@@ -81,13 +81,22 @@ public interface ModelPackage extends EPackage {
 	int GRAPH_ELEMENT__ID = NcorePackage.STRING_IDENTITY__ID;
 
 	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GRAPH_ELEMENT__SEMANTIC_MAPPINGS = NcorePackage.STRING_IDENTITY_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Graph Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GRAPH_ELEMENT_FEATURE_COUNT = NcorePackage.STRING_IDENTITY_FEATURE_COUNT + 0;
+	int GRAPH_ELEMENT_FEATURE_COUNT = NcorePackage.STRING_IDENTITY_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Graph Element</em>' class.
@@ -155,6 +164,15 @@ public interface ModelPackage extends EPackage {
 	int SUB_GRAPH__ID = GRAPH_ELEMENT__ID;
 
 	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_GRAPH__SEMANTIC_MAPPINGS = GRAPH_ELEMENT__SEMANTIC_MAPPINGS;
+
+	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -201,6 +219,15 @@ public interface ModelPackage extends EPackage {
 	int CONNECTION_TARGET__ID = GRAPH_ELEMENT__ID;
 
 	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION_TARGET__SEMANTIC_MAPPINGS = GRAPH_ELEMENT__SEMANTIC_MAPPINGS;
+
+	/**
 	 * The feature id for the '<em><b>Incoming Connections</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -245,6 +272,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPOSITE_CONNECTION_TARGET__ID = SUB_GRAPH__ID;
+
+	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_CONNECTION_TARGET__SEMANTIC_MAPPINGS = SUB_GRAPH__SEMANTIC_MAPPINGS;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -357,6 +393,15 @@ public interface ModelPackage extends EPackage {
 	int CONNECTION_SOURCE__ID = GRAPH_ELEMENT__ID;
 
 	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION_SOURCE__SEMANTIC_MAPPINGS = GRAPH_ELEMENT__SEMANTIC_MAPPINGS;
+
+	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -401,6 +446,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPOSITE_CONNECTION_SOURCE__ID = SUB_GRAPH__ID;
+
+	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_CONNECTION_SOURCE__SEMANTIC_MAPPINGS = SUB_GRAPH__SEMANTIC_MAPPINGS;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -458,6 +512,15 @@ public interface ModelPackage extends EPackage {
 	int NODE__ID = CONNECTION_SOURCE__ID;
 
 	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE__SEMANTIC_MAPPINGS = CONNECTION_SOURCE__SEMANTIC_MAPPINGS;
+
+	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -512,6 +575,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPOSITE_NODE__ID = SUB_GRAPH__ID;
+
+	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_NODE__SEMANTIC_MAPPINGS = SUB_GRAPH__SEMANTIC_MAPPINGS;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -641,6 +713,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int DOCUMENTED_NAMED_GRAPH_ELEMENT__ID = GRAPH_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_GRAPH_ELEMENT__SEMANTIC_MAPPINGS = GRAPH_ELEMENT__SEMANTIC_MAPPINGS;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -897,6 +978,15 @@ public interface ModelPackage extends EPackage {
 	int DOCUMENTED_NAMED_SUB_GRAPH__ID = DOCUMENTED_NAMED_GRAPH_ELEMENT__ID;
 
 	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_SUB_GRAPH__SEMANTIC_MAPPINGS = DOCUMENTED_NAMED_GRAPH_ELEMENT__SEMANTIC_MAPPINGS;
+
+	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1033,6 +1123,15 @@ public interface ModelPackage extends EPackage {
 	int DOCUMENTED_NAMED_CONNECTION_TARGET__ID = CONNECTION_TARGET__ID;
 
 	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_CONNECTION_TARGET__SEMANTIC_MAPPINGS = CONNECTION_TARGET__SEMANTIC_MAPPINGS;
+
+	/**
 	 * The feature id for the '<em><b>Incoming Connections</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1167,6 +1266,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int DOCUMENTED_NAMED_COMPOSITE_CONNECTION_TARGET__ID = DOCUMENTED_NAMED_SUB_GRAPH__ID;
+
+	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_COMPOSITE_CONNECTION_TARGET__SEMANTIC_MAPPINGS = DOCUMENTED_NAMED_SUB_GRAPH__SEMANTIC_MAPPINGS;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -1459,6 +1567,15 @@ public interface ModelPackage extends EPackage {
 	int DOCUMENTED_NAMED_CONNECTION_SOURCE__ID = DOCUMENTED_NAMED_GRAPH_ELEMENT__ID;
 
 	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_CONNECTION_SOURCE__SEMANTIC_MAPPINGS = DOCUMENTED_NAMED_GRAPH_ELEMENT__SEMANTIC_MAPPINGS;
+
+	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1593,6 +1710,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int DOCUMENTED_NAMED_COMPOSITE_CONNECTION_SOURCE__ID = DOCUMENTED_NAMED_SUB_GRAPH__ID;
+
+	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_COMPOSITE_CONNECTION_SOURCE__SEMANTIC_MAPPINGS = DOCUMENTED_NAMED_SUB_GRAPH__SEMANTIC_MAPPINGS;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -1740,6 +1866,15 @@ public interface ModelPackage extends EPackage {
 	int DOCUMENTED_NAMED_NODE__ID = NODE__ID;
 
 	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_NODE__SEMANTIC_MAPPINGS = NODE__SEMANTIC_MAPPINGS;
+
+	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1883,6 +2018,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int DOCUMENTED_NAMED_COMPOSITE_NODE__ID = COMPOSITE_NODE__ID;
+
+	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_COMPOSITE_NODE__SEMANTIC_MAPPINGS = COMPOSITE_NODE__SEMANTIC_MAPPINGS;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.

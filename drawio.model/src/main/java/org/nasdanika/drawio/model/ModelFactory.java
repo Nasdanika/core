@@ -112,6 +112,15 @@ public interface ModelFactory extends EFactory {
 	Geometry createGeometry();
 
 	/**
+	 * Returns a new object of class '<em>Semantic Mapping</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Semantic Mapping</em>'.
+	 * @generated
+	 */
+	SemanticMapping createSemanticMapping();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

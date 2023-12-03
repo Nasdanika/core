@@ -246,6 +246,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		isInited = true;
 
 		// Initialize simple dependencies
+		org.nasdanika.drawio.model.ModelPackage.eINSTANCE.eClass();
 		NcorePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
@@ -647,6 +648,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		// Obtain other dependent packages
 		NcorePackage theNcorePackage = (NcorePackage)EPackage.Registry.INSTANCE.getEPackage(NcorePackage.eNS_URI);
+		org.nasdanika.drawio.model.ModelPackage theModelPackage_1 = (org.nasdanika.drawio.model.ModelPackage)EPackage.Registry.INSTANCE.getEPackage(org.nasdanika.drawio.model.ModelPackage.eNS_URI);
 
 		// Create type parameters
 		ETypeParameter graphEClass_E = addETypeParameter(graphEClass, "E");
@@ -774,6 +776,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		// Add supertypes to classes
 		graphElementEClass.getESuperTypes().add(theNcorePackage.getStringIdentity());
+		graphElementEClass.getESuperTypes().add(theModelPackage_1.getSemanticElement());
 		g1 = createEGenericType(this.getGraphElement());
 		subGraphEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getGraph());

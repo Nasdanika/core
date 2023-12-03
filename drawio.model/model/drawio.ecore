@@ -82,4 +82,25 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="points" upperBound="-1"
         eType="#//Point" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SemanticMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="documentURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pageID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelElementID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pageElement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An element may be marked as &quot;page-element&quot; to indicate that a particular page is about this element and shall be added to the list of element's representations"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SemanticElement" abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="EClasses mapped/created from diagram elements may implement this interface to trace the elements they were mapped from"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="semanticMappings" upperBound="-1"
+        eType="#//SemanticMapping" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A list of semantic mappings"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
 </ecore:EPackage>

@@ -1197,6 +1197,108 @@ public interface ModelPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.SemanticMappingImpl <em>Semantic Mapping</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.drawio.model.impl.SemanticMappingImpl
+	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getSemanticMapping()
+	 * @generated
+	 */
+	int SEMANTIC_MAPPING = 11;
+
+	/**
+	 * The feature id for the '<em><b>Document URI</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEMANTIC_MAPPING__DOCUMENT_URI = 0;
+
+	/**
+	 * The feature id for the '<em><b>Page ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEMANTIC_MAPPING__PAGE_ID = 1;
+
+	/**
+	 * The feature id for the '<em><b>Model Element ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEMANTIC_MAPPING__MODEL_ELEMENT_ID = 2;
+
+	/**
+	 * The feature id for the '<em><b>Page Element</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEMANTIC_MAPPING__PAGE_ELEMENT = 3;
+
+	/**
+	 * The number of structural features of the '<em>Semantic Mapping</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEMANTIC_MAPPING_FEATURE_COUNT = 4;
+
+	/**
+	 * The number of operations of the '<em>Semantic Mapping</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEMANTIC_MAPPING_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.drawio.model.SemanticElement <em>Semantic Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.drawio.model.SemanticElement
+	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getSemanticElement()
+	 * @generated
+	 */
+	int SEMANTIC_ELEMENT = 12;
+
+	/**
+	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEMANTIC_ELEMENT__SEMANTIC_MAPPINGS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Semantic Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEMANTIC_ELEMENT_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Semantic Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEMANTIC_ELEMENT_OPERATION_COUNT = 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Document <em>Document</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1648,6 +1750,81 @@ public interface ModelPackage extends EPackage {
 	EReference getGeometry_Points();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.SemanticMapping <em>Semantic Mapping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Semantic Mapping</em>'.
+	 * @see org.nasdanika.drawio.model.SemanticMapping
+	 * @generated
+	 */
+	EClass getSemanticMapping();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.drawio.model.SemanticMapping#getDocumentURI <em>Document URI</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Document URI</em>'.
+	 * @see org.nasdanika.drawio.model.SemanticMapping#getDocumentURI()
+	 * @see #getSemanticMapping()
+	 * @generated
+	 */
+	EAttribute getSemanticMapping_DocumentURI();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.drawio.model.SemanticMapping#getPageID <em>Page ID</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Page ID</em>'.
+	 * @see org.nasdanika.drawio.model.SemanticMapping#getPageID()
+	 * @see #getSemanticMapping()
+	 * @generated
+	 */
+	EAttribute getSemanticMapping_PageID();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.drawio.model.SemanticMapping#getModelElementID <em>Model Element ID</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Model Element ID</em>'.
+	 * @see org.nasdanika.drawio.model.SemanticMapping#getModelElementID()
+	 * @see #getSemanticMapping()
+	 * @generated
+	 */
+	EAttribute getSemanticMapping_ModelElementID();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.drawio.model.SemanticMapping#isPageElement <em>Page Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Page Element</em>'.
+	 * @see org.nasdanika.drawio.model.SemanticMapping#isPageElement()
+	 * @see #getSemanticMapping()
+	 * @generated
+	 */
+	EAttribute getSemanticMapping_PageElement();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.SemanticElement <em>Semantic Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Semantic Element</em>'.
+	 * @see org.nasdanika.drawio.model.SemanticElement
+	 * @generated
+	 */
+	EClass getSemanticElement();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.drawio.model.SemanticElement#getSemanticMappings <em>Semantic Mappings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Semantic Mappings</em>'.
+	 * @see org.nasdanika.drawio.model.SemanticElement#getSemanticMappings()
+	 * @see #getSemanticElement()
+	 * @generated
+	 */
+	EReference getSemanticElement_SemanticMappings();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1986,6 +2163,59 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference GEOMETRY__POINTS = eINSTANCE.getGeometry_Points();
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.SemanticMappingImpl <em>Semantic Mapping</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.drawio.model.impl.SemanticMappingImpl
+		 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getSemanticMapping()
+		 * @generated
+		 */
+		EClass SEMANTIC_MAPPING = eINSTANCE.getSemanticMapping();
+		/**
+		 * The meta object literal for the '<em><b>Document URI</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SEMANTIC_MAPPING__DOCUMENT_URI = eINSTANCE.getSemanticMapping_DocumentURI();
+		/**
+		 * The meta object literal for the '<em><b>Page ID</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SEMANTIC_MAPPING__PAGE_ID = eINSTANCE.getSemanticMapping_PageID();
+		/**
+		 * The meta object literal for the '<em><b>Model Element ID</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SEMANTIC_MAPPING__MODEL_ELEMENT_ID = eINSTANCE.getSemanticMapping_ModelElementID();
+		/**
+		 * The meta object literal for the '<em><b>Page Element</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SEMANTIC_MAPPING__PAGE_ELEMENT = eINSTANCE.getSemanticMapping_PageElement();
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.drawio.model.SemanticElement <em>Semantic Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.drawio.model.SemanticElement
+		 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getSemanticElement()
+		 * @generated
+		 */
+		EClass SEMANTIC_ELEMENT = eINSTANCE.getSemanticElement();
+		/**
+		 * The meta object literal for the '<em><b>Semantic Mappings</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SEMANTIC_ELEMENT__SEMANTIC_MAPPINGS = eINSTANCE.getSemanticElement_SemanticMappings();
 
 	}
 

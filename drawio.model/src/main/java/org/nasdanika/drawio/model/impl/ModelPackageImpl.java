@@ -22,6 +22,8 @@ import org.nasdanika.drawio.model.Node;
 import org.nasdanika.drawio.model.Page;
 import org.nasdanika.drawio.model.Point;
 import org.nasdanika.drawio.model.Root;
+import org.nasdanika.drawio.model.SemanticElement;
+import org.nasdanika.drawio.model.SemanticMapping;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -100,6 +102,20 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	private EClass geometryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass semanticMappingEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass semanticElementEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -590,6 +606,76 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getSemanticMapping() {
+		return semanticMappingEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSemanticMapping_DocumentURI() {
+		return (EAttribute)semanticMappingEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSemanticMapping_PageID() {
+		return (EAttribute)semanticMappingEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSemanticMapping_ModelElementID() {
+		return (EAttribute)semanticMappingEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSemanticMapping_PageElement() {
+		return (EAttribute)semanticMappingEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSemanticElement() {
+		return semanticElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSemanticElement_SemanticMappings() {
+		return (EReference)semanticElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ModelFactory getModelFactory() {
 		return (ModelFactory)getEFactoryInstance();
 	}
@@ -665,6 +751,15 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEReference(geometryEClass, GEOMETRY__TARGET_POINT);
 		createEReference(geometryEClass, GEOMETRY__OFFSET_POINT);
 		createEReference(geometryEClass, GEOMETRY__POINTS);
+
+		semanticMappingEClass = createEClass(SEMANTIC_MAPPING);
+		createEAttribute(semanticMappingEClass, SEMANTIC_MAPPING__DOCUMENT_URI);
+		createEAttribute(semanticMappingEClass, SEMANTIC_MAPPING__PAGE_ID);
+		createEAttribute(semanticMappingEClass, SEMANTIC_MAPPING__MODEL_ELEMENT_ID);
+		createEAttribute(semanticMappingEClass, SEMANTIC_MAPPING__PAGE_ELEMENT);
+
+		semanticElementEClass = createEClass(SEMANTIC_ELEMENT);
+		createEReference(semanticElementEClass, SEMANTIC_ELEMENT__SEMANTIC_MAPPINGS);
 	}
 
 	/**
@@ -769,6 +864,15 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEReference(getGeometry_OffsetPoint(), this.getPoint(), null, "offsetPoint", null, 0, 1, Geometry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getGeometry_Points(), this.getPoint(), null, "points", null, 0, -1, Geometry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(semanticMappingEClass, SemanticMapping.class, "SemanticMapping", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSemanticMapping_DocumentURI(), ecorePackage.getEString(), "documentURI", null, 0, 1, SemanticMapping.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSemanticMapping_PageID(), ecorePackage.getEString(), "pageID", null, 0, 1, SemanticMapping.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSemanticMapping_ModelElementID(), ecorePackage.getEString(), "modelElementID", null, 0, 1, SemanticMapping.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSemanticMapping_PageElement(), ecorePackage.getEBoolean(), "pageElement", null, 0, 1, SemanticMapping.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(semanticElementEClass, SemanticElement.class, "SemanticElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSemanticElement_SemanticMappings(), this.getSemanticMapping(), null, "semanticMappings", null, 0, -1, SemanticElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Create resource
 		createResource(eNS_URI);
 
@@ -796,6 +900,24 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Model elements linking to this page"
+		   });
+		addAnnotation
+		  (getSemanticMapping_PageElement(),
+		   source,
+		   new String[] {
+			   "documentation", "An element may be marked as \"page-element\" to indicate that a particular page is about this element and shall be added to the list of element\'s representations"
+		   });
+		addAnnotation
+		  (semanticElementEClass,
+		   source,
+		   new String[] {
+			   "documentation", "EClasses mapped/created from diagram elements may implement this interface to trace the elements they were mapped from"
+		   });
+		addAnnotation
+		  (getSemanticElement_SemanticMappings(),
+		   source,
+		   new String[] {
+			   "documentation", "A list of semantic mappings"
 		   });
 	}
 

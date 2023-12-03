@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.drawio.model.SemanticElement;
 import org.nasdanika.graph.model.*;
 
 import org.nasdanika.ncore.Documented;
@@ -79,6 +80,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				GraphElement graphElement = (GraphElement)theEObject;
 				T1 result = caseGraphElement(graphElement);
 				if (result == null) result = caseStringIdentity(graphElement);
+				if (result == null) result = caseSemanticElement(graphElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -94,6 +96,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseGraphElement(subGraph);
 				if (result == null) result = caseGraph(subGraph);
 				if (result == null) result = caseStringIdentity(subGraph);
+				if (result == null) result = caseSemanticElement(subGraph);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -102,6 +105,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				T1 result = caseConnectionTarget(connectionTarget);
 				if (result == null) result = caseGraphElement(connectionTarget);
 				if (result == null) result = caseStringIdentity(connectionTarget);
+				if (result == null) result = caseSemanticElement(connectionTarget);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -113,6 +117,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseGraphElement(compositeConnectionTarget);
 				if (result == null) result = caseGraph(compositeConnectionTarget);
 				if (result == null) result = caseStringIdentity(compositeConnectionTarget);
+				if (result == null) result = caseSemanticElement(compositeConnectionTarget);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -128,6 +133,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				T1 result = caseConnectionSource(connectionSource);
 				if (result == null) result = caseGraphElement(connectionSource);
 				if (result == null) result = caseStringIdentity(connectionSource);
+				if (result == null) result = caseSemanticElement(connectionSource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -139,6 +145,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseGraphElement(compositeConnectionSource);
 				if (result == null) result = caseGraph(compositeConnectionSource);
 				if (result == null) result = caseStringIdentity(compositeConnectionSource);
+				if (result == null) result = caseSemanticElement(compositeConnectionSource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -149,6 +156,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseConnectionTarget(node);
 				if (result == null) result = caseGraphElement(node);
 				if (result == null) result = caseStringIdentity(node);
+				if (result == null) result = caseSemanticElement(node);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -162,6 +170,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseConnectionTarget(compositeNode);
 				if (result == null) result = caseGraphElement(compositeNode);
 				if (result == null) result = caseStringIdentity(compositeNode);
+				if (result == null) result = caseSemanticElement(compositeNode);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -179,6 +188,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseGraphElement(documentedNamedGraphElement);
 				if (result == null) result = caseDocumentedNamedStringIdentity(documentedNamedGraphElement);
 				if (result == null) result = caseStringIdentity(documentedNamedGraphElement);
+				if (result == null) result = caseSemanticElement(documentedNamedGraphElement);
 				if (result == null) result = caseDocumentedNamedElement(documentedNamedGraphElement);
 				if (result == null) result = caseNamedElement(documentedNamedGraphElement);
 				if (result == null) result = caseDocumented(documentedNamedGraphElement);
@@ -212,6 +222,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseDocumentedNamedStringIdentity(documentedNamedSubGraph);
 				if (result == null) result = caseGraph(documentedNamedSubGraph);
 				if (result == null) result = caseStringIdentity(documentedNamedSubGraph);
+				if (result == null) result = caseSemanticElement(documentedNamedSubGraph);
 				if (result == null) result = caseDocumentedNamedElement(documentedNamedSubGraph);
 				if (result == null) result = caseNamedElement(documentedNamedSubGraph);
 				if (result == null) result = caseDocumented(documentedNamedSubGraph);
@@ -230,6 +241,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseGraphElement(documentedNamedConnectionTarget);
 				if (result == null) result = caseDocumentedNamedStringIdentity(documentedNamedConnectionTarget);
 				if (result == null) result = caseStringIdentity(documentedNamedConnectionTarget);
+				if (result == null) result = caseSemanticElement(documentedNamedConnectionTarget);
 				if (result == null) result = caseDocumentedNamedElement(documentedNamedConnectionTarget);
 				if (result == null) result = caseNamedElement(documentedNamedConnectionTarget);
 				if (result == null) result = caseDocumented(documentedNamedConnectionTarget);
@@ -252,6 +264,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseDocumentedNamedStringIdentity(documentedNamedCompositeConnectionTarget);
 				if (result == null) result = caseGraph(documentedNamedCompositeConnectionTarget);
 				if (result == null) result = caseStringIdentity(documentedNamedCompositeConnectionTarget);
+				if (result == null) result = caseSemanticElement(documentedNamedCompositeConnectionTarget);
 				if (result == null) result = caseDocumentedNamedElement(documentedNamedCompositeConnectionTarget);
 				if (result == null) result = caseNamedElement(documentedNamedCompositeConnectionTarget);
 				if (result == null) result = caseDocumented(documentedNamedCompositeConnectionTarget);
@@ -286,6 +299,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseGraphElement(documentedNamedConnectionSource);
 				if (result == null) result = caseDocumentedNamedStringIdentity(documentedNamedConnectionSource);
 				if (result == null) result = caseStringIdentity(documentedNamedConnectionSource);
+				if (result == null) result = caseSemanticElement(documentedNamedConnectionSource);
 				if (result == null) result = caseDocumentedNamedElement(documentedNamedConnectionSource);
 				if (result == null) result = caseNamedElement(documentedNamedConnectionSource);
 				if (result == null) result = caseDocumented(documentedNamedConnectionSource);
@@ -308,6 +322,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseDocumentedNamedStringIdentity(documentedNamedCompositeConnectionSource);
 				if (result == null) result = caseGraph(documentedNamedCompositeConnectionSource);
 				if (result == null) result = caseStringIdentity(documentedNamedCompositeConnectionSource);
+				if (result == null) result = caseSemanticElement(documentedNamedCompositeConnectionSource);
 				if (result == null) result = caseDocumentedNamedElement(documentedNamedCompositeConnectionSource);
 				if (result == null) result = caseNamedElement(documentedNamedCompositeConnectionSource);
 				if (result == null) result = caseDocumented(documentedNamedCompositeConnectionSource);
@@ -330,6 +345,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseGraphElement(documentedNamedNode);
 				if (result == null) result = caseDocumentedNamedStringIdentity(documentedNamedNode);
 				if (result == null) result = caseStringIdentity(documentedNamedNode);
+				if (result == null) result = caseSemanticElement(documentedNamedNode);
 				if (result == null) result = caseDocumentedNamedElement(documentedNamedNode);
 				if (result == null) result = caseNamedElement(documentedNamedNode);
 				if (result == null) result = caseDocumented(documentedNamedNode);
@@ -354,6 +370,7 @@ public class ModelSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseConnectionTarget(documentedNamedCompositeNode);
 				if (result == null) result = caseDocumentedNamedGraphElement(documentedNamedCompositeNode);
 				if (result == null) result = caseGraphElement(documentedNamedCompositeNode);
+				if (result == null) result = caseSemanticElement(documentedNamedCompositeNode);
 				if (result == null) result = caseDocumentedNamedStringIdentity(documentedNamedCompositeNode);
 				if (result == null) result = caseStringIdentity(documentedNamedCompositeNode);
 				if (result == null) result = caseDocumentedNamedElement(documentedNamedCompositeNode);
@@ -730,6 +747,21 @@ public class ModelSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseStringIdentity(StringIdentity object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Semantic Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Semantic Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSemanticElement(SemanticElement object) {
 		return null;
 	}
 

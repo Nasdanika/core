@@ -4,7 +4,7 @@
     editorDirectory="" modelPluginID="org.nasdanika.graph.model" modelName="Graph"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
     featureDelegation="Dynamic" complianceLevel="17.0" suppressGenModelAnnotations="false"
-    copyrightFields="false" usedGenPackages="../../org.nasdanika.ncore/model/ncore.genmodel#//ncore"
+    copyrightFields="false" usedGenPackages="../../org.nasdanika.drawio.model/model/drawio.genmodel#//model ../../org.nasdanika.ncore/model/ncore.genmodel#//ncore"
     operationReflection="true" importOrganizing="true">
   <foreignModel>graph.ecore</foreignModel>
   <genPackages prefix="Model" basePackage="org.nasdanika.graph" disposableProviderFactory="true"

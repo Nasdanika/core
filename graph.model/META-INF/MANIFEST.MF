@@ -13,5 +13,6 @@ Export-Package: org.nasdanika.graph.model,
  org.nasdanika.graph.model.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
+ org.nasdanika.drawio.model;visibility:=reexport,
  org.nasdanika.ncore;visibility:=reexport
 Bundle-ActivationPolicy: lazy

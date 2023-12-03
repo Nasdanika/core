@@ -62,5 +62,14 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//Geometry/offsetPoint"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//Geometry/points"/>
     </genClasses>
+    <genClasses ecoreClass="drawio.ecore#//SemanticMapping">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//SemanticMapping/documentURI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//SemanticMapping/pageID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//SemanticMapping/modelElementID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//SemanticMapping/pageElement"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="drawio.ecore#//SemanticElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//SemanticElement/semanticMappings"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

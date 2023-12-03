@@ -2,6 +2,7 @@
  */
 package org.nasdanika.graph.model;
 
+import org.nasdanika.drawio.model.SemanticElement;
 import org.nasdanika.ncore.StringIdentity;
 
 /**
@@ -18,5 +19,5 @@ import org.nasdanika.ncore.StringIdentity;
  * @model abstract="true"
  * @generated
  */
-public interface GraphElement extends StringIdentity {
+public interface GraphElement extends StringIdentity, SemanticElement {
 } // GraphElement

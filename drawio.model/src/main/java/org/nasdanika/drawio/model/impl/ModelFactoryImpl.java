@@ -66,6 +66,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 			case ModelPackage.CONNECTION: return createConnection();
 			case ModelPackage.POINT: return createPoint();
 			case ModelPackage.GEOMETRY: return createGeometry();
+			case ModelPackage.SEMANTIC_MAPPING: return createSemanticMapping();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -179,6 +180,17 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	public Geometry createGeometry() {
 		GeometryImpl geometry = new GeometryImpl();
 		return geometry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SemanticMapping createSemanticMapping() {
+		SemanticMappingImpl semanticMapping = new SemanticMappingImpl();
+		return semanticMapping;
 	}
 
 	/**
