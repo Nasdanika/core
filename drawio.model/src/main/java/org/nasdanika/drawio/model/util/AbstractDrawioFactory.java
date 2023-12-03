@@ -2,9 +2,11 @@ package org.nasdanika.drawio.model.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -26,6 +28,7 @@ import org.nasdanika.drawio.model.Node;
 import org.nasdanika.drawio.model.Page;
 import org.nasdanika.drawio.model.Root;
 import org.nasdanika.ncore.Marker;
+import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marked;
 
@@ -38,7 +41,8 @@ import org.nasdanika.persistence.Marked;
  */
 public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject> {
 	
-	public static final String PAGE_ID_ANNOTATION = "page-id";
+	public static final String MODEL_ELEMENT_ID_ANNOTATION = "model-element-id";
+	public static final String PAGE_ELEMENT = "page-element";
 	public static final String TOP_LEVEL_PAGES_ANNOTATION = "top-level-pages";
 	public static final String DRAWIO_REPRESENTATION = "drawio";
 
@@ -179,7 +183,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @return
 	 */
 	@org.nasdanika.common.Transformer.Factory
-	public D createDocumentElement(
+	public final D createDocumentElement(
 			org.nasdanika.drawio.model.Document document,
 			boolean parallel,
 			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
@@ -187,23 +191,16 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			ProgressMonitor progressMonitor) {
 		
 		D documentElement = createDocumentElement(document, elementProvider, registry, progressMonitor);
-		String source = document.getSource();
-		if (!Util.isBlank(source) && documentElement instanceof org.nasdanika.ncore.ModelElement) {
-			org.nasdanika.ncore.ModelElement documentModelElement = (org.nasdanika.ncore.ModelElement) documentElement;
-			documentModelElement.getRepresentations().put(DRAWIO_REPRESENTATION, source);
-			Collection<String> topLevelPages = new ArrayList<>();
-			for (Page page: document.getPages()) {
-				if (isTopLevelPage(page)) {
-					topLevelPages.add(page.getId());
-				}
-			}
-			if (!topLevelPages.isEmpty()) {
-				documentModelElement.setAnnotation(TOP_LEVEL_PAGES_ANNOTATION, topLevelPages);
-			}
-		}
 		if (documentElement instanceof org.nasdanika.ncore.Marked) {
 			for (Marker marker: document.getMarkers()) {
 				((org.nasdanika.ncore.Marked) documentElement).getMarkers().add(EcoreUtil.copy(marker));
+			}
+		}
+
+		if (documentElement instanceof ModelElement) {
+			ModelElement dme = (ModelElement) documentElement;
+			if (Util.isBlank(dme.getUuid())) {
+				dme.setUuid(UUID.randomUUID().toString());
 			}
 		}
 		
@@ -273,7 +270,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @return
 	 */
 	@org.nasdanika.common.Transformer.Factory
-	public S createSemanticElement(
+	public final S createSemanticElement(
 			org.nasdanika.drawio.model.ModelElement modelElement,
 			boolean parallel,
 			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
@@ -300,7 +297,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 				((org.nasdanika.ncore.NamedElement) semanticElement).setName(page.getName());
 			}
 			if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
-				((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation(PAGE_ID_ANNOTATION, page.getId());
+				((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation(PAGE_ELEMENT, true);
 			}
 		}
 		
@@ -313,13 +310,19 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			}
 		}
 		if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
-			((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation("model-element-id", elementId);
+			String pageID = null;
+			for (EObject eContainer = modelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
+				if (eContainer instanceof Page) {
+					pageID = ((Page) eContainer).getId();						
+				}
+			}
+			
+			List<String> elementIdList = List.of(pageID, elementId); 
+			((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation(MODEL_ELEMENT_ID_ANNOTATION, elementIdList);
 			
 			if (isPageElement(modelElement)) {
-				for (EObject eContainer = modelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
-					if (eContainer instanceof Page) {
-						((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation(PAGE_ID_ANNOTATION, ((Page) eContainer).getId());						
-					}
+				if (pageID != null) {
+					((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation(PAGE_ELEMENT, true);						
 				}
 			}						
 		}
@@ -404,6 +407,13 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 				}
 			}
 		}		
+
+		if (semanticElement instanceof ModelElement) {
+			ModelElement sme = (ModelElement) semanticElement;
+			if (Util.isBlank(sme.getUuid())) {
+				sme.setUuid(UUID.randomUUID().toString());
+			}
+		}
 		
 		return configureSemanticElement(
 				modelElement,
@@ -503,7 +513,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire
-	public void wireDocumentContainment(
+	public final void wireDocumentContainment(
 			org.nasdanika.drawio.model.Document document,
 			D documentElement,
 			Map<EObject, EObject> registry,
@@ -527,7 +537,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire
-	public void wireModelElementContainment(
+	public final void wireModelElementContainment(
 			org.nasdanika.drawio.model.ModelElement drawioModelElement,
 			S semanticElement,
 			Map<EObject, EObject> registry,
@@ -579,7 +589,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire(phase = 1)
-	public void wireDocumentNonContainment(
+	public final void wireDocumentNonContainment(
 			org.nasdanika.drawio.model.Document document,
 			D documentElement,
 			Map<EObject, EObject> registry,
@@ -590,10 +600,47 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		if (mapper != null) {
 			mapper.wire(document, registry, progressMonitor);
 		}
+		
+		String source = document.getSource();
+		if (!Util.isBlank(source) && documentElement instanceof org.nasdanika.ncore.ModelElement) {
+			org.nasdanika.ncore.ModelElement documentModelElement = (org.nasdanika.ncore.ModelElement) documentElement;
+			String filteredSource = filterSourceDocument(source, document, documentModelElement, registry, pass, progressMonitor);
+			documentModelElement.getRepresentations().put(DRAWIO_REPRESENTATION, filteredSource);
+			Collection<String> topLevelPages = new ArrayList<>();
+			for (Page page: document.getPages()) {
+				if (isTopLevelPage(page)) {
+					topLevelPages.add(page.getId());
+				}
+			}
+			if (!topLevelPages.isEmpty()) {
+				documentModelElement.setAnnotation(TOP_LEVEL_PAGES_ANNOTATION, topLevelPages);
+			}
+		}
+	}
+	
+	/**
+	 * Override to manipulate the source document. E.g. inject semantic UUID's from the registry
+	 * @param source
+	 * @param document
+	 * @param documentModelElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 * @return
+	 */
+	protected String filterSourceDocument(
+			String source,
+			org.nasdanika.drawio.model.Document document,
+			org.nasdanika.ncore.ModelElement documentModelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		return source;
 	}
 	
 	@org.nasdanika.common.Transformer.Wire(phase = 1)
-	public void wireModelElementNonContainment(
+	public final void wireModelElementNonContainment(
 			org.nasdanika.drawio.model.ModelElement drawioModelElement,
 			S semanticElement,
 			Map<EObject, EObject> registry,
@@ -627,7 +674,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public boolean wireRefIds(
+	public final boolean wireRefIds(
 			org.nasdanika.drawio.model.ModelElement modelElement,
 			Map<EObject, EObject> registry,
 			int pass,
@@ -659,7 +706,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 2)
-	public boolean featurMapNulls(
+	public final boolean featurMapNulls(
 			org.nasdanika.drawio.model.ModelElement modelElement,
 			Map<EObject, EObject> registry,
 			int pass,

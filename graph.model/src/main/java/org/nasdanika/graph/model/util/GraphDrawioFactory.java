@@ -1,5 +1,6 @@
 package org.nasdanika.graph.model.util;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -8,12 +9,17 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
+import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.model.Document;
 import org.nasdanika.drawio.model.ModelElement;
 import org.nasdanika.drawio.model.util.AbstractDrawioFactory;
@@ -31,6 +37,7 @@ import org.nasdanika.graph.model.ModelPackage;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.ObjectLoader;
+import org.xml.sax.SAXException;
 
 /**
  * Factory for mapping drawio model to graph model
@@ -38,6 +45,8 @@ import org.nasdanika.persistence.ObjectLoader;
  * @param <E>
  */
 public class GraphDrawioFactory<G extends Graph<?>, E extends EObject> extends AbstractDrawioFactory<G, E> {
+	
+	public static final String SEMANTIC_UUID_KEY = "semantic-uuid";
 
 	/**
 	 * Returns a map with graph and ncore entries.
@@ -223,6 +232,51 @@ public class GraphDrawioFactory<G extends Graph<?>, E extends EObject> extends A
 				elementProvider,
 				registry,
 				progressMonitor);
+	}
+	
+	@Override
+	protected String filterSourceDocument(
+			String source, 
+			Document document,
+			org.nasdanika.ncore.ModelElement documentModelElement, 
+			Map<EObject, EObject> registry, 
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		URI sourceURI = URI.createURI(source);		
+		try {
+			org.nasdanika.drawio.Document sourceDocument = org.nasdanika.drawio.Document.load(sourceURI);
+			for (Page page: sourceDocument.getPages()) {
+				for (org.nasdanika.drawio.model.Page modelPage: document.getPages()) {
+					if (page.getId().equals(modelPage.getId())) {
+						page.accept(pageElement -> {
+							if (pageElement instanceof org.nasdanika.drawio.ModelElement) {
+								org.nasdanika.drawio.ModelElement pageModelElement = (org.nasdanika.drawio.ModelElement) pageElement;
+								String pageElementID = pageModelElement.getId();
+								TreeIterator<EObject> mpit = modelPage.eAllContents();
+								while (mpit.hasNext()) {
+									EObject next = mpit.next();
+									if (next instanceof org.nasdanika.drawio.model.ModelElement && pageElementID.equals(((org.nasdanika.drawio.model.ModelElement) next).getId())) {
+										EObject semanticElement = registry.get(next);
+										if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
+											String uuid = ((org.nasdanika.ncore.ModelElement) semanticElement).getUuid();
+											if (!Util.isBlank(uuid)) {
+												pageModelElement.setProperty(SEMANTIC_UUID_KEY, uuid);
+											}
+										}
+										break;
+									}
+								}
+							}
+						});
+					}
+				}
+			}
+			
+			return sourceDocument.toDataURI(true).toString();
+		} catch (IOException | ParserConfigurationException | SAXException | TransformerException e) {
+			throw new ConfigurationException("Error filtering source document: " + source, document); 				
+		}
 	}
 	
 }
