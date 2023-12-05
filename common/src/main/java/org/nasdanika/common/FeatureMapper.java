@@ -40,89 +40,102 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 		return connectionValue == null;
 	}
 	
+	/**
+	 * Selects zero or more target (semantic) elements for the source element. This implementation returns registry value.
+	 * Override to support, for example, mapping to multiple semantic values. 
+	 * @param source
+	 * @param registry
+	 * @param progressMonitor
+	 * @return
+	 */
+	protected Iterable<T> select(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
+		return Collections.singleton(registry.get(source));
+	}
+	
 	@Override
 	public void wire(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
-		T value = registry.get(source);
-		HashSet<EObject> tracker = new HashSet<>();			
-		for (EObject contents: contents(source, tracker)) {
-			LinkedList<EObject> path = new LinkedList<>();
-			path.add(contents);
-			Function<LinkedList<EObject>, Boolean> pathMapper = createPathMapper(source, value, registry, progressMonitor);
-			wireContents(path, pathMapper, tracker);
-		}
-		
-		List<EStructuralFeature> valueFeatures = value == null ? Collections.emptyList() : value.eClass().getEAllStructuralFeatures();		
-		
-		S connectionSource = getConnectionSource(source);
-		T connectionSourceValue = connectionSource == null ? null : registry.get(connectionSource);		
-		List<EStructuralFeature> connectionSourceValueFeatures = connectionSourceValue == null ? Collections.emptyList() : connectionSourceValue.eClass().getEAllStructuralFeatures();
-				
-		S connectionTarget = getConnectionTarget(source);
-		T connectionTargetValue = connectionTarget == null ? null : registry.get(connectionTarget);		
-		List<EStructuralFeature> connectionTargetValueFeatures = connectionTargetValue == null ? Collections.emptyList() : connectionTargetValue.eClass().getEAllStructuralFeatures();
-		
-		boolean isPassThrough = isPassThrough(source, value);
-		
-		// Connection source features		
-		for (EStructuralFeature connectionSourceValueFeature: connectionSourceValueFeatures) {
-			wireConnectionSourceFeature(
-					source,	
-					connectionSource,
-					connectionSourceValue,
-					connectionSourceValueFeature,
-					isPassThrough ? connectionTarget : source,
-					isPassThrough ? connectionTargetValue : value,
-					registry,
-					progressMonitor);
-		}
-		
-		// Connection target features		
-		for (EStructuralFeature connectionTargetValueFeature: connectionTargetValueFeatures) {
-			wireConnectionTargetFeature(
-					source,	
-					connectionTarget,
-					connectionTargetValue,
-					connectionTargetValueFeature,
-					isPassThrough ? connectionSource : source,
-					isPassThrough ? connectionSourceValue : value,
-					registry,
-					progressMonitor);
-		}
-		
-		// Own features		
-		for (EStructuralFeature valueFeature: valueFeatures) {
-			wireFeature(
-					source, 
-					value, 
-					valueFeature, 
-					registry, 
-					progressMonitor);			
+		for (T value: select(source, registry, progressMonitor)) {
+			HashSet<EObject> tracker = new HashSet<>();			
+			for (EObject contents: contents(source, tracker)) {
+				LinkedList<EObject> path = new LinkedList<>();
+				path.add(contents);
+				Function<LinkedList<EObject>, Boolean> pathMapper = createPathMapper(source, value, registry, progressMonitor);
+				wireContents(path, pathMapper, tracker);
+			}
 			
-			if (connectionSource != null) {
-				wireConnectionStartFeature(
-						source,
-						value,
-						valueFeature,
+			List<EStructuralFeature> valueFeatures = value == null ? Collections.emptyList() : value.eClass().getEAllStructuralFeatures();		
+			
+			S connectionSource = getConnectionSource(source);
+			T connectionSourceValue = connectionSource == null ? null : registry.get(connectionSource);		
+			List<EStructuralFeature> connectionSourceValueFeatures = connectionSourceValue == null ? Collections.emptyList() : connectionSourceValue.eClass().getEAllStructuralFeatures();
+					
+			S connectionTarget = getConnectionTarget(source);
+			T connectionTargetValue = connectionTarget == null ? null : registry.get(connectionTarget);		
+			List<EStructuralFeature> connectionTargetValueFeatures = connectionTargetValue == null ? Collections.emptyList() : connectionTargetValue.eClass().getEAllStructuralFeatures();
+			
+			boolean isPassThrough = isPassThrough(source, value);
+			
+			// Connection source features		
+			for (EStructuralFeature connectionSourceValueFeature: connectionSourceValueFeatures) {
+				wireConnectionSourceFeature(
+						source,	
 						connectionSource,
 						connectionSourceValue,
+						connectionSourceValueFeature,
+						isPassThrough ? connectionTarget : source,
+						isPassThrough ? connectionTargetValue : value,
 						registry,
 						progressMonitor);
 			}
 			
-			if (connectionTarget != null) {
-				wireConnectionEndFeature(
-						source,
-						value,
-						valueFeature,
+			// Connection target features		
+			for (EStructuralFeature connectionTargetValueFeature: connectionTargetValueFeatures) {
+				wireConnectionTargetFeature(
+						source,	
 						connectionTarget,
 						connectionTargetValue,
+						connectionTargetValueFeature,
+						isPassThrough ? connectionSource : source,
+						isPassThrough ? connectionSourceValue : value,
 						registry,
 						progressMonitor);
 			}
-		}	
+			
+			// Own features		
+			for (EStructuralFeature valueFeature: valueFeatures) {
+				wireFeature(
+						source, 
+						value, 
+						valueFeature, 
+						registry, 
+						progressMonitor);			
+				
+				if (connectionSource != null) {
+					wireConnectionStartFeature(
+							source,
+							value,
+							valueFeature,
+							connectionSource,
+							connectionSourceValue,
+							registry,
+							progressMonitor);
+				}
+				
+				if (connectionTarget != null) {
+					wireConnectionEndFeature(
+							source,
+							value,
+							valueFeature,
+							connectionTarget,
+							connectionTargetValue,
+							registry,
+							progressMonitor);
+				}
+			}
+		}
 		
 		if (chain != null) {
-			chain.wire(connectionSource, registry, progressMonitor);
+			chain.wire(source, registry, progressMonitor);
 		}
 	}
 	
@@ -169,44 +182,46 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 		return path -> {
 			@SuppressWarnings("unchecked")
 			S contents = (S) path.getLast();
-			T contentsValue = registry.get(contents);
-			if (contentsValue == null && containerValue == null) {
-				return true; 
-			}
-			
-			// Container (parent) features capable of accepting the child
-			List<EStructuralFeature> containerFeatures = containerValue == null ? Collections.emptyList() : containerValue.eClass().getEAllStructuralFeatures();
-			List<EStructuralFeature> contentsFeatures = contentsValue == null ? Collections.emptyList() : contentsValue.eClass().getEAllStructuralFeatures();
-
-			boolean result = containerFeatures.isEmpty() && contentsFeatures.isEmpty();
-			
-			for (EStructuralFeature containerFeature: containerFeatures) {					
-				if (wireContainerFeature(
-						container, 
-						containerValue, 
-						containerFeature, 
-						contents, 
-						contentsValue, 
-						path, 
-						registry, 
-						progressMonitor)) {
-					
-					result = true;
+			boolean result = true;
+			for (T contentsValue: select(contents, registry, progressMonitor)) {
+				if (contentsValue == null && containerValue == null) {
+					continue; 
 				}
-			}
+				
+				// Container (parent) features capable of accepting the child
+				List<EStructuralFeature> containerFeatures = containerValue == null ? Collections.emptyList() : containerValue.eClass().getEAllStructuralFeatures();
+				List<EStructuralFeature> contentsFeatures = contentsValue == null ? Collections.emptyList() : contentsValue.eClass().getEAllStructuralFeatures();
+	
+				result = result && containerFeatures.isEmpty() && contentsFeatures.isEmpty();
+				
+				for (EStructuralFeature containerFeature: containerFeatures) {					
+					if (wireContainerFeature(
+							container, 
+							containerValue, 
+							containerFeature, 
+							contents, 
+							contentsValue, 
+							path, 
+							registry, 
+							progressMonitor)) {
 						
-			for (EStructuralFeature contentsFeature: contentsFeatures) {
-				if (wireContentsFeature(
-						contents, 
-						contentsValue, 
-						contentsFeature, 
-						container, 
-						containerValue, 
-						path, 
-						registry, 
-						progressMonitor)) {
-					
-					result = true;
+						result = true;
+					}
+				}
+							
+				for (EStructuralFeature contentsFeature: contentsFeatures) {
+					if (wireContentsFeature(
+							contents, 
+							contentsValue, 
+							contentsFeature, 
+							container, 
+							containerValue, 
+							path, 
+							registry, 
+							progressMonitor)) {
+						
+						result = true;
+					}
 				}
 			}
 			

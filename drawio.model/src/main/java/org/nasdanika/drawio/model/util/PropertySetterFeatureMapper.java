@@ -47,6 +47,10 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 		return getPropertyNamespace() + "feature-map-ref";
 	}
 	
+	protected String getMappingSelectorPropertyName() {
+		return getPropertyNamespace() + "mapping-selector";
+	}
+	
 	@Override
 	protected String getFeatureMapConfigStr(EObject source) {
 		if (source instanceof ModelElement) {
