@@ -2,6 +2,7 @@
  */
 package org.nasdanika.drawio.model.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -9,8 +10,9 @@ import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -18,6 +20,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.nasdanika.drawio.model.Document;
 import org.nasdanika.drawio.model.ModelElement;
 import org.nasdanika.drawio.model.ModelPackage;
 import org.nasdanika.drawio.model.Page;
@@ -312,6 +315,53 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public Document getDocument() {
+		for (EObject ec = eContainer(); ec != null; ec = ec.eContainer()) {
+			if (ec instanceof Document) {
+				return (Document) ec;
+			} 
+		}			
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public Page getPage() {
+		for (EObject ec = eContainer(); ec != null; ec = ec.eContainer()) {
+			if (ec instanceof Page) {
+				return (Page) ec;
+			} 
+		}			
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public ModelElement getModelElementById(String modelElementId) {
+		TreeIterator<EObject> cit = eAllContents();
+		while (cit.hasNext()) {
+			EObject next = cit.next();
+			if (next instanceof ModelElement && ((ModelElement) next).getId().equals(modelElementId)) {
+				return (ModelElement) next;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -530,6 +580,24 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ModelPackage.MODEL_ELEMENT___GET_DOCUMENT:
+				return getDocument();
+			case ModelPackage.MODEL_ELEMENT___GET_PAGE:
+				return getPage();
+			case ModelPackage.MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING:
+				return getModelElementById((String)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //ModelElementImpl

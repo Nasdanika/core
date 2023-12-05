@@ -4,6 +4,7 @@ package org.nasdanika.drawio.model;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.nasdanika.ncore.NcorePackage;
@@ -113,13 +114,40 @@ public interface ModelPackage extends EPackage {
 	int DOCUMENT_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 3;
 
 	/**
+	 * The operation id for the '<em>Get Page By Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENT___GET_PAGE_BY_NAME__STRING = NcorePackage.MARKED_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Page By Id</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENT___GET_PAGE_BY_ID__STRING = NcorePackage.MARKED_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENT___GET_MODEL_ELEMENT_BY_ID__STRING = NcorePackage.MARKED_OPERATION_COUNT + 2;
+
+	/**
 	 * The number of operations of the '<em>Document</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DOCUMENT_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 0;
+	int DOCUMENT_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 3;
 
 
 	/**
@@ -187,13 +215,22 @@ public interface ModelPackage extends EPackage {
 	int PAGE_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 4;
 
 	/**
+	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE___GET_MODEL_ELEMENT_BY_ID__STRING = NcorePackage.MARKED_OPERATION_COUNT + 0;
+
+	/**
 	 * The number of operations of the '<em>Page</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 0;
+	int PAGE_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.ModelImpl <em>Model</em>}' class.
@@ -351,13 +388,40 @@ public interface ModelPackage extends EPackage {
 	int MODEL_ELEMENT_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 9;
 
 	/**
+	 * The operation id for the '<em>Get Document</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT___GET_DOCUMENT = NcorePackage.MARKED_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Page</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT___GET_PAGE = NcorePackage.MARKED_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING = NcorePackage.MARKED_OPERATION_COUNT + 2;
+
+	/**
 	 * The number of operations of the '<em>Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 0;
+	int MODEL_ELEMENT_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.RootImpl <em>Root</em>}' class.
@@ -476,6 +540,33 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int ROOT_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Document</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROOT___GET_DOCUMENT = MODEL_ELEMENT___GET_DOCUMENT;
+
+	/**
+	 * The operation id for the '<em>Get Page</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROOT___GET_PAGE = MODEL_ELEMENT___GET_PAGE;
+
+	/**
+	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROOT___GET_MODEL_ELEMENT_BY_ID__STRING = MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING;
 
 	/**
 	 * The number of operations of the '<em>Root</em>' class.
@@ -605,6 +696,33 @@ public interface ModelPackage extends EPackage {
 	int LAYER_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Get Document</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER___GET_DOCUMENT = MODEL_ELEMENT___GET_DOCUMENT;
+
+	/**
+	 * The operation id for the '<em>Get Page</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER___GET_PAGE = MODEL_ELEMENT___GET_PAGE;
+
+	/**
+	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER___GET_MODEL_ELEMENT_BY_ID__STRING = MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING;
+
+	/**
 	 * The number of operations of the '<em>Layer</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -730,6 +848,33 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int LAYER_ELEMENT_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Document</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER_ELEMENT___GET_DOCUMENT = MODEL_ELEMENT___GET_DOCUMENT;
+
+	/**
+	 * The operation id for the '<em>Get Page</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER_ELEMENT___GET_PAGE = MODEL_ELEMENT___GET_PAGE;
+
+	/**
+	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING = MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING;
 
 	/**
 	 * The number of operations of the '<em>Layer Element</em>' class.
@@ -886,6 +1031,33 @@ public interface ModelPackage extends EPackage {
 	int NODE_FEATURE_COUNT = LAYER_FEATURE_COUNT + 3;
 
 	/**
+	 * The operation id for the '<em>Get Document</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE___GET_DOCUMENT = LAYER___GET_DOCUMENT;
+
+	/**
+	 * The operation id for the '<em>Get Page</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE___GET_PAGE = LAYER___GET_PAGE;
+
+	/**
+	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE___GET_MODEL_ELEMENT_BY_ID__STRING = LAYER___GET_MODEL_ELEMENT_BY_ID__STRING;
+
+	/**
 	 * The number of operations of the '<em>Node</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1029,6 +1201,33 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONNECTION_FEATURE_COUNT = LAYER_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Document</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION___GET_DOCUMENT = LAYER_ELEMENT___GET_DOCUMENT;
+
+	/**
+	 * The operation id for the '<em>Get Page</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION___GET_PAGE = LAYER_ELEMENT___GET_PAGE;
+
+	/**
+	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION___GET_MODEL_ELEMENT_BY_ID__STRING = LAYER_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING;
 
 	/**
 	 * The number of operations of the '<em>Connection</em>' class.
@@ -1342,6 +1541,36 @@ public interface ModelPackage extends EPackage {
 	EAttribute getDocument_Source();
 
 	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Document#getPageByName(java.lang.String) <em>Get Page By Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Page By Name</em>' operation.
+	 * @see org.nasdanika.drawio.model.Document#getPageByName(java.lang.String)
+	 * @generated
+	 */
+	EOperation getDocument__GetPageByName__String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Document#getPageById(java.lang.String) <em>Get Page By Id</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Page By Id</em>' operation.
+	 * @see org.nasdanika.drawio.model.Document#getPageById(java.lang.String)
+	 * @generated
+	 */
+	EOperation getDocument__GetPageById__String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Document#getModelElementById(java.lang.String) <em>Get Model Element By Id</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Element By Id</em>' operation.
+	 * @see org.nasdanika.drawio.model.Document#getModelElementById(java.lang.String)
+	 * @generated
+	 */
+	EOperation getDocument__GetModelElementById__String();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Page <em>Page</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1383,6 +1612,16 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPage_Links();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Page#getModelElementById(java.lang.String) <em>Get Model Element By Id</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Element By Id</em>' operation.
+	 * @see org.nasdanika.drawio.model.Page#getModelElementById(java.lang.String)
+	 * @generated
+	 */
+	EOperation getPage__GetModelElementById__String();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Model <em>Model</em>}'.
@@ -1502,6 +1741,36 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getModelElement_Visible();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.ModelElement#getDocument() <em>Get Document</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Document</em>' operation.
+	 * @see org.nasdanika.drawio.model.ModelElement#getDocument()
+	 * @generated
+	 */
+	EOperation getModelElement__GetDocument();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.ModelElement#getPage() <em>Get Page</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Page</em>' operation.
+	 * @see org.nasdanika.drawio.model.ModelElement#getPage()
+	 * @generated
+	 */
+	EOperation getModelElement__GetPage();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.ModelElement#getModelElementById(java.lang.String) <em>Get Model Element By Id</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Element By Id</em>' operation.
+	 * @see org.nasdanika.drawio.model.ModelElement#getModelElementById(java.lang.String)
+	 * @generated
+	 */
+	EOperation getModelElement__GetModelElementById__String();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Root <em>Root</em>}'.
@@ -1878,6 +2147,27 @@ public interface ModelPackage extends EPackage {
 		 */
 		EAttribute DOCUMENT__SOURCE = eINSTANCE.getDocument_Source();
 		/**
+		 * The meta object literal for the '<em><b>Get Page By Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DOCUMENT___GET_PAGE_BY_NAME__STRING = eINSTANCE.getDocument__GetPageByName__String();
+		/**
+		 * The meta object literal for the '<em><b>Get Page By Id</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DOCUMENT___GET_PAGE_BY_ID__STRING = eINSTANCE.getDocument__GetPageById__String();
+		/**
+		 * The meta object literal for the '<em><b>Get Model Element By Id</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DOCUMENT___GET_MODEL_ELEMENT_BY_ID__STRING = eINSTANCE.getDocument__GetModelElementById__String();
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.PageImpl <em>Page</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1907,6 +2197,13 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PAGE__LINKS = eINSTANCE.getPage_Links();
+		/**
+		 * The meta object literal for the '<em><b>Get Model Element By Id</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PAGE___GET_MODEL_ELEMENT_BY_ID__STRING = eINSTANCE.getPage__GetModelElementById__String();
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.ModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
@@ -1988,6 +2285,27 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MODEL_ELEMENT__VISIBLE = eINSTANCE.getModelElement_Visible();
+		/**
+		 * The meta object literal for the '<em><b>Get Document</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MODEL_ELEMENT___GET_DOCUMENT = eINSTANCE.getModelElement__GetDocument();
+		/**
+		 * The meta object literal for the '<em><b>Get Page</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MODEL_ELEMENT___GET_PAGE = eINSTANCE.getModelElement__GetPage();
+		/**
+		 * The meta object literal for the '<em><b>Get Model Element By Id</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING = eINSTANCE.getModelElement__GetModelElementById__String();
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.RootImpl <em>Root</em>}' class.
 		 * <!-- begin-user-doc -->

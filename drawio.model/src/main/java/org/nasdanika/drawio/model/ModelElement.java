@@ -181,4 +181,28 @@ public interface ModelElement extends Marked, StringIdentity {
 	 */
 	void setVisible(boolean value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	Document getDocument();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	Page getPage();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	ModelElement getModelElementById(String modelElementId);
+
 } // ModelElement

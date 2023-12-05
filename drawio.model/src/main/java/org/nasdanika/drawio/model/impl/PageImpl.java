@@ -2,13 +2,15 @@
  */
 package org.nasdanika.drawio.model.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.UUID;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
-
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
@@ -183,6 +185,23 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public ModelElement getModelElementById(String modelElementId) {
+		TreeIterator<EObject> cit = eAllContents();
+		while (cit.hasNext()) {
+			EObject next = cit.next();
+			if (next instanceof ModelElement && ((ModelElement) next).getId().equals(modelElementId)) {
+				return (ModelElement) next;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -344,6 +363,20 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ModelPackage.PAGE___GET_MODEL_ELEMENT_BY_ID__STRING:
+				return getModelElementById((String)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //PageImpl

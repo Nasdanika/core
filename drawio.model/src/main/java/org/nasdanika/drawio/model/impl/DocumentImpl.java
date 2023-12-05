@@ -2,16 +2,19 @@
  */
 package org.nasdanika.drawio.model.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
-
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.drawio.model.Document;
+import org.nasdanika.drawio.model.ModelElement;
 import org.nasdanika.drawio.model.ModelPackage;
 import org.nasdanika.drawio.model.Page;
 import org.nasdanika.ncore.Marker;
@@ -148,6 +151,53 @@ public class DocumentImpl extends MinimalEObjectImpl.Container implements Docume
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public Page getPageByName(String pageName) {
+		for (Page page: getPages()) {
+			if (pageName.equals(page.getName())) {
+				return page;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public Page getPageById(String pageId) {
+		for (Page page: getPages()) {
+			if (pageId.equals(page.getId())) {
+				return page;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public ModelElement getModelElementById(String modelElementId) {
+		TreeIterator<EObject> cit = eAllContents();
+		while (cit.hasNext()) {
+			EObject next = cit.next();
+			if (next instanceof ModelElement && ((ModelElement) next).getId().equals(modelElementId)) {
+				return (ModelElement) next;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -250,6 +300,24 @@ public class DocumentImpl extends MinimalEObjectImpl.Container implements Docume
 				return SOURCE_EDEFAULT == null ? getSource() != null : !SOURCE_EDEFAULT.equals(getSource());
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ModelPackage.DOCUMENT___GET_PAGE_BY_NAME__STRING:
+				return getPageByName((String)arguments.get(0));
+			case ModelPackage.DOCUMENT___GET_PAGE_BY_ID__STRING:
+				return getPageById((String)arguments.get(0));
+			case ModelPackage.DOCUMENT___GET_MODEL_ELEMENT_BY_ID__STRING:
+				return getModelElementById((String)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //DocumentImpl

@@ -83,4 +83,28 @@ public interface Document extends Marked {
 	 * @generated
 	 */
 	void setSource(String value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	Page getPageByName(String pageName);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	Page getPageById(String pageId);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	ModelElement getModelElementById(String modelElementId);
 } // Document

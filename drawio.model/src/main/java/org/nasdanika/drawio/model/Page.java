@@ -86,4 +86,12 @@ public interface Page extends Marked, StringIdentity {
 	 * @generated
 	 */
 	EList<ModelElement> getLinks();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	ModelElement getModelElementById(String modelElementId);
 } // Page

@@ -32,6 +32,13 @@ import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marked;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.EvaluationException;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.ParseException;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 /**
  * Base class for classes which map/transform Drawio model to a specific semantic model. For example, architecture model or flow/process model.
@@ -644,13 +651,24 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			((org.nasdanika.drawio.model.SemanticElement) semanticElement).getSemanticMappings().add(semanticMapping);
 		}	
 		
+		
 		// Page representation
 		if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
+			org.nasdanika.ncore.ModelElement semanticModelElement = (org.nasdanika.ncore.ModelElement) semanticElement;
+			Page linkedPage = drawioModelElement.getLinkedPage();
+			if (linkedPage != null) {
+				addRepresentationPage(
+						semanticModelElement, 
+						linkedPage, 
+						registry, 
+						progressMonitor);
+				
+			}
 			for (EObject eContainer = drawioModelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
 				if (eContainer instanceof Page) {
 					if (isPageElement) {
 						addRepresentationPage(
-								(org.nasdanika.ncore.ModelElement) semanticElement, 
+								semanticModelElement, 
 								(Page) eContainer, 
 								registry, 
 								progressMonitor);
@@ -678,7 +696,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	}
 	
 	protected String getRefIdProperty() {
-		return "ref-id";
+		return getPropertyNamespace() + "ref-id";
 	}
 	
 	/**
@@ -721,6 +739,70 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		registry.put(modelElement, refTarget); // Resolved refId triggers a new wave of wiring
 		return true;
 	}
+		
+	protected String getSelectorProperty() {
+		return getPropertyNamespace() + "selector";
+	}
+	
+	/**
+	 * Wires elements with selector property. Remaps which triggers wireContainment.
+	 * @param modelElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
+	public final boolean wireSelectors(
+			org.nasdanika.drawio.model.ModelElement modelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+
+		String selectorPropertyName = getSelectorProperty();
+		if (Util.isBlank(selectorPropertyName)) {
+			return true;
+		}
+		String selector = modelElement.getProperties().get(selectorPropertyName);
+		if (Util.isBlank(selector)) {
+			return true;
+		}
+		
+		try {			
+			ExpressionParser parser = getExpressionParser();
+			Expression exp = parser.parseExpression(selector);
+			EvaluationContext evaluationContext = getEvaluationContext();
+			evaluationContext.setVariable("registry", registry);
+			evaluationContext.setVariable("pass", pass);
+			Object result = exp.getValue(evaluationContext, modelElement, Object.class);
+			if (result instanceof EObject) {
+				EObject selectedTarget = registry.get(result);
+				if (selectedTarget == null) {
+					return false; // Not there yet
+				}
+				registry.put(modelElement, selectedTarget); // Тriggers a new wave of wiring
+				return true;				
+			}
+			if (result instanceof Boolean) {
+				return (Boolean) result;
+			} 
+			if (result == null) {
+				return true;
+			}
+			throw new ConfigurationException("Unexpected result type of selector: '" + selector + "': " + result, modelElement);			
+		} catch (ParseException e) {
+			throw new ConfigurationException("Error parsing expression: '" + selector, e, modelElement);
+		} catch (EvaluationException e) {
+			throw new ConfigurationException("Error evaluating expression: '" + selector, e, modelElement);
+		}
+	}
+	
+	protected EvaluationContext getEvaluationContext() {
+		return new StandardEvaluationContext();
+	}
+
+	protected SpelExpressionParser getExpressionParser() {
+		return new SpelExpressionParser();
+	}	
 	
 	/**
 	 * Feature maps null semantic elements, which is needed for connections as they might be pass-through.

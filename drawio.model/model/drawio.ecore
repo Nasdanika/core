@@ -2,6 +2,15 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="ecore://nasdanika.org/core/drawio/model" nsPrefix="org.nasdanika.drawio.model">
   <eClassifiers xsi:type="ecore:EClass" name="Document" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked">
+    <eOperations name="getPageByName" eType="#//Page">
+      <eParameters name="pageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getPageById" eType="#//Page">
+      <eParameters name="pageId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getModelElementById" eType="#//ModelElement">
+      <eParameters name="modelElementId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="pages" upperBound="-1"
         eType="#//Page" containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity/id"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -12,6 +21,9 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Page" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked ../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity">
+    <eOperations name="getModelElementById" eType="#//ModelElement">
+      <eParameters name="modelElementId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1" eType="#//Model"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -27,6 +39,11 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked ../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity">
+    <eOperations name="getDocument" eType="#//Document"/>
+    <eOperations name="getPage" eType="#//Page"/>
+    <eOperations name="getModelElementById" eType="#//ModelElement">
+      <eParameters name="modelElementId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
         eType="ecore:EClass ../../org.nasdanika.ncore/model/ncore.ecore#//StringEntry"
         containment="true"/>

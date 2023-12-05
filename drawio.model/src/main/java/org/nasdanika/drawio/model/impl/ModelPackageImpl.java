@@ -4,6 +4,7 @@ package org.nasdanika.drawio.model.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.EReference;
@@ -226,6 +227,36 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
+	public EOperation getDocument__GetPageByName__String() {
+		return documentEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getDocument__GetPageById__String() {
+		return documentEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getDocument__GetModelElementById__String() {
+		return documentEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPage() {
 		return pageEClass;
 	}
@@ -258,6 +289,16 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	@Override
 	public EReference getPage_Links() {
 		return (EReference)pageEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getPage__GetModelElementById__String() {
+		return pageEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -368,6 +409,36 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	@Override
 	public EAttribute getModelElement_Visible() {
 		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getModelElement__GetDocument() {
+		return modelElementEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getModelElement__GetPage() {
+		return modelElementEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getModelElement__GetModelElementById__String() {
+		return modelElementEClass.getEOperations().get(2);
 	}
 
 	/**
@@ -703,11 +774,15 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEReference(documentEClass, DOCUMENT__PAGES);
 		createEAttribute(documentEClass, DOCUMENT__URI);
 		createEAttribute(documentEClass, DOCUMENT__SOURCE);
+		createEOperation(documentEClass, DOCUMENT___GET_PAGE_BY_NAME__STRING);
+		createEOperation(documentEClass, DOCUMENT___GET_PAGE_BY_ID__STRING);
+		createEOperation(documentEClass, DOCUMENT___GET_MODEL_ELEMENT_BY_ID__STRING);
 
 		pageEClass = createEClass(PAGE);
 		createEReference(pageEClass, PAGE__MODEL);
 		createEAttribute(pageEClass, PAGE__NAME);
 		createEReference(pageEClass, PAGE__LINKS);
+		createEOperation(pageEClass, PAGE___GET_MODEL_ELEMENT_BY_ID__STRING);
 
 		modelEClass = createEClass(MODEL);
 		createEReference(modelEClass, MODEL__ROOT);
@@ -721,6 +796,9 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__TAGS);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__TOOLTIP);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__VISIBLE);
+		createEOperation(modelElementEClass, MODEL_ELEMENT___GET_DOCUMENT);
+		createEOperation(modelElementEClass, MODEL_ELEMENT___GET_PAGE);
+		createEOperation(modelElementEClass, MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING);
 
 		rootEClass = createEClass(ROOT);
 		createEReference(rootEClass, ROOT__LAYERS);
@@ -814,10 +892,22 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEAttribute(getDocument_Uri(), ecorePackage.getEString(), "uri", null, 0, 1, Document.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDocument_Source(), ecorePackage.getEString(), "source", null, 0, 1, Document.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		EOperation op = initEOperation(getDocument__GetPageByName__String(), this.getPage(), "getPageByName", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "pageName", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getDocument__GetPageById__String(), this.getPage(), "getPageById", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "pageId", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getDocument__GetModelElementById__String(), this.getModelElement(), "getModelElementById", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "modelElementId", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(pageEClass, Page.class, "Page", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPage_Model(), this.getModel(), null, "model", null, 1, 1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPage_Name(), ecorePackage.getEString(), "name", null, 1, 1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPage_Links(), this.getModelElement(), this.getModelElement_LinkedPage(), "links", null, 0, -1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		op = initEOperation(getPage__GetModelElementById__String(), this.getModelElement(), "getModelElementById", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "modelElementId", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getModel_Root(), this.getRoot(), null, "root", null, 1, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -831,6 +921,13 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEAttribute(getModelElement_Tags(), ecorePackage.getEString(), "tags", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Tooltip(), ecorePackage.getEString(), "tooltip", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Visible(), ecorePackage.getEBoolean(), "visible", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getModelElement__GetDocument(), this.getDocument(), "getDocument", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getModelElement__GetPage(), this.getPage(), "getPage", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getModelElement__GetModelElementById__String(), this.getModelElement(), "getModelElementById", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "modelElementId", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(rootEClass, Root.class, "Root", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoot_Layers(), this.getLayer(), null, "layers", null, 0, -1, Root.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
