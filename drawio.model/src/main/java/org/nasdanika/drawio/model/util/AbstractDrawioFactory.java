@@ -197,11 +197,6 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			ProgressMonitor progressMonitor) {
 		
 		D documentElement = createDocumentElement(document, elementProvider, registry, progressMonitor);
-		if (documentElement instanceof org.nasdanika.ncore.Marked) {
-			for (Marker marker: document.getMarkers()) {
-				((org.nasdanika.ncore.Marked) documentElement).getMarkers().add(EcoreUtil.copy(marker));
-			}
-		}
 
 		if (documentElement instanceof ModelElement) {
 			ModelElement dme = (ModelElement) documentElement;
@@ -209,21 +204,6 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 				dme.setUuid(UUID.randomUUID().toString());
 			}
 		}
-		
-		return configureDocumentElement(
-				document,
-				documentElement,
-				elementProvider,
-				registry,
-				progressMonitor);
-	}
-	
-	protected D configureDocumentElement(
-			org.nasdanika.drawio.model.Document document,
-			D documentElement,
-			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
-			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
-			ProgressMonitor progressMonitor) {
 		
 		return documentElement;
 	}
@@ -276,6 +256,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @return
 	 */
 	@org.nasdanika.common.Transformer.Factory
+	@SuppressWarnings("unchecked")
 	public final S createSemanticElement(
 			org.nasdanika.drawio.model.ModelElement modelElement,
 			boolean parallel,
@@ -283,117 +264,31 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {
 	
-		String type = getTypeName(modelElement);
+		String type = getTypeName(modelElement);		
+		
+		S semanticElement;		
 		if (Util.isBlank(type)) {
-			return null;
+			String constructorPropertyName = getSemanticSelectorProperty();
+			String constructor = Util.isBlank(constructorPropertyName) ? null : modelElement.getProperties().get(constructorPropertyName);
+			if (Util.isBlank(constructor)) {
+				return null;
+			}
+			
+			try {			
+				ExpressionParser parser = getExpressionParser();
+				Expression exp = parser.parseExpression(constructor);
+				EvaluationContext evaluationContext = getEvaluationContext();
+				configureConstructorEvaluationContext(evaluationContext, registry, progressMonitor);
+				semanticElement = (S) exp.getValue(evaluationContext, modelElement, EObject.class);
+			} catch (ParseException e) {
+				throw new ConfigurationException("Error parsing semantic selector: '" + constructor, e, modelElement);
+			} catch (EvaluationException e) {
+				throw new ConfigurationException("Error evaluating semantic selector: '" + constructor, e, modelElement);
+			}			
+		} else {
+			semanticElement = (S) create(type.trim(), modelElement);
 		}
 		
-		@SuppressWarnings("unchecked")
-		S semanticElement = (S) create(type.trim(), modelElement);
-		if (semanticElement instanceof org.nasdanika.ncore.Marked) {
-			for (Marker marker: modelElement.getMarkers()) {
-				((org.nasdanika.ncore.Marked) semanticElement).getMarkers().add(EcoreUtil.copy(marker));
-			}
-		}		
-		
-		// Root is logically "merged" with the containing page
-		if (modelElement instanceof Root) {
-			Page page = (Page) modelElement.eContainer().eContainer();
-			if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
-				((org.nasdanika.ncore.NamedElement) semanticElement).setName(page.getName());
-			}
-		}
-		
-		String elementId = modelElement.getId();
-		if (semanticElement instanceof org.nasdanika.ncore.StringIdentity) {
-			String semanticIdProperty = getSemanticIdProperty();
-			if (!Util.isBlank(semanticIdProperty)) {
-				String semanticId = modelElement.getProperties().get(semanticIdProperty);
-				((org.nasdanika.ncore.StringIdentity) semanticElement).setId(Util.isBlank(semanticId) ? elementId : semanticId);
-			}
-		}
-		
-		String label = modelElement.getLabel();
-		if (!Util.isBlank(label) && semanticElement instanceof org.nasdanika.ncore.NamedElement) {
-			String labelText = Jsoup.parse(label).text();
-			((org.nasdanika.ncore.NamedElement) semanticElement).setName(labelText);
-		}
-		String tooltip = modelElement.getTooltip();
-		if (!Util.isBlank(tooltip) && semanticElement instanceof org.nasdanika.ncore.ModelElement) {
-			((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(tooltip);
-		}
-				
-		if (semanticElement instanceof org.nasdanika.ncore.Documented) {
-			URI baseUri = getBaseURI(modelElement);
-			org.nasdanika.ncore.Documented documented = (org.nasdanika.ncore.Documented) semanticElement;
-			String docProperty = getDocumentationProperty();
-			if (!Util.isBlank(docProperty)) {
-				String doc = modelElement.getProperties().get(docProperty);
-				if (!Util.isBlank(doc)) {
-					DocumentationFormat docFormat = DocumentationFormat.markdown;
-					String docFormatProperty = getDocFormatProperty();
-					if (!Util.isBlank(docFormatProperty)) {
-						String docFormatStr = modelElement.getProperties().get(docFormatProperty);
-						if (!Util.isBlank(docFormatStr)) {
-							docFormat = DocumentationFormat.valueOf(docFormatStr);						
-						}					
-					}
-					switch (docFormat) {
-					case html:
-						documented.getDocumentation().add(createHtmlDoc(doc, baseUri, progressMonitor));
-						break;
-					case markdown:
-						documented.getDocumentation().add(createMarkdownDoc(doc, baseUri, progressMonitor));
-						break;
-					case text:
-						documented.getDocumentation().add(createTextDoc(doc, baseUri, progressMonitor));
-						break;
-					default:
-						throw new ConfigurationException("Unsupported documentation format: " + docFormat, modelElement instanceof Marked ? (Marked) modelElement : null);
-					
-					}
-				}
-			}
-			String docRefProperty = getDocRefProperty();
-			if (!Util.isBlank(docRefProperty)) {
-				String docRefStr = modelElement.getProperties().get(docRefProperty);
-				if (!Util.isBlank(docRefStr)) {					
-					DocumentationFormat docFormat = null;
-					if (docRefStr.toLowerCase().endsWith(".html") || docRefStr.toLowerCase().endsWith(".htm")) {
-						docFormat = DocumentationFormat.html;
-					} else if (docRefStr.toLowerCase().endsWith(".txt")) {
-						docFormat = DocumentationFormat.text;
-					} else {					
-						docFormat = DocumentationFormat.markdown; // Default
-					}
-					String docFormatProperty = getDocFormatProperty();
-					if (!Util.isBlank(docFormatProperty)) {
-						String docFormatStr = modelElement.getProperties().get(docFormatProperty);
-						if (!Util.isBlank(docFormatStr)) {
-							docFormat = DocumentationFormat.valueOf(docFormatStr);						
-						}					
-					}
-					URI docRefURI = URI.createURI(docRefStr);
-					if (baseUri != null && !baseUri.isRelative()) {
-						docRefURI = docRefURI.resolve(baseUri);
-					}
-					switch (docFormat) {
-					case html:
-						documented.getDocumentation().add(createHtmlDoc(docRefURI, progressMonitor));
-						break;
-					case markdown:
-						documented.getDocumentation().add(createMarkdownDoc(docRefURI, progressMonitor));
-						break;
-					case text:
-						documented.getDocumentation().add(createTextDoc(docRefURI, progressMonitor));
-						break;
-					default:
-						throw new ConfigurationException("Unsupported documentation format: " + docFormat, modelElement instanceof Marked ? (Marked) modelElement : null);					
-					}
-				}
-			}
-		}		
-
 		if (semanticElement instanceof ModelElement) {
 			ModelElement sme = (ModelElement) semanticElement;
 			if (Util.isBlank(sme.getUuid())) {
@@ -401,35 +296,25 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			}
 		}
 		
-		return configureSemanticElement(
-				modelElement,
-				semanticElement,
-				elementProvider,
-				registry,
-				progressMonitor);
-	}
-	
-	protected S configureSemanticElement(
-			org.nasdanika.drawio.model.ModelElement modelElement,
-			S semanticElement,
-			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
-			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
-			ProgressMonitor progressMonitor) {
-		
 		return semanticElement;
 	}
+	
+	/**
+	 * Constructor expression
+	 * @return
+	 */
+	protected String getConstructorProperty() {
+		return getPropertyNamespace() + "constructor";
+	}
+
+	protected void configureConstructorEvaluationContext(
+			EvaluationContext evaluationContext,
+			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry, 
+			ProgressMonitor progressMonitor) {
 		
-	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-	
-	protected abstract EObject createTextDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-	
-	protected abstract EObject createMarkdownDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-	
-	protected abstract EObject createHtmlDoc(URI docRef, ProgressMonitor progressMonitor);
-	
-	protected abstract EObject createTextDoc(URI docRef, ProgressMonitor progressMonitor);
-	
-	protected abstract EObject createMarkdownDoc(URI docRef, ProgressMonitor progressMonitor);
+		evaluationContext.setVariable("registry", registry);
+		evaluationContext.setVariable("progressMonitor", progressMonitor);
+	}
 	
 	/**
 	 * Property for setting base {@link URI} for an element relative to its containers for resolving resource URI's 
@@ -771,8 +656,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			ExpressionParser parser = getExpressionParser();
 			Expression exp = parser.parseExpression(selector);
 			EvaluationContext evaluationContext = getEvaluationContext();
-			evaluationContext.setVariable("registry", registry);
-			evaluationContext.setVariable("pass", pass);
+			configureSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
 			Object result = exp.getValue(evaluationContext, modelElement, Object.class);
 			if (result instanceof EObject) {
 				EObject selectedTarget = registry.get(result);
@@ -790,12 +674,82 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			}
 			throw new ConfigurationException("Unexpected result type of selector: '" + selector + "': " + result, modelElement);			
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing expression: '" + selector, e, modelElement);
+			throw new ConfigurationException("Error parsing selector: '" + selector, e, modelElement);
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating expression: '" + selector, e, modelElement);
+			throw new ConfigurationException("Error evaluating selector: '" + selector, e, modelElement);
 		}
 	}
+
+	protected void configureSelectorEvaluationContext(
+			EvaluationContext evaluationContext,
+			Map<EObject, EObject> registry, 
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		evaluationContext.setVariable("registry", registry);
+		evaluationContext.setVariable("pass", pass);
+		evaluationContext.setVariable("progressMonitor", progressMonitor);
+	}
 	
+	protected String getSemanticSelectorProperty() {
+		return getPropertyNamespace() + "semantic-selector";
+	}
+	
+	/**
+	 * Wires elements with semantic selector property. Remaps which triggers wireContainment.
+	 * @param modelElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
+	public final boolean wireSemanticSelectors(
+			org.nasdanika.drawio.model.ModelElement modelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+
+		String semanticSelectorPropertyName = getSemanticSelectorProperty();
+		if (Util.isBlank(semanticSelectorPropertyName)) {
+			return true;
+		}
+		String semanticSelector = modelElement.getProperties().get(semanticSelectorPropertyName);
+		if (Util.isBlank(semanticSelector)) {
+			return true;
+		}
+		
+		try {			
+			ExpressionParser parser = getExpressionParser();
+			Expression exp = parser.parseExpression(semanticSelector);
+			EvaluationContext evaluationContext = getEvaluationContext();
+			configureSemanticSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
+			Object result = exp.getValue(evaluationContext, modelElement, Object.class);
+			if (result instanceof EObject) {
+				registry.put(modelElement, (EObject) result); 
+				return true;				
+			}
+			if (result == null) {
+				return true;
+			}
+			throw new ConfigurationException("Unexpected result type of semantic selector: '" + semanticSelector + "': " + result, modelElement);			
+		} catch (ParseException e) {
+			throw new ConfigurationException("Error parsing semantic selector: '" + semanticSelector, e, modelElement);
+		} catch (EvaluationException e) {
+			throw new ConfigurationException("Error evaluating semantic selector: '" + semanticSelector, e, modelElement);
+		}
+	}
+
+	protected void configureSemanticSelectorEvaluationContext(
+			EvaluationContext evaluationContext,
+			Map<EObject, EObject> registry, 
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		evaluationContext.setVariable("registry", registry);
+		evaluationContext.setVariable("pass", pass);
+		evaluationContext.setVariable("progressMonitor", progressMonitor);
+	}
+		
 	protected EvaluationContext getEvaluationContext() {
 		return new StandardEvaluationContext();
 	}
@@ -818,11 +772,184 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		Mapper<EObject,EObject> mapper = getMapper(0, pass);
+		Mapper<EObject,EObject> mapper = getMapper(2, pass);
 		if (mapper != null) {
 			mapper.wire(modelElement, registry, progressMonitor);
 		}		
 		return true;
-	}	
+	}
+	
+	/**
+	 * Wires document configuration
+	 */
+	@org.nasdanika.common.Transformer.Wire(phase = 3)
+	public final void wireDocumentConfiguration(
+			org.nasdanika.drawio.model.Document document,
+			D documentElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		
+		configureDocumentElement(
+				document,
+				documentElement,
+				registry,
+				progressMonitor);
+	}
+	
+	protected void configureDocumentElement(
+			org.nasdanika.drawio.model.Document document,
+			D documentElement,
+			Map<EObject, EObject> registry,
+			ProgressMonitor progressMonitor) {
+		
+		if (documentElement instanceof org.nasdanika.ncore.Marked) {
+			for (Marker marker: document.getMarkers()) {
+				((org.nasdanika.ncore.Marked) documentElement).getMarkers().add(EcoreUtil.copy(marker));
+			}
+		}		
+	}
+	
+	@org.nasdanika.common.Transformer.Wire(phase = 3)
+	public final void wireModelElementConfiguration(
+			org.nasdanika.drawio.model.ModelElement drawioModelElement,
+			S semanticElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		configureSemanticElement(
+				drawioModelElement,
+				semanticElement,
+				registry,
+				progressMonitor);
+	}
+	
+	protected S configureSemanticElement(
+			org.nasdanika.drawio.model.ModelElement modelElement,
+			S semanticElement,
+			Map<EObject, EObject> registry,
+			ProgressMonitor progressMonitor) {
+
+		if (semanticElement instanceof org.nasdanika.ncore.Marked) {
+			for (Marker marker: modelElement.getMarkers()) {
+				((org.nasdanika.ncore.Marked) semanticElement).getMarkers().add(EcoreUtil.copy(marker));
+			}
+		}
+						
+		// Root is logically "merged" with the containing page
+		if (modelElement instanceof Root) {
+			Page page = (Page) modelElement.eContainer().eContainer();
+			if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
+				((org.nasdanika.ncore.NamedElement) semanticElement).setName(page.getName());
+			}
+		}
+		
+		String elementId = modelElement.getId();
+		if (semanticElement instanceof org.nasdanika.ncore.StringIdentity) {
+			String semanticIdProperty = getSemanticIdProperty();
+			if (!Util.isBlank(semanticIdProperty)) {
+				String semanticId = modelElement.getProperties().get(semanticIdProperty);
+				((org.nasdanika.ncore.StringIdentity) semanticElement).setId(Util.isBlank(semanticId) ? elementId : semanticId);
+			}
+		}
+		
+		String label = modelElement.getLabel();
+		if (!Util.isBlank(label) && semanticElement instanceof org.nasdanika.ncore.NamedElement) {
+			String labelText = Jsoup.parse(label).text();
+			((org.nasdanika.ncore.NamedElement) semanticElement).setName(labelText);
+		}
+		String tooltip = modelElement.getTooltip();
+		if (!Util.isBlank(tooltip) && semanticElement instanceof org.nasdanika.ncore.ModelElement) {
+			((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(tooltip);
+		}
+				
+		if (semanticElement instanceof org.nasdanika.ncore.Documented) {
+			URI baseUri = getBaseURI(modelElement);
+			org.nasdanika.ncore.Documented documented = (org.nasdanika.ncore.Documented) semanticElement;
+			String docProperty = getDocumentationProperty();
+			if (!Util.isBlank(docProperty)) {
+				String doc = modelElement.getProperties().get(docProperty);
+				if (!Util.isBlank(doc)) {
+					DocumentationFormat docFormat = DocumentationFormat.markdown;
+					String docFormatProperty = getDocFormatProperty();
+					if (!Util.isBlank(docFormatProperty)) {
+						String docFormatStr = modelElement.getProperties().get(docFormatProperty);
+						if (!Util.isBlank(docFormatStr)) {
+							docFormat = DocumentationFormat.valueOf(docFormatStr);						
+						}					
+					}
+					switch (docFormat) {
+					case html:
+						documented.getDocumentation().add(createHtmlDoc(doc, baseUri, progressMonitor));
+						break;
+					case markdown:
+						documented.getDocumentation().add(createMarkdownDoc(doc, baseUri, progressMonitor));
+						break;
+					case text:
+						documented.getDocumentation().add(createTextDoc(doc, baseUri, progressMonitor));
+						break;
+					default:
+						throw new ConfigurationException("Unsupported documentation format: " + docFormat, modelElement instanceof Marked ? (Marked) modelElement : null);
+					
+					}
+				}
+			}
+			String docRefProperty = getDocRefProperty();
+			if (!Util.isBlank(docRefProperty)) {
+				String docRefStr = modelElement.getProperties().get(docRefProperty);
+				if (!Util.isBlank(docRefStr)) {					
+					DocumentationFormat docFormat = null;
+					if (docRefStr.toLowerCase().endsWith(".html") || docRefStr.toLowerCase().endsWith(".htm")) {
+						docFormat = DocumentationFormat.html;
+					} else if (docRefStr.toLowerCase().endsWith(".txt")) {
+						docFormat = DocumentationFormat.text;
+					} else {					
+						docFormat = DocumentationFormat.markdown; // Default
+					}
+					String docFormatProperty = getDocFormatProperty();
+					if (!Util.isBlank(docFormatProperty)) {
+						String docFormatStr = modelElement.getProperties().get(docFormatProperty);
+						if (!Util.isBlank(docFormatStr)) {
+							docFormat = DocumentationFormat.valueOf(docFormatStr);						
+						}					
+					}
+					URI docRefURI = URI.createURI(docRefStr);
+					if (baseUri != null && !baseUri.isRelative()) {
+						docRefURI = docRefURI.resolve(baseUri);
+					}
+					switch (docFormat) {
+					case html:
+						documented.getDocumentation().add(createHtmlDoc(docRefURI, progressMonitor));
+						break;
+					case markdown:
+						documented.getDocumentation().add(createMarkdownDoc(docRefURI, progressMonitor));
+						break;
+					case text:
+						documented.getDocumentation().add(createTextDoc(docRefURI, progressMonitor));
+						break;
+					default:
+						throw new ConfigurationException("Unsupported documentation format: " + docFormat, modelElement instanceof Marked ? (Marked) modelElement : null);					
+					}
+				}
+			}
+		}				
+		
+		return semanticElement;
+	}
+		
+	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
+	
+	protected abstract EObject createTextDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
+	
+	protected abstract EObject createMarkdownDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
+	
+	protected abstract EObject createHtmlDoc(URI docRef, ProgressMonitor progressMonitor);
+	
+	protected abstract EObject createTextDoc(URI docRef, ProgressMonitor progressMonitor);
+	
+	protected abstract EObject createMarkdownDoc(URI docRef, ProgressMonitor progressMonitor);
+	
 	
 }

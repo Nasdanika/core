@@ -176,9 +176,8 @@ public class GraphDrawioFactory<G extends Graph<?>, E extends EObject> extends A
 	@Override
 	protected E configureSemanticElement(
 			ModelElement modelElement, 
-			E semanticElement,
-			BiConsumer<EObject, BiConsumer<EObject, ProgressMonitor>> elementProvider,
-			Consumer<BiConsumer<Map<EObject, EObject>, ProgressMonitor>> registry, 
+			E semanticElement, 
+			Map<EObject, EObject> registry,
 			ProgressMonitor progressMonitor) {
 		
 		EObjectLoader eObjectLoader = new EObjectLoader((ObjectLoader) null) {
@@ -229,7 +228,6 @@ public class GraphDrawioFactory<G extends Graph<?>, E extends EObject> extends A
 		return super.configureSemanticElement(
 				modelElement,
 				semanticElement,
-				elementProvider,
 				registry,
 				progressMonitor);
 	}
