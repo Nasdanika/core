@@ -43,6 +43,17 @@ public abstract class GraphPropertySetterFeatureMapper extends PropertySetterFea
 	
 	protected abstract boolean isPageElement(org.nasdanika.drawio.model.ModelElement drawioModelElement);
 	
+	protected boolean isTopLevelPageElement(org.nasdanika.drawio.model.ModelElement drawioModelElement) {
+		if (isPageElement(drawioModelElement)) {
+			for (EObject eContainer = drawioModelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
+				if (eContainer instanceof Page) {
+					return isTopLevelPage((Page) eContainer);
+				} 
+			}			
+		}
+		return false;
+	}
+	
 	@Override
 	protected Setter<EObject, EObject> getFeatureSetter(
 			EObject source, 
@@ -84,8 +95,9 @@ public abstract class GraphPropertySetterFeatureMapper extends PropertySetterFea
 							}
 						} 
 						
-						if (argument instanceof ModelElement 
-								&& isPageElement((ModelElement) argument)
+						if (argument instanceof ModelElement
+								&& argument.eContainer() == null // Taking only non-contained objects
+								&& isTopLevelPageElement((ModelElement) argument)
 								&& feature.getEType().isInstance(argumentValue)
 								&& !graph.getElements().contains(argumentValue)) {
 										
