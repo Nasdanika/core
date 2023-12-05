@@ -271,7 +271,7 @@ public class GraphDrawioFactory<G extends Graph<?>, E extends EObject> extends A
 		URI sourceURI = URI.createURI(source);		
 		try {
 			org.nasdanika.drawio.Document sourceDocument = org.nasdanika.drawio.Document.load(sourceURI);
-			for (Page page: sourceDocument.getPages()) {
+			Z: for (Page page: sourceDocument.getPages()) {
 				if (page.getId().equals(modelPage.getId())) {
 					page.accept(pageElement -> setSemanticUUIDs(pageElement, modelPage, registry));
 					String semanticElementRepresentation = semanticModelElement.getRepresentations().get(DRAWIO_REPRESENTATION);
@@ -280,6 +280,11 @@ public class GraphDrawioFactory<G extends Graph<?>, E extends EObject> extends A
 						semanticElementRepresentationDocument = org.nasdanika.drawio.Document.create(true, sourceDocument.getURI());
 					} else {
 						semanticElementRepresentationDocument = org.nasdanika.drawio.Document.load(URI.createURI(semanticElementRepresentation));
+					}
+					for (Page serdp: semanticElementRepresentationDocument.getPages()) {
+						if (serdp.getId().equals(page.getId())) {
+							continue Z;
+						}
 					}
 					semanticElementRepresentationDocument.getPages().add(page);
 					semanticModelElement.getRepresentations().put(
