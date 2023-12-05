@@ -66,70 +66,72 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 			List<EStructuralFeature> valueFeatures = value == null ? Collections.emptyList() : value.eClass().getEAllStructuralFeatures();		
 			
 			S connectionSource = getConnectionSource(source);
-			T connectionSourceValue = connectionSource == null ? null : registry.get(connectionSource);		
-			List<EStructuralFeature> connectionSourceValueFeatures = connectionSourceValue == null ? Collections.emptyList() : connectionSourceValue.eClass().getEAllStructuralFeatures();
+			for (T connectionSourceValue: connectionSource == null ? Collections.<T>singleton(null) : select(connectionSource, registry, progressMonitor)) {		
+				List<EStructuralFeature> connectionSourceValueFeatures = connectionSourceValue == null ? Collections.emptyList() : connectionSourceValue.eClass().getEAllStructuralFeatures();
+						
+				S connectionTarget = getConnectionTarget(source);
+				for (T connectionTargetValue: connectionTarget == null ? Collections.<T>singleton(null) : select(connectionTarget, registry, progressMonitor)) {		
+					List<EStructuralFeature> connectionTargetValueFeatures = connectionTargetValue == null ? Collections.emptyList() : connectionTargetValue.eClass().getEAllStructuralFeatures();
 					
-			S connectionTarget = getConnectionTarget(source);
-			T connectionTargetValue = connectionTarget == null ? null : registry.get(connectionTarget);		
-			List<EStructuralFeature> connectionTargetValueFeatures = connectionTargetValue == null ? Collections.emptyList() : connectionTargetValue.eClass().getEAllStructuralFeatures();
-			
-			boolean isPassThrough = isPassThrough(source, value);
-			
-			// Connection source features		
-			for (EStructuralFeature connectionSourceValueFeature: connectionSourceValueFeatures) {
-				wireConnectionSourceFeature(
-						source,	
-						connectionSource,
-						connectionSourceValue,
-						connectionSourceValueFeature,
-						isPassThrough ? connectionTarget : source,
-						isPassThrough ? connectionTargetValue : value,
-						registry,
-						progressMonitor);
-			}
-			
-			// Connection target features		
-			for (EStructuralFeature connectionTargetValueFeature: connectionTargetValueFeatures) {
-				wireConnectionTargetFeature(
-						source,	
-						connectionTarget,
-						connectionTargetValue,
-						connectionTargetValueFeature,
-						isPassThrough ? connectionSource : source,
-						isPassThrough ? connectionSourceValue : value,
-						registry,
-						progressMonitor);
-			}
-			
-			// Own features		
-			for (EStructuralFeature valueFeature: valueFeatures) {
-				wireFeature(
-						source, 
-						value, 
-						valueFeature, 
-						registry, 
-						progressMonitor);			
-				
-				if (connectionSource != null) {
-					wireConnectionStartFeature(
-							source,
-							value,
-							valueFeature,
-							connectionSource,
-							connectionSourceValue,
-							registry,
-							progressMonitor);
-				}
-				
-				if (connectionTarget != null) {
-					wireConnectionEndFeature(
-							source,
-							value,
-							valueFeature,
-							connectionTarget,
-							connectionTargetValue,
-							registry,
-							progressMonitor);
+					boolean isPassThrough = isPassThrough(source, value);
+					
+					// Connection source features		
+					for (EStructuralFeature connectionSourceValueFeature: connectionSourceValueFeatures) {
+						wireConnectionSourceFeature(
+								source,	
+								connectionSource,
+								connectionSourceValue,
+								connectionSourceValueFeature,
+								isPassThrough ? connectionTarget : source,
+								isPassThrough ? connectionTargetValue : value,
+								registry,
+								progressMonitor);
+					}
+					
+					// Connection target features		
+					for (EStructuralFeature connectionTargetValueFeature: connectionTargetValueFeatures) {
+						wireConnectionTargetFeature(
+								source,	
+								connectionTarget,
+								connectionTargetValue,
+								connectionTargetValueFeature,
+								isPassThrough ? connectionSource : source,
+								isPassThrough ? connectionSourceValue : value,
+								registry,
+								progressMonitor);
+					}
+					
+					// Own features		
+					for (EStructuralFeature valueFeature: valueFeatures) {
+						wireFeature(
+								source, 
+								value, 
+								valueFeature, 
+								registry, 
+								progressMonitor);			
+						
+						if (connectionSource != null) {
+							wireConnectionStartFeature(
+									source,
+									value,
+									valueFeature,
+									connectionSource,
+									connectionSourceValue,
+									registry,
+									progressMonitor);
+						}
+						
+						if (connectionTarget != null) {
+							wireConnectionEndFeature(
+									source,
+									value,
+									valueFeature,
+									connectionTarget,
+									connectionTargetValue,
+									registry,
+									progressMonitor);
+						}
+					}
 				}
 			}
 		}
