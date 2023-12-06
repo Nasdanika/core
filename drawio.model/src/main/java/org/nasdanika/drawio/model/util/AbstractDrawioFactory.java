@@ -534,8 +534,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			semanticMapping.setModelElementID(drawioModelElement.getId());
 			semanticMapping.setPageElement(isPageElement);
 			((org.nasdanika.drawio.model.SemanticElement) semanticElement).getSemanticMappings().add(semanticMapping);
-		}	
-		
+		}		
 		
 		// Page representation
 		if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
@@ -691,6 +690,76 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		evaluationContext.setVariable("progressMonitor", progressMonitor);
 	}
 	
+	protected String getPrototypeProperty() {
+		return getPropertyNamespace() + "prototype";
+	}
+	
+	/**
+	 * Wires elements with prototype property. Remaps which triggers wireContainment.
+	 * @param modelElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
+	public final boolean wirePrototype(
+			org.nasdanika.drawio.model.ModelElement modelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+	
+		String prototypePropertyName = getPrototypeProperty();
+		if (Util.isBlank(prototypePropertyName)) {
+			return true;
+		}
+		String prototypeExpr = modelElement.getProperties().get(prototypePropertyName);
+		if (Util.isBlank(prototypeExpr)) {
+			return true;
+		}
+		
+		try {			
+			ExpressionParser parser = getExpressionParser();
+			Expression exp = parser.parseExpression(prototypeExpr);
+			EvaluationContext evaluationContext = getEvaluationContext();
+			configurePrototypeEvaluationContext(evaluationContext, registry, pass, progressMonitor);
+			Object result = exp.getValue(evaluationContext, modelElement, Object.class);
+			if (result instanceof EObject) {
+				EObject prototype = registry.get(result);
+				if (prototype == null) {
+					return false; // Not there yet
+				}
+				EObject copy = EcoreUtil.copy(prototype);
+				if (copy instanceof ModelElement) {
+					((ModelElement) copy).setUuid(UUID.randomUUID().toString());
+				}
+				registry.put(modelElement, copy); // Тriggers a new wave of wiring
+				return true;				
+			}
+			if (result instanceof Boolean) {
+				return (Boolean) result;
+			} 
+			if (result == null) {
+				return true;
+			}
+			throw new ConfigurationException("Unexpected result type of selector: '" + prototypeExpr + "': " + result, modelElement);			
+		} catch (ParseException e) {
+			throw new ConfigurationException("Error parsing selector: '" + prototypeExpr, e, modelElement);
+		} catch (EvaluationException e) {
+			throw new ConfigurationException("Error evaluating selector: '" + prototypeExpr, e, modelElement);
+		}
+	}
+
+	protected void configurePrototypeEvaluationContext(
+			EvaluationContext evaluationContext,
+			Map<EObject, EObject> registry, 
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		evaluationContext.setVariable("registry", registry);
+		evaluationContext.setVariable("pass", pass);
+		evaluationContext.setVariable("progressMonitor", progressMonitor);
+	}
+	
 	protected String getSemanticSelectorProperty() {
 		return getPropertyNamespace() + "semantic-selector";
 	}
@@ -826,7 +895,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 				progressMonitor);
 	}
 	
-	protected S configureSemanticElement(
+	protected void configureSemanticElement(
 			org.nasdanika.drawio.model.ModelElement modelElement,
 			S semanticElement,
 			Map<EObject, EObject> registry,
@@ -842,16 +911,25 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		if (modelElement instanceof Root) {
 			Page page = (Page) modelElement.eContainer().eContainer();
 			if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
-				((org.nasdanika.ncore.NamedElement) semanticElement).setName(page.getName());
+				org.nasdanika.ncore.NamedElement namedSemanticElement = (org.nasdanika.ncore.NamedElement) semanticElement;
+				if (Util.isBlank(namedSemanticElement.getName())) {
+					namedSemanticElement.setName(page.getName());
+				}
 			}
 		}
 		
-		String elementId = modelElement.getId();
 		if (semanticElement instanceof org.nasdanika.ncore.StringIdentity) {
 			String semanticIdProperty = getSemanticIdProperty();
 			if (!Util.isBlank(semanticIdProperty)) {
 				String semanticId = modelElement.getProperties().get(semanticIdProperty);
-				((org.nasdanika.ncore.StringIdentity) semanticElement).setId(Util.isBlank(semanticId) ? elementId : semanticId);
+				org.nasdanika.ncore.StringIdentity semanticStringIdentity = (org.nasdanika.ncore.StringIdentity) semanticElement;
+				if (Util.isBlank(semanticId)) {
+					if (Util.isBlank(semanticStringIdentity.getId())) {
+						semanticStringIdentity.setId(modelElement.getId());
+					}
+				} else {
+					semanticStringIdentity.setId(semanticId);
+				}
 			}
 		}
 		
@@ -935,8 +1013,6 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 				}
 			}
 		}				
-		
-		return semanticElement;
 	}
 		
 	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);

@@ -174,11 +174,17 @@ public class GraphDrawioFactory<G extends Graph<?>, E extends EObject> extends A
 	}
 	
 	@Override
-	protected E configureSemanticElement(
+	protected void configureSemanticElement(
 			ModelElement modelElement, 
 			E semanticElement, 
 			Map<EObject, EObject> registry,
 			ProgressMonitor progressMonitor) {
+		
+		super.configureSemanticElement(
+				modelElement,
+				semanticElement,
+				registry,
+				progressMonitor);
 		
 		EObjectLoader eObjectLoader = new EObjectLoader((ObjectLoader) null) {
 		
@@ -224,12 +230,6 @@ public class GraphDrawioFactory<G extends Graph<?>, E extends EObject> extends A
 				}
 			}
 		}
-		
-		return super.configureSemanticElement(
-				modelElement,
-				semanticElement,
-				registry,
-				progressMonitor);
 	}
 	
 	@Override
