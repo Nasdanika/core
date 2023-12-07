@@ -60,7 +60,8 @@ public abstract class GraphPropertySetterFeatureMapper extends PropertySetterFea
 			ConfigType configType, 
 			ConfigSubType configSubType,
 			EStructuralFeature feature,
-			BiConsumer<String, EObject> featureNameValidator) {
+			BiConsumer<String, EObject> featureNameValidator,
+			Setter<EObject, EObject> chain) {
 		
 		if (configType == ConfigType.container  
 				&& configSubType == ConfigSubType.self
@@ -96,7 +97,8 @@ public abstract class GraphPropertySetterFeatureMapper extends PropertySetterFea
 						} 
 						
 						if (argument instanceof ModelElement
-								&& argument.eContainer() == null // Taking only non-contained objects
+								&& argumentValue != null
+								&& argumentValue.eContainer() == null // Taking only non-contained objects
 								&& isTopLevelPageElement((ModelElement) argument)
 								&& feature.getEType().isInstance(argumentValue)
 								&& !graph.getElements().contains(argumentValue)) {
@@ -110,7 +112,13 @@ public abstract class GraphPropertySetterFeatureMapper extends PropertySetterFea
 			};
 		}
 		
-		return super.getFeatureSetter(source, configType, configSubType, feature, featureNameValidator);
+		return super.getFeatureSetter(
+				source, 
+				configType, 
+				configSubType, 
+				feature, 
+				featureNameValidator,
+				chain);
 	}
 	
 }

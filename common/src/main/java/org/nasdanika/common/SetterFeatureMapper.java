@@ -35,6 +35,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	
 	public static final String PATH_KEY = "path";
 	public static final String CONDITION_KEY = "condition";
+	public static final String NOP_KEY = "nop";
 	public static final String EXPRESSION_KEY = "expression";
 	public static final String GREEDY_KEY = "greedy";
 	public static final String GREEDY_NO_CHILDREN_KEY = "no-children";
@@ -71,6 +72,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		 * @param value
 		 * @param sourcePath
 		 * @param registry
+		 * @param defaultFeatureMapper Is called in case of this setter does not match
 		 * @param progressMonitor
 		 * @return
 		 */
@@ -197,7 +199,12 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Map<String, Setter<S,T>> loadFeatureSetters(Object configs, java.util.function.BiConsumer<String, EObject> featureNameValidator, EObject context) {
+	protected Map<String, Setter<S,T>> loadFeatureSetters(
+			Object configs, 
+			java.util.function.BiConsumer<String, EObject> featureNameValidator, 
+			EObject context, 
+			Setter<S, T> chain) {
+		
 		if (configs == null) {
 			return Collections.emptyMap();
 		}
@@ -206,7 +213,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			if (Util.isBlank(strConfig)) {
 				return Collections.emptyMap();
 			}
-			return Collections.singletonMap(strConfig.trim(), loadFeatureSetter(true, context));
+			return Collections.singletonMap(strConfig.trim(), loadFeatureSetter(true, context, chain));
 		} 
 		
 		if (configs instanceof Collection) {
@@ -215,7 +222,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 				if (e instanceof String) {
 					String se = (String) e; 
 					if (!Util.isBlank(se)) {
-						ret.put(se.trim(), loadFeatureSetter(true, context));
+						ret.put(se.trim(), loadFeatureSetter(true, context, chain));
 					}
 				} else {
 					throwConfigurationException("Feature config in a collection shall be a string, got: " + e, null, context);
@@ -229,7 +236,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Map<String, Setter<S,T>> ret = new LinkedHashMap<>();
 			for (Entry<String, Object> fce: ((Map<String,Object>) configs).entrySet()) {
 				featureNameValidator.accept(fce.getKey(), context);
-				ret.put(fce.getKey().trim(), loadFeatureSetter(fce.getValue(), context));
+				ret.put(fce.getKey().trim(), loadFeatureSetter(fce.getValue(), context, chain));
 			}
 			return ret;
 		}
@@ -240,7 +247,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	
 	protected enum Greedy { FALSE, NO_CHILDREN, TRUE }
 	
-	protected Setter<S,T> loadFeatureSetter(Object config, EObject context) {
+	protected Setter<S,T> loadFeatureSetter(Object config, EObject context, Setter<S, T> chain) {
 		return new Setter<S, T>() {
 
 			@Override
@@ -250,13 +257,18 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 					S argument,
 					T argumentValue,
 					LinkedList<EObject> sourcePath,
-					Map<S, T> registry, 
+					Map<S, T> registry, 					
 					ProgressMonitor progressMonitor) {
-				
+												
 				if (matchCondition(config, eObj, argument, argumentValue, sourcePath, registry, context)
 						&& matchType(eObj, config, context)
 						&& matchArgumentType(argumentValue, config, context)
 						&& matchPath(config, sourcePath, registry, context)) {
+					
+					if (isNop(config)) {
+						return true;
+					}
+					
 					Class<?> featureType = feature.getEType().getInstanceClass();
 					Object featureValue = eval(config, argument, argumentValue, sourcePath, registry, featureType, context);
 					if (featureValue != null) {
@@ -299,7 +311,16 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 								eObj.eSet(feature, element);
 							}
 						}
-					}
+					}					
+				} else if (chain != null) {
+					return chain.setFeature(
+							eObj, 
+							feature, 
+							argument, 
+							argumentValue, 
+							sourcePath, 
+							registry, 
+							progressMonitor);
 				}
 				
 				return true;
@@ -307,6 +328,17 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			
 		};
 	}
+	
+	/**
+	 * NOP means "If matches - do nothing and don't call the chain" 
+	 * Use nop to suppress chained feature mapping. E.g. by default all element children are added to XYZ reference, but a given child shall not be added to any reference. 
+	 * @param config
+	 * @return
+	 */
+	protected boolean isNop(Object config) {
+		return config instanceof Map &&  Boolean.TRUE.equals(((Map<?,?>) config).get(NOP_KEY));
+	}	
+	
 	
 	protected Object convert(Object value, EClassifier type, EObject context) {
 		if (value == null || type.isInstance(value)) {
@@ -488,7 +520,6 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			}
 			throwConfigurationException("Unsupported position type: " + position.getClass() + " " + position, null, context);
 		}
-		// TODO
 		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
 		return -1;
 	}
@@ -551,7 +582,8 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			EObject source,
 			ConfigType configType, 
 			ConfigSubType configSubType,
-			java.util.function.BiConsumer<String, EObject> featureNameValidator) {
+			java.util.function.BiConsumer<String, EObject> featureNameValidator,
+			Setter<S, T> chain) {
 		Object config = getFeatureMapConfig(source, configType, configSubType);
 		if (configType == ConfigType.self && config instanceof Map) {
 			// Converting to maps with expression key
@@ -561,7 +593,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 				.map(e -> Map.entry(e.getKey(), Collections.singletonMap(EXPRESSION_KEY, e.getValue())))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 		}
-		return loadFeatureSetters(config, featureNameValidator, source);		
+		return loadFeatureSetters(config, featureNameValidator, source, chain);		
 	}	
 	
 	protected Setter<S,T> getFeatureSetter(
@@ -569,8 +601,14 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			ConfigType configType, 
 			ConfigSubType configSubType, 
 			String featureName,
-			java.util.function.BiConsumer<String, EObject> featureNameValidator) {
-		return getFeatureSetters(source, configType, configSubType, featureNameValidator).get(featureName);
+			java.util.function.BiConsumer<String, EObject> featureNameValidator, 
+			Setter<S, T> chain) {
+		return getFeatureSetters(
+				source, 
+				configType, 
+				configSubType, 
+				featureNameValidator,
+				chain).get(featureName);
 	}
 	
 	protected Setter<S,T> getFeatureSetter(
@@ -578,8 +616,14 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			ConfigType configType, 
 			ConfigSubType configSubType, 
 			EStructuralFeature feature,
-			java.util.function.BiConsumer<String, EObject> featureNameValidator) {
-		return getFeatureSetter(source, configType, configSubType, feature.getName(), featureNameValidator);
+			java.util.function.BiConsumer<String, EObject> featureNameValidator,
+			Setter<S, T> chain) {
+		return getFeatureSetter(
+				source, 
+				configType, 
+				configSubType, 
+				feature.getName(), 
+				featureNameValidator, chain);
 	}
 	
 	protected java.util.function.BiConsumer<String, EObject> getFeatureNameValidator(EObject value) { 
@@ -600,17 +644,37 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor) {
 		
-		// Own (self) feature mapping
-		Setter<S,T> featureSetter = getFeatureSetter(source, ConfigType.self, null, valueFeature, getFeatureNameValidator(value));
-		
-		if (featureSetter != null) {
-			featureSetter.setFeature(value, valueFeature, source, null, null, registry, progressMonitor);
-		}  else if (defaultFeatureMapper != null) {
+		Setter<S,T> chain = defaultFeatureMapper == null ? null : (eObj, feature, argument, argumentValue, sPath, reg, pm) -> {
 			defaultFeatureMapper.wireFeature(
 					source, 
 					value, 
 					valueFeature, 
 					registry, 
+					progressMonitor);
+			return true;
+		};							
+		
+		// Own (self) feature mapping
+		Setter<S,T> featureSetter = getFeatureSetter(
+				source, 
+				ConfigType.self, 
+				null, 
+				valueFeature, 
+				getFeatureNameValidator(value), 
+				chain);
+		
+		if (featureSetter == null) {
+			featureSetter = chain;
+		}
+		
+		if (featureSetter != null) {
+			featureSetter.setFeature(
+					value, 
+					valueFeature, 
+					source, 
+					null, 
+					null, 
+					registry,
 					progressMonitor);
 		}
 	}
@@ -625,21 +689,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor) {
 		
-		
-
-		// Own (self) feature mapping
-		Setter<S,T> featureSetter = getFeatureSetter(container, ConfigType.container, ConfigSubType.self, containerValueFeature, getFeatureNameValidator(containerValue));
-		
-		if (featureSetter == null) {
-			// Mapping defined at the argument (contents)
-			featureSetter = getFeatureSetter(contents, ConfigType.container, ConfigSubType.other, containerValueFeature, getFeatureNameValidator(containerValue));
-		}
-		
-		if (featureSetter != null) {
-			return featureSetter.setFeature(containerValue, containerValueFeature, contents, contentsValue, sourcePath, registry, progressMonitor);
-		}
-		
-		if (defaultFeatureMapper != null) {
+		Setter<S,T> chain = defaultFeatureMapper == null ? null : (eObj, feature, argument, argumentValue, sPath, reg, pm) -> {
 			return defaultFeatureMapper.wireContainerFeature(
 					container, 
 					containerValue, 
@@ -648,6 +698,41 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 					contentsValue, 
 					sourcePath, 
 					registry, 
+					progressMonitor);
+		};							
+				
+		// Own (self) feature mapping
+		Setter<S,T> featureSetter = getFeatureSetter(
+				container, 
+				ConfigType.container, 
+				ConfigSubType.self, 
+				containerValueFeature, 
+				getFeatureNameValidator(containerValue),
+				chain);
+		
+		if (featureSetter == null) {
+			// Mapping defined at the argument (contents)
+			featureSetter = getFeatureSetter(
+					contents, 
+					ConfigType.container, 
+					ConfigSubType.other, 
+					containerValueFeature, 
+					getFeatureNameValidator(containerValue),
+					chain);
+		}
+		
+		if (featureSetter == null) {
+			featureSetter = chain;
+		}
+		
+		if (featureSetter != null) {
+			return featureSetter.setFeature(
+					containerValue, 
+					containerValueFeature, 
+					contents, 
+					contentsValue, 
+					sourcePath, 
+					registry,
 					progressMonitor);
 		}
 
@@ -665,19 +750,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor) {
 		
-		// Own (self) feature mapping
-		Setter<S,T> featureSetter = getFeatureSetter(contents, ConfigType.contents, ConfigSubType.self, contentsValueFeature, getFeatureNameValidator(contentsValue));
-		
-		if (featureSetter == null) {
-			// Mapping defined at container
-			featureSetter = getFeatureSetter(container, ConfigType.contents, ConfigSubType.other, contentsValueFeature, getFeatureNameValidator(contentsValue));
-		}
-		
-		if (featureSetter != null) {
-			return featureSetter.setFeature(contentsValue, contentsValueFeature, container, containerValue, sourcePath, registry, progressMonitor);
-		}
-		
-		if (defaultFeatureMapper != null) {
+		Setter<S,T> chain = defaultFeatureMapper == null ? null : (eObj, feature, argument, argumentValue, sPath, reg, pm) -> {
 			return defaultFeatureMapper.wireContentsFeature(
 					contents, 
 					contentsValue, 
@@ -686,6 +759,41 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 					containerValue, 
 					sourcePath, 
 					registry, 
+					progressMonitor);
+		};							
+		
+		// Own (self) feature mapping
+		Setter<S,T> featureSetter = getFeatureSetter(
+				contents, 
+				ConfigType.contents, 
+				ConfigSubType.self, 
+				contentsValueFeature, 
+				getFeatureNameValidator(contentsValue),
+				chain);
+		
+		if (featureSetter == null) {
+			// Mapping defined at container
+			featureSetter = getFeatureSetter(
+					container, 
+					ConfigType.contents, 
+					ConfigSubType.other, 
+					contentsValueFeature, 
+					getFeatureNameValidator(contentsValue),
+					chain);
+		}
+		
+		if (featureSetter == null) {
+			featureSetter = chain;
+		}
+		
+		if (featureSetter != null) {
+			return featureSetter.setFeature(
+					contentsValue, 
+					contentsValueFeature, 
+					container, 
+					containerValue, 
+					sourcePath, 
+					registry,
 					progressMonitor);
 		}
 				
@@ -703,11 +811,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor) {
 		
-		Setter<S,T> featureSetter = getFeatureSetter(connection, ConfigType.source, null, connectionSourceValueFeature, getFeatureNameValidator(connectionSourceValue));
-		
-		if (featureSetter != null) {
-			featureSetter.setFeature(connectionSourceValue, connectionSourceValueFeature, argument, argumentValue, null, registry, progressMonitor);
-		} else if (defaultFeatureMapper != null) {
+		Setter<S,T> chain = defaultFeatureMapper == null ? null : (eObj, feature, arg, argValue, sPath, reg, pm) -> {
 			defaultFeatureMapper.wireConnectionSourceFeature(
 					connection, 
 					connectionSource, 
@@ -715,6 +819,30 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 					connectionSourceValueFeature, 
 					argument, 
 					argumentValue, 
+					registry, 
+					progressMonitor);
+			return true;
+		};							
+		
+		Setter<S,T> featureSetter = getFeatureSetter(
+				connection, 
+				ConfigType.source, 
+				null, 
+				connectionSourceValueFeature, 
+				getFeatureNameValidator(connectionSourceValue),
+				chain);
+		
+		if (featureSetter == null) {
+			featureSetter = chain;
+		}
+		
+		if (featureSetter != null) {
+			featureSetter.setFeature(
+					connectionSourceValue, 
+					connectionSourceValueFeature, 
+					argument, 
+					argumentValue, 
+					null, 
 					registry, 
 					progressMonitor);
 		}
@@ -731,11 +859,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor) {
 		
-		Setter<S,T> featureSetter = getFeatureSetter(connection, ConfigType.target, null, connectionTargetValueFeature, getFeatureNameValidator(connectionTargetValue));
-		
-		if (featureSetter != null) {
-			featureSetter.setFeature(connectionTargetValue, connectionTargetValueFeature, argument, argumentValue, null, registry, progressMonitor);
-		} else if (defaultFeatureMapper != null) {
+		Setter<S,T> chain = defaultFeatureMapper == null ? null : (eObj, feature, arg, argValue, sPath, reg, pm) -> {
 			defaultFeatureMapper.wireConnectionTargetFeature(
 					connection, 
 					connectionTarget, 
@@ -743,6 +867,30 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 					connectionTargetValueFeature, 
 					argument, 
 					argumentValue, 
+					registry, 
+					progressMonitor);
+			return true;
+		};							
+		
+		Setter<S,T> featureSetter = getFeatureSetter(
+				connection, 
+				ConfigType.target, 
+				null, 
+				connectionTargetValueFeature, 
+				getFeatureNameValidator(connectionTargetValue),
+				chain);
+		
+		if (featureSetter == null) {
+			featureSetter = chain;
+		}
+		
+		if (featureSetter != null) {
+			featureSetter.setFeature(
+					connectionTargetValue, 
+					connectionTargetValueFeature, 
+					argument, 
+					argumentValue, 
+					null, 
 					registry, 
 					progressMonitor);
 		}
@@ -758,17 +906,37 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor) {
 		
-		Setter<S,T> featureSetter = getFeatureSetter(connection, ConfigType.start, null, connectionValueFeature, getFeatureNameValidator(connectionValue));
-		
-		if (featureSetter != null) {
-			featureSetter.setFeature(connectionValue, connectionValueFeature, connectionSource, connectionSourceValue, null, registry, progressMonitor);
-		} else if (defaultFeatureMapper != null) {
+		Setter<S,T> chain = defaultFeatureMapper == null ? null : (eObj, feature, arg, argValue, sPath, reg, pm) -> {
 			defaultFeatureMapper.wireConnectionStartFeature(
 					connection, 
 					connectionValue, 
 					connectionValueFeature, 
 					connectionSource, 
 					connectionSourceValue, 
+					registry, 
+					progressMonitor);
+			return true;
+		};							
+		
+		Setter<S,T> featureSetter = getFeatureSetter(
+				connection, 
+				ConfigType.start, 
+				null, 
+				connectionValueFeature, 
+				getFeatureNameValidator(connectionValue),
+				chain);
+		
+		if (featureSetter == null) {
+			featureSetter = chain;
+		}
+		
+		if (featureSetter != null) {
+			featureSetter.setFeature(
+					connectionValue, 
+					connectionValueFeature, 
+					connectionSource, 
+					connectionSourceValue, 
+					null, 
 					registry, 
 					progressMonitor);
 		}
@@ -784,17 +952,37 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Map<S, T> registry, 
 			ProgressMonitor progressMonitor) {
 		
-		Setter<S,T> featureSetter = getFeatureSetter(connection, ConfigType.end, null, connectionValueFeature, getFeatureNameValidator(connectionValue));
-		
-		if (featureSetter != null) {
-			featureSetter.setFeature(connectionValue, connectionValueFeature, connectionTarget, connectionTargetValue, null, registry, progressMonitor);
-		} else if (defaultFeatureMapper != null) {
+		Setter<S,T> chain = defaultFeatureMapper == null ? null : (eObj, feature, arg, argValue, sPath, reg, pm) -> {
 			defaultFeatureMapper.wireConnectionEndFeature(
 					connection, 
 					connectionValue, 
 					connectionValueFeature, 
 					connectionTarget, 
 					connectionTargetValue, 
+					registry, 
+					progressMonitor);
+			return true;
+		};							
+		
+		Setter<S,T> featureSetter = getFeatureSetter(
+				connection, 
+				ConfigType.end, 
+				null, 
+				connectionValueFeature, 
+				getFeatureNameValidator(connectionValue), 
+				chain);
+		
+		if (featureSetter == null) {
+			featureSetter = chain;
+		}
+		
+		if (featureSetter != null) {
+			featureSetter.setFeature(
+					connectionValue, 
+					connectionValueFeature, 
+					connectionTarget, 
+					connectionTargetValue, 
+					null, 
 					registry, 
 					progressMonitor);
 		}

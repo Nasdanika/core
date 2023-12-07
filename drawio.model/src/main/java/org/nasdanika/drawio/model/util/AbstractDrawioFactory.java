@@ -9,7 +9,6 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -175,7 +174,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param pass
 	 * @return
 	 */
-	protected Mapper<EObject, EObject> getMapper(int phase, int pass) {
+	protected Mapper<EObject, EObject> getMapper(int pass) {
 		return null;
 	}
 	
@@ -373,68 +372,6 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	
 	// === Wiring ===
 	
-	/**
-	 * Adds contained elements into containment references.
-	 * Traverses page links.
-	 * 
-	 * @param document
-	 * @param pkg
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire
-	public final void wireDocumentContainment(
-			org.nasdanika.drawio.model.Document document,
-			D documentElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		Mapper<EObject,EObject> mapper = getMapper(0, pass);
-		if (mapper != null) {
-			mapper.wire(document, registry, progressMonitor);
-		}
-	}
-	
-	/**
-	 * Adds contained elements into containment references.
-	 * Traverses page links.
-	 * 
-	 * @param drawioModelElement
-	 * @param flowModelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire
-	public final void wireModelElementContainment(
-			org.nasdanika.drawio.model.ModelElement drawioModelElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		Mapper<EObject,EObject> mapper = getMapper(0, pass);
-		if (mapper != null) {
-			mapper.wire(drawioModelElement, registry, progressMonitor);
-		}
-				
-		Page linkedPage = drawioModelElement.getLinkedPage();
-		if (linkedPage != null) {
-			TreeIterator<EObject> pcit = linkedPage.eAllContents();
-			while (pcit.hasNext()) {
-				EObject next = pcit.next();
-				if (next instanceof org.nasdanika.drawio.model.ModelElement && isPageElement((org.nasdanika.drawio.model.ModelElement) next)) {
-					registry.put(next, semanticElement);
-					return;
-				}
-			}
-			registry.put(linkedPage, semanticElement);
-			registry.put(linkedPage.getModel().getRoot(), semanticElement);
-		}		
-	}
-	
 	protected String getPageElementProperty() {
 		return getPropertyNamespace() + "page-element";
 	}
@@ -460,14 +397,14 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire(phase = 1)
-	public final void wireDocumentNonContainment(
+	public final void mapDocument(
 			org.nasdanika.drawio.model.Document document,
 			D documentElement,
 			Map<EObject, EObject> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		Mapper<EObject,EObject> mapper = getMapper(1, pass);
+		Mapper<EObject,EObject> mapper = getMapper(pass);
 		if (mapper != null) {
 			mapper.wire(document, registry, progressMonitor);
 		}
@@ -507,14 +444,14 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	}
 	
 	@org.nasdanika.common.Transformer.Wire(phase = 1)
-	public final void wireModelElementNonContainment(
+	public final void mapModelElement(
 			org.nasdanika.drawio.model.ModelElement drawioModelElement,
 			S semanticElement,
 			Map<EObject, EObject> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 						
-		Mapper<EObject,EObject> mapper = getMapper(1, pass);
+		Mapper<EObject,EObject> mapper = getMapper(pass);
 		if (mapper != null) {
 			mapper.wire(drawioModelElement, registry, progressMonitor);
 		}
@@ -629,6 +566,42 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	}
 	
 	/**
+	 * Wires page elements without semantic element
+	 * @param modelElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 * @return
+	 */
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
+	public final boolean wirePageElement(
+			org.nasdanika.drawio.model.ModelElement modelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		if (!isPageElement(modelElement)) {
+			return true;
+		}
+		Page page = modelElement.getPage();
+		if (isTopLevelPage(page) || page.getLinks().isEmpty()) {
+			return true;
+		}
+		Optional<EObject> linkSemanticElementOpt = page
+			.getLinks()
+			.stream()
+			.map(registry::get)
+			.filter(Objects::nonNull)
+			.findFirst();
+		
+		if (linkSemanticElementOpt.isEmpty()) {
+			return false; // Not there yet
+		}
+		registry.put(modelElement, linkSemanticElementOpt.get());
+		return true;
+	}
+	
+	/**
 	 * Wires elements with selector property. Remaps which triggers wireContainment.
 	 * @param modelElement
 	 * @param registry
@@ -636,7 +609,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireSelectors(
+	public final boolean wireSelector(
 			org.nasdanika.drawio.model.ModelElement modelElement,
 			Map<EObject, EObject> registry,
 			int pass,
@@ -781,7 +754,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireSemanticSelectors(
+	public final boolean wireSemanticSelector(
 			org.nasdanika.drawio.model.ModelElement modelElement,
 			Map<EObject, EObject> registry,
 			int pass,
@@ -850,7 +823,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		Mapper<EObject,EObject> mapper = getMapper(2, pass);
+		Mapper<EObject,EObject> mapper = getMapper(pass);
 		if (mapper != null) {
 			mapper.wire(modelElement, registry, progressMonitor);
 		}		
