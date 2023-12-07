@@ -56,10 +56,21 @@ public class EObjectGraphFactory {
 		new EReferenceConnection(source, target, reference, index, referencePath(source, target, reference, index));
 	}
 	
+	protected boolean isCompactPath() {
+		return false;
+	}
+	
 	protected String referencePath(EObjectNode source, EObjectNode target, EReference reference, int index) {
-		String position = String.valueOf(index);
 		if (reference.isMany()) {
+			if (isCompactPath()) {
+				if (index == 0 && ((Collection<?>) source.get().eGet(reference)).size() == 1) {
+					return null;
+				}
+				return Integer.toString(index, Character.MAX_RADIX);
+			}
+			
 			EList<EAttribute> eKeys = reference.getEKeys();
+			String position = String.valueOf(index);
 			if (eKeys.isEmpty()) {
 				return position;
 			} else {

@@ -178,12 +178,14 @@ public class GraphDrawioFactory<G extends Graph<?>, E extends EObject> extends A
 			ModelElement modelElement, 
 			E semanticElement, 
 			Map<EObject, EObject> registry,
+			boolean isPrototype,
 			ProgressMonitor progressMonitor) {
 		
 		super.configureSemanticElement(
 				modelElement,
 				semanticElement,
 				registry,
+				isPrototype,
 				progressMonitor);
 		
 		EObjectLoader eObjectLoader = new EObjectLoader((ObjectLoader) null) {

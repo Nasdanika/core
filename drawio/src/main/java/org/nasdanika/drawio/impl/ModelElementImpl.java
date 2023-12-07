@@ -21,6 +21,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.jsoup.Jsoup;
 import org.nasdanika.common.AbstractSplitJoinSet;
 import org.nasdanika.common.DelimitedStringMap;
 import org.nasdanika.common.NasdanikaException;
@@ -173,7 +174,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	 * @return
 	 */
 	private String getRawProperty(String name) {
-		return isMxCell() ? null : element.getAttribute(name);
+		return isMxCell() ? null : getElement().getAttribute(name);
 	}
 
 	protected boolean isMxCell() {
@@ -402,7 +403,8 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		positionBuilder.append("page-name: " + page.getName() + ", page-id: " + page.getId());
 		String label = getLabel();
 		if (!Util.isBlank(label)) {
-			positionBuilder.append(", label: "+ label);
+			String labelText = Jsoup.parse(label).text();
+			positionBuilder.append(", label: "+ labelText);
 		}
 		String id = getId();
 		if (!Util.isBlank(id)) {
