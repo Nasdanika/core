@@ -63,9 +63,6 @@ public class EObjectGraphFactory {
 	protected String referencePath(EObjectNode source, EObjectNode target, EReference reference, int index) {
 		if (reference.isMany()) {
 			if (isCompactPath()) {
-				if (index == 0 && ((Collection<?>) source.get().eGet(reference)).size() == 1) {
-					return null;
-				}
 				return Integer.toString(index, Character.MAX_RADIX);
 			}
 			
