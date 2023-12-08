@@ -33,8 +33,7 @@ public interface EStructuralFeatureAndEOperationMatcher {
 			
 		};
 	}
-	
-	
+		
 	/**
 	 * Matches feature by its id, class id, and package nsURI
 	 * This implementation performs exact match with the declaring class. 
@@ -70,8 +69,7 @@ public interface EStructuralFeatureAndEOperationMatcher {
 					.forEach(contextEPackages::add);
 			}
 		}
-		
-		
+				
 		EPackage ePackage = getEPackage(nsURI, contextEPackages);
 		if (ePackage != null) {
 			for (EClassifier eClassifier: ePackage.getEClassifiers()) {
