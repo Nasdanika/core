@@ -41,7 +41,6 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
@@ -1269,7 +1268,7 @@ public class Util {
 			}
 		}
 	}	
-
+	
 	/**
 	 * Flattened inheritance hierarchy from the argument class to all of its supertypes.
 	 * @param eClass

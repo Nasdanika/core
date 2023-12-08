@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * @param <S>
  * @param <T>
  */
-public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> extends FeatureMapper<S, T> {
+public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> extends FeatureMapper<S, T> implements EStructuralFeatureAndEOperationMatcher {
 
 	/**
 	 * Annotation for feature wiring methods. 
@@ -32,9 +32,13 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 	public @interface Feature {
 		
 		/**
-		 * Feature id
+		 * Target feature id
 		 */
 		int value();
+		
+		int classID();
+		
+		String nsURI();
 		
 		/**
 		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
@@ -76,6 +80,10 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 		 * Feature id
 		 */
 		int value();
+		
+		int classID();
+		
+		String nsURI();
 		
 		/**
 		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
@@ -130,6 +138,10 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 		 */
 		int value();
 		
+		int classID();
+		
+		String nsURI();
+		
 		/**
 		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
 		 * which is evaluated in the context of the source element with other method arguments as variables 
@@ -182,6 +194,10 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 		 * Feature id
 		 */
 		int value();
+		
+		int classID();
+		
+		String nsURI();
 		
 		/**
 		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
@@ -236,6 +252,10 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 		 */
 		int value();
 		
+		int classID();
+		
+		String nsURI();
+		
 		/**
 		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
 		 * which is evaluated in the context of the source element with other method arguments as variables 
@@ -289,6 +309,10 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 		 */
 		int value();
 		
+		int classID();
+		
+		String nsURI();
+		
 		/**
 		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
 		 * which is evaluated in the context of the source element with other method arguments as variables 
@@ -341,6 +365,10 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 		 * Feature id
 		 */
 		int value();
+		
+		int classID();
+		
+		String nsURI();
 		
 		/**
 		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
@@ -442,7 +470,8 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 				Class<?>[] parameterTypes = ((Method) ar.getAnnotatedElement()).getParameterTypes();
 				if (rWire.type().isInstance(source) && parameterTypes[0].isInstance(source)
 						&& (rWire.valueType() == Void.class ? value == null : rWire.valueType().isInstance(value) && parameterTypes[1].isInstance(value))
-						&& rWire.value() == valueFeature.getFeatureID()) {
+						// String nsURI, int classID, int featureID, EClass contextEClass, EStructuralFeature feature
+						&& matchEStructuralFeature(rWire.nsURI(), rWire.classID(), rWire.value(), value == null ? null : value.eClass(), valueFeature)) {
 					
 					Map<String, Object> variables = new HashMap<>();
 					variables.put("registry", registry);
@@ -469,7 +498,8 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 				Class<?>[] parameterTypes = ((Method) ar.getAnnotatedElement()).getParameterTypes();
 				if (rWire.contentsType().isInstance(contents) && parameterTypes[0].isInstance(contents)
 						&& (rWire.contentsValueType() == Void.class ? contentsValue == null : rWire.contentsValueType().isInstance(contentsValue) && parameterTypes[1].isInstance(contentsValue))
-						&& rWire.value() == contentsValueFeature.getFeatureID()
+						// String nsURI, int classID, int featureID, EClass contextEClass, EStructuralFeature feature
+						&& matchEStructuralFeature(rWire.nsURI(), rWire.classID(), rWire.value(), contentsValue == null ? null : contentsValue.eClass(), contentsValueFeature)						
 						&& rWire.containerType().isInstance(container) && parameterTypes[3].isInstance(container)
 						&& (rWire.containerValueType() == Void.class ? containerValue == null : rWire.containerValueType().isInstance(containerValue) && parameterTypes[4].isInstance(containerValue))) {
 					
@@ -517,7 +547,8 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 				Class<?>[] parameterTypes = ((Method) ar.getAnnotatedElement()).getParameterTypes();
 				if (rWire.contentsType().isInstance(container) && parameterTypes[0].isInstance(container)
 						&& (rWire.containerValueType() == Void.class ? containerValue == null : rWire.containerValueType().isInstance(containerValue) && parameterTypes[1].isInstance(containerValue))
-						&& rWire.value() == containerValueFeature.getFeatureID()
+						// String nsURI, int classID, int featureID, EClass contextEClass, EStructuralFeature feature
+						&& matchEStructuralFeature(rWire.nsURI(), rWire.classID(), rWire.value(), containerValue == null ? null : containerValue.eClass(), containerValueFeature)						
 						&& rWire.contentsType().isInstance(contents) && parameterTypes[3].isInstance(contents)
 						&& (rWire.contentsValueType() == Void.class ? contentsValue == null : rWire.contentsValueType().isInstance(contentsValue) && parameterTypes[4].isInstance(contentsValue))) {
 					
@@ -565,7 +596,7 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 //				Class<?>[] parameterTypes = ((Method) ar.getAnnotatedElement()).getParameterTypes();
 //				if (rWire.connectionType().isInstance(connection) && parameterTypes[0].isInstance(connection)
 //						&& (rWire.connectionValueType() == Void.class ? connectionValue == null : rWire.containerValueType().isInstance(containerValue) && parameterTypes[1].isInstance(containerValue))
-//						&& rWire.value() == containerValueFeature.getFeatureID()
+//						&& match feature here
 //						&& rWire.contentsType().isInstance(contents) && parameterTypes[3].isInstance(contents)
 //						&& (rWire.contentsValueType() == Void.class ? contentsValue == null : rWire.contentsValueType().isInstance(contentsValue) && parameterTypes[4].isInstance(contentsValue))) {
 //					

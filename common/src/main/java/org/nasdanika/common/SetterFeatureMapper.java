@@ -259,60 +259,66 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 					LinkedList<EObject> sourcePath,
 					Map<S, T> registry, 					
 					ProgressMonitor progressMonitor) {
-												
-				if (matchCondition(config, eObj, argument, argumentValue, sourcePath, registry, context)
-						&& matchType(eObj, config, context)
-						&& matchArgumentType(argumentValue, config, context)
-						&& matchPath(config, sourcePath, registry, context)) {
-					
-					if (isNop(config)) {
-						return true;
-					}
-					
-					Class<?> featureType = feature.getEType().getInstanceClass();
-					Object featureValue = eval(config, argument, argumentValue, sourcePath, registry, featureType, context);
-					if (featureValue != null) {
-						boolean shallSet = true;
+
+				boolean shallCallChain = true;
+				for (Object configElement: (config instanceof Iterable ? (Iterable<?>) config : Collections.singleton(config))) {
+					if (matchCondition(configElement, eObj, argument, argumentValue, sourcePath, registry, context)
+							&& matchType(eObj, configElement, context)
+							&& matchArgumentType(argumentValue, configElement, context)
+							&& matchPath(configElement, sourcePath, registry, context)) {
 						
-						if (feature instanceof EReference) {
-							shallSet = feature.getEType().isInstance(featureValue);
+						if (isNop(configElement)) {
+							return true;
+						}
+						
+						Class<?> featureType = feature.getEType().getInstanceClass();
+						Object featureValue = eval(configElement, argument, argumentValue, sourcePath, registry, featureType, context);
+						if (featureValue != null) {
+							boolean shallSet = true;
 							
-							if (shallSet 
-									&& ((EReference) feature).isContainment()
-									&& featureValue instanceof EObject) {
+							if (feature instanceof EReference) {
+								shallSet = feature.getEType().isInstance(featureValue);
 								
-								EObject featureValueEObject = (EObject) featureValue;
-								EObject fvc = featureValueEObject.eContainer();
-								if (fvc != null) {
-									Greedy greedy = getGreedy(config, context);
-									if (greedy != Greedy.FALSE) {
-										if (EcoreUtil.isAncestor(eObj, fvc)) {
-											shallSet = greedy != Greedy.NO_CHILDREN; // Grab only if truly greedy
-										} else {
-											shallSet = false; // Not a child, grab
+								if (shallSet 
+										&& ((EReference) feature).isContainment()
+										&& featureValue instanceof EObject) {
+									
+									EObject featureValueEObject = (EObject) featureValue;
+									EObject fvc = featureValueEObject.eContainer();
+									if (fvc != null) {
+										Greedy greedy = getGreedy(configElement, context);
+										if (greedy != Greedy.FALSE) {
+											if (EcoreUtil.isAncestor(eObj, fvc)) {
+												shallSet = greedy != Greedy.NO_CHILDREN; // Grab only if truly greedy
+											} else {
+												shallSet = false; // Not a child, grab
+											}
 										}
 									}
 								}
 							}
-						}
-						
-						if (shallSet) {
-							Object element = convert(featureValue, feature.getEType(), context);
-							if (feature.isMany()) {
-								@SuppressWarnings("unchecked")
-								List<Object> fvl = (List<Object>) eObj.eGet(feature);
-								int position = getPosition(config, context);
-								if (position == -1) {
-									fvl.add(element);
+							
+							if (shallSet) {
+								Object element = convert(featureValue, feature.getEType(), context);
+								if (feature.isMany()) {
+									@SuppressWarnings("unchecked")
+									List<Object> fvl = (List<Object>) eObj.eGet(feature);
+									int position = getPosition(configElement, context);
+									if (position == -1) {
+										fvl.add(element);
+									} else {
+										fvl.add(position, element);								
+									}
 								} else {
-									fvl.add(position, element);								
+									eObj.eSet(feature, element);
 								}
-							} else {
-								eObj.eSet(feature, element);
+								shallCallChain = false;
 							}
-						}
-					}					
-				} else if (chain != null) {
+						}	
+					}
+				}
+				
+				if (shallCallChain && chain != null) {
 					return chain.setFeature(
 							eObj, 
 							feature, 
