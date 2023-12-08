@@ -47,11 +47,13 @@ public interface EStructuralFeatureAndEOperationMatcher {
 	 * @return
 	 */
 	default boolean matchEStructuralFeature(String nsURI, int classID, int featureID, EClass contextEClass, EStructuralFeature feature) {
-		return getEClass(nsURI, classID, contextEClass, feature.getEContainingClass()).getFeatureID(feature) == featureID;
+		EClass eClass = getEClass(nsURI, classID, contextEClass, feature.getEContainingClass());
+		return eClass != null && eClass.getFeatureID(feature) == featureID;
 	}
 	
 	default boolean matchEOperation(String nsURI, int classID, int operationID, EClass contextEClass, EOperation operation) {
-		return getEClass(nsURI, classID, contextEClass, operation.getEContainingClass()).getOperationID(operation) == operationID;
+		EClass eClass = getEClass(nsURI, classID, contextEClass, operation.getEContainingClass());
+		return eClass != null && eClass.getOperationID(operation) == operationID;
 	}
 	
 	default EClass getEClass(String nsURI, int classID, EClass... contextEClasses) {		
@@ -70,15 +72,18 @@ public interface EStructuralFeatureAndEOperationMatcher {
 		}
 		
 		
-		for (EClassifier eClassifier: getEPackage(nsURI, contextEPackages).getEClassifiers()) {
-			if (eClassifier.getClassifierID() == classID) {
-				if (eClassifier instanceof EClass) {
-					return (EClass) eClassifier;
+		EPackage ePackage = getEPackage(nsURI, contextEPackages);
+		if (ePackage != null) {
+			for (EClassifier eClassifier: ePackage.getEClassifiers()) {
+				if (eClassifier.getClassifierID() == classID) {
+					if (eClassifier instanceof EClass) {
+						return (EClass) eClassifier;
+					}
+					throw new IllegalArgumentException("Not an EClass for ID " + classID + " in EPackage " + nsURI + " - " + eClassifier);				
 				}
-				throw new IllegalArgumentException("Not an EClass for ID " + classID + " in EPackage " + nsURI + " - " + eClassifier);				
 			}
 		}
-		throw new IllegalArgumentException("Unknown EClass ID " + classID + " in EPackage " + nsURI);
+		return null;
 	}
 	
 	/**
@@ -86,8 +91,7 @@ public interface EStructuralFeatureAndEOperationMatcher {
 	 * This implementation returns context {@link EPackage} if nsURI matches. 
 	 * Override if matching by non-context packages is required. 
 	 * @param nsURI
-	 * @return {@link EPackage} by nsURI
-	 * @throws IllegalArgumentException If nsURi is cannot be resolved to EPackage. In this implementation if contextPackage is null or nsURI is not equal to the contextEPackage nsURI.
+	 * @return {@link EPackage} by nsURI or null
 	 */
 	default EPackage getEPackage(String nsURI, Collection<EPackage> contextEPackages) {
 		for (EPackage contextEPackage: contextEPackages) {
@@ -95,7 +99,7 @@ public interface EStructuralFeatureAndEOperationMatcher {
 				return contextEPackage;
 			}
 		}
-		throw new IllegalArgumentException("Unknown EPackage: " + nsURI);
+		return null;
 	}	
 
 }
