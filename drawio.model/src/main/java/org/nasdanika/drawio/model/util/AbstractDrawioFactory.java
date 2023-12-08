@@ -339,6 +339,13 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			logicalParentBaseURI = getBaseURI((org.nasdanika.drawio.model.ModelElement) logicalParent);
 		} else {
 			logicalParentBaseURI = modelElement.eResource().getURI();
+			if (logicalParent instanceof org.nasdanika.drawio.model.Model) {
+				Page page = (Page) logicalParent.eContainer();
+				for (org.nasdanika.drawio.model.ModelElement link: page.getLinks()) {
+					logicalParentBaseURI = getBaseURI(link);
+					break;
+				}
+			}
 		}
 		String baseURIProperty = getBaseURIProperty();
 		if (Util.isBlank(baseURIProperty)) {
