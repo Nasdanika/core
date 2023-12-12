@@ -1005,6 +1005,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 					}
 				}
 			}
+			
 			String docRefProperty = getDocRefProperty();
 			if (!Util.isBlank(docRefProperty)) {
 				String docRefStr = modelElement.getProperties().get(docRefProperty);
@@ -1056,7 +1057,6 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	
 	protected abstract EObject createTextDoc(URI docRef, ProgressMonitor progressMonitor);
 	
-	protected abstract EObject createMarkdownDoc(URI docRef, ProgressMonitor progressMonitor);
-	
+	protected abstract EObject createMarkdownDoc(URI docRef, ProgressMonitor progressMonitor);	
 	
 }
