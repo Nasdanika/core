@@ -28,7 +28,7 @@ import org.xml.sax.SAXException;
  */
 public class DrawioResource extends ResourceImpl {
 	
-	protected DrawioResource(URI uri) {
+	public DrawioResource(URI uri) {
 		super(uri);
 	}
 		

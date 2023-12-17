@@ -1,7 +1,5 @@
 package org.nasdanika.drawio.model.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -9,6 +7,7 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -43,12 +42,10 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
  * Base class for classes which map/transform Drawio model to a specific semantic model. For example, architecture model or flow/process model.
  * @author Pavel
  *
- * @param <D> Document element type
- * @param <S> Semantic model element type
+ * @param <S> Semantic element type
  */
-public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject> {
+public abstract class AbstractDrawioFactory<S extends EObject> {
 	
-	public static final String TOP_LEVEL_PAGES_ANNOTATION = "top-level-pages";
 	public static final String DRAWIO_REPRESENTATION = "drawio";
 
 	public String getPropertyNamespace() {
@@ -129,7 +126,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		Optional<EClassifier> typeOpt = getEPackages()
 				.entrySet()
 				.stream()
-				.filter(pe -> pe.getKey().equals(type.substring(0,dotIdx)))
+				.filter(pe -> pe.getKey().equals(type.substring(0, dotIdx)))
 				.map(Map.Entry::getValue)
 				.map(ep -> ep.getEClassifier(type.substring(dotIdx + 1)))
 				.filter(Objects::nonNull)
@@ -166,16 +163,31 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		return type.getEPackage().getEFactoryInstance().create(type);
 	}
 	
-	// ---
-
 	/**
-	 * Override to return content mappers for different phases and passes
-	 * @param phase
+	 * Override to return content mappers for different passes. 
+	 * This implementation returns {@link PropertySetterFeatureMapper}.
 	 * @param pass
 	 * @return
 	 */
 	protected Mapper<EObject, EObject> getMapper(int pass) {
-		return null;
+		return new PropertySetterFeatureMapper<EObject, EObject>() {
+
+			@Override
+			protected URI getBaseURI(org.nasdanika.drawio.model.ModelElement source) {
+				return AbstractDrawioFactory.this.getBaseURI(source);
+			}
+
+			@Override
+			protected EClassifier getType(String type, EObject context) {
+				return AbstractDrawioFactory.this.getType(type, context instanceof Marked ? (Marked) context : null);
+			}
+			
+			@Override
+			protected String getPropertyNamespace() {
+				return AbstractDrawioFactory.this.getPropertyNamespace();
+			}
+			
+		};
 	}
 	
 	/**
@@ -188,14 +200,14 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @return
 	 */
 	@org.nasdanika.common.Transformer.Factory
-	public final D createDocumentElement(
+	public final S createDocumentElement(
 			org.nasdanika.drawio.model.Document document,
 			boolean parallel,
 			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {
 		
-		D documentElement = createDocumentElement(document, elementProvider, registry, progressMonitor);
+		S documentElement = createDocumentElement(document, elementProvider, registry, progressMonitor);
 
 		if (documentElement instanceof ModelElement) {
 			ModelElement dme = (ModelElement) documentElement;
@@ -215,11 +227,13 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param progressMonitor
 	 * @return
 	 */
-	protected abstract D createDocumentElement(
+	protected S createDocumentElement(
 			org.nasdanika.drawio.model.Document document,
 			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
-			ProgressMonitor progressMonitor);
+			ProgressMonitor progressMonitor) {
+		return null;
+	};
 	
 	/**
 	 * Semantic ID is used instead of the Drawio element ID if provided. E.g. "my-process" instead of "HP_1aCX3hRniy5izKEYK"
@@ -392,136 +406,10 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		String pev = drawioModelElement.getProperties().get(pageElementProperty);
 		return !Util.isBlank(pev) && "true".equals(pev.trim());
 	}
-
-	/**
-	 * Adds contained elements into containment references.
-	 * Traverses page links.
-	 * 
-	 * @param document
-	 * @param pkg
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(phase = 1)
-	public final void mapDocument(
-			org.nasdanika.drawio.model.Document document,
-			D documentElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		Mapper<EObject,EObject> mapper = getMapper(pass);
-		if (mapper != null) {
-			mapper.wire(document, registry, progressMonitor);
-		}
-		
-		String source = document.getSource();
-		if (!Util.isBlank(source) && documentElement instanceof org.nasdanika.ncore.ModelElement) {
-			org.nasdanika.ncore.ModelElement documentModelElement = (org.nasdanika.ncore.ModelElement) documentElement;
-			String filteredSource = filterSourceDocument(source, document, registry, progressMonitor);
-			documentModelElement.getRepresentations().put(DRAWIO_REPRESENTATION, filteredSource);
-			Collection<String> topLevelPages = new ArrayList<>();
-			for (Page page: document.getPages()) {
-				if (isTopLevelPage(page)) {
-					topLevelPages.add(page.getId());
-				}
-			}
-			if (!topLevelPages.isEmpty()) {
-				documentModelElement.setAnnotation(TOP_LEVEL_PAGES_ANNOTATION, topLevelPages);
-			}
-		}
-	}
 	
-	/**
-	 * Override to manipulate the source document. E.g. inject semantic UUID's from the registry
-	 * @param source
-	 * @param document
-	 * @param registry
-	 * @param progressMonitor
-	 * @return
-	 */
-	protected String filterSourceDocument(
-			String source,
-			org.nasdanika.drawio.model.Document document,
-			Map<EObject, EObject> registry,
-			ProgressMonitor progressMonitor) {
-		
-		return source;
-	}
+	// --- Wiring ---
 	
-	@org.nasdanika.common.Transformer.Wire(phase = 1)
-	public final void mapModelElement(
-			org.nasdanika.drawio.model.ModelElement drawioModelElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-						
-		Mapper<EObject,EObject> mapper = getMapper(pass);
-		if (mapper != null) {
-			mapper.wire(drawioModelElement, registry, progressMonitor);
-		}
-		
-		boolean isPageElement = isPageElement(drawioModelElement);
-		
-		// Semantic mapping
-		if (semanticElement instanceof org.nasdanika.drawio.model.SemanticElement) {
-			SemanticMapping semanticMapping = createSemanticMapping();
-			for (EObject eContainer = drawioModelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
-				if (eContainer instanceof Page) {
-					semanticMapping.setPageID(((Page) eContainer).getId());						
-				} else if (eContainer instanceof org.nasdanika.drawio.model.Document) {
-					semanticMapping.setDocumentURI(((org.nasdanika.drawio.model.Document) eContainer).getUri());
-				}
-			}
-			semanticMapping.setModelElementID(drawioModelElement.getId());
-			semanticMapping.setPageElement(isPageElement);
-			((org.nasdanika.drawio.model.SemanticElement) semanticElement).getSemanticMappings().add(semanticMapping);
-		}		
-		
-		// Page representation
-		if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
-			org.nasdanika.ncore.ModelElement semanticModelElement = (org.nasdanika.ncore.ModelElement) semanticElement;
-			Page linkedPage = drawioModelElement.getLinkedPage();
-			if (linkedPage != null) {
-				addRepresentationPage(
-						semanticModelElement, 
-						linkedPage, 
-						registry, 
-						progressMonitor);
-				
-			}
-			for (EObject eContainer = drawioModelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
-				if (eContainer instanceof Page) {
-					if (isPageElement) {
-						addRepresentationPage(
-								semanticModelElement, 
-								(Page) eContainer, 
-								registry, 
-								progressMonitor);
-					}
-				}
-			}
-		}
-	}
-	
-	/**
-	 * NOP method because drawio classes are not available here. Implemented in GraphDrawioFactory.
-	 * @param semanticElement
-	 * @param page
-	 */
-	protected void addRepresentationPage(
-			org.nasdanika.ncore.ModelElement semanticModelElement, 
-			Page page,
-			Map<EObject, EObject> registry,
-			ProgressMonitor progressMonitor) {
-		// NOP
-	}
-
-	protected SemanticMapping createSemanticMapping() {
-		return ModelFactory.eINSTANCE.createSemanticMapping();
-	}
+	// --- Phase 0 - semantic elements using ref-id's, page element, selector, prototype, semantic-selector ---	
 	
 	protected String getRefIdProperty() {
 		return getPropertyNamespace() + "ref-id";
@@ -560,11 +448,9 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		}
 		
 		S refTarget = getByRefId(refId, pass, registry);
-		if (refTarget == null) {
-			return false;
+		if (refTarget != null) {
+			registry.put(modelElement, refTarget); // Resolved refId triggers a new wave of wiring
 		}
-		
-		registry.put(modelElement, refTarget); // Resolved refId triggers a new wave of wiring
 		return true;
 	}
 		
@@ -815,6 +701,178 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	protected SpelExpressionParser getExpressionParser() {
 		return new SpelExpressionParser();
 	}	
+		
+	/**
+	 * Wires document to the page element of the top level page.
+	 * @param document
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 * @return
+	 */
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
+	public final boolean wireDocument(
+			org.nasdanika.drawio.model.Document document,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		for (Page page: document.getPages()) {
+			if (isTopLevelPage(page)) {
+				TreeIterator<EObject> cit = page.eAllContents();
+				while (cit.hasNext()) {
+					EObject next = cit.next();
+					if (next instanceof org.nasdanika.drawio.model.ModelElement) {
+						org.nasdanika.drawio.model.ModelElement modelElement = (org.nasdanika.drawio.model.ModelElement) next;
+						if (isPageElement(modelElement)) {
+							EObject semanticElement = registry.get(modelElement);
+							if (semanticElement == null) {
+								return false; // Not there yet
+							}
+							registry.put(document, semanticElement);
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+
+	// --- Phase 1: Mapping features and adding representations ---
+	
+	/**
+	 * Adds contained elements into containment references.
+	 * Traverses page links.
+	 * 
+	 * @param document
+	 * @param pkg
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(phase = 1)
+	public final void mapDocument(
+			org.nasdanika.drawio.model.Document document,
+			S documentElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		Mapper<EObject,EObject> mapper = getMapper(pass);
+		if (mapper != null) {
+			mapper.wire(document, registry, progressMonitor);
+		}
+	}
+	
+	/**
+	 * Adds contained elements into containment references.
+	 * Traverses page links.
+	 * 
+	 * @param document
+	 * @param pkg
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(phase = 1)
+	public final void addDocumentReprentations(
+			org.nasdanika.drawio.model.Document document,
+			S documentElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		if (documentElement instanceof org.nasdanika.ncore.ModelElement) {
+			org.nasdanika.ncore.ModelElement documentModelElement = (org.nasdanika.ncore.ModelElement) documentElement;
+			for (Page page: document.getPages()) {
+				if (isTopLevelPage(page)) {
+					addRepresentationPage(
+							documentModelElement, 
+							page, 
+							registry, 
+							progressMonitor);
+					
+				}
+			}
+		}
+	}	
+		
+	@org.nasdanika.common.Transformer.Wire(phase = 1)
+	public final void mapModelElement(
+			org.nasdanika.drawio.model.ModelElement drawioModelElement,
+			S semanticElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+						
+		Mapper<EObject,EObject> mapper = getMapper(pass);
+		if (mapper != null) {
+			mapper.wire(drawioModelElement, registry, progressMonitor);
+		}
+		
+		boolean isPageElement = isPageElement(drawioModelElement);
+		
+		// Semantic mapping
+		if (semanticElement instanceof org.nasdanika.drawio.model.SemanticElement) {
+			SemanticMapping semanticMapping = createSemanticMapping();
+			for (EObject eContainer = drawioModelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
+				if (eContainer instanceof Page) {
+					semanticMapping.setPageID(((Page) eContainer).getId());						
+				} else if (eContainer instanceof org.nasdanika.drawio.model.Document) {
+					semanticMapping.setDocumentURI(((org.nasdanika.drawio.model.Document) eContainer).getUri());
+				}
+			}
+			semanticMapping.setModelElementID(drawioModelElement.getId());
+			semanticMapping.setPageElement(isPageElement);
+			((org.nasdanika.drawio.model.SemanticElement) semanticElement).getSemanticMappings().add(semanticMapping);
+		}		
+		
+		// Page representation
+		if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
+			org.nasdanika.ncore.ModelElement semanticModelElement = (org.nasdanika.ncore.ModelElement) semanticElement;
+			Page linkedPage = drawioModelElement.getLinkedPage();
+			if (linkedPage != null) {
+				addRepresentationPage(
+						semanticModelElement, 
+						linkedPage, 
+						registry, 
+						progressMonitor);
+				
+			}
+			for (EObject eContainer = drawioModelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
+				if (eContainer instanceof Page) {
+					if (isPageElement) {
+						addRepresentationPage(
+								semanticModelElement, 
+								(Page) eContainer, 
+								registry, 
+								progressMonitor);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * NOP method because drawio classes are not available here. Implemented in DocumentFilteringDrawioFactory.
+	 * @param semanticElement
+	 * @param page
+	 */
+	protected void addRepresentationPage(
+			org.nasdanika.ncore.ModelElement semanticModelElement, 
+			Page page,
+			Map<EObject, EObject> registry,
+			ProgressMonitor progressMonitor) {
+		// NOP
+	}
+
+	protected SemanticMapping createSemanticMapping() {
+		return ModelFactory.eINSTANCE.createSemanticMapping();
+	}
+	
+	// --- Phase 2: mapping features of null semantic elements such as pass-through connections
 	
 	/**
 	 * Feature maps null semantic elements, which is needed for connections as they might be pass-through.
@@ -837,13 +895,15 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		return true;
 	}
 	
+	// --- Phase 3: Configuration ---
+	
 	/**
 	 * Wires document configuration
 	 */
 	@org.nasdanika.common.Transformer.Wire(phase = 3)
 	public final void wireDocumentConfiguration(
 			org.nasdanika.drawio.model.Document document,
-			D documentElement,
+			S documentElement,
 			Map<EObject, EObject> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
@@ -858,7 +918,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	
 	protected void configureDocumentElement(
 			org.nasdanika.drawio.model.Document document,
-			D documentElement,
+			S documentElement,
 			Map<EObject, EObject> registry,
 			ProgressMonitor progressMonitor) {
 		

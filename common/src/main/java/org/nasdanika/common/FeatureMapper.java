@@ -65,6 +65,16 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 			
 			List<EStructuralFeature> valueFeatures = value == null ? Collections.emptyList() : value.eClass().getEAllStructuralFeatures();		
 			
+			// Own features, no permutations
+			for (EStructuralFeature valueFeature: valueFeatures) {
+				wireFeature(
+						source, 
+						value, 
+						valueFeature, 
+						registry, 
+						progressMonitor);			
+			}
+			
 			S connectionSource = getConnectionSource(source);
 			for (T connectionSourceValue: connectionSource == null ? Collections.<T>singleton(null) : select(connectionSource, registry, progressMonitor)) {		
 				List<EStructuralFeature> connectionSourceValueFeatures = connectionSourceValue == null ? Collections.emptyList() : connectionSourceValue.eClass().getEAllStructuralFeatures();
@@ -101,15 +111,8 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 								progressMonitor);
 					}
 					
-					// Own features		
+					// Connection start and connection end	
 					for (EStructuralFeature valueFeature: valueFeatures) {
-						wireFeature(
-								source, 
-								value, 
-								valueFeature, 
-								registry, 
-								progressMonitor);			
-						
 						if (connectionSource != null) {
 							wireConnectionStartFeature(
 									source,

@@ -1,13 +1,16 @@
 package org.nasdanika.common;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EClass;
@@ -42,6 +45,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	public static final String POSITION_KEY = "position";
 	public static final String TYPE_KEY = "type";
 	public static final String ARGUMENT_TYPE_KEY = "argument-type";
+	public static final String COMPARATOR_KEY = "comparator";
 	
 	private FeatureMapper<S, T> defaultFeatureMapper;
 	
@@ -93,7 +97,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	 */
 	protected abstract String getFeatureMapConfigStr(EObject source);
 	
-	protected abstract EClassifier getType(String type, EObject context);	
+	protected abstract EClassifier getType(String type, EObject context);
 	
 	protected enum ConfigType { 
 		self,
@@ -305,7 +309,24 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 									List<Object> fvl = (List<Object>) eObj.eGet(feature);
 									int position = getPosition(configElement, context);
 									if (position == -1) {
-										fvl.add(element);
+										Comparator<Object> comparator = getComparator(configElement, registry, context);
+										if (comparator == null || fvl.isEmpty()) {										
+											fvl.add(element);
+										} else {
+											// Iterating and comparing
+											boolean added = false;
+											for (int i = 0; i < fvl.size(); ++i) {
+												Object fvle = fvl.get(i);
+												if (comparator.compare(element, fvle) < 0) {
+													fvl.add(i, element);
+													added = true;
+													break;
+												}
+											}
+											if (!added) {
+												fvl.add(element);
+											}
+										}
 									} else {
 										fvl.add(position, element);								
 									}
@@ -511,6 +532,127 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		return new SpelExpressionParser();
 	}
 	
+	/**
+	 * A comparator of elements for many features.
+	 * @param config
+	 * @param registry
+	 * @return
+	 */
+	protected Comparator<Object> getComparator(Object config, Map<S, T> registry, EObject context) {
+		if (config == Boolean.TRUE) {
+			return null;
+		}
+		if (config instanceof Map) {
+			Map<?,?> configMap = (Map<?,?>) config;
+			Object comparatorConfig = configMap.get(COMPARATOR_KEY);
+			if (comparatorConfig == null) {
+				return null;
+			}
+			return createComparator(comparatorConfig, registry, context);
+		}
+		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
+		return null; 
+	}
+	
+	public static final Comparator<Object> NATURAL_COMPARATOR = new Comparator<Object>() {
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public int compare(Object o1, Object o2) {
+			if (Objects.equals(o1,  o2)) {
+				return 0;
+			}
+			if (o1 instanceof Comparable) {
+				return ((Comparable<Object>) o1).compareTo(o2);
+			}
+			if (o2 instanceof Comparable) {
+				return - ((Comparable<Object>) o2).compareTo(o1);
+			}
+			
+			if (o1 == null) {
+				return 1;
+			}
+			
+			if (o2 == null) {
+				return -1;
+			}
+			
+			return o1.hashCode() - o2.hashCode();
+		}
+	};	
+	
+	/**
+	 * Creates a comparator from config. This implementation supports the following comparators:
+	 * 
+	 * <UL>
+	 * <LI>natural (String) - objects being compared shall implement Comparable. if not, they are compared by hashCode value. Nulls are considered larger than non-nulls</LI>
+	 * <LI>key - maps to a SpEL expression which evaluates a comparison key. The keys are then compared using natural comparison</LI>
+	 * <LI>expression - maps to a SpEL expression evaluated in the context of the first element with the second element in the <code>other</code> variable. The expression shall return an integer</LI>
+	 * </UL>
+	 * SpEL expressions have access to a <code>registry</code> variable
+	 * Override to add support of more comparators
+	 * @param comparatorConfig
+	 * @param registry
+	 * @param context
+	 * @return
+	 */
+	protected Comparator<Object> createComparator(Object comparatorConfig, Map<S, T> registry, EObject context) {
+		if ("natural".equals(comparatorConfig)) {
+			return NATURAL_COMPARATOR;
+		} 
+		
+		if (comparatorConfig instanceof Map) {
+			Map<?, ?> comparatorConfigMap = (Map<?,?>) comparatorConfig;
+			if (comparatorConfigMap.size() == 1) {
+				for (Entry<?, ?> cce: comparatorConfigMap.entrySet()) {
+					if ("key".equals(cce.getKey()) && cce.getValue() instanceof String) {
+						return new Comparator<Object>() {
+							
+							@Override
+							public int compare(Object o1, Object o2) {
+								Object key1 = evaluate(
+										o1, 
+										(String) cce.getValue(), 
+										Map.of("registry", registry), 
+										Object.class, 
+										context);
+								
+								Object key2 = evaluate(
+										o2, 
+										(String) cce.getValue(), 
+										Map.of("registry", registry), 
+										Object.class, 
+										context);
+								
+								return NATURAL_COMPARATOR.compare(key1, key2);
+							}
+						};
+					} 
+					
+					if (EXPRESSION_KEY.equals(cce.getKey()) && cce.getValue() instanceof String) {
+						return new Comparator<Object>() {
+
+							@Override
+							public int compare(Object o1, Object o2) {
+								return evaluate(
+										o1, 
+										(String) cce.getValue(), 
+										Map.of(
+												"other", o2,
+												"registry", registry), 
+										Integer.class, 
+										context);
+							}							
+						};
+					}
+				}
+			}
+		}
+		
+		throwConfigurationException("Unsupported comparator config: " + comparatorConfig, null, context);
+		return null;
+	}
+	
 	protected int getPosition(Object config, EObject context) {
 		if (config == Boolean.TRUE) {
 			return -1;
@@ -547,6 +689,13 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			expression = configMap.get(EXPRESSION_KEY);
 			if (expression == null) {
 				return argumentValue;
+			}
+			if (expression instanceof Collection) {
+				Collection<Object> ret = new ArrayList<>();
+				for (Object ee: (Collection<?>) expression) {
+					ret.add(eval(ee, argument, argumentValue, sourcePath, registry, type, context));
+				}
+				return ret;
 			}
 			if (!(expression instanceof String)) {
 				return expression;

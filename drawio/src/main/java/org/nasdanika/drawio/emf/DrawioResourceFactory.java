@@ -9,16 +9,17 @@ import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.persistence.Marker;
 
 public class DrawioResourceFactory extends ResourceFactoryImpl {
-	
-	
+		
 	@Override
 	public Resource createResource(URI uri) {
 		return new DrawioResource(uri) {
 
+			@Override
 			protected Function<Marker, org.nasdanika.ncore.Marker> getMarkerFactory() {
 				return DrawioResourceFactory.this.getMarkerFactory();
 			}
 
+			@Override
 			protected ModelFactory getFactory() {
 				return DrawioResourceFactory.this.getFactory();
 			}
