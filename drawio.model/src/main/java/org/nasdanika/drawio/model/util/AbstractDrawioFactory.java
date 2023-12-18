@@ -192,6 +192,11 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				return AbstractDrawioFactory.this.getPropertyNamespace();
 			}
 			
+			@Override
+			protected EvaluationContext createEvaluationContext() {
+				return AbstractDrawioFactory.this.createEvaluationContext();
+			}
+			
 		};
 	}
 	
@@ -295,7 +300,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			try {			
 				ExpressionParser parser = getExpressionParser();
 				Expression exp = parser.parseExpression(constructor);
-				EvaluationContext evaluationContext = getEvaluationContext();
+				EvaluationContext evaluationContext = createEvaluationContext();
 				configureConstructorEvaluationContext(evaluationContext, registry, progressMonitor);
 				semanticElement = (S) exp.getValue(evaluationContext, modelElement, EObject.class);
 			} catch (ParseException e) {
@@ -525,7 +530,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		try {			
 			ExpressionParser parser = getExpressionParser();
 			Expression exp = parser.parseExpression(selector);
-			EvaluationContext evaluationContext = getEvaluationContext();
+			EvaluationContext evaluationContext = createEvaluationContext();
 			configureSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
 			Object result = exp.getValue(evaluationContext, modelElement, Object.class);
 			if (result instanceof EObject) {
@@ -581,7 +586,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		try {			
 			ExpressionParser parser = getExpressionParser();
 			Expression exp = parser.parseExpression(prototypeExpr);
-			EvaluationContext evaluationContext = getEvaluationContext();
+			EvaluationContext evaluationContext = createEvaluationContext();
 			configurePrototypeEvaluationContext(evaluationContext, progressMonitor);
 			return exp.getValue(evaluationContext, modelElement, EObject.class);
 		} catch (ParseException e) {
@@ -670,7 +675,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		try {			
 			ExpressionParser parser = getExpressionParser();
 			Expression exp = parser.parseExpression(semanticSelector);
-			EvaluationContext evaluationContext = getEvaluationContext();
+			EvaluationContext evaluationContext = createEvaluationContext();
 			configureSemanticSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
 			Object result = exp.getValue(evaluationContext, modelElement, Object.class);
 			if (result instanceof EObject) {
@@ -699,7 +704,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		evaluationContext.setVariable("progressMonitor", progressMonitor);
 	}
 		
-	protected EvaluationContext getEvaluationContext() {
+	protected EvaluationContext createEvaluationContext() {
 		return new StandardEvaluationContext();
 	}
 
@@ -974,7 +979,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		try {			
 			ExpressionParser parser = getExpressionParser();
 			Expression exp = parser.parseExpression(configPrototypeExpr);
-			EvaluationContext evaluationContext = getEvaluationContext();
+			EvaluationContext evaluationContext = createEvaluationContext();
 			configurePrototypeEvaluationContext(evaluationContext, progressMonitor);
 			return exp.getValue(evaluationContext, modelElement, EObject.class);
 		} catch (ParseException e) {
