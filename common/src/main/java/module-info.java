@@ -18,6 +18,7 @@ module org.nasdanika.common {
 	requires org.apache.commons.lang3;
 	requires transitive java.xml;
 	requires transitive spring.expression;
+	requires java.desktop;
 	
 	exports org.nasdanika.common;
 	exports org.nasdanika.common.descriptors;

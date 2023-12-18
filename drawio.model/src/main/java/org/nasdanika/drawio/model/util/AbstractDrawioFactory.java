@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -47,6 +48,10 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 public abstract class AbstractDrawioFactory<S extends EObject> {
 	
 	public static final String DRAWIO_REPRESENTATION = "drawio";
+	public static final String IMAGE_REPRESENTATION = "image";
+	
+	private static final String DATA_URI_PNG_PREFIX_NO_BASE_64 = "data:image/png,";
+	private static final String DATA_URI_JPEG_PREFIX_NO_BASE_64 = "data:image/jpeg,";
 
 	public String getPropertyNamespace() {
 		return "";
@@ -798,6 +803,8 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			}
 		}
 	}	
+	
+	public static final URI BASE_LIB_URI = URI.createURI("https://app.diagrams.net/"); 
 		
 	@org.nasdanika.common.Transformer.Wire(phase = 1)
 	public final void mapModelElement(
@@ -829,8 +836,8 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			((org.nasdanika.drawio.model.SemanticElement) semanticElement).getSemanticMappings().add(semanticMapping);
 		}		
 		
-		// Page representation
 		if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
+			// Page representation
 			org.nasdanika.ncore.ModelElement semanticModelElement = (org.nasdanika.ncore.ModelElement) semanticElement;
 			Page linkedPage = drawioModelElement.getLinkedPage();
 			if (linkedPage != null) {
@@ -852,7 +859,25 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					}
 				}
 			}
-		}
+			
+			// Image
+			EMap<String, String> style = drawioModelElement.getStyle();
+			String image = style.get("image");
+			if (!Util.isBlank(image)) {
+				// Drawio does not add ;base64 to the image URL, browsers don't understand. Fixing it here.
+				if (image.startsWith(DATA_URI_PNG_PREFIX_NO_BASE_64)) {
+					int insertIdx = DATA_URI_PNG_PREFIX_NO_BASE_64.length() - 1;
+					image = image.substring(0, insertIdx) + ";base64" + image.substring(insertIdx);
+				} else if (image.startsWith(DATA_URI_JPEG_PREFIX_NO_BASE_64)) {
+					int insertIdx = DATA_URI_JPEG_PREFIX_NO_BASE_64.length() - 1;
+					image = image.substring(0, insertIdx) + ";base64" + image.substring(insertIdx);
+				} else {
+					image = URI.createURI(image).resolve(BASE_LIB_URI).toString();
+				}
+
+				semanticModelElement.getRepresentations().put(IMAGE_REPRESENTATION,	image);					
+			}
+		}		
 	}
 	
 	/**

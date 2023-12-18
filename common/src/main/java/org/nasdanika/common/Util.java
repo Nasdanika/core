@@ -1,5 +1,8 @@
 package org.nasdanika.common;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -42,6 +45,10 @@ import java.util.function.ToIntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageOutputStream;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
@@ -1369,8 +1376,68 @@ public class Util {
 			public void afterError(T target, T proxy, Method method, Object[] args, Throwable error) {
 				invocationRecordConsumer.accept(new InvocationRecord<T>(target, proxy, method, args, true, null, error, Thread.currentThread(), new Throwable().getStackTrace(), counter.incrementAndGet(), System.nanoTime()));				
 			}
-		});		
-		
+		});				
+	}
+	
+	public static final String DATA_IMAGE_PNG_BASE64_PREFIX = "data:image/png;base64,";
+	public static final String DATA_IMAGE_JPEG_BASE64_PREFIX = "data:image/jpeg;base64,";
+
+	public static String scaleImageToPNG(String imageDataURL, int height) throws IOException {
+		return scaleImage(imageDataURL, height, "png");
+	}	
+	
+	/**
+	 * Scales data encoded png to specified height keeping aspect ratio.
+	 * @param encodedImage
+	 * @param height
+	 * @return
+	 * @throws IOException 
+	 */
+	public static String scaleImage(String imageDataURL, int height, String format) throws IOException {
+		if (imageDataURL.startsWith(DATA_IMAGE_PNG_BASE64_PREFIX)) {
+			byte[] imageData = java.util.Base64.getDecoder().decode(imageDataURL.substring(DATA_IMAGE_PNG_BASE64_PREFIX.length()));
+			BufferedImage inputImage = ImageIO.read(new ByteArrayInputStream(imageData));
+			int inputHeight = inputImage.getHeight();
+			int inputWidth = inputImage.getWidth();
+			int scaledWidth = (height * inputWidth) / inputHeight;
+			Image scaledImage = inputImage.getScaledInstance(scaledWidth, height, Image.SCALE_SMOOTH);
+			
+		    BufferedImage scaledBufferedImage = new BufferedImage(scaledImage.getWidth(null), scaledImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		    Graphics2D bGr = scaledBufferedImage.createGraphics();
+		    bGr.drawImage(scaledImage, 0, 0, null);
+		    bGr.dispose();			
+			
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			try (ImageOutputStream ios = new MemoryCacheImageOutputStream(baos)) {
+				ImageIO.write(scaledBufferedImage, format, ios);
+			}
+			baos.close();
+			
+			return DATA_IMAGE_PNG_BASE64_PREFIX + java.util.Base64.getEncoder().encodeToString(baos.toByteArray());
+			
+		} else if (imageDataURL.startsWith(DATA_IMAGE_JPEG_BASE64_PREFIX)) {
+			byte[] imageData = java.util.Base64.getDecoder().decode(imageDataURL.substring(DATA_IMAGE_JPEG_BASE64_PREFIX.length()));
+			BufferedImage inputImage = ImageIO.read(new ByteArrayInputStream(imageData));
+			int inputHeight = inputImage.getHeight();
+			int inputWidth = inputImage.getWidth();
+			int scaledWidth = (height * inputWidth) / inputHeight;
+			Image scaledImage = inputImage.getScaledInstance(scaledWidth, height, Image.SCALE_SMOOTH);
+			
+		    BufferedImage scaledBufferedImage = new BufferedImage(scaledImage.getWidth(null), scaledImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		    Graphics2D bGr = scaledBufferedImage.createGraphics();
+		    bGr.drawImage(scaledImage, 0, 0, null);
+		    bGr.dispose();			
+			
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			try (ImageOutputStream ios = new MemoryCacheImageOutputStream(baos)) {
+				ImageIO.write(scaledBufferedImage, format, ios);
+			}
+			baos.close();
+			
+			return DATA_IMAGE_JPEG_BASE64_PREFIX + java.util.Base64.getEncoder().encodeToString(baos.toByteArray());			
+		} 
+ 
+		throw new UnsupportedOperationException();
 	}
 	
 }
