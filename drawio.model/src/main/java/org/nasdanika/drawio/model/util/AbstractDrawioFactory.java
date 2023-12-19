@@ -809,7 +809,23 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		}
 	}	
 	
-	public static final URI BASE_LIB_URI = URI.createURI("https://app.diagrams.net/"); 
+	/**
+	 * Default base URI for the Drawio application to resolve library relative URL's.
+	 */
+	public static final URI DEFAULT_APP_BASE = URI.createURI("https://app.diagrams.net/");
+	
+	/**
+	 * Application base for resolving relative image URL's. 
+	 * This implementation returns DEFAULT_APP_BASE. 
+	 * Override to customize for different (e.g. intranet) installations.
+	 * App sources - https://github.com/jgraph/drawio/tree/dev/src/main/webapp.
+	 * For the purposes of serving images and a diagram editor the web app can be deployed as a static site.
+	 * It can also be deployed as a Docker container - https://www.drawio.com/blog/diagrams-docker-app, https://hub.docker.com/r/jgraph/drawio 
+	 * @return
+	 */
+	protected URI getAppBase() {
+		return DEFAULT_APP_BASE;
+	}
 		
 	@org.nasdanika.common.Transformer.Wire(phase = 1)
 	public final void mapModelElement(
@@ -877,7 +893,14 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					int insertIdx = DATA_URI_JPEG_PREFIX_NO_BASE_64.length() - 1;
 					image = image.substring(0, insertIdx) + ";base64" + image.substring(insertIdx);
 				} else {
-					image = URI.createURI(image).resolve(BASE_LIB_URI).toString();
+					URI imageURI = URI.createURI(image);
+					if (imageURI.isRelative()) {
+						URI appBase = getAppBase();
+						if (appBase != null && !appBase.isRelative()) {
+							imageURI = imageURI.resolve(appBase);
+						}
+					}
+					image = imageURI.toString();
 				}
 
 				semanticModelElement.getRepresentations().put(IMAGE_REPRESENTATION,	image);					

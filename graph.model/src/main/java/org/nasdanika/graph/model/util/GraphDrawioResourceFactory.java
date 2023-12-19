@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.drawio.model.util.AbstractDrawioFactory;
 import org.nasdanika.persistence.Marker;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -34,6 +35,11 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 				return GraphDrawioResourceFactory.this.createEvaluationContext();
 			}
 			
+			@Override
+			protected URI getAppBase() {
+				return GraphDrawioResourceFactory.this.getAppBase();
+			}
+			
 		};
 	}
 	
@@ -52,5 +58,9 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 	protected EvaluationContext createEvaluationContext() {
 		return new StandardEvaluationContext();
 	}	
+
+	protected URI getAppBase() {
+		return AbstractDrawioFactory.DEFAULT_APP_BASE;
+	}
 			
 }
