@@ -18,6 +18,7 @@ import org.nasdanika.ncore.StringIdentity;
  *   <li>{@link org.nasdanika.drawio.model.Page#getModel <em>Model</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.Page#getName <em>Name</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.Page#getLinks <em>Links</em>}</li>
+ *   <li>{@link org.nasdanika.drawio.model.Page#getTags <em>Tags</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.drawio.model.ModelPackage#getPage()
@@ -88,10 +89,46 @@ public interface Page extends Marked, StringIdentity {
 	EList<ModelElement> getLinks();
 
 	/**
+	 * Returns the value of the '<em><b>Tags</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.drawio.model.Tag}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Tags</em>' containment reference list.
+	 * @see org.nasdanika.drawio.model.ModelPackage#getPage_Tags()
+	 * @model containment="true" keys="name"
+	 * @generated
+	 */
+	EList<Tag> getTags();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model
 	 * @generated
 	 */
 	ModelElement getModelElementById(String modelElementId);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	Tag getTag(String tagName);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	ModelElement getModelElementByProperty(String name, String value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	EList<ModelElement> getModelElementsByProperty(String name, String value);
 } // Page

@@ -141,13 +141,31 @@ public interface ModelPackage extends EPackage {
 	int DOCUMENT___GET_MODEL_ELEMENT_BY_ID__STRING = NcorePackage.MARKED_OPERATION_COUNT + 2;
 
 	/**
+	 * The operation id for the '<em>Get Model Element By Property</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENT___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING = NcorePackage.MARKED_OPERATION_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Model Elements By Property</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENT___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = NcorePackage.MARKED_OPERATION_COUNT + 4;
+
+	/**
 	 * The number of operations of the '<em>Document</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DOCUMENT_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 3;
+	int DOCUMENT_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 5;
 
 
 	/**
@@ -206,13 +224,22 @@ public interface ModelPackage extends EPackage {
 	int PAGE__LINKS = NcorePackage.MARKED_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Tags</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE__TAGS = NcorePackage.MARKED_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Page</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 4;
+	int PAGE_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
@@ -224,13 +251,86 @@ public interface ModelPackage extends EPackage {
 	int PAGE___GET_MODEL_ELEMENT_BY_ID__STRING = NcorePackage.MARKED_OPERATION_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Get Tag</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE___GET_TAG__STRING = NcorePackage.MARKED_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Model Element By Property</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING = NcorePackage.MARKED_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Model Elements By Property</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = NcorePackage.MARKED_OPERATION_COUNT + 3;
+
+	/**
 	 * The number of operations of the '<em>Page</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 1;
+	int PAGE_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 4;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.TagImpl <em>Tag</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.drawio.model.impl.TagImpl
+	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getTag()
+	 * @generated
+	 */
+	int TAG = 2;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TAG__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TAG__ELEMENTS = 1;
+
+	/**
+	 * The number of structural features of the '<em>Tag</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TAG_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Tag</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TAG_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.ModelImpl <em>Model</em>}' class.
@@ -240,7 +340,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getModel()
 	 * @generated
 	 */
-	int MODEL = 2;
+	int MODEL = 3;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -286,7 +386,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getModelElement()
 	 * @generated
 	 */
-	int MODEL_ELEMENT = 3;
+	int MODEL_ELEMENT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -352,7 +452,7 @@ public interface ModelPackage extends EPackage {
 	int MODEL_ELEMENT__STYLE = NcorePackage.MARKED_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Tags</b></em>' attribute list.
+	 * The feature id for the '<em><b>Tags</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -406,22 +506,13 @@ public interface ModelPackage extends EPackage {
 	int MODEL_ELEMENT___GET_PAGE = NcorePackage.MARKED_OPERATION_COUNT + 1;
 
 	/**
-	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING = NcorePackage.MARKED_OPERATION_COUNT + 2;
-
-	/**
 	 * The number of operations of the '<em>Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 3;
+	int MODEL_ELEMENT_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.RootImpl <em>Root</em>}' class.
@@ -431,7 +522,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getRoot()
 	 * @generated
 	 */
-	int ROOT = 4;
+	int ROOT = 5;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -497,7 +588,7 @@ public interface ModelPackage extends EPackage {
 	int ROOT__STYLE = MODEL_ELEMENT__STYLE;
 
 	/**
-	 * The feature id for the '<em><b>Tags</b></em>' attribute list.
+	 * The feature id for the '<em><b>Tags</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -566,7 +657,25 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROOT___GET_MODEL_ELEMENT_BY_ID__STRING = MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING;
+	int ROOT___GET_MODEL_ELEMENT_BY_ID__STRING = MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Model Element By Property</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROOT___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING = MODEL_ELEMENT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Model Elements By Property</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROOT___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = MODEL_ELEMENT_OPERATION_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Root</em>' class.
@@ -575,7 +684,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROOT_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int ROOT_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.LayerImpl <em>Layer</em>}' class.
@@ -585,7 +694,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getLayer()
 	 * @generated
 	 */
-	int LAYER = 5;
+	int LAYER = 6;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -651,7 +760,7 @@ public interface ModelPackage extends EPackage {
 	int LAYER__STYLE = MODEL_ELEMENT__STYLE;
 
 	/**
-	 * The feature id for the '<em><b>Tags</b></em>' attribute list.
+	 * The feature id for the '<em><b>Tags</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -720,7 +829,25 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LAYER___GET_MODEL_ELEMENT_BY_ID__STRING = MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING;
+	int LAYER___GET_MODEL_ELEMENT_BY_ID__STRING = MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Model Element By Property</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING = MODEL_ELEMENT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Model Elements By Property</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = MODEL_ELEMENT_OPERATION_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Layer</em>' class.
@@ -729,7 +856,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LAYER_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int LAYER_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.LayerElementImpl <em>Layer Element</em>}' class.
@@ -739,7 +866,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getLayerElement()
 	 * @generated
 	 */
-	int LAYER_ELEMENT = 6;
+	int LAYER_ELEMENT = 7;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -805,7 +932,7 @@ public interface ModelPackage extends EPackage {
 	int LAYER_ELEMENT__STYLE = MODEL_ELEMENT__STYLE;
 
 	/**
-	 * The feature id for the '<em><b>Tags</b></em>' attribute list.
+	 * The feature id for the '<em><b>Tags</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -868,15 +995,6 @@ public interface ModelPackage extends EPackage {
 	int LAYER_ELEMENT___GET_PAGE = MODEL_ELEMENT___GET_PAGE;
 
 	/**
-	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LAYER_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING = MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING;
-
-	/**
 	 * The number of operations of the '<em>Layer Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -893,7 +1011,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getNode()
 	 * @generated
 	 */
-	int NODE = 7;
+	int NODE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -959,7 +1077,7 @@ public interface ModelPackage extends EPackage {
 	int NODE__STYLE = LAYER__STYLE;
 
 	/**
-	 * The feature id for the '<em><b>Tags</b></em>' attribute list.
+	 * The feature id for the '<em><b>Tags</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1058,6 +1176,24 @@ public interface ModelPackage extends EPackage {
 	int NODE___GET_MODEL_ELEMENT_BY_ID__STRING = LAYER___GET_MODEL_ELEMENT_BY_ID__STRING;
 
 	/**
+	 * The operation id for the '<em>Get Model Element By Property</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING = LAYER___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING;
+
+	/**
+	 * The operation id for the '<em>Get Model Elements By Property</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = LAYER___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING;
+
+	/**
 	 * The number of operations of the '<em>Node</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1074,7 +1210,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getConnection()
 	 * @generated
 	 */
-	int CONNECTION = 8;
+	int CONNECTION = 9;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -1140,7 +1276,7 @@ public interface ModelPackage extends EPackage {
 	int CONNECTION__STYLE = LAYER_ELEMENT__STYLE;
 
 	/**
-	 * The feature id for the '<em><b>Tags</b></em>' attribute list.
+	 * The feature id for the '<em><b>Tags</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1221,15 +1357,6 @@ public interface ModelPackage extends EPackage {
 	int CONNECTION___GET_PAGE = LAYER_ELEMENT___GET_PAGE;
 
 	/**
-	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONNECTION___GET_MODEL_ELEMENT_BY_ID__STRING = LAYER_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING;
-
-	/**
 	 * The number of operations of the '<em>Connection</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1247,7 +1374,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getPoint()
 	 * @generated
 	 */
-	int POINT = 9;
+	int POINT = 10;
 
 	/**
 	 * The feature id for the '<em><b>X</b></em>' attribute.
@@ -1293,7 +1420,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getGeometry()
 	 * @generated
 	 */
-	int GEOMETRY = 10;
+	int GEOMETRY = 11;
 
 	/**
 	 * The feature id for the '<em><b>X</b></em>' attribute.
@@ -1403,7 +1530,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getSemanticMapping()
 	 * @generated
 	 */
-	int SEMANTIC_MAPPING = 11;
+	int SEMANTIC_MAPPING = 12;
 
 	/**
 	 * The feature id for the '<em><b>Document URI</b></em>' attribute.
@@ -1467,7 +1594,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getSemanticElement()
 	 * @generated
 	 */
-	int SEMANTIC_ELEMENT = 12;
+	int SEMANTIC_ELEMENT = 13;
 
 	/**
 	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
@@ -1571,6 +1698,26 @@ public interface ModelPackage extends EPackage {
 	EOperation getDocument__GetModelElementById__String();
 
 	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Document#getModelElementByProperty(java.lang.String, java.lang.String) <em>Get Model Element By Property</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Element By Property</em>' operation.
+	 * @see org.nasdanika.drawio.model.Document#getModelElementByProperty(java.lang.String, java.lang.String)
+	 * @generated
+	 */
+	EOperation getDocument__GetModelElementByProperty__String_String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Document#getModelElementsByProperty(java.lang.String, java.lang.String) <em>Get Model Elements By Property</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Elements By Property</em>' operation.
+	 * @see org.nasdanika.drawio.model.Document#getModelElementsByProperty(java.lang.String, java.lang.String)
+	 * @generated
+	 */
+	EOperation getDocument__GetModelElementsByProperty__String_String();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Page <em>Page</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1614,6 +1761,17 @@ public interface ModelPackage extends EPackage {
 	EReference getPage_Links();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.drawio.model.Page#getTags <em>Tags</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Tags</em>'.
+	 * @see org.nasdanika.drawio.model.Page#getTags()
+	 * @see #getPage()
+	 * @generated
+	 */
+	EReference getPage_Tags();
+
+	/**
 	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Page#getModelElementById(java.lang.String) <em>Get Model Element By Id</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1622,6 +1780,68 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getPage__GetModelElementById__String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Page#getTag(java.lang.String) <em>Get Tag</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Tag</em>' operation.
+	 * @see org.nasdanika.drawio.model.Page#getTag(java.lang.String)
+	 * @generated
+	 */
+	EOperation getPage__GetTag__String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Page#getModelElementByProperty(java.lang.String, java.lang.String) <em>Get Model Element By Property</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Element By Property</em>' operation.
+	 * @see org.nasdanika.drawio.model.Page#getModelElementByProperty(java.lang.String, java.lang.String)
+	 * @generated
+	 */
+	EOperation getPage__GetModelElementByProperty__String_String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Page#getModelElementsByProperty(java.lang.String, java.lang.String) <em>Get Model Elements By Property</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Elements By Property</em>' operation.
+	 * @see org.nasdanika.drawio.model.Page#getModelElementsByProperty(java.lang.String, java.lang.String)
+	 * @generated
+	 */
+	EOperation getPage__GetModelElementsByProperty__String_String();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Tag <em>Tag</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Tag</em>'.
+	 * @see org.nasdanika.drawio.model.Tag
+	 * @generated
+	 */
+	EClass getTag();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.drawio.model.Tag#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.nasdanika.drawio.model.Tag#getName()
+	 * @see #getTag()
+	 * @generated
+	 */
+	EAttribute getTag_Name();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.nasdanika.drawio.model.Tag#getElements <em>Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Elements</em>'.
+	 * @see org.nasdanika.drawio.model.Tag#getElements()
+	 * @see #getTag()
+	 * @generated
+	 */
+	EReference getTag_Elements();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Model <em>Model</em>}'.
@@ -1710,15 +1930,15 @@ public interface ModelPackage extends EPackage {
 	EReference getModelElement_Style();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link org.nasdanika.drawio.model.ModelElement#getTags <em>Tags</em>}'.
+	 * Returns the meta object for the reference list '{@link org.nasdanika.drawio.model.ModelElement#getTags <em>Tags</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Tags</em>'.
+	 * @return the meta object for the reference list '<em>Tags</em>'.
 	 * @see org.nasdanika.drawio.model.ModelElement#getTags()
 	 * @see #getModelElement()
 	 * @generated
 	 */
-	EAttribute getModelElement_Tags();
+	EReference getModelElement_Tags();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.nasdanika.drawio.model.ModelElement#getTooltip <em>Tooltip</em>}'.
@@ -1763,16 +1983,6 @@ public interface ModelPackage extends EPackage {
 	EOperation getModelElement__GetPage();
 
 	/**
-	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.ModelElement#getModelElementById(java.lang.String) <em>Get Model Element By Id</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Model Element By Id</em>' operation.
-	 * @see org.nasdanika.drawio.model.ModelElement#getModelElementById(java.lang.String)
-	 * @generated
-	 */
-	EOperation getModelElement__GetModelElementById__String();
-
-	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Root <em>Root</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1794,6 +2004,36 @@ public interface ModelPackage extends EPackage {
 	EReference getRoot_Layers();
 
 	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Root#getModelElementById(java.lang.String) <em>Get Model Element By Id</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Element By Id</em>' operation.
+	 * @see org.nasdanika.drawio.model.Root#getModelElementById(java.lang.String)
+	 * @generated
+	 */
+	EOperation getRoot__GetModelElementById__String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Root#getModelElementByProperty(java.lang.String, java.lang.String) <em>Get Model Element By Property</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Element By Property</em>' operation.
+	 * @see org.nasdanika.drawio.model.Root#getModelElementByProperty(java.lang.String, java.lang.String)
+	 * @generated
+	 */
+	EOperation getRoot__GetModelElementByProperty__String_String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Root#getModelElementsByProperty(java.lang.String, java.lang.String) <em>Get Model Elements By Property</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Elements By Property</em>' operation.
+	 * @see org.nasdanika.drawio.model.Root#getModelElementsByProperty(java.lang.String, java.lang.String)
+	 * @generated
+	 */
+	EOperation getRoot__GetModelElementsByProperty__String_String();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Layer <em>Layer</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1813,6 +2053,36 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLayer_Elements();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Layer#getModelElementById(java.lang.String) <em>Get Model Element By Id</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Element By Id</em>' operation.
+	 * @see org.nasdanika.drawio.model.Layer#getModelElementById(java.lang.String)
+	 * @generated
+	 */
+	EOperation getLayer__GetModelElementById__String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Layer#getModelElementByProperty(java.lang.String, java.lang.String) <em>Get Model Element By Property</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Element By Property</em>' operation.
+	 * @see org.nasdanika.drawio.model.Layer#getModelElementByProperty(java.lang.String, java.lang.String)
+	 * @generated
+	 */
+	EOperation getLayer__GetModelElementByProperty__String_String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.drawio.model.Layer#getModelElementsByProperty(java.lang.String, java.lang.String) <em>Get Model Elements By Property</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Model Elements By Property</em>' operation.
+	 * @see org.nasdanika.drawio.model.Layer#getModelElementsByProperty(java.lang.String, java.lang.String)
+	 * @generated
+	 */
+	EOperation getLayer__GetModelElementsByProperty__String_String();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.LayerElement <em>Layer Element</em>}'.
@@ -2168,6 +2438,20 @@ public interface ModelPackage extends EPackage {
 		 */
 		EOperation DOCUMENT___GET_MODEL_ELEMENT_BY_ID__STRING = eINSTANCE.getDocument__GetModelElementById__String();
 		/**
+		 * The meta object literal for the '<em><b>Get Model Element By Property</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DOCUMENT___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING = eINSTANCE.getDocument__GetModelElementByProperty__String_String();
+		/**
+		 * The meta object literal for the '<em><b>Get Model Elements By Property</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DOCUMENT___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = eINSTANCE.getDocument__GetModelElementsByProperty__String_String();
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.PageImpl <em>Page</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2198,12 +2482,63 @@ public interface ModelPackage extends EPackage {
 		 */
 		EReference PAGE__LINKS = eINSTANCE.getPage_Links();
 		/**
+		 * The meta object literal for the '<em><b>Tags</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAGE__TAGS = eINSTANCE.getPage_Tags();
+		/**
 		 * The meta object literal for the '<em><b>Get Model Element By Id</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EOperation PAGE___GET_MODEL_ELEMENT_BY_ID__STRING = eINSTANCE.getPage__GetModelElementById__String();
+		/**
+		 * The meta object literal for the '<em><b>Get Tag</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PAGE___GET_TAG__STRING = eINSTANCE.getPage__GetTag__String();
+		/**
+		 * The meta object literal for the '<em><b>Get Model Element By Property</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PAGE___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING = eINSTANCE.getPage__GetModelElementByProperty__String_String();
+		/**
+		 * The meta object literal for the '<em><b>Get Model Elements By Property</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PAGE___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = eINSTANCE.getPage__GetModelElementsByProperty__String_String();
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.TagImpl <em>Tag</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.drawio.model.impl.TagImpl
+		 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getTag()
+		 * @generated
+		 */
+		EClass TAG = eINSTANCE.getTag();
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TAG__NAME = eINSTANCE.getTag_Name();
+		/**
+		 * The meta object literal for the '<em><b>Elements</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TAG__ELEMENTS = eINSTANCE.getTag_Elements();
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.ModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
@@ -2265,12 +2600,12 @@ public interface ModelPackage extends EPackage {
 		 */
 		EReference MODEL_ELEMENT__STYLE = eINSTANCE.getModelElement_Style();
 		/**
-		 * The meta object literal for the '<em><b>Tags</b></em>' attribute list feature.
+		 * The meta object literal for the '<em><b>Tags</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute MODEL_ELEMENT__TAGS = eINSTANCE.getModelElement_Tags();
+		EReference MODEL_ELEMENT__TAGS = eINSTANCE.getModelElement_Tags();
 		/**
 		 * The meta object literal for the '<em><b>Tooltip</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
@@ -2300,13 +2635,6 @@ public interface ModelPackage extends EPackage {
 		 */
 		EOperation MODEL_ELEMENT___GET_PAGE = eINSTANCE.getModelElement__GetPage();
 		/**
-		 * The meta object literal for the '<em><b>Get Model Element By Id</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING = eINSTANCE.getModelElement__GetModelElementById__String();
-		/**
 		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.RootImpl <em>Root</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2323,6 +2651,27 @@ public interface ModelPackage extends EPackage {
 		 */
 		EReference ROOT__LAYERS = eINSTANCE.getRoot_Layers();
 		/**
+		 * The meta object literal for the '<em><b>Get Model Element By Id</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation ROOT___GET_MODEL_ELEMENT_BY_ID__STRING = eINSTANCE.getRoot__GetModelElementById__String();
+		/**
+		 * The meta object literal for the '<em><b>Get Model Element By Property</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation ROOT___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING = eINSTANCE.getRoot__GetModelElementByProperty__String_String();
+		/**
+		 * The meta object literal for the '<em><b>Get Model Elements By Property</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation ROOT___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = eINSTANCE.getRoot__GetModelElementsByProperty__String_String();
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.LayerImpl <em>Layer</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2338,6 +2687,27 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference LAYER__ELEMENTS = eINSTANCE.getLayer_Elements();
+		/**
+		 * The meta object literal for the '<em><b>Get Model Element By Id</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LAYER___GET_MODEL_ELEMENT_BY_ID__STRING = eINSTANCE.getLayer__GetModelElementById__String();
+		/**
+		 * The meta object literal for the '<em><b>Get Model Element By Property</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LAYER___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING = eINSTANCE.getLayer__GetModelElementByProperty__String_String();
+		/**
+		 * The meta object literal for the '<em><b>Get Model Elements By Property</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LAYER___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = eINSTANCE.getLayer__GetModelElementsByProperty__String_String();
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.LayerElementImpl <em>Layer Element</em>}' class.
 		 * <!-- begin-user-doc -->

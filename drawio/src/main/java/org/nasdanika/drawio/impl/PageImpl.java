@@ -18,6 +18,7 @@ import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.drawio.model.Tag;
 import org.nasdanika.persistence.Marker;
 import org.xml.sax.SAXException;
 
@@ -140,7 +141,19 @@ class PageImpl extends ElementImpl implements Page {
 		mPage.setName(getName());
 		mPage.setId(getId());
 		
-		mPage.setModel(((ModelImpl) getModel()).toModelModel(factory, markerFactory, modelElementProvider));
+		mPage.setModel(((ModelImpl) getModel()).toModelModel(
+				factory, 
+				markerFactory, 
+				modelElementProvider,
+				tagName -> {
+					Tag tag = mPage.getTag(tagName);
+					if (tag == null) {
+						tag = ModelFactory.eINSTANCE.createTag();
+						tag.setName(tagName);
+						mPage.getTags().add(tag);
+					}
+					return tag;
+				}));
 		
 		for (Marker marker: getMarkers()) {
 			mPage.getMarkers().add(markerFactory.apply(marker));

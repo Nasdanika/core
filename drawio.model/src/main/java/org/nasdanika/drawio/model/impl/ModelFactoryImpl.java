@@ -58,6 +58,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 		switch (eClass.getClassifierID()) {
 			case ModelPackage.DOCUMENT: return createDocument();
 			case ModelPackage.PAGE: return createPage();
+			case ModelPackage.TAG: return createTag();
 			case ModelPackage.MODEL: return createModel();
 			case ModelPackage.ROOT: return createRoot();
 			case ModelPackage.LAYER: return createLayer();
@@ -92,6 +93,17 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	public Page createPage() {
 		PageImpl page = new PageImpl();
 		return page;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Tag createTag() {
+		TagImpl tag = new TagImpl();
+		return tag;
 	}
 
 	/**

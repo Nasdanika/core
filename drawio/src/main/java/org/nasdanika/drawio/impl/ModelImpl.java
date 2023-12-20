@@ -231,11 +231,12 @@ class ModelImpl extends ElementImpl implements Model {
 	org.nasdanika.drawio.model.Model toModelModel(
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<Element, CompletableFuture<EObject>> modelElementProvider) {
+			Function<Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
 		org.nasdanika.drawio.model.Model mModel = factory.createModel();		
 		modelElementProvider.apply(this).complete(mModel);
 		
-		mModel.setRoot(((RootImpl) getRoot()).toModelRoot(factory, markerFactory, modelElementProvider));
+		mModel.setRoot(((RootImpl) getRoot()).toModelRoot(factory, markerFactory, modelElementProvider, tagProvider));
 		
 		for (Marker marker: getMarkers()) {
 			mModel.getMarkers().add(markerFactory.apply(marker));

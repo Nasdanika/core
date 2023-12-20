@@ -22,14 +22,38 @@
       <genOperations ecoreOperation="drawio.ecore#//Document/getModelElementById">
         <genParameters ecoreParameter="drawio.ecore#//Document/getModelElementById/modelElementId"/>
       </genOperations>
+      <genOperations ecoreOperation="drawio.ecore#//Document/getModelElementByProperty">
+        <genParameters ecoreParameter="drawio.ecore#//Document/getModelElementByProperty/name"/>
+        <genParameters ecoreParameter="drawio.ecore#//Document/getModelElementByProperty/value"/>
+      </genOperations>
+      <genOperations ecoreOperation="drawio.ecore#//Document/getModelElementsByProperty">
+        <genParameters ecoreParameter="drawio.ecore#//Document/getModelElementsByProperty/name"/>
+        <genParameters ecoreParameter="drawio.ecore#//Document/getModelElementsByProperty/value"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="drawio.ecore#//Page">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//Page/model"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//Page/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference drawio.ecore#//Page/links"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//Page/tags"/>
       <genOperations ecoreOperation="drawio.ecore#//Page/getModelElementById">
         <genParameters ecoreParameter="drawio.ecore#//Page/getModelElementById/modelElementId"/>
       </genOperations>
+      <genOperations ecoreOperation="drawio.ecore#//Page/getTag">
+        <genParameters ecoreParameter="drawio.ecore#//Page/getTag/tagName"/>
+      </genOperations>
+      <genOperations ecoreOperation="drawio.ecore#//Page/getModelElementByProperty">
+        <genParameters ecoreParameter="drawio.ecore#//Page/getModelElementByProperty/name"/>
+        <genParameters ecoreParameter="drawio.ecore#//Page/getModelElementByProperty/value"/>
+      </genOperations>
+      <genOperations ecoreOperation="drawio.ecore#//Page/getModelElementsByProperty">
+        <genParameters ecoreParameter="drawio.ecore#//Page/getModelElementsByProperty/name"/>
+        <genParameters ecoreParameter="drawio.ecore#//Page/getModelElementsByProperty/value"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="drawio.ecore#//Tag">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//Tag/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference drawio.ecore#//Tag/elements"/>
     </genClasses>
     <genClasses ecoreClass="drawio.ecore#//Model">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//Model/root"/>
@@ -40,20 +64,39 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//ModelElement/link"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference drawio.ecore#//ModelElement/linkedPage"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//ModelElement/style"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//ModelElement/tags"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference drawio.ecore#//ModelElement/tags"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//ModelElement/tooltip"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//ModelElement/visible"/>
       <genOperations ecoreOperation="drawio.ecore#//ModelElement/getDocument"/>
       <genOperations ecoreOperation="drawio.ecore#//ModelElement/getPage"/>
-      <genOperations ecoreOperation="drawio.ecore#//ModelElement/getModelElementById">
-        <genParameters ecoreParameter="drawio.ecore#//ModelElement/getModelElementById/modelElementId"/>
-      </genOperations>
     </genClasses>
     <genClasses ecoreClass="drawio.ecore#//Root">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//Root/layers"/>
+      <genOperations ecoreOperation="drawio.ecore#//Root/getModelElementById">
+        <genParameters ecoreParameter="drawio.ecore#//Root/getModelElementById/modelElementId"/>
+      </genOperations>
+      <genOperations ecoreOperation="drawio.ecore#//Root/getModelElementByProperty">
+        <genParameters ecoreParameter="drawio.ecore#//Root/getModelElementByProperty/name"/>
+        <genParameters ecoreParameter="drawio.ecore#//Root/getModelElementByProperty/value"/>
+      </genOperations>
+      <genOperations ecoreOperation="drawio.ecore#//Root/getModelElementsByProperty">
+        <genParameters ecoreParameter="drawio.ecore#//Root/getModelElementsByProperty/name"/>
+        <genParameters ecoreParameter="drawio.ecore#//Root/getModelElementsByProperty/value"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="drawio.ecore#//Layer">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//Layer/elements"/>
+      <genOperations ecoreOperation="drawio.ecore#//Layer/getModelElementById">
+        <genParameters ecoreParameter="drawio.ecore#//Layer/getModelElementById/modelElementId"/>
+      </genOperations>
+      <genOperations ecoreOperation="drawio.ecore#//Layer/getModelElementByProperty">
+        <genParameters ecoreParameter="drawio.ecore#//Layer/getModelElementByProperty/name"/>
+        <genParameters ecoreParameter="drawio.ecore#//Layer/getModelElementByProperty/value"/>
+      </genOperations>
+      <genOperations ecoreOperation="drawio.ecore#//Layer/getModelElementsByProperty">
+        <genParameters ecoreParameter="drawio.ecore#//Layer/getModelElementsByProperty/name"/>
+        <genParameters ecoreParameter="drawio.ecore#//Layer/getModelElementsByProperty/value"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="drawio.ecore#//LayerElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//LayerElement/geometry"/>

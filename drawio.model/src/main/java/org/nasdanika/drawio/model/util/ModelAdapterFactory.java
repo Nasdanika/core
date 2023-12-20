@@ -78,6 +78,10 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
 				return createPageAdapter();
 			}
 			@Override
+			public Adapter caseTag(Tag object) {
+				return createTagAdapter();
+			}
+			@Override
 			public Adapter caseModel(Model object) {
 				return createModelAdapter();
 			}
@@ -178,6 +182,20 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPageAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.drawio.model.Tag <em>Tag</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.drawio.model.Tag
+	 * @generated
+	 */
+	public Adapter createTagAdapter() {
 		return null;
 	}
 

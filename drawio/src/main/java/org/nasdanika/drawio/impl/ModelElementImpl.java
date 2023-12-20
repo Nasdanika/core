@@ -445,7 +445,8 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	protected <T extends org.nasdanika.drawio.model.ModelElement> T toModelElement(
 			T mElement, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<Element, CompletableFuture<EObject>> modelElementProvider) {
+			Function<Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
 		modelElementProvider.apply(this).complete(mElement);
 		mElement.setId(getId());
 		mElement.setLabel(getLabel());
@@ -460,7 +461,11 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		for (Entry<String, String> se: getStyle().entrySet()) {
 			mElement.getStyle().put(se.getKey(), se.getValue());			
 		}
-		mElement.getTags().addAll(getTags());
+		
+		for (String tag: getTags()) {
+			mElement.getTags().add(tagProvider.apply(tag));
+			
+		}
 		mElement.setTooltip(getTooltip());
 		mElement.setVisible(isVisible());
 		

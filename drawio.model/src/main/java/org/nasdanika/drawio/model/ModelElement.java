@@ -126,16 +126,18 @@ public interface ModelElement extends Marked, StringIdentity {
 	EMap<String, String> getStyle();
 
 	/**
-	 * Returns the value of the '<em><b>Tags</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
+	 * Returns the value of the '<em><b>Tags</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.drawio.model.Tag}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.drawio.model.Tag#getElements <em>Elements</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Tags</em>' attribute list.
+	 * @return the value of the '<em>Tags</em>' reference list.
 	 * @see org.nasdanika.drawio.model.ModelPackage#getModelElement_Tags()
-	 * @model
+	 * @see org.nasdanika.drawio.model.Tag#getElements
+	 * @model opposite="elements"
 	 * @generated
 	 */
-	EList<String> getTags();
+	EList<Tag> getTags();
 
 	/**
 	 * Returns the value of the '<em><b>Tooltip</b></em>' attribute.
@@ -196,13 +198,5 @@ public interface ModelElement extends Marked, StringIdentity {
 	 * @generated
 	 */
 	Page getPage();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model
-	 * @generated
-	 */
-	ModelElement getModelElementById(String modelElementId);
 
 } // ModelElement

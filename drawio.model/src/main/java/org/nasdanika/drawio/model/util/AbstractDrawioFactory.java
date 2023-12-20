@@ -1050,17 +1050,6 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				((org.nasdanika.ncore.Marked) semanticElement).getMarkers().add(EcoreUtil.copy(marker));
 			}
 		}
-						
-		// Root is logically "merged" with the containing page
-		if (modelElement instanceof Root) {
-			Page page = (Page) modelElement.eContainer().eContainer();
-			if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
-				org.nasdanika.ncore.NamedElement namedSemanticElement = (org.nasdanika.ncore.NamedElement) semanticElement;
-				if (Util.isBlank(namedSemanticElement.getName())) {
-					namedSemanticElement.setName(page.getName());
-				}
-			}
-		}
 		
 		if (!isPrototype && semanticElement instanceof org.nasdanika.ncore.StringIdentity) {
 			String semanticIdProperty = getSemanticIdProperty();
@@ -1157,7 +1146,19 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					}
 				}
 			}
-		}				
+		}	
+				
+		// Root is logically "merged" with the containing page
+		if (modelElement instanceof Root) {
+			Page page = (Page) modelElement.eContainer().eContainer();
+			if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
+				org.nasdanika.ncore.NamedElement namedSemanticElement = (org.nasdanika.ncore.NamedElement) semanticElement;
+				if (Util.isBlank(namedSemanticElement.getName())) {
+					namedSemanticElement.setName(page.getName());
+				}
+			}
+		}
+		
 	}
 		
 	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);

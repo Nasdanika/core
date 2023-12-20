@@ -5,6 +5,7 @@ package org.nasdanika.drawio.model.impl;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
@@ -198,6 +199,38 @@ public class DocumentImpl extends MinimalEObjectImpl.Container implements Docume
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public ModelElement getModelElementByProperty(String name, String value) {
+		for (Page page: getPages()) {
+			ModelElement ret = page.getModelElementByProperty(name, value);
+			if (ret != null) {
+				return ret;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<ModelElement> getModelElementsByProperty(String name, String value) {
+		EList<ModelElement> ret = ECollections.newBasicEList();
+		getPages()
+			.stream()
+			.flatMap(p -> p.getModelElementsByProperty(name, value).stream())
+			.forEach(ret::add);
+		
+		return ret;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -316,6 +349,10 @@ public class DocumentImpl extends MinimalEObjectImpl.Container implements Docume
 				return getPageById((String)arguments.get(0));
 			case ModelPackage.DOCUMENT___GET_MODEL_ELEMENT_BY_ID__STRING:
 				return getModelElementById((String)arguments.get(0));
+			case ModelPackage.DOCUMENT___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING:
+				return getModelElementByProperty((String)arguments.get(0), (String)arguments.get(1));
+			case ModelPackage.DOCUMENT___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING:
+				return getModelElementsByProperty((String)arguments.get(0), (String)arguments.get(1));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

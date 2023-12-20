@@ -6,7 +6,6 @@ import java.util.function.Function;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
-import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.model.ModelFactory;
@@ -53,8 +52,9 @@ class ConnectionImpl extends ModelElementImpl implements Connection {
 	org.nasdanika.drawio.model.Connection toModelConnection(
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider) {
-		org.nasdanika.drawio.model.Connection mConnection = toModelElement(factory.createConnection(), markerFactory, modelElementProvider);
+			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
+		org.nasdanika.drawio.model.Connection mConnection = toModelElement(factory.createConnection(), markerFactory, modelElementProvider, tagProvider);
 		
 		Node sourceNode = getSource();
 		if (sourceNode != null) {

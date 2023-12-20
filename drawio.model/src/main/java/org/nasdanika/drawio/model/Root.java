@@ -33,4 +33,28 @@ public interface Root extends ModelElement {
 	 * @generated
 	 */
 	EList<Layer> getLayers();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	ModelElement getModelElementById(String modelElementId);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	ModelElement getModelElementByProperty(String name, String value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	EList<ModelElement> getModelElementsByProperty(String name, String value);
 } // Root

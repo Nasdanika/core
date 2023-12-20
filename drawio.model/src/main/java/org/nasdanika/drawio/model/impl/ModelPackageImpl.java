@@ -25,6 +25,7 @@ import org.nasdanika.drawio.model.Point;
 import org.nasdanika.drawio.model.Root;
 import org.nasdanika.drawio.model.SemanticElement;
 import org.nasdanika.drawio.model.SemanticMapping;
+import org.nasdanika.drawio.model.Tag;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -47,6 +48,13 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	private EClass pageEClass = null;
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass tagEClass = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -257,6 +265,26 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
+	public EOperation getDocument__GetModelElementByProperty__String_String() {
+		return documentEClass.getEOperations().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getDocument__GetModelElementsByProperty__String_String() {
+		return documentEClass.getEOperations().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPage() {
 		return pageEClass;
 	}
@@ -297,8 +325,78 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getPage_Tags() {
+		return (EReference)pageEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getPage__GetModelElementById__String() {
 		return pageEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getPage__GetTag__String() {
+		return pageEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getPage__GetModelElementByProperty__String_String() {
+		return pageEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getPage__GetModelElementsByProperty__String_String() {
+		return pageEClass.getEOperations().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getTag() {
+		return tagEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTag_Name() {
+		return (EAttribute)tagEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getTag_Elements() {
+		return (EReference)tagEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -387,8 +485,8 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getModelElement_Tags() {
-		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(5);
+	public EReference getModelElement_Tags() {
+		return (EReference)modelElementEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -437,16 +535,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
-	public EOperation getModelElement__GetModelElementById__String() {
-		return modelElementEClass.getEOperations().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getRoot() {
 		return rootEClass;
 	}
@@ -467,6 +555,36 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
+	public EOperation getRoot__GetModelElementById__String() {
+		return rootEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getRoot__GetModelElementByProperty__String_String() {
+		return rootEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getRoot__GetModelElementsByProperty__String_String() {
+		return rootEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getLayer() {
 		return layerEClass;
 	}
@@ -479,6 +597,36 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	@Override
 	public EReference getLayer_Elements() {
 		return (EReference)layerEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getLayer__GetModelElementById__String() {
+		return layerEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getLayer__GetModelElementByProperty__String_String() {
+		return layerEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getLayer__GetModelElementsByProperty__String_String() {
+		return layerEClass.getEOperations().get(2);
 	}
 
 	/**
@@ -777,12 +925,22 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEOperation(documentEClass, DOCUMENT___GET_PAGE_BY_NAME__STRING);
 		createEOperation(documentEClass, DOCUMENT___GET_PAGE_BY_ID__STRING);
 		createEOperation(documentEClass, DOCUMENT___GET_MODEL_ELEMENT_BY_ID__STRING);
+		createEOperation(documentEClass, DOCUMENT___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING);
+		createEOperation(documentEClass, DOCUMENT___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING);
 
 		pageEClass = createEClass(PAGE);
 		createEReference(pageEClass, PAGE__MODEL);
 		createEAttribute(pageEClass, PAGE__NAME);
 		createEReference(pageEClass, PAGE__LINKS);
+		createEReference(pageEClass, PAGE__TAGS);
 		createEOperation(pageEClass, PAGE___GET_MODEL_ELEMENT_BY_ID__STRING);
+		createEOperation(pageEClass, PAGE___GET_TAG__STRING);
+		createEOperation(pageEClass, PAGE___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING);
+		createEOperation(pageEClass, PAGE___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING);
+
+		tagEClass = createEClass(TAG);
+		createEAttribute(tagEClass, TAG__NAME);
+		createEReference(tagEClass, TAG__ELEMENTS);
 
 		modelEClass = createEClass(MODEL);
 		createEReference(modelEClass, MODEL__ROOT);
@@ -793,18 +951,23 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__LINK);
 		createEReference(modelElementEClass, MODEL_ELEMENT__LINKED_PAGE);
 		createEReference(modelElementEClass, MODEL_ELEMENT__STYLE);
-		createEAttribute(modelElementEClass, MODEL_ELEMENT__TAGS);
+		createEReference(modelElementEClass, MODEL_ELEMENT__TAGS);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__TOOLTIP);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__VISIBLE);
 		createEOperation(modelElementEClass, MODEL_ELEMENT___GET_DOCUMENT);
 		createEOperation(modelElementEClass, MODEL_ELEMENT___GET_PAGE);
-		createEOperation(modelElementEClass, MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING);
 
 		rootEClass = createEClass(ROOT);
 		createEReference(rootEClass, ROOT__LAYERS);
+		createEOperation(rootEClass, ROOT___GET_MODEL_ELEMENT_BY_ID__STRING);
+		createEOperation(rootEClass, ROOT___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING);
+		createEOperation(rootEClass, ROOT___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING);
 
 		layerEClass = createEClass(LAYER);
 		createEReference(layerEClass, LAYER__ELEMENTS);
+		createEOperation(layerEClass, LAYER___GET_MODEL_ELEMENT_BY_ID__STRING);
+		createEOperation(layerEClass, LAYER___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING);
+		createEOperation(layerEClass, LAYER___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING);
 
 		layerElementEClass = createEClass(LAYER_ELEMENT);
 		createEReference(layerElementEClass, LAYER_ELEMENT__GEOMETRY);
@@ -901,13 +1064,38 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		op = initEOperation(getDocument__GetModelElementById__String(), this.getModelElement(), "getModelElementById", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "modelElementId", 0, 1, IS_UNIQUE, IS_ORDERED);
 
+		op = initEOperation(getDocument__GetModelElementByProperty__String_String(), this.getModelElement(), "getModelElementByProperty", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getDocument__GetModelElementsByProperty__String_String(), this.getModelElement(), "getModelElementsByProperty", 0, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(pageEClass, Page.class, "Page", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPage_Model(), this.getModel(), null, "model", null, 1, 1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPage_Name(), ecorePackage.getEString(), "name", null, 1, 1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPage_Links(), this.getModelElement(), this.getModelElement_LinkedPage(), "links", null, 0, -1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPage_Tags(), this.getTag(), null, "tags", null, 0, -1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getPage_Tags().getEKeys().add(this.getTag_Name());
 
 		op = initEOperation(getPage__GetModelElementById__String(), this.getModelElement(), "getModelElementById", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "modelElementId", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getPage__GetTag__String(), this.getTag(), "getTag", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "tagName", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getPage__GetModelElementByProperty__String_String(), this.getModelElement(), "getModelElementByProperty", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getPage__GetModelElementsByProperty__String_String(), this.getModelElement(), "getModelElementsByProperty", 0, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(tagEClass, Tag.class, "Tag", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getTag_Name(), ecorePackage.getEString(), "name", null, 1, 1, Tag.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTag_Elements(), this.getModelElement(), this.getModelElement_Tags(), "elements", null, 0, 1, Tag.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getModel_Root(), this.getRoot(), null, "root", null, 1, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -918,7 +1106,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEAttribute(getModelElement_Link(), ecorePackage.getEString(), "link", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_LinkedPage(), this.getPage(), this.getPage_Links(), "linkedPage", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_Style(), theNcorePackage.getStringEntry(), null, "style", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getModelElement_Tags(), ecorePackage.getEString(), "tags", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getModelElement_Tags(), this.getTag(), this.getTag_Elements(), "tags", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Tooltip(), ecorePackage.getEString(), "tooltip", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Visible(), ecorePackage.getEBoolean(), "visible", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -926,16 +1114,35 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		initEOperation(getModelElement__GetPage(), this.getPage(), "getPage", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		op = initEOperation(getModelElement__GetModelElementById__String(), this.getModelElement(), "getModelElementById", 0, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, ecorePackage.getEString(), "modelElementId", 0, 1, IS_UNIQUE, IS_ORDERED);
-
 		initEClass(rootEClass, Root.class, "Root", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoot_Layers(), this.getLayer(), null, "layers", null, 0, -1, Root.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getRoot_Layers().getEKeys().add(theNcorePackage.getStringIdentity_Id());
 
+		op = initEOperation(getRoot__GetModelElementById__String(), this.getModelElement(), "getModelElementById", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "modelElementId", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getRoot__GetModelElementByProperty__String_String(), this.getModelElement(), "getModelElementByProperty", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getRoot__GetModelElementsByProperty__String_String(), this.getModelElement(), "getModelElementsByProperty", 0, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(layerEClass, Layer.class, "Layer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getLayer_Elements(), this.getLayerElement(), null, "elements", null, 0, -1, Layer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getLayer_Elements().getEKeys().add(theNcorePackage.getStringIdentity_Id());
+
+		op = initEOperation(getLayer__GetModelElementById__String(), this.getModelElement(), "getModelElementById", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "modelElementId", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getLayer__GetModelElementByProperty__String_String(), this.getModelElement(), "getModelElementByProperty", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getLayer__GetModelElementsByProperty__String_String(), this.getModelElement(), "getModelElementsByProperty", 0, -1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(layerElementEClass, LayerElement.class, "LayerElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getLayerElement_Geometry(), this.getGeometry(), null, "geometry", null, 0, 1, LayerElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

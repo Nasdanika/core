@@ -7,10 +7,8 @@ import java.util.Collection;
 import java.util.UUID;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -24,6 +22,7 @@ import org.nasdanika.drawio.model.Document;
 import org.nasdanika.drawio.model.ModelElement;
 import org.nasdanika.drawio.model.ModelPackage;
 import org.nasdanika.drawio.model.Page;
+import org.nasdanika.drawio.model.Tag;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.StringIdentity;
@@ -268,8 +267,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<String> getTags() {
-		return (EList<String>)eDynamicGet(ModelPackage.MODEL_ELEMENT__TAGS, ModelPackage.Literals.MODEL_ELEMENT__TAGS, true, true);
+	public EList<Tag> getTags() {
+		return (EList<Tag>)eDynamicGet(ModelPackage.MODEL_ELEMENT__TAGS, ModelPackage.Literals.MODEL_ELEMENT__TAGS, true, true);
 	}
 
 	/**
@@ -345,25 +344,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@Override
-	public ModelElement getModelElementById(String modelElementId) {
-		TreeIterator<EObject> cit = eAllContents();
-		while (cit.hasNext()) {
-			EObject next = cit.next();
-			if (next instanceof ModelElement && ((ModelElement) next).getId().equals(modelElementId)) {
-				return (ModelElement) next;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -372,6 +355,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				if (linkedPage != null)
 					msgs = ((InternalEObject)linkedPage).eInverseRemove(this, ModelPackage.PAGE__LINKS, Page.class, msgs);
 				return basicSetLinkedPage((Page)otherEnd, msgs);
+			case ModelPackage.MODEL_ELEMENT__TAGS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getTags()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -392,6 +377,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return basicSetLinkedPage(null, msgs);
 			case ModelPackage.MODEL_ELEMENT__STYLE:
 				return ((InternalEList<?>)getStyle()).basicRemove(otherEnd, msgs);
+			case ModelPackage.MODEL_ELEMENT__TAGS:
+				return ((InternalEList<?>)getTags()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -464,7 +451,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return;
 			case ModelPackage.MODEL_ELEMENT__TAGS:
 				getTags().clear();
-				getTags().addAll((Collection<? extends String>)newValue);
+				getTags().addAll((Collection<? extends Tag>)newValue);
 				return;
 			case ModelPackage.MODEL_ELEMENT__TOOLTIP:
 				setTooltip((String)newValue);
@@ -594,8 +581,6 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return getDocument();
 			case ModelPackage.MODEL_ELEMENT___GET_PAGE:
 				return getPage();
-			case ModelPackage.MODEL_ELEMENT___GET_MODEL_ELEMENT_BY_ID__STRING:
-				return getModelElementById((String)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

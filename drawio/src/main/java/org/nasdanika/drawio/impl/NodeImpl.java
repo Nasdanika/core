@@ -84,8 +84,9 @@ class NodeImpl extends LayerImpl implements Node {
 	org.nasdanika.drawio.model.Node toModelNode(
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider) {
-		return toModelLayer(factory, factory.createNode(), markerFactory, modelElementProvider);
+			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
+		return toModelLayer(factory, factory.createNode(), markerFactory, modelElementProvider, tagProvider);
 	}
 
 }

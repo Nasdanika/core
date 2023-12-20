@@ -11,7 +11,6 @@ import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.Node;
-import org.nasdanika.drawio.model.ModelElement;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.persistence.Marker;
 import org.w3c.dom.Element;
@@ -65,24 +64,26 @@ class LayerImpl extends ModelElementImpl implements Layer {
 	org.nasdanika.drawio.model.Layer toModelLayer(
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider) {
-		return toModelLayer(factory, factory.createLayer(), markerFactory, modelElementProvider);
+			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
+		return toModelLayer(factory, factory.createLayer(), markerFactory, modelElementProvider, tagProvider);
 	}
 	
 	protected <T extends org.nasdanika.drawio.model.Layer> T toModelLayer(
 			ModelFactory factory,			
 			T mElement,
 			Function<Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider) {
+			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
 		
-		toModelElement(mElement, markerFactory, modelElementProvider);
+		toModelElement(mElement, markerFactory, modelElementProvider, tagProvider);
 
 		EList<org.nasdanika.drawio.model.LayerElement> layerElements = ((org.nasdanika.drawio.model.Layer) mElement).getElements();
 		for (LayerElement layerElement: getElements()) {
 			if (layerElement instanceof NodeImpl) {
-				layerElements.add(((NodeImpl) layerElement).toModelNode(factory, markerFactory, modelElementProvider));
+				layerElements.add(((NodeImpl) layerElement).toModelNode(factory, markerFactory, modelElementProvider, tagProvider));
 			} else {
-				layerElements.add(((ConnectionImpl) layerElement).toModelConnection(factory, markerFactory, modelElementProvider));				
+				layerElements.add(((ConnectionImpl) layerElement).toModelConnection(factory, markerFactory, modelElementProvider, tagProvider));				
 			}
 		}		
 		
