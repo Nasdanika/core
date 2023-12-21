@@ -88,6 +88,8 @@ public class ModelSwitch<T> extends Switch<T> {
 			case ModelPackage.TAG: {
 				Tag tag = (Tag)theEObject;
 				T result = caseTag(tag);
+				if (result == null) result = caseMarked(tag);
+				if (result == null) result = caseIMarked(tag);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

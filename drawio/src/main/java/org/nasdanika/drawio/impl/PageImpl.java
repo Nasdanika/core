@@ -150,6 +150,12 @@ class PageImpl extends ElementImpl implements Page {
 					if (tag == null) {
 						tag = ModelFactory.eINSTANCE.createTag();
 						tag.setName(tagName);
+						for (Marker marker: getMarkers()) {
+							org.nasdanika.ncore.Marker tagMarker = markerFactory.apply(marker);
+							tagMarker.setLocation(tagMarker.getLocation() + ", tag=" + tagName);
+							tag.getMarkers().add(tagMarker);
+						}
+						
 						mPage.getTags().add(tag);
 					}
 					return tag;

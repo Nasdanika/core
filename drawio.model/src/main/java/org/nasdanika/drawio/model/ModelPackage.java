@@ -297,22 +297,31 @@ public interface ModelPackage extends EPackage {
 	int TAG = 2;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TAG__MARKERS = NcorePackage.MARKED__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TAG__NAME = 0;
+	int TAG__NAME = NcorePackage.MARKED_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Elements</b></em>' reference.
+	 * The feature id for the '<em><b>Elements</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TAG__ELEMENTS = 1;
+	int TAG__ELEMENTS = NcorePackage.MARKED_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Tag</em>' class.
@@ -321,7 +330,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TAG_FEATURE_COUNT = 2;
+	int TAG_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Tag</em>' class.
@@ -330,7 +339,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TAG_OPERATION_COUNT = 0;
+	int TAG_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.ModelImpl <em>Model</em>}' class.
@@ -1833,10 +1842,10 @@ public interface ModelPackage extends EPackage {
 	EAttribute getTag_Name();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.nasdanika.drawio.model.Tag#getElements <em>Elements</em>}'.
+	 * Returns the meta object for the reference list '{@link org.nasdanika.drawio.model.Tag#getElements <em>Elements</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Elements</em>'.
+	 * @return the meta object for the reference list '<em>Elements</em>'.
 	 * @see org.nasdanika.drawio.model.Tag#getElements()
 	 * @see #getTag()
 	 * @generated
@@ -2533,7 +2542,7 @@ public interface ModelPackage extends EPackage {
 		 */
 		EAttribute TAG__NAME = eINSTANCE.getTag_Name();
 		/**
-		 * The meta object literal for the '<em><b>Elements</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Elements</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

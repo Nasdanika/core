@@ -179,7 +179,7 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 	 * @param tracker prevents infinite loops in case of circular references
 	 * @return Tree iterator which is aware of page links and fails on double-visits (circular references)
 	 */
-	protected List<EObject> contents(EObject eObject, Collection<EObject> tracker) {
+	protected List<? extends EObject> contents(EObject eObject, Collection<EObject> tracker) {
     	return eObject.eContents();
 	}	
 	

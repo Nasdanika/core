@@ -1,5 +1,9 @@
 package org.nasdanika.drawio.model.util;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,6 +21,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Mapper;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
@@ -27,6 +32,7 @@ import org.nasdanika.drawio.model.Node;
 import org.nasdanika.drawio.model.Page;
 import org.nasdanika.drawio.model.Root;
 import org.nasdanika.drawio.model.SemanticMapping;
+import org.nasdanika.drawio.model.Tag;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.persistence.ConfigurationException;
@@ -38,6 +44,8 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.ParseException;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * Base class for classes which map/transform Drawio model to a specific semantic model. For example, architecture model or flow/process model.
@@ -59,8 +67,98 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	
 	protected String getTopLevelPageProperty() {
 		return getPropertyNamespace() + "top-level-page";
-	}		
+	}	
 	
+	
+	protected String getTagSpecPropertyName() {
+		return getPropertyNamespace() + "tag-spec";
+	}
+	
+	protected String getTagSpecRefPropertyName() {
+		return getPropertyNamespace() + "feature-map-ref";
+	}
+	
+	protected String getTagSpecStr(EObject source) {
+		String tspn = getTagSpecPropertyName();
+		if (!Util.isBlank(tspn)) {
+			String ts = getProperty(source, tspn);
+			if (!Util.isBlank(ts)) {
+				return ts;
+			}
+		}
+		
+		String tsrpn = getTagSpecRefPropertyName();
+		if (!Util.isBlank(tsrpn)) {
+			String ref = getProperty(source, tsrpn);
+			if (!Util.isBlank(ref)) {
+				URI refURI = URI.createURI(ref);
+				URI baseURI = getBaseURI(source);
+				if (baseURI != null && !baseURI.isRelative()) {
+					refURI = refURI.resolve(baseURI);
+				}
+				try {
+					DefaultConverter converter = DefaultConverter.INSTANCE;
+					Reader reader = converter.toReader(refURI);
+					return converter.toString(reader);
+				} catch (IOException e) {
+					throw new ConfigurationException("Error loading tag spec from " + refURI, e, asMarked(source));
+				}
+			}
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * Returns eObject property. This implementation uses ModelElement.getProperties().get() for instances of model element. 
+	 * Returns null otherwise.
+	 * @param eObj
+	 * @return
+	 */
+	protected String getProperty(EObject eObj, String property) {
+		if (eObj instanceof org.nasdanika.drawio.model.ModelElement) {
+			return ((org.nasdanika.drawio.model.ModelElement) eObj).getProperties().get(property);
+		}
+		
+		if (eObj instanceof Tag) {
+			Page page = (Page) eObj.eContainer();
+			Root root = page.getModel().getRoot();
+			
+			String config = getTagSpecStr(root);
+			if (Util.isBlank(config)) {
+				return null;
+			}
+			try {
+				Yaml yaml = new Yaml();
+				Object tagSpecObj = yaml.load(config);
+				if (tagSpecObj instanceof Map) {
+					Map<?,?> tagSpecMap = (Map<?,?>) tagSpecObj;
+					Object tagConfigObj = tagSpecMap.get(((Tag) eObj).getName());
+					if (tagConfigObj == null) {
+						return null;
+					}
+					
+					if (tagConfigObj instanceof Map) {
+						Map<?,?> tagConfigMap = (Map<?,?>) tagConfigObj;
+						Object value = tagConfigMap.get(property);
+						if (value instanceof String) {
+							return (String) value;
+						}
+						return yaml.dump(value);
+					}
+					
+					throw new ConfigurationException("Usupported tag configuration type: " + tagConfigObj, asMarked(eObj));
+				}
+				
+				throw new ConfigurationException("Usupported configuration type: " + tagSpecObj, asMarked(eObj));
+			} catch (YAMLException yamlException) {
+				throw new ConfigurationException(yamlException, asMarked(eObj));
+			}
+		}
+		
+		return null;
+	}
+		
 	/**
 	 * Indicates a top level page which shall be a child of document element
 	 * @param page
@@ -93,7 +191,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 */
 	protected abstract Map<String,EPackage> getEPackages();
 		
-	public EClassifier getType(String type, Marked source) {
+	public EClassifier getType(String type, EObject source) {
 		if (Util.isBlank(type)) {
 			return null;
 		}
@@ -105,7 +203,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					String eClassifierName = typeURI.fragment().substring(2);
 					EClassifier eClassifier = ePackage.getEClassifier(eClassifierName);
 					if (eClassifier == null) {
-						throw new ConfigurationException("EClassifier " + eClassifierName + " not found in EPackage: " + ePackageNsURI, source); 				
+						throw new ConfigurationException("EClassifier " + eClassifierName + " not found in EPackage: " + ePackageNsURI, asMarked(source)); 				
 					}
 					return eClassifier;
 				}
@@ -125,7 +223,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			if (typeOpt.isPresent()) {
 				return typeOpt.get();
 			}
-			throw new ConfigurationException("Unknown type: " + type, source); 				
+			throw new ConfigurationException("Unknown type: " + type, asMarked(source)); 				
 		}
 		
 		Optional<EClassifier> typeOpt = getEPackages()
@@ -140,7 +238,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		if (typeOpt.isPresent()) {
 			return typeOpt.get();
 		}
-		throw new ConfigurationException("Unknown type: " + type, source); 				
+		throw new ConfigurationException("Unknown type: " + type, asMarked(source)); 				
 	}
 	
 	/**
@@ -149,7 +247,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @param kind
 	 * @return
 	 */
-	protected EObject create(String type, Marked source) {
+	protected EObject create(String type, EObject source) {
 		EClassifier classifier = getType(type, source);
 		if (classifier instanceof EClass) {
 			return create((EClass) classifier);
@@ -178,13 +276,26 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return new PropertySetterFeatureMapper<EObject, EObject>() {
 
 			@Override
-			protected URI getBaseURI(org.nasdanika.drawio.model.ModelElement source) {
+			protected URI getBaseURI(EObject source) {
 				return AbstractDrawioFactory.this.getBaseURI(source);
 			}
-
+			
+			@Override
+			protected List<? extends EObject> contents(EObject eObject, Collection<EObject> tracker) {
+				if (eObject instanceof Tag) {
+					return ((Tag) eObject).getElements();
+				}
+				return super.contents(eObject, tracker);
+			}
+			
+			@Override
+			protected String getProperty(EObject eObj, String property) {
+				return AbstractDrawioFactory.this.getProperty(eObj, property);
+			}
+			
 			@Override
 			protected EClassifier getType(String type, EObject context) {
-				return AbstractDrawioFactory.this.getType(type, context instanceof Marked ? (Marked) context : null);
+				return AbstractDrawioFactory.this.getType(type, context);
 			}
 			
 			@Override
@@ -269,6 +380,16 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return getPropertyNamespace() + "doc-format"; 
 	}	
 	
+	protected Marked asMarked(EObject eObject) {
+		if (eObject == null) {
+			return null;
+		}
+		if (eObject instanceof Marked) {
+			return (Marked) eObject;
+		}
+		return asMarked(eObject.eContainer());
+	}
+	
 	/**
 	 * Creates a semantic model element depending on the type
 	 * @param page
@@ -279,20 +400,49 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @return
 	 */
 	@org.nasdanika.common.Transformer.Factory
-	@SuppressWarnings("unchecked")
-	public final S createSemanticElement(
+	public final S createModelElementSemanticElement(
 			org.nasdanika.drawio.model.ModelElement modelElement,
 			boolean parallel,
 			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {
+
+		return createSemanticElement(
+				modelElement,
+				elementProvider,
+				registry,
+				progressMonitor);
+	}		
 	
-		String type = getTypeName(modelElement);		
+	public final S createTagSemanticElement(
+			org.nasdanika.drawio.model.Tag tag,
+			boolean parallel,
+			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
+			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
+			ProgressMonitor progressMonitor) {
+	
+		return createSemanticElement(
+				tag,
+				elementProvider,
+				registry,
+				progressMonitor);
+	
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected S createSemanticElement(
+			EObject eObj,
+			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
+			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
+			ProgressMonitor progressMonitor) {	
+	
+		
+		String type = getTypeName(eObj);		
 		
 		S semanticElement;		
 		if (Util.isBlank(type)) {
 			String constructorPropertyName = getConstructorProperty();
-			String constructor = Util.isBlank(constructorPropertyName) ? null : modelElement.getProperties().get(constructorPropertyName);
+			String constructor = Util.isBlank(constructorPropertyName) ? null : getProperty(eObj, constructorPropertyName);
 			if (Util.isBlank(constructor)) {
 				return null;
 			}
@@ -302,14 +452,14 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				Expression exp = parser.parseExpression(constructor);
 				EvaluationContext evaluationContext = createEvaluationContext();
 				configureConstructorEvaluationContext(evaluationContext, registry, progressMonitor);
-				semanticElement = (S) exp.getValue(evaluationContext, modelElement, EObject.class);
+				semanticElement = (S) exp.getValue(evaluationContext, eObj, EObject.class);
 			} catch (ParseException e) {
-				throw new ConfigurationException("Error parsing semantic selector: '" + constructor, e, modelElement);
+				throw new ConfigurationException("Error parsing semantic selector: '" + constructor, e, asMarked(eObj));
 			} catch (EvaluationException e) {
-				throw new ConfigurationException("Error evaluating semantic selector: '" + constructor, e, modelElement);
+				throw new ConfigurationException("Error evaluating semantic selector: '" + constructor, e, asMarked(eObj));
 			}			
 		} else {
-			semanticElement = (S) create(type.trim(), modelElement);
+			semanticElement = (S) create(type.trim(), eObj);
 		}
 		
 		if (semanticElement instanceof ModelElement) {
@@ -348,21 +498,21 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return getPropertyNamespace() + Context.BASE_URI_PROPERTY;
 	}		
 	
-	public URI getBaseURI(org.nasdanika.drawio.model.ModelElement modelElement) {
+	public URI getBaseURI(EObject eObj) {
 		EObject logicalParent; 
 		
-		if (modelElement instanceof Connection) {
-			Connection connection = (Connection) modelElement;
+		if (eObj instanceof Connection) {
+			Connection connection = (Connection) eObj;
 			Node cSource = connection.getSource();
 			logicalParent = cSource == null ? connection.eContainer() : cSource;
 		} else {		
-			logicalParent = modelElement.eContainer();
+			logicalParent = eObj.eContainer();
 		}
 		URI logicalParentBaseURI;
 		if (logicalParent instanceof org.nasdanika.drawio.model.ModelElement) {
 			logicalParentBaseURI = getBaseURI((org.nasdanika.drawio.model.ModelElement) logicalParent);
 		} else {
-			logicalParentBaseURI = modelElement.eResource().getURI();
+			logicalParentBaseURI = eObj.eResource().getURI();
 			if (logicalParent instanceof org.nasdanika.drawio.model.Model) {
 				Page page = (Page) logicalParent.eContainer();
 				for (org.nasdanika.drawio.model.ModelElement link: page.getLinks()) {
@@ -376,7 +526,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			return logicalParentBaseURI;
 		}
 		
-		String baseURIStr = modelElement.getProperties().get(baseURIProperty);
+		String baseURIStr = getProperty(eObj, baseURIProperty);
 		if (Util.isBlank(baseURIStr)) {
 			return logicalParentBaseURI;
 		}
@@ -389,16 +539,16 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * Returns semantic element type name. This implementation gets it from type property.
 	 * Override to customize. E.g. read <code>c4Type</code> property and map c4 type names such as "Software System" to model types.
 	 * Mapping of type names can also be done by overriding <code>getType</code> method
-	 * @param modelElement
+	 * @param eObj
 	 * @return
 	 */
-	protected String getTypeName(org.nasdanika.drawio.model.ModelElement modelElement) {
+	protected String getTypeName(EObject eObj) {
 		String typeProperty = getTypeProperty();
 		if (Util.isBlank(typeProperty)) {
 			return null;
 		}
 		
-		return modelElement.getProperties().get(typeProperty);
+		return getProperty(eObj, typeProperty);
 	}
 	
 	// === Wiring ===
@@ -407,13 +557,13 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return getPropertyNamespace() + "page-element";
 	}
 	
-	public boolean isPageElement(org.nasdanika.drawio.model.ModelElement drawioModelElement) {	
+	public boolean isPageElement(EObject eObj) {	
 		String pageElementProperty = getPageElementProperty();
 		if (Util.isBlank(pageElementProperty)) {
 			return false;
 		}
 		
-		String pev = drawioModelElement.getProperties().get(pageElementProperty);
+		String pev = getProperty(eObj, pageElementProperty);
 		return !Util.isBlank(pev) && "true".equals(pev.trim());
 	}
 	
@@ -442,8 +592,34 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireRefIds(
+	public final boolean wireModelElementRefIds(
 			org.nasdanika.drawio.model.ModelElement modelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		return wireRefIds(modelElement, registry, pass, progressMonitor);
+	}
+		
+	/**
+	 * Wires elements with ref-id property. Remaps which triggers wireContainment.
+	 * @param modelElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
+	public final boolean wireTagRefIds(
+			org.nasdanika.drawio.model.Tag tag,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		return wireRefIds(tag, registry, pass, progressMonitor);
+	}
+	
+	protected boolean wireRefIds(
+			EObject eObj,
 			Map<EObject, EObject> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
@@ -452,14 +628,14 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		if (Util.isBlank(refIdPropertyName)) {
 			return true;
 		}
-		String refId = modelElement.getProperties().get(refIdPropertyName);
+		String refId = getProperty(eObj, refIdPropertyName);
 		if (Util.isBlank(refId)) {
 			return true;
 		}
 		
 		S refTarget = getByRefId(refId, pass, registry);
 		if (refTarget != null) {
-			registry.put(modelElement, refTarget); // Resolved refId triggers a new wave of wiring
+			registry.put(eObj, refTarget); // Resolved refId triggers a new wave of wiring
 		}
 		return true;
 	}
@@ -512,8 +688,33 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireSelector(
+	public final boolean wireModelElementSelector(
 			org.nasdanika.drawio.model.ModelElement modelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		return wireSelector(modelElement, registry, pass, progressMonitor);
+	}
+	
+	
+	/**
+	 * Wires elements with selector property. Remaps which triggers wireContainment.
+	 * @param modelElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
+	public final boolean wireTagSelector(
+			org.nasdanika.drawio.model.Tag tag,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		return wireSelector(tag, registry, pass, progressMonitor);
+	}
+	
+	protected boolean wireSelector(
+			EObject eObj,
 			Map<EObject, EObject> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
@@ -522,7 +723,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		if (Util.isBlank(selectorPropertyName)) {
 			return true;
 		}
-		String selector = modelElement.getProperties().get(selectorPropertyName);
+		String selector = getProperty(eObj, selectorPropertyName);
 		if (Util.isBlank(selector)) {
 			return true;
 		}
@@ -532,13 +733,13 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			Expression exp = parser.parseExpression(selector);
 			EvaluationContext evaluationContext = createEvaluationContext();
 			configureSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
-			Object result = exp.getValue(evaluationContext, modelElement, Object.class);
+			Object result = exp.getValue(evaluationContext, eObj, Object.class);
 			if (result instanceof EObject) {
 				EObject selectedTarget = registry.get(result);
 				if (selectedTarget == null) {
 					return false; // Not there yet
 				}
-				registry.put(modelElement, selectedTarget); // Тriggers a new wave of wiring
+				registry.put(eObj, selectedTarget); // Тriggers a new wave of wiring
 				return true;				
 			}
 			if (result instanceof Boolean) {
@@ -547,11 +748,11 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			if (result == null) {
 				return true;
 			}
-			throw new ConfigurationException("Unexpected result type of selector: '" + selector + "': " + result, modelElement);			
+			throw new ConfigurationException("Unexpected result type of selector: '" + selector + "': " + result, asMarked(eObj));			
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing selector: '" + selector, e, modelElement);
+			throw new ConfigurationException("Error parsing selector: '" + selector, e, asMarked(eObj));
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating selector: '" + selector, e, modelElement);
+			throw new ConfigurationException("Error evaluating selector: '" + selector, e, asMarked(eObj));
 		}
 	}
 
@@ -571,14 +772,14 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	}
 	
 	protected EObject getPrototype(
-			org.nasdanika.drawio.model.ModelElement modelElement,
+			EObject eObj,
 			ProgressMonitor progressMonitor) {
 	
 		String prototypePropertyName = getPrototypeProperty();
 		if (Util.isBlank(prototypePropertyName)) {
 			return null;
 		}
-		String prototypeExpr = modelElement.getProperties().get(prototypePropertyName);
+		String prototypeExpr = getProperty(eObj, prototypePropertyName);
 		if (Util.isBlank(prototypeExpr)) {
 			return null;
 		}
@@ -588,11 +789,11 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			Expression exp = parser.parseExpression(prototypeExpr);
 			EvaluationContext evaluationContext = createEvaluationContext();
 			configurePrototypeEvaluationContext(evaluationContext, progressMonitor);
-			return exp.getValue(evaluationContext, modelElement, EObject.class);
+			return exp.getValue(evaluationContext, eObj, EObject.class);
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing prototype: '" + prototypeExpr, e, modelElement);
+			throw new ConfigurationException("Error parsing prototype: '" + prototypeExpr, e, asMarked(eObj));
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating prototype: '" + prototypeExpr, e, modelElement);
+			throw new ConfigurationException("Error evaluating prototype: '" + prototypeExpr, e, asMarked(eObj));
 		}
 	}	
 	
@@ -604,8 +805,34 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wirePrototype(
+	public final boolean wireModelElementPrototype(
 			org.nasdanika.drawio.model.ModelElement modelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		return wirePrototype(modelElement, registry, pass, progressMonitor);
+	}
+		
+	/**
+	 * Wires elements with prototype property. Remaps which triggers wireContainment.
+	 * @param modelElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
+	public final boolean wireTagPrototype(
+			org.nasdanika.drawio.model.Tag tag,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		return wirePrototype(tag, registry, pass, progressMonitor);
+	}
+
+	protected boolean wirePrototype(
+			EObject eObj,
 			Map<EObject, EObject> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
@@ -614,13 +841,13 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		if (Util.isBlank(prototypePropertyName)) {
 			return true;
 		}
-		String prototypeExpr = modelElement.getProperties().get(prototypePropertyName);
+		String prototypeExpr = getProperty(eObj, prototypePropertyName);
 		if (Util.isBlank(prototypeExpr)) {
 			return true;
 		}
 		
 		try {			
-			EObject result = getPrototype(modelElement, progressMonitor);
+			EObject result = getPrototype(eObj, progressMonitor);
 			EObject prototype = registry.get(result);
 			if (prototype == null) {
 				return false; // Not there yet
@@ -629,12 +856,12 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			if (copy instanceof ModelElement) {
 				((ModelElement) copy).setUuid(UUID.randomUUID().toString());
 			}
-			registry.put(modelElement, copy); // Тriggers a new wave of wiring
+			registry.put(eObj, copy); // Тriggers a new wave of wiring
 			return true;				
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing selector: '" + prototypeExpr, e, modelElement);
+			throw new ConfigurationException("Error parsing selector: '" + prototypeExpr, e, asMarked(eObj));
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating selector: '" + prototypeExpr, e, modelElement);
+			throw new ConfigurationException("Error evaluating selector: '" + prototypeExpr, e, asMarked(eObj));
 		}
 	}
 
@@ -657,8 +884,34 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireSemanticSelector(
+	public final boolean wireModelElementSemanticSelector(
 			org.nasdanika.drawio.model.ModelElement modelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		return wireSemanticSelector(modelElement, registry, pass, progressMonitor);
+	}
+	
+	/**
+	 * Wires elements with semantic selector property. Remaps which triggers wireContainment.
+	 * @param modelElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
+	public final boolean wireTagSemanticSelector(
+			org.nasdanika.drawio.model.Tag tag,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+
+		return wireSemanticSelector(tag, registry, pass, progressMonitor);
+	}	
+
+	protected boolean wireSemanticSelector(
+			EObject eObj,
 			Map<EObject, EObject> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
@@ -667,7 +920,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		if (Util.isBlank(semanticSelectorPropertyName)) {
 			return true;
 		}
-		String semanticSelector = modelElement.getProperties().get(semanticSelectorPropertyName);
+		String semanticSelector = getProperty(eObj, semanticSelectorPropertyName);
 		if (Util.isBlank(semanticSelector)) {
 			return true;
 		}
@@ -677,19 +930,19 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			Expression exp = parser.parseExpression(semanticSelector);
 			EvaluationContext evaluationContext = createEvaluationContext();
 			configureSemanticSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
-			Object result = exp.getValue(evaluationContext, modelElement, Object.class);
+			Object result = exp.getValue(evaluationContext, eObj, Object.class);
 			if (result instanceof EObject) {
-				registry.put(modelElement, (EObject) result); 
+				registry.put(eObj, (EObject) result); 
 				return true;				
 			}
 			if (result == null) {
 				return true;
 			}
-			throw new ConfigurationException("Unexpected result type of semantic selector: '" + semanticSelector + "': " + result, modelElement);			
+			throw new ConfigurationException("Unexpected result type of semantic selector: '" + semanticSelector + "': " + result, asMarked(eObj));			
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing semantic selector: '" + semanticSelector, e, modelElement);
+			throw new ConfigurationException("Error parsing semantic selector: '" + semanticSelector, e, asMarked(eObj));
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating semantic selector: '" + semanticSelector, e, modelElement);
+			throw new ConfigurationException("Error evaluating semantic selector: '" + semanticSelector, e, asMarked(eObj));
 		}
 	}
 
@@ -987,16 +1240,16 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	}
 	
 	protected EObject getConfigPrototype(
-			org.nasdanika.drawio.model.ModelElement modelElement,
+			EObject eObj,
 			ProgressMonitor progressMonitor) {
 	
 		String configPrototypePropertyName = getConfigPrototypeProperty();
 		if (Util.isBlank(configPrototypePropertyName)) {
-			return getPrototype(modelElement, progressMonitor);
+			return getPrototype(eObj, progressMonitor);
 		}
-		String configPrototypeExpr = modelElement.getProperties().get(configPrototypePropertyName);
+		String configPrototypeExpr = getProperty(eObj, configPrototypePropertyName);
 		if (Util.isBlank(configPrototypeExpr)) {
-			return getPrototype(modelElement, progressMonitor);
+			return getPrototype(eObj, progressMonitor);
 		}
 		
 		try {			
@@ -1004,11 +1257,11 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			Expression exp = parser.parseExpression(configPrototypeExpr);
 			EvaluationContext evaluationContext = createEvaluationContext();
 			configurePrototypeEvaluationContext(evaluationContext, progressMonitor);
-			return exp.getValue(evaluationContext, modelElement, EObject.class);
+			return exp.getValue(evaluationContext, eObj, EObject.class);
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing congfig prototype: '" + configPrototypeExpr, e, modelElement);
+			throw new ConfigurationException("Error parsing congfig prototype: '" + configPrototypeExpr, e, asMarked(eObj));
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating config prototype: '" + configPrototypeExpr, e, modelElement);
+			throw new ConfigurationException("Error evaluating config prototype: '" + configPrototypeExpr, e, asMarked(eObj));
 		}
 	}		
 	
@@ -1028,14 +1281,30 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				progressMonitor);
 	}
 	
+	@org.nasdanika.common.Transformer.Wire(phase = 3)
+	public final void wireTagConfiguration(
+			org.nasdanika.drawio.model.Tag tag,
+			S semanticElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		configureSemanticElement(
+				tag,
+				semanticElement,
+				registry,
+				false,
+				progressMonitor);
+	}
+	
 	protected void configureSemanticElement(
-			org.nasdanika.drawio.model.ModelElement modelElement,
+			EObject eObj,
 			S semanticElement,
 			Map<EObject, EObject> registry,
 			boolean isPrototype,
 			ProgressMonitor progressMonitor) {
 		
-		EObject configPrototype = getConfigPrototype(modelElement, progressMonitor);
+		EObject configPrototype = getConfigPrototype(eObj, progressMonitor);
 		if (configPrototype instanceof org.nasdanika.drawio.model.ModelElement) {
 			configureSemanticElement(
 					(org.nasdanika.drawio.model.ModelElement) configPrototype, 
@@ -1045,23 +1314,23 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					progressMonitor);
 		}
 
-		if (semanticElement instanceof org.nasdanika.ncore.Marked) {
-			for (Marker marker: modelElement.getMarkers()) {
+		if (semanticElement instanceof org.nasdanika.ncore.Marked && eObj instanceof org.nasdanika.ncore.Marked) {
+			for (Marker marker: ((org.nasdanika.ncore.Marked) eObj).getMarkers()) {
 				((org.nasdanika.ncore.Marked) semanticElement).getMarkers().add(EcoreUtil.copy(marker));
 			}
 		}
 		
 		// Indicates that this element is linked from another element and as such its id shall not be used as default semantic id
-		boolean isLinked = isPageElement(modelElement) && !isTopLevelPage(modelElement.getPage());
+		boolean isLinked = eObj instanceof org.nasdanika.drawio.model.ModelElement && isPageElement(eObj) && !isTopLevelPage(((org.nasdanika.drawio.model.ModelElement) eObj).getPage());
 		
 		if (!isPrototype && !isLinked && semanticElement instanceof org.nasdanika.ncore.StringIdentity) {
 			String semanticIdProperty = getSemanticIdProperty();
 			if (!Util.isBlank(semanticIdProperty)) {
-				String semanticId = modelElement.getProperties().get(semanticIdProperty);
+				String semanticId = getProperty(eObj, semanticIdProperty);
 				org.nasdanika.ncore.StringIdentity semanticStringIdentity = (org.nasdanika.ncore.StringIdentity) semanticElement;
 				if (Util.isBlank(semanticId)) {
-					if (Util.isBlank(semanticStringIdentity.getId())) {
-						semanticStringIdentity.setId(modelElement.getId());
+					if (Util.isBlank(semanticStringIdentity.getId()) && eObj instanceof org.nasdanika.drawio.model.ModelElement) {
+						semanticStringIdentity.setId(((org.nasdanika.drawio.model.ModelElement) eObj).getId());
 					}
 				} else {
 					semanticStringIdentity.setId(semanticId);
@@ -1069,27 +1338,29 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			}
 		}
 		
-		String label = modelElement.getLabel();
-		if (!Util.isBlank(label) && semanticElement instanceof org.nasdanika.ncore.NamedElement) {
-			String labelText = Jsoup.parse(label).text();
-			((org.nasdanika.ncore.NamedElement) semanticElement).setName(labelText);
-		}
-		String tooltip = modelElement.getTooltip();
-		if (!Util.isBlank(tooltip) && semanticElement instanceof org.nasdanika.ncore.ModelElement) {
-			((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(tooltip);
+		if (eObj instanceof org.nasdanika.drawio.model.ModelElement) {
+			String label = ((org.nasdanika.drawio.model.ModelElement) eObj).getLabel();
+			if (!Util.isBlank(label) && semanticElement instanceof org.nasdanika.ncore.NamedElement) {
+				String labelText = Jsoup.parse(label).text();
+				((org.nasdanika.ncore.NamedElement) semanticElement).setName(labelText);
+			}
+			String tooltip = ((org.nasdanika.drawio.model.ModelElement) eObj).getTooltip();
+			if (!Util.isBlank(tooltip) && semanticElement instanceof org.nasdanika.ncore.ModelElement) {
+				((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(tooltip);
+			}
 		}
 				
 		if (semanticElement instanceof org.nasdanika.ncore.Documented) {
-			URI baseUri = getBaseURI(modelElement);
+			URI baseUri = getBaseURI(eObj);
 			org.nasdanika.ncore.Documented documented = (org.nasdanika.ncore.Documented) semanticElement;
 			String docProperty = getDocumentationProperty();
 			if (!Util.isBlank(docProperty)) {
-				String doc = modelElement.getProperties().get(docProperty);
+				String doc = getProperty(eObj, docProperty);
 				if (!Util.isBlank(doc)) {
 					DocumentationFormat docFormat = DocumentationFormat.markdown;
 					String docFormatProperty = getDocFormatProperty();
 					if (!Util.isBlank(docFormatProperty)) {
-						String docFormatStr = modelElement.getProperties().get(docFormatProperty);
+						String docFormatStr = getProperty(eObj, docFormatProperty);
 						if (!Util.isBlank(docFormatStr)) {
 							docFormat = DocumentationFormat.valueOf(docFormatStr);						
 						}					
@@ -1105,7 +1376,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 						documented.getDocumentation().add(createTextDoc(doc, baseUri, progressMonitor));
 						break;
 					default:
-						throw new ConfigurationException("Unsupported documentation format: " + docFormat, modelElement instanceof Marked ? (Marked) modelElement : null);
+						throw new ConfigurationException("Unsupported documentation format: " + docFormat, eObj instanceof Marked ? (Marked) eObj : null);
 					
 					}
 				}
@@ -1113,7 +1384,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			
 			String docRefProperty = getDocRefProperty();
 			if (!Util.isBlank(docRefProperty)) {
-				String docRefStr = modelElement.getProperties().get(docRefProperty);
+				String docRefStr = getProperty(eObj, docRefProperty);
 				if (!Util.isBlank(docRefStr)) {					
 					DocumentationFormat docFormat = null;
 					if (docRefStr.toLowerCase().endsWith(".html") || docRefStr.toLowerCase().endsWith(".htm")) {
@@ -1125,7 +1396,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					}
 					String docFormatProperty = getDocFormatProperty();
 					if (!Util.isBlank(docFormatProperty)) {
-						String docFormatStr = modelElement.getProperties().get(docFormatProperty);
+						String docFormatStr = getProperty(eObj, docFormatProperty);
 						if (!Util.isBlank(docFormatStr)) {
 							docFormat = DocumentationFormat.valueOf(docFormatStr);						
 						}					
@@ -1145,15 +1416,15 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 						documented.getDocumentation().add(createTextDoc(docRefURI, progressMonitor));
 						break;
 					default:
-						throw new ConfigurationException("Unsupported documentation format: " + docFormat, modelElement instanceof Marked ? (Marked) modelElement : null);					
+						throw new ConfigurationException("Unsupported documentation format: " + docFormat, eObj instanceof Marked ? (Marked) eObj : null);					
 					}
 				}
 			}
 		}	
 				
 		// Root is logically "merged" with the containing page
-		if (modelElement instanceof Root) {
-			Page page = (Page) modelElement.eContainer().eContainer();
+		if (eObj instanceof Root) {
+			Page page = (Page) eObj.eContainer().eContainer();
 			if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
 				org.nasdanika.ncore.NamedElement namedSemanticElement = (org.nasdanika.ncore.NamedElement) semanticElement;
 				if (Util.isBlank(namedSemanticElement.getName())) {

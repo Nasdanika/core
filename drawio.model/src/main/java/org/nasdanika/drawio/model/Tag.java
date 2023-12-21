@@ -2,7 +2,8 @@
  */
 package org.nasdanika.drawio.model;
 
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.common.util.EList;
+import org.nasdanika.ncore.Marked;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,7 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface Tag extends EObject {
+public interface Tag extends Marked {
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -45,27 +46,17 @@ public interface Tag extends EObject {
 	void setName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Elements</b></em>' reference.
+	 * Returns the value of the '<em><b>Elements</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.drawio.model.ModelElement}.
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.drawio.model.ModelElement#getTags <em>Tags</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Elements</em>' reference.
-	 * @see #setElements(ModelElement)
+	 * @return the value of the '<em>Elements</em>' reference list.
 	 * @see org.nasdanika.drawio.model.ModelPackage#getTag_Elements()
 	 * @see org.nasdanika.drawio.model.ModelElement#getTags
 	 * @model opposite="tags"
 	 * @generated
 	 */
-	ModelElement getElements();
-
-	/**
-	 * Sets the value of the '{@link org.nasdanika.drawio.model.Tag#getElements <em>Elements</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Elements</em>' reference.
-	 * @see #getElements()
-	 * @generated
-	 */
-	void setElements(ModelElement value);
+	EList<ModelElement> getElements();
 
 } // Tag

@@ -1037,6 +1037,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		documentEClass.getESuperTypes().add(theNcorePackage.getMarked());
 		pageEClass.getESuperTypes().add(theNcorePackage.getMarked());
 		pageEClass.getESuperTypes().add(theNcorePackage.getStringIdentity());
+		tagEClass.getESuperTypes().add(theNcorePackage.getMarked());
 		modelEClass.getESuperTypes().add(theNcorePackage.getMarked());
 		modelElementEClass.getESuperTypes().add(theNcorePackage.getMarked());
 		modelElementEClass.getESuperTypes().add(theNcorePackage.getStringIdentity());
@@ -1095,7 +1096,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		initEClass(tagEClass, Tag.class, "Tag", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTag_Name(), ecorePackage.getEString(), "name", null, 1, 1, Tag.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTag_Elements(), this.getModelElement(), this.getModelElement_Tags(), "elements", null, 0, 1, Tag.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTag_Elements(), this.getModelElement(), this.getModelElement_Tags(), "elements", null, 0, -1, Tag.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getModel_Root(), this.getRoot(), null, "root", null, 1, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -18,7 +18,6 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SetterFeatureMapper;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.model.Connection;
-import org.nasdanika.drawio.model.ModelElement;
 import org.nasdanika.drawio.model.comparators.LabelModelElementComparator;
 import org.nasdanika.drawio.model.comparators.PropertyModelElementComparator;
 import org.nasdanika.persistence.ConfigurationException;
@@ -58,34 +57,41 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 		return getPropertyNamespace() + "feature-map-ref";
 	}
 	
+	/**
+	 * Returns eObject property. This implementation uses ModelElement.getProperties().get() for instances of model element. 
+	 * Returns null otherwise.
+	 * @param eObj
+	 * @return
+	 */
+	protected String getProperty(EObject eObj, String property) {
+		return eObj instanceof org.nasdanika.drawio.model.ModelElement ? ((org.nasdanika.drawio.model.ModelElement) eObj).getProperties().get(property) : null;
+	}
+	
 	@Override
 	protected String getFeatureMapConfigStr(EObject source) {
-		if (source instanceof ModelElement) {
-			String fmcpn = getFeatureMapConfigPropertyName();
-			ModelElement modelElement = (ModelElement) source;
-			if (!Util.isBlank(fmcpn)) {
-				String fmc = modelElement.getProperties().get(fmcpn);
-				if (!Util.isBlank(fmc)) {
-					return fmc;
-				}
+		String fmcpn = getFeatureMapConfigPropertyName();
+		if (!Util.isBlank(fmcpn)) {
+			String fmc = getProperty(source, fmcpn);
+			if (!Util.isBlank(fmc)) {
+				return fmc;
 			}
-			
-			String fmcrpn = getFeatureMapConfigRefPropertyName();
-			if (!Util.isBlank(fmcrpn)) {
-				String ref = modelElement.getProperties().get(fmcrpn);
-				if (!Util.isBlank(ref)) {
-					URI refURI = URI.createURI(ref);
-					URI baseURI = getBaseURI(modelElement);
-					if (baseURI != null && !baseURI.isRelative()) {
-						refURI = refURI.resolve(baseURI);
-					}
-					try {
-						DefaultConverter converter = DefaultConverter.INSTANCE;
-						Reader reader = converter.toReader(refURI);
-						return converter.toString(reader);
-					} catch (IOException e) {
-						throwConfigurationException("Error loading feature map from " + refURI, e, source);
-					}
+		}
+		
+		String fmcrpn = getFeatureMapConfigRefPropertyName();
+		if (!Util.isBlank(fmcrpn)) {
+			String ref = getProperty(source, fmcrpn);
+			if (!Util.isBlank(ref)) {
+				URI refURI = URI.createURI(ref);
+				URI baseURI = getBaseURI(source);
+				if (baseURI != null && !baseURI.isRelative()) {
+					refURI = refURI.resolve(baseURI);
+				}
+				try {
+					DefaultConverter converter = DefaultConverter.INSTANCE;
+					Reader reader = converter.toReader(refURI);
+					return converter.toString(reader);
+				} catch (IOException e) {
+					throwConfigurationException("Error loading feature map from " + refURI, e, source);
 				}
 			}
 		}
@@ -101,32 +107,29 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 	}
 	
 	protected String getMappingSelectorStr(EObject source) {
-		if (source instanceof ModelElement) {
-			String mspn = getMappingSelectorPropertyName();
-			ModelElement modelElement = (ModelElement) source;
-			if (!Util.isBlank(mspn)) {
-				String ms = modelElement.getProperties().get(mspn);
-				if (!Util.isBlank(ms)) {
-					return ms;
-				}
+		String mspn = getMappingSelectorPropertyName();
+		if (!Util.isBlank(mspn)) {
+			String ms = getProperty(source, mspn);
+			if (!Util.isBlank(ms)) {
+				return ms;
 			}
-			
-			String msrpn = getMappingSelectorRefPropertyName();
-			if (!Util.isBlank(msrpn)) {
-				String ref = modelElement.getProperties().get(msrpn);
-				if (!Util.isBlank(ref)) {
-					URI refURI = URI.createURI(ref);
-					URI baseURI = getBaseURI(modelElement);
-					if (baseURI != null && !baseURI.isRelative()) {
-						refURI = refURI.resolve(baseURI);
-					}
-					try {
-						DefaultConverter converter = DefaultConverter.INSTANCE;
-						Reader reader = converter.toReader(refURI);
-						return converter.toString(reader);
-					} catch (IOException e) {
-						throwConfigurationException("Error loading mapping selector from " + refURI, e, source);
-					}
+		}
+		
+		String msrpn = getMappingSelectorRefPropertyName();
+		if (!Util.isBlank(msrpn)) {
+			String ref = getProperty(source, msrpn);
+			if (!Util.isBlank(ref)) {
+				URI refURI = URI.createURI(ref);
+				URI baseURI = getBaseURI(source);
+				if (baseURI != null && !baseURI.isRelative()) {
+					refURI = refURI.resolve(baseURI);
+				}
+				try {
+					DefaultConverter converter = DefaultConverter.INSTANCE;
+					Reader reader = converter.toReader(refURI);
+					return converter.toString(reader);
+				} catch (IOException e) {
+					throwConfigurationException("Error loading mapping selector from " + refURI, e, source);
 				}
 			}
 		}
@@ -178,7 +181,7 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 		return ret;		
 	}	
 	
-	protected abstract URI getBaseURI(ModelElement source);
+	protected abstract URI getBaseURI(EObject source);
 	
 	@Override
 	protected void throwConfigurationException(String message, Throwable cause, EObject context) {

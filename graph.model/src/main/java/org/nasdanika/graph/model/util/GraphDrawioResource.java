@@ -80,7 +80,8 @@ public class GraphDrawioResource extends ResourceImpl {
 		diagramResource.getAllContents().forEachRemaining(e -> {
 			if (e instanceof org.nasdanika.drawio.model.Document
 					|| e instanceof org.nasdanika.drawio.model.Page
-					|| e instanceof org.nasdanika.drawio.model.ModelElement) {
+					|| e instanceof org.nasdanika.drawio.model.ModelElement
+					|| e instanceof org.nasdanika.drawio.model.Tag) {
 				diagramModelContents.add(e);
 			}
 		});
