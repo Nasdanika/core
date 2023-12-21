@@ -408,4 +408,10 @@ public class TestCommon {
 		System.out.println(jo);
 	}
 	
+	@Test
+	public void testSVGScale() throws Exception {
+		URL svg = getClass().getResource("web_server.svg");
+		System.out.println(Util.scaleSVG(svg.openStream(), 20));
+	}
+	
 }

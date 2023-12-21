@@ -1,0 +1,1 @@
+web_server.svg is compied from the Drawio repository for testing of SVG scaling

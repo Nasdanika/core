@@ -49,6 +49,15 @@ import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageOutputStream;
 import javax.imageio.stream.MemoryCacheImageOutputStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
@@ -57,8 +66,15 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.jsoup.Jsoup;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 public class Util {
+
+	private static final String WIDTH_ATTRIBUTE = "width";
+
+	private static final String HEIGHT_ATTRIBUTE = "height";
 
 	public static final Pattern SENTENCE_PATTERN = Pattern.compile(".+?[\\.?!]+\\s+");		
 		
@@ -1383,8 +1399,16 @@ public class Util {
 	public static final String BASE64_SUFFIX = ";base64,";
 	public static final String DATA_IMAGE_PNG_BASE64_PREFIX = DATA_IMAGE_PREFIX + "png" + BASE64_SUFFIX;
 	public static final String DATA_IMAGE_JPEG_BASE64_PREFIX = DATA_IMAGE_PREFIX + "jpeg" + BASE64_SUFFIX;
+	public static final String DATA_IMAGE_SVG_BASE64_PREFIX = DATA_IMAGE_PREFIX + "svg+xml" + BASE64_SUFFIX;
 
-	public static String scaleImageToPNG(String imageDataURL, int height) throws IOException {
+	/**
+	 * Scales image with PNG format for raster images.
+	 * @param imageDataURL
+	 * @param height
+	 * @return
+	 * @throws IOException
+	 */
+	public static String scaleImage(String imageDataURL, int height) throws IOException {
 		return scaleImage(imageDataURL, height, "png");
 	}	
 	
@@ -1406,24 +1430,37 @@ public class Util {
 			return scaleImage(new ByteArrayInputStream(imageData), height, format);
 		} 
 		
+		if (imageURL.startsWith(DATA_IMAGE_SVG_BASE64_PREFIX)) {
+			byte[] imageData = java.util.Base64.getDecoder().decode(imageURL.substring(DATA_IMAGE_JPEG_BASE64_PREFIX.length()));
+			return scaleSVG(new ByteArrayInputStream(imageData), height);
+		} 
+		
 		// Treating as URL
 		try (InputStream inputStream = new URL(imageURL).openStream()) {
+			if (imageURL.toLowerCase().endsWith(".svg")) {
+				return scaleSVG(inputStream, height);				
+			}
+			
 			return scaleImage(inputStream, height, format);
 		} 
 	}
+	
 	/**
 	 * Scales image, writes it in specified format and encodes as data URL. 
 	 * @param encodedImage
-	 * @param height
+	 * @param height Height of the scaled image. -1 if no scaling, just data encoding.
 	 * @return
 	 * @throws IOException 
 	 */
 	public static String scaleImage(InputStream inputStream, int height, String format) throws IOException {
 		BufferedImage inputImage = ImageIO.read(inputStream);
-		int inputHeight = inputImage.getHeight();
-		int inputWidth = inputImage.getWidth();
-		int scaledWidth = (height * inputWidth) / inputHeight;
-		Image scaledImage = inputImage.getScaledInstance(scaledWidth, height, Image.SCALE_SMOOTH);
+		Image scaledImage = inputImage;
+		if (height > 0) { 
+			int inputHeight = inputImage.getHeight();
+			int inputWidth = inputImage.getWidth();
+			int scaledWidth = (height * inputWidth) / inputHeight;
+			scaledImage = inputImage.getScaledInstance(scaledWidth, height, Image.SCALE_SMOOTH);
+		}
 		
 	    BufferedImage scaledBufferedImage = new BufferedImage(scaledImage.getWidth(null), scaledImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 	    Graphics2D bGr = scaledBufferedImage.createGraphics();
@@ -1437,6 +1474,39 @@ public class Util {
 		baos.close();
 		
 		return DATA_IMAGE_PREFIX + ("JPG".equalsIgnoreCase(format) ? "jpeg" : format) + BASE64_SUFFIX + java.util.Base64.getEncoder().encodeToString(baos.toByteArray());			
+	}
+	
+	public static String scaleSVG(InputStream inputStream, int height) {
+		try {
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document document = dBuilder.parse(inputStream);
+			if (height != -1) {
+				Element element = document.getDocumentElement();
+				String svgHeightStr = element.getAttribute(HEIGHT_ATTRIBUTE);
+				double svgHeight = Double.parseDouble(svgHeightStr);
+				
+				String svgWidthStr = element.getAttribute(WIDTH_ATTRIBUTE);
+				double svgWidth = Double.parseDouble(svgWidthStr);
+				
+				element.setAttribute(HEIGHT_ATTRIBUTE, String.valueOf(height));
+				element.setAttribute(WIDTH_ATTRIBUTE, String.valueOf((svgWidth * height) / svgHeight));				
+			}
+			
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+		    Transformer transformer = tFactory.newTransformer();
+		    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+		    
+		    DOMSource source = new DOMSource(document);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		    try (baos) {
+		    	transformer.transform(source, new StreamResult(baos));
+		    }
+			return DATA_IMAGE_SVG_BASE64_PREFIX + java.util.Base64.getEncoder().encodeToString(baos.toByteArray());
+		} catch (TransformerException | ParserConfigurationException | SAXException | IOException e) {
+			throw new NasdanikaException("Error scaling SVG: " + e, e);
+		}
 	}
 	
 }

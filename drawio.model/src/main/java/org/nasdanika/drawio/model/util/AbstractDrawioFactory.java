@@ -1051,7 +1051,10 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			}
 		}
 		
-		if (!isPrototype && semanticElement instanceof org.nasdanika.ncore.StringIdentity) {
+		// Indicates that this element is linked from another element and as such its id shall not be used as default semantic id
+		boolean isLinked = isPageElement(modelElement) && !isTopLevelPage(modelElement.getPage());
+		
+		if (!isPrototype && !isLinked && semanticElement instanceof org.nasdanika.ncore.StringIdentity) {
 			String semanticIdProperty = getSemanticIdProperty();
 			if (!Util.isBlank(semanticIdProperty)) {
 				String semanticId = modelElement.getProperties().get(semanticIdProperty);

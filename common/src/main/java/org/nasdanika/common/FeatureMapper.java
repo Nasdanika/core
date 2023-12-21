@@ -63,6 +63,14 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 				wireContents(path, pathMapper, tracker);
 			}
 			
+			/*
+			 * TODO Traversal of non-containment references similar to contents but with tracing of the feature used to traverse
+			 * and avoiding loops.
+			 * 
+			 * Add wireReferenceTarget and wireReferenceSource or Reference/Referrer. 
+			 * Implement support in sub-classes such as setter mapper
+			 */
+			
 			List<EStructuralFeature> valueFeatures = value == null ? Collections.emptyList() : value.eClass().getEAllStructuralFeatures();		
 			
 			// Own features, no permutations
