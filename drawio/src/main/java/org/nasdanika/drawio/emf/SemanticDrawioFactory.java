@@ -40,7 +40,7 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 			org.nasdanika.drawio.Document sourceDocument = org.nasdanika.drawio.Document.load(sourceURI);
 			Z: for (Page page: sourceDocument.getPages()) {
 				if (page.getId().equals(modelPage.getId())) {
-					page.accept(pageElement -> setSemanticUUIDs(pageElement, modelPage, registry));
+					page.accept(pageElement -> setSemanticUUIDsAndFilter(pageElement, modelPage, registry, progressMonitor));
 					String semanticElementRepresentation = semanticModelElement.getRepresentations().get(DRAWIO_REPRESENTATION);
 					org.nasdanika.drawio.Document semanticElementRepresentationDocument;
 					if (Util.isBlank(semanticElementRepresentation)) {
@@ -67,23 +67,25 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 	/**
 	 * Sets semantic UUIDs for the contents of eObj
 	 * @param documentElement Element of drawio document to set semantic UUID property 
-	 * @param modelElement Element of drawio model to iterate over contents to match id with the document element and get a semantic element from the registry
+	 * @param modelPage Element of drawio model to iterate over contents to match id with the document element and get a semantic element from the registry
 	 * @param registry
 	 * @return
 	 */
-	protected void setSemanticUUIDs(
+	protected void setSemanticUUIDsAndFilter(
 			org.nasdanika.graph.Element documentElement, 
-			EObject modelElement, 
-			Map<EObject, EObject> registry) {
+			EObject modelPage, 
+			Map<EObject, EObject> registry,
+			ProgressMonitor progressMonitor) {
 		
 		if (documentElement instanceof org.nasdanika.drawio.ModelElement) {
 			org.nasdanika.drawio.ModelElement documentModelElement = (org.nasdanika.drawio.ModelElement) documentElement;
 			String documentElementID = documentModelElement.getId();
-			TreeIterator<EObject> mpit = modelElement.eAllContents();
+			TreeIterator<EObject> mpit = modelPage.eAllContents();
 			while (mpit.hasNext()) {
 				EObject next = mpit.next();
 				if (next instanceof org.nasdanika.drawio.model.ModelElement && documentElementID.equals(((org.nasdanika.drawio.model.ModelElement) next).getId())) {
 					EObject semanticElement = registry.get(next);
+					filterRepresentationElement(documentModelElement, semanticElement, progressMonitor);
 					if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
 						String uuid = ((org.nasdanika.ncore.ModelElement) semanticElement).getUuid();
 						if (!Util.isBlank(uuid)) {
@@ -94,6 +96,21 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Override to implement filtering of a representation element. 
+	 * For example, if an element represents a processing unit, its background color or image can be modified depending on the load - red for overloaded, green for OK, grey for planned offline.
+	 * When this method is called, the semantic element is not yet configured from the representation element.    
+	 * @param representationElement
+	 * @param registry
+	 * @param progressMonitor
+	 */
+	protected void filterRepresentationElement(
+			org.nasdanika.graph.Element representationElement, 
+			EObject semanticElement,
+			ProgressMonitor progressMonitor) {
+		
 	}
 	
 }
