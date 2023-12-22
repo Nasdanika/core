@@ -1,12 +1,12 @@
 package org.nasdanika.common;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -56,11 +56,11 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 	public void wire(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
 		for (T value: select(source, registry, progressMonitor)) {
 			HashSet<EObject> tracker = new HashSet<>();			
-			for (EObject contents: contents(source, tracker)) {
+			for (EObject contents: contents(source, tracker::add)) {
 				LinkedList<EObject> path = new LinkedList<>();
 				path.add(contents);
 				Function<LinkedList<EObject>, Boolean> pathMapper = createPathMapper(source, value, registry, progressMonitor);
-				wireContents(path, pathMapper, tracker);
+				wireContents(path, pathMapper, tracker::add);
 			}
 			
 			/*
@@ -163,7 +163,7 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 	 * @param consumer Consumes descendant source path, returns true if traversal shall continue
 	 * @param tracker Tracker to avoid infinite loops
 	 */
-	protected void wireContents(LinkedList<EObject> path, Function<LinkedList<EObject>,Boolean> pathMapper, Collection<EObject> tracker) {
+	protected void wireContents(LinkedList<EObject> path, Function<LinkedList<EObject>,Boolean> pathMapper, Predicate<EObject> tracker) {
 		if (pathMapper.apply(path)) {
 			for (EObject child: contents(path.getLast(), tracker)) {
 				LinkedList<EObject> subPath = new LinkedList<>(path);
@@ -179,7 +179,7 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 	 * @param tracker prevents infinite loops in case of circular references
 	 * @return Tree iterator which is aware of page links and fails on double-visits (circular references)
 	 */
-	protected List<? extends EObject> contents(EObject eObject, Collection<EObject> tracker) {
+	protected List<? extends EObject> contents(EObject eObject, Predicate<EObject> tracker) {
     	return eObject.eContents();
 	}	
 	

@@ -2,8 +2,6 @@ package org.nasdanika.drawio.model.util;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -278,14 +276,6 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			@Override
 			protected URI getBaseURI(EObject source) {
 				return AbstractDrawioFactory.this.getBaseURI(source);
-			}
-			
-			@Override
-			protected List<? extends EObject> contents(EObject eObject, Collection<EObject> tracker) {
-				if (eObject instanceof Tag) {
-					return ((Tag) eObject).getElements();
-				}
-				return super.contents(eObject, tracker);
 			}
 			
 			@Override

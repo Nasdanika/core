@@ -1,61 +1,47 @@
 package org.nasdanika.drawio.model.util;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.function.Predicate;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.nasdanika.common.DefaultConverter;
-import org.nasdanika.common.FeatureMapper;
-import org.nasdanika.common.Mapper;
-import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.SetterFeatureMapper;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.model.Connection;
+import org.nasdanika.drawio.model.Page;
+import org.nasdanika.drawio.model.Tag;
 import org.nasdanika.drawio.model.comparators.LabelModelElementComparator;
 import org.nasdanika.drawio.model.comparators.PropertyModelElementComparator;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marked;
 import org.nasdanika.persistence.Marker;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * Loads feature mapping configuration from properties
  * @param <S>
  * @param <T>
  */
-public abstract class PropertySetterFeatureMapper<S extends EObject, T extends EObject> extends SetterFeatureMapper<S, T> {
+public abstract class PropertySetterFeatureMapper<S extends EObject, T extends EObject> extends org.nasdanika.common.PropertySetterFeatureMapper<S, T> {
 	
-	protected PropertySetterFeatureMapper() {
-		super();
-	}
-
-	protected PropertySetterFeatureMapper(Mapper<S, T> chain) {
-		super(chain);
-	}
-
-	protected PropertySetterFeatureMapper(Mapper<S, T> chain, FeatureMapper<S, T> defaulFeaturetMapper) {
-		super(chain, defaulFeaturetMapper);
-	}
-
-	protected String getPropertyNamespace() {
-		return "";
-	}
 	
-	protected String getFeatureMapConfigPropertyName() {
-		return getPropertyNamespace() + "feature-map";
-	}
-	
-	protected String getFeatureMapConfigRefPropertyName() {
-		return getPropertyNamespace() + "feature-map-ref";
-	}
+	@Override
+	protected List<? extends EObject> contents(EObject eObject, Predicate<EObject> tracker) {
+		if (eObject instanceof Tag) {
+			return ((Tag) eObject).getElements();
+		}
+		if (eObject instanceof org.nasdanika.drawio.model.ModelElement) {
+			Page linkedPage = ((org.nasdanika.drawio.model.ModelElement) eObject).getLinkedPage();
+			if (linkedPage != null && tracker.test(linkedPage)) {
+				List<EObject> ret = new ArrayList<>(super.contents(eObject, tracker));
+				ret.add(linkedPage);
+				return ret;
+			}
+		}
+		return super.contents(eObject, tracker);
+	}	
 	
 	/**
 	 * Returns eObject property. This implementation uses ModelElement.getProperties().get() for instances of model element. 
@@ -63,125 +49,10 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 	 * @param eObj
 	 * @return
 	 */
+	@Override
 	protected String getProperty(EObject eObj, String property) {
 		return eObj instanceof org.nasdanika.drawio.model.ModelElement ? ((org.nasdanika.drawio.model.ModelElement) eObj).getProperties().get(property) : null;
 	}
-	
-	@Override
-	protected String getFeatureMapConfigStr(EObject source) {
-		String fmcpn = getFeatureMapConfigPropertyName();
-		if (!Util.isBlank(fmcpn)) {
-			String fmc = getProperty(source, fmcpn);
-			if (!Util.isBlank(fmc)) {
-				return fmc;
-			}
-		}
-		
-		String fmcrpn = getFeatureMapConfigRefPropertyName();
-		if (!Util.isBlank(fmcrpn)) {
-			String ref = getProperty(source, fmcrpn);
-			if (!Util.isBlank(ref)) {
-				URI refURI = URI.createURI(ref);
-				URI baseURI = getBaseURI(source);
-				if (baseURI != null && !baseURI.isRelative()) {
-					refURI = refURI.resolve(baseURI);
-				}
-				try {
-					DefaultConverter converter = DefaultConverter.INSTANCE;
-					Reader reader = converter.toReader(refURI);
-					return converter.toString(reader);
-				} catch (IOException e) {
-					throwConfigurationException("Error loading feature map from " + refURI, e, source);
-				}
-			}
-		}
-		return null;
-	}
-		
-	protected String getMappingSelectorPropertyName() {
-		return getPropertyNamespace() + "mapping-selector";
-	}
-	
-	protected String getMappingSelectorRefPropertyName() {
-		return getPropertyNamespace() + "mapping-selector-ref";
-	}
-	
-	protected String getMappingSelectorStr(EObject source) {
-		String mspn = getMappingSelectorPropertyName();
-		if (!Util.isBlank(mspn)) {
-			String ms = getProperty(source, mspn);
-			if (!Util.isBlank(ms)) {
-				return ms;
-			}
-		}
-		
-		String msrpn = getMappingSelectorRefPropertyName();
-		if (!Util.isBlank(msrpn)) {
-			String ref = getProperty(source, msrpn);
-			if (!Util.isBlank(ref)) {
-				URI refURI = URI.createURI(ref);
-				URI baseURI = getBaseURI(source);
-				if (baseURI != null && !baseURI.isRelative()) {
-					refURI = refURI.resolve(baseURI);
-				}
-				try {
-					DefaultConverter converter = DefaultConverter.INSTANCE;
-					Reader reader = converter.toReader(refURI);
-					return converter.toString(reader);
-				} catch (IOException e) {
-					throwConfigurationException("Error loading mapping selector from " + refURI, e, source);
-				}
-			}
-		}
-		return null;
-	}
-		
-	@SuppressWarnings("unchecked")
-	@Override
-	protected Iterable<T> select(
-			S source, 
-			Map<S, T> registry, 
-			ProgressMonitor progressMonitor) {
-
-		String mappingSelector = getMappingSelectorStr(source);
-		if (Util.isBlank(mappingSelector)) {
-			return super.select(source, registry, progressMonitor);
-		}
-		
-		Collection<T> ret = new ArrayList<>();
-		try {
-			Yaml yaml = new Yaml();
-			Object mappingObj = yaml.load(mappingSelector);
-			if (mappingObj instanceof String) {
-				Object result = evaluate(source, (String) mappingObj, null, Object.class, source);
-				if (result instanceof EObject) {
-					ret.add((T) result);
-				} else if (result instanceof Iterable) {
-					((Iterable<T>) result).forEach(ret::add);
-				} else {
-					throwConfigurationException("Usupported result type: " + result + " for mapping selector " + mappingSelector, null, source);					
-				}
-			} else if (mappingObj instanceof Iterable) {
-				for (String mappingElement: (Iterable<String>) mappingObj) {
-					Object result = evaluate(source, mappingElement, null, Object.class, source);
-					if (result instanceof EObject) {
-						ret.add((T) result);
-					} else if (result instanceof Iterable) {
-						((Iterable<T>) result).forEach(ret::add);
-					} else {
-						throwConfigurationException("Usupported result type: " + result + " for mapping element " + mappingElement, null, source);					
-					}					
-				}				
-			} else {			
-				throwConfigurationException("Usupported configuration type: " + mappingObj, null, source);
-			}
-		} catch (YAMLException yamlException) {
-			throwConfigurationException(null, yamlException, source);
-		}
-		return ret;		
-	}	
-	
-	protected abstract URI getBaseURI(EObject source);
 	
 	@Override
 	protected void throwConfigurationException(String message, Throwable cause, EObject context) {
@@ -311,8 +182,6 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 				}
 			}
 		}
-		
-		
 		
 		// TODO Auto-generated method stub
 		return super.createComparator(comparatorConfig, registry, context);

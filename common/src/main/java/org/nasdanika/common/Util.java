@@ -73,8 +73,8 @@ import org.xml.sax.SAXException;
 public class Util {
 
 	private static final String WIDTH_ATTRIBUTE = "width";
-
 	private static final String HEIGHT_ATTRIBUTE = "height";
+	private static final String VIEW_BOX_ATTRIBUTE = "viewBox";	
 
 	public static final Pattern SENTENCE_PATTERN = Pattern.compile(".+?[\\.?!]+\\s+");		
 		
@@ -1490,7 +1490,11 @@ public class Util {
 				double svgWidth = Double.parseDouble(svgWidthStr);
 				
 				element.setAttribute(HEIGHT_ATTRIBUTE, String.valueOf(height));
-				element.setAttribute(WIDTH_ATTRIBUTE, String.valueOf((svgWidth * height) / svgHeight));				
+				element.setAttribute(WIDTH_ATTRIBUTE, String.valueOf((svgWidth * height) / svgHeight));		
+				
+				if (isBlank(element.getAttribute(VIEW_BOX_ATTRIBUTE))) {
+					element.setAttribute(VIEW_BOX_ATTRIBUTE, "0 0 " + svgWidthStr + " " + svgHeightStr);
+				}
 			}
 			
 			TransformerFactory tFactory = TransformerFactory.newInstance();
