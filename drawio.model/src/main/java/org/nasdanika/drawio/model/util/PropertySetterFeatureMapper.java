@@ -9,10 +9,14 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.model.Connection;
+import org.nasdanika.drawio.model.Node;
 import org.nasdanika.drawio.model.Page;
 import org.nasdanika.drawio.model.Tag;
+import org.nasdanika.drawio.model.comparators.AngularNodeComparator;
+import org.nasdanika.drawio.model.comparators.CartesianNodeComparator;
 import org.nasdanika.drawio.model.comparators.LabelModelElementComparator;
 import org.nasdanika.drawio.model.comparators.PropertyModelElementComparator;
 import org.nasdanika.persistence.ConfigurationException;
@@ -105,16 +109,52 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 		return null;
 	}
 	
-	private S getSource(Object target, Map<S, T> registry) {
+	@SafeVarargs
+	private S getSource(Object target, Map<S, T> registry, Predicate<S>... predicates) {
 		if (target == null) {
 			return null;
 		}
-		for (Entry<S, T> re: registry.entrySet()) {
+		Z: for (Entry<S, T> re: registry.entrySet()) {
 			if (Objects.equals(target, re.getValue())) {
-				return re.getKey();
+				S result = re.getKey();
+				for (Predicate<S> predicate: predicates) {
+					if (!predicate.test(result)) {
+						continue Z;
+					}
+				}
+				return result;
 			}
 		}
 		return null;
+	}
+		
+	private enum Comparators {
+		
+		label("label"),
+		labelDescending("label-descending"),
+		
+		property("property"),
+		propertyDescending("property-descending"),
+		
+		clockwise("clockwise"),
+		counterclockwise("counterclockwise"),
+
+		rightDown("right-down"),
+		rightUp("rightUp"),
+		
+		leftDown("left-down"),
+		leftUp("left-up"),
+		
+		downRight("down-right"),
+		downLeft("down-left"),
+		
+		upRight("up-right"),
+		upLeft("up-left");
+		
+		Comparators(String key) {
+			this.key = key;
+		}
+		public final String key;
 	}
 
 	/**
@@ -134,57 +174,92 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 	 * </UI>
 	 */	
 	@Override
-	protected Comparator<Object> createComparator(Object comparatorConfig, Map<S, T> registry, EObject context) {
-		if ("label".equals(comparatorConfig)) {
-			LabelModelElementComparator labelComparator = new LabelModelElementComparator(false);
-			return (a, b) -> {
-				S as = getSource(a, registry); 
-				S bs = getSource(b, registry); 
-				
-				return as instanceof org.nasdanika.drawio.model.ModelElement && bs instanceof org.nasdanika.drawio.model.ModelElement ? labelComparator.compare((org.nasdanika.drawio.model.ModelElement) as, (org.nasdanika.drawio.model.ModelElement) bs) : NATURAL_COMPARATOR.compare(as,bs);				
-			};
+	protected Comparator<Object> createComparator(
+			EObject semanticElement,
+			EStructuralFeature feature,
+			Object comparatorConfig, 
+			Map<S, T> registry, 
+			EObject context) {
+		if (Comparators.label.key.equals(comparatorConfig)) {
+			return adapt(new LabelModelElementComparator(false), registry);
 		} 
-		if ("label-descending".equals(comparatorConfig)) {
-			LabelModelElementComparator labelComparator = new LabelModelElementComparator(true);
-			return (a, b) -> {
-				S as = getSource(a, registry); 
-				S bs = getSource(b, registry); 
-				
-				return as instanceof org.nasdanika.drawio.model.ModelElement && bs instanceof org.nasdanika.drawio.model.ModelElement ? labelComparator.compare((org.nasdanika.drawio.model.ModelElement) as, (org.nasdanika.drawio.model.ModelElement) bs) : NATURAL_COMPARATOR.compare(as,bs);				
-			};
+		if (Comparators.labelDescending.key.equals(comparatorConfig)) {
+			return adapt(new LabelModelElementComparator(true), registry);
 		} 
+	
+		if (Comparators.clockwise.key.equals(comparatorConfig)) {
+			Node base = (Node) getSource(semanticElement, registry, org.nasdanika.drawio.model.Node.class::isInstance);
+			return adapt(new AngularNodeComparator(base, true, null), registry);
+		}
 		
-		// TODO cartesian, angular with the container as base and default angle
+		if (Comparators.counterclockwise.key.equals(comparatorConfig)) {
+			Node base = (Node) getSource(semanticElement, registry, org.nasdanika.drawio.model.Node.class::isInstance);
+			return adapt(new AngularNodeComparator(base, false, null), registry);			
+		}
+		
+		for (CartesianNodeComparator.Direction direction: CartesianNodeComparator.Direction.values()) {
+			if (Comparators.valueOf(direction.name()).key.equals(comparatorConfig)) {
+				return adapt(new CartesianNodeComparator(direction), registry);
+			}			
+		}		
 		
 		if (comparatorConfig instanceof Map) {
 			Map<?, ?> comparatorConfigMap = (Map<?,?>) comparatorConfig;
 			if (comparatorConfigMap.size() == 1) {
 				for (Entry<?, ?> cce: comparatorConfigMap.entrySet()) {
-					if ("property".equals(cce.getKey()) && cce.getValue() instanceof String) {
-						PropertyModelElementComparator propertyComparator = new PropertyModelElementComparator((String) cce.getValue(),  false);
-						return (a, b) -> {
-							S as = getSource(a, registry); 
-							S bs = getSource(b, registry); 
-							
-							return as instanceof org.nasdanika.drawio.model.ModelElement && bs instanceof org.nasdanika.drawio.model.ModelElement ? propertyComparator.compare((org.nasdanika.drawio.model.ModelElement) as, (org.nasdanika.drawio.model.ModelElement) bs) : NATURAL_COMPARATOR.compare(as,bs);				
-						};
+					if (Comparators.property.key.equals(cce.getKey()) && cce.getValue() instanceof String) {
+						return adapt(new PropertyModelElementComparator((String) cce.getValue(),  false), registry);
 					} 
-					if ("property-descending".equals(cce.getKey()) && cce.getValue() instanceof String) {
-						PropertyModelElementComparator propertyComparator = new PropertyModelElementComparator((String) cce.getValue(),  true);
-						return (a, b) -> {
-							S as = getSource(a, registry); 
-							S bs = getSource(b, registry); 
-							
-							return as instanceof org.nasdanika.drawio.model.ModelElement && bs instanceof org.nasdanika.drawio.model.ModelElement ? propertyComparator.compare((org.nasdanika.drawio.model.ModelElement) as, (org.nasdanika.drawio.model.ModelElement) bs) : NATURAL_COMPARATOR.compare(as,bs);				
-						};
-					} 
-					// TODO - angular
+					if (Comparators.propertyDescending.key.equals(cce.getKey()) && cce.getValue() instanceof String) {
+						return adapt(new PropertyModelElementComparator((String) cce.getValue(),  true), registry);
+					}
+					
+					if (Comparators.clockwise.key.equals(cce.getKey())) {
+						Node base = (Node) getSource(semanticElement, registry, org.nasdanika.drawio.model.Node.class::isInstance);
+						return adapt(new AngularNodeComparator(base, true, getAngle(cce.getValue(), base, context)), registry);
+					}
+					
+					if (Comparators.counterclockwise.key.equals(cce.getKey())) {
+						Node base = (Node) getSource(semanticElement, registry, org.nasdanika.drawio.model.Node.class::isInstance);
+						return adapt(new AngularNodeComparator(base, false, getAngle(cce.getValue(), base, context)), registry);			
+					}
 				}
 			}
 		}
 		
-		// TODO Auto-generated method stub
-		return super.createComparator(comparatorConfig, registry, context);
+		return super.createComparator(semanticElement, feature, comparatorConfig, registry, context);
+	}
+	
+	protected Double getAngle(Object value, Node base, EObject context) {
+		if (value == null) {
+			return null;
+		}
+		if (value instanceof Number) {
+			return ((Number) value).doubleValue();
+		}
+		if (value instanceof String) {
+			Object result = evaluate(base, (String) value, null, Object.class, context);
+			if (result instanceof Number) {
+				return ((Number) result).doubleValue();
+			}
+			if (result instanceof Node) {
+				return AngularNodeComparator.angle(base, (Node) result);
+			}
+			throwConfigurationException("Unsupported angle expression result type: " + result + " for expression " + value, null, context);
+		}
+
+		throwConfigurationException("Unsupported angle value type: " + value, null, context);
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <CT> Comparator<Object> adapt(Comparator<CT> comparator, Map<S, T> registry) {
+		return (a, b) -> {
+			S as = getSource(a, registry); 
+			S bs = getSource(b, registry); 
+			
+			return as instanceof org.nasdanika.drawio.model.ModelElement && bs instanceof org.nasdanika.drawio.model.ModelElement ? comparator.compare((CT) as, (CT) bs) : NATURAL_COMPARATOR.compare(as,bs);				
+		};
 	}
 
 }

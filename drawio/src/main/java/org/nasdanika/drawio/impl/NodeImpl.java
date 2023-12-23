@@ -86,7 +86,21 @@ class NodeImpl extends LayerImpl implements Node {
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
 			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
 			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
-		return toModelLayer(factory, factory.createNode(), markerFactory, modelElementProvider, tagProvider);
+		org.nasdanika.drawio.model.Node mNode = toModelLayer(factory, factory.createNode(), markerFactory, modelElementProvider, tagProvider);
+		Rectangle geometry = getGeometry();
+		if (geometry != null) {
+			org.nasdanika.drawio.model.Geometry mGeometry = factory.createGeometry();
+			mGeometry.setX(geometry.getX());
+			mGeometry.setY(geometry.getY());
+			mGeometry.setHeight(geometry.getHeight());
+//			mGeometry.setOffsetPoint(Point);
+//			mGeometry.setRelative(boolean);
+//			mGeometry.setSourcePoint(Point);
+//			mGeometry.setTargetPoint(Point);
+			mGeometry.setWidth(geometry.getWidth());
+			mNode.setGeometry(mGeometry);
+		}
+		return mNode;
 	}
 
 }

@@ -309,7 +309,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 									List<Object> fvl = (List<Object>) eObj.eGet(feature);
 									int position = getPosition(configElement, context);
 									if (position == -1) {
-										Comparator<Object> comparator = getComparator(configElement, registry, context);
+										Comparator<Object> comparator = getComparator(eObj, feature, configElement, registry, context);
 										if (comparator == null || fvl.isEmpty()) {										
 											fvl.add(element);
 										} else {
@@ -534,11 +534,18 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	
 	/**
 	 * A comparator of elements for many features.
+	 * @param semanticElement Semantic element receiving objects being compared. For some types of comparators the semantic element may be used to compute the base coordinates/geometry for comparison.
+	 * @param feature Semantic element's many feature into which object being compared are injected (set)     
 	 * @param config
 	 * @param registry
 	 * @return
 	 */
-	protected Comparator<Object> getComparator(Object config, Map<S, T> registry, EObject context) {
+	protected Comparator<Object> getComparator(
+			EObject semanticElement,
+			EStructuralFeature feature,
+			Object config, 
+			Map<S, T> registry, 
+			EObject context) {
 		if (config == Boolean.TRUE) {
 			return null;
 		}
@@ -548,7 +555,12 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			if (comparatorConfig == null) {
 				return null;
 			}
-			return createComparator(comparatorConfig, registry, context);
+			return createComparator(
+					semanticElement,
+					feature,
+					comparatorConfig, 
+					registry, 
+					context);
 		}
 		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
 		return null; 
@@ -596,7 +608,12 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	 * @param context
 	 * @return
 	 */
-	protected Comparator<Object> createComparator(Object comparatorConfig, Map<S, T> registry, EObject context) {
+	protected Comparator<Object> createComparator(
+			EObject semanticElement,
+			EStructuralFeature feature,
+			Object comparatorConfig, 
+			Map<S, T> registry, 
+			EObject context) {
 		if ("natural".equals(comparatorConfig)) {
 			return NATURAL_COMPARATOR;
 		} 

@@ -14,7 +14,7 @@ public class CartesianNodeComparator implements Comparator<Node> {
 	
 	public enum Direction {
 		rightDown,
-		reightUp,
+		rightUp,
 		leftDown,
 		leftUp,
 		downRight,
@@ -90,7 +90,7 @@ public class CartesianNodeComparator implements Comparator<Node> {
 				return 1;
 			}
 			break;
-		case reightUp:
+		case rightUp:
 			if (after(o1, o2)) {
 				return -11;
 			}
