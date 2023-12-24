@@ -2,7 +2,7 @@ package org.nasdanika.graph.emf;
 
 import org.eclipse.emf.ecore.EReference;
 
-public class EReferenceConnection extends QualifiedConnection<EReferenceConnectionQualifier> {
+public class EReferenceConnection extends QualifiedConnection<EReferenceConnectionQualifier> implements Comparable<EReferenceConnection> {
 	
 	/**
 	 * 
@@ -35,6 +35,11 @@ public class EReferenceConnection extends QualifiedConnection<EReferenceConnecti
 	 */
 	public int getIndex() {
 		return get().index();
+	}
+
+	@Override
+	public int compareTo(EReferenceConnection o) {
+		return get().compareTo(o.get());
 	}
 
 }
