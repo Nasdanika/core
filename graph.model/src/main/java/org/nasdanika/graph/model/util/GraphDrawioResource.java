@@ -75,8 +75,13 @@ public class GraphDrawioResource extends ResourceImpl {
 			}
 			
 			@Override
-			protected void filterRepresentationElement(Element representationElement, EObject semanticElement, ProgressMonitor progressMonitor) {
-				GraphDrawioResource.this.filterRepresentationElement(representationElement, semanticElement, progressMonitor);
+			protected void filterRepresentationElement(
+					Element representationElement, 
+					EObject semanticElement, 
+					Map<EObject, EObject> registry,
+					ProgressMonitor progressMonitor) {
+				super.filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor);
+				GraphDrawioResource.this.filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor);
 			}
 			
 		};
@@ -139,6 +144,7 @@ public class GraphDrawioResource extends ResourceImpl {
 	protected void filterRepresentationElement(
 			org.nasdanika.graph.Element representationElement, 
 			EObject semanticElement,
+			Map<EObject, EObject> registry,
 			ProgressMonitor progressMonitor) {
 		
 	}

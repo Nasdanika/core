@@ -85,7 +85,7 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 				EObject next = mpit.next();
 				if (next instanceof org.nasdanika.drawio.model.ModelElement && documentElementID.equals(((org.nasdanika.drawio.model.ModelElement) next).getId())) {
 					EObject semanticElement = registry.get(next);
-					filterRepresentationElement(documentModelElement, semanticElement, progressMonitor);
+					filterRepresentationElement(documentModelElement, semanticElement, registry, progressMonitor);
 					if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
 						String uuid = ((org.nasdanika.ncore.ModelElement) semanticElement).getUuid();
 						if (!Util.isBlank(uuid)) {
@@ -102,6 +102,7 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 	 * Override to implement filtering of a representation element. 
 	 * For example, if an element represents a processing unit, its background color or image can be modified depending on the load - red for overloaded, green for OK, grey for planned offline.
 	 * When this method is called, the semantic element is not yet configured from the representation element.    
+	 * This implementation carries over a tooltip for representations which don't have tooltip.
 	 * @param representationElement
 	 * @param registry
 	 * @param progressMonitor
@@ -109,8 +110,23 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 	protected void filterRepresentationElement(
 			org.nasdanika.graph.Element representationElement, 
 			EObject semanticElement,
+			Map<EObject, EObject> registry,
 			ProgressMonitor progressMonitor) {
 		
+		if (representationElement instanceof org.nasdanika.drawio.ModelElement) {
+			org.nasdanika.drawio.ModelElement mer = (org.nasdanika.drawio.ModelElement) representationElement;
+			if (Util.isBlank(mer.getTooltip())) {
+				registry
+					.entrySet()
+					.stream()
+					.filter(e -> e.getValue() == semanticElement)
+					.filter(e -> e.getKey() instanceof org.nasdanika.drawio.model.ModelElement)
+					.map(e -> ((org.nasdanika.drawio.model.ModelElement) e.getKey()).getTooltip())
+					.filter(t -> !Util.isBlank(t))
+					.findFirst()
+					.ifPresent(mer::setTooltip);					
+			}						
+		}		
 	}
 	
 }

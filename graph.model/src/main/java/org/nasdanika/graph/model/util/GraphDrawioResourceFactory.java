@@ -1,5 +1,6 @@
 package org.nasdanika.graph.model.util;
 
+import java.util.Map;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
@@ -45,9 +46,10 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 			protected void filterRepresentationElement(
 					Element representationElement, 
 					EObject semanticElement,
+					Map<EObject, EObject> registry,
 					ProgressMonitor progressMonitor) {
 				
-				GraphDrawioResourceFactory.this.filterRepresentationElement(representationElement, semanticElement, progressMonitor);			
+				GraphDrawioResourceFactory.this.filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor);			
 			}
 			
 		};
@@ -83,6 +85,7 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 	protected void filterRepresentationElement(
 			org.nasdanika.graph.Element representationElement, 
 			EObject semanticElement,
+			Map<EObject, EObject> registry,
 			ProgressMonitor progressMonitor) {
 		
 	}
