@@ -3,7 +3,6 @@ package org.nasdanika.drawio.model.comparators;
 import java.util.Comparator;
 import java.util.Objects;
 
-import org.jsoup.Jsoup;
 import org.nasdanika.drawio.model.Geometry;
 import org.nasdanika.drawio.model.Node;
 
@@ -149,8 +148,8 @@ public class CartesianNodeComparator implements Comparator<Node> {
 	private static boolean below(Node o1, Node o2) {
 //		System.out.println("Below: " + Jsoup.parse(o1.getLabel()).text() + " - " + Jsoup.parse(o2.getLabel()).text());
 		
-		Geometry g1 = o1.getGeometry();
-		return g1.getY() + g1.getHeight() < o2.getGeometry().getY();		
+		Geometry g1 = AngularNodeComparator.getAbsoluteGeometry(o1);
+		return g1.getY() + g1.getHeight() < AngularNodeComparator.getAbsoluteGeometry(o2).getY();		
 	}	
 	
 	/**
@@ -161,8 +160,8 @@ public class CartesianNodeComparator implements Comparator<Node> {
 	private static boolean after(Node o1, Node o2) {
 //		System.out.println("After " + Jsoup.parse(o1.getLabel()).text() + " - " + Jsoup.parse(o2.getLabel()).text());
 		
-		Geometry g1 = o1.getGeometry();
-		return g1.getX() + g1.getWidth() < o2.getGeometry().getX();		
+		Geometry g1 = AngularNodeComparator.getAbsoluteGeometry(o1);
+		return g1.getX() + g1.getWidth() < AngularNodeComparator.getAbsoluteGeometry(o2).getX();		
 	}
 	
 	protected int compareVertical(Node o1, Node o2) {
