@@ -13,11 +13,9 @@ import org.nasdanika.drawio.model.ModelElement;
 public class PropertyModelElementComparator implements Comparator<ModelElement> {
 	
 	private String property;
-	private boolean descending;
 
-	public PropertyModelElementComparator(String property, boolean descending) {
+	public PropertyModelElementComparator(String property) {
 		this.property = property;
-		this.descending = descending;
 	}
 	
 	@Override
@@ -45,7 +43,7 @@ public class PropertyModelElementComparator implements Comparator<ModelElement> 
 			if (!org.nasdanika.common.Util.isBlank(p1) && !org.nasdanika.common.Util.isBlank(p2)) {
 				int cmp = p1.compareTo(p2);
 				if (cmp != 0) {
-					return descending ? -cmp : cmp;
+					return cmp;
 				}
 			}       					
 		}

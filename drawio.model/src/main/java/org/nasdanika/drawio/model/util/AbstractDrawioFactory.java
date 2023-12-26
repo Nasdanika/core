@@ -1287,6 +1287,47 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				progressMonitor);
 	}
 	
+	/**
+	 * Sets semantic identity if semantic element is instance of org.nasdanika.ncore.StringIdentity
+	 * @param semanticElement
+	 * @param semanticId
+	 */
+	protected void setSemanticId(S semanticElement, String semanticId, String elementId) {
+		if (semanticElement instanceof org.nasdanika.ncore.StringIdentity) {
+			org.nasdanika.ncore.StringIdentity semanticStringIdentity = (org.nasdanika.ncore.StringIdentity) semanticElement;
+			if (Util.isBlank(semanticId)) {
+				if (Util.isBlank(semanticStringIdentity.getId()) && !Util.isBlank(elementId)) {
+					semanticStringIdentity.setId(elementId);
+				}
+			} else {
+				semanticStringIdentity.setId(semanticId);
+			}
+		}
+	}
+	
+	protected void addDocumentation(S semanticElement, EObject documentation) {
+		if (semanticElement instanceof org.nasdanika.ncore.Documented) {
+			((org.nasdanika.ncore.Documented) semanticElement).getDocumentation().add(documentation);
+		}	
+	}
+	
+	/**
+	 * Sets label text extracted from the label HTML.
+	 * @param semanticElement
+	 * @param labelText
+	 */
+	protected void setLabelText(S semanticElement, String labelText) {
+		if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
+			((org.nasdanika.ncore.NamedElement) semanticElement).setName(labelText);
+		}
+	}
+
+	protected void setTooltip(S semanticElement, String tooltip) {
+		if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
+			((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(tooltip);
+		}
+	}	
+	
 	protected void configureSemanticElement(
 			EObject eObj,
 			S semanticElement,
@@ -1313,104 +1354,98 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		// Indicates that this element is linked from another element and as such its id shall not be used as default semantic id
 		boolean isLinked = eObj instanceof org.nasdanika.drawio.model.ModelElement && isPageElement(eObj) && !isTopLevelPage(((org.nasdanika.drawio.model.ModelElement) eObj).getPage());
 		
-		if (!isPrototype && !isLinked && semanticElement instanceof org.nasdanika.ncore.StringIdentity) {
+		if (!isPrototype && !isLinked) {
 			String semanticIdProperty = getSemanticIdProperty();
 			if (!Util.isBlank(semanticIdProperty)) {
 				String semanticId = getProperty(eObj, semanticIdProperty);
-				org.nasdanika.ncore.StringIdentity semanticStringIdentity = (org.nasdanika.ncore.StringIdentity) semanticElement;
-				if (Util.isBlank(semanticId)) {
-					if (Util.isBlank(semanticStringIdentity.getId()) && eObj instanceof org.nasdanika.drawio.model.ModelElement) {
-						semanticStringIdentity.setId(((org.nasdanika.drawio.model.ModelElement) eObj).getId());
-					}
-				} else {
-					semanticStringIdentity.setId(semanticId);
+				String elementId = null;
+				if (eObj instanceof org.nasdanika.drawio.model.ModelElement) {
+					elementId = ((org.nasdanika.drawio.model.ModelElement) eObj).getId();
 				}
+				setSemanticId(semanticElement, semanticId, elementId);
 			}
 		}
 		
 		if (eObj instanceof org.nasdanika.drawio.model.ModelElement) {
 			String label = ((org.nasdanika.drawio.model.ModelElement) eObj).getLabel();
-			if (!Util.isBlank(label) && semanticElement instanceof org.nasdanika.ncore.NamedElement) {
+			if (!Util.isBlank(label)) {
 				String labelText = Jsoup.parse(label).text();
-				((org.nasdanika.ncore.NamedElement) semanticElement).setName(labelText);
+				setLabelText(semanticElement, labelText);				
 			}
 			String tooltip = ((org.nasdanika.drawio.model.ModelElement) eObj).getTooltip();
-			if (!Util.isBlank(tooltip) && semanticElement instanceof org.nasdanika.ncore.ModelElement) {
-				((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(tooltip);
+			if (!Util.isBlank(tooltip)) {
+				setTooltip(semanticElement, tooltip);
 			}
 		}
 				
-		if (semanticElement instanceof org.nasdanika.ncore.Documented) {
-			URI baseUri = getBaseURI(eObj);
-			org.nasdanika.ncore.Documented documented = (org.nasdanika.ncore.Documented) semanticElement;
-			String docProperty = getDocumentationProperty();
-			if (!Util.isBlank(docProperty)) {
-				String doc = getProperty(eObj, docProperty);
-				if (!Util.isBlank(doc)) {
-					DocumentationFormat docFormat = DocumentationFormat.markdown;
-					String docFormatProperty = getDocFormatProperty();
-					if (!Util.isBlank(docFormatProperty)) {
-						String docFormatStr = getProperty(eObj, docFormatProperty);
-						if (!Util.isBlank(docFormatStr)) {
-							docFormat = DocumentationFormat.valueOf(docFormatStr);						
-						}					
-					}
-					switch (docFormat) {
-					case html:
-						documented.getDocumentation().add(createHtmlDoc(doc, baseUri, progressMonitor));
-						break;
-					case markdown:
-						documented.getDocumentation().add(createMarkdownDoc(doc, baseUri, progressMonitor));
-						break;
-					case text:
-						documented.getDocumentation().add(createTextDoc(doc, baseUri, progressMonitor));
-						break;
-					default:
-						throw new ConfigurationException("Unsupported documentation format: " + docFormat, eObj instanceof Marked ? (Marked) eObj : null);
-					
-					}
+		URI baseUri = getBaseURI(eObj);
+		String docProperty = getDocumentationProperty();
+		if (!Util.isBlank(docProperty)) {
+			String doc = getProperty(eObj, docProperty);
+			if (!Util.isBlank(doc)) {
+				DocumentationFormat docFormat = DocumentationFormat.markdown;
+				String docFormatProperty = getDocFormatProperty();
+				if (!Util.isBlank(docFormatProperty)) {
+					String docFormatStr = getProperty(eObj, docFormatProperty);
+					if (!Util.isBlank(docFormatStr)) {
+						docFormat = DocumentationFormat.valueOf(docFormatStr);						
+					}					
+				}
+				switch (docFormat) {
+				case html:
+					addDocumentation(semanticElement, createHtmlDoc(doc, baseUri, progressMonitor));
+					break;
+				case markdown:
+					addDocumentation(semanticElement, createMarkdownDoc(doc, baseUri, progressMonitor));
+					break;
+				case text:
+					addDocumentation(semanticElement, createTextDoc(doc, baseUri, progressMonitor));
+					break;
+				default:
+					throw new ConfigurationException("Unsupported documentation format: " + docFormat, eObj instanceof Marked ? (Marked) eObj : null);
+				
 				}
 			}
-			
-			String docRefProperty = getDocRefProperty();
-			if (!Util.isBlank(docRefProperty)) {
-				String docRefStr = getProperty(eObj, docRefProperty);
-				if (!Util.isBlank(docRefStr)) {					
-					DocumentationFormat docFormat = null;
-					if (docRefStr.toLowerCase().endsWith(".html") || docRefStr.toLowerCase().endsWith(".htm")) {
-						docFormat = DocumentationFormat.html;
-					} else if (docRefStr.toLowerCase().endsWith(".txt")) {
-						docFormat = DocumentationFormat.text;
-					} else {					
-						docFormat = DocumentationFormat.markdown; // Default
-					}
-					String docFormatProperty = getDocFormatProperty();
-					if (!Util.isBlank(docFormatProperty)) {
-						String docFormatStr = getProperty(eObj, docFormatProperty);
-						if (!Util.isBlank(docFormatStr)) {
-							docFormat = DocumentationFormat.valueOf(docFormatStr);						
-						}					
-					}
-					URI docRefURI = URI.createURI(docRefStr);
-					if (baseUri != null && !baseUri.isRelative()) {
-						docRefURI = docRefURI.resolve(baseUri);
-					}
-					switch (docFormat) {
-					case html:
-						documented.getDocumentation().add(createHtmlDoc(docRefURI, progressMonitor));
-						break;
-					case markdown:
-						documented.getDocumentation().add(createMarkdownDoc(docRefURI, progressMonitor));
-						break;
-					case text:
-						documented.getDocumentation().add(createTextDoc(docRefURI, progressMonitor));
-						break;
-					default:
-						throw new ConfigurationException("Unsupported documentation format: " + docFormat, eObj instanceof Marked ? (Marked) eObj : null);					
-					}
+		}
+		
+		String docRefProperty = getDocRefProperty();
+		if (!Util.isBlank(docRefProperty)) {
+			String docRefStr = getProperty(eObj, docRefProperty);
+			if (!Util.isBlank(docRefStr)) {					
+				DocumentationFormat docFormat = null;
+				if (docRefStr.toLowerCase().endsWith(".html") || docRefStr.toLowerCase().endsWith(".htm")) {
+					docFormat = DocumentationFormat.html;
+				} else if (docRefStr.toLowerCase().endsWith(".txt")) {
+					docFormat = DocumentationFormat.text;
+				} else {					
+					docFormat = DocumentationFormat.markdown; // Default
+				}
+				String docFormatProperty = getDocFormatProperty();
+				if (!Util.isBlank(docFormatProperty)) {
+					String docFormatStr = getProperty(eObj, docFormatProperty);
+					if (!Util.isBlank(docFormatStr)) {
+						docFormat = DocumentationFormat.valueOf(docFormatStr);						
+					}					
+				}
+				URI docRefURI = URI.createURI(docRefStr);
+				if (baseUri != null && !baseUri.isRelative()) {
+					docRefURI = docRefURI.resolve(baseUri);
+				}
+				switch (docFormat) {
+				case html:
+					addDocumentation(semanticElement, createHtmlDoc(docRefURI, progressMonitor));
+					break;
+				case markdown:
+					addDocumentation(semanticElement, createMarkdownDoc(docRefURI, progressMonitor));
+					break;
+				case text:
+					addDocumentation(semanticElement, createTextDoc(docRefURI, progressMonitor));
+					break;
+				default:
+					throw new ConfigurationException("Unsupported documentation format: " + docFormat, eObj instanceof Marked ? (Marked) eObj : null);					
 				}
 			}
-		}	
+		}
 				
 		// Root is logically "merged" with the containing page
 		if (eObj instanceof Root) {
