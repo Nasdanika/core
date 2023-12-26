@@ -3,6 +3,7 @@ package org.nasdanika.drawio.model.comparators;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.function.Predicate;
 
 import org.nasdanika.drawio.model.Connection;
 import org.nasdanika.drawio.model.Node;
@@ -14,10 +15,12 @@ import org.nasdanika.drawio.model.Node;
 public class FlowNodeComparator implements Comparator<Node> {
 	
 	private Comparator<? super Node> fallback;
+	private Predicate<? super Connection> connectionPredicate;
 
 
-	public FlowNodeComparator(Comparator<? super Node> fallback) {
+	public FlowNodeComparator(Predicate<? super Connection> connectionPredicate, Comparator<? super Node> fallback) {
 		this.fallback = fallback;
+		this.connectionPredicate = connectionPredicate;
 	}
 	
 	@Override
@@ -53,7 +56,7 @@ public class FlowNodeComparator implements Comparator<Node> {
 	 * @param o1
 	 * @param o2
 	 */
-	private static int traverse(Node source, Node target, Stack<Node> tracker) {
+	private int traverse(Node source, Node target, Stack<Node> tracker) {
 		if (Objects.equals(source, target)) {
 			return 0;
 		}
@@ -63,15 +66,17 @@ public class FlowNodeComparator implements Comparator<Node> {
 		int result = Integer.MAX_VALUE;
 		if (!tracker.contains(source)) {
 			tracker.push(source);
-			for (Connection oc: source.getOutgoing()) {				
-				Node cTarget = oc.getTarget();
-				if (Objects.equals(cTarget, target)) {
-					result = 1;
-					break;
-				}
-				int tr = traverse(cTarget, target, tracker);
-				if (tr != Integer.MAX_VALUE && tr + 1 < result) {
-					result = tr + 1;
+			for (Connection oc: source.getOutgoing()) {
+				if (connectionPredicate == null || connectionPredicate.test(oc)) {
+					Node cTarget = oc.getTarget();
+					if (Objects.equals(cTarget, target)) {
+						result = 1;
+						break;
+					}
+					int tr = traverse(cTarget, target, tracker);
+					if (tr != Integer.MAX_VALUE && tr + 1 < result) {
+						result = tr + 1;
+					}
 				}
 			}			
 			tracker.pop();

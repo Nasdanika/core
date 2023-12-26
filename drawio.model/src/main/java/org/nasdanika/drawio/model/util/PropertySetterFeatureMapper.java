@@ -3,6 +3,7 @@ package org.nasdanika.drawio.model.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -251,20 +252,45 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 						return createAngularComparator(semanticElement, feature, cce.getValue(), registry, context, NATURAL_COMPARATOR);
 					}
 					
-					if (Comparators.flow.key.equals(cce.getKey())) {
-						Comparator<Object> fallback = createComparator(semanticElement, feature, cce.getValue(), registry, context);						
-						return adapt(
-								new FlowNodeComparator(fallback),
+					if (Comparators.flow.key.equals(cce.getKey()) || Comparators.reverseFlow.key.equals(cce.getKey())) {
+						Predicate<org.nasdanika.drawio.model.Connection> connectionPredicate; 
+						Comparator<Object> fallback; 
+						Object cConfig = cce.getValue();						
+						if (cConfig instanceof String) {
+							fallback = createComparator(semanticElement, feature, cConfig, registry, context);
+							connectionPredicate = null;
+						} else if (cConfig instanceof Map) {
+							Map<?,?> cConfigMap = (Map<?,?>) cConfig;
+							Object fallbackConfig = cConfigMap.get("fallback");
+							if (fallbackConfig == null) {
+								throwConfigurationException("No 'fallback' comparator definition: " + cConfig, null, context);								
+							} 
+							fallback = createComparator(semanticElement, feature, fallbackConfig, registry, context);
+							Object condition = cConfigMap.get(CONDITION_KEY);
+							if (condition == null) {
+								connectionPredicate = null;
+							} else {
+								if (condition instanceof String) {
+									Map<String,Object> variables = new LinkedHashMap<>();
+									variables.put("registry", registry);
+									connectionPredicate = connection -> evaluatePredicate(connection, (String) condition, variables, context);
+								} else {
+									throwConfigurationException("Condition must be a string: " + condition, null, context);
+									connectionPredicate = null;
+								}								
+							}
+						} else {
+							throwConfigurationException("Unsupported flow comparator configuration type: " + cConfig, null, context);
+							return null;							
+						}
+						
+						Comparator<Object> flowComparator = adapt(
+								new FlowNodeComparator(connectionPredicate, fallback),
 								this::areSamePageNodes,
 								registry);
+						
+						return Comparators.flow.key.equals(cce.getKey()) ? flowComparator : flowComparator.reversed();
 					} 
-					if (Comparators.reverseFlow.key.equals(cce.getKey())) {
-						Comparator<Object> fallback = createComparator(semanticElement, feature, cce.getValue(), registry, context);						
-						return adapt(
-								new FlowNodeComparator(fallback),
-								this::areSamePageNodes,
-								registry).reversed();
-					} 										
 				}
 			}
 		}
