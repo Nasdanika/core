@@ -426,17 +426,10 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {	
 	
-		
-		String type = getTypeName(eObj);		
-		
-		S semanticElement;		
-		if (Util.isBlank(type)) {
-			String constructorPropertyName = getConstructorProperty();
-			String constructor = Util.isBlank(constructorPropertyName) ? null : getProperty(eObj, constructorPropertyName);
-			if (Util.isBlank(constructor)) {
-				return null;
-			}
-			
+		S semanticElement = null;		
+		String constructorPropertyName = getConstructorProperty();
+		String constructor = Util.isBlank(constructorPropertyName) ? null : getProperty(eObj, constructorPropertyName);
+		if (!Util.isBlank(constructor)) {
 			try {			
 				ExpressionParser parser = getExpressionParser();
 				Expression exp = parser.parseExpression(constructor);
@@ -447,9 +440,15 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				throw new ConfigurationException("Error parsing semantic selector: '" + constructor, e, asMarked(eObj));
 			} catch (EvaluationException e) {
 				throw new ConfigurationException("Error evaluating semantic selector: '" + constructor, e, asMarked(eObj));
-			}			
-		} else {
-			semanticElement = (S) create(type.trim(), eObj);
+			}
+		}
+		
+		if (semanticElement == null) {
+			String type = getTypeName(eObj);		
+		
+			if (!Util.isBlank(type)) {
+				semanticElement = (S) create(type.trim(), eObj);
+			}
 		}
 		
 		if (semanticElement instanceof ModelElement) {
