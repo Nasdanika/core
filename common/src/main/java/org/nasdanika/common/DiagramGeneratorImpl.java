@@ -44,8 +44,13 @@ public class DiagramGeneratorImpl implements DiagramGenerator {
 		throw new UnsupportedOperationException("Unsupported dialect: " + dialect);
 	}
 
-	protected String getDrawioViewer() {
-		return "https://app.diagrams.net/js/viewer-static.min.js"; // "https://cdn.jsdelivr.net/gh/Nasdanika/drawio@dev/src/main/webapp/js/viewer-static.min.js";
+	protected String getDrawioViewer() {		
+		return "https://cdn.jsdelivr.net/gh/jgraph/drawio@v22.1.11/src/main/webapp/js/viewer.min.js"; // Last known working viewer, update during release.
+		/*
+		 * An alternative in a page (template) script:
+		 * window.DRAWIO_BASE_URL = "...";
+		 * GraphViewer.prototype.editBlankUrl = window.DRAWIO_BASE_URL;
+		 */
 	}
 	
 	protected String getMermaidInitialize() {

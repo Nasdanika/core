@@ -552,11 +552,14 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 	@SuppressWarnings("unchecked")
 	protected void setFeature(EObject eObj, EStructuralFeature structuralFeature, Object value) {
 		if (structuralFeature.isMany()) {
-			Collection<Object> fv = (Collection<Object>) eObj.eGet(structuralFeature);
+			Object featureValue = eObj.eGet(structuralFeature);
+			Collection<Object> collectionFeatureValue = (Collection<Object>) featureValue;
 			if (value instanceof Collection) {
-				fv.addAll((Collection<Object>) value);
+				collectionFeatureValue.addAll((Collection<Object>) value);
+			} else if (featureValue instanceof EMap && value instanceof Map) {
+				((EMap<Object,Object>) featureValue).putAll((Map<Object,Object>) value);
 			} else {
-				fv.add(value);
+				collectionFeatureValue.add(value);
 			}
 		} else {
 			eObj.eSet(structuralFeature, value);

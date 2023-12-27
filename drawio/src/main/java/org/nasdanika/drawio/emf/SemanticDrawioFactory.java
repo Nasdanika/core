@@ -40,7 +40,7 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 			org.nasdanika.drawio.Document sourceDocument = org.nasdanika.drawio.Document.load(sourceURI);
 			Z: for (Page page: sourceDocument.getPages()) {
 				if (page.getId().equals(modelPage.getId())) {
-					page.accept(pageElement -> setSemanticUUIDsAndFilter(pageElement, modelPage, registry, progressMonitor));
+					page.accept(pageElement -> filterRepresentation(pageElement, modelPage, registry, progressMonitor));
 					String semanticElementRepresentation = semanticModelElement.getRepresentations().get(DRAWIO_REPRESENTATION);
 					org.nasdanika.drawio.Document semanticElementRepresentationDocument;
 					if (Util.isBlank(semanticElementRepresentation)) {
@@ -71,7 +71,7 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 	 * @param registry
 	 * @return
 	 */
-	protected void setSemanticUUIDsAndFilter(
+	protected void filterRepresentation(
 			org.nasdanika.graph.Element documentElement, 
 			EObject modelPage, 
 			Map<EObject, EObject> registry,
@@ -86,12 +86,6 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 				if (next instanceof org.nasdanika.drawio.model.ModelElement && documentElementID.equals(((org.nasdanika.drawio.model.ModelElement) next).getId())) {
 					EObject semanticElement = registry.get(next);
 					filterRepresentationElement(documentModelElement, semanticElement, registry, progressMonitor);
-					if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
-						String uuid = ((org.nasdanika.ncore.ModelElement) semanticElement).getUuid();
-						if (!Util.isBlank(uuid)) {
-							documentModelElement.setProperty(SEMANTIC_UUID_KEY, uuid);
-						}
-					}
 					break;
 				}
 			}
@@ -102,31 +96,40 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 	 * Override to implement filtering of a representation element. 
 	 * For example, if an element represents a processing unit, its background color or image can be modified depending on the load - red for overloaded, green for OK, grey for planned offline.
 	 * When this method is called, the semantic element is not yet configured from the representation element.    
-	 * This implementation carries over a tooltip for representations which don't have tooltip.
+	 * This implementation sets semantic UUID and carries over a tooltip for representations which don't have a tooltip.
 	 * @param representationElement
 	 * @param registry
 	 * @param progressMonitor
 	 */
 	protected void filterRepresentationElement(
-			org.nasdanika.graph.Element representationElement, 
+			org.nasdanika.drawio.ModelElement representationElement, 
 			EObject semanticElement,
 			Map<EObject, EObject> registry,
 			ProgressMonitor progressMonitor) {
 		
-		if (representationElement instanceof org.nasdanika.drawio.ModelElement) {
-			org.nasdanika.drawio.ModelElement mer = (org.nasdanika.drawio.ModelElement) representationElement;
-			if (Util.isBlank(mer.getTooltip())) {
-				registry
-					.entrySet()
-					.stream()
-					.filter(e -> e.getValue() == semanticElement)
-					.filter(e -> e.getKey() instanceof org.nasdanika.drawio.model.ModelElement)
-					.map(e -> ((org.nasdanika.drawio.model.ModelElement) e.getKey()).getTooltip())
-					.filter(t -> !Util.isBlank(t))
-					.findFirst()
-					.ifPresent(mer::setTooltip);					
-			}						
-		}		
+		String semanticUUIDPropertyName = getSemanticUUIDPropertyName();
+		if (!Util.isBlank(semanticUUIDPropertyName) && semanticElement instanceof org.nasdanika.ncore.ModelElement) {
+			String uuid = ((org.nasdanika.ncore.ModelElement) semanticElement).getUuid();
+			if (!Util.isBlank(uuid)) {
+				representationElement.setProperty(semanticUUIDPropertyName, uuid);
+			}
+		}
+		
+		if (Util.isBlank(representationElement.getTooltip())) {
+			registry
+				.entrySet()
+				.stream()
+				.filter(e -> e.getValue() == semanticElement)
+				.filter(e -> e.getKey() instanceof org.nasdanika.drawio.model.ModelElement)
+				.map(e -> ((org.nasdanika.drawio.model.ModelElement) e.getKey()).getTooltip())
+				.filter(t -> !Util.isBlank(t))
+				.findFirst()
+				.ifPresent(representationElement::setTooltip);					
+		}						
+	}
+
+	protected String getSemanticUUIDPropertyName() {
+		return SEMANTIC_UUID_KEY;
 	}
 	
 }

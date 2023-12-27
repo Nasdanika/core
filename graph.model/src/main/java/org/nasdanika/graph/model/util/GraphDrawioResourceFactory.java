@@ -10,7 +10,6 @@ import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.drawio.model.util.AbstractDrawioFactory;
-import org.nasdanika.graph.Element;
 import org.nasdanika.persistence.Marker;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -44,7 +43,7 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 			
 			@Override
 			protected void filterRepresentationElement(
-					Element representationElement, 
+					org.nasdanika.drawio.ModelElement representationElement, 
 					EObject semanticElement,
 					Map<EObject, EObject> registry,
 					ProgressMonitor progressMonitor) {
@@ -83,7 +82,7 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 	 * @param progressMonitor
 	 */
 	protected void filterRepresentationElement(
-			org.nasdanika.graph.Element representationElement, 
+			org.nasdanika.drawio.ModelElement representationElement, 
 			EObject semanticElement,
 			Map<EObject, EObject> registry,
 			ProgressMonitor progressMonitor) {
