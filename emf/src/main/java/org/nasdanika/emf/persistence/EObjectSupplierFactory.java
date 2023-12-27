@@ -549,8 +549,18 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 	 * @param structuralFeature
 	 * @param value
 	 */
+	@SuppressWarnings("unchecked")
 	protected void setFeature(EObject eObj, EStructuralFeature structuralFeature, Object value) {
-		eObj.eSet(structuralFeature, value);
+		if (structuralFeature.isMany()) {
+			Collection<Object> fv = (Collection<Object>) eObj.eGet(structuralFeature);
+			if (value instanceof Collection) {
+				fv.addAll((Collection<Object>) value);
+			} else {
+				fv.add(value);
+			}
+		} else {
+			eObj.eSet(structuralFeature, value);
+		}
 	}
 	
 	/**
