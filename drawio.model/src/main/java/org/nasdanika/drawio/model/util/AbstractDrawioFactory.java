@@ -104,8 +104,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			}
 		}
 		return null;
-	}
-	
+	}	
 	
 	/**
 	 * Returns eObject property. This implementation uses ModelElement.getProperties().get() for instances of model element. 
@@ -1449,14 +1448,18 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		// Root is logically "merged" with the containing page
 		if (eObj instanceof Root) {
 			Page page = (Page) eObj.eContainer().eContainer();
-			if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
-				org.nasdanika.ncore.NamedElement namedSemanticElement = (org.nasdanika.ncore.NamedElement) semanticElement;
-				if (Util.isBlank(namedSemanticElement.getName())) {
-					namedSemanticElement.setName(page.getName());
-				}
-			}
+			setPageName(semanticElement, page.getName());
 		}
 		
+	}
+	
+	protected void setPageName(S semanticElement, String pageName) {
+		if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
+			org.nasdanika.ncore.NamedElement namedSemanticElement = (org.nasdanika.ncore.NamedElement) semanticElement;
+			if (Util.isBlank(namedSemanticElement.getName())) {
+				namedSemanticElement.setName(pageName);
+			}
+		}		
 	}
 		
 	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
