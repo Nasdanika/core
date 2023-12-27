@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2023.12.0</version>
+	    <version>2023.12.1</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>common</artifactId>
@@ -62,7 +62,7 @@
 		<dependency>
 		    <groupId>org.jsoup</groupId>
 		    <artifactId>jsoup</artifactId>
-		    <version>1.16.1</version>
+		    <version>1.17.1</version>
 		</dependency>
 
 		<dependency>
@@ -74,19 +74,19 @@
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
-		    <version>3.13.0</version>
+		    <version>3.14.0</version>
 		</dependency>
 
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-text</artifactId>
-		    <version>1.10.0</version>
+		    <version>1.11.0</version>
 		</dependency>		
 		
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-expression</artifactId>
-		    <version>6.0.12</version>
+		    <version>6.1.2</version>
 		</dependency>
 
 		<dependency>

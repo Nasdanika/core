@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nasdanika.core</groupId>
-	<version>2023.12.0</version>
+	<version>2023.12.1</version>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Nasdanika Core Parent</name>
@@ -23,7 +23,7 @@
 	</scm>
 
 	<properties>
-		<jacoco.version>0.8.10</jacoco.version>
+		<jacoco.version>0.8.11</jacoco.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.javadoc.failOnError>false</maven.javadoc.failOnError>
 		<linksource>true</linksource>
@@ -41,7 +41,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.11.0</version>
+				<version>3.12.1</version>
 				<configuration>
 					<source>17</source>
 					<target>17</target>
@@ -68,19 +68,19 @@
 		        <plugin>
 		            <groupId>org.apache.maven.plugins</groupId>
 		            <artifactId>maven-surefire-plugin</artifactId>
-		            <version>3.1.2</version>
+		            <version>3.2.3</version>
 		            <dependencies>
 		                <dependency>
 		                    <groupId>org.junit.jupiter</groupId>
 		                    <artifactId>junit-jupiter-engine</artifactId>
-		                    <version>5.10.0</version>
+		                    <version>5.10.1</version>
 		                </dependency>
 		            </dependencies>
 		        </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.5.0</version>
+				<version>3.6.3</version>
 			
 				<executions>
 					<execution>
@@ -150,7 +150,13 @@
 		<dependency>
 		    <groupId>org.junit.jupiter</groupId>
 		    <artifactId>junit-jupiter-api</artifactId>
-		    <version>5.10.0</version>
+		    <version>5.10.1</version>
+		    <scope>test</scope>
+		</dependency>		
+		<dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter-engine</artifactId>
+		    <version>5.10.1</version>
 		    <scope>test</scope>
 		</dependency>		
 		
@@ -188,7 +194,6 @@
 		<module>resources</module>
 		<module>graph</module>
 		<module>graph.model</module>
-		<!-- <module>graph.processor.emf</module> -->
 		<module>ncore</module>
 		<module>ncore.gen</module>
 		<module>exec</module>

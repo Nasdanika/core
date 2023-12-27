@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>parent</artifactId>
 		<groupId>org.nasdanika.core</groupId>
-		<version>2023.12.0</version>
+		<version>2023.12.1</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>emf</artifactId>
@@ -59,12 +59,12 @@
 		<dependency>
 		    <groupId>org.eclipse.jgit</groupId>
 		    <artifactId>org.eclipse.jgit</artifactId>
-		    <version>6.7.0.202309050840-r</version>
+		    <version>6.8.0.202311291450-r</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-ooxml</artifactId>
-		    <version>5.2.3</version>
+		    <version>5.2.5</version>
 		</dependency>
 
 	</dependencies>
