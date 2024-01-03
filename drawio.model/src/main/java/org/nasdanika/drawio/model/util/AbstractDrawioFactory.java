@@ -2,6 +2,8 @@ package org.nasdanika.drawio.model.util;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,6 +18,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
@@ -295,6 +299,38 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			@Override
 			protected EvaluationContext createEvaluationContext() {
 				return AbstractDrawioFactory.this.createEvaluationContext();
+			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			protected Iterable<EObject> select(EObject source, Map<EObject, EObject> registry, ProgressMonitor progressMonitor) {
+				String referenceProperty = getReferenceProperty();
+				if (!Util.isBlank(referenceProperty)) {		
+					String referenceName = getProperty(source, referenceProperty);
+					if (!Util.isBlank(referenceName)) {
+						for (EObject eContainer = source.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
+							EObject containerSemanticElement = registry.get(eContainer);
+							if (containerSemanticElement != null) {
+								EClass eClass = containerSemanticElement.eClass();
+								EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
+								if (feature == null) {
+									throwConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), null, source); 
+								} else if (feature instanceof EReference) {
+									Object featureValue = containerSemanticElement.eGet(feature);
+									if (feature.isMany()) {
+										return (Iterable<EObject>) featureValue;
+									}									
+									return featureValue instanceof EObject ? Collections.singleton((EObject) featureValue) : Collections.emptyList();
+								} else {
+									throwConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), null, source); 									
+								}
+							}
+						}
+						return Collections.emptyList();
+					}
+				}
+				
+				return super.select(source, registry, progressMonitor);
 			}
 			
 		};
@@ -990,8 +1026,54 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		
 		return true;
 	}
+	
+	// --- Phase 1: Mapping "reference" elements
+	
+	protected String getReferenceProperty() {
+		return getPropertyNamespace() + "reference";
+	}
+		
+	@SuppressWarnings("unchecked")
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 1)
+	public final void wireSemanticFeatures(
+			org.nasdanika.drawio.model.Layer drawioModelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		String referenceProperty = getReferenceProperty();
+		if (!Util.isBlank(referenceProperty)) {		
+			String referenceName = getProperty(drawioModelElement, referenceProperty);
+			if (!Util.isBlank(referenceName)) {
+				for (EObject eContainer = drawioModelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
+					EObject containerSemanticElement = registry.get(eContainer);
+					if (containerSemanticElement != null) {
+						EClass eClass = containerSemanticElement.eClass();
+						EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
+						if (feature == null) {
+							throw new ConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), drawioModelElement); 
+						} else if (feature instanceof EReference) {							
+							for (EObject layerElement: drawioModelElement.getElements()) {
+								EObject semanticLayerElement = registry.get(layerElement);
+								if (semanticLayerElement != null && feature.getEType().isInstance(semanticLayerElement)) {
+									if (feature.isMany()) {
+										((Collection<EObject>) containerSemanticElement.eGet(feature)).add(semanticLayerElement);
+									} else {
+										containerSemanticElement.eSet(feature, semanticLayerElement);										
+									}									
+								}
+							}
+						} else {
+							throw new ConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), drawioModelElement); 									
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
 
-	// --- Phase 1: Mapping features and adding representations ---
+	// --- Phase 2: Mapping features and adding representations ---
 	
 	/**
 	 * Adds contained elements into containment references.
@@ -1003,7 +1085,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @param pass
 	 * @param progressMonitor
 	 */
-	@org.nasdanika.common.Transformer.Wire(phase = 1)
+	@org.nasdanika.common.Transformer.Wire(phase = 2)
 	public final void mapDocument(
 			org.nasdanika.drawio.model.Document document,
 			S documentElement,
@@ -1027,7 +1109,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @param pass
 	 * @param progressMonitor
 	 */
-	@org.nasdanika.common.Transformer.Wire(phase = 1)
+	@org.nasdanika.common.Transformer.Wire(phase = 2)
 	public final void addDocumentReprentations(
 			org.nasdanika.drawio.model.Document document,
 			S documentElement,
@@ -1068,7 +1150,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return DEFAULT_APP_BASE;
 	}
 		
-	@org.nasdanika.common.Transformer.Wire(phase = 1)
+	@org.nasdanika.common.Transformer.Wire(phase = 2)
 	public final void mapModelElement(
 			org.nasdanika.drawio.model.ModelElement drawioModelElement,
 			S semanticElement,
@@ -1166,7 +1248,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return ModelFactory.eINSTANCE.createSemanticMapping();
 	}
 	
-	// --- Phase 2: mapping features of null semantic elements such as pass-through connections
+	// --- Phase 3: mapping features of null semantic elements such as pass-through connections
 	
 	/**
 	 * Feature maps null semantic elements, which is needed for connections as they might be pass-through.
@@ -1175,7 +1257,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @param pass
 	 * @param progressMonitor
 	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 2)
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 3)
 	public final boolean featurMapNulls(
 			org.nasdanika.drawio.model.ModelElement modelElement,
 			Map<EObject, EObject> registry,
@@ -1189,12 +1271,12 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return true;
 	}
 	
-	// --- Phase 3: Configuration ---
+	// --- Phase 4: Configuration ---
 	
 	/**
 	 * Wires document configuration
 	 */
-	@org.nasdanika.common.Transformer.Wire(phase = 3)
+	@org.nasdanika.common.Transformer.Wire(phase = 4)
 	public final void wireDocumentConfiguration(
 			org.nasdanika.drawio.model.Document document,
 			S documentElement,
@@ -1253,7 +1335,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		}
 	}		
 	
-	@org.nasdanika.common.Transformer.Wire(phase = 3)
+	@org.nasdanika.common.Transformer.Wire(phase = 4)
 	public final void wireModelElementConfiguration(
 			org.nasdanika.drawio.model.ModelElement drawioModelElement,
 			S semanticElement,
@@ -1269,7 +1351,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				progressMonitor);
 	}
 	
-	@org.nasdanika.common.Transformer.Wire(phase = 3)
+	@org.nasdanika.common.Transformer.Wire(phase = 4)
 	public final void wireTagConfiguration(
 			org.nasdanika.drawio.model.Tag tag,
 			S semanticElement,
