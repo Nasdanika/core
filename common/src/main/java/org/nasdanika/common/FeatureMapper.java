@@ -48,7 +48,7 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 	 * @param progressMonitor
 	 * @return
 	 */
-	protected Iterable<T> select(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
+	public Iterable<T> select(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
 		return Collections.singleton(registry.get(source));
 	}
 	
@@ -179,7 +179,7 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 	 * @param tracker prevents infinite loops in case of circular references
 	 * @return Tree iterator which is aware of page links and fails on double-visits (circular references)
 	 */
-	protected List<? extends EObject> contents(EObject eObject, Predicate<EObject> tracker) {
+	public List<? extends EObject> contents(EObject eObject, Predicate<EObject> tracker) {
     	return eObject.eContents();
 	}	
 	

@@ -2,14 +2,19 @@ package org.nasdanika.drawio.model.util;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -26,6 +31,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Mapper;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.SetterFeatureMapper;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.model.Connection;
 import org.nasdanika.drawio.model.Document;
@@ -267,6 +273,77 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return type.getEPackage().getEFactoryInstance().create(type);
 	}
 	
+	SetterFeatureMapper<EObject, EObject> mapper = new PropertySetterFeatureMapper<EObject, EObject>() {
+
+		@Override
+		protected URI getBaseURI(EObject source) {
+			return AbstractDrawioFactory.this.getBaseURI(source);
+		}
+		
+		@Override
+		protected String getProperty(EObject eObj, String property) {
+			return AbstractDrawioFactory.this.getProperty(eObj, property);
+		}
+		
+		@Override
+		protected EClassifier getType(String type, EObject context) {
+			return AbstractDrawioFactory.this.getType(type, context);
+		}
+		
+		@Override
+		protected String getPropertyNamespace() {
+			return AbstractDrawioFactory.this.getPropertyNamespace();
+		}
+		
+		@Override
+		protected EvaluationContext createEvaluationContext() {
+			return AbstractDrawioFactory.this.createEvaluationContext();
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public Iterable<EObject> select(EObject source, Map<EObject, EObject> registry, ProgressMonitor progressMonitor) {
+			String referenceProperty = getReferenceProperty();
+			if (!Util.isBlank(referenceProperty)) {		
+				String referenceSpec = getProperty(source, referenceProperty);			
+				if (!Util.isBlank(referenceSpec)) {
+					Collection<EObject> ret = new ArrayList<>();
+					ReferenceMapper referenceMapper = new ReferenceMapper(referenceSpec, source);
+					List<EObject> logicalAncestorsPath = new ArrayList<>();
+					for (EObject logicalAncestor = getLogicalParent(source); logicalAncestor != null; logicalAncestor = getLogicalParent(logicalAncestor)) {
+						logicalAncestorsPath.add(logicalAncestor);					
+						for (EObject logicalAncestorSemanticElement: mapper.select(logicalAncestor, registry, progressMonitor)) {						
+							if (referenceMapper.matchLogicalAncestorSemanticelement(logicalAncestorSemanticElement, logicalAncestorsPath, registry, source)) {
+								EObject refObj = referenceMapper.getLogicalAncestorSemanticElementRefObj(logicalAncestorSemanticElement, logicalAncestorsPath, registry, source); 
+								if (refObj != null) {
+									EClass eClass = refObj.eClass();
+									String referenceName = referenceMapper.getReferenceName();
+									EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
+									if (feature == null) {
+										throw new ConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), asMarked(source)); 
+									} else if (feature instanceof EReference) {
+										Object featureValue = refObj.eGet(feature);
+										if (feature.isMany()) {
+											ret.addAll((Collection<EObject>) featureValue);
+										} else if (featureValue instanceof EObject) {
+											ret.add((EObject) featureValue);
+										}
+									} else {
+										throw new ConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), null, asMarked(source)); 									
+									}
+								}
+							}
+						}
+					}
+					return ret;
+				}
+			}
+			
+			return super.select(source, registry, progressMonitor);
+		}
+		
+	};
+	
 	/**
 	 * Override to return content mappers for different passes. 
 	 * This implementation returns {@link PropertySetterFeatureMapper}.
@@ -274,66 +351,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @return
 	 */
 	protected Mapper<EObject, EObject> getMapper(int pass) {
-		return new PropertySetterFeatureMapper<EObject, EObject>() {
-
-			@Override
-			protected URI getBaseURI(EObject source) {
-				return AbstractDrawioFactory.this.getBaseURI(source);
-			}
-			
-			@Override
-			protected String getProperty(EObject eObj, String property) {
-				return AbstractDrawioFactory.this.getProperty(eObj, property);
-			}
-			
-			@Override
-			protected EClassifier getType(String type, EObject context) {
-				return AbstractDrawioFactory.this.getType(type, context);
-			}
-			
-			@Override
-			protected String getPropertyNamespace() {
-				return AbstractDrawioFactory.this.getPropertyNamespace();
-			}
-			
-			@Override
-			protected EvaluationContext createEvaluationContext() {
-				return AbstractDrawioFactory.this.createEvaluationContext();
-			}
-			
-			@SuppressWarnings("unchecked")
-			@Override
-			protected Iterable<EObject> select(EObject source, Map<EObject, EObject> registry, ProgressMonitor progressMonitor) {
-				String referenceProperty = getReferenceProperty();
-				if (!Util.isBlank(referenceProperty)) {		
-					String referenceName = getProperty(source, referenceProperty);
-					if (!Util.isBlank(referenceName)) {
-						for (EObject logicalParent = getLogicalParent(source); logicalParent != null; logicalParent = getLogicalParent(logicalParent)) {
-							EObject logicalParentSemanticElement = registry.get(logicalParent);
-							if (logicalParentSemanticElement != null) {
-								EClass eClass = logicalParentSemanticElement.eClass();
-								EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
-								if (feature == null) {
-									throwConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), null, source); 
-								} else if (feature instanceof EReference) {
-									Object featureValue = logicalParentSemanticElement.eGet(feature);
-									if (feature.isMany()) {
-										return (Iterable<EObject>) featureValue;
-									}									
-									return featureValue instanceof EObject ? Collections.singleton((EObject) featureValue) : Collections.emptyList();
-								} else {
-									throwConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), null, source); 									
-								}
-							}
-						}
-						return Collections.emptyList();
-					}
-				}
-				
-				return super.select(source, registry, progressMonitor);
-			}
-			
-		};
+		return mapper;
 	}
 	
 	/**
@@ -1038,10 +1056,174 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	protected String getReferenceProperty() {
 		return getPropertyNamespace() + "reference";
 	}
+	
+	protected class ReferenceMapper {
 		
+		private static final String NAME_KEY = "name";
+		private static final String CONDITION_KEY = "condition";
+		private static final String EXPRESSION_KEY = "expression";
+		private static final String ELEMENT_CONDITION_KEY = "element-condition";
+		private static final String ELEMENT_EXPRESSION_KEY = "element-expression";
+		
+		private static final String REGISTRY_VAR = "registry";
+		private static final String SOURCE_PATH_VAR = "sourcePath";
+		
+		private Map<?,?> spec;
+		
+		private String referenceName;
+		
+		public ReferenceMapper(String specYaml, EObject context) {
+			Yaml yaml = new Yaml();
+			Object specObj = yaml.load(specYaml);
+			if (specObj instanceof Map) {			
+				this.spec =  (Map<?,?>) specObj;
+			} else if (specObj instanceof String) {
+				 this.spec =  Collections.singletonMap(NAME_KEY, specObj);			
+			} else {						
+				throw new ConfigurationException("Usupported reference configuration type: " + specObj, asMarked(context));
+			}
+			
+			Object rName = this.spec.get(NAME_KEY);
+			if (rName instanceof String) {
+				this.referenceName = (String) rName;
+			} else {
+				throw new ConfigurationException("Reference name is not a string: " + specObj, asMarked(context));				
+			}
+		}
+		
+		public String getReferenceName() {
+			return referenceName;
+		}
+
+		public boolean matchLogicalAncestorSemanticelement(
+				EObject logicalAncestorSemanticElement, 
+				List<EObject> logicalAncestorPath,
+				Map<EObject, EObject> registry,
+				EObject context) {
+			
+			Object cObj = spec.get(CONDITION_KEY);
+			if (cObj == null) {
+				return logicalAncestorSemanticElement != null; // Shall always be true?
+			}
+			
+			if (cObj instanceof String) {
+				mapper.evaluatePredicate(
+						logicalAncestorSemanticElement, 
+						(String) cObj, 
+						Map.ofEntries(
+								Map.entry(REGISTRY_VAR, registry),
+								Map.entry(SOURCE_PATH_VAR, logicalAncestorPath)), 
+						context);
+			}
+			
+			throw new ConfigurationException("Usupported reference condition type: " + cObj, asMarked(context));		
+		}
+		
+		public EObject getLogicalAncestorSemanticElementRefObj(
+				EObject logicalAncestorSemanticElement, 
+				List<EObject> logicalAncestorPath,
+				Map<EObject, EObject> registry, 
+				EObject context) {
+			
+			Object eObj = spec.get(EXPRESSION_KEY);
+			if (eObj == null) {
+				return logicalAncestorSemanticElement;
+			}
+			
+			if (eObj instanceof String) {
+				mapper.evaluate(
+						logicalAncestorSemanticElement, 
+						(String) eObj, 
+						Map.ofEntries(
+								Map.entry(REGISTRY_VAR, registry),
+								Map.entry(SOURCE_PATH_VAR, logicalAncestorPath)), 
+						EObject.class,
+						context);
+			}
+			
+			throw new ConfigurationException("Usupported reference expression type: " + eObj, asMarked(context));		
+		}
+		
+		private boolean matchContentsSemanticelement(
+				EObject contentsSemanticElement, 
+				List<EObject> sourcePath,
+				Map<EObject, EObject> registry,
+				EObject context) {
+			
+			Object cObj = spec.get(ELEMENT_CONDITION_KEY);
+			if (cObj == null) {
+				return sourcePath.size() == 2; // Immediate children
+			}
+			
+			if (cObj instanceof String) {
+				mapper.evaluatePredicate(
+						contentsSemanticElement, 
+						(String) cObj, 
+						Map.ofEntries(
+								Map.entry(REGISTRY_VAR, registry),
+								Map.entry(SOURCE_PATH_VAR, sourcePath)), 
+						context);
+			}
+			
+			throw new ConfigurationException("Usupported reference element condition type: " + cObj, asMarked(context));		
+		}
+		
+		private EObject getContentsSemanticElementRefObj(
+				EObject contentsSemanticElement, 
+				List<EObject> sourcePath,
+				Map<EObject, EObject> registry, 
+				EObject context) {
+			
+			Object eObj = spec.get(ELEMENT_EXPRESSION_KEY);
+			if (eObj == null) {
+				return contentsSemanticElement;
+			}
+			
+			if (eObj instanceof String) {
+				mapper.evaluate(
+						contentsSemanticElement, 
+						(String) eObj, 
+						Map.ofEntries(
+								Map.entry(REGISTRY_VAR, registry),
+								Map.entry(SOURCE_PATH_VAR, sourcePath)), 
+						EObject.class,
+						context);
+			}
+			
+			throw new ConfigurationException("Usupported reference element expression type: " + eObj, asMarked(context));		
+		}
+		
+		
+		public List<EObject> getElements(
+				LinkedList<EObject> sourcePath,
+				Map<EObject, EObject> registry, 
+				Predicate<EObject> tracker,
+				EObject context,
+				ProgressMonitor progressMonitor) {
+			
+			List<EObject> ret = new ArrayList<>();			
+			for (EObject childSource: mapper.contents(sourcePath.getLast(), tracker)) {
+				sourcePath.add(childSource);
+				for (EObject childSemanticElement: mapper.select(childSource, registry, null)) {
+					if (matchContentsSemanticelement(childSemanticElement, sourcePath, registry, context)) {
+						EObject refObj = getContentsSemanticElementRefObj(childSemanticElement, sourcePath, registry, context);
+						if (refObj != null) {
+							ret.add(refObj);
+						}
+					}
+				}
+				ret.addAll(getElements(sourcePath, registry, tracker, context, progressMonitor));
+				sourcePath.removeLast();				
+			}
+			
+			return ret;
+		}		
+		
+	}
+			
 	@SuppressWarnings("unchecked")
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 1)
-	public final void wireSemanticFeatures(
+	public final void wireSemanticReferences(
 			org.nasdanika.drawio.model.Layer drawioModelElement,
 			Map<EObject, EObject> registry,
 			int pass,
@@ -1049,30 +1231,40 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		
 		String referenceProperty = getReferenceProperty();
 		if (!Util.isBlank(referenceProperty)) {		
-			String referenceName = getProperty(drawioModelElement, referenceProperty);
-			if (!Util.isBlank(referenceName)) {
-				for (EObject logicalParent = getLogicalParent(drawioModelElement); logicalParent != null; logicalParent = getLogicalParent(logicalParent)) {
-					EObject logicalParentSemanticElement = registry.get(logicalParent);
-					if (logicalParentSemanticElement != null) {
-						EClass eClass = logicalParentSemanticElement.eClass();
-						EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
-						if (feature == null) {
-							throw new ConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), drawioModelElement); 
-						} else if (feature instanceof EReference) {							
-							for (EObject layerElement: drawioModelElement.getElements()) {
-								EObject semanticLayerElement = registry.get(layerElement);
-								if (semanticLayerElement != null && feature.getEType().isInstance(semanticLayerElement)) {
-									if (feature.isMany()) {
-										((Collection<EObject>) logicalParentSemanticElement.eGet(feature)).add(semanticLayerElement);
-									} else {
-										logicalParentSemanticElement.eSet(feature, semanticLayerElement);										
-									}									
+			String referenceSpec = getProperty(drawioModelElement, referenceProperty);			
+			if (!Util.isBlank(referenceSpec)) {
+				ReferenceMapper referenceMapper = new ReferenceMapper(referenceSpec, drawioModelElement);
+				List<EObject> logicalAncestorsPath = new ArrayList<>();
+				Z: for (EObject logicalAncestor = getLogicalParent(drawioModelElement); logicalAncestor != null; logicalAncestor = getLogicalParent(logicalAncestor)) {
+					logicalAncestorsPath.add(logicalAncestor);					
+					for (EObject logicalAncestorSemanticElement: mapper.select(logicalAncestor, registry, progressMonitor)) {						
+						if (referenceMapper.matchLogicalAncestorSemanticelement(logicalAncestorSemanticElement, logicalAncestorsPath, registry, drawioModelElement)) {
+							EObject refObj = referenceMapper.getLogicalAncestorSemanticElementRefObj(logicalAncestorSemanticElement, logicalAncestorsPath, registry, drawioModelElement); 
+							if (refObj != null) {
+								EClass eClass = refObj.eClass();
+								String referenceName = referenceMapper.getReferenceName();
+								EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
+								if (feature == null) {
+									throw new ConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), drawioModelElement); 
+								} else if (feature instanceof EReference) {							
+									LinkedList<EObject> sourcePath = new LinkedList<EObject>();
+									sourcePath.add(drawioModelElement);
+									for (EObject layerElement: referenceMapper.getElements(sourcePath, registry, new HashSet<>()::add, drawioModelElement, progressMonitor)) {
+										EObject semanticLayerElement = registry.get(layerElement);
+										if (semanticLayerElement != null && feature.getEType().isInstance(semanticLayerElement)) {
+											if (feature.isMany()) {
+												((Collection<EObject>) logicalAncestorSemanticElement.eGet(feature)).add(semanticLayerElement);
+											} else {
+												logicalAncestorSemanticElement.eSet(feature, semanticLayerElement);										
+											}									
+										}
+									}
+								} else {
+									throw new ConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), drawioModelElement); 									
 								}
+								break Z;								
 							}
-						} else {
-							throw new ConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), drawioModelElement); 									
 						}
-						break;
 					}
 				}
 			}

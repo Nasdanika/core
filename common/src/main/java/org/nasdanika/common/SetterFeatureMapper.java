@@ -518,14 +518,25 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		return true;
 	}	
 
-	protected boolean evaluatePredicate(Object obj, String expr, Map<String,Object> variables, EObject context) {
+	public boolean evaluatePredicate(
+			Object obj, 
+			String expr, 
+			Map<String,Object> variables, 
+			EObject context) {
+		
 		if (Util.isBlank(expr)) {
 			return true;
 		}
 		return evaluate(obj, expr, variables, Boolean.class, context);
 	}
 
-	protected <V> V evaluate(Object obj, String expr, Map<String,Object> variables, Class<V> resultType, EObject context) {
+	public <V> V evaluate(
+			Object obj, 
+			String expr, 
+			Map<String,Object> variables, 
+			Class<V> resultType, 
+			EObject context) {
+		
 		if (Util.isBlank(expr)) {
 			return null;
 		}

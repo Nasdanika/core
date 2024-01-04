@@ -121,7 +121,7 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 		
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Iterable<T> select(
+	public Iterable<T> select(
 			S source, 
 			Map<S, T> registry, 
 			ProgressMonitor progressMonitor) {

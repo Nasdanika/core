@@ -36,7 +36,7 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 	
 	
 	@Override
-	protected List<? extends EObject> contents(EObject eObject, Predicate<EObject> tracker) {
+	public List<? extends EObject> contents(EObject eObject, Predicate<EObject> tracker) {
 		if (eObject instanceof Tag) {
 			return ((Tag) eObject).getElements();
 		}
