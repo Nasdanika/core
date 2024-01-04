@@ -112,25 +112,6 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 		}
 		return null;
 	}
-	
-	@SafeVarargs
-	private Collection<S> getSources(Object target, Map<S, T> registry, Predicate<S>... predicates) {
-		Collection<S> result = new ArrayList<>();
-		if (target != null) {
-			Z: for (Entry<S, T> re: registry.entrySet()) {
-				if (Objects.equals(target, re.getValue())) {
-					S source = re.getKey();
-					for (Predicate<S> predicate: predicates) {
-						if (!predicate.test(source)) {
-							continue Z;
-						}
-					}
-					result.add(source);
-				}
-			}
-		}
-		return result;
-	}
 		
 	private enum Comparators {
 		
@@ -328,9 +309,11 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 			BiPredicate<? super S, ? super S> predicate,
 			Map<S,T> registry) {
 		
+		@SuppressWarnings("unchecked")
 		Collection<S> as = new ArrayList<>(getSources(ase, registry));
 		as.add(null); // outer join
 		
+		@SuppressWarnings("unchecked")
 		Collection<S> bs = new ArrayList<>(getSources(bse, registry));
 		bs.add(null); // outer join
 		
@@ -355,6 +338,7 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 	 * @param type
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	protected Comparator<Object> createAngularComparator(
 			EObject semanticElement,
 			EStructuralFeature feature,

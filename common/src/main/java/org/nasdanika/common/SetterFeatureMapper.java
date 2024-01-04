@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EClass;
@@ -248,12 +249,31 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		throwConfigurationException("Unexpected config type: " + configs, null, context);
 		return null; // Never gets here
 	}
+			
+	protected Collection<S> getSources(Object target, Map<S, T> registry, @SuppressWarnings("unchecked") Predicate<S>... predicates) {
+		Collection<S> result = new ArrayList<>();
+		if (target != null) {
+			Z: for (Entry<S, T> re: registry.entrySet()) {
+				if (Objects.equals(target, re.getValue())) {
+					S source = re.getKey();
+					for (Predicate<S> predicate: predicates) {
+						if (!predicate.test(source)) {
+							continue Z;
+						}
+					}
+					result.add(source);
+				}
+			}
+		}
+		return result;
+	}	
 	
 	protected enum Greedy { FALSE, NO_CHILDREN, TRUE }
 	
 	protected Setter<S,T> loadFeatureSetter(Object config, EObject context, Setter<S, T> chain) {
 		return new Setter<S, T>() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public boolean setFeature(
 					T eObj, 
@@ -291,11 +311,15 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 									EObject fvc = featureValueEObject.eContainer();
 									if (fvc != null) {
 										Greedy greedy = getGreedy(configElement, context);
-										if (greedy != Greedy.FALSE) {
-											if (EcoreUtil.isAncestor(eObj, fvc)) {
-												shallSet = greedy != Greedy.NO_CHILDREN; // Grab only if truly greedy
-											} else {
-												shallSet = false; // Not a child, grab
+										if (greedy == Greedy.FALSE) {
+											shallSet = false;
+										} else if (greedy == Greedy.NO_CHILDREN) {
+											for (S eObjSource: getSources(eObj, registry) ) {
+												for (S fvcSource: getSources(fvc, registry)) {
+													if (EcoreUtil.isAncestor(eObjSource, fvcSource)) {
+														shallSet = false; // No taking from children
+													}													
+												}												
 											}
 										}
 									}
@@ -305,7 +329,6 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 							if (shallSet) {
 								Object element = convert(featureValue, feature.getEType(), context);
 								if (feature.isMany()) {
-									@SuppressWarnings("unchecked")
 									List<Object> fvl = (List<Object>) eObj.eGet(feature);
 									int position = getPosition(configElement, context);
 									if (position == -1) {

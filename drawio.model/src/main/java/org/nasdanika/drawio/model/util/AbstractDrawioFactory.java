@@ -308,15 +308,15 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				if (!Util.isBlank(referenceProperty)) {		
 					String referenceName = getProperty(source, referenceProperty);
 					if (!Util.isBlank(referenceName)) {
-						for (EObject eContainer = source.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
-							EObject containerSemanticElement = registry.get(eContainer);
-							if (containerSemanticElement != null) {
-								EClass eClass = containerSemanticElement.eClass();
+						for (EObject logicalParent = getLogicalParent(source); logicalParent != null; logicalParent = getLogicalParent(logicalParent)) {
+							EObject logicalParentSemanticElement = registry.get(logicalParent);
+							if (logicalParentSemanticElement != null) {
+								EClass eClass = logicalParentSemanticElement.eClass();
 								EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
 								if (feature == null) {
 									throwConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), null, source); 
 								} else if (feature instanceof EReference) {
-									Object featureValue = containerSemanticElement.eGet(feature);
+									Object featureValue = logicalParentSemanticElement.eGet(feature);
 									if (feature.isMany()) {
 										return (Iterable<EObject>) featureValue;
 									}									
@@ -520,31 +520,37 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 */
 	protected String getBaseURIProperty() {
 		return getPropertyNamespace() + Context.BASE_URI_PROPERTY;
-	}		
-	
-	public URI getBaseURI(EObject eObj) {
-		EObject logicalParent; 
-		
+	}	
+
+	/**
+	 * Computes logical parent - source for connection, first link for pages.
+	 * @param eObj
+	 * @return
+	 */
+	protected EObject getLogicalParent(EObject eObj) {
 		if (eObj instanceof Connection) {
 			Connection connection = (Connection) eObj;
 			Node cSource = connection.getSource();
-			logicalParent = cSource == null ? connection.eContainer() : cSource;
-		} else {		
-			logicalParent = eObj.eContainer();
-		}
-		URI logicalParentBaseURI;
-		if (logicalParent instanceof org.nasdanika.drawio.model.ModelElement) {
-			logicalParentBaseURI = getBaseURI((org.nasdanika.drawio.model.ModelElement) logicalParent);
-		} else {
-			logicalParentBaseURI = eObj.eResource().getURI();
-			if (logicalParent instanceof org.nasdanika.drawio.model.Model) {
-				Page page = (Page) logicalParent.eContainer();
-				for (org.nasdanika.drawio.model.ModelElement link: page.getLinks()) {
-					logicalParentBaseURI = getBaseURI(link);
-					break;
-				}
+			return  cSource == null ? connection.eContainer() : cSource;
+		} 
+		
+		if (eObj instanceof Page) {
+			for (org.nasdanika.drawio.model.ModelElement link: ((Page) eObj).getLinks()) {
+				return link;
 			}
 		}
+		
+		return eObj.eContainer();
+	}
+	
+	public URI getBaseURI(EObject eObj) {
+		if (eObj == null) {
+			return null;
+		}
+		
+		EObject logicalParent = getLogicalParent(eObj);		
+		URI logicalParentBaseURI = logicalParent == null ? eObj.eResource().getURI() : getBaseURI(logicalParent);
+
 		String baseURIProperty = getBaseURIProperty();
 		if (Util.isBlank(baseURIProperty)) {
 			return logicalParentBaseURI;
@@ -1045,10 +1051,10 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		if (!Util.isBlank(referenceProperty)) {		
 			String referenceName = getProperty(drawioModelElement, referenceProperty);
 			if (!Util.isBlank(referenceName)) {
-				for (EObject eContainer = drawioModelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
-					EObject containerSemanticElement = registry.get(eContainer);
-					if (containerSemanticElement != null) {
-						EClass eClass = containerSemanticElement.eClass();
+				for (EObject logicalParent = getLogicalParent(drawioModelElement); logicalParent != null; logicalParent = getLogicalParent(logicalParent)) {
+					EObject logicalParentSemanticElement = registry.get(logicalParent);
+					if (logicalParentSemanticElement != null) {
+						EClass eClass = logicalParentSemanticElement.eClass();
 						EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
 						if (feature == null) {
 							throw new ConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), drawioModelElement); 
@@ -1057,9 +1063,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 								EObject semanticLayerElement = registry.get(layerElement);
 								if (semanticLayerElement != null && feature.getEType().isInstance(semanticLayerElement)) {
 									if (feature.isMany()) {
-										((Collection<EObject>) containerSemanticElement.eGet(feature)).add(semanticLayerElement);
+										((Collection<EObject>) logicalParentSemanticElement.eGet(feature)).add(semanticLayerElement);
 									} else {
-										containerSemanticElement.eSet(feature, semanticLayerElement);										
+										logicalParentSemanticElement.eSet(feature, semanticLayerElement);										
 									}									
 								}
 							}
