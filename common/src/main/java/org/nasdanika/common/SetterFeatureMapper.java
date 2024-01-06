@@ -332,7 +332,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 									List<Object> fvl = (List<Object>) eObj.eGet(feature);
 									int position = getPosition(configElement, context);
 									if (position == -1) {
-										Comparator<Object> comparator = getComparator(eObj, feature, configElement, registry, context);
+										Comparator<Object> comparator = getComparator(eObj, configElement, registry, context);
 										if (comparator == null || fvl.isEmpty()) {										
 											fvl.add(element);
 										} else {
@@ -574,9 +574,8 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	 * @param registry
 	 * @return
 	 */
-	protected Comparator<Object> getComparator(
+	public Comparator<Object> getComparator(
 			EObject semanticElement,
-			EStructuralFeature feature,
 			Object config, 
 			Map<S, T> registry, 
 			EObject context) {
@@ -591,7 +590,6 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			}
 			return createComparator(
 					semanticElement,
-					feature,
 					comparatorConfig, 
 					registry, 
 					context);
@@ -642,9 +640,8 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	 * @param context
 	 * @return
 	 */
-	protected Comparator<Object> createComparator(
+	public Comparator<Object> createComparator(
 			EObject semanticElement,
-			EStructuralFeature feature,
 			Object comparatorConfig, 
 			Map<S, T> registry, 
 			EObject context) {

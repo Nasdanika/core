@@ -2,13 +2,18 @@ package org.nasdanika.drawio.model.util;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,13 +21,17 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -63,6 +72,9 @@ import org.yaml.snakeyaml.error.YAMLException;
  */
 public abstract class AbstractDrawioFactory<S extends EObject> {
 	
+	private static final String ARGUMENTS_KEY = "arguments";
+	private static final String ITERATOR_KEY = "iterator";
+	private static final String SELECTOR_KEY = "selector";
 	public static final String DRAWIO_REPRESENTATION = "drawio";
 	public static final String IMAGE_REPRESENTATION = "image";
 	
@@ -77,13 +89,12 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return getPropertyNamespace() + "top-level-page";
 	}	
 	
-	
 	protected String getTagSpecPropertyName() {
 		return getPropertyNamespace() + "tag-spec";
 	}
 	
 	protected String getTagSpecRefPropertyName() {
-		return getPropertyNamespace() + "feature-map-ref";
+		return getPropertyNamespace() + "tag-spec-ref";
 	}
 	
 	protected String getTagSpecStr(EObject source) {
@@ -159,7 +170,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				
 				throw new ConfigurationException("Usupported configuration type: " + tagSpecObj, asMarked(eObj));
 			} catch (YAMLException yamlException) {
-				throw new ConfigurationException(yamlException, asMarked(eObj));
+				throw new ConfigurationException("Error loading tag spec: " + yamlException , yamlException, asMarked(eObj));
 			}
 		}
 		
@@ -307,7 +318,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			if (!Util.isBlank(referenceProperty)) {		
 				String referenceSpec = getProperty(source, referenceProperty);			
 				if (!Util.isBlank(referenceSpec)) {
-					Collection<EObject> ret = new ArrayList<>();
+					List<EObject> ret = new ArrayList<>();
 					ReferenceMapper referenceMapper = new ReferenceMapper(referenceSpec, source);
 					List<EObject> logicalAncestorsPath = new ArrayList<>();
 					for (EObject logicalAncestor = getLogicalParent(source); logicalAncestor != null; logicalAncestor = getLogicalParent(logicalAncestor)) {
@@ -333,8 +344,12 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 									}
 								}
 							}
+							Comparator<Object> comparator = referenceMapper.getComparator(logicalAncestorSemanticElement, registry);
+							if (comparator != null) {
+								ret.sort(comparator);
+							}
 						}
-					}
+					}					
 					return ret;
 				}
 			}
@@ -689,7 +704,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	}
 		
 	protected String getSelectorProperty() {
-		return getPropertyNamespace() + "selector";
+		return getPropertyNamespace() + SELECTOR_KEY;
 	}
 	
 	/**
@@ -1071,6 +1086,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		private Map<?,?> spec;
 		
 		private String referenceName;
+		private EObject context;
 		
 		public ReferenceMapper(String specYaml, EObject context) {
 			Yaml yaml = new Yaml();
@@ -1089,6 +1105,13 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			} else {
 				throw new ConfigurationException("Reference name is not a string: " + specObj, asMarked(context));				
 			}
+			this.context = context;
+			
+		}
+		
+		public Comparator<Object> getComparator(EObject semanticElement, Map<EObject, EObject> registry) {
+			return mapper.getComparator(semanticElement, spec, registry, context);
+			
 		}
 		
 		public String getReferenceName() {
@@ -1249,13 +1272,31 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 								} else if (feature instanceof EReference) {							
 									LinkedList<EObject> sourcePath = new LinkedList<EObject>();
 									sourcePath.add(drawioModelElement);
-									for (EObject layerElement: referenceMapper.getElements(sourcePath, registry, new HashSet<>()::add, drawioModelElement, progressMonitor)) {
-										EObject semanticLayerElement = registry.get(layerElement);
-										if (semanticLayerElement != null && feature.getEType().isInstance(semanticLayerElement)) {
+									Comparator<Object> comparator = referenceMapper.getComparator(logicalAncestorSemanticElement, registry);
+									for (EObject semanticElement: referenceMapper.getElements(sourcePath, registry, new HashSet<>()::add, drawioModelElement, progressMonitor)) {
+										if (semanticElement != null && feature.getEType().isInstance(semanticElement)) {
 											if (feature.isMany()) {
-												((Collection<EObject>) logicalAncestorSemanticElement.eGet(feature)).add(semanticLayerElement);
+												// TODO - comparator
+												List<EObject> fvl = (List<EObject>) logicalAncestorSemanticElement.eGet(feature);
+												if (comparator == null || fvl.isEmpty()) {										
+													fvl.add(semanticElement);
+												} else {
+													// Iterating and comparing
+													boolean added = false;
+													for (int i = 0; i < fvl.size(); ++i) {
+														Object fvle = fvl.get(i);
+														if (comparator.compare(semanticElement, fvle) < 0) {
+															fvl.add(i, semanticElement);
+															added = true;
+															break;
+														}
+													}
+													if (!added) {
+														fvl.add(semanticElement);
+													}
+												}
 											} else {
-												logicalAncestorSemanticElement.eSet(feature, semanticLayerElement);										
+												logicalAncestorSemanticElement.eSet(feature, semanticElement);										
 											}									
 										}
 									}
@@ -1752,6 +1793,183 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	
 	protected abstract EObject createTextDoc(URI docRef, ProgressMonitor progressMonitor);
 	
-	protected abstract EObject createMarkdownDoc(URI docRef, ProgressMonitor progressMonitor);	
+	protected abstract EObject createMarkdownDoc(URI docRef, ProgressMonitor progressMonitor);
+	
+	// --- Phase 5: Operations
+		
+	protected String getOperationMapPropertyName() {
+		return getPropertyNamespace() + "operation-map";
+	}
+	
+	protected String getOperationMapRefPropertyName() {
+		return getPropertyNamespace() + "operation-map-ref";
+	}
+	
+	protected String getOperationMapStr(EObject source) {
+		String ompn = getOperationMapPropertyName();
+		if (!Util.isBlank(ompn)) {
+			String om = getProperty(source, ompn);
+			if (!Util.isBlank(om)) {
+				return om;
+			}
+		}
+		
+		String omrpn = getOperationMapRefPropertyName();
+		if (!Util.isBlank(omrpn)) {
+			String ref = getProperty(source, omrpn);
+			if (!Util.isBlank(ref)) {
+				URI refURI = URI.createURI(ref);
+				URI baseURI = getBaseURI(source);
+				if (baseURI != null && !baseURI.isRelative()) {
+					refURI = refURI.resolve(baseURI);
+				}
+				try {
+					DefaultConverter converter = DefaultConverter.INSTANCE;
+					Reader reader = converter.toReader(refURI);
+					return converter.toString(reader);
+				} catch (IOException e) {
+					throw new ConfigurationException("Error loading operation map from " + refURI, e, asMarked(source));
+				}
+			}
+		}
+		return null;
+	}	
+	
+	/**
+	 * Invokes {@link EOperation}s of the semantic element. 	
+	 * @param diagramElement
+	 * @param semanticElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(phase = 5)
+	public final void mapOperations(
+			EObject diagramElement,
+			S semanticElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+
+		String opMapStr = getOperationMapStr(diagramElement);
+		if (!Util.isBlank(opMapStr)) {
+			try {
+				Yaml yaml = new Yaml();
+				Object opMapObj = yaml.load(opMapStr);
+				if (opMapObj instanceof Map) {
+					Map<?,?> opMap = (Map<?,?>) opMapObj;
+					EClass eClass = semanticElement.eClass();
+					for (EOperation eOperation: eClass.getEAllOperations()) {
+						Object opSpec = opMap.get(eOperation.getName());
+						if (opSpec instanceof Map) {
+							opSpec = Collections.singleton(opSpec); // Wrapping into a list to simplify further logic
+						}
+						
+						if (opSpec instanceof Iterable) {
+							OSE: for (Object opSpecElement: (Iterable<?>) opSpec) {
+								if (opSpecElement instanceof Map) {
+									Map<?,?> opSpecElementMap = (Map<?,?>) opSpecElement;
+									org.nasdanika.persistence.Util.checkUnsupportedKeys(
+											opSpecElementMap, 
+											SELECTOR_KEY, 
+											ITERATOR_KEY, 
+											ARGUMENTS_KEY);
+									
+									Map<String,String> argMap = new HashMap<>(); 
+									Object arguments = opSpecElementMap.get(ARGUMENTS_KEY);
+									if (arguments instanceof Map) {
+										for (Entry<?, ?> ae: ((Map<?,?>) arguments).entrySet()) {
+											Object key = ae.getKey();
+											if (key instanceof String) {
+												boolean hasParameter = false;
+												for (EParameter prm: eOperation.getEParameters()) {
+													if (prm.getName().equals(key)) {
+														hasParameter = true;
+														break;
+													}
+												}
+												
+												if (!hasParameter) {
+													continue OSE;
+												}
+												
+												Object val = ae.getValue();
+												if (val instanceof String) {
+													argMap.put((String) key, (String) val);
+												} else {
+													throw new ConfigurationException("Usupported operation argument expression type: " + val, asMarked(diagramElement));																																																													
+												}
+											} else {
+												throw new ConfigurationException("Usupported operation parameter name type: " + key, asMarked(diagramElement));																																																
+											}
+										}
+									} else {
+										throw new ConfigurationException("Usupported operation arguments type: " + arguments, asMarked(diagramElement));																																				
+									}																		
+									
+									Object selector = opSpecElementMap.get(SELECTOR_KEY);
+									if (selector instanceof String) {
+										if (!mapper.evaluatePredicate(eOperation, (String) selector, null, diagramElement)) {
+											continue;
+										}
+									} else if (selector != null) {
+										throw new ConfigurationException("Usupported operation selector type: " + selector, asMarked(diagramElement));																										
+									}
+									
+									Iterator<?> it = Collections.singleton(diagramElement).iterator();
+									
+									Object iterator = opSpecElementMap.get(ITERATOR_KEY);
+									if (iterator instanceof String) {										
+										it = mapper.evaluate(
+												diagramElement, 
+												(String) iterator,												
+												Map.of("registry", registry),
+												Iterator.class,
+												diagramElement); 
+									} else if (iterator != null) {
+										throw new ConfigurationException("Usupported operation iterator type: " + iterator, asMarked(diagramElement));																										
+									}
+									
+									if (it != null) {
+										while (it.hasNext()) {
+											Object next = it.next();
+											EList<Object> argList = ECollections.newBasicEList();
+											for (EParameter prm: eOperation.getEParameters()) {
+												String argExpr = argMap.get(prm.getName());
+												if (Util.isBlank(argExpr)) {
+													argList.add(null);
+												} else {
+													Object arg = mapper.evaluate(
+															next, 
+															argExpr,												
+															Map.of("registry", registry),
+															Object.class,
+															diagramElement);
+													argList.add(arg);
+												}
+											}
+											try {
+												semanticElement.eInvoke(eOperation, argList);
+											} catch (InvocationTargetException e) {
+												throw new ConfigurationException("Error invoking eOperation " + eOperation, e, asMarked(diagramElement));																
+											}
+										}
+									}
+								} else {
+									throw new ConfigurationException("Usupported operation spec element type: " + opSpecElement, asMarked(diagramElement));																
+								}								
+							}
+						} else {
+							throw new ConfigurationException("Usupported operation spec type: " + opSpec, asMarked(diagramElement));							
+						}						
+					}
+				} else {				
+					throw new ConfigurationException("Usupported operation map type: " + opMapObj, asMarked(diagramElement));
+				}
+			} catch (YAMLException yamlException) {
+				throw new ConfigurationException("Error loading operation map: " + yamlException, yamlException, asMarked(diagramElement));
+			}
+		}			
+	}	
 	
 }

@@ -12,7 +12,6 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.model.Connection;
 import org.nasdanika.drawio.model.Node;
@@ -172,9 +171,8 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 	 * </UI>
 	 */	
 	@Override
-	protected Comparator<Object> createComparator(
+	public Comparator<Object> createComparator(
 			EObject semanticElement,
-			EStructuralFeature feature,
 			Object comparatorConfig, 
 			Map<S, T> registry, 
 			EObject context) {
@@ -192,11 +190,11 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 		} 
 	
 		if (Comparators.clockwise.key.equals(comparatorConfig)) {
-			return createAngularComparator(semanticElement, feature, null, registry, context, NATURAL_COMPARATOR).reversed();
+			return createAngularComparator(semanticElement, null, registry, context, NATURAL_COMPARATOR).reversed();
 		}
 		
 		if (Comparators.counterclockwise.key.equals(comparatorConfig)) {
-			return createAngularComparator(semanticElement, feature, null, registry, context, NATURAL_COMPARATOR);
+			return createAngularComparator(semanticElement, null, registry, context, NATURAL_COMPARATOR);
 		}
 		
 		for (CartesianNodeComparator.Direction direction: CartesianNodeComparator.Direction.values()) {
@@ -226,11 +224,11 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 					}
 					
 					if (Comparators.clockwise.key.equals(cce.getKey())) {
-						return createAngularComparator(semanticElement, feature, cce.getValue(), registry, context, NATURAL_COMPARATOR).reversed();
+						return createAngularComparator(semanticElement, cce.getValue(), registry, context, NATURAL_COMPARATOR).reversed();
 					}
 					
 					if (Comparators.counterclockwise.key.equals(cce.getKey())) {
-						return createAngularComparator(semanticElement, feature, cce.getValue(), registry, context, NATURAL_COMPARATOR);
+						return createAngularComparator(semanticElement, cce.getValue(), registry, context, NATURAL_COMPARATOR);
 					}
 					
 					if (Comparators.flow.key.equals(cce.getKey()) || Comparators.reverseFlow.key.equals(cce.getKey())) {
@@ -238,7 +236,7 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 						Comparator<Object> fallback; 
 						Object cConfig = cce.getValue();						
 						if (cConfig instanceof String) {
-							fallback = createComparator(semanticElement, feature, cConfig, registry, context);
+							fallback = createComparator(semanticElement, cConfig, registry, context);
 							connectionPredicate = null;
 						} else if (cConfig instanceof Map) {
 							Map<?,?> cConfigMap = (Map<?,?>) cConfig;
@@ -246,7 +244,7 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 							if (fallbackConfig == null) {
 								throwConfigurationException("No 'fallback' comparator definition: " + cConfig, null, context);								
 							} 
-							fallback = createComparator(semanticElement, feature, fallbackConfig, registry, context);
+							fallback = createComparator(semanticElement, fallbackConfig, registry, context);
 							Object condition = cConfigMap.get(CONDITION_KEY);
 							if (condition == null) {
 								connectionPredicate = null;
@@ -276,7 +274,7 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 			}
 		}
 		
-		return super.createComparator(semanticElement, feature, comparatorConfig, registry, context);
+		return super.createComparator(semanticElement, comparatorConfig, registry, context);
 	}
 	
 	protected Double getAngle(Object value, Node base, EObject context) {
@@ -341,7 +339,6 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 	@SuppressWarnings("unchecked")
 	protected Comparator<Object> createAngularComparator(
 			EObject semanticElement,
-			EStructuralFeature feature,
 			Object angleConfig, 
 			Map<S, T> registry,			
 			EObject context,
