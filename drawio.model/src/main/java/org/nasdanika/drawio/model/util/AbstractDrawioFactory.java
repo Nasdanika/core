@@ -2,6 +2,7 @@ package org.nasdanika.drawio.model.util;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1949,9 +1950,18 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 											it = ((Iterable<?>) itVal).iterator();
 										} else if (itVal instanceof Stream) {
 											it = ((Stream<?>) itVal).iterator();
+										} else if (itVal == null) {
+											it = Collections.emptyIterator();
+										} else if (itVal.getClass().isArray()) {
+											Collection<Object> values = new ArrayList<>();
+											for (int i = 0; i < Array.getLength(itVal); ++i) {
+												values.add(Array.get(itVal, i));
+											}
+											it = values.iterator();
 										} else {
+											
 											it = Collections.singleton(itVal).iterator();
-										}
+										} 
 									} else if (iterator != null) {
 										throw new ConfigurationException("Usupported operation iterator type: " + iterator, asMarked(diagramElement));																										
 									}
