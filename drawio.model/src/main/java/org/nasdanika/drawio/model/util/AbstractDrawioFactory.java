@@ -72,6 +72,7 @@ import org.yaml.snakeyaml.error.YAMLException;
  */
 public abstract class AbstractDrawioFactory<S extends EObject> {
 	
+	private static final String PASS_KEY = "pass";
 	private static final String ARGUMENTS_KEY = "arguments";
 	private static final String ITERATOR_KEY = "iterator";
 	private static final String SELECTOR_KEY = "selector";
@@ -826,7 +827,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			ProgressMonitor progressMonitor) {
 		
 		evaluationContext.setVariable("registry", registry);
-		evaluationContext.setVariable("pass", pass);
+		evaluationContext.setVariable(PASS_KEY, pass);
 		evaluationContext.setVariable("progressMonitor", progressMonitor);
 	}
 	
@@ -1016,7 +1017,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			ProgressMonitor progressMonitor) {
 		
 		evaluationContext.setVariable("registry", registry);
-		evaluationContext.setVariable("pass", pass);
+		evaluationContext.setVariable(PASS_KEY, pass);
 		evaluationContext.setVariable("progressMonitor", progressMonitor);
 	}
 		
@@ -1844,13 +1845,14 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @param progressMonitor
 	 */
 	@org.nasdanika.common.Transformer.Wire(phase = 5)
-	public final void mapOperations(
+	public final boolean mapOperations(
 			EObject diagramElement,
 			S semanticElement,
 			Map<EObject, EObject> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 
+		boolean result = true;
 		String opMapStr = getOperationMapStr(diagramElement);
 		if (!Util.isBlank(opMapStr)) {
 			try {
@@ -1873,7 +1875,20 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 											opSpecElementMap, 
 											SELECTOR_KEY, 
 											ITERATOR_KEY, 
-											ARGUMENTS_KEY);
+											ARGUMENTS_KEY,
+											PASS_KEY);
+									
+									Object passObj = opSpecElementMap.get(PASS_KEY);
+									if (passObj instanceof Number) {
+										int passNum = ((Number) passObj).intValue();
+										if (passNum > pass) {
+											result = false; // This op shall be invoked later
+										} else if (passNum < pass) {
+											continue OSE; // Already invoked if matched
+										}
+									} else if (passObj != null) {
+										throw new ConfigurationException("Usupported operation pass type: " + passObj, asMarked(diagramElement));																																				
+									}
 									
 									Map<String,String> argMap = new HashMap<>(); 
 									Object arguments = opSpecElementMap.get(ARGUMENTS_KEY);
@@ -1969,7 +1984,8 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			} catch (YAMLException yamlException) {
 				throw new ConfigurationException("Error loading operation map: " + yamlException, yamlException, asMarked(diagramElement));
 			}
-		}			
+		}	
+		return result;
 	}	
 	
 }
