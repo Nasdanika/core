@@ -15,15 +15,19 @@ public class NamedElement {
 	public String getTooltip() {
 		return tooltip;
 	}
+	
 	public void setTooltip(String tooltip) {
 		this.tooltip = tooltip;
 	}
+	
 	public String getLocation() {
 		return location;
 	}
+	
 	public void setLocation(String location) {
 		this.location = location;
 	}	
+	
 	public List<Link> getName() {
 		return name;
 	}	
@@ -42,14 +46,25 @@ public class NamedElement {
 			sb.append(location);
 		}
 		if (!Util.isBlank(tooltip)) {
-			sb.append("{").append(tooltip).append("}");
+			sb.append(" {").append(tooltip).append("}");
 		}
+		String linkText = getLinkText(); 
+		if (!Util.isBlank(linkText)) {
+			sb.append(" ").append(linkText);
+		}
+		
 		sb.append(getLinkStringSuffix());
 		return sb.toString();
 	}
+	
+	protected String getLinkText() {
+		return "";
+	}
+	
 	protected String getLinkStringSuffix() {
 		return "]]";
 	}
+	
 	protected String getLinkStringPrefix() {
 		return " [[";
 	}
