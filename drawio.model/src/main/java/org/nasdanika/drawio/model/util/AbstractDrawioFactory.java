@@ -20,6 +20,7 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
@@ -1935,12 +1936,22 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 									
 									Object iterator = opSpecElementMap.get(ITERATOR_KEY);
 									if (iterator instanceof String) {										
-										it = mapper.evaluate(
+										Object itVal = mapper.evaluate(
 												diagramElement, 
 												(String) iterator,												
 												Map.of("registry", registry),
-												Iterator.class,
-												diagramElement); 
+												Object.class,
+												diagramElement);
+										
+										if (itVal instanceof Iterator) {
+											it = (Iterator<?>) itVal;
+										} else if (itVal instanceof Iterable) {
+											it = ((Iterable<?>) itVal).iterator();
+										} else if (itVal instanceof Stream) {
+											it = ((Stream<?>) itVal).iterator();
+										} else {
+											it = Collections.singleton(itVal).iterator();
+										}
 									} else if (iterator != null) {
 										throw new ConfigurationException("Usupported operation iterator type: " + iterator, asMarked(diagramElement));																										
 									}
