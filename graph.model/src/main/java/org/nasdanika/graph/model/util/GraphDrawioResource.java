@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
+
+import javax.script.ScriptEngine;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -20,6 +23,7 @@ import org.nasdanika.drawio.model.util.AbstractDrawioFactory;
 import org.nasdanika.persistence.Marker;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.expression.spel.support.StandardTypeLocator;
 
 /**
  * Loads Drawio model using {@link DrawioResource} and then transforms it to the graph model.
@@ -64,8 +68,44 @@ public class GraphDrawioResource extends ResourceImpl {
 			}
 			
 			@Override
-			protected EvaluationContext createEvaluationContext() {
-				return GraphDrawioResource.this.createEvaluationContext();
+			protected EvaluationContext createEvaluationContext(EObject context) {
+				EvaluationContext ret = GraphDrawioResource.this.createEvaluationContext(context);
+				if (ret instanceof StandardEvaluationContext) {
+					ClassLoader classLoader = getClassLoader(context);
+					if (classLoader != null) {
+						((StandardEvaluationContext) ret).setTypeLocator(new StandardTypeLocator(classLoader));
+					}
+				}
+				
+				return ret;
+			}
+			
+			@Override
+			protected ClassLoader getClassLoader(EObject context) {
+				Supplier<ClassLoader> lpcs = () -> {
+					EObject logicalParent = getLogicalParent(context);
+					if (logicalParent == null) {
+						return null;
+					}
+					
+					return getClassLoader(logicalParent);
+				};
+				return GraphDrawioResource.this.getClassLoader(
+						context,
+						getBaseURI(context),
+						lpcs);
+			}
+			
+			@Override
+			protected void configureScriptEngine(
+					ScriptEngine engine, 
+					EObject diagramElement, 
+					EObject semanticElement,
+					Map<EObject, EObject> registry, 
+					int pass, 
+					ProgressMonitor progressMonitor) {
+				super.configureScriptEngine(engine, diagramElement, semanticElement, registry, pass, progressMonitor);
+				GraphDrawioResource.this.configureScriptEngine(engine, diagramElement, semanticElement, registry, pass, progressMonitor);
 			}
 			
 			@Override
@@ -125,8 +165,12 @@ public class GraphDrawioResource extends ResourceImpl {
 		return uriResolver.apply(refURI);
 	}
 	
-	protected EvaluationContext createEvaluationContext() {
+	protected EvaluationContext createEvaluationContext(EObject context) {		
 		return new StandardEvaluationContext();
+	}
+	
+	protected ClassLoader getClassLoader(EObject context, URI baseURI, Supplier<ClassLoader> logicalParentClassLoaderSupplier) {
+		return logicalParentClassLoaderSupplier == null ? getClass().getClassLoader() : logicalParentClassLoaderSupplier.get();
 	}	
 
 	protected URI getAppBase() {
@@ -148,5 +192,14 @@ public class GraphDrawioResource extends ResourceImpl {
 		
 	}
 	
+	protected void configureScriptEngine(
+			ScriptEngine engine, 
+			EObject diagramElement, 
+			EObject semanticElement,
+			Map<EObject, EObject> registry, 
+			int pass, 
+			ProgressMonitor progressMonitor) {		
+		
+	}	
 
 }

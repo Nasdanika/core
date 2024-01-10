@@ -542,9 +542,9 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		}
 		
 		try {			
-			ExpressionParser parser = getExpressionParser();
+			ExpressionParser parser = createExpressionParser(context);
 			Expression exp = parser.parseExpression(expr);
-			EvaluationContext evaluationContext = createEvaluationContext();
+			EvaluationContext evaluationContext = createEvaluationContext(context);
 			if (variables != null) {
 				variables.entrySet().forEach(ve -> evaluationContext.setVariable(ve.getKey(), ve.getValue()));
 			}
@@ -558,11 +558,11 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		}
 	}
 	
-	protected EvaluationContext createEvaluationContext() {
+	protected EvaluationContext createEvaluationContext(EObject context) {
 		return new StandardEvaluationContext();
 	}
 
-	protected SpelExpressionParser getExpressionParser() {
+	protected SpelExpressionParser createExpressionParser(EObject context) {
 		return new SpelExpressionParser();
 	}
 	

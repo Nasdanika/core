@@ -6,5 +6,6 @@ module org.nasdanika.drawio.model {
 	
 	requires transitive org.nasdanika.ncore;
 	requires org.jsoup;
+	requires transitive java.scripting;
 
 }

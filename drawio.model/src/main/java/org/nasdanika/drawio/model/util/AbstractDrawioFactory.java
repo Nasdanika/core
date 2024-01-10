@@ -23,6 +23,11 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -61,8 +66,10 @@ import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.ParseException;
+import org.springframework.expression.spel.SpelParserConfiguration;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.expression.spel.support.StandardTypeLocator;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 
@@ -310,8 +317,13 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		}
 		
 		@Override
-		protected EvaluationContext createEvaluationContext() {
-			return AbstractDrawioFactory.this.createEvaluationContext();
+		protected EvaluationContext createEvaluationContext(EObject context) {
+			return AbstractDrawioFactory.this.createEvaluationContext(context);
+		}
+		
+		@Override
+		protected SpelExpressionParser createExpressionParser(EObject context) {
+			return AbstractDrawioFactory.this.createExpressionParser(context);
 		}
 		
 		@SuppressWarnings("unchecked")
@@ -502,9 +514,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		String constructor = Util.isBlank(constructorPropertyName) ? null : getProperty(eObj, constructorPropertyName);
 		if (!Util.isBlank(constructor)) {
 			try {			
-				ExpressionParser parser = getExpressionParser();
+				ExpressionParser parser = createExpressionParser(eObj);
 				Expression exp = parser.parseExpression(constructor);
-				EvaluationContext evaluationContext = createEvaluationContext();
+				EvaluationContext evaluationContext = createEvaluationContext(eObj);
 				configureConstructorEvaluationContext(evaluationContext, registry, progressMonitor);
 				semanticElement = (S) exp.getValue(evaluationContext, eObj, EObject.class);
 			} catch (ParseException e) {
@@ -795,9 +807,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		}
 		
 		try {			
-			ExpressionParser parser = getExpressionParser();
+			ExpressionParser parser = createExpressionParser(eObj);
 			Expression exp = parser.parseExpression(selector);
-			EvaluationContext evaluationContext = createEvaluationContext();
+			EvaluationContext evaluationContext = createEvaluationContext(eObj);
 			configureSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
 			Object result = exp.getValue(evaluationContext, eObj, Object.class);
 			if (result instanceof EObject) {
@@ -851,9 +863,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		}
 		
 		try {			
-			ExpressionParser parser = getExpressionParser();
+			ExpressionParser parser = createExpressionParser(eObj);
 			Expression exp = parser.parseExpression(prototypeExpr);
-			EvaluationContext evaluationContext = createEvaluationContext();
+			EvaluationContext evaluationContext = createEvaluationContext(eObj);
 			configurePrototypeEvaluationContext(evaluationContext, progressMonitor);
 			return exp.getValue(evaluationContext, eObj, EObject.class);
 		} catch (ParseException e) {
@@ -992,9 +1004,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		}
 		
 		try {			
-			ExpressionParser parser = getExpressionParser();
+			ExpressionParser parser = createExpressionParser(eObj);
 			Expression exp = parser.parseExpression(semanticSelector);
-			EvaluationContext evaluationContext = createEvaluationContext();
+			EvaluationContext evaluationContext = createEvaluationContext(eObj);
 			configureSemanticSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
 			Object result = exp.getValue(evaluationContext, eObj, Object.class);
 			if (result instanceof EObject) {
@@ -1023,13 +1035,41 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		evaluationContext.setVariable("progressMonitor", progressMonitor);
 	}
 		
-	protected EvaluationContext createEvaluationContext() {
-		return new StandardEvaluationContext();
+	protected EvaluationContext createEvaluationContext(EObject context) {
+		StandardEvaluationContext ret = new StandardEvaluationContext();
+		ClassLoader classLoader = getClassLoader(context);
+		if (classLoader != null) {
+			ret.setTypeLocator(new StandardTypeLocator(classLoader));
+		}
+		return ret;
 	}
 
-	protected SpelExpressionParser getExpressionParser() {
-		return new SpelExpressionParser();
+	protected SpelExpressionParser createExpressionParser(EObject context) {
+		SpelParserConfiguration config = new SpelParserConfiguration(null, getClassLoader(context));
+		return new SpelExpressionParser(config);
 	}	
+	
+	/**
+	 * Returns a {@link ClassLoader} for an object (diagram element). 
+	 * This implementation delegates to logical parent and returns this class' classLoader for the root object.
+	 * Classloader returned by this method is used to create SpEL parser and to execute scripts.
+	 * Override to implement object-specific classloaders. For example, load Maven POM from a property value or resource and build a classloader from dependencies:
+	 * 
+	 *  https://maven.apache.org/resolver/maven-resolver-api/index.html, 
+	 *  https://stackoverflow.com/questions/11799923/programmatically-resolving-maven-dependencies-outside-of-a-plugin-get-reposito,
+	 *  https://mvnrepository.com/artifact/org.apache.maven.resolver/maven-resolver-api, 
+	 *  https://wiki.eclipse.org/Aether, 
+	 *  https://github.com/yahro/maven-classloader/blob/master/src/main/java/com/bigfatgun/MavenClassLoader.java - old code, needs to be refactored.
+	 * @param context
+	 * @return
+	 */
+	protected ClassLoader getClassLoader(EObject context) {
+		EObject logicalParent = getLogicalParent(context);
+		if (logicalParent == null) {
+			return getClass().getClassLoader();
+		}
+		return getClassLoader(logicalParent);
+	}
 		
 	/**
 	 * Wires document to the page element of the top level page.
@@ -1565,9 +1605,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		}
 		
 		try {			
-			ExpressionParser parser = getExpressionParser();
+			ExpressionParser parser = createExpressionParser(eObj);
 			Expression exp = parser.parseExpression(configPrototypeExpr);
-			EvaluationContext evaluationContext = createEvaluationContext();
+			EvaluationContext evaluationContext = createEvaluationContext(eObj);
 			configurePrototypeEvaluationContext(evaluationContext, progressMonitor);
 			return exp.getValue(evaluationContext, eObj, EObject.class);
 		} catch (ParseException e) {
@@ -2007,6 +2047,279 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			}
 		}	
 		return result;
+	}
+	
+	// --- Phase 6: Script
+	
+	protected String getScriptPropertyName() {
+		return getPropertyNamespace() + "script";
+	}
+	
+	protected String getScriptRefPropertyName() {
+		return getPropertyNamespace() + "script-ref";
+	}
+	
+	protected String getScriptEnginePropertyName() {
+		return getPropertyNamespace() + "script-engine";
+	}
+	
+	protected String getScript(EObject source) {
+		String spn = getScriptPropertyName();
+		if (!Util.isBlank(spn)) {
+			String script = getProperty(source, spn);
+			if (!Util.isBlank(script)) {
+				return script;
+			}
+		}
+		
+		String srpn = getScriptRefPropertyName();
+		if (!Util.isBlank(srpn)) {
+			String ref = getProperty(source, srpn);
+			if (!Util.isBlank(ref)) {
+				URI refURI = URI.createURI(ref);
+				URI baseURI = getBaseURI(source);
+				if (baseURI != null && !baseURI.isRelative()) {
+					refURI = refURI.resolve(baseURI);
+				}
+				try {
+					DefaultConverter converter = DefaultConverter.INSTANCE;
+					Reader reader = converter.toReader(refURI);
+					return converter.toString(reader);
+				} catch (IOException e) {
+					throw new ConfigurationException("Error loading script from " + refURI, e, asMarked(source));
+				}
+			}
+		}
+		return null;
+	}
+	
+	@org.nasdanika.common.Transformer.Wire(phase = 6, targetType = Void.class)
+	public final boolean wireScript(
+			EObject diagramElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+	
+		return executeScript(diagramElement, null, registry, pass, progressMonitor);
+	}
+	
+	
+	@org.nasdanika.common.Transformer.Wire(phase = 6, targetType = Void.class)
+	public final boolean wireScript(
+			EObject diagramElement,
+			S semanticElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+	
+		return executeScript(diagramElement, semanticElement, registry, pass, progressMonitor);
+	}
+	
+	/**
+	 * Executes script
+	 * @param diagramElement
+	 * @param semanticElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	protected boolean executeScript(
+			EObject diagramElement,
+			S semanticElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		String script = getScript(diagramElement);
+		
+		if (!Util.isBlank(script)) {
+			String sepn = getScriptEnginePropertyName();
+			String enginePredicateExpr = Util.isBlank(sepn) ? null : getProperty(diagramElement, sepn);
+	
+			Map<String, Object> variables = Map.ofEntries(
+					Map.entry("diagramElement", diagramElement),
+					Map.entry("semanticElement", semanticElement),
+					Map.entry("pass", pass),
+					Map.entry("registry", registry));		
+			
+			ScriptEngineManager scriptEngineManger = new ScriptEngineManager(getClassLoader(diagramElement));
+			for (ScriptEngineFactory scriptEngineFactory: scriptEngineManger.getEngineFactories()) {
+				if (!Util.isBlank(enginePredicateExpr)) {
+					if (!mapper.evaluatePredicate(scriptEngineFactory, enginePredicateExpr, variables, diagramElement)) {
+						continue;
+					}
+				}
+				
+				ScriptEngine engine = scriptEngineFactory.getScriptEngine();
+				configureScriptEngine(
+						engine, 
+						diagramElement, 
+						semanticElement, 
+						registry, 
+						pass, 
+						progressMonitor);
+				
+				try {
+					Object result = engine.eval(script);
+					return !Boolean.FALSE.equals(result);
+				} catch (ScriptException e) {
+					throw new ConfigurationException("Error evaluating script: " + e, e, asMarked(diagramElement));
+				}
+			}
+		}		
+		
+		return true;
+	}
+	
+	protected void configureScriptEngine(
+			ScriptEngine engine,
+			EObject diagramElement,
+			S semanticElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		engine.put("diagramElement", "diagramElement");
+		engine.put("semanticElement", semanticElement);
+		engine.put("registry", registry);
+		engine.put("baseURI", getBaseURI(diagramElement));
+		engine.put("logicalParent", getLogicalParent(diagramElement));
 	}	
+	
+	// --- Phase 7: Processor
+	
+	/**
+	 * Element processor
+	 */
+	public interface Processor<S extends EObject> {
+		
+		/**
+		 * Processes elements
+		 * @param diagramElement
+		 * @param semanticElement
+		 * @param registry
+		 * @param pass
+		 * @param progressMonitor
+		 * @return false if processing shall be done in subsequent passes, e.g. pending some other processing 
+		 */
+		boolean process(
+				EObject diagramElement,
+				S semanticElement,
+				Map<EObject, EObject> registry,
+				int pass,
+				ProgressMonitor progressMonitor);
+		
+	}
+	
+	protected String getProcessorPropertyName() {
+		return getPropertyNamespace() + "processor";
+	}
+	
+	@org.nasdanika.common.Transformer.Wire(phase = 7, targetType = Void.class)
+	public final boolean wireProcessors(
+			EObject diagramElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+
+		return invokeProcessors(diagramElement, null, registry, pass, progressMonitor);
+	}
+	
+	@org.nasdanika.common.Transformer.Wire(phase = 7)
+	public final boolean wireProcessors(
+			EObject diagramElement,
+			S semanticElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+
+		return invokeProcessors(diagramElement, semanticElement, registry, pass, progressMonitor);
+	}
+
+	/**
+	 * Calls processors
+	 * @param diagramElement
+	 * @param semanticElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	protected boolean invokeProcessors(
+			EObject diagramElement,
+			S semanticElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+
+		String ppn = getScriptPropertyName();
+		if (Util.isBlank(ppn)) {
+			return true;
+		}
+		
+		String processorExpr = getProperty(diagramElement, ppn);
+		if (Util.isBlank(processorExpr)) {
+			return true;
+		}
+		
+		Map<String, Object> variables = Map.ofEntries(
+				Map.entry("semanticElement", semanticElement),
+				Map.entry("registry", registry));
+		
+		Object result = mapper.evaluate(diagramElement, processorExpr, variables, Object.class, diagramElement);
+		if (result == null) {
+			return true;
+		}
+		if (result instanceof Processor) {
+			return ((Processor<S>) result).process(diagramElement, semanticElement, registry, pass, progressMonitor); 
+		}
+		if (result instanceof Iterator) {
+			boolean ret = true;
+			Iterator<Processor<S>> pit = (Iterator<Processor<S>>) result;
+			while (pit.hasNext()) {
+				if (!pit.next().process(diagramElement, semanticElement, registry, pass, progressMonitor)) {
+					ret = false;
+				}
+			}
+			
+			return ret;
+		}
+		if (result instanceof Iterable) {
+			boolean ret = true;
+			for (Processor<S> processor: (Iterable<Processor<S>>) result) {
+				if (!processor.process(diagramElement, semanticElement, registry, pass, progressMonitor)) {
+					ret = false;
+				}
+			}
+				
+			return ret;	
+		}
+		if (result instanceof Stream) {
+			boolean ret = true;
+			for (Processor<S> processor: ((Stream<Processor<S>>) result).toList()) {
+				if (!processor.process(diagramElement, semanticElement, registry, pass, progressMonitor)) {
+					ret = false;
+				}
+			}
+				
+			return ret;	
+		}
+		if (result.getClass().isArray()) {
+			boolean ret = true;
+			for (int i = 0; i < Array.getLength(result); ++i) {
+				Processor<S> processor = (Processor<S>) Array.get(result, i);
+				if (!processor.process(diagramElement, semanticElement, registry, pass, progressMonitor)) {
+					ret = false;
+				}
+			}
+				
+			return ret;	
+		}
+		
+		
+		throw new ConfigurationException("Unsupported processor type: " + result, asMarked(diagramElement));
+		
+	}
+	
 	
 }

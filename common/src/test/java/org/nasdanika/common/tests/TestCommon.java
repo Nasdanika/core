@@ -115,6 +115,16 @@ public class TestCommon {
 		assertEquals("World", mapContext.get("map/a"));
 	}
 	
+//	@Test
+//	public void testSpEL() {
+//		ExpressionParser parser = new SpelExpressionParser();
+//		Expression exp = parser.parseExpression("new Mama()");
+//		StandardEvaluationContext evaluationContext = new StandardEvaluationContext("mama");
+//		evaluationContext.setTypeLocator(null);
+//		Object result = exp.getValue(evaluationContext, "papa", Object.class);
+//		System.out.println(result);
+//	}
+	
 	@Test 
 	public void testProgressMonitor() {
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();

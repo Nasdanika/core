@@ -2,6 +2,9 @@ package org.nasdanika.graph.model.util;
 
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
+
+import javax.script.ScriptEngine;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -32,8 +35,40 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 		return new GraphDrawioResource(uri, uriResolver) {
 			
 			@Override
-			protected EvaluationContext createEvaluationContext() {
-				return GraphDrawioResourceFactory.this.createEvaluationContext();
+			protected EvaluationContext createEvaluationContext(EObject context) {
+				return GraphDrawioResourceFactory.this.createEvaluationContext(context);				
+			};
+			
+			@Override
+			protected ClassLoader getClassLoader(EObject context, URI baseURI, Supplier<ClassLoader> logicalParentClassLoaderSupplier) {
+				return GraphDrawioResourceFactory.this.getClassLoader(context, baseURI, logicalParentClassLoaderSupplier);
+			};
+			
+			@Override
+			protected void configureScriptEngine(
+					ScriptEngine engine, 
+					EObject diagramElement, 
+					EObject semanticElement,
+					Map<EObject, EObject> registry, 
+					int pass, 
+					ProgressMonitor progressMonitor) {
+				
+				super.configureScriptEngine(
+						engine, 
+						diagramElement, 
+						semanticElement, 
+						registry, 
+						pass, 
+						progressMonitor);
+				
+				GraphDrawioResourceFactory.this.configureScriptEngine(
+						engine, 
+						this,
+						diagramElement, 
+						semanticElement, 
+						registry, 
+						pass, 
+						progressMonitor);
 			}
 			
 			@Override
@@ -66,8 +101,12 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 		return new NullProgressMonitor();
 	}
 	
-	protected EvaluationContext createEvaluationContext() {
+	protected EvaluationContext createEvaluationContext(Object context) {
 		return new StandardEvaluationContext();
+	}	
+	
+	protected ClassLoader getClassLoader(EObject context, URI baseURI, Supplier<ClassLoader> logicalParentClassLoaderSupplier) {
+		return logicalParentClassLoaderSupplier == null ? getClass().getClassLoader() : logicalParentClassLoaderSupplier.get();
 	}	
 
 	protected URI getAppBase() {
@@ -88,5 +127,16 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 			ProgressMonitor progressMonitor) {
 		
 	}
+	
+	protected void configureScriptEngine(
+			ScriptEngine engine, 
+			GraphDrawioResource resource,
+			EObject diagramElement, 
+			EObject semanticElement,
+			Map<EObject, EObject> registry, 
+			int pass, 
+			ProgressMonitor progressMonitor) {		
+		
+	}	
 			
 }
