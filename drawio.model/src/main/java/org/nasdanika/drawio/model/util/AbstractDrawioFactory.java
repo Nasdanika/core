@@ -2180,6 +2180,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			ProgressMonitor progressMonitor) {
 		engine.put("diagramElement", "diagramElement");
 		engine.put("semanticElement", semanticElement);
+		engine.put("pass", pass);
 		engine.put("registry", registry);
 		engine.put("baseURI", getBaseURI(diagramElement));
 		engine.put("logicalParent", getLogicalParent(diagramElement));
@@ -2264,6 +2265,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		
 		Map<String, Object> variables = Map.ofEntries(
 				Map.entry("semanticElement", semanticElement),
+				Map.entry("pass", pass),
 				Map.entry("registry", registry));
 		
 		Object result = mapper.evaluate(diagramElement, processorExpr, variables, Object.class, diagramElement);
