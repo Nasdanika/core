@@ -2104,7 +2104,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	}
 	
 	
-	@org.nasdanika.common.Transformer.Wire(phase = 6, targetType = Void.class)
+	@org.nasdanika.common.Transformer.Wire(phase = 6)
 	public final boolean wireScript(
 			EObject diagramElement,
 			S semanticElement,
