@@ -1,6 +1,7 @@
 package org.nasdanika.drawio.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -365,7 +366,8 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			}
 				
 			try {
-				Document targetDocument = Document.load(new URL(targetURI.toString()));
+				Function<URI, InputStream> uriHandler = ((DocumentImpl) document).getUriHandler();
+				Document targetDocument = uriHandler == null ? Document.load(new URL(targetURI.toString()), uriHandler) : Document.load(uriHandler.apply(targetURI), targetURI, uriHandler);
 				for (Page page: targetDocument.getPages()) {
 					if (Util.isBlank(targetURI.fragment()) || URLDecoder.decode(targetURI.fragment(), StandardCharsets.UTF_8).equals(page.getName())) {
 						return page;

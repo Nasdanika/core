@@ -52,24 +52,52 @@ public class DocumentImpl extends ElementImpl implements Document {
 	private static final String ATTRIBUTE_COMPRESSED = "compressed";
 	private org.w3c.dom.Document document;
 	private URI uri;	
-
-	public DocumentImpl(InputStream in, URI uri) throws ParserConfigurationException, SAXException, IOException {
+	private Function<URI, InputStream> uriHandler;
+	
+	/**
+	 * 
+	 * @param in
+	 * @param uri
+	 * @param uriHandler URI handler for loading cross-document page links.
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	public DocumentImpl(InputStream in, URI uri, Function<URI, InputStream> uriHandler) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(in);
 		element = document.getDocumentElement();
 		this.uri = uri;
+		this.uriHandler = uriHandler;
 	}
-	
-	public DocumentImpl(Reader reader, URI uri) throws ParserConfigurationException, SAXException, IOException {
+
+	/**
+	 * 
+	 * @param reader
+	 * @param uri
+	 * @param uriHandler URI handler for loading cross-document page links.
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	public DocumentImpl(Reader reader, URI uri, Function<URI, InputStream> uriHandler) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(new InputSource(reader));
 		element = document.getDocumentElement();
 		this.uri = uri;
+		this.uriHandler = uriHandler;
 	}
-	
-	public DocumentImpl(boolean compressed, URI uri) throws ParserConfigurationException {
+
+	/**
+	 * 
+	 * @param compressed
+	 * @param uri
+	 * @param uriHandler URI handler for loading cross-document page links.
+	 * @throws ParserConfigurationException
+	 */
+	public DocumentImpl(boolean compressed, URI uri, Function<URI, InputStream> uriHandler) throws ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.newDocument();		
@@ -81,10 +109,15 @@ public class DocumentImpl extends ElementImpl implements Document {
 		document.appendChild(mxFileElement);
 		element = document.getDocumentElement();
 		this.uri = uri;
+		this.uriHandler = uriHandler;
 	}
 	
-	public DocumentImpl(String docStr, URI uri) throws ParserConfigurationException, SAXException, IOException {
-		this(new StringReader(docStr), uri);
+	public DocumentImpl(String docStr, URI uri, Function<URI, InputStream> uriHandler) throws ParserConfigurationException, SAXException, IOException {
+		this(new StringReader(docStr), uri, uriHandler);
+	}
+	
+	Function<URI, InputStream> getUriHandler() {
+		return uriHandler;
 	}
 
 	@Override

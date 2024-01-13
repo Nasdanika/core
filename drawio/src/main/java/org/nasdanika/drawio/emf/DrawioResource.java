@@ -14,6 +14,7 @@ import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.drawio.Document;
@@ -60,7 +61,7 @@ public class DrawioResource extends ResourceImpl {
 	 * @throws SAXException
 	 */
 	protected Document loadDocument(InputStream inputStream) throws IOException, ParserConfigurationException, SAXException {
-		return Document.load(inputStream, getURI().trimFragment());
+		return Document.load(inputStream, getURI().trimFragment(), getURIHandler());
 	}
 	
 	@Override
@@ -86,6 +87,25 @@ public class DrawioResource extends ResourceImpl {
 				throw new IllegalStateException("Root element shall be an instance of org.nasdanika.drawio.model.Document, found: " + root);
 			}
 		}
+	}
+	
+	/**
+	 * Override to support loading from non-URL URI's.
+	 * @return
+	 */
+	protected Function<URI, InputStream> getURIHandler() {
+		URIConverter uriConverter = getURIConverter();
+		if (uriConverter == null) {
+			return null;
+		}
+		
+		return uri -> {
+			try {
+				return uriConverter.createInputStream(uri);
+			} catch (IOException e) {
+				throw new NasdanikaException("Error creating input stream from '" + uri +  "': " + e, e);
+			}
+		};
 	}
 			
 }
