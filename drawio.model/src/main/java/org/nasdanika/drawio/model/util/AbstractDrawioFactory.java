@@ -214,10 +214,41 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	}	
 		
 	/**
-	 * A map of package aliases to {@link EPackage}
+	 * A map of top level package aliases to {@link EPackage}
 	 * @return
 	 */
 	protected abstract Map<String,EPackage> getEPackages();
+	
+	private Stream<EPackage> withSubPackages(EPackage ePackage) {
+		Stream<EPackage> subPackagesStream = ePackage
+			.getESubpackages()
+			.stream()
+			.flatMap(this::withSubPackages);
+		
+		return Stream.concat(Stream.of(ePackage), subPackagesStream);
+	}
+	
+	/**
+	 * Finds eClassifier in the package and sub-packages
+	 * @param ePackage
+	 * @param name dot-separated classifier name relative to the argument package. e.g. MyClassifier for a classifier in the package, and mySubPackage.MyClassifier
+	 * for a classfier in a sub-package.
+	 * @return
+	 */
+	private EClassifier findEClassifier(EPackage ePackage, String name) {
+		int dotIdx = name.indexOf('.');
+		if (dotIdx == -1) {
+			return ePackage.getEClassifier(name);
+		}
+		String spName = name.substring(0, dotIdx);
+		Optional<EPackage> subPackageOpt = ePackage
+				.getESubpackages()
+				.stream()
+				.filter(sp -> spName.equals(sp.getName()))
+				.findFirst();
+		
+		return subPackageOpt.isPresent() ? findEClassifier(subPackageOpt.get(), name.substring(dotIdx + 1)) : null;		
+	}
 		
 	public EClassifier getType(String type, EObject source) {
 		if (Util.isBlank(type)) {
@@ -244,6 +275,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			Optional<EClassifier> typeOpt = getEPackages()
 				.values()
 				.stream()
+				.flatMap(this::withSubPackages)
 				.map(ep -> ep.getEClassifier(type))
 				.filter(Objects::nonNull)
 				.findFirst();
@@ -259,7 +291,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				.stream()
 				.filter(pe -> pe.getKey().equals(type.substring(0, dotIdx)))
 				.map(Map.Entry::getValue)
-				.map(ep -> ep.getEClassifier(type.substring(dotIdx + 1)))
+				.map(ep -> findEClassifier(ep, type.substring(dotIdx + 1)))
 				.filter(Objects::nonNull)
 				.findFirst();
 			
@@ -2317,11 +2349,8 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				
 			return ret;	
 		}
-		
-		
+				
 		throw new ConfigurationException("Unsupported processor type: " + result, asMarked(diagramElement));
-		
 	}
-	
-	
+		
 }
