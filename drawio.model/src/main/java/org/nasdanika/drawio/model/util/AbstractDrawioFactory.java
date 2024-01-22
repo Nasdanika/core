@@ -804,8 +804,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			int pass,
 			ProgressMonitor progressMonitor) {
 		return wireSelector(modelElement, registry, pass, progressMonitor);
-	}
-	
+	}	
 	
 	/**
 	 * Wires elements with selector property. Remaps which triggers wireContainment.
@@ -1290,8 +1289,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			
 			throw new ConfigurationException("Usupported reference element expression type: " + eObj, asMarked(context));		
 		}
-		
-		
+				
 		public List<EObject> getElements(
 				LinkedList<EObject> sourcePath,
 				Map<EObject, EObject> registry, 
@@ -1351,7 +1349,6 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 									for (EObject semanticElement: referenceMapper.getElements(sourcePath, registry, new HashSet<>()::add, drawioModelElement, progressMonitor)) {
 										if (semanticElement != null && feature.getEType().isInstance(semanticElement)) {
 											if (feature.isMany()) {
-												// TODO - comparator
 												List<EObject> fvl = (List<EObject>) logicalAncestorSemanticElement.eGet(feature);
 												if (comparator == null || fvl.isEmpty()) {										
 													fvl.add(semanticElement);
@@ -2210,7 +2207,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			Map<EObject, EObject> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
-		engine.put("diagramElement", "diagramElement");
+		engine.put("diagramElement", diagramElement);
 		engine.put("semanticElement", semanticElement);
 		engine.put("pass", pass);
 		engine.put("registry", registry);
@@ -2285,7 +2282,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			int pass,
 			ProgressMonitor progressMonitor) {
 
-		String ppn = getScriptPropertyName();
+		String ppn = getProcessorPropertyName();
 		if (Util.isBlank(ppn)) {
 			return true;
 		}
