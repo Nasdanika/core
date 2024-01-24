@@ -358,6 +358,16 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			return AbstractDrawioFactory.this.createExpressionParser(context);
 		}
 		
+		@Override
+		protected ClassLoader getClassLoader(EObject source) {
+			return AbstractDrawioFactory.this.getClassLoader(source);
+		}
+		
+		@Override
+		protected Iterable<Entry<String, Object>> getVariables(EObject context) {
+			return AbstractDrawioFactory.this.getVariables(context);
+		}
+		
 		@SuppressWarnings("unchecked")
 		@Override
 		public Iterable<EObject> select(EObject source, Map<EObject, EObject> registry, ProgressMonitor progressMonitor) {
@@ -542,19 +552,19 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			ProgressMonitor progressMonitor) {	
 	
 		S semanticElement = null;		
-		String constructorPropertyName = getConstructorProperty();
-		String constructor = Util.isBlank(constructorPropertyName) ? null : getProperty(eObj, constructorPropertyName);
-		if (!Util.isBlank(constructor)) {
+		String initializerPropertyName = getInitializerProperty();
+		String initializer = Util.isBlank(initializerPropertyName) ? null : getProperty(eObj, initializerPropertyName);
+		if (!Util.isBlank(initializer)) {
 			try {			
 				ExpressionParser parser = createExpressionParser(eObj);
-				Expression exp = parser.parseExpression(constructor);
+				Expression exp = parser.parseExpression(initializer);
 				EvaluationContext evaluationContext = createEvaluationContext(eObj);
-				configureConstructorEvaluationContext(evaluationContext, registry, progressMonitor);
+				configureInitializerEvaluationContext(evaluationContext, registry, progressMonitor);
 				semanticElement = (S) exp.getValue(evaluationContext, eObj, EObject.class);
 			} catch (ParseException e) {
-				throw new ConfigurationException("Error parsing semantic selector: '" + constructor, e, asMarked(eObj));
+				throw new ConfigurationException("Error parsing semantic selector: '" + initializer, e, asMarked(eObj));
 			} catch (EvaluationException e) {
-				throw new ConfigurationException("Error evaluating semantic selector: '" + constructor, e, asMarked(eObj));
+				throw new ConfigurationException("Error evaluating semantic selector: '" + initializer, e, asMarked(eObj));
 			}
 		}
 		
@@ -573,18 +583,131 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			}
 		}
 		
-		return semanticElement;
+		return executeInitializerScript(eObj, semanticElement, registry, progressMonitor);
+	}
+		
+	protected String getInitializerScriptPropertyName() {
+		return getPropertyNamespace() + "initializer-script";
+	}
+	
+	protected String getInitializerScriptRefPropertyName() {
+		return getPropertyNamespace() + "initializer-script-ref";
+	}
+	
+	protected String getInitializerScriptEnginePropertyName() {
+		return getPropertyNamespace() + "initializer-script-engine";
+	}
+	
+	protected String getInitializerScript(EObject source) {
+		String ispn = getInitializerScriptPropertyName();
+		if (!Util.isBlank(ispn)) {
+			String script = getProperty(source, ispn);
+			if (!Util.isBlank(script)) {
+				return script;
+			}
+		}
+		
+		String isrpn = getInitializerScriptRefPropertyName();
+		if (!Util.isBlank(isrpn)) {
+			String ref = getProperty(source, isrpn);
+			if (!Util.isBlank(ref)) {
+				URI refURI = URI.createURI(ref);
+				URI baseURI = getBaseURI(source);
+				if (baseURI != null && !baseURI.isRelative()) {
+					refURI = refURI.resolve(baseURI);
+				}
+				try {
+					DefaultConverter converter = DefaultConverter.INSTANCE;
+					Reader reader = converter.toReader(refURI);
+					return converter.toString(reader);
+				} catch (IOException e) {
+					throw new ConfigurationException("Error loading script from " + refURI, e, asMarked(source));
+				}
+			}
+		}
+		return null;
 	}
 	
 	/**
-	 * Constructor expression
+	 * Executes script
+	 * @param diagramElement
+	 * @param semanticElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@SuppressWarnings("unchecked")
+	protected S executeInitializerScript(
+			EObject diagramElement,
+			S semanticElement,
+			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
+			ProgressMonitor progressMonitor) {
+		
+		String script = getInitializerScript(diagramElement);
+		
+		if (Util.isBlank(script)) {
+			return semanticElement;
+		}
+		
+		String isepn = getInitializerScriptEnginePropertyName();
+		String enginePredicateExpr = Util.isBlank(isepn) ? null : getProperty(diagramElement, isepn);
+
+		Map<String, Object> variables = Map.ofEntries(
+				Map.entry("diagramElement", diagramElement),
+				Map.entry("semanticElement", semanticElement),
+				Map.entry("registry", registry));		
+		
+		ScriptEngineManager scriptEngineManger = new ScriptEngineManager(getClassLoader(diagramElement));
+		for (ScriptEngineFactory scriptEngineFactory: scriptEngineManger.getEngineFactories()) {
+			if (!Util.isBlank(enginePredicateExpr)) {
+				if (!mapper.evaluatePredicate(scriptEngineFactory, enginePredicateExpr, variables, diagramElement)) {
+					continue;
+				}
+			}
+			
+			ScriptEngine engine = scriptEngineFactory.getScriptEngine();
+			configureInitializerScriptEngine(
+					engine, 
+					diagramElement,
+					semanticElement,
+					registry, 
+					progressMonitor);
+			
+			try {
+				return (S) engine.eval(script);
+			} catch (ScriptException e) {
+				throw new ConfigurationException("Error evaluating initializer script: " + e, e, asMarked(diagramElement));
+			}
+		}
+		
+		throw new ConfigurationException("No matching script engine for the initializer script", asMarked(diagramElement));
+	}
+	
+	protected void configureInitializerScriptEngine(
+			ScriptEngine engine,
+			EObject diagramElement,
+			EObject semanticElement,
+			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
+			ProgressMonitor progressMonitor) {
+		engine.put("diagramElement", diagramElement);
+		engine.put("semanticElement", diagramElement);
+		engine.put("registry", registry);
+		engine.put("baseURI", getBaseURI(diagramElement));
+		engine.put("logicalParent", getLogicalParent(diagramElement));
+		for (Entry<String, Object> ve: getVariables(diagramElement)) {
+			engine.put(ve.getKey(), ve.getValue());
+		}
+	}		
+	
+	/**
+	 * Initializer expression
 	 * @return
 	 */
-	protected String getConstructorProperty() {
-		return getPropertyNamespace() + "constructor";
+	protected String getInitializerProperty() {
+		return getPropertyNamespace() + "initializer";
 	}
 
-	protected void configureConstructorEvaluationContext(
+	protected void configureInitializerEvaluationContext(
 			EvaluationContext evaluationContext,
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry, 
 			ProgressMonitor progressMonitor) {
@@ -1072,9 +1195,21 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		if (classLoader != null) {
 			ret.setTypeLocator(new StandardTypeLocator(classLoader));
 		}
+		for (Entry<String, Object> ve: getVariables(context)) {
+			ret.setVariable(ve.getKey(), ve.getValue());
+		}
 		return ret;
 	}
-
+	
+	/**
+	 * Override to provide variables for expressions and scripts.
+	 * 
+	 * @return
+	 */
+	protected Iterable<Map.Entry<String, Object>> getVariables(EObject context) {
+		return Collections.emptySet();
+	}
+	
 	protected SpelExpressionParser createExpressionParser(EObject context) {
 		SpelParserConfiguration config = new SpelParserConfiguration(null, getClassLoader(context));
 		return new SpelExpressionParser(config);
@@ -2080,6 +2215,28 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	
 	// --- Phase 6: Script
 	
+	@org.nasdanika.common.Transformer.Wire(phase = 6, targetType = Void.class)
+	public final boolean wireScript(
+			EObject diagramElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+	
+		return executeScript(diagramElement, null, registry, pass, progressMonitor);
+	}
+	
+	
+	@org.nasdanika.common.Transformer.Wire(phase = 6)
+	public final boolean wireScript(
+			EObject diagramElement,
+			S semanticElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+	
+		return executeScript(diagramElement, semanticElement, registry, pass, progressMonitor);
+	}
+	
 	protected String getScriptPropertyName() {
 		return getPropertyNamespace() + "script";
 	}
@@ -2122,28 +2279,6 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return null;
 	}
 	
-	@org.nasdanika.common.Transformer.Wire(phase = 6, targetType = Void.class)
-	public final boolean wireScript(
-			EObject diagramElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-	
-		return executeScript(diagramElement, null, registry, pass, progressMonitor);
-	}
-	
-	
-	@org.nasdanika.common.Transformer.Wire(phase = 6)
-	public final boolean wireScript(
-			EObject diagramElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-	
-		return executeScript(diagramElement, semanticElement, registry, pass, progressMonitor);
-	}
-	
 	/**
 	 * Executes script
 	 * @param diagramElement
@@ -2161,43 +2296,44 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		
 		String script = getScript(diagramElement);
 		
-		if (!Util.isBlank(script)) {
-			String sepn = getScriptEnginePropertyName();
-			String enginePredicateExpr = Util.isBlank(sepn) ? null : getProperty(diagramElement, sepn);
-	
-			Map<String, Object> variables = Map.ofEntries(
-					Map.entry("diagramElement", diagramElement),
-					Map.entry("semanticElement", semanticElement),
-					Map.entry("pass", pass),
-					Map.entry("registry", registry));		
-			
-			ScriptEngineManager scriptEngineManger = new ScriptEngineManager(getClassLoader(diagramElement));
-			for (ScriptEngineFactory scriptEngineFactory: scriptEngineManger.getEngineFactories()) {
-				if (!Util.isBlank(enginePredicateExpr)) {
-					if (!mapper.evaluatePredicate(scriptEngineFactory, enginePredicateExpr, variables, diagramElement)) {
-						continue;
-					}
-				}
-				
-				ScriptEngine engine = scriptEngineFactory.getScriptEngine();
-				configureScriptEngine(
-						engine, 
-						diagramElement, 
-						semanticElement, 
-						registry, 
-						pass, 
-						progressMonitor);
-				
-				try {
-					Object result = engine.eval(script);
-					return !Boolean.FALSE.equals(result);
-				} catch (ScriptException e) {
-					throw new ConfigurationException("Error evaluating script: " + e, e, asMarked(diagramElement));
+		if (Util.isBlank(script)) {
+			return true;
+		}
+		
+		String sepn = getScriptEnginePropertyName();
+		String enginePredicateExpr = Util.isBlank(sepn) ? null : getProperty(diagramElement, sepn);
+
+		Map<String, Object> variables = Map.ofEntries(
+				Map.entry("diagramElement", diagramElement),
+				Map.entry("semanticElement", semanticElement),
+				Map.entry("pass", pass),
+				Map.entry("registry", registry));		
+		
+		ScriptEngineManager scriptEngineManger = new ScriptEngineManager(getClassLoader(diagramElement));
+		for (ScriptEngineFactory scriptEngineFactory: scriptEngineManger.getEngineFactories()) {
+			if (!Util.isBlank(enginePredicateExpr)) {
+				if (!mapper.evaluatePredicate(scriptEngineFactory, enginePredicateExpr, variables, diagramElement)) {
+					continue;
 				}
 			}
-		}		
-		
-		return true;
+			
+			ScriptEngine engine = scriptEngineFactory.getScriptEngine();
+			configureScriptEngine(
+					engine, 
+					diagramElement, 
+					semanticElement, 
+					registry, 
+					pass, 
+					progressMonitor);
+			
+			try {
+				Object result = engine.eval(script);
+				return !Boolean.FALSE.equals(result);
+			} catch (ScriptException e) {
+				throw new ConfigurationException("Error evaluating script: " + e, e, asMarked(diagramElement));
+			}
+		}
+		throw new ConfigurationException("No matching script engine", asMarked(diagramElement));
 	}
 	
 	protected void configureScriptEngine(
@@ -2213,6 +2349,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		engine.put("registry", registry);
 		engine.put("baseURI", getBaseURI(diagramElement));
 		engine.put("logicalParent", getLogicalParent(diagramElement));
+		for (Entry<String, Object> ve: getVariables(diagramElement)) {
+			engine.put(ve.getKey(), ve.getValue());
+		}
 	}	
 	
 	// --- Phase 7: Processor

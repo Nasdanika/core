@@ -163,7 +163,5 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 		}
 		return ret;		
 	}	
-	
-	protected abstract URI getBaseURI(EObject source);
 
 }

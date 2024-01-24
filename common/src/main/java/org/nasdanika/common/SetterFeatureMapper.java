@@ -1,5 +1,7 @@
 package org.nasdanika.common;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +16,12 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
@@ -47,6 +55,9 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	public static final String TYPE_KEY = "type";
 	public static final String ARGUMENT_TYPE_KEY = "argument-type";
 	public static final String COMPARATOR_KEY = "comparator";
+	public static final String SCRIPT_KEY = "script";
+	public static final String SCRIPT_REF_KEY = "script-ref";
+	public static final String SCRIPT_ENGINE_KEY = "script-engine";
 	
 	private FeatureMapper<S, T> defaultFeatureMapper;
 	
@@ -297,6 +308,17 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 						
 						Class<?> featureType = feature.getEType().getInstanceClass();
 						Object featureValue = eval(configElement, argument, argumentValue, sourcePath, registry, featureType, context);
+						if (configElement instanceof Map) {
+							featureValue = evaluateScript(
+									(Map<?,?>) configElement, 
+									argument,
+									argumentValue,
+									sourcePath,
+									registry,
+									featureType,
+									context);
+						}
+
 						if (featureValue != null) {
 							boolean shallSet = true;
 							
@@ -758,7 +780,117 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		variables.put("value", argumentValue);
 		variables.put("path", sourcePath);
 		variables.put("registry", registry);
-		return evaluate(argument, (String) expression, variables, type, context);
+		Object result = evaluate(argument, (String) expression, variables, type, context);
+		return result;
+	}
+	
+	protected String getScript(Map<?,?> configMap, EObject context) {
+		Object script = configMap.get(SCRIPT_KEY);
+		if (script instanceof String) {
+			String ss = (String) script;
+			if (!Util.isBlank(ss)) {		
+				return ss;
+			}
+		} else if (script != null) {
+			throwConfigurationException("Script is not a string: " + script, null, context);			
+		}
+					
+		Object ref = configMap.get(SCRIPT_REF_KEY);
+		if (ref instanceof String) {
+			String sRef = (String) ref;
+			if (Util.isBlank(sRef)) {
+				return null;
+			}
+
+			URI refURI = URI.createURI(sRef);
+			URI baseURI = getBaseURI(context);
+			if (baseURI != null && !baseURI.isRelative()) {
+				refURI = refURI.resolve(baseURI);
+			}
+			try {
+				DefaultConverter converter = DefaultConverter.INSTANCE;
+				Reader reader = converter.toReader(refURI);
+				return converter.toString(reader);
+			} catch (IOException e) {
+				throwConfigurationException("Error loading script from " + refURI, e, context);
+			}
+		}
+		throwConfigurationException("Script ref is not a string: " + ref, null, context);	
+		return null;
+	}
+	
+	protected URI getBaseURI(EObject eObj) {
+		return null;
+	}
+	
+	protected ClassLoader getClassLoader(EObject obj) {
+		return getClass().getClassLoader();
+	}
+		
+	/**
+	 * Override to provide variables for expressions and scripts.
+	 * 
+	 * @return
+	 */
+	protected Iterable<Map.Entry<String, Object>> getVariables(EObject context) {
+		return Collections.emptySet();
+	}	
+	
+	/**
+	 * Executes script
+	 * @param diagramElement
+	 * @param semanticElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	protected Object evaluateScript(
+			Map<?,?> configMap, 
+			Object argument,
+			Object argumentValue,
+			LinkedList<EObject> sourcePath,
+			Map<S, T> registry,
+			Class<?> type,
+			EObject context) {		
+		String script = getScript(configMap, context);
+		
+		if (Util.isBlank(script)) {
+			return argumentValue;
+		}
+		
+		Object enginePredicateExpr = configMap.get(SCRIPT_ENGINE_KEY);
+		if (enginePredicateExpr != null && !(enginePredicateExpr instanceof String)) {
+			throwConfigurationException("Script engine expression is not a string: " + enginePredicateExpr, null, context);				
+		}
+		
+		ScriptEngineManager scriptEngineManger = new ScriptEngineManager(getClassLoader(context));
+		for (ScriptEngineFactory scriptEngineFactory: scriptEngineManger.getEngineFactories()) {
+			if (!Util.isBlank((String) enginePredicateExpr)) {
+				if (!evaluatePredicate(scriptEngineFactory, (String) enginePredicateExpr, null, context)) {
+					continue;
+				}
+			}
+			
+			ScriptEngine engine = scriptEngineFactory.getScriptEngine();
+			engine.put("context", context);
+			engine.put("argument", argument);
+			engine.put("argumentValue", argumentValue);
+			engine.put("registry", registry);
+			engine.put("sourcePath", sourcePath);
+			engine.put("type", type);
+			engine.put("baseURI", getBaseURI(context));
+			for (Entry<String, Object> ve: getVariables(context)) {
+				engine.put(ve.getKey(), ve.getValue());
+			}
+			
+			try {
+				return engine.eval(script);
+			} catch (ScriptException e) {
+				throwConfigurationException("Error evaluating script: " + e, e, context);
+			}
+		}
+		throwConfigurationException("No matching script engine", null, context);
+		return argumentValue;
 	}
 	
 	protected Greedy getGreedy(Object config, EObject context) {
