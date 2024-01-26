@@ -1,6 +1,8 @@
 package org.nasdanika.graph.model.util;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -35,41 +37,9 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 		return new GraphDrawioResource(uri, uriResolver) {
 			
 			@Override
-			protected EvaluationContext createEvaluationContext(EObject context) {
-				return GraphDrawioResourceFactory.this.createEvaluationContext(context);				
-			};
-			
-			@Override
 			protected ClassLoader getClassLoader(EObject context, URI baseURI, Supplier<ClassLoader> logicalParentClassLoaderSupplier) {
 				return GraphDrawioResourceFactory.this.getClassLoader(context, baseURI, logicalParentClassLoaderSupplier);
 			};
-			
-			@Override
-			protected void configureScriptEngine(
-					ScriptEngine engine, 
-					EObject diagramElement, 
-					EObject semanticElement,
-					Map<EObject, EObject> registry, 
-					int pass, 
-					ProgressMonitor progressMonitor) {
-				
-				super.configureScriptEngine(
-						engine, 
-						diagramElement, 
-						semanticElement, 
-						registry, 
-						pass, 
-						progressMonitor);
-				
-				GraphDrawioResourceFactory.this.configureScriptEngine(
-						engine, 
-						this,
-						diagramElement, 
-						semanticElement, 
-						registry, 
-						pass, 
-						progressMonitor);
-			}
 			
 			@Override
 			protected URI getAppBase() {
@@ -84,6 +54,11 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 					ProgressMonitor progressMonitor) {
 				
 				GraphDrawioResourceFactory.this.filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor);			
+			}
+			
+			@Override
+			protected Iterable<Entry<String, Object>> getVariables(EObject context) {
+				return GraphDrawioResourceFactory.this.getVariables(this, context);
 			}
 			
 		};
@@ -138,5 +113,9 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 			ProgressMonitor progressMonitor) {		
 		
 	}	
+	
+	protected Iterable<Entry<String, Object>> getVariables(GraphDrawioResource resource, EObject context) {
+		return Collections.emptySet();
+	}
 			
 }
