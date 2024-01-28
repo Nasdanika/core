@@ -71,7 +71,7 @@ public class GraphDrawioResource extends ResourceImpl {
 			}
 			
 			@Override
-			protected boolean isRefIProxydURI() {
+			protected boolean isRefIdProxyURI() {
 				return true;
 			}
 			
