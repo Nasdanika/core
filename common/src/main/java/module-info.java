@@ -19,6 +19,7 @@ module org.nasdanika.common {
 	requires transitive java.xml;
 	requires transitive spring.expression;
 	requires java.desktop;
+	requires net.sourceforge.plantuml;
 	
 	exports org.nasdanika.common;
 	exports org.nasdanika.common.descriptors;
