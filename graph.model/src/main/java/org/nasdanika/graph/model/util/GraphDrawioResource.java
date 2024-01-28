@@ -66,8 +66,13 @@ public class GraphDrawioResource extends ResourceImpl {
 		GraphDrawioFactory<EObject> graphDrawioFactory = new GraphDrawioFactory<EObject>() {
 
 			@Override
-			protected EObject getByRefId(String refId, int pass, Map<EObject, EObject> registry) {				
-				return GraphDrawioResource.this.getByRefId(refId, pass, registry);
+			protected EObject getByRefId(EObject eObj, String refId, int pass, Map<EObject, EObject> registry) {				
+				return GraphDrawioResource.this.getByRefId(eObj, getBaseURI(eObj),  refId, pass, registry);
+			}
+			
+			@Override
+			protected boolean isRefIProxydURI() {
+				return true;
 			}
 			
 			@Override
@@ -136,14 +141,18 @@ public class GraphDrawioResource extends ResourceImpl {
 		return org.nasdanika.drawio.model.ModelFactory.eINSTANCE;
 	}	
 	
-	protected EObject getByRefId(String refId, int pass, Map<EObject, EObject> registry) {
+	protected EObject getByRefId(EObject eObj, URI baseURI, String refId, int pass, Map<EObject, EObject> registry) {
 		if (uriResolver == null) {
 			return null;
 		}
 		
 		URI refURI = URI.createURI(refId);
 		if(!getURI().isRelative()) {
-			refURI = refURI.resolve(getURI());
+			if (baseURI == null) {
+				refURI = refURI.resolve(getURI());
+			} else {
+				refURI = refURI.resolve(baseURI);
+			}
 		}
 		return uriResolver.apply(refURI);
 	}

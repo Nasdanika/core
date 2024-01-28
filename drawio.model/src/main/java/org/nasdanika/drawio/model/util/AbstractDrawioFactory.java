@@ -41,6 +41,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
@@ -528,7 +529,8 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				registry,
 				progressMonitor);
 	}		
-	
+
+	@org.nasdanika.common.Transformer.Factory
 	public final S createTagSemanticElement(
 			org.nasdanika.drawio.model.Tag tag,
 			boolean parallel,
@@ -583,7 +585,33 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			}
 		}
 		
-		return executeInitializerScript(eObj, semanticElement, registry, progressMonitor);
+		semanticElement = executeInitializerScript(eObj, semanticElement, registry, progressMonitor);
+		
+		if (semanticElement instanceof MinimalEObjectImpl && isRefIProxydURI()) {
+			String refIdPropertyName = getRefIdProperty();
+			if (!Util.isBlank(refIdPropertyName)) {
+				String refId = getProperty(eObj, refIdPropertyName);
+				if (!Util.isBlank(refId)) {
+					URI refIdURI = URI.createURI(refId);
+					if (refIdURI.isRelative()) {
+						URI baseURI = getBaseURI(eObj);
+						if (baseURI != null) {
+							refIdURI = refIdURI.resolve(baseURI);
+						}
+					}
+					((MinimalEObjectImpl) semanticElement).eSetProxyURI(refIdURI);					
+				}
+			}
+		}
+		
+		return semanticElement;
+	}
+	
+	/**
+	 * @return true if ref-id shall be treated as proxy URI. 
+	 */
+	protected boolean isRefIProxydURI() {
+		return false;
 	}
 		
 	protected String getInitializerScriptPropertyName() {
@@ -597,13 +625,15 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	protected String getInitializerScriptEnginePropertyName() {
 		return getPropertyNamespace() + "initializer-script-engine";
 	}
+		
+	protected static record Script(URI uri, String script) {};
 	
-	protected String getInitializerScript(EObject source) {
+	protected Script getInitializerScript(EObject source) {
 		String ispn = getInitializerScriptPropertyName();
 		if (!Util.isBlank(ispn)) {
 			String script = getProperty(source, ispn);
 			if (!Util.isBlank(script)) {
-				return script;
+				return new Script(null, script);
 			}
 		}
 		
@@ -619,7 +649,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				try {
 					DefaultConverter converter = DefaultConverter.INSTANCE;
 					Reader reader = converter.toReader(refURI);
-					return converter.toString(reader);
+					return new Script(refURI, converter.toString(reader));
 				} catch (IOException e) {
 					throw new ConfigurationException("Error loading script from " + refURI, e, asMarked(source));
 				}
@@ -643,9 +673,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {
 		
-		String script = getInitializerScript(diagramElement);
+		Script script = getInitializerScript(diagramElement);
 		
-		if (Util.isBlank(script)) {
+		if (script == null || Util.isBlank(script.script())) {
 			return semanticElement;
 		}
 		
@@ -663,6 +693,11 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				if (!mapper.evaluatePredicate(scriptEngineFactory, enginePredicateExpr, variables, diagramElement)) {
 					continue;
 				}
+			} else if (script.uri() != null) {
+				String extension = script.uri().fileExtension();
+				if (!Util.isBlank(extension) && !scriptEngineFactory.getExtensions().contains(extension)) {
+					continue;
+				}
 			}
 			
 			ScriptEngine engine = scriptEngineFactory.getScriptEngine();
@@ -674,7 +709,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					progressMonitor);
 			
 			try {
-				return (S) engine.eval(script);
+				return (S) engine.eval(script.script());
 			} catch (ScriptException e) {
 				throw new ConfigurationException("Error evaluating initializer script: " + e, e, asMarked(diagramElement));
 			}
@@ -815,7 +850,11 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @return Null if element cannot be resolved yet
 	 * @throws IllegalArgumentException If refId does not resolve to a semantic element
 	 */
-	protected abstract S getByRefId(String refId, int pass, Map<EObject, EObject> registry);
+	protected abstract S getByRefId(
+			EObject eObj,
+			String refId, 
+			int pass, 
+			Map<EObject, EObject> registry);
 	
 	/**
 	 * Wires elements with ref-id property. Remaps which triggers wireContainment.
@@ -866,7 +905,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			return true;
 		}
 		
-		S refTarget = getByRefId(refId, pass, registry);
+		S refTarget = getByRefId(eObj, refId, pass, registry);
 		if (refTarget != null) {
 			registry.put(eObj, refTarget); // Resolved refId triggers a new wave of wiring
 		}
@@ -1878,7 +1917,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		}
 		
 		// Indicates that this element is linked from another element and as such its id shall not be used as default semantic id
-		boolean isLinked = eObj instanceof org.nasdanika.drawio.model.ModelElement && isPageElement(eObj) && !isTopLevelPage(((org.nasdanika.drawio.model.ModelElement) eObj).getPage());
+		boolean isLinked = eObj instanceof org.nasdanika.drawio.model.ModelElement
+				&& isPageElement(eObj)
+				&& !isTopLevelPage(((org.nasdanika.drawio.model.ModelElement) eObj).getPage());
 		
 		if (!isPrototype && !isLinked) {
 			String semanticIdProperty = getSemanticIdProperty();
@@ -2249,12 +2290,12 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return getPropertyNamespace() + "script-engine";
 	}
 	
-	protected String getScript(EObject source) {
+	protected Script getScript(EObject source) {
 		String spn = getScriptPropertyName();
 		if (!Util.isBlank(spn)) {
 			String script = getProperty(source, spn);
 			if (!Util.isBlank(script)) {
-				return script;
+				return new Script(null, script);
 			}
 		}
 		
@@ -2270,7 +2311,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				try {
 					DefaultConverter converter = DefaultConverter.INSTANCE;
 					Reader reader = converter.toReader(refURI);
-					return converter.toString(reader);
+					return new Script(refURI, converter.toString(reader));
 				} catch (IOException e) {
 					throw new ConfigurationException("Error loading script from " + refURI, e, asMarked(source));
 				}
@@ -2294,9 +2335,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		String script = getScript(diagramElement);
+		Script script = getScript(diagramElement);
 		
-		if (Util.isBlank(script)) {
+		if (script == null || Util.isBlank(script.script())) {
 			return true;
 		}
 		
@@ -2315,6 +2356,11 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				if (!mapper.evaluatePredicate(scriptEngineFactory, enginePredicateExpr, variables, diagramElement)) {
 					continue;
 				}
+			} else if (script.uri() != null) {
+				String extension = script.uri().fileExtension();
+				if (!Util.isBlank(extension) && !scriptEngineFactory.getExtensions().contains(extension)) {
+					continue;
+				}
 			}
 			
 			ScriptEngine engine = scriptEngineFactory.getScriptEngine();
@@ -2327,7 +2373,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					progressMonitor);
 			
 			try {
-				Object result = engine.eval(script);
+				Object result = engine.eval(script.script());
 				return !Boolean.FALSE.equals(result);
 			} catch (ScriptException e) {
 				throw new ConfigurationException("Error evaluating script: " + e, e, asMarked(diagramElement));

@@ -783,16 +783,20 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		Object result = evaluate(argument, (String) expression, variables, type, context);
 		return result;
 	}
+		
+	protected static record Script(URI uri, String script) {};	
 	
-	protected String getScript(Map<?,?> configMap, EObject context) {
+	protected Script getScript(Map<?,?> configMap, EObject context) {
 		Object script = configMap.get(SCRIPT_KEY);
 		if (script instanceof String) {
 			String ss = (String) script;
 			if (!Util.isBlank(ss)) {		
-				return ss;
+				return new Script(null, ss);
 			}
 		} else if (script != null) {
 			throwConfigurationException("Script is not a string: " + script, null, context);			
+		} else {
+			return null;
 		}
 					
 		Object ref = configMap.get(SCRIPT_REF_KEY);
@@ -810,7 +814,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			try {
 				DefaultConverter converter = DefaultConverter.INSTANCE;
 				Reader reader = converter.toReader(refURI);
-				return converter.toString(reader);
+				return new Script(refURI, converter.toString(reader));
 			} catch (IOException e) {
 				throwConfigurationException("Error loading script from " + refURI, e, context);
 			}
@@ -852,9 +856,9 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Map<S, T> registry,
 			Class<?> type,
 			EObject context) {		
-		String script = getScript(configMap, context);
+		Script script = getScript(configMap, context);
 		
-		if (Util.isBlank(script)) {
+		if (script == null || Util.isBlank(script.script())) {
 			return argumentValue;
 		}
 		
@@ -867,6 +871,11 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		for (ScriptEngineFactory scriptEngineFactory: scriptEngineManger.getEngineFactories()) {
 			if (!Util.isBlank((String) enginePredicateExpr)) {
 				if (!evaluatePredicate(scriptEngineFactory, (String) enginePredicateExpr, null, context)) {
+					continue;
+				}
+			} else if (script.uri() != null) {
+				String extension = script.uri().fileExtension();
+				if (!Util.isBlank(extension) && !scriptEngineFactory.getExtensions().contains(extension)) {
 					continue;
 				}
 			}
@@ -884,7 +893,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			}
 			
 			try {
-				return engine.eval(script);
+				return engine.eval(script.script());
 			} catch (ScriptException e) {
 				throwConfigurationException("Error evaluating script: " + e, e, context);
 			}

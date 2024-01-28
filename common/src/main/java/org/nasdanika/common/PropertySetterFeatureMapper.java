@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
@@ -130,13 +131,18 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 		if (Util.isBlank(mappingSelector)) {
 			return super.select(source, registry, progressMonitor);
 		}
-		
+						
 		Collection<T> ret = new ArrayList<>();
 		try {
 			Yaml yaml = new Yaml();
 			Object mappingObj = yaml.load(mappingSelector);
 			if (mappingObj instanceof String) {
-				Object result = evaluate(source, (String) mappingObj, null, Object.class, source);
+				Object result = evaluate(
+						source, 
+						(String) mappingObj, 
+						Collections.singletonMap("registry", registry), 
+						Object.class, 
+						source);
 				if (result instanceof EObject) {
 					ret.add((T) result);
 				} else if (result instanceof Iterable) {
@@ -146,7 +152,12 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 				}
 			} else if (mappingObj instanceof Iterable) {
 				for (String mappingElement: (Iterable<String>) mappingObj) {
-					Object result = evaluate(source, mappingElement, null, Object.class, source);
+					Object result = evaluate(
+							source, 
+							mappingElement, 
+							Collections.singletonMap("registry", registry), 
+							Object.class, 
+							source);
 					if (result instanceof EObject) {
 						ret.add((T) result);
 					} else if (result instanceof Iterable) {
