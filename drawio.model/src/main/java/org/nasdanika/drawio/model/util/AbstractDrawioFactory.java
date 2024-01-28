@@ -587,7 +587,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		
 		semanticElement = executeInitializerScript(eObj, semanticElement, registry, progressMonitor);
 		
-		if (semanticElement instanceof MinimalEObjectImpl && isRefIProxydURI()) {
+		if (semanticElement instanceof MinimalEObjectImpl && isRefIdProxydURI()) {
 			String refIdPropertyName = getRefIdProperty();
 			if (!Util.isBlank(refIdPropertyName)) {
 				String refId = getProperty(eObj, refIdPropertyName);
@@ -610,7 +610,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	/**
 	 * @return true if ref-id shall be treated as proxy URI. 
 	 */
-	protected boolean isRefIProxydURI() {
+	protected boolean isRefIdProxydURI() {
 		return false;
 	}
 		
