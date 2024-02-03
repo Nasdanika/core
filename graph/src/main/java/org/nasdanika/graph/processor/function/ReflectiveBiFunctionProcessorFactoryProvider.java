@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -91,7 +92,7 @@ public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Refle
 
 	public ReflectiveBiFunctionProcessorFactoryProvider(Object... targets) {
 		for (Object target: targets) {
-			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
+			getAnnotatedElementRecords(target, Collections.singletonList(target)).forEach(annotatedElementRecords::add);
 		}
 	}		
 	

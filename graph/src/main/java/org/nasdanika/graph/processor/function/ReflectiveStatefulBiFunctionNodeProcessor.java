@@ -2,6 +2,7 @@ package org.nasdanika.graph.processor.function;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.nasdanika.common.ProgressMonitor;
@@ -18,7 +19,7 @@ public abstract class ReflectiveStatefulBiFunctionNodeProcessor<S> extends Refle
 		
 	public ReflectiveStatefulBiFunctionNodeProcessor(Collection<Object> targets) {
 		for (Object target: targets) {
-			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
+			getAnnotatedElementRecords(target, Collections.singletonList(target)).forEach(annotatedElementRecords::add);
 		}
 	}
 

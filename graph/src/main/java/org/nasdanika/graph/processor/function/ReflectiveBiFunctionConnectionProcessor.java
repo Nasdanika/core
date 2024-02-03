@@ -2,6 +2,7 @@ package org.nasdanika.graph.processor.function;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -19,7 +20,7 @@ public class ReflectiveBiFunctionConnectionProcessor extends Reflector implement
 		
 	public ReflectiveBiFunctionConnectionProcessor(Collection<Object> targets) {
 		for (Object target: targets) {
-			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
+			getAnnotatedElementRecords(target, Collections.singletonList(target)).forEach(annotatedElementRecords::add);
 		}
 	}
 

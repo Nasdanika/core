@@ -15,7 +15,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -104,8 +107,13 @@ public class Reflector {
 		private AnnotatedElement annotatedElement;
 		private URI baseURI;
 		private Class<?> declaringClass;
+		private List<Object> factoryPath;
 
-		public AnnotatedElementRecord(Predicate<Object> predicate, Object target, AnnotatedElement annotatedElement) {
+		public AnnotatedElementRecord(
+				Predicate<Object> predicate, 
+				Object target, 
+				AnnotatedElement annotatedElement,
+				List<Object> factoryPath) {
 			this.predicate = predicate;
 			this.target = target;
 			this.annotatedElement = annotatedElement;
@@ -118,6 +126,10 @@ public class Reflector {
 			} else if (annotatedElement instanceof Class) {
 				baseURI = Util.createClassURI((Class<?>) annotatedElement);				
 			}
+		}
+		
+		public List<Object> getFactoryPath() {
+			return factoryPath;
 		}
 		
 		public Class<?> getDeclaringClass() {
@@ -184,7 +196,7 @@ public class Reflector {
 				return this;
 			}
 						
-			return new AnnotatedElementRecord(e -> test(e) && other.test(e), target, annotatedElement);
+			return new AnnotatedElementRecord(e -> test(e) && other.test(e), target, annotatedElement, Collections.emptyList());
 		}
 		
 		public AnnotatedElement getAnnotatedElement() {
@@ -206,9 +218,9 @@ public class Reflector {
 	 * @param target
 	 * @return
 	 */
-	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target) {
+	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, List<Object> factoryPath) {
 		Predicate<Object> targetPredicate = getTargetPredicate(target);
-		return Util.getFieldsAndMethods(target.getClass()).flatMap(ae -> getAnnotatedElementRecords(target, ae)).map(aer -> aer.and(targetPredicate));
+		return Util.getFieldsAndMethods(target.getClass()).flatMap(ae -> getAnnotatedElementRecords(target, ae, factoryPath)).map(aer -> aer.and(targetPredicate));
 	}
 	
 	/**
@@ -218,20 +230,29 @@ public class Reflector {
 		return null;
 	}
 	
-	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, AnnotatedElement annotatedElement) {		
+	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, AnnotatedElement annotatedElement, List<Object> factoryPath) {		
 		Factory factory = annotatedElement.getAnnotation(Factory.class);
 		if (factory == null) {			
 			Factories factories = annotatedElement.getAnnotation(Factories.class);
 			if (factories == null) {
-				return Stream.of(new AnnotatedElementRecord(null, target, annotatedElement));
+				return Stream.of(new AnnotatedElementRecord(null, target, annotatedElement, factoryPath));
 			}
 			Predicate<Object> factoriesPredicate = e -> factories.type().isInstance(e) && matchPredicate(e, factories.value());
 			@SuppressWarnings("unchecked")
 			Collection<Object> factoriesTargets = (Collection<Object>) get(target, annotatedElement);
-			return factoriesTargets.stream().flatMap(this::getAnnotatedElementRecords).map(r -> r.and(factoriesPredicate));
+			return factoriesTargets
+					.stream()
+					.flatMap(f -> {
+						List<Object> fPath = new ArrayList<>(factoryPath);
+						fPath.add(f);					
+						return getAnnotatedElementRecords(f, fPath);
+					})
+					.map(r -> r.and(factoriesPredicate));
 		}
 		Predicate<Object> factoryPredicate = e -> factory.type().isInstance(e) && matchPredicate(e, factory.value());
-		return getAnnotatedElementRecords(get(target, annotatedElement)).map(r -> r.and(factoryPredicate));
+		List<Object> fPath = new ArrayList<>(factoryPath);
+		fPath.add(factory);
+		return getAnnotatedElementRecords(get(target, annotatedElement), fPath).map(r -> r.and(factoryPredicate));
 	}
 
 	/**

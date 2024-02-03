@@ -7,6 +7,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -421,37 +422,37 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 		
 		public Dispatcher(Object[] targets) {
 			for (Object target: targets) {
-				getAnnotatedElementRecords(target)
+				getAnnotatedElementRecords(target, Collections.singletonList(target))
 				.filter(ar -> ar.getAnnotation(Feature.class) != null && ar.getAnnotatedElement() instanceof Method)
 				.sorted((a,b) -> b.getAnnotation(Feature.class).priority() - a.getAnnotation(Feature.class).priority())
 				.forEach(featureWires::add);
 			
-				getAnnotatedElementRecords(target)
+				getAnnotatedElementRecords(target, Collections.singletonList(target))
 					.filter(ar -> ar.getAnnotation(ContainerFeature.class) != null && ar.getAnnotatedElement() instanceof Method)
 					.sorted((a,b) -> b.getAnnotation(ContainerFeature.class).priority() - a.getAnnotation(ContainerFeature.class).priority())
 					.forEach(containerFeatureWires::add);
 				
-				getAnnotatedElementRecords(target)
+				getAnnotatedElementRecords(target, Collections.singletonList(target))
 					.filter(ar -> ar.getAnnotation(ContentsFeature.class) != null && ar.getAnnotatedElement() instanceof Method)
 					.sorted((a,b) -> b.getAnnotation(ContentsFeature.class).priority() - a.getAnnotation(ContentsFeature.class).priority())
 					.forEach(contentsFeatureWires::add);
 				
-				getAnnotatedElementRecords(target)
+				getAnnotatedElementRecords(target, Collections.singletonList(target))
 					.filter(ar -> ar.getAnnotation(ConnectionSourceFeature.class) != null && ar.getAnnotatedElement() instanceof Method)
 					.sorted((a,b) -> b.getAnnotation(ConnectionSourceFeature.class).priority() - a.getAnnotation(ConnectionSourceFeature.class).priority())
 					.forEach(connectionSourceFeatureWires::add);
 				
-				getAnnotatedElementRecords(target)
+				getAnnotatedElementRecords(target, Collections.singletonList(target))
 					.filter(ar -> ar.getAnnotation(ConnectionStartFeature.class) != null && ar.getAnnotatedElement() instanceof Method)
 					.sorted((a,b) -> b.getAnnotation(ConnectionStartFeature.class).priority() - a.getAnnotation(ConnectionStartFeature.class).priority())
 					.forEach(connectionStartFeatureWires::add);
 				
-				getAnnotatedElementRecords(target)
+				getAnnotatedElementRecords(target, Collections.singletonList(target))
 					.filter(ar -> ar.getAnnotation(ConnectionTargetFeature.class) != null && ar.getAnnotatedElement() instanceof Method)
 					.sorted((a,b) -> b.getAnnotation(ConnectionTargetFeature.class).priority() - a.getAnnotation(ConnectionTargetFeature.class).priority())
 					.forEach(contentsFeatureWires::add);
 				
-				getAnnotatedElementRecords(target)
+				getAnnotatedElementRecords(target, Collections.singletonList(target))
 					.filter(ar -> ar.getAnnotation(ConnectionEndFeature.class) != null && ar.getAnnotatedElement() instanceof Method)
 					.sorted((a,b) -> b.getAnnotation(ConnectionEndFeature.class).priority() - a.getAnnotation(ConnectionEndFeature.class).priority())
 					.forEach(contentsFeatureWires::add);

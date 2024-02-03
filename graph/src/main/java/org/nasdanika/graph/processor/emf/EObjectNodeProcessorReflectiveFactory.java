@@ -3,6 +3,7 @@ package org.nasdanika.graph.processor.emf;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
 
 	public EObjectNodeProcessorReflectiveFactory(Object... targets) {
 		for (Object target: targets) {
-			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
+			getAnnotatedElementRecords(target, Collections.singletonList(target)).forEach(annotatedElementRecords::add);
 		}
 	}
 	

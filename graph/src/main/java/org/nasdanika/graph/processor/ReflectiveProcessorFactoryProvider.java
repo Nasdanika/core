@@ -45,7 +45,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 		
 	public ReflectiveProcessorFactoryProvider(Object... targets) {
 		for (Object target: targets) {
-			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
+			getAnnotatedElementRecords(target, Collections.singletonList(target)).forEach(annotatedElementRecords::add);
 		}
 	}
 	
@@ -72,7 +72,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 						bc.accept(registry.get(e), progressMonitor);
 					};
 					
-					List<AnnotatedElementRecord> registryTargetAnnotatedElementRecords = getAnnotatedElementRecords(registryTarget).toList();
+					List<AnnotatedElementRecord> registryTargetAnnotatedElementRecords = getAnnotatedElementRecords(registryTarget, Collections.singletonList(registryTarget)).toList();
 					wireRegistryEntry(parallel ? registryTargetAnnotatedElementRecords.parallelStream() : registryTargetAnnotatedElementRecords.stream(), configs, infoProvider);
 					wireRegistry(parallel ? registryTargetAnnotatedElementRecords.parallelStream() : registryTargetAnnotatedElementRecords.stream(), configs, infoProvider);
 				}				
@@ -109,7 +109,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 		}
 		Processor elementProcessorAnnotation = method.getAnnotation(Processor.class);
 		
-		List<AnnotatedElementRecord> processorAnnotatedElementRecords = getAnnotatedElementRecords(processor).toList();
+		List<AnnotatedElementRecord> processorAnnotatedElementRecords = getAnnotatedElementRecords(processor, Collections.emptyList()).toList();
 		Supplier<Stream<AnnotatedElementRecord>> processorAnnotatedElementRecordsStreamSupplier = () -> parallel ? processorAnnotatedElementRecords.parallelStream() : processorAnnotatedElementRecords.stream();
 		
 		boolean hideWired = elementProcessorAnnotation.hideWired();
