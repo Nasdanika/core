@@ -33,10 +33,8 @@ import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marker;
 import org.nasdanika.persistence.ObjectFactory;
 import org.nasdanika.persistence.ObjectLoader;
+import org.springframework.util.AntPathMatcher;
 import org.yaml.snakeyaml.Yaml;
-
-import io.github.azagniotov.matcher.AntPathMatcher;
-import io.github.azagniotov.matcher.AntPathMatcher.Builder;
 
 /**
  * Creates reference value/element - {@link EObject} or proxy.
@@ -282,18 +280,17 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 	}
 	
 	private static Collection<File> match(File baseDir, Collection<String> includes, Collection<String> excludes) {
-		Builder builder = new AntPathMatcher.Builder();
-		AntPathMatcher matcher = builder.build();
+		AntPathMatcher matcher = new AntPathMatcher();
 		Map<String,File> collector = new HashMap<>();
 		if (includes == null || includes.isEmpty()) {
 			include(baseDir, (file,path) -> true, collector);
 		} else {
 			for (String include: includes) {
-				include(baseDir, (file,path) -> matcher.isMatch(peel(include), path), collector);
+				include(baseDir, (file,path) -> matcher.match(peel(include), path), collector);
 			}
 		}
 		if (excludes != null) {
-			collector.keySet().removeIf(path -> excludes.stream().filter(exclude -> matcher.isMatch(peel(exclude), path)).findAny().isPresent());
+			collector.keySet().removeIf(path -> excludes.stream().filter(exclude -> matcher.match(peel(exclude), path)).findAny().isPresent());
 		}				
 		return collector.values();
 	}

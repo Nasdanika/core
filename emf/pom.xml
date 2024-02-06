@@ -42,11 +42,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>io.github.azagniotov</groupId>
-			<artifactId>ant-style-path-matcher</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.nasdanika.core</groupId>
 			<artifactId>ncore</artifactId>
 			<version>${project.version}</version>
