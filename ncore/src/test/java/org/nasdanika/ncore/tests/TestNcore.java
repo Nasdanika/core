@@ -41,11 +41,11 @@ class TestNcore {
 	void testFileDirectoryURIHandler() throws IOException {
 		ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());		
-		URIHandler fileDirectoryURIHandler = new DirectoryContentFileURIHandler(u -> DispatchingResourceFactory.canLoad(resourceSet.getResourceFactoryRegistry(), u), false);
+		URIHandler fileDirectoryURIHandler = new DirectoryContentFileURIHandler();
 		resourceSet.getURIConverter().getURIHandlers().add(0,fileDirectoryURIHandler);
 		
 		String currentDir = new File(".").getCanonicalPath();
-		URI currentDirURI = URI.createFileURI(currentDir);
+		URI currentDirURI = URI.createFileURI(currentDir).appendSegment("");
 		
 		Resource dirResource = resourceSet.getResource(currentDirURI, true);
 		dirResource.save(System.out, null);

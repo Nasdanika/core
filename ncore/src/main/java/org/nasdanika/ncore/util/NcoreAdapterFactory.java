@@ -13,11 +13,13 @@ import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
+import org.nasdanika.ncore.Directory;
 import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.DocumentedNamedElement;
 import org.nasdanika.ncore.DocumentedNamedStringIdentity;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
+import org.nasdanika.ncore.File;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
@@ -34,6 +36,8 @@ import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringIdentity;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.ncore.Tree;
+import org.nasdanika.ncore.TreeItem;
 import org.nasdanika.ncore.ValueObject;
 import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.persistence.Marked;
@@ -246,6 +250,22 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseDocumentedNamedStringIdentity(DocumentedNamedStringIdentity object) {
 				return createDocumentedNamedStringIdentityAdapter();
+			}
+			@Override
+			public Adapter caseTreeItem(TreeItem object) {
+				return createTreeItemAdapter();
+			}
+			@Override
+			public Adapter caseTree(Tree object) {
+				return createTreeAdapter();
+			}
+			@Override
+			public Adapter caseFile(File object) {
+				return createFileAdapter();
+			}
+			@Override
+			public Adapter caseDirectory(Directory object) {
+				return createDirectoryAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -796,6 +816,62 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDocumentedNamedStringIdentityAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.TreeItem <em>Tree Item</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.TreeItem
+	 * @generated
+	 */
+	public Adapter createTreeItemAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Tree <em>Tree</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Tree
+	 * @generated
+	 */
+	public Adapter createTreeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.File <em>File</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.File
+	 * @generated
+	 */
+	public Adapter createFileAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Directory <em>Directory</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Directory
+	 * @generated
+	 */
+	public Adapter createDirectoryAdapter() {
 		return null;
 	}
 

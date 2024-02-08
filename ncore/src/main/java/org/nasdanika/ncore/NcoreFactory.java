@@ -265,6 +265,42 @@ public interface NcoreFactory extends EFactory {
 	DocumentedNamedStringIdentity createDocumentedNamedStringIdentity();
 
 	/**
+	 * Returns a new object of class '<em>Tree Item</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Tree Item</em>'.
+	 * @generated
+	 */
+	TreeItem createTreeItem();
+
+	/**
+	 * Returns a new object of class '<em>Tree</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Tree</em>'.
+	 * @generated
+	 */
+	Tree createTree();
+
+	/**
+	 * Returns a new object of class '<em>File</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>File</em>'.
+	 * @generated
+	 */
+	File createFile();
+
+	/**
+	 * Returns a new object of class '<em>Directory</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Directory</em>'.
+	 * @generated
+	 */
+	Directory createDirectory();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

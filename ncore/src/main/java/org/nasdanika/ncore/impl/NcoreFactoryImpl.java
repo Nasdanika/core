@@ -17,10 +17,12 @@ import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
+import org.nasdanika.ncore.Directory;
 import org.nasdanika.ncore.DocumentedNamedElement;
 import org.nasdanika.ncore.DocumentedNamedStringIdentity;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
+import org.nasdanika.ncore.File;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
@@ -36,6 +38,8 @@ import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.ncore.Tree;
+import org.nasdanika.ncore.TreeItem;
 import org.nasdanika.ncore.ValueObjectProperty;
 
 /**
@@ -111,6 +115,10 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.DOCUMENTED_NAMED_ELEMENT: return createDocumentedNamedElement();
 			case NcorePackage.COMPOSITE: return createComposite();
 			case NcorePackage.DOCUMENTED_NAMED_STRING_IDENTITY: return createDocumentedNamedStringIdentity();
+			case NcorePackage.TREE_ITEM: return createTreeItem();
+			case NcorePackage.TREE: return createTree();
+			case NcorePackage.FILE: return createFile();
+			case NcorePackage.DIRECTORY: return createDirectory();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -465,6 +473,50 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public DocumentedNamedStringIdentity createDocumentedNamedStringIdentity() {
 		DocumentedNamedStringIdentityImpl documentedNamedStringIdentity = new DocumentedNamedStringIdentityImpl();
 		return documentedNamedStringIdentity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TreeItem createTreeItem() {
+		TreeItemImpl treeItem = new TreeItemImpl();
+		return treeItem;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Tree createTree() {
+		TreeImpl tree = new TreeImpl();
+		return tree;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public File createFile() {
+		FileImpl file = new FileImpl();
+		return file;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Directory createDirectory() {
+		DirectoryImpl directory = new DirectoryImpl();
+		return directory;
 	}
 
 	/**

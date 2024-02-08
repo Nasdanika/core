@@ -19,11 +19,13 @@ import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
+import org.nasdanika.ncore.Directory;
 import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.DocumentedNamedElement;
 import org.nasdanika.ncore.DocumentedNamedStringIdentity;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
+import org.nasdanika.ncore.File;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
@@ -39,6 +41,8 @@ import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringIdentity;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.ncore.Tree;
+import org.nasdanika.ncore.TreeItem;
 import org.nasdanika.ncore.ValueObject;
 import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.persistence.Marked;
@@ -192,6 +196,14 @@ public class NcoreValidator extends EObjectValidator {
 				return validateStringIdentity((StringIdentity)value, diagnostics, context);
 			case NcorePackage.DOCUMENTED_NAMED_STRING_IDENTITY:
 				return validateDocumentedNamedStringIdentity((DocumentedNamedStringIdentity)value, diagnostics, context);
+			case NcorePackage.TREE_ITEM:
+				return validateTreeItem((TreeItem)value, diagnostics, context);
+			case NcorePackage.TREE:
+				return validateTree((Tree)value, diagnostics, context);
+			case NcorePackage.FILE:
+				return validateFile((File)value, diagnostics, context);
+			case NcorePackage.DIRECTORY:
+				return validateDirectory((Directory)value, diagnostics, context);
 			case NcorePackage.INSTANT:
 				return validateInstant((Instant)value, diagnostics, context);
 			case NcorePackage.DURATION:
@@ -646,6 +658,42 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateDocumentedNamedStringIdentity(DocumentedNamedStringIdentity documentedNamedStringIdentity, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(documentedNamedStringIdentity, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateTreeItem(TreeItem treeItem, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(treeItem, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateTree(Tree tree, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(tree, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateFile(File file, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(file, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateDirectory(Directory directory, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(directory, diagnostics, context);
 	}
 
 	/**

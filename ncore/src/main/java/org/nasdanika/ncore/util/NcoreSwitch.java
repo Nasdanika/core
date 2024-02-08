@@ -11,11 +11,13 @@ import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
+import org.nasdanika.ncore.Directory;
 import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.DocumentedNamedElement;
 import org.nasdanika.ncore.DocumentedNamedStringIdentity;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
+import org.nasdanika.ncore.File;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
@@ -32,6 +34,8 @@ import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringIdentity;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.ncore.Tree;
+import org.nasdanika.ncore.TreeItem;
 import org.nasdanika.ncore.ValueObject;
 import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.persistence.Marked;
@@ -396,6 +400,35 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseMarked(documentedNamedStringIdentity);
 				if (result == null) result = caseAdaptable(documentedNamedStringIdentity);
 				if (result == null) result = caseIMarked(documentedNamedStringIdentity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.TREE_ITEM: {
+				TreeItem treeItem = (TreeItem)theEObject;
+				T1 result = caseTreeItem(treeItem);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.TREE: {
+				Tree tree = (Tree)theEObject;
+				T1 result = caseTree(tree);
+				if (result == null) result = caseTreeItem(tree);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.FILE: {
+				File file = (File)theEObject;
+				T1 result = caseFile(file);
+				if (result == null) result = caseTreeItem(file);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.DIRECTORY: {
+				Directory directory = (Directory)theEObject;
+				T1 result = caseDirectory(directory);
+				if (result == null) result = caseFile(directory);
+				if (result == null) result = caseTree(directory);
+				if (result == null) result = caseTreeItem(directory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -970,6 +1003,66 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseDocumentedNamedStringIdentity(DocumentedNamedStringIdentity object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Tree Item</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Tree Item</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseTreeItem(TreeItem object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Tree</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Tree</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseTree(Tree object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>File</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>File</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseFile(File object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Directory</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Directory</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseDirectory(Directory object) {
 		return null;
 	}
 

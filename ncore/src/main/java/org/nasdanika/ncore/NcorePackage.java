@@ -2305,6 +2305,208 @@ public interface NcorePackage extends EPackage {
 	int DOCUMENTED_NAMED_STRING_IDENTITY_OPERATION_COUNT = DOCUMENTED_NAMED_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.TreeItemImpl <em>Tree Item</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.TreeItemImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTreeItem()
+	 * @generated
+	 */
+	int TREE_ITEM = 38;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TREE_ITEM__NAME = 0;
+
+	/**
+	 * The number of structural features of the '<em>Tree Item</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TREE_ITEM_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Tree Item</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TREE_ITEM_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.TreeImpl <em>Tree</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.TreeImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTree()
+	 * @generated
+	 */
+	int TREE = 39;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TREE__NAME = TREE_ITEM__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Tree Items</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TREE__TREE_ITEMS = TREE_ITEM_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Tree</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TREE_FEATURE_COUNT = TREE_ITEM_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Tree</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TREE_OPERATION_COUNT = TREE_ITEM_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.FileImpl <em>File</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.FileImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getFile()
+	 * @generated
+	 */
+	int FILE = 40;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE__NAME = TREE_ITEM__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Length</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE__LENGTH = TREE_ITEM_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Last Modified</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE__LAST_MODIFIED = TREE_ITEM_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>File</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE_FEATURE_COUNT = TREE_ITEM_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>File</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE_OPERATION_COUNT = TREE_ITEM_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.DirectoryImpl <em>Directory</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.DirectoryImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDirectory()
+	 * @generated
+	 */
+	int DIRECTORY = 41;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__NAME = FILE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Length</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__LENGTH = FILE__LENGTH;
+
+	/**
+	 * The feature id for the '<em><b>Last Modified</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__LAST_MODIFIED = FILE__LAST_MODIFIED;
+
+	/**
+	 * The feature id for the '<em><b>Tree Items</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__TREE_ITEMS = FILE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Directory</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY_FEATURE_COUNT = FILE_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Directory</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY_OPERATION_COUNT = FILE_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '<em>Instant</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2312,7 +2514,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 38;
+	int INSTANT = 42;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -2322,7 +2524,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 39;
+	int DURATION = 43;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -3244,6 +3446,90 @@ public interface NcorePackage extends EPackage {
 	EClass getDocumentedNamedStringIdentity();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.TreeItem <em>Tree Item</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Tree Item</em>'.
+	 * @see org.nasdanika.ncore.TreeItem
+	 * @generated
+	 */
+	EClass getTreeItem();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.TreeItem#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.nasdanika.ncore.TreeItem#getName()
+	 * @see #getTreeItem()
+	 * @generated
+	 */
+	EAttribute getTreeItem_Name();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Tree <em>Tree</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Tree</em>'.
+	 * @see org.nasdanika.ncore.Tree
+	 * @generated
+	 */
+	EClass getTree();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.Tree#getTreeItems <em>Tree Items</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Tree Items</em>'.
+	 * @see org.nasdanika.ncore.Tree#getTreeItems()
+	 * @see #getTree()
+	 * @generated
+	 */
+	EReference getTree_TreeItems();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.File <em>File</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>File</em>'.
+	 * @see org.nasdanika.ncore.File
+	 * @generated
+	 */
+	EClass getFile();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.File#getLength <em>Length</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Length</em>'.
+	 * @see org.nasdanika.ncore.File#getLength()
+	 * @see #getFile()
+	 * @generated
+	 */
+	EAttribute getFile_Length();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.File#getLastModified <em>Last Modified</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Last Modified</em>'.
+	 * @see org.nasdanika.ncore.File#getLastModified()
+	 * @see #getFile()
+	 * @generated
+	 */
+	EAttribute getFile_LastModified();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Directory <em>Directory</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Directory</em>'.
+	 * @see org.nasdanika.ncore.Directory
+	 * @generated
+	 */
+	EClass getDirectory();
+
+	/**
 	 * Returns the meta object for data type '{@link java.time.Instant <em>Instant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4074,6 +4360,78 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass DOCUMENTED_NAMED_STRING_IDENTITY = eINSTANCE.getDocumentedNamedStringIdentity();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.TreeItemImpl <em>Tree Item</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.TreeItemImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTreeItem()
+		 * @generated
+		 */
+		EClass TREE_ITEM = eINSTANCE.getTreeItem();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TREE_ITEM__NAME = eINSTANCE.getTreeItem_Name();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.TreeImpl <em>Tree</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.TreeImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTree()
+		 * @generated
+		 */
+		EClass TREE = eINSTANCE.getTree();
+
+		/**
+		 * The meta object literal for the '<em><b>Tree Items</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TREE__TREE_ITEMS = eINSTANCE.getTree_TreeItems();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.FileImpl <em>File</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.FileImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getFile()
+		 * @generated
+		 */
+		EClass FILE = eINSTANCE.getFile();
+
+		/**
+		 * The meta object literal for the '<em><b>Length</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FILE__LENGTH = eINSTANCE.getFile_Length();
+
+		/**
+		 * The meta object literal for the '<em><b>Last Modified</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FILE__LAST_MODIFIED = eINSTANCE.getFile_LastModified();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.DirectoryImpl <em>Directory</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.DirectoryImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDirectory()
+		 * @generated
+		 */
+		EClass DIRECTORY = eINSTANCE.getDirectory();
 
 		/**
 		 * The meta object literal for the '<em>Instant</em>' data type.

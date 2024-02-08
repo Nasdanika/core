@@ -20,11 +20,13 @@ import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
+import org.nasdanika.ncore.Directory;
 import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.DocumentedNamedElement;
 import org.nasdanika.ncore.DocumentedNamedStringIdentity;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
+import org.nasdanika.ncore.File;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
@@ -44,6 +46,8 @@ import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringIdentity;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.ncore.Tree;
+import org.nasdanika.ncore.TreeItem;
 import org.nasdanika.ncore.ValueObject;
 import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.ncore.util.NcoreValidator;
@@ -320,6 +324,34 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass documentedNamedStringIdentityEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass treeItemEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass treeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass fileEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass directoryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1282,6 +1314,86 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getTreeItem() {
+		return treeItemEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTreeItem_Name() {
+		return (EAttribute)treeItemEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getTree() {
+		return treeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getTree_TreeItems() {
+		return (EReference)treeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getFile() {
+		return fileEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getFile_Length() {
+		return (EAttribute)fileEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getFile_LastModified() {
+		return (EAttribute)fileEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getDirectory() {
+		return directoryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getInstant() {
 		return instantEDataType;
 	}
@@ -1450,6 +1562,18 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		documentedNamedStringIdentityEClass = createEClass(DOCUMENTED_NAMED_STRING_IDENTITY);
 
+		treeItemEClass = createEClass(TREE_ITEM);
+		createEAttribute(treeItemEClass, TREE_ITEM__NAME);
+
+		treeEClass = createEClass(TREE);
+		createEReference(treeEClass, TREE__TREE_ITEMS);
+
+		fileEClass = createEClass(FILE);
+		createEAttribute(fileEClass, FILE__LENGTH);
+		createEAttribute(fileEClass, FILE__LAST_MODIFIED);
+
+		directoryEClass = createEClass(DIRECTORY);
+
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
 		durationEDataType = createEDataType(DURATION);
@@ -1570,6 +1694,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		compositeEClass.getESuperTypes().add(this.getDocumentedNamedElement());
 		documentedNamedStringIdentityEClass.getESuperTypes().add(this.getDocumentedNamedElement());
 		documentedNamedStringIdentityEClass.getESuperTypes().add(this.getStringIdentity());
+		treeEClass.getESuperTypes().add(this.getTreeItem());
+		fileEClass.getESuperTypes().add(this.getTreeItem());
+		directoryEClass.getESuperTypes().add(this.getFile());
+		directoryEClass.getESuperTypes().add(this.getTree());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(adaptableEClass, Adaptable.class, "Adaptable", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1715,6 +1843,18 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getStringIdentity_Id(), ecorePackage.getEString(), "id", null, 1, 1, StringIdentity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(documentedNamedStringIdentityEClass, DocumentedNamedStringIdentity.class, "DocumentedNamedStringIdentity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(treeItemEClass, TreeItem.class, "TreeItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getTreeItem_Name(), ecorePackage.getEString(), "name", null, 0, 1, TreeItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(treeEClass, Tree.class, "Tree", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTree_TreeItems(), this.getTreeItem(), null, "treeItems", null, 0, -1, Tree.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(fileEClass, File.class, "File", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getFile_Length(), ecorePackage.getELong(), "length", null, 0, 1, File.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFile_LastModified(), ecorePackage.getEDate(), "lastModified", null, 0, 1, File.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(directoryEClass, Directory.class, "Directory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

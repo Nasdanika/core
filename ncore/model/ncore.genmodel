@@ -131,5 +131,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//StringIdentity/id"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//DocumentedNamedStringIdentity"/>
+    <genClasses ecoreClass="ncore.ecore#//TreeItem">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//TreeItem/name"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Tree">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Tree/treeItems"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//File">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//File/length"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//File/lastModified"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Directory"/>
   </genPackages>
 </genmodel:GenModel>
