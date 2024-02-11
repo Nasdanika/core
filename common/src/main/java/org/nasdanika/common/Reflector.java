@@ -132,6 +132,10 @@ public class Reflector {
 			return factoryPath;
 		}
 		
+		public Object getTarget() {
+			return target;
+		}
+		
 		public Class<?> getDeclaringClass() {
 			return declaringClass;
 		}

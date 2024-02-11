@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
@@ -15,7 +14,6 @@ import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.junit.jupiter.api.Test;
-import org.nasdanika.common.DispatchingResourceFactory;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.util.DirectoryContentFileURIHandler;
 import org.nasdanika.ncore.util.NcoreUtil;
