@@ -268,7 +268,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					return eClassifier;
 				}
 			}
-			throw new IllegalArgumentException("EPackage not found: " + ePackageNsURI); 
+			throw new ConfigurationException("EPackage not found: " + ePackageNsURI, asMarked(source)); 
 		}
 		
 		int dotIdx = type.indexOf('.');
