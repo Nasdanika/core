@@ -45,10 +45,18 @@ public abstract class DelimitedStringMap extends AbstractSplitJoinMap<String, St
 			}
 		};
 	}
+	
+	protected boolean isStoreValue(String value) {
+		return value != null;
+	}
 
 	@Override
-	protected String store(Entry<String, String> element) {
-		return element.getKey() + keyValueDelimiter + element.getValue();
+	protected String store(Entry<String, String> element) {		
+		String value = element.getValue();
+		if (isStoreValue(value)) {
+			return element.getKey() + keyValueDelimiter + value;
+		}
+		return element.getKey();
 	}
 
 }

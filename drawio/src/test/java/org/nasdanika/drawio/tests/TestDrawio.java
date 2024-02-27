@@ -868,4 +868,41 @@ public class TestDrawio {
 			System.out.println(el);			
 		}
 	}
+	
+	@Test
+	public void testContainer() throws Exception {
+		Document document = Document.create(false, null);
+		Page page = document.createPage();
+		page.setName("My first new page");
+		
+		Model model = page.getModel();
+		Root root = model.getRoot();
+		List<Layer> layers = root.getLayers();
+		assertThat(layers).singleElement();
+		
+		Layer backgroundLayer = root.getLayers().get(0);
+		
+		Node container = backgroundLayer.createNode();
+		Map<String, String> containerStyle = container.getStyle();
+		containerStyle.put("swimlane", null);
+		containerStyle.put("whitespace", "wrap");
+		containerStyle.put("html", "1");
+		containerStyle.put("collapsible", "0");
+		container.getGeometry().setBounds(200, 100, 300, 400);
+		container.setLabel("My Container");
+		
+		Node person = container.createNode();
+		person.getGeometry().setBounds(100, 100, 48, 48);
+		person.style("shape", "image");
+		Map<String, String> personStyle = person.getStyle();
+		personStyle.put("verticalLabelPosition", "bottom");
+		personStyle.put("labelBackgroundColor", "default");
+		personStyle.put("verticalAlign", "top");
+		personStyle.put("aspect", "fixed");
+		personStyle.put("imageAspect", "0");
+		personStyle.put("image", "https://img.icons8.com/color/48/user-male.png");
+		
+		Files.writeString(new File("target/container.drawio").toPath(), document.save(null));
+	}
+	
 }

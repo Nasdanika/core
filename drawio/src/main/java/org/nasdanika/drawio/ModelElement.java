@@ -44,6 +44,17 @@ public interface ModelElement extends Element, PropertySource<String, String> {
 	 */
 	Map<String,String> getStyle();
 	
+	/**
+	 * A fluent method equivalent to getStyle().put(key, value)
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	default ModelElement style(String key, String value) {
+		getStyle().put(key, value);
+		return this;
+	}
+	
 	void setProperty(String name, String value);
 	
 	Set<String> getPropertyNames();
