@@ -217,9 +217,10 @@ public class DocumentImpl extends ElementImpl implements Document {
 		};
 	}
 	
-	public Function<String, String> getPropertySource() {
-		return propertySource;
-	}	
+	@Override
+	public String getProperty(String name) {
+		return propertySource == null ? null : propertySource.apply(name);
+	}
 
 	@Override
 	public String toHtml(Boolean compress, String viewer) throws JSONException, TransformerException, IOException {

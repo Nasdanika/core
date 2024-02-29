@@ -1,7 +1,9 @@
 package org.nasdanika.drawio.emf;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -37,7 +39,7 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 		String source = modelDocument.getSource();
 		URI sourceURI = URI.createURI(source);		
 		try {
-			org.nasdanika.drawio.Document sourceDocument = org.nasdanika.drawio.Document.load(sourceURI);
+			org.nasdanika.drawio.Document sourceDocument = org.nasdanika.drawio.Document.load(sourceURI, getUriHandler(), this::getProperty);
 			Z: for (Page page: sourceDocument.getPages()) {
 				if (page.getId().equals(modelPage.getId())) {
 					page.accept(pageElement -> filterRepresentation(pageElement, modelPage, registry, progressMonitor));
@@ -64,6 +66,14 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 		}
 	}
 
+	protected String getProperty(String name) {
+		return null;
+	}
+
+	protected Function<URI, InputStream> getUriHandler() {
+		return null;
+	}
+
 	/**
 	 * Sets semantic UUIDs for the contents of eObj
 	 * @param documentElement Element of drawio document to set semantic UUID property 
@@ -88,6 +98,15 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 					filterRepresentationElement(documentModelElement, semanticElement, registry, progressMonitor);
 					break;
 				}
+			}
+			
+			// Expanding placeholders for label and tooltip
+			if ("1".equals(documentModelElement.getProperty("placeholders"))) {
+				String label = documentModelElement.getLabel();
+				documentModelElement.setLabel(label);
+				
+				String tooltip = documentModelElement.getTooltip();
+				documentModelElement.setTooltip(tooltip);				
 			}
 		}
 	}

@@ -59,6 +59,11 @@ public class GraphDrawioResource extends ResourceImpl {
 				return GraphDrawioResource.this.getURIConverter();
 			}
 			
+			@Override
+			protected String getProperty(String name) {
+				return GraphDrawioResource.this.getProperty(name);
+			}
+			
 		};
 		
 		diagramResource.load(inputStream, options);
@@ -110,6 +115,11 @@ public class GraphDrawioResource extends ResourceImpl {
 			protected Iterable<Entry<String, Object>> getVariables(EObject context) {
 				return GraphDrawioResource.this.getVariables(context);
 			}
+						
+			@Override
+			protected String getProperty(String name) {
+				return GraphDrawioResource.this.getProperty(name);
+			}
 			
 		};
 		
@@ -127,6 +137,10 @@ public class GraphDrawioResource extends ResourceImpl {
 		Map<EObject, EObject> graphElements = graphFactory.transform(diagramModelContents, false, getProgressMonitor());
 		
 		diagramResource.getContents().stream().map(graphElements::get).forEach(getContents()::add);
+	}
+	
+	protected String getProperty(String name) {
+		return null;
 	}
 
 	protected ProgressMonitor getProgressMonitor() {

@@ -219,7 +219,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	
 	private String getInheritedProperty(ModelElement modelElement, String name) {
 		if (modelElement == null) {
-			Function<String, String> propertySource = ((DocumentImpl) getModel().getPage().getDocument()).getPropertySource();
+			Function<String, String> propertySource = ((DocumentImpl) getModel().getPage().getDocument())::getProperty;
 			return propertySource == null ? null : propertySource.apply(name);
 		}
 		String val = modelElement.getProperty(name);

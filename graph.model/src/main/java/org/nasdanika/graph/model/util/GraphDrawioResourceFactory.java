@@ -61,9 +61,18 @@ public class GraphDrawioResourceFactory implements Resource.Factory {
 				return GraphDrawioResourceFactory.this.getVariables(this, context);
 			}
 			
+			@Override
+			protected String getProperty(String name) {
+				return GraphDrawioResourceFactory.this.getProperty(this, name);
+			}
+			
 		};
 	}
 	
+	protected String getProperty(GraphDrawioResource graphDrawioResource, String name) {
+		return null;
+	}
+
 	protected Function<Marker, org.nasdanika.ncore.Marker> getMarkerFactory() {
 		return null;
 	}

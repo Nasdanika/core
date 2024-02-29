@@ -375,5 +375,7 @@ public interface Document extends Element {
 	 * @return Document string.
 	 */
 	String save(Boolean compress) throws TransformerException, IOException;
+	
+	String getProperty(String name);
 
 }
