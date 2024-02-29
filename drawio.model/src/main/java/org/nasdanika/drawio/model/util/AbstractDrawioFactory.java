@@ -42,6 +42,7 @@ import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
@@ -760,8 +761,14 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			return null;
 		}
 		
-		EObject logicalParent = getLogicalParent(eObj);		
-		URI logicalParentBaseURI = logicalParent == null ? eObj.eResource().getURI() : getBaseURI(logicalParent);
+		EObject logicalParent = getLogicalParent(eObj);				
+		URI logicalParentBaseURI;
+		if (logicalParent == null) {
+			Resource eResource = eObj.eResource();			
+			logicalParentBaseURI = eResource == null ? null : eResource.getURI();
+		} else {
+			logicalParentBaseURI = getBaseURI(logicalParent);
+		}
 
 		String baseURIProperty = getBaseURIProperty();
 		if (Util.isBlank(baseURIProperty)) {
