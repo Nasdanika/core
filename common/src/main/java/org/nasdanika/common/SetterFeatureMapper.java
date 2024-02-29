@@ -783,15 +783,14 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		Object result = evaluate(argument, (String) expression, variables, type, context);
 		return result;
 	}
-		
-	protected static record Script(URI uri, String script) {};	
 	
-	protected Script getScript(Map<?,?> configMap, EObject context) {
+	protected SourceRecord getScript(Map<?,?> configMap, EObject context) {
+		URI baseURI = getBaseURI(context);
 		Object script = configMap.get(SCRIPT_KEY);
 		if (script instanceof String) {
 			String ss = (String) script;
 			if (!Util.isBlank(ss)) {		
-				return new Script(null, ss);
+				return new SourceRecord(baseURI, ss);
 			}
 		} else if (script != null) {
 			throwConfigurationException("Script is not a string: " + script, null, context);			
@@ -807,14 +806,13 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			}
 
 			URI refURI = URI.createURI(sRef);
-			URI baseURI = getBaseURI(context);
 			if (baseURI != null && !baseURI.isRelative()) {
 				refURI = refURI.resolve(baseURI);
 			}
 			try {
 				DefaultConverter converter = DefaultConverter.INSTANCE;
 				Reader reader = converter.toReader(refURI);
-				return new Script(refURI, converter.toString(reader));
+				return new SourceRecord(refURI, converter.toString(reader));
 			} catch (IOException e) {
 				throwConfigurationException("Error loading script from " + refURI, e, context);
 			}
@@ -856,9 +854,9 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Map<S, T> registry,
 			Class<?> type,
 			EObject context) {		
-		Script script = getScript(configMap, context);
+		SourceRecord script = getScript(configMap, context);
 		
-		if (script == null || Util.isBlank(script.script())) {
+		if (script == null || Util.isBlank(script.source())) {
 			return argumentValue;
 		}
 		
@@ -893,7 +891,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			}
 			
 			try {
-				return engine.eval(script.script());
+				return engine.eval(script.source());
 			} catch (ScriptException e) {
 				throwConfigurationException("Error evaluating script: " + e, e, context);
 			}

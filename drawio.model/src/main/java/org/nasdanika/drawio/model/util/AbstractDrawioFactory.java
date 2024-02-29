@@ -73,6 +73,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeLocator;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
+import org.nasdanika.common.SourceRecord;
 
 /**
  * Base class for classes which map/transform Drawio model to a specific semantic model. For example, architecture model or flow/process model.
@@ -82,6 +83,7 @@ import org.yaml.snakeyaml.error.YAMLException;
  */
 public abstract class AbstractDrawioFactory<S extends EObject> {
 	
+	private static final String ENGINE_PROPERTY_SUFFIX = "-engine";
 	private static final String PASS_KEY = "pass";
 	private static final String ARGUMENTS_KEY = "arguments";
 	private static final String ITERATOR_KEY = "iterator";
@@ -104,39 +106,51 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return getPropertyNamespace() + "tag-spec";
 	}
 	
-	protected String getTagSpecRefPropertyName() {
-		return getPropertyNamespace() + "tag-spec-ref";
-	}
-	
-	protected String getTagSpecStr(EObject source) {
-		String tspn = getTagSpecPropertyName();
-		if (!Util.isBlank(tspn)) {
-			String ts = getProperty(source, tspn);
-			if (!Util.isBlank(ts)) {
-				return ts;
+	/**
+	 * Loads source from a property or from a URL specified by refProperty
+	 * @param source
+	 * @param property
+	 * @param refProperty
+	 * @return
+	 */
+	protected SourceRecord loadSource(EObject eObj, String property, String refProperty) {
+		URI baseURI = getBaseURI(eObj);
+		if (!Util.isBlank(property)) {
+			String source = getProperty(eObj, property);
+			if (!Util.isBlank(source)) {
+				return new SourceRecord(baseURI, source);
 			}
 		}
 		
-		String tsrpn = getTagSpecRefPropertyName();
-		if (!Util.isBlank(tsrpn)) {
-			String ref = getProperty(source, tsrpn);
+		if (!Util.isBlank(refProperty)) {
+			String ref = getProperty(eObj, refProperty);
 			if (!Util.isBlank(ref)) {
 				URI refURI = URI.createURI(ref);
-				URI baseURI = getBaseURI(source);
 				if (baseURI != null && !baseURI.isRelative()) {
 					refURI = refURI.resolve(baseURI);
 				}
 				try {
 					DefaultConverter converter = DefaultConverter.INSTANCE;
 					Reader reader = converter.toReader(refURI);
-					return converter.toString(reader);
+					return new SourceRecord(refURI, converter.toString(reader));
 				} catch (IOException e) {
-					throw new ConfigurationException("Error loading tag spec from " + refURI, e, asMarked(source));
+					throw new ConfigurationException("Error loading source from " + refURI, e, asMarked(eObj));
 				}
 			}
 		}
 		return null;
-	}	
+	}
+	
+	protected SourceRecord loadSource(EObject eObj, String property) {
+		if (Util.isBlank(property)) {
+			return null;
+		}
+		return loadSource(eObj, property, property + getRefSuffix());
+	}
+
+	protected String getRefSuffix() {
+		return "-ref";
+	}
 	
 	/**
 	 * Returns eObject property. This implementation uses ModelElement.getProperties().get() for instances of model element. 
@@ -152,14 +166,14 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		if (eObj instanceof Tag) {
 			Page page = (Page) eObj.eContainer();
 			Root root = page.getModel().getRoot();
-			
-			String config = getTagSpecStr(root);
-			if (Util.isBlank(config)) {
+
+			SourceRecord configRecord = loadSource(root, getTagSpecPropertyName());
+			if (configRecord == null) {
 				return null;
 			}
 			try {
 				Yaml yaml = new Yaml();
-				Object tagSpecObj = yaml.load(config);
+				Object tagSpecObj = yaml.load(configRecord.source());
 				if (tagSpecObj instanceof Map) {
 					Map<?,?> tagSpecMap = (Map<?,?>) tagSpecObj;
 					Object tagConfigObj = tagSpecMap.get(((Tag) eObj).getName());
@@ -618,46 +632,6 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return getPropertyNamespace() + "initializer-script";
 	}
 	
-	protected String getInitializerScriptRefPropertyName() {
-		return getPropertyNamespace() + "initializer-script-ref";
-	}
-	
-	protected String getInitializerScriptEnginePropertyName() {
-		return getPropertyNamespace() + "initializer-script-engine";
-	}
-		
-	protected static record Script(URI uri, String script) {};
-	
-	protected Script getInitializerScript(EObject source) {
-		String ispn = getInitializerScriptPropertyName();
-		if (!Util.isBlank(ispn)) {
-			String script = getProperty(source, ispn);
-			if (!Util.isBlank(script)) {
-				return new Script(null, script);
-			}
-		}
-		
-		String isrpn = getInitializerScriptRefPropertyName();
-		if (!Util.isBlank(isrpn)) {
-			String ref = getProperty(source, isrpn);
-			if (!Util.isBlank(ref)) {
-				URI refURI = URI.createURI(ref);
-				URI baseURI = getBaseURI(source);
-				if (baseURI != null && !baseURI.isRelative()) {
-					refURI = refURI.resolve(baseURI);
-				}
-				try {
-					DefaultConverter converter = DefaultConverter.INSTANCE;
-					Reader reader = converter.toReader(refURI);
-					return new Script(refURI, converter.toString(reader));
-				} catch (IOException e) {
-					throw new ConfigurationException("Error loading script from " + refURI, e, asMarked(source));
-				}
-			}
-		}
-		return null;
-	}
-	
 	/**
 	 * Executes script
 	 * @param diagramElement
@@ -673,13 +647,13 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {
 		
-		Script script = getInitializerScript(diagramElement);
+		SourceRecord script = loadSource(diagramElement, getInitializerScriptPropertyName());
 		
-		if (script == null || Util.isBlank(script.script())) {
+		if (script == null || Util.isBlank(script.source())) {
 			return semanticElement;
 		}
 		
-		String isepn = getInitializerScriptEnginePropertyName();
+		String isepn = getInitializerScriptPropertyName() + ENGINE_PROPERTY_SUFFIX;
 		String enginePredicateExpr = Util.isBlank(isepn) ? null : getProperty(diagramElement, isepn);
 
 		Map<String, Object> variables = Map.ofEntries(
@@ -709,7 +683,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					progressMonitor);
 			
 			try {
-				return (S) engine.eval(script.script());
+				return (S) engine.eval(script.source());
 			} catch (ScriptException e) {
 				throw new ConfigurationException("Error evaluating initializer script: " + e, e, asMarked(diagramElement));
 			}
@@ -2049,40 +2023,6 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return getPropertyNamespace() + "operation-map";
 	}
 	
-	protected String getOperationMapRefPropertyName() {
-		return getPropertyNamespace() + "operation-map-ref";
-	}
-	
-	protected String getOperationMapStr(EObject source) {
-		String ompn = getOperationMapPropertyName();
-		if (!Util.isBlank(ompn)) {
-			String om = getProperty(source, ompn);
-			if (!Util.isBlank(om)) {
-				return om;
-			}
-		}
-		
-		String omrpn = getOperationMapRefPropertyName();
-		if (!Util.isBlank(omrpn)) {
-			String ref = getProperty(source, omrpn);
-			if (!Util.isBlank(ref)) {
-				URI refURI = URI.createURI(ref);
-				URI baseURI = getBaseURI(source);
-				if (baseURI != null && !baseURI.isRelative()) {
-					refURI = refURI.resolve(baseURI);
-				}
-				try {
-					DefaultConverter converter = DefaultConverter.INSTANCE;
-					Reader reader = converter.toReader(refURI);
-					return converter.toString(reader);
-				} catch (IOException e) {
-					throw new ConfigurationException("Error loading operation map from " + refURI, e, asMarked(source));
-				}
-			}
-		}
-		return null;
-	}	
-	
 	/**
 	 * Invokes {@link EOperation}s of the semantic element. 	
 	 * @param diagramElement
@@ -2100,11 +2040,11 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			ProgressMonitor progressMonitor) {
 
 		boolean result = true;
-		String opMapStr = getOperationMapStr(diagramElement);
-		if (!Util.isBlank(opMapStr)) {
+		SourceRecord operationMap = loadSource(semanticElement, getOperationMapPropertyName());
+		if (operationMap != null) {
 			try {
 				Yaml yaml = new Yaml();
-				Object opMapObj = yaml.load(opMapStr);
+				Object opMapObj = yaml.load(operationMap.source());
 				if (opMapObj instanceof Map) {
 					Map<?,?> opMap = (Map<?,?>) opMapObj;
 					EClass eClass = semanticElement.eClass();
@@ -2282,44 +2222,6 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return getPropertyNamespace() + "script";
 	}
 	
-	protected String getScriptRefPropertyName() {
-		return getPropertyNamespace() + "script-ref";
-	}
-	
-	protected String getScriptEnginePropertyName() {
-		return getPropertyNamespace() + "script-engine";
-	}
-	
-	protected Script getScript(EObject source) {
-		String spn = getScriptPropertyName();
-		if (!Util.isBlank(spn)) {
-			String script = getProperty(source, spn);
-			if (!Util.isBlank(script)) {
-				return new Script(null, script);
-			}
-		}
-		
-		String srpn = getScriptRefPropertyName();
-		if (!Util.isBlank(srpn)) {
-			String ref = getProperty(source, srpn);
-			if (!Util.isBlank(ref)) {
-				URI refURI = URI.createURI(ref);
-				URI baseURI = getBaseURI(source);
-				if (baseURI != null && !baseURI.isRelative()) {
-					refURI = refURI.resolve(baseURI);
-				}
-				try {
-					DefaultConverter converter = DefaultConverter.INSTANCE;
-					Reader reader = converter.toReader(refURI);
-					return new Script(refURI, converter.toString(reader));
-				} catch (IOException e) {
-					throw new ConfigurationException("Error loading script from " + refURI, e, asMarked(source));
-				}
-			}
-		}
-		return null;
-	}
-	
 	/**
 	 * Executes script
 	 * @param diagramElement
@@ -2335,13 +2237,13 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		Script script = getScript(diagramElement);
+		SourceRecord script = loadSource(diagramElement, getScriptPropertyName());
 		
-		if (script == null || Util.isBlank(script.script())) {
+		if (script == null || Util.isBlank(script.source())) {
 			return true;
 		}
 		
-		String sepn = getScriptEnginePropertyName();
+		String sepn = getScriptPropertyName() + ENGINE_PROPERTY_SUFFIX;
 		String enginePredicateExpr = Util.isBlank(sepn) ? null : getProperty(diagramElement, sepn);
 
 		Map<String, Object> variables = Map.ofEntries(
@@ -2373,7 +2275,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					progressMonitor);
 			
 			try {
-				Object result = engine.eval(script.script());
+				Object result = engine.eval(script.source());
 				return !Boolean.FALSE.equals(result);
 			} catch (ScriptException e) {
 				throw new ConfigurationException("Error evaluating script: " + e, e, asMarked(diagramElement));
