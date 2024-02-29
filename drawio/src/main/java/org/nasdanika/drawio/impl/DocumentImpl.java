@@ -53,23 +53,30 @@ public class DocumentImpl extends ElementImpl implements Document {
 	private org.w3c.dom.Document document;
 	private URI uri;	
 	private Function<URI, InputStream> uriHandler;
+	private Function<String,String> propertySource;
 	
 	/**
 	 * 
 	 * @param in
 	 * @param uri
 	 * @param uriHandler URI handler for loading cross-document page links.
+	 * @param propertySource source of properties to resolve %propertyName% placeholders
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public DocumentImpl(InputStream in, URI uri, Function<URI, InputStream> uriHandler) throws ParserConfigurationException, SAXException, IOException {
+	public DocumentImpl(
+			InputStream in, 
+			URI uri, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(in);
 		element = document.getDocumentElement();
 		this.uri = uri;
 		this.uriHandler = uriHandler;
+		this.propertySource = propertySource;
 	}
 
 	/**
@@ -77,17 +84,23 @@ public class DocumentImpl extends ElementImpl implements Document {
 	 * @param reader
 	 * @param uri
 	 * @param uriHandler URI handler for loading cross-document page links.
+	 * @param propertySource source of properties to resolve %propertyName% placeholders
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public DocumentImpl(Reader reader, URI uri, Function<URI, InputStream> uriHandler) throws ParserConfigurationException, SAXException, IOException {
+	public DocumentImpl(
+			Reader reader, 
+			URI uri, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(new InputSource(reader));
 		element = document.getDocumentElement();
 		this.uri = uri;
 		this.uriHandler = uriHandler;
+		this.propertySource = propertySource;
 	}
 
 	/**
@@ -97,7 +110,11 @@ public class DocumentImpl extends ElementImpl implements Document {
 	 * @param uriHandler URI handler for loading cross-document page links.
 	 * @throws ParserConfigurationException
 	 */
-	public DocumentImpl(boolean compressed, URI uri, Function<URI, InputStream> uriHandler) throws ParserConfigurationException {
+	public DocumentImpl(
+			boolean compressed, 
+			URI uri, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.newDocument();		
@@ -110,10 +127,15 @@ public class DocumentImpl extends ElementImpl implements Document {
 		element = document.getDocumentElement();
 		this.uri = uri;
 		this.uriHandler = uriHandler;
+		this.propertySource = propertySource;
 	}
 	
-	public DocumentImpl(String docStr, URI uri, Function<URI, InputStream> uriHandler) throws ParserConfigurationException, SAXException, IOException {
-		this(new StringReader(docStr), uri, uriHandler);
+	public DocumentImpl(
+			String docStr, 
+			URI uri, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
+		this(new StringReader(docStr), uri, uriHandler, propertySource);
 	}
 	
 	Function<URI, InputStream> getUriHandler() {
@@ -195,6 +217,9 @@ public class DocumentImpl extends ElementImpl implements Document {
 		};
 	}
 	
+	public Function<String, String> getPropertySource() {
+		return propertySource;
+	}	
 
 	@Override
 	public String toHtml(Boolean compress, String viewer) throws JSONException, TransformerException, IOException {

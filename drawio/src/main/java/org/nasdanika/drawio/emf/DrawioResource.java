@@ -61,7 +61,7 @@ public class DrawioResource extends ResourceImpl {
 	 * @throws SAXException
 	 */
 	protected Document loadDocument(InputStream inputStream) throws IOException, ParserConfigurationException, SAXException {
-		return Document.load(inputStream, getURI().trimFragment(), getURIHandler());
+		return Document.load(inputStream, getURI().trimFragment(), getURIHandler(), this::getProperty);
 	}
 	
 	@Override
@@ -106,6 +106,15 @@ public class DrawioResource extends ResourceImpl {
 				throw new NasdanikaException("Error creating input stream from '" + uri +  "': " + e, e);
 			}
 		};
+	}
+	
+	/**
+	 * This implementation returns null. Override as needed.
+	 * @param name
+	 * @return Property value for placeholder expansion.  
+	 */
+	protected String getProperty(String name) {
+		return null;
 	}
 			
 }

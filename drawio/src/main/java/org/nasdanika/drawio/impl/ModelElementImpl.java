@@ -217,9 +217,10 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		return str;
 	}
 	
-	private static String getInheritedProperty(ModelElement modelElement, String name) {
+	private String getInheritedProperty(ModelElement modelElement, String name) {
 		if (modelElement == null) {
-			return null;
+			Function<String, String> propertySource = ((DocumentImpl) getModel().getPage().getDocument()).getPropertySource();
+			return propertySource == null ? null : propertySource.apply(name);
 		}
 		String val = modelElement.getProperty(name);
 		if (!Util.isBlank(val)) {
@@ -367,7 +368,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 				
 			try {
 				Function<URI, InputStream> uriHandler = ((DocumentImpl) document).getUriHandler();
-				Document targetDocument = uriHandler == null ? Document.load(new URL(targetURI.toString()), uriHandler) : Document.load(uriHandler.apply(targetURI), targetURI, uriHandler);
+				Document targetDocument = uriHandler == null ? Document.load(new URL(targetURI.toString()), uriHandler, this::getProperty) : Document.load(uriHandler.apply(targetURI), targetURI, uriHandler, this::getProperty);
 				for (Page page: targetDocument.getPages()) {
 					if (Util.isBlank(targetURI.fragment()) || URLDecoder.decode(targetURI.fragment(), StandardCharsets.UTF_8).equals(page.getName())) {
 						return page;

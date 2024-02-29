@@ -57,8 +57,12 @@ public interface Document extends Element {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 */
-	static Document load(String docStr, URI uri, Function<URI, InputStream> uriHandler) throws ParserConfigurationException, SAXException, IOException {
-		return new DocumentImpl(docStr, uri, uriHandler);
+	static Document load(
+			String docStr, 
+			URI uri, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
+		return new DocumentImpl(docStr, uri, uriHandler, propertySource);
 	}
 
 	/**
@@ -71,7 +75,7 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException 
 	 */
 	static Document load(String docStr, URI uri) throws ParserConfigurationException, SAXException, IOException {
-		return load(docStr, uri, null);
+		return load(docStr, uri, null, null);
 	}
 
 	/**
@@ -83,8 +87,12 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */
-	static Document load(Reader reader, URI uri, Function<URI, InputStream> uriHandler) throws IOException, ParserConfigurationException, SAXException {
-		return new DocumentImpl(reader, uri, uriHandler);
+	static Document load(
+			Reader reader, 
+			URI uri, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
+		return new DocumentImpl(reader, uri, uriHandler, propertySource);
 	}
 
 	/**
@@ -97,7 +105,7 @@ public interface Document extends Element {
 	 * @throws SAXException
 	 */
 	static Document load(Reader reader, URI uri) throws IOException, ParserConfigurationException, SAXException {
-		return load(reader, uri, null);
+		return load(reader, uri, null, null);
 	}
 	
 	/**
@@ -107,8 +115,12 @@ public interface Document extends Element {
 	 * @return
 	 * @throws ParserConfigurationException
 	 */
-	static Document create(boolean compressed, URI uri, Function<URI, InputStream> uriHandler) throws ParserConfigurationException {
-		return new DocumentImpl(compressed, uri, uriHandler);
+	static Document create(
+			boolean compressed, 
+			URI uri, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws ParserConfigurationException {
+		return new DocumentImpl(compressed, uri, uriHandler, propertySource);
 	}
 	
 	/**
@@ -119,7 +131,7 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException
 	 */
 	static Document create(boolean compressed, URI uri) throws ParserConfigurationException {
-		return create(compressed, uri, null);
+		return create(compressed, uri, null, null);
 	}
 
 	/**
@@ -131,8 +143,12 @@ public interface Document extends Element {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 */
-	static Document load(InputStream in, URI uri, Function<URI, InputStream> uriHandler) throws IOException, ParserConfigurationException, SAXException {
-		return new DocumentImpl(in, uri, uriHandler);
+	static Document load(
+			InputStream in, 
+			URI uri, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
+		return new DocumentImpl(in, uri, uriHandler, propertySource);
 	}
 
 	/**
@@ -145,7 +161,7 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException 
 	 */
 	static Document load(InputStream in, URI uri) throws IOException, ParserConfigurationException, SAXException {
-		return load(in, uri, null);
+		return load(in, uri, null, null);
 	}
 	
 	/**
@@ -194,7 +210,10 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */
-	static Document load(URI source, Function<URI, InputStream> uriHandler) throws IOException, ParserConfigurationException, SAXException {
+	static Document load(
+			URI source, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
 		if (isDataURI(source)) {
 			String uriStr = source.toString();
 			uriStr = uriStr.substring("data:drawio".length());				
@@ -205,10 +224,10 @@ public interface Document extends Element {
 				uriStr = URLDecoder.decode(uriStr.substring(1), StandardCharsets.UTF_8);
 			}
 			JSONObject payload = new JSONObject(new JSONTokener(uriStr));
-			return load(payload.getString("document"), payload.has("uri") ? URI.createURI(payload.getString("uri")) : null, uriHandler);
+			return load(payload.getString("document"), payload.has("uri") ? URI.createURI(payload.getString("uri")) : null, uriHandler, propertySource);
 		}
 			
-		return uriHandler == null ? load(new URL(source.toString())) : load(uriHandler.apply(source), source, uriHandler);
+		return uriHandler == null ? load(new URL(source.toString())) : load(uriHandler.apply(source), source, uriHandler, propertySource);
 	}
 	
 	/**
@@ -220,7 +239,7 @@ public interface Document extends Element {
 	 * @throws SAXException
 	 */
 	static Document load(URI source) throws IOException, ParserConfigurationException, SAXException {
-		return load(source, null);
+		return load(source, null, null);
 	}
 		
 	/**
@@ -231,15 +250,18 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */
-	static Document load(URL source, Function<URI, InputStream> uriHandler) throws IOException, ParserConfigurationException, SAXException {
+	static Document load(
+			URL source, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
 		URI sourceUri = URI.createURI(source.toString());
 		if (uriHandler == null) {
 			try (InputStream in = source.openStream()) {
-				return load(in, sourceUri);
+				return load(in, sourceUri, uriHandler, propertySource);
 			}
 		}
 		try (InputStream in = uriHandler.apply(sourceUri)) {
-			return load(in, sourceUri);
+			return load(in, sourceUri, uriHandler, propertySource);
 		}
 	}
 	
@@ -252,7 +274,7 @@ public interface Document extends Element {
 	 * @throws SAXException
 	 */
 	static Document load(URL source) throws IOException, ParserConfigurationException, SAXException {
-		return load(source, null);
+		return load(source, null, null);
 	}
 	
 	/**
@@ -263,7 +285,11 @@ public interface Document extends Element {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 */
-	static List<Document> loadFromPngMetadata(InputStream in, URI uri, Function<URI, InputStream> uriHandler) throws IOException, ParserConfigurationException, SAXException {
+	static List<Document> loadFromPngMetadata(
+			InputStream in, 
+			URI uri, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
 		ImageReader imageReader = ImageIO.getImageReadersByFormatName("png").next();
 		imageReader.setInput(ImageIO.createImageInputStream(in));
 		IIOMetadata metadata = imageReader.getImageMetadata(0);
@@ -285,7 +311,7 @@ public interface Document extends Element {
 										&& ((org.w3c.dom.Element) grandChild).hasAttribute("keyword")
 										&& "mxfile".equals(((org.w3c.dom.Element) grandChild).getAttribute("keyword"))) {
 									String value = ((org.w3c.dom.Element) grandChild).getAttribute("value");
-									ret.add(load((URLDecoder.decode(value, StandardCharsets.UTF_8)), uri));									
+									ret.add(load((URLDecoder.decode(value, StandardCharsets.UTF_8)), uri, uriHandler, propertySource));									
 								}
 							}
 						}
@@ -297,7 +323,7 @@ public interface Document extends Element {
 	}
 
 	static List<Document> loadFromPngMetadata(InputStream in, URI uri) throws IOException, ParserConfigurationException, SAXException {
-		return loadFromPngMetadata(in, uri, null);
+		return loadFromPngMetadata(in, uri, null, null);
 	}
 	
 	/**
@@ -308,21 +334,24 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */
-	static List<Document> loadFromPngMetadata(URL source, Function<URI, InputStream> uriHandler) throws IOException, ParserConfigurationException, SAXException {
+	static List<Document> loadFromPngMetadata(
+			URL source, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
 		URI sourceUri = URI.createURI(source.toString());
 		if (uriHandler == null) {
 			try (InputStream in = source.openStream()) {
-				return loadFromPngMetadata(in, sourceUri, uriHandler);
+				return loadFromPngMetadata(in, sourceUri, uriHandler, propertySource);
 			}
 		}
 		
 		try (InputStream in = uriHandler.apply(sourceUri)) {
-			return loadFromPngMetadata(in, sourceUri, uriHandler);
+			return loadFromPngMetadata(in, sourceUri, uriHandler, propertySource);
 		}		
 	}
 	
 	static List<Document> loadFromPngMetadata(URL source) throws IOException, ParserConfigurationException, SAXException {
-		return loadFromPngMetadata(source, null);
+		return loadFromPngMetadata(source, null, null);
 	}
 	
 	/**
