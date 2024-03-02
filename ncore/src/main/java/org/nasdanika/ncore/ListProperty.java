@@ -36,7 +36,7 @@ public interface ListProperty extends Property, List {
 			} else if (element instanceof java.lang.String) {
 				ret.add((java.lang.String) element);
 			} else if (element instanceof java.util.Map) {
-				ret.add((java.util.Map<java.lang.String,Object>) element);
+				ret.add((java.util.Map<Object,Object>) element);
 			} else if (element != null) {
 				throw new IllegalArgumentException("Cannot add " + element.getClass() + " to ListProperty. Value: " + element);
 			}

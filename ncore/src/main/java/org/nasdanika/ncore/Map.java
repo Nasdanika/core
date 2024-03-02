@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.DefaultConverter;
 
 /**
  * <!-- begin-user-doc -->
@@ -226,29 +227,30 @@ public interface Map extends EObject {
 	}
 	
 	@SuppressWarnings("unchecked")
-	static Map wrap(java.util.Map<java.lang.String, ?> map) {
+	static Map wrap(java.util.Map<Object, ?> map) {
 		Map ret = NcoreFactory.eINSTANCE.createMap();
-		for (Entry<java.lang.String, ?> entry: map.entrySet()) {
-			java.lang.String key = entry.getKey();
+		for (Entry<Object, ?> entry: map.entrySet()) {
+			Object key = entry.getKey();
+			java.lang.String keyString = key == null || key instanceof String ? (java.lang.String) key : DefaultConverter.INSTANCE.toString(key);
 			Object value = entry.getValue();
 			if (value instanceof java.lang.Boolean) {
-				ret.put(key, (java.lang.Boolean) value);
+				ret.put(keyString, (java.lang.Boolean) value);
 			} else if (value instanceof EObject) {
-				ret.put(key, (EObject) value);
+				ret.put(keyString, (EObject) value);
 			} else if (value instanceof java.lang.Integer) {
-				ret.put(key, (java.lang.Integer) value);
+				ret.put(keyString, (java.lang.Integer) value);
 			} else if (value instanceof java.lang.Long) {
-				ret.put(key, (java.lang.Long) value);
+				ret.put(keyString, (java.lang.Long) value);
 			} else if (value instanceof java.lang.Double) {
-				ret.put(key, (java.lang.Double) value);
+				ret.put(keyString, (java.lang.Double) value);
 			} else if (value instanceof java.util.Date) {
-				ret.put(key, (java.util.Date) value);
+				ret.put(keyString, (java.util.Date) value);
 			} else if (value instanceof Iterable) {
-				ret.put(key, (Iterable<?>) value);
+				ret.put(keyString, (Iterable<?>) value);
 			} else if (value instanceof java.lang.String) {
-				ret.put(key, (java.lang.String) value);
+				ret.put(keyString, (java.lang.String) value);
 			} else if (value instanceof java.util.Map) {
-				ret.put(key, (java.util.Map<java.lang.String,Object>) value);
+				ret.put(keyString, (java.util.Map<java.lang.String,Object>) value);
 			} else if (value != null) {
 				throw new IllegalArgumentException("Cannot put " + value.getClass() + " to Map. Value: " + value);
 			}

@@ -72,7 +72,7 @@ public interface List extends EObject {
 		getValue().add(value);
 	}
 	
-	default void add(java.util.Map<java.lang.String,Object> map) {
+	default void add(java.util.Map<Object,Object> map) {
 		getValue().add(Map.wrap(map));
 	}
 	
@@ -89,7 +89,7 @@ public interface List extends EObject {
 			} else if (element instanceof Iterable) {
 				ret.add(wrap((Iterable<?>) element));
 			} else if (element instanceof java.util.Map) {
-				ret.add(Map.wrap((java.util.Map<java.lang.String,Object>) element));
+				ret.add(Map.wrap((java.util.Map<Object,Object>) element));
 			} else if (element instanceof java.lang.Boolean) {
 				ret.add(Boolean.wrap((java.lang.Boolean) element));
 			} else if (element instanceof java.lang.Integer) {

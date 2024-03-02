@@ -21,6 +21,6 @@ public interface Date extends ValueObject<java.util.Date> {
 		Date ret = NcoreFactory.eINSTANCE.createDate();
 		ret.setValue(val);
 		return ret;
-}
+	}
 
 } // Date
