@@ -11,6 +11,16 @@ import org.eclipse.emf.ecore.resource.Resource;
  
  */
 public class YamlResourceFactory implements Resource.Factory {
+	
+	public YamlResourceFactory() {
+		
+	}
+	
+	public YamlResourceFactory(YamlHandler... handlers) {
+		for (YamlHandler handler: handlers) {
+			this.handlers.add(handler);
+		}
+	}
 
 	@Override
 	public Resource createResource(URI uri) {

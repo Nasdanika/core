@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  * Creates objects from other objects.
  * Uses reflection to match factory methods and delegate to them.
  * Can create target objects sequentially or in parallel. 
- * Objects yet to be created can be referenced by objects being created using {@link CompletionStage}s.
+ * Objects yet to be created can be referenced by objects being created using callbacks.
  * The transformation process may create objects from referenced objects and as such the result size may be smaller (if no object created) or larger (related objects created) than the source collection. 
  * One application is creation and wiring of graphs. 
  * @author Pavel

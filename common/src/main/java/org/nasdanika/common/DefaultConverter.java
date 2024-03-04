@@ -286,13 +286,17 @@ public class DefaultConverter extends ReflectiveConverter {
 	
 	// URI
 	
-	@ConverterMethod
-	public InputStream toInputStream(URI uri) throws IOException {
+	public InputStream toInputStream(URI uri, ClassLoader classLoader) throws IOException {
 		if (Util.CLASSPATH_SCHEME.equals(uri.scheme())) {
 			String resource = uri.toString().substring(Util.CLASSPATH_URL_PREFIX.length());
-			return Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(resource), "ClassLoader resource not found: " + resource);
+			return Objects.requireNonNull(classLoader.getResourceAsStream(resource), "ClassLoader resource not found: " + resource);
 		}
 		return toInputStream(new URL(uri.toString()));
+	}
+	
+	@ConverterMethod
+	public InputStream toInputStream(URI uri) throws IOException {
+		return toInputStream(uri, getClass().getClassLoader());
 	}
 	
 	/**
