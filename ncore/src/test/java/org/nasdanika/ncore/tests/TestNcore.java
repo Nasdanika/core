@@ -13,6 +13,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -60,11 +61,12 @@ class TestNcore {
 	
 	@Test
 	public void testGoodYAML() {
-		URL goodYamlURL = getClass().getResource("yaml/good.yml");
+		String resourceName = "yaml/good.yml";
+		URL goodYamlURL = getClass().getResource(resourceName);
 		assertNotNull(goodYamlURL);
 		System.out.println(goodYamlURL);
 		
-		InputStream goodYamlStream = getClass().getResourceAsStream("yaml/good.yml");
+		InputStream goodYamlStream = getClass().getResourceAsStream(resourceName);
 		assertNotNull(goodYamlStream);
 
 //		URL goodYamlURL2 = getClass().getClassLoader().getResource("org/nasdanika/ncore/tests/good.yml");
@@ -79,7 +81,7 @@ class TestNcore {
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("yml", new YamlResourceFactory(new NcoreYamlHandler()));		
 		resourceSet.getURIConverter().getURIHandlers().add(0, new ClassLoaderURIHandler(getClass()::getResourceAsStream));
 
-		URI goodYamlURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + "yaml/good.yml"); 
+		URI goodYamlURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + resourceName); 
 		
 		Resource goodYamlResource = resourceSet.getResource(goodYamlURI, true);
 		assertTrue(goodYamlResource instanceof YamlResource);
@@ -89,6 +91,32 @@ class TestNcore {
 		org.nasdanika.ncore.Map rootMap = (org.nasdanika.ncore.Map) root;
 		assertEquals(3, rootMap.getValue().size());
 		
+	}
+	
+	@Test
+	public void testDuplicateKeyYAML() {
+		String resourceName = "yaml/duplicate-key.yml";
+		URL duplicateKeyYamlURL = getClass().getResource(resourceName);
+		assertNotNull(duplicateKeyYamlURL);
+		System.out.println(duplicateKeyYamlURL);
+		
+		InputStream duplicateKeyYamlStream = getClass().getResourceAsStream(resourceName);
+		assertNotNull(duplicateKeyYamlStream);
+		
+		ResourceSet resourceSet = new ResourceSetImpl();		
+		
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("yml", new YamlResourceFactory(new NcoreYamlHandler()));		
+		resourceSet.getURIConverter().getURIHandlers().add(0, new ClassLoaderURIHandler(getClass()::getResourceAsStream));
+
+		URI duplicateKeyYamlURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + resourceName); 
+		
+		Resource duplicateKeyYamlResource = resourceSet.getResource(duplicateKeyYamlURI, true);
+		assertTrue(duplicateKeyYamlResource instanceof YamlResource);
+		assertTrue(duplicateKeyYamlResource.getContents().isEmpty());
+		assertEquals(1, duplicateKeyYamlResource.getErrors().size());
+		Diagnostic error = duplicateKeyYamlResource.getErrors().get(0);
+		System.out.println(error.getMessage());
+		System.out.println(error.getLocation());		
 	}
 
 }
