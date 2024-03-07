@@ -45,5 +45,40 @@ public interface ValueObject<T> extends EObject {
 	 * @generated
 	 */
 	void setValue(T value);
+	
+	static EObject wrap(Object value) {
+		if (value == null) {
+			return null;
+		}
+		if (value instanceof java.lang.Boolean) {
+			return Boolean.wrap((java.lang.Boolean) value);
+		} 
+		if (value instanceof EObject) {
+			return (EObject) value;
+		} 
+		if (value instanceof java.lang.Integer) {
+			return Integer.wrap((java.lang.Integer) value);
+		} 
+		if (value instanceof java.lang.Long) {
+			return Long.wrap((java.lang.Long) value);
+		} 
+		if (value instanceof java.lang.Double) {
+			return Double.wrap((java.lang.Double) value);
+		} 
+		if (value instanceof java.util.Date) {
+			return Date.wrap((java.util.Date) value);
+		} 
+		if (value instanceof Iterable) {
+			return List.wrap((Iterable<?>) value);
+		} 
+		if (value instanceof java.lang.String) {
+			return String.wrap((java.lang.String) value);
+		} 
+		if (value instanceof java.util.Map) {
+			return Map.wrap((java.util.Map<?,?>) value);
+		} 
+		throw new IllegalArgumentException("Cannot wrap " + value.getClass() + ". Value: " + value);
+		
+	}
 
 } // ValueObject

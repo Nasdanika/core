@@ -17,6 +17,7 @@ package org.nasdanika.ncore;
  * @generated
  */
 public interface Double extends ValueObject<java.lang.Double> {
+	
 	static Double wrap(java.lang.Double val) {
 		Double ret = NcoreFactory.eINSTANCE.createDouble();
 		ret.setValue(val);

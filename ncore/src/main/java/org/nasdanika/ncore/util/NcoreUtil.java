@@ -635,12 +635,6 @@ public final class NcoreUtil {
 			return ((EReference) associationFeature).getEReferenceType();
 		}
 		return null;		
-	}	
-	
-	public static org.nasdanika.ncore.String wrapString(String str) {
-		org.nasdanika.ncore.String strObj = NcoreFactory.eINSTANCE.createString();
-		strObj.setValue(str);		
-		return strObj;
 	}
 	
 }

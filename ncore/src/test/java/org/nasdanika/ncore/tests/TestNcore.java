@@ -28,7 +28,7 @@ import org.nasdanika.ncore.util.YamlResource;
 import org.nasdanika.ncore.util.YamlResourceFactory;
 import org.nasdanika.common.Util;
 
-class TestNcore {
+public class TestNcore {
 
 	@Test
 	public void testECoreURI() {

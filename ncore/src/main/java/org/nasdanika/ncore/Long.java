@@ -17,6 +17,7 @@ package org.nasdanika.ncore;
  * @generated
  */
 public interface Long extends ValueObject<java.lang.Long> {
+	
 	static Long wrap(java.lang.Long val) {
 		Long ret = NcoreFactory.eINSTANCE.createLong();
 		ret.setValue(val);

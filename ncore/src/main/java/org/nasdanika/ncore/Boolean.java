@@ -17,6 +17,7 @@ package org.nasdanika.ncore;
  * @generated
  */
 public interface Boolean extends ValueObject<java.lang.Boolean> {
+	
 	static Boolean wrap(java.lang.Boolean val) {
 		Boolean ret = NcoreFactory.eINSTANCE.createBoolean();
 		ret.setValue(val);

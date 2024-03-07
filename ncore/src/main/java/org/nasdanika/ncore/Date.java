@@ -17,6 +17,7 @@ package org.nasdanika.ncore;
  * @generated
  */
 public interface Date extends ValueObject<java.util.Date> {
+	
 	static Date wrap(java.util.Date val) {
 		Date ret = NcoreFactory.eINSTANCE.createDate();
 		ret.setValue(val);

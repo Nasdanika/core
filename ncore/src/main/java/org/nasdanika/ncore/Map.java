@@ -227,9 +227,9 @@ public interface Map extends EObject {
 	}
 	
 	@SuppressWarnings("unchecked")
-	static Map wrap(java.util.Map<Object, ?> map) {
+	static Map wrap(java.util.Map<?, ?> map) {
 		Map ret = NcoreFactory.eINSTANCE.createMap();
-		for (Entry<Object, ?> entry: map.entrySet()) {
+		for (Entry<?, ?> entry: map.entrySet()) {
 			Object key = entry.getKey();
 			java.lang.String keyString = key == null || key instanceof String ? (java.lang.String) key : DefaultConverter.INSTANCE.toString(key);
 			Object value = entry.getValue();

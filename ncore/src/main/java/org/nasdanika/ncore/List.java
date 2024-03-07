@@ -56,11 +56,11 @@ public interface List extends EObject {
 		getValue().add(String.wrap(value));
 	}
 	
-	default void add(java.lang.Double value) {
+	default void add(double value) {
 		getValue().add(Double.wrap(value));
 	}
 	
-	default void add(java.lang.Long value) {
+	default void add(long value) {
 		getValue().add(Long.wrap(value));
 	}
 	
@@ -89,7 +89,7 @@ public interface List extends EObject {
 			} else if (element instanceof Iterable) {
 				ret.add(wrap((Iterable<?>) element));
 			} else if (element instanceof java.util.Map) {
-				ret.add(Map.wrap((java.util.Map<Object,Object>) element));
+				ret.add(Map.wrap((java.util.Map<?,?>) element));
 			} else if (element instanceof java.lang.Boolean) {
 				ret.add(Boolean.wrap((java.lang.Boolean) element));
 			} else if (element instanceof java.lang.Integer) {

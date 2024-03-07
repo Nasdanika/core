@@ -17,6 +17,7 @@ package org.nasdanika.ncore;
  * @generated
  */
 public interface String extends ValueObject<java.lang.String> {
+	
 	static String wrap(java.lang.String val) {
 		String ret = NcoreFactory.eINSTANCE.createString();
 		ret.setValue(val);

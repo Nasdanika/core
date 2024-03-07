@@ -17,6 +17,7 @@ package org.nasdanika.ncore;
  * @generated
  */
 public interface Integer extends ValueObject<java.lang.Integer> {
+	
 	static Integer wrap(java.lang.Integer val) {
 		Integer ret = NcoreFactory.eINSTANCE.createInteger();
 		ret.setValue(val);
