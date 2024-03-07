@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.persistence.MarkedArrayList;
+import org.nasdanika.persistence.Marker;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,7 +29,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface List extends EObject {
+public interface List extends Marked {
 	/**
 	 * Returns the value of the '<em><b>Value</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
@@ -80,28 +82,65 @@ public interface List extends EObject {
 		getValue().add(List.wrap(iterable));
 	}
 	
-	@SuppressWarnings("unchecked")
 	static List wrap(Iterable<?> iterable) {
 		List ret = NcoreFactory.eINSTANCE.createList();
+		ret.mark((Object) iterable);
 		for (Object element: iterable) {
 			if (element instanceof EObject) {
-				ret.add((EObject) element);
+				EObject value = (EObject) element;
+				if (value instanceof Marked) {
+					if (iterable instanceof MarkedArrayList) {
+						java.util.List<? extends Marker> elementMarkers = ((MarkedArrayList<?>) iterable).getElementMarkers().get(ret.getValue().size());
+						((Marked) value).mark(elementMarkers);
+					}
+				}
+				ret.add(value);
 			} else if (element instanceof Iterable) {
 				ret.add(wrap((Iterable<?>) element));
 			} else if (element instanceof java.util.Map) {
 				ret.add(Map.wrap((java.util.Map<?,?>) element));
 			} else if (element instanceof java.lang.Boolean) {
-				ret.add(Boolean.wrap((java.lang.Boolean) element));
+				Boolean value = Boolean.wrap((java.lang.Boolean) element);
+				if (iterable instanceof MarkedArrayList) {
+					java.util.List<? extends Marker> elementMarkers = ((MarkedArrayList<?>) iterable).getElementMarkers().get(ret.getValue().size());
+					((Marked) value).mark(elementMarkers);
+				}
+				ret.add(value);
 			} else if (element instanceof java.lang.Integer) {
-				ret.add(Integer.wrap((java.lang.Integer) element));
+				Integer value = Integer.wrap((java.lang.Integer) element);
+				if (iterable instanceof MarkedArrayList) {
+					java.util.List<? extends Marker> elementMarkers = ((MarkedArrayList<?>) iterable).getElementMarkers().get(ret.getValue().size());
+					((Marked) value).mark(elementMarkers);
+				}
+				ret.add(value);
 			} else if (element instanceof java.lang.Double) {
-				ret.add(Double.wrap((java.lang.Double) element));
+				Double value = Double.wrap((java.lang.Double) element);
+				if (iterable instanceof MarkedArrayList) {
+					java.util.List<? extends Marker> elementMarkers = ((MarkedArrayList<?>) iterable).getElementMarkers().get(ret.getValue().size());
+					((Marked) value).mark(elementMarkers);
+				}
+				ret.add(value);
 			} else if (element instanceof java.lang.Long) {
-				ret.add(Long.wrap((java.lang.Long) element));
+				Long value = Long.wrap((java.lang.Long) element);
+				if (iterable instanceof MarkedArrayList) {
+					java.util.List<? extends Marker> elementMarkers = ((MarkedArrayList<?>) iterable).getElementMarkers().get(ret.getValue().size());
+					((Marked) value).mark(elementMarkers);
+				}
+				ret.add(value);
 			} else if (element instanceof java.util.Date) {
-				ret.add(Date.wrap((java.util.Date) element));
+				Date value = Date.wrap((java.util.Date) element);
+				if (iterable instanceof MarkedArrayList) {
+					java.util.List<? extends Marker> elementMarkers = ((MarkedArrayList<?>) iterable).getElementMarkers().get(ret.getValue().size());
+					((Marked) value).mark(elementMarkers);
+				}
+				ret.add(value);
 			} else if (element instanceof java.lang.String) {
-				ret.add(String.wrap((java.lang.String) element));
+				String value = String.wrap((java.lang.String) element);
+				if (iterable instanceof MarkedArrayList) {
+					java.util.List<? extends Marker> elementMarkers = ((MarkedArrayList<?>) iterable).getElementMarkers().get(ret.getValue().size());
+					((Marked) value).mark(elementMarkers);
+				}
+				ret.add(value);
 			} else if (element != null) {
 				throw new IllegalArgumentException("Cannot add " + element.getClass() + " to List. Value: " + element);
 			}

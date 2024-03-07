@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.persistence.MarkedLinkedHashMap;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,7 +31,7 @@ import org.nasdanika.common.DefaultConverter;
  * @model
  * @generated
  */
-public interface Map extends EObject {
+public interface Map extends Marked {
 	/**
 	 * Returns the value of the '<em><b>Value</b></em>' containment reference list.
 	 * The list contents are of type {@link org.nasdanika.ncore.Property}.
@@ -61,7 +62,12 @@ public interface Map extends EObject {
 	}
 	
 	default Property put(java.lang.String key, long value) {
+		return put(key, value, null);
+	}
+	
+	private Property put(java.lang.String key, long value, Iterable<? extends org.nasdanika.persistence.Marker> markers) {
 		LongProperty property = NcoreFactory.eINSTANCE.createLongProperty();
+		property.mark(markers);
 		property.setName(key);
 		property.setValue(value);
 		Property ret = null;
@@ -79,7 +85,12 @@ public interface Map extends EObject {
 	}
 	
 	default Property put(java.lang.String key, double value) {
+		return put(key, value, null);
+	}
+	
+	private Property put(java.lang.String key, double value, Iterable<? extends org.nasdanika.persistence.Marker> markers) {
 		DoubleProperty property = NcoreFactory.eINSTANCE.createDoubleProperty();
+		property.mark(markers);
 		property.setName(key);
 		property.setValue(value);
 		Property ret = null;
@@ -97,7 +108,12 @@ public interface Map extends EObject {
 	}
 	
 	default Property put(java.lang.String key, java.util.Date value) {
+		return put(key, value, null);
+	}
+	
+	private Property put(java.lang.String key, java.util.Date value, Iterable<? extends org.nasdanika.persistence.Marker> markers) {
 		DateProperty property = NcoreFactory.eINSTANCE.createDateProperty();
+		property.mark(markers);
 		property.setName(key);
 		property.setValue(value);
 		Property ret = null;
@@ -115,7 +131,12 @@ public interface Map extends EObject {
 	}
 	
 	default Property put(java.lang.String key, boolean value) {
+		return put(key, value, null);
+	}
+	
+	private Property put(java.lang.String key, boolean value, Iterable<? extends org.nasdanika.persistence.Marker> markers) {
 		BooleanProperty property = NcoreFactory.eINSTANCE.createBooleanProperty();
+		property.mark(markers);
 		property.setName(key);
 		property.setValue(value);
 		Property ret = null;
@@ -133,7 +154,12 @@ public interface Map extends EObject {
 	}
 	
 	default Property put(java.lang.String key, int value) {
+		return put(key, value, null);
+	}
+	
+	private Property put(java.lang.String key, int value, Iterable<? extends org.nasdanika.persistence.Marker> markers) {
 		IntegerProperty property = NcoreFactory.eINSTANCE.createIntegerProperty();
+		property.mark(markers);
 		property.setName(key);
 		property.setValue(value);
 		Property ret = null;
@@ -151,7 +177,12 @@ public interface Map extends EObject {
 	}
 	
 	default Property put(java.lang.String key, java.lang.String value) {
+		return put(key, value, null);
+	}
+	
+	private Property put(java.lang.String key, java.lang.String value, Iterable<? extends org.nasdanika.persistence.Marker> markers) {
 		StringProperty property = NcoreFactory.eINSTANCE.createStringProperty();
+		property.mark(markers);
 		property.setName(key);
 		property.setValue(value);
 		Property ret = null;
@@ -169,6 +200,10 @@ public interface Map extends EObject {
 	}
 	
 	default Property put(java.lang.String key, EObject value) {
+		return put(key, value, null);
+	}
+	
+	private Property put(java.lang.String key, EObject value, Iterable<? extends org.nasdanika.persistence.Marker> markers) {
 		Property ret = null;
 		Iterator<Property> pit = getValue().iterator();
 		while (pit.hasNext()) {
@@ -181,14 +216,19 @@ public interface Map extends EObject {
 		}
 		if (value != null) {
 			EObjectProperty property = NcoreFactory.eINSTANCE.createEObjectProperty();
+			property.mark(markers);
 			property.setName(key);
-			property.setValue(value);
+			property.setValue(value);			
 			getValue().add(property);
 		}
 		return ret;
 	}
 		
 	default Property put(java.lang.String key, java.util.Map<java.lang.String, Object> value) {
+		return put(key, value, null);
+	}
+	
+	private Property put(java.lang.String key, java.util.Map<java.lang.String, Object> value, Iterable<? extends org.nasdanika.persistence.Marker> markers) {
 		Property ret = null;
 		Iterator<Property> pit = getValue().iterator();
 		while (pit.hasNext()) {
@@ -201,6 +241,7 @@ public interface Map extends EObject {
 		}
 		if (value != null) {
 			MapProperty property = MapProperty.wrap(key, value);
+			property.mark(markers);
 			property.setName(key);
 			getValue().add(property);
 		}
@@ -208,6 +249,10 @@ public interface Map extends EObject {
 	}
 	
 	default Property put(java.lang.String key, Iterable<?> value) {
+		return put(key, value, null);
+	}
+	
+	private Property put(java.lang.String key, Iterable<?> value, Iterable<? extends org.nasdanika.persistence.Marker> markers) {
 		Property ret = null;
 		Iterator<Property> pit = getValue().iterator();
 		while (pit.hasNext()) {
@@ -220,6 +265,7 @@ public interface Map extends EObject {
 		}
 		if (value != null) {
 			ListProperty property = ListProperty.wrap(key, value);;
+			property.mark(markers);
 			property.setName(key);
 			getValue().add(property);
 		}
@@ -229,28 +275,33 @@ public interface Map extends EObject {
 	@SuppressWarnings("unchecked")
 	static Map wrap(java.util.Map<?, ?> map) {
 		Map ret = NcoreFactory.eINSTANCE.createMap();
+		ret.mark(map);
 		for (Entry<?, ?> entry: map.entrySet()) {
 			Object key = entry.getKey();
 			java.lang.String keyString = key == null || key instanceof String ? (java.lang.String) key : DefaultConverter.INSTANCE.toString(key);
+			Iterable<? extends org.nasdanika.persistence.Marker> entryMarkers = null;
+			if (map instanceof MarkedLinkedHashMap) {
+				entryMarkers = ((MarkedLinkedHashMap<?, ?>) map).getEntryMarkers(key);
+			}
 			Object value = entry.getValue();
 			if (value instanceof java.lang.Boolean) {
-				ret.put(keyString, (java.lang.Boolean) value);
+				ret.put(keyString, (java.lang.Boolean) value, entryMarkers);
 			} else if (value instanceof EObject) {
-				ret.put(keyString, (EObject) value);
+				ret.put(keyString, (EObject) value, entryMarkers);
 			} else if (value instanceof java.lang.Integer) {
-				ret.put(keyString, (java.lang.Integer) value);
+				ret.put(keyString, (java.lang.Integer) value, entryMarkers);
 			} else if (value instanceof java.lang.Long) {
-				ret.put(keyString, (java.lang.Long) value);
+				ret.put(keyString, (java.lang.Long) value, entryMarkers);
 			} else if (value instanceof java.lang.Double) {
-				ret.put(keyString, (java.lang.Double) value);
+				ret.put(keyString, (java.lang.Double) value, entryMarkers);
 			} else if (value instanceof java.util.Date) {
-				ret.put(keyString, (java.util.Date) value);
+				ret.put(keyString, (java.util.Date) value, entryMarkers);
 			} else if (value instanceof Iterable) {
-				ret.put(keyString, (Iterable<?>) value);
+				ret.put(keyString, (Iterable<?>) value, entryMarkers);
 			} else if (value instanceof java.lang.String) {
-				ret.put(keyString, (java.lang.String) value);
+				ret.put(keyString, (java.lang.String) value, entryMarkers);
 			} else if (value instanceof java.util.Map) {
-				ret.put(keyString, (java.util.Map<java.lang.String,Object>) value);
+				ret.put(keyString, (java.util.Map<java.lang.String,Object>) value, entryMarkers);
 			} else if (value != null) {
 				throw new IllegalArgumentException("Cannot put " + value.getClass() + " to Map. Value: " + value);
 			}

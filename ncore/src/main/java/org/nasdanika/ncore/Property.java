@@ -4,8 +4,6 @@ package org.nasdanika.ncore;
 
 import java.lang.String;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Property</b></em>'.
@@ -26,7 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface Property extends EObject {
+public interface Property extends Marked {
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->

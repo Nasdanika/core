@@ -4,10 +4,16 @@ package org.nasdanika.ncore.impl;
 
 import java.lang.Long;
 
+import java.util.Collection;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.emf.ecore.util.InternalEList;
+import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -18,6 +24,7 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.nasdanika.ncore.impl.LongImpl#getMarkers <em>Markers</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.LongImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
@@ -58,6 +65,17 @@ public class LongImpl extends MinimalEObjectImpl.Container implements org.nasdan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Marker> getMarkers() {
+		return (EList<Marker>)eDynamicGet(NcorePackage.LONG__MARKERS, NcorePackage.Literals.MARKED__MARKERS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Long getValue() {
 		return (Long)eDynamicGet(NcorePackage.LONG__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, true, true);
@@ -79,8 +97,24 @@ public class LongImpl extends MinimalEObjectImpl.Container implements org.nasdan
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case NcorePackage.LONG__MARKERS:
+				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case NcorePackage.LONG__MARKERS:
+				return getMarkers();
 			case NcorePackage.LONG__VALUE:
 				return getValue();
 		}
@@ -92,9 +126,14 @@ public class LongImpl extends MinimalEObjectImpl.Container implements org.nasdan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case NcorePackage.LONG__MARKERS:
+				getMarkers().clear();
+				getMarkers().addAll((Collection<? extends Marker>)newValue);
+				return;
 			case NcorePackage.LONG__VALUE:
 				setValue((Long)newValue);
 				return;
@@ -110,6 +149,9 @@ public class LongImpl extends MinimalEObjectImpl.Container implements org.nasdan
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case NcorePackage.LONG__MARKERS:
+				getMarkers().clear();
+				return;
 			case NcorePackage.LONG__VALUE:
 				setValue((Long)null);
 				return;
@@ -125,6 +167,8 @@ public class LongImpl extends MinimalEObjectImpl.Container implements org.nasdan
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case NcorePackage.LONG__MARKERS:
+				return !getMarkers().isEmpty();
 			case NcorePackage.LONG__VALUE:
 				return getValue() != null;
 		}

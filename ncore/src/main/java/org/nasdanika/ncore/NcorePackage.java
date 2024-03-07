@@ -866,13 +866,22 @@ public interface NcorePackage extends EPackage {
 	int VALUE_OBJECT = 11;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_OBJECT__MARKERS = MARKED__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VALUE_OBJECT__VALUE = 0;
+	int VALUE_OBJECT__VALUE = MARKED_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Value Object</em>' class.
@@ -881,7 +890,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VALUE_OBJECT_FEATURE_COUNT = 1;
+	int VALUE_OBJECT_FEATURE_COUNT = MARKED_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Value Object</em>' class.
@@ -890,7 +899,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VALUE_OBJECT_OPERATION_COUNT = 0;
+	int VALUE_OBJECT_OPERATION_COUNT = MARKED_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.StringImpl <em>String</em>}' class.
@@ -901,6 +910,15 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	int STRING = 12;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING__MARKERS = VALUE_OBJECT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1000,6 +1018,15 @@ public interface NcorePackage extends EPackage {
 	int BOOLEAN = 13;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOLEAN__MARKERS = VALUE_OBJECT__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1025,6 +1052,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int BOOLEAN_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE__MARKERS = VALUE_OBJECT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1054,6 +1090,15 @@ public interface NcorePackage extends EPackage {
 	int DOUBLE_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE__MARKERS = VALUE_OBJECT__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1079,6 +1124,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int DATE_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER__MARKERS = VALUE_OBJECT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1108,13 +1162,22 @@ public interface NcorePackage extends EPackage {
 	int INTEGER_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST__MARKERS = MARKED__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LIST__VALUE = 0;
+	int LIST__VALUE = MARKED_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>List</em>' class.
@@ -1123,7 +1186,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIST_FEATURE_COUNT = 1;
+	int LIST_FEATURE_COUNT = MARKED_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>List</em>' class.
@@ -1132,7 +1195,16 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIST_OPERATION_COUNT = 0;
+	int LIST_OPERATION_COUNT = MARKED_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LONG__MARKERS = VALUE_OBJECT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1162,13 +1234,22 @@ public interface NcorePackage extends EPackage {
 	int LONG_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP__MARKERS = MARKED__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MAP__VALUE = 0;
+	int MAP__VALUE = MARKED_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Map</em>' class.
@@ -1177,7 +1258,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MAP_FEATURE_COUNT = 1;
+	int MAP_FEATURE_COUNT = MARKED_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Map</em>' class.
@@ -1186,7 +1267,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MAP_OPERATION_COUNT = 0;
+	int MAP_OPERATION_COUNT = MARKED_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.Property <em>Property</em>}' class.
@@ -1199,13 +1280,22 @@ public interface NcorePackage extends EPackage {
 	int PROPERTY = 20;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__MARKERS = MARKED__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROPERTY__NAME = 0;
+	int PROPERTY__NAME = MARKED_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Property</em>' class.
@@ -1214,7 +1304,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROPERTY_FEATURE_COUNT = 1;
+	int PROPERTY_FEATURE_COUNT = MARKED_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Property</em>' class.
@@ -1223,7 +1313,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROPERTY_OPERATION_COUNT = 0;
+	int PROPERTY_OPERATION_COUNT = MARKED_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ValueObjectPropertyImpl <em>Value Object Property</em>}' class.
@@ -1234,6 +1324,15 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	int VALUE_OBJECT_PROPERTY = 21;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_OBJECT_PROPERTY__MARKERS = VALUE_OBJECT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1352,6 +1451,15 @@ public interface NcorePackage extends EPackage {
 	int BOOLEAN_PROPERTY = 22;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOLEAN_PROPERTY__MARKERS = BOOLEAN__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1388,6 +1496,15 @@ public interface NcorePackage extends EPackage {
 	int BOOLEAN_PROPERTY_OPERATION_COUNT = BOOLEAN_OPERATION_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_PROPERTY__MARKERS = DATE__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1422,6 +1539,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int DATE_PROPERTY_OPERATION_COUNT = DATE_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE_PROPERTY__MARKERS = DOUBLE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1470,6 +1596,15 @@ public interface NcorePackage extends EPackage {
 	int EOBJECT_PROPERTY = 25;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EOBJECT_PROPERTY__MARKERS = PROPERTY__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1504,6 +1639,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int EOBJECT_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_PROPERTY__MARKERS = INTEGER__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1542,6 +1686,15 @@ public interface NcorePackage extends EPackage {
 	int INTEGER_PROPERTY_OPERATION_COUNT = INTEGER_OPERATION_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_PROPERTY__MARKERS = PROPERTY__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1576,6 +1729,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int LIST_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LONG_PROPERTY__MARKERS = LONG__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1614,6 +1776,15 @@ public interface NcorePackage extends EPackage {
 	int LONG_PROPERTY_OPERATION_COUNT = LONG_OPERATION_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP_PROPERTY__MARKERS = PROPERTY__MARKERS;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1648,6 +1819,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int MAP_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_PROPERTY__MARKERS = STRING__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.

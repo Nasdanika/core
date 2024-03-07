@@ -285,7 +285,8 @@
       <eGenericType eTypeParameter="#//Reference/T"/>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ValueObject" abstract="true" interface="true">
+  <eClassifiers xsi:type="ecore:EClass" name="ValueObject" abstract="true" interface="true"
+      eSuperTypes="#//Marked">
     <eTypeParameters name="T"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value">
       <eAnnotations source="urn:org.nasdanika">
@@ -337,7 +338,7 @@
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="List">
+  <eClassifiers xsi:type="ecore:EClass" name="List" eSuperTypes="#//Marked">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A list of objects."/>
     </eAnnotations>
@@ -359,7 +360,7 @@
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Map">
+  <eClassifiers xsi:type="ecore:EClass" name="Map" eSuperTypes="#//Marked">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A set of key-value pairs."/>
     </eAnnotations>
@@ -374,7 +375,8 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Property" abstract="true" interface="true">
+  <eClassifiers xsi:type="ecore:EClass" name="Property" abstract="true" interface="true"
+      eSuperTypes="#//Marked">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Base class for keyed values."/>
     </eAnnotations>

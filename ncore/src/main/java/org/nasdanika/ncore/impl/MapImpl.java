@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.Map;
+import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Property;
 
@@ -25,6 +26,7 @@ import org.nasdanika.ncore.Property;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.nasdanika.ncore.impl.MapImpl#getMarkers <em>Markers</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.MapImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
@@ -67,6 +69,17 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EList<Marker> getMarkers() {
+		return (EList<Marker>)eDynamicGet(NcorePackage.MAP__MARKERS, NcorePackage.Literals.MARKED__MARKERS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public EList<Property> getValue() {
 		return (EList<Property>)eDynamicGet(NcorePackage.MAP__VALUE, NcorePackage.Literals.MAP__VALUE, true, true);
 	}
@@ -79,6 +92,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case NcorePackage.MAP__MARKERS:
+				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
 			case NcorePackage.MAP__VALUE:
 				return ((InternalEList<?>)getValue()).basicRemove(otherEnd, msgs);
 		}
@@ -93,6 +108,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case NcorePackage.MAP__MARKERS:
+				return getMarkers();
 			case NcorePackage.MAP__VALUE:
 				return getValue();
 		}
@@ -108,6 +125,10 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case NcorePackage.MAP__MARKERS:
+				getMarkers().clear();
+				getMarkers().addAll((Collection<? extends Marker>)newValue);
+				return;
 			case NcorePackage.MAP__VALUE:
 				getValue().clear();
 				getValue().addAll((Collection<? extends Property>)newValue);
@@ -124,6 +145,9 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case NcorePackage.MAP__MARKERS:
+				getMarkers().clear();
+				return;
 			case NcorePackage.MAP__VALUE:
 				getValue().clear();
 				return;
@@ -139,6 +163,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case NcorePackage.MAP__MARKERS:
+				return !getMarkers().isEmpty();
 			case NcorePackage.MAP__VALUE:
 				return !getValue().isEmpty();
 		}

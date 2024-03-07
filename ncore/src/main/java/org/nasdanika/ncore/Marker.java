@@ -129,5 +129,16 @@ public interface Marker extends EObject, org.nasdanika.persistence.Marker {
 	 * @generated
 	 */
 	void setDate(Date value);
+	
+	static Marker wrap(org.nasdanika.persistence.Marker marker) {
+		if (marker == null) {
+			return null;
+		}
+		Marker ret = NcoreFactory.eINSTANCE.createMarker();
+		ret.setDate(new Date());
+		ret.setLocation(marker.getLocation());
+		ret.setPosition(marker.getPosition());		
+		return ret;
+	}
 
 } // Marker

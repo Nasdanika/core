@@ -3,14 +3,18 @@
 package org.nasdanika.ncore.impl;
 
 import java.lang.String;
+import java.util.Collection;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.EObjectProperty;
+import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -21,6 +25,7 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.nasdanika.ncore.impl.EObjectPropertyImpl#getMarkers <em>Markers</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.EObjectPropertyImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.EObjectPropertyImpl#getValue <em>Value</em>}</li>
  * </ul>
@@ -65,6 +70,17 @@ public class EObjectPropertyImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	protected int eStaticFeatureCount() {
 		return 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Marker> getMarkers() {
+		return (EList<Marker>)eDynamicGet(NcorePackage.EOBJECT_PROPERTY__MARKERS, NcorePackage.Literals.MARKED__MARKERS, true, true);
 	}
 
 	/**
@@ -125,6 +141,8 @@ public class EObjectPropertyImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case NcorePackage.EOBJECT_PROPERTY__MARKERS:
+				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
 			case NcorePackage.EOBJECT_PROPERTY__VALUE:
 				return basicSetValue(null, msgs);
 		}
@@ -139,6 +157,8 @@ public class EObjectPropertyImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case NcorePackage.EOBJECT_PROPERTY__MARKERS:
+				return getMarkers();
 			case NcorePackage.EOBJECT_PROPERTY__NAME:
 				return getName();
 			case NcorePackage.EOBJECT_PROPERTY__VALUE:
@@ -152,9 +172,14 @@ public class EObjectPropertyImpl extends MinimalEObjectImpl.Container implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case NcorePackage.EOBJECT_PROPERTY__MARKERS:
+				getMarkers().clear();
+				getMarkers().addAll((Collection<? extends Marker>)newValue);
+				return;
 			case NcorePackage.EOBJECT_PROPERTY__NAME:
 				setName((String)newValue);
 				return;
@@ -173,6 +198,9 @@ public class EObjectPropertyImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case NcorePackage.EOBJECT_PROPERTY__MARKERS:
+				getMarkers().clear();
+				return;
 			case NcorePackage.EOBJECT_PROPERTY__NAME:
 				setName(NAME_EDEFAULT);
 				return;
@@ -191,6 +219,8 @@ public class EObjectPropertyImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case NcorePackage.EOBJECT_PROPERTY__MARKERS:
+				return !getMarkers().isEmpty();
 			case NcorePackage.EOBJECT_PROPERTY__NAME:
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case NcorePackage.EOBJECT_PROPERTY__VALUE:

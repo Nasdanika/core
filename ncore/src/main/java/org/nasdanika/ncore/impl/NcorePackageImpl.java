@@ -1617,6 +1617,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		modelElementEClass.getESuperTypes().add(this.getMarked());
 		modelElementEClass.getESuperTypes().add(this.getAdaptable());
 		namedElementEClass.getESuperTypes().add(this.getModelElement());
+		valueObjectEClass.getESuperTypes().add(this.getMarked());
 		EGenericType g1 = createEGenericType(this.getValueObject());
 		EGenericType g2 = createEGenericType(ecorePackage.getEString());
 		g1.getETypeArguments().add(g2);
@@ -1637,10 +1638,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		g2 = createEGenericType(ecorePackage.getEIntegerObject());
 		g1.getETypeArguments().add(g2);
 		integerEClass.getEGenericSuperTypes().add(g1);
+		listEClass.getESuperTypes().add(this.getMarked());
 		g1 = createEGenericType(this.getValueObject());
 		g2 = createEGenericType(ecorePackage.getELongObject());
 		g1.getETypeArguments().add(g2);
 		longEClass.getEGenericSuperTypes().add(g1);
+		mapEClass.getESuperTypes().add(this.getMarked());
+		propertyEClass.getESuperTypes().add(this.getMarked());
 		g1 = createEGenericType(this.getValueObject());
 		g2 = createEGenericType(valueObjectPropertyEClass_T);
 		g1.getETypeArguments().add(g2);

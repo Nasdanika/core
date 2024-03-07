@@ -4,10 +4,16 @@ package org.nasdanika.ncore.impl;
 
 import java.lang.String;
 
+import java.util.Collection;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.emf.ecore.util.InternalEList;
+import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -18,6 +24,7 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.nasdanika.ncore.impl.StringImpl#getMarkers <em>Markers</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.StringImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
@@ -58,6 +65,17 @@ public class StringImpl extends MinimalEObjectImpl.Container implements org.nasd
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Marker> getMarkers() {
+		return (EList<Marker>)eDynamicGet(NcorePackage.STRING__MARKERS, NcorePackage.Literals.MARKED__MARKERS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public String getValue() {
 		return (String)eDynamicGet(NcorePackage.STRING__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, true, true);
@@ -79,8 +97,24 @@ public class StringImpl extends MinimalEObjectImpl.Container implements org.nasd
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case NcorePackage.STRING__MARKERS:
+				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case NcorePackage.STRING__MARKERS:
+				return getMarkers();
 			case NcorePackage.STRING__VALUE:
 				return getValue();
 		}
@@ -92,9 +126,14 @@ public class StringImpl extends MinimalEObjectImpl.Container implements org.nasd
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case NcorePackage.STRING__MARKERS:
+				getMarkers().clear();
+				getMarkers().addAll((Collection<? extends Marker>)newValue);
+				return;
 			case NcorePackage.STRING__VALUE:
 				setValue((String)newValue);
 				return;
@@ -110,6 +149,9 @@ public class StringImpl extends MinimalEObjectImpl.Container implements org.nasd
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case NcorePackage.STRING__MARKERS:
+				getMarkers().clear();
+				return;
 			case NcorePackage.STRING__VALUE:
 				setValue((String)null);
 				return;
@@ -125,6 +167,8 @@ public class StringImpl extends MinimalEObjectImpl.Container implements org.nasd
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case NcorePackage.STRING__MARKERS:
+				return !getMarkers().isEmpty();
 			case NcorePackage.STRING__VALUE:
 				return getValue() != null;
 		}

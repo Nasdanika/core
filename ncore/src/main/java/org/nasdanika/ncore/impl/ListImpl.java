@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.List;
+import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -25,6 +26,7 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.nasdanika.ncore.impl.ListImpl#getMarkers <em>Markers</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ListImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
@@ -67,6 +69,17 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EList<Marker> getMarkers() {
+		return (EList<Marker>)eDynamicGet(NcorePackage.LIST__MARKERS, NcorePackage.Literals.MARKED__MARKERS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public EList<EObject> getValue() {
 		return (EList<EObject>)eDynamicGet(NcorePackage.LIST__VALUE, NcorePackage.Literals.LIST__VALUE, true, true);
 	}
@@ -79,6 +92,8 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case NcorePackage.LIST__MARKERS:
+				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
 			case NcorePackage.LIST__VALUE:
 				return ((InternalEList<?>)getValue()).basicRemove(otherEnd, msgs);
 		}
@@ -93,6 +108,8 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case NcorePackage.LIST__MARKERS:
+				return getMarkers();
 			case NcorePackage.LIST__VALUE:
 				return getValue();
 		}
@@ -108,6 +125,10 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case NcorePackage.LIST__MARKERS:
+				getMarkers().clear();
+				getMarkers().addAll((Collection<? extends Marker>)newValue);
+				return;
 			case NcorePackage.LIST__VALUE:
 				getValue().clear();
 				getValue().addAll((Collection<? extends EObject>)newValue);
@@ -124,6 +145,9 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case NcorePackage.LIST__MARKERS:
+				getMarkers().clear();
+				return;
 			case NcorePackage.LIST__VALUE:
 				getValue().clear();
 				return;
@@ -139,6 +163,8 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case NcorePackage.LIST__MARKERS:
+				return !getMarkers().isEmpty();
 			case NcorePackage.LIST__VALUE:
 				return !getValue().isEmpty();
 		}

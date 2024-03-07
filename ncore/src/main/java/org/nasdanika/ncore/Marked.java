@@ -41,5 +41,30 @@ public interface Marked extends EObject, org.nasdanika.persistence.Marked {
 	 * @generated
 	 */
 	EList<Marker> getMarkers();
+	
+	/**
+	 * If source is Marked then markers are carried over to this marked, if source is Marker, then it is wrapped and added to this marked.
+	 * @param source
+	 */
+	default void mark(Object source) {
+		if (source instanceof org.nasdanika.persistence.Marked) {
+			mark(((org.nasdanika.persistence.Marked) source).getMarkers());
+		} else if (source instanceof org.nasdanika.persistence.Marker) {
+			getMarkers().add(Marker.wrap((org.nasdanika.persistence.Marker) source));
+		}
+	}
+	
+	/**
+	 * If source is Marked then markers are carried over to this marked, if source is Marker, then it is wrapped and added to this marked.
+	 * @param source
+	 */
+	default void mark(Iterable<? extends org.nasdanika.persistence.Marker> markers) {
+		if (markers != null) {
+			EList<Marker> thisMarkers = getMarkers();
+			for (org.nasdanika.persistence.Marker marker: markers) {
+				thisMarkers.add(Marker.wrap(marker));
+			}
+		}
+	}
 
 } // Marked

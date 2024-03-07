@@ -184,6 +184,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 			case NcorePackage.VALUE_OBJECT: {
 				ValueObject<?> valueObject = (ValueObject<?>)theEObject;
 				T1 result = caseValueObject(valueObject);
+				if (result == null) result = caseMarked(valueObject);
+				if (result == null) result = caseIMarked(valueObject);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -191,6 +193,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				org.nasdanika.ncore.String string = (org.nasdanika.ncore.String)theEObject;
 				T1 result = caseString(string);
 				if (result == null) result = caseValueObject(string);
+				if (result == null) result = caseMarked(string);
+				if (result == null) result = caseIMarked(string);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -198,6 +202,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				org.nasdanika.ncore.Boolean boolean_ = (org.nasdanika.ncore.Boolean)theEObject;
 				T1 result = caseBoolean(boolean_);
 				if (result == null) result = caseValueObject(boolean_);
+				if (result == null) result = caseMarked(boolean_);
+				if (result == null) result = caseIMarked(boolean_);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -205,6 +211,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				org.nasdanika.ncore.Double double_ = (org.nasdanika.ncore.Double)theEObject;
 				T1 result = caseDouble(double_);
 				if (result == null) result = caseValueObject(double_);
+				if (result == null) result = caseMarked(double_);
+				if (result == null) result = caseIMarked(double_);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -212,6 +220,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				Date date = (Date)theEObject;
 				T1 result = caseDate(date);
 				if (result == null) result = caseValueObject(date);
+				if (result == null) result = caseMarked(date);
+				if (result == null) result = caseIMarked(date);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -219,12 +229,16 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				org.nasdanika.ncore.Integer integer = (org.nasdanika.ncore.Integer)theEObject;
 				T1 result = caseInteger(integer);
 				if (result == null) result = caseValueObject(integer);
+				if (result == null) result = caseMarked(integer);
+				if (result == null) result = caseIMarked(integer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.LIST: {
 				List list = (List)theEObject;
 				T1 result = caseList(list);
+				if (result == null) result = caseMarked(list);
+				if (result == null) result = caseIMarked(list);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -232,18 +246,24 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				org.nasdanika.ncore.Long long_ = (org.nasdanika.ncore.Long)theEObject;
 				T1 result = caseLong(long_);
 				if (result == null) result = caseValueObject(long_);
+				if (result == null) result = caseMarked(long_);
+				if (result == null) result = caseIMarked(long_);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.MAP: {
 				Map map = (Map)theEObject;
 				T1 result = caseMap(map);
+				if (result == null) result = caseMarked(map);
+				if (result == null) result = caseIMarked(map);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.PROPERTY: {
 				Property property = (Property)theEObject;
 				T1 result = caseProperty(property);
+				if (result == null) result = caseMarked(property);
+				if (result == null) result = caseIMarked(property);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -252,6 +272,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseValueObjectProperty(valueObjectProperty);
 				if (result == null) result = caseValueObject(valueObjectProperty);
 				if (result == null) result = caseProperty(valueObjectProperty);
+				if (result == null) result = caseMarked(valueObjectProperty);
+				if (result == null) result = caseIMarked(valueObjectProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -262,6 +284,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseValueObjectProperty(booleanProperty);
 				if (result == null) result = caseValueObject(booleanProperty);
 				if (result == null) result = caseProperty(booleanProperty);
+				if (result == null) result = caseMarked(booleanProperty);
+				if (result == null) result = caseIMarked(booleanProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -272,6 +296,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseValueObjectProperty(dateProperty);
 				if (result == null) result = caseValueObject(dateProperty);
 				if (result == null) result = caseProperty(dateProperty);
+				if (result == null) result = caseMarked(dateProperty);
+				if (result == null) result = caseIMarked(dateProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -282,6 +308,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseValueObjectProperty(doubleProperty);
 				if (result == null) result = caseValueObject(doubleProperty);
 				if (result == null) result = caseProperty(doubleProperty);
+				if (result == null) result = caseMarked(doubleProperty);
+				if (result == null) result = caseIMarked(doubleProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -289,6 +317,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				EObjectProperty eObjectProperty = (EObjectProperty)theEObject;
 				T1 result = caseEObjectProperty(eObjectProperty);
 				if (result == null) result = caseProperty(eObjectProperty);
+				if (result == null) result = caseMarked(eObjectProperty);
+				if (result == null) result = caseIMarked(eObjectProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -299,6 +329,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseValueObjectProperty(integerProperty);
 				if (result == null) result = caseValueObject(integerProperty);
 				if (result == null) result = caseProperty(integerProperty);
+				if (result == null) result = caseMarked(integerProperty);
+				if (result == null) result = caseIMarked(integerProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -307,6 +339,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseListProperty(listProperty);
 				if (result == null) result = caseProperty(listProperty);
 				if (result == null) result = caseList(listProperty);
+				if (result == null) result = caseMarked(listProperty);
+				if (result == null) result = caseIMarked(listProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -317,6 +351,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseValueObjectProperty(longProperty);
 				if (result == null) result = caseValueObject(longProperty);
 				if (result == null) result = caseProperty(longProperty);
+				if (result == null) result = caseMarked(longProperty);
+				if (result == null) result = caseIMarked(longProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -325,6 +361,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseMapProperty(mapProperty);
 				if (result == null) result = caseProperty(mapProperty);
 				if (result == null) result = caseMap(mapProperty);
+				if (result == null) result = caseMarked(mapProperty);
+				if (result == null) result = caseIMarked(mapProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -335,6 +373,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseValueObjectProperty(stringProperty);
 				if (result == null) result = caseValueObject(stringProperty);
 				if (result == null) result = caseProperty(stringProperty);
+				if (result == null) result = caseMarked(stringProperty);
+				if (result == null) result = caseIMarked(stringProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
