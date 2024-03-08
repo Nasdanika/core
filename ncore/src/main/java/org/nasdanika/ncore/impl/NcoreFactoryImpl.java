@@ -119,6 +119,8 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.TREE: return createTree();
 			case NcorePackage.FILE: return createFile();
 			case NcorePackage.DIRECTORY: return createDirectory();
+			case NcorePackage.THROWABLE: return createThrowable();
+			case NcorePackage.STACK_TRACE_ELEMENT: return createStackTraceElement();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -517,6 +519,28 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public Directory createDirectory() {
 		DirectoryImpl directory = new DirectoryImpl();
 		return directory;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public org.nasdanika.ncore.Throwable createThrowable() {
+		ThrowableImpl throwable = new ThrowableImpl();
+		return throwable;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public org.nasdanika.ncore.StackTraceElement createStackTraceElement() {
+		StackTraceElementImpl stackTraceElement = new StackTraceElementImpl();
+		return stackTraceElement;
 	}
 
 	/**

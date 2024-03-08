@@ -358,6 +358,20 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass throwableEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stackTraceElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EDataType instantEDataType = null;
 
 	/**
@@ -1394,6 +1408,126 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getThrowable() {
+		return throwableEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getThrowable_Type() {
+		return (EAttribute)throwableEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getThrowable_Message() {
+		return (EAttribute)throwableEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getThrowable_StackTrace() {
+		return (EReference)throwableEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getThrowable_Supressed() {
+		return (EReference)throwableEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getThrowable_Cause() {
+		return (EReference)throwableEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getStackTraceElement() {
+		return stackTraceElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStackTraceElement_ClassName() {
+		return (EAttribute)stackTraceElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStackTraceElement_FileName() {
+		return (EAttribute)stackTraceElementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStackTraceElement_MethodName() {
+		return (EAttribute)stackTraceElementEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStackTraceElement_LineNumber() {
+		return (EAttribute)stackTraceElementEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStackTraceElement_Native() {
+		return (EAttribute)stackTraceElementEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getInstant() {
 		return instantEDataType;
 	}
@@ -1573,6 +1707,20 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(fileEClass, FILE__LAST_MODIFIED);
 
 		directoryEClass = createEClass(DIRECTORY);
+
+		throwableEClass = createEClass(THROWABLE);
+		createEAttribute(throwableEClass, THROWABLE__TYPE);
+		createEAttribute(throwableEClass, THROWABLE__MESSAGE);
+		createEReference(throwableEClass, THROWABLE__STACK_TRACE);
+		createEReference(throwableEClass, THROWABLE__SUPRESSED);
+		createEReference(throwableEClass, THROWABLE__CAUSE);
+
+		stackTraceElementEClass = createEClass(STACK_TRACE_ELEMENT);
+		createEAttribute(stackTraceElementEClass, STACK_TRACE_ELEMENT__CLASS_NAME);
+		createEAttribute(stackTraceElementEClass, STACK_TRACE_ELEMENT__FILE_NAME);
+		createEAttribute(stackTraceElementEClass, STACK_TRACE_ELEMENT__METHOD_NAME);
+		createEAttribute(stackTraceElementEClass, STACK_TRACE_ELEMENT__LINE_NUMBER);
+		createEAttribute(stackTraceElementEClass, STACK_TRACE_ELEMENT__NATIVE);
 
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
@@ -1859,6 +2007,20 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getFile_LastModified(), ecorePackage.getEDate(), "lastModified", null, 0, 1, File.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(directoryEClass, Directory.class, "Directory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(throwableEClass, org.nasdanika.ncore.Throwable.class, "Throwable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getThrowable_Type(), ecorePackage.getEString(), "type", null, 0, 1, org.nasdanika.ncore.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getThrowable_Message(), ecorePackage.getEString(), "message", null, 0, 1, org.nasdanika.ncore.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getThrowable_StackTrace(), this.getStackTraceElement(), null, "stackTrace", null, 0, -1, org.nasdanika.ncore.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getThrowable_Supressed(), this.getThrowable(), null, "supressed", null, 0, -1, org.nasdanika.ncore.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getThrowable_Cause(), this.getThrowable(), null, "cause", null, 0, 1, org.nasdanika.ncore.Throwable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(stackTraceElementEClass, org.nasdanika.ncore.StackTraceElement.class, "StackTraceElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getStackTraceElement_ClassName(), ecorePackage.getEString(), "className", null, 0, 1, org.nasdanika.ncore.StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStackTraceElement_FileName(), ecorePackage.getEString(), "fileName", null, 0, 1, org.nasdanika.ncore.StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStackTraceElement_MethodName(), ecorePackage.getEString(), "methodName", null, 0, 1, org.nasdanika.ncore.StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStackTraceElement_LineNumber(), ecorePackage.getEInt(), "lineNumber", null, 0, 1, org.nasdanika.ncore.StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStackTraceElement_Native(), ecorePackage.getEBoolean(), "native", null, 0, 1, org.nasdanika.ncore.StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
@@ -2495,6 +2657,78 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Element ID used as eKey in containment references"
+		   });
+		addAnnotation
+		  (throwableEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Models java.lang.Throwable."
+		   });
+		addAnnotation
+		  (getThrowable_Type(),
+		   source,
+		   new String[] {
+			   "documentation", "Throwable class name."
+		   });
+		addAnnotation
+		  (getThrowable_Message(),
+		   source,
+		   new String[] {
+			   "documentation", "Error message."
+		   });
+		addAnnotation
+		  (getThrowable_StackTrace(),
+		   source,
+		   new String[] {
+			   "documentation", "Stack trace."
+		   });
+		addAnnotation
+		  (getThrowable_Supressed(),
+		   source,
+		   new String[] {
+			   "documentation", "Stack trace."
+		   });
+		addAnnotation
+		  (getThrowable_Cause(),
+		   source,
+		   new String[] {
+			   "documentation", "Stack trace."
+		   });
+		addAnnotation
+		  (stackTraceElementEClass,
+		   source,
+		   new String[] {
+			   "documentation", ""
+		   });
+		addAnnotation
+		  (getStackTraceElement_ClassName(),
+		   source,
+		   new String[] {
+			   "documentation", "Class name."
+		   });
+		addAnnotation
+		  (getStackTraceElement_FileName(),
+		   source,
+		   new String[] {
+			   "documentation", "File name."
+		   });
+		addAnnotation
+		  (getStackTraceElement_MethodName(),
+		   source,
+		   new String[] {
+			   "documentation", "Method name."
+		   });
+		addAnnotation
+		  (getStackTraceElement_LineNumber(),
+		   source,
+		   new String[] {
+			   "documentation", "Line number."
+		   });
+		addAnnotation
+		  (getStackTraceElement_Native(),
+		   source,
+		   new String[] {
+			   "documentation", "\'true\' for native methods."
 		   });
 	}
 

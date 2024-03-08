@@ -272,7 +272,56 @@ public interface Map extends Marked {
 		return ret;
 	}
 	
+	default Property put(java.lang.String key, Object value) {
+		return put(key, value, null);
+	}
+	
 	@SuppressWarnings("unchecked")
+	private Property put(java.lang.String key, Object value, Iterable<? extends org.nasdanika.persistence.Marker> entryMarkers) {
+		if (value instanceof java.lang.Boolean) {
+			return put(key, (java.lang.Boolean) value, entryMarkers);
+		} 
+		if (value instanceof EObject) {
+			return put(key, (EObject) value, entryMarkers);
+		} 
+		if (value instanceof java.lang.Integer) {
+			return put(key, (java.lang.Integer) value, entryMarkers);
+		} 
+		if (value instanceof java.lang.Long) {
+			return put(key, (java.lang.Long) value, entryMarkers);
+		} 
+		if (value instanceof java.lang.Double) {
+			return put(key, (java.lang.Double) value, entryMarkers);
+		} 
+		if (value instanceof java.util.Date) {
+			return put(key, (java.util.Date) value, entryMarkers);
+		} 
+		if (value instanceof Iterable) {
+			return put(key, (Iterable<?>) value, entryMarkers);
+		} 
+		if (value instanceof java.lang.String) {
+			return put(key, (java.lang.String) value, entryMarkers);
+		} 
+		if (value instanceof java.util.Map) {
+			return put(key, (java.util.Map<java.lang.String,Object>) value, entryMarkers);
+		} 
+		
+		Property ret = null;
+		Iterator<Property> pit = getValue().iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		if (value != null) {
+			throw new IllegalArgumentException("Cannot put " + value.getClass() + " to Map. Value: " + value);
+		}
+		return ret;
+	}
+	
 	static Map wrap(java.util.Map<?, ?> map) {
 		Map ret = NcoreFactory.eINSTANCE.createMap();
 		ret.mark(map);
@@ -283,28 +332,7 @@ public interface Map extends Marked {
 			if (map instanceof MarkedLinkedHashMap) {
 				entryMarkers = ((MarkedLinkedHashMap<?, ?>) map).getEntryMarkers(key);
 			}
-			Object value = entry.getValue();
-			if (value instanceof java.lang.Boolean) {
-				ret.put(keyString, (java.lang.Boolean) value, entryMarkers);
-			} else if (value instanceof EObject) {
-				ret.put(keyString, (EObject) value, entryMarkers);
-			} else if (value instanceof java.lang.Integer) {
-				ret.put(keyString, (java.lang.Integer) value, entryMarkers);
-			} else if (value instanceof java.lang.Long) {
-				ret.put(keyString, (java.lang.Long) value, entryMarkers);
-			} else if (value instanceof java.lang.Double) {
-				ret.put(keyString, (java.lang.Double) value, entryMarkers);
-			} else if (value instanceof java.util.Date) {
-				ret.put(keyString, (java.util.Date) value, entryMarkers);
-			} else if (value instanceof Iterable) {
-				ret.put(keyString, (Iterable<?>) value, entryMarkers);
-			} else if (value instanceof java.lang.String) {
-				ret.put(keyString, (java.lang.String) value, entryMarkers);
-			} else if (value instanceof java.util.Map) {
-				ret.put(keyString, (java.util.Map<java.lang.String,Object>) value, entryMarkers);
-			} else if (value != null) {
-				throw new IllegalArgumentException("Cannot put " + value.getClass() + " to Map. Value: " + value);
-			}
+			ret.put(keyString, entry.getValue(), entryMarkers);
 		}
 		return ret;
 	}	

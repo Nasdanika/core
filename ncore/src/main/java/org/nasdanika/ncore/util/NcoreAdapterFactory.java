@@ -268,6 +268,14 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createDirectoryAdapter();
 			}
 			@Override
+			public Adapter caseThrowable(org.nasdanika.ncore.Throwable object) {
+				return createThrowableAdapter();
+			}
+			@Override
+			public Adapter caseStackTraceElement(org.nasdanika.ncore.StackTraceElement object) {
+				return createStackTraceElementAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -872,6 +880,34 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDirectoryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Throwable <em>Throwable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Throwable
+	 * @generated
+	 */
+	public Adapter createThrowableAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.StackTraceElement <em>Stack Trace Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.StackTraceElement
+	 * @generated
+	 */
+	public Adapter createStackTraceElementAdapter() {
 		return null;
 	}
 

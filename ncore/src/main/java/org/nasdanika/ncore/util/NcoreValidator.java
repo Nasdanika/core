@@ -204,6 +204,10 @@ public class NcoreValidator extends EObjectValidator {
 				return validateFile((File)value, diagnostics, context);
 			case NcorePackage.DIRECTORY:
 				return validateDirectory((Directory)value, diagnostics, context);
+			case NcorePackage.THROWABLE:
+				return validateThrowable((org.nasdanika.ncore.Throwable)value, diagnostics, context);
+			case NcorePackage.STACK_TRACE_ELEMENT:
+				return validateStackTraceElement((org.nasdanika.ncore.StackTraceElement)value, diagnostics, context);
 			case NcorePackage.INSTANT:
 				return validateInstant((Instant)value, diagnostics, context);
 			case NcorePackage.DURATION:
@@ -694,6 +698,24 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateDirectory(Directory directory, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(directory, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateThrowable(org.nasdanika.ncore.Throwable throwable, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(throwable, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateStackTraceElement(org.nasdanika.ncore.StackTraceElement stackTraceElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(stackTraceElement, diagnostics, context);
 	}
 
 	/**

@@ -472,6 +472,18 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.THROWABLE: {
+				org.nasdanika.ncore.Throwable throwable = (org.nasdanika.ncore.Throwable)theEObject;
+				T1 result = caseThrowable(throwable);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.STACK_TRACE_ELEMENT: {
+				org.nasdanika.ncore.StackTraceElement stackTraceElement = (org.nasdanika.ncore.StackTraceElement)theEObject;
+				T1 result = caseStackTraceElement(stackTraceElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -1103,6 +1115,36 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseDirectory(Directory object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Throwable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Throwable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseThrowable(org.nasdanika.ncore.Throwable object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Stack Trace Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Stack Trace Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseStackTraceElement(org.nasdanika.ncore.StackTraceElement object) {
 		return null;
 	}
 

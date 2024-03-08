@@ -301,6 +301,24 @@ public interface NcoreFactory extends EFactory {
 	Directory createDirectory();
 
 	/**
+	 * Returns a new object of class '<em>Throwable</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Throwable</em>'.
+	 * @generated
+	 */
+	Throwable createThrowable();
+
+	/**
+	 * Returns a new object of class '<em>Stack Trace Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Stack Trace Element</em>'.
+	 * @generated
+	 */
+	StackTraceElement createStackTraceElement();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

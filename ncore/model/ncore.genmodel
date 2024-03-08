@@ -142,5 +142,19 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//File/lastModified"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//Directory"/>
+    <genClasses ecoreClass="ncore.ecore#//Throwable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Throwable/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Throwable/message"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Throwable/stackTrace"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Throwable/supressed"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Throwable/cause"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//StackTraceElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//StackTraceElement/className"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//StackTraceElement/fileName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//StackTraceElement/methodName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//StackTraceElement/lineNumber"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//StackTraceElement/native"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

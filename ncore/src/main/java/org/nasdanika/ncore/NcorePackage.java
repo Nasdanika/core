@@ -2687,6 +2687,152 @@ public interface NcorePackage extends EPackage {
 	int DIRECTORY_OPERATION_COUNT = FILE_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ThrowableImpl <em>Throwable</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.ThrowableImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getThrowable()
+	 * @generated
+	 */
+	int THROWABLE = 42;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROWABLE__TYPE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROWABLE__MESSAGE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Stack Trace</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROWABLE__STACK_TRACE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Supressed</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROWABLE__SUPRESSED = 3;
+
+	/**
+	 * The feature id for the '<em><b>Cause</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROWABLE__CAUSE = 4;
+
+	/**
+	 * The number of structural features of the '<em>Throwable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROWABLE_FEATURE_COUNT = 5;
+
+	/**
+	 * The number of operations of the '<em>Throwable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROWABLE_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.StackTraceElementImpl <em>Stack Trace Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.StackTraceElementImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStackTraceElement()
+	 * @generated
+	 */
+	int STACK_TRACE_ELEMENT = 43;
+
+	/**
+	 * The feature id for the '<em><b>Class Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STACK_TRACE_ELEMENT__CLASS_NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>File Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STACK_TRACE_ELEMENT__FILE_NAME = 1;
+
+	/**
+	 * The feature id for the '<em><b>Method Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STACK_TRACE_ELEMENT__METHOD_NAME = 2;
+
+	/**
+	 * The feature id for the '<em><b>Line Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STACK_TRACE_ELEMENT__LINE_NUMBER = 3;
+
+	/**
+	 * The feature id for the '<em><b>Native</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STACK_TRACE_ELEMENT__NATIVE = 4;
+
+	/**
+	 * The number of structural features of the '<em>Stack Trace Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STACK_TRACE_ELEMENT_FEATURE_COUNT = 5;
+
+	/**
+	 * The number of operations of the '<em>Stack Trace Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STACK_TRACE_ELEMENT_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '<em>Instant</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2694,7 +2840,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 42;
+	int INSTANT = 44;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -2704,7 +2850,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 43;
+	int DURATION = 45;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -3710,6 +3856,136 @@ public interface NcorePackage extends EPackage {
 	EClass getDirectory();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Throwable <em>Throwable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Throwable</em>'.
+	 * @see org.nasdanika.ncore.Throwable
+	 * @generated
+	 */
+	EClass getThrowable();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Throwable#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see org.nasdanika.ncore.Throwable#getType()
+	 * @see #getThrowable()
+	 * @generated
+	 */
+	EAttribute getThrowable_Type();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Throwable#getMessage <em>Message</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Message</em>'.
+	 * @see org.nasdanika.ncore.Throwable#getMessage()
+	 * @see #getThrowable()
+	 * @generated
+	 */
+	EAttribute getThrowable_Message();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.Throwable#getStackTrace <em>Stack Trace</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Stack Trace</em>'.
+	 * @see org.nasdanika.ncore.Throwable#getStackTrace()
+	 * @see #getThrowable()
+	 * @generated
+	 */
+	EReference getThrowable_StackTrace();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.Throwable#getSupressed <em>Supressed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Supressed</em>'.
+	 * @see org.nasdanika.ncore.Throwable#getSupressed()
+	 * @see #getThrowable()
+	 * @generated
+	 */
+	EReference getThrowable_Supressed();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.nasdanika.ncore.Throwable#getCause <em>Cause</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Cause</em>'.
+	 * @see org.nasdanika.ncore.Throwable#getCause()
+	 * @see #getThrowable()
+	 * @generated
+	 */
+	EReference getThrowable_Cause();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.StackTraceElement <em>Stack Trace Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Stack Trace Element</em>'.
+	 * @see org.nasdanika.ncore.StackTraceElement
+	 * @generated
+	 */
+	EClass getStackTraceElement();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.StackTraceElement#getClassName <em>Class Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Class Name</em>'.
+	 * @see org.nasdanika.ncore.StackTraceElement#getClassName()
+	 * @see #getStackTraceElement()
+	 * @generated
+	 */
+	EAttribute getStackTraceElement_ClassName();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.StackTraceElement#getFileName <em>File Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>File Name</em>'.
+	 * @see org.nasdanika.ncore.StackTraceElement#getFileName()
+	 * @see #getStackTraceElement()
+	 * @generated
+	 */
+	EAttribute getStackTraceElement_FileName();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.StackTraceElement#getMethodName <em>Method Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Method Name</em>'.
+	 * @see org.nasdanika.ncore.StackTraceElement#getMethodName()
+	 * @see #getStackTraceElement()
+	 * @generated
+	 */
+	EAttribute getStackTraceElement_MethodName();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.StackTraceElement#getLineNumber <em>Line Number</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Line Number</em>'.
+	 * @see org.nasdanika.ncore.StackTraceElement#getLineNumber()
+	 * @see #getStackTraceElement()
+	 * @generated
+	 */
+	EAttribute getStackTraceElement_LineNumber();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.StackTraceElement#isNative <em>Native</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Native</em>'.
+	 * @see org.nasdanika.ncore.StackTraceElement#isNative()
+	 * @see #getStackTraceElement()
+	 * @generated
+	 */
+	EAttribute getStackTraceElement_Native();
+
+	/**
 	 * Returns the meta object for data type '{@link java.time.Instant <em>Instant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4612,6 +4888,106 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass DIRECTORY = eINSTANCE.getDirectory();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ThrowableImpl <em>Throwable</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.ThrowableImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getThrowable()
+		 * @generated
+		 */
+		EClass THROWABLE = eINSTANCE.getThrowable();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute THROWABLE__TYPE = eINSTANCE.getThrowable_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Message</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute THROWABLE__MESSAGE = eINSTANCE.getThrowable_Message();
+
+		/**
+		 * The meta object literal for the '<em><b>Stack Trace</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference THROWABLE__STACK_TRACE = eINSTANCE.getThrowable_StackTrace();
+
+		/**
+		 * The meta object literal for the '<em><b>Supressed</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference THROWABLE__SUPRESSED = eINSTANCE.getThrowable_Supressed();
+
+		/**
+		 * The meta object literal for the '<em><b>Cause</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference THROWABLE__CAUSE = eINSTANCE.getThrowable_Cause();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.StackTraceElementImpl <em>Stack Trace Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.StackTraceElementImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStackTraceElement()
+		 * @generated
+		 */
+		EClass STACK_TRACE_ELEMENT = eINSTANCE.getStackTraceElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Class Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STACK_TRACE_ELEMENT__CLASS_NAME = eINSTANCE.getStackTraceElement_ClassName();
+
+		/**
+		 * The meta object literal for the '<em><b>File Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STACK_TRACE_ELEMENT__FILE_NAME = eINSTANCE.getStackTraceElement_FileName();
+
+		/**
+		 * The meta object literal for the '<em><b>Method Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STACK_TRACE_ELEMENT__METHOD_NAME = eINSTANCE.getStackTraceElement_MethodName();
+
+		/**
+		 * The meta object literal for the '<em><b>Line Number</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STACK_TRACE_ELEMENT__LINE_NUMBER = eINSTANCE.getStackTraceElement_LineNumber();
+
+		/**
+		 * The meta object literal for the '<em><b>Native</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STACK_TRACE_ELEMENT__NATIVE = eINSTANCE.getStackTraceElement_Native();
 
 		/**
 		 * The meta object literal for the '<em>Instant</em>' data type.
