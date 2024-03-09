@@ -64,7 +64,7 @@ public interface Graph<E extends GraphElement> extends EObject {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	default ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>> createProcessors(Context context, ProgressMonitor progressMonitor) {				
+	default ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>> createProcessor(Context context, ProgressMonitor progressMonitor) {				
 		// Creating adapters
 		GraphAdapterFactory graphAdapterFactory = new GraphAdapterFactory();  
 		Transformer<EObject,ElementAdapter<?>> graphFactory = new Transformer<>(graphAdapterFactory); 
