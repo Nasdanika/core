@@ -3,6 +3,7 @@ package org.nasdanika.graph.model.tests;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,8 @@ import org.nasdanika.graph.model.adapters.ConnectionAdapter;
 import org.nasdanika.graph.model.adapters.ElementAdapter;
 import org.nasdanika.graph.model.adapters.GraphAdapterFactory;
 import org.nasdanika.graph.model.adapters.NodeAdapter;
+import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
+import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.ncore.NamedElement;
 
 public class TestAdapters {
@@ -75,7 +78,20 @@ public class TestAdapters {
 				System.out.println("\t" + nodeAdapter.getIncomingConnections());				
 			}
 		}
-		 
+		
+		// Configs and processors
+		NopEndpointProcessorConfigFactory<Function<String,String>> processorConfigFactory = new NopEndpointProcessorConfigFactory<>() {
+			
+			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
+				return false;
+			};
+			
+		};
+		
+		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
+		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(registry.values(), false, progressMonitor);
+
+		System.out.println(configs.size());
 	}
 
 }
