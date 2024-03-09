@@ -11,6 +11,12 @@ import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 
+/**
+ * 
+ * @param <P> Processor type
+ * @param <H> Handler type
+ * @param <E> Endpoint type
+ */
 public class NodeProcessorInfo<P, H, E> extends ProcessorInfo<P> implements NodeProcessorConfig<H, E> {
 	/**
 	 * Functional interface for processor/info creation.
