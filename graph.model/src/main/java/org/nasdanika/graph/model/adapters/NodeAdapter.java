@@ -23,12 +23,19 @@ import org.nasdanika.graph.model.GraphElement;
  */
 public class NodeAdapter extends ObjectNode<EObject> implements ElementAdapter<EObject> {
 
+	private NodeAdapter parent;
+
 	public NodeAdapter(EObject value, BiConsumer<EObject, BiConsumer<Element, ProgressMonitor>> elementProvider) {
 		super(value);
 		
 		if (value instanceof Graph) {
 			for (GraphElement graphElement: ((Graph<?>) value).getElements()) {
-				elementProvider.accept(graphElement, (child, pm) -> children.add((Element) child));
+				elementProvider.accept(graphElement, (child, pm) -> {
+					children.add((Element) child);
+					if (child instanceof NodeAdapter) {
+						((NodeAdapter) child).setParent(this);
+					}
+				});
 			}			
 		}
 		
@@ -49,6 +56,14 @@ public class NodeAdapter extends ObjectNode<EObject> implements ElementAdapter<E
 				});
 			}			
 		}
+	}
+	
+	void setParent(NodeAdapter parent) {
+		this.parent = parent;
+	}
+	
+	public NodeAdapter getParent() {
+		return parent;
 	}
 	
 	private Collection<Element> children = Collections.synchronizedCollection(new ArrayList<>());
