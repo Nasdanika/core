@@ -67,6 +67,11 @@
 		    <groupId>org.nasdanika.core</groupId>
 		    <artifactId>exec</artifactId>
 		    <version>${project.version}</version>
-		</dependency> 		
+		</dependency>
+		<dependency>
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>common</artifactId>
+			<version>2024.1.0</version>
+		</dependency>
 	</dependencies>
 </project>
