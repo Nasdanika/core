@@ -75,7 +75,7 @@ public abstract class YamlResource  extends ResourceImpl {
 				
 				@Override
 				public String getMessage() {
-					return e.toString();
+					return "[" + e.getClass().getName() + "] " + e.toString();
 				}
 				
 				@Override

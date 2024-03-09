@@ -279,19 +279,19 @@ public interface Map extends Marked {
 	@SuppressWarnings("unchecked")
 	private Property put(java.lang.String key, Object value, Iterable<? extends org.nasdanika.persistence.Marker> entryMarkers) {
 		if (value instanceof java.lang.Boolean) {
-			return put(key, (java.lang.Boolean) value, entryMarkers);
+			return put(key, ((java.lang.Boolean) value).booleanValue(), entryMarkers);
 		} 
 		if (value instanceof EObject) {
 			return put(key, (EObject) value, entryMarkers);
 		} 
 		if (value instanceof java.lang.Integer) {
-			return put(key, (java.lang.Integer) value, entryMarkers);
+			return put(key, ((java.lang.Integer) value).intValue(), entryMarkers);
 		} 
 		if (value instanceof java.lang.Long) {
-			return put(key, (java.lang.Long) value, entryMarkers);
+			return put(key, ((java.lang.Long) value).longValue(), entryMarkers);
 		} 
 		if (value instanceof java.lang.Double) {
-			return put(key, (java.lang.Double) value, entryMarkers);
+			return put(key, ((java.lang.Double) value).doubleValue(), entryMarkers);
 		} 
 		if (value instanceof java.util.Date) {
 			return put(key, (java.util.Date) value, entryMarkers);
