@@ -16,7 +16,7 @@ import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.Connect
 /**
  * Service interface for creating connection processors
  */
-public interface ConnectionFactory {
+public interface ConnectionProcessorFactory {
 	
 	/**
 	 * Returns true if can create processor for a given connection

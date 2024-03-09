@@ -1,5 +1,5 @@
-import org.nasdanika.graph.model.util.ConnectionFactory;
-import org.nasdanika.graph.model.util.NodeFactory;
+import org.nasdanika.graph.model.util.ConnectionProcessorFactory;
+import org.nasdanika.graph.model.util.NodeProcessorFactory;
 
 module org.nasdanika.graph.model {
 	exports org.nasdanika.graph.model;
@@ -9,7 +9,7 @@ module org.nasdanika.graph.model {
 	
 	requires transitive org.nasdanika.exec;
 	
-	uses ConnectionFactory;
-	uses NodeFactory;
+	uses ConnectionProcessorFactory;
+	uses NodeProcessorFactory;
 	
 }

@@ -18,7 +18,7 @@ import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.NodePro
 /**
  * Service interface for creating flow nodes
  */
-public interface NodeFactory {
+public interface NodeProcessorFactory {
 	
 	/**
 	 * Returns true if can create processor for a given transition

@@ -44,9 +44,9 @@ public class ReflectiveProcessorFactory {
 		
 		org.nasdanika.graph.model.Connection<?> connection = (org.nasdanika.graph.model.Connection<?>) ((ConnectionAdapter) connectionProcessorConfig.getElement()).get();
 		
-		Iterable<ConnectionFactory> connectionFactories = ServiceLoader.load(ConnectionFactory.class);
-		ConnectionFactory factory = null;
-		for (ConnectionFactory candidate: connectionFactories) {
+		Iterable<org.nasdanika.graph.model.util.ConnectionProcessorFactory> connectionFactories = ServiceLoader.load(org.nasdanika.graph.model.util.ConnectionProcessorFactory.class);
+		org.nasdanika.graph.model.util.ConnectionProcessorFactory factory = null;
+		for (org.nasdanika.graph.model.util.ConnectionProcessorFactory candidate: connectionFactories) {
 			if (candidate.canHandle(connection)) {
 				if (factory == null || factory.priority() > candidate.priority()) {
 					factory = candidate;
@@ -79,9 +79,9 @@ public class ReflectiveProcessorFactory {
 		
 		EObject node = ((NodeAdapter) config.getElement()).get();
 		
-		Iterable<NodeFactory> nodeFactories = ServiceLoader.load(NodeFactory.class);
-		NodeFactory factory = null;
-		for (NodeFactory candidate: nodeFactories) {
+		Iterable<org.nasdanika.graph.model.util.NodeProcessorFactory> nodeFactories = ServiceLoader.load(org.nasdanika.graph.model.util.NodeProcessorFactory.class);
+		org.nasdanika.graph.model.util.NodeProcessorFactory factory = null;
+		for (org.nasdanika.graph.model.util.NodeProcessorFactory candidate: nodeFactories) {
 			if (candidate.canHandle(node)) {
 				if (factory == null || factory.priority() > candidate.priority()) {
 					factory = candidate;
