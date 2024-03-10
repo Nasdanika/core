@@ -229,7 +229,9 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			if (Util.isBlank(strConfig)) {
 				return Collections.emptyMap();
 			}
-			return Collections.singletonMap(strConfig.trim(), loadFeatureSetter(true, context, chain));
+			String trimmedKey = strConfig.trim();
+			featureNameValidator.accept(trimmedKey, context);
+			return Collections.singletonMap(trimmedKey, loadFeatureSetter(true, context, chain));
 		} 
 		
 		if (configs instanceof Collection) {
@@ -238,7 +240,9 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 				if (e instanceof String) {
 					String se = (String) e; 
 					if (!Util.isBlank(se)) {
-						ret.put(se.trim(), loadFeatureSetter(true, context, chain));
+						String trimmedKey = se.trim();
+						featureNameValidator.accept(trimmedKey, context);
+						ret.put(trimmedKey, loadFeatureSetter(true, context, chain));
 					}
 				} else {
 					throwConfigurationException("Feature config in a collection shall be a string, got: " + e, null, context);
@@ -251,8 +255,9 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		if (configs instanceof Map) {
 			Map<String, Setter<S,T>> ret = new LinkedHashMap<>();
 			for (Entry<String, Object> fce: ((Map<String,Object>) configs).entrySet()) {
-				featureNameValidator.accept(fce.getKey(), context);
-				ret.put(fce.getKey().trim(), loadFeatureSetter(fce.getValue(), context, chain));
+				String trimmedKey = fce.getKey().trim();
+				featureNameValidator.accept(trimmedKey, context);
+				ret.put(trimmedKey, loadFeatureSetter(fce.getValue(), context, chain));
 			}
 			return ret;
 		}
@@ -488,6 +493,10 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}
 	
 	protected boolean matchArgumentType(Object argument, Object config, EObject context) {
+		if (argument == null) {
+			return false;
+		}
+		
 		if (config == Boolean.TRUE) {
 			return true;
 		}
@@ -499,13 +508,37 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 				return true;
 			}
 			if (argumentType instanceof String) {
-				EClassifier eClassifier = getType((String) argumentType, context);
-				return eClassifier.isInstance(argument);
+				return matchArgumentTypeValue(argument, (String) argumentType, context);
+			}
+			if (argumentType instanceof Iterable) {
+				for (Object ate: ((Iterable<?>) argumentType)) {
+					if (ate instanceof String) {
+						if (matchArgumentTypeValue(argument, (String) ate, context)) {
+							return true;
+						}
+					} else if (ate != null) {
+						throwConfigurationException("Unsupported argument-type element type: " + ate.getClass() + " " + ate, null, context);						
+					}
+				}
+				return false;
 			}
 		}
 		
 		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
 		return true;
+	}
+	
+	/**
+	 * Matches argument type taking negation into account (!)
+	 * @param argument
+	 * @param value
+	 * @param context
+	 */
+	protected boolean matchArgumentTypeValue(Object argument, String value, EObject context) {
+		boolean isNegation = value.startsWith("!");
+		String typeName = isNegation ? value.substring(1) : value;
+		EClassifier eClassifier = getType(typeName, context);
+		return eClassifier.isInstance(argument) ^ isNegation;
 	}
 	
 	protected boolean matchCondition(
@@ -950,7 +983,8 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 				configType, 
 				configSubType, 
 				featureNameValidator,
-				chain).get(featureName);
+				chain)
+			.get(featureName);
 	}
 	
 	protected Setter<S,T> getFeatureSetter(
@@ -965,7 +999,8 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 				configType, 
 				configSubType, 
 				feature.getName(), 
-				featureNameValidator, chain);
+				featureNameValidator, 
+				chain);
 	}
 	
 	protected java.util.function.BiConsumer<String, EObject> getFeatureNameValidator(EObject value) { 

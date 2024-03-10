@@ -16,8 +16,8 @@ public class ConnectionAdapter implements org.nasdanika.graph.Connection, Elemen
 	
 	public ConnectionAdapter(Connection<?> value, BiConsumer<EObject, BiConsumer<Element, ProgressMonitor>> elementProvider) {
 		this.value = value;
-		elementProvider.accept(value.eContainer(), (sourceAdapter, pm) -> source = (NodeAdapter) sourceAdapter);
-		elementProvider.accept(value.getTarget(), (targetAdapter, pm) -> target = (NodeAdapter) targetAdapter);
+		elementProvider.accept(Objects.requireNonNull(value.eContainer(), "Connection container (source) is null"), (sourceAdapter, pm) -> source = (NodeAdapter) sourceAdapter);
+		elementProvider.accept(Objects.requireNonNull(value.getTarget(), "Connection target is null"), (targetAdapter, pm) -> target = (NodeAdapter) targetAdapter);
 	}
 
 	@Override

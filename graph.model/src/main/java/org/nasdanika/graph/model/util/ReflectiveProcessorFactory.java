@@ -16,7 +16,7 @@ import org.nasdanika.graph.model.adapters.ConnectionAdapter;
 import org.nasdanika.graph.model.adapters.NodeAdapter;
 //import org.nasdanika.common.Reflector.Factory;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
-import org.nasdanika.graph.processor.ProcessorConfig;
+import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.ConnectionProcessor;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.NodeProcessor;
@@ -68,7 +68,7 @@ public class ReflectiveProcessorFactory {
 
 	@NodeProcessorFactory
 	public NodeProcessor<Object, Object, Object, Object> createNodeProcessor(
-			ProcessorConfig config, 
+			NodeProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> config, 
 			boolean parallel,
 			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,

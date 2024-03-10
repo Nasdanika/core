@@ -17,13 +17,17 @@ import org.nasdanika.graph.model.GraphElement;
 public class GraphAdapterFactory {
 	
 	@org.nasdanika.common.Transformer.Factory
-	public NodeAdapter createtGraphElementAdapter(
+	public ElementAdapter<?> createtGraphElementAdapter(
 			GraphElement graphElement,
 			boolean parallel,
 			BiConsumer<EObject, BiConsumer<Element, ProgressMonitor>> elementProvider, 
 			Consumer<BiConsumer<Map<EObject, Element>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {
 
+		if (graphElement instanceof Connection) {
+			return createtConnectionAdapter((Connection<?>) graphElement, parallel, elementProvider, registry, progressMonitor);
+		}
+		
 		return new NodeAdapter(graphElement, elementProvider);
 	}
 	
