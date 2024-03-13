@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2024.1.0</version>
+	    <version>2024.3.1</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>common</artifactId>
@@ -46,12 +46,12 @@
 		<dependency>
 			<groupId>org.eclipse.emf</groupId>
 			<artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-			<version>2.35.0</version>
+			<version>2.36.0</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.json</groupId>
 		    <artifactId>json</artifactId>
-		    <version>20231013</version>
+		    <version>20240303</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.yaml</groupId>
@@ -62,7 +62,7 @@
 		<dependency>
 		    <groupId>org.jsoup</groupId>
 		    <artifactId>jsoup</artifactId>
-		    <version>1.17.1</version>
+		    <version>1.17.2</version>
 		</dependency>
 
 		<dependency>
@@ -86,19 +86,19 @@
 		<dependency>
 		    <groupId>net.sourceforge.plantuml</groupId>
 		    <artifactId>plantuml-epl</artifactId>
-		    <version>1.2023.13</version>
+		    <version>1.2024.3</version>
 		</dependency>		
 		
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-expression</artifactId>
-		    <version>6.1.2</version>
+		    <version>6.1.4</version>
 		</dependency>
 
 		<dependency>
 		  <groupId>commons-codec</groupId>
 		  <artifactId>commons-codec</artifactId>
-		  <version>1.16.0</version>
+		  <version>1.16.1</version>
 		</dependency>		
 	</dependencies>
 </project>

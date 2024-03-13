@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>parent</artifactId>
 		<groupId>org.nasdanika.core</groupId>
-		<version>2024.1.0</version>
+		<version>2024.3.1</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>graph-model</artifactId>
@@ -59,19 +59,19 @@
 
 	<dependencies>	
 		<dependency>
-		    <groupId>org.nasdanika.core</groupId>
+		    <groupId>${project.groupId}</groupId>
 		    <artifactId>drawio-model</artifactId>
 		    <version>${project.version}</version>
 		</dependency> 		
 		<dependency>
-		    <groupId>org.nasdanika.core</groupId>
+		    <groupId>${project.groupId}</groupId>
 		    <artifactId>exec</artifactId>
 		    <version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.nasdanika.core</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>common</artifactId>
-			<version>2024.1.0</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

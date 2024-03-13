@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nasdanika.core</groupId>
-	<version>2024.1.0</version>
+	<version>2024.3.1</version>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Nasdanika Core Parent</name>
@@ -50,7 +50,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>4.0.0-M9</version>
+				<version>4.0.0-M13</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -68,12 +68,12 @@
 		        <plugin>
 		            <groupId>org.apache.maven.plugins</groupId>
 		            <artifactId>maven-surefire-plugin</artifactId>
-		            <version>3.2.3</version>
+		            <version>3.2.5</version>
 		            <dependencies>
 		                <dependency>
 		                    <groupId>org.junit.jupiter</groupId>
 		                    <artifactId>junit-jupiter-engine</artifactId>
-		                    <version>5.10.1</version>
+		                    <version>5.10.2</version>
 		                </dependency>
 		            </dependencies>
 		        </plugin>
@@ -150,20 +150,20 @@
 		<dependency>
 		    <groupId>org.junit.jupiter</groupId>
 		    <artifactId>junit-jupiter-api</artifactId>
-		    <version>5.10.1</version>
+		    <version>5.10.2</version>
 		    <scope>test</scope>
 		</dependency>		
 		<dependency>
 		    <groupId>org.junit.jupiter</groupId>
 		    <artifactId>junit-jupiter-engine</artifactId>
-		    <version>5.10.1</version>
+		    <version>5.10.2</version>
 		    <scope>test</scope>
 		</dependency>		
 		
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.24.2</version>
+			<version>3.25.3</version>
 			<scope>test</scope>
 		</dependency>				
 	</dependencies>
