@@ -387,8 +387,8 @@ public class Transformer<S,T> extends Reflector {
 	 * 
 	 * @param element
 	 * @param parallel
-	 * @param elementProvider Accepts a source element and a consumer of the target element and a progress monitor, which is invoked when the target element is created from the source element. 
-	 * The function may optionally return a completion stage which will be used to report exceptional completions.  
+	 * @param elementProvider Accepts a source element and a consumer of the target element and a progress monitor.
+	 * The consumer is invoked when the target element is created from the source element. 
 	 * @param registry
 	 * @param progressMonitor
 	 * @return

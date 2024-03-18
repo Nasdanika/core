@@ -200,6 +200,7 @@
 		<module>exec.gen</module>
 		<module>emf</module>
 		<module>maven</module>
+		<module>capability</module>
 	</modules>	
 
 	<distributionManagement>
