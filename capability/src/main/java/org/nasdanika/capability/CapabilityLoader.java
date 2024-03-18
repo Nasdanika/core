@@ -11,9 +11,11 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Status;
 
 /**
  * Loads capabilities from {@link CapabilityFactory}'s.
@@ -46,6 +48,35 @@ public class CapabilityLoader {
 	 */
 	private Map<Object, CompletionStage<Iterable<CapabilityProvider<?>>>> registry = new ConcurrentHashMap<>();
 	
+	protected CompletionStage<Iterable<CapabilityProvider<?>>> load(Object requirement, Consumer<Runnable> jobCollector, ProgressMonitor progressMonitor) {
+		CompletionStage<Iterable<CapabilityProvider<?>>> result = registry.get(requirement);
+		if (result != null) {
+			return result;
+		}
+		CompletableFuture<Iterable<CapabilityProvider<?>>> ret  = new CompletableFuture<>();
+		registry.put(requirement, ret);
+		progressMonitor.worked(1, "Created a registry entry for requirement: " + requirement, requirement);
+		
+		Runnable job = () -> { // A runnable which completes the future		
+			createCapabilityProviders(
+					requirement, 
+					(rq, pm) -> load(rq,jobCollector,pm), 
+					progressMonitor)
+			.whenComplete((r, e) -> {						
+				if (e == null) {
+					((CompletableFuture<Iterable<CapabilityProvider<?>>>) ret).complete(r);
+					progressMonitor.worked(1, "Completed capability providers for requirement: " + requirement, requirement);
+				} else {
+					((CompletableFuture<Iterable<CapabilityProvider<?>>>) ret).completeExceptionally(e);
+					progressMonitor.worked(Status.ERROR, 1, "Exception while Completing capability providers for requirement: " + requirement, requirement);
+				}
+			});
+			progressMonitor.worked(1, "Created capability providers for requirement: " + requirement, requirement);
+		};
+		jobCollector.accept(job);
+		return ret;		
+	}
+	
 	/**
 	 * Asynchronously loads providers which are not yet in the registry
 	 * @param requirement
@@ -54,33 +85,10 @@ public class CapabilityLoader {
 	 */
 	public Iterable<CapabilityProvider<?>> load(Object requirement, ProgressMonitor progressMonitor) {		
 		Queue<Runnable> constructionQueue = new ConcurrentLinkedQueue<>(); // 
-		BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<?>>>> constructor = new BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<?>>>>() {
-
-			@Override
-			public CompletionStage<Iterable<CapabilityProvider<?>>> apply(Object req, ProgressMonitor constructionMonitor) {
-				CompletionStage<Iterable<CapabilityProvider<?>>> result = registry.get(requirement);
-				if (result != null) {
-					return result;
-				}
-				CompletableFuture<Iterable<CapabilityProvider<?>>> ret  = new CompletableFuture<>();
-				registry.put(requirement, ret);  
-				constructionQueue.add(() -> { // A runnable which completes the future
-					createCapabilityProviders(req, this, constructionMonitor).whenComplete((r, e) -> {
-						if (e == null) {
-							((CompletableFuture<Iterable<CapabilityProvider<?>>>) ret).complete(r);
-						} else {
-							((CompletableFuture<Iterable<CapabilityProvider<?>>>) ret).completeExceptionally(e);
-						}
-					});
-				});
-				return ret;
-			}
-			
-		};
-		CompletionStage<Iterable<CapabilityProvider<?>>> result = constructor.apply(requirement, progressMonitor); // Puts to registry, fills the queue with immediate dependencies.
-		Runnable workItem;
-		while ((workItem = constructionQueue.poll()) != null) {
-			workItem.run();
+		CompletionStage<Iterable<CapabilityProvider<?>>> result = load(requirement, constructionQueue::add, progressMonitor); 
+		Runnable job;
+		while ((job = constructionQueue.poll()) != null) {
+			job.run();
 		}
 		
 		return result.toCompletableFuture().join();		

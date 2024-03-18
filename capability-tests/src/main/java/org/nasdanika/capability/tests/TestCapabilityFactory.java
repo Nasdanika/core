@@ -15,13 +15,15 @@ import reactor.core.publisher.Flux;
  * 
  */
 public class TestCapabilityFactory implements CapabilityFactory {
+	
+	public record Requirement(String value){};
 
 	@Override
 	public CompletionStage<Iterable<CapabilityProvider<?>>> create(Object requirement,
 			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<?>>>> resolver,
 			ProgressMonitor progressMonitor) {
 		
-		if (requirement instanceof String) {
+		if (requirement instanceof Requirement) {
 
 			return resolver.apply(MyService.class, progressMonitor).thenApply(cp -> {;
 				@SuppressWarnings("unchecked")
@@ -31,7 +33,7 @@ public class TestCapabilityFactory implements CapabilityFactory {
 		
 					@Override
 					public Flux<Object> getPublisher() {
-						return myServiceCapabilityPublisher.map(ms -> ms.count((String) requirement));
+						return myServiceCapabilityPublisher.map(ms -> ms.count(((Requirement) requirement).value()));
 					}
 					
 				});
