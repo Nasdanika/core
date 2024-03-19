@@ -14,35 +14,37 @@ import reactor.core.publisher.Flux;
 /**
  * 
  */
-public class AggregatorFactory implements CapabilityFactory {
+public class AggregatorFactory implements CapabilityFactory<AggregatorFactory.Requirement,String> {
 	
 	public record Requirement(String value){};
+	
+	@Override
+		public boolean canHandle(Object requirement) {
+			return requirement instanceof Requirement;
+		}
 
 	@Override
-	public CompletionStage<Iterable<CapabilityProvider<?>>> create(Object requirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<?>>>> resolver,
+	public CompletionStage<Iterable<CapabilityProvider<String>>> create(
+			Requirement requirement,
+			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
 			ProgressMonitor progressMonitor) {
 		
-		if (requirement instanceof Requirement) {
-			String reqValue = ((Requirement) requirement).value();
-			
-			CompletionStage<Iterable<CapabilityProvider<?>>> myServiceProviders = resolver.apply(MyService.class, progressMonitor);
-			CompletionStage<Iterable<CapabilityProvider<?>>> testProviders = resolver.apply(new TestCapabilityFactory.Requirement(reqValue) , progressMonitor);
-			
-			return myServiceProviders.thenCombine(testProviders, this::combine);
-		}
+		String reqValue = ((Requirement) requirement).value();
 		
-		return CompletableFuture.completedStage(Collections.emptyList());
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		CompletionStage<Iterable<CapabilityProvider<MyService>>> myServiceProviders = (CompletionStage) resolver.apply(MyService.class, progressMonitor);
+		CompletionStage<Iterable<CapabilityProvider<Object>>> testProviders = resolver.apply(new TestCapabilityFactory.Requirement(reqValue) , progressMonitor);
+		
+		return myServiceProviders.thenCombine(testProviders, this::combine);
 	}
 	
-	protected Iterable<CapabilityProvider<?>> combine(Iterable<CapabilityProvider<?>> myServiceProviders, Iterable<CapabilityProvider<?>> testProviders) {
-		@SuppressWarnings("unchecked")
-		Flux<MyService> myServiceCapabilityPublisher = (Flux<MyService>) myServiceProviders.iterator().next().getPublisher();
+	protected Iterable<CapabilityProvider<String>> combine(Iterable<CapabilityProvider<MyService>> myServiceProviders, Iterable<CapabilityProvider<Object>> testProviders) {
+		Flux<MyService> myServiceCapabilityPublisher = myServiceProviders.iterator().next().getPublisher();
 		
-		return Collections.singleton(new CapabilityProvider<Object>() {
+		return Collections.singleton(new CapabilityProvider<String>() {
 
 			@Override
-			public Flux<Object> getPublisher() {
+			public Flux<String> getPublisher() {
 				return myServiceCapabilityPublisher.map(ms -> {
 					return "Some result: " + testProviders;
 				});

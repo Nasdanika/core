@@ -9,10 +9,10 @@ import org.nasdanika.capability.ServiceFactory;
 /**
  * Factory which delegates to {@link ServiceLoader} and handles requirements of type {@link Class}.
  */
-public class TestServiceFactory extends ServiceFactory {
+public class TestServiceFactory<S> extends ServiceFactory<S> {
 	
 	@Override
-	protected <S> Stream<Provider<S>> stream(Class<S> service) {
+	protected Stream<Provider<S>> stream(Class<S> service) {
 		return ServiceLoader.load(service).stream();
 	}
 

@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import org.nasdanika.common.Context;
 
-public class ContextServiceFactory extends ServiceFactory {
+public class ContextServiceFactory<S> extends ServiceFactory<S> {
 	
 	private Context context;
 
@@ -14,7 +14,7 @@ public class ContextServiceFactory extends ServiceFactory {
 		this.context = context;
 	}
 	
-	protected <S> Provider<S> createProvider(S service) {
+	protected Provider<S> createProvider(S service) {
 		return new Provider<S>() {
 
 			@SuppressWarnings("unchecked")
@@ -32,7 +32,7 @@ public class ContextServiceFactory extends ServiceFactory {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected <S> Stream<Provider<S>> stream(Class<S> service) {
+	protected Stream<Provider<S>> stream(Class<S> service) {
 		Object services = context.get(service.arrayType());
 		if (services != null) {
 			return Arrays.stream((Object[]) services)

@@ -10,7 +10,10 @@ import org.nasdanika.common.ProgressMonitor;
  * Creates providers of capabilities satisfying the requirement.
  * This is a service interface intended to be used with {@link ServiceLoader}. 
  */
-public interface CapabilityFactory {
+public interface CapabilityFactory<R,C> {
+	
+	
+	boolean canHandle(Object requirement);
 	
 	/**
 	 * Asynchronously creates providers of capabilities satisfying the requirement.
@@ -19,9 +22,9 @@ public interface CapabilityFactory {
 	 * @param resolver Use to obtain dependency capabilities by requirements. E.g. service instance by service class.
 	 * @return
 	 */
-	CompletionStage<Iterable<CapabilityProvider<?>>> create(
-			Object requirement, 
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<?>>>> resolver,
+	CompletionStage<Iterable<CapabilityProvider<C>>> create(
+			R requirement, 
+			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
 			ProgressMonitor progressMonitor);	
-
+	
 }

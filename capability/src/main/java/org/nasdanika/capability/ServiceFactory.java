@@ -2,7 +2,6 @@ package org.nasdanika.capability;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.ServiceLoader;
 import java.util.ServiceLoader.Provider;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -15,9 +14,9 @@ import org.nasdanika.common.ProgressMonitor;
 import reactor.core.publisher.Flux;
 
 /**
- * Factory which delegates to {@link ServiceLoader} and handles requirements of type {@link Class}.
+ * Factory which handles requirements of type {@link Class}.
  */
-public abstract class ServiceFactory implements CapabilityFactory {
+public abstract class ServiceFactory<S> implements CapabilityFactory<Object,S> {
 	
 	/**
 	 * Service requirement. providerPredicate is applied to the service implementation type returned by {@link Provider}. 
@@ -25,19 +24,24 @@ public abstract class ServiceFactory implements CapabilityFactory {
 	 * Service predicate is used on the service instance.
 	 * @param <T> Service type
 	 */
-	public record Requirement<T>(
-			Class<T> serviceType, 
+	public record Requirement<S>(
+			Class<S> serviceType, 
 			Predicate<Class<?>> providerPredicate,
-			Predicate<? super T> servicePredicate) {}
+			Predicate<? super S> servicePredicate) {}
 	
-	protected abstract <S> Stream<Provider<S>> stream(Class<S> service);
+	protected abstract Stream<Provider<S>> stream(Class<S> service);
 	
-	protected CapabilityProvider<?> createServiceCapabilityProvider(Object service) {
-		return new CapabilityProvider<Object>() {
-			Flux<Object> publisher = Flux.just(service);
+	@Override
+	public boolean canHandle(Object requirement) {
+		return requirement instanceof Class || requirement instanceof Requirement;
+	}
+	
+	protected CapabilityProvider<S> createServiceCapabilityProvider(S service) {
+		return new CapabilityProvider<S>() {
+			Flux<S> publisher = Flux.just(service);
 
 			@Override
-			public Flux<Object> getPublisher() {
+			public Flux<S> getPublisher() {
 				return publisher;
 			}
 			
@@ -46,18 +50,18 @@ public abstract class ServiceFactory implements CapabilityFactory {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public CompletionStage<Iterable<CapabilityProvider<?>>> create(Object requirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<?>>>> resolver,
+	public CompletionStage<Iterable<CapabilityProvider<S>>> create(
+			Object requirement,
+			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
 			ProgressMonitor progressMonitor) {
 		if (requirement instanceof Class) {
-			requirement = new Requirement<Object>((Class<Object>) requirement, null, null);
+			requirement = new Requirement<S>((Class<S>) requirement, null, null);
 		}
 		
 		if (requirement instanceof Requirement) {
-			Requirement<Object> theRequirement = (Requirement<Object>) requirement;
+			Requirement<S> theRequirement = (Requirement<S>) requirement;
 			
-			@SuppressWarnings("rawtypes")
-			List<CapabilityProvider<?>> ret = (List) stream(theRequirement.serviceType())
+			List<CapabilityProvider<S>> ret = stream(theRequirement.serviceType())
 				.filter(p -> theRequirement.providerPredicate() == null || theRequirement.providerPredicate().test(p.type()))
 				.map(Provider::get)
 				.filter(s -> theRequirement.servicePredicate() == null || theRequirement.servicePredicate().test(s))

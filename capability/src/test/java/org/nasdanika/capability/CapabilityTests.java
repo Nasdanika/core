@@ -15,7 +15,7 @@ public class CapabilityTests {
 		MutableContext ctx = Context.EMPTY_CONTEXT.fork();
 		ctx.register(String.class, "Hello");
 		ctx.register(String.class, "World");
-		capabilityLoader.getFactories().add(new ContextServiceFactory(ctx));
+		capabilityLoader.getFactories().add(new ContextServiceFactory<Object>(ctx));
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		
 		for (CapabilityProvider<?> cp: capabilityLoader.load(String.class, progressMonitor)) {
