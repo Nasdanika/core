@@ -77,4 +77,19 @@ public class CapabilityTests {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void testLoadServiceListFactory() {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		capabilityLoader.getFactories().add(new TestServiceFactory<Object>());
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		
+		for (CapabilityProvider<List> cp: capabilityLoader.loadServices(List.class, null, 33.0, progressMonitor)) {
+			System.out.println(cp);
+			Flux<?> publisher = cp.getPublisher();
+			
+			publisher.subscribe(System.out::println);
+		}
+	}
+	
 }

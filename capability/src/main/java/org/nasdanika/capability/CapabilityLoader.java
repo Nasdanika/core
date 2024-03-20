@@ -56,7 +56,7 @@ public class CapabilityLoader {
 		}
 		CompletableFuture<Iterable<CapabilityProvider<Object>>> ret  = new CompletableFuture<>();
 		registry.put(requirement, ret);
-		progressMonitor.worked(1, "Created a registry entry for requirement: " + requirement, requirement);
+		progressMonitor.worked(1, "Created a registry entry", requirement);
 		
 		Runnable job = () -> { // A runnable which completes the future		
 			createCapabilityProviders(
@@ -66,13 +66,13 @@ public class CapabilityLoader {
 			.whenComplete((r, e) -> {						
 				if (e == null) {
 					((CompletableFuture<Iterable<CapabilityProvider<Object>>>) ret).complete(r);
-					progressMonitor.worked(1, "Completed capability providers for requirement: " + requirement, requirement);
+					progressMonitor.worked(1, "Completed capability providers", requirement);
 				} else {
 					((CompletableFuture<Iterable<CapabilityProvider<Object>>>) ret).completeExceptionally(e);
-					progressMonitor.worked(Status.ERROR, 1, "Exception while Completing capability providers for requirement: " + requirement, requirement);
+					progressMonitor.worked(Status.ERROR, 1, "Exception while completing capability providers", requirement, e);
 				}
 			});
-			progressMonitor.worked(1, "Created capability providers for requirement: " + requirement, requirement);
+			progressMonitor.worked(1, "Created capability providers", requirement);
 		};
 		jobCollector.accept(job);
 		return ret;		

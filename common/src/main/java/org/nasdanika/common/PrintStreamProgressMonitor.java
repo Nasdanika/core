@@ -17,6 +17,7 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	private String indent;
 	protected int indentIncrement = 2;
 	private boolean cancelled;
+	private boolean printData;
 	
 	/**
 	 * Constructs a progress monitor for a given print stream.
@@ -25,7 +26,7 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	 * @param indentIncrement Increment to add to the indent of this monitor when constructing a sub-monitor.
 	 * @param closeStream if true the monitor closes the stream in its close() method.
 	 */
-	public PrintStreamProgressMonitor(PrintStream out, int indent, int indentIncrement, boolean closeStream) {
+	public PrintStreamProgressMonitor(PrintStream out, int indent, int indentIncrement, boolean closeStream, boolean printData) {
 		this.out = out;
 		StringBuilder indentBuilder = new StringBuilder();
 		for (int i = 0; i < indent; ++i) {
@@ -33,13 +34,21 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 		}
 		this.indent = indentBuilder.toString();
 		this.closeStream = closeStream;
+		this.printData = printData;
 	}
 	
 	/**
-	 * Constructs a progres monitor outputting to System.out with indent 0, indentIncrement 2 and not closing the stream.
+	 * Constructs a progress monitor outputting to System.out with indent 0, indentIncrement 2 and not closing the stream.
 	 */
 	public PrintStreamProgressMonitor() {
-		this(System.out, 0, 2, false);
+		this(false);
+	}
+	
+	/**
+	 * Constructs a progress monitor outputting to System.out with indent 0, indentIncrement 2 and not closing the stream.
+	 */
+	public PrintStreamProgressMonitor(boolean printData) {
+		this(System.out, 0, 2, false, printData);
 	}
 	
 	@Override
@@ -65,7 +74,7 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 				out.println(formatDetail(d, indent + "    "));			
 			}
 		}
-		return new PrintStreamProgressMonitor(out, indent.length()+indentIncrement, indentIncrement, false) {
+		return new PrintStreamProgressMonitor(out, indent.length()+indentIncrement, indentIncrement, false, printData) {
 			
 			@Override
 			public boolean isCancelled() {
@@ -88,7 +97,7 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	@Override
 	public void worked(Status status, double work, String progressMessage, Object... data) {
 		out.print(indent+"  ["+status+" "+work+"] "+progressMessage);
-		if (data.length > 0) { 
+		if (printData && data.length > 0) { 
 			out.print(": "+Arrays.deepToString(data));
 		}
 		out.println();

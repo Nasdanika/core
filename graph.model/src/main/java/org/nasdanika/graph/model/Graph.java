@@ -64,7 +64,7 @@ public interface Graph<E extends GraphElement> extends EObject {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	default ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>> createProcessor(Context context, ProgressMonitor progressMonitor) {				
+	default ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>> createProcessor(Object requirement, Context context, ProgressMonitor progressMonitor) {				
 		// Creating adapters
 		GraphAdapterFactory graphAdapterFactory = new GraphAdapterFactory();  
 		Transformer<EObject,ElementAdapter<?>> graphFactory = new Transformer<>(graphAdapterFactory); 
@@ -82,7 +82,7 @@ public interface Graph<E extends GraphElement> extends EObject {
 		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
 		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(registry.values(), false, progressMonitor);
 
-		ReflectiveProcessorFactory reflectiveTarget = new ReflectiveProcessorFactory(context);
+		ReflectiveProcessorFactory reflectiveTarget = new ReflectiveProcessorFactory(requirement, context);
 		ReflectiveBiFunctionProcessorFactoryProvider<Object, Object, Object, Object> processorFactoryProvider = new ReflectiveBiFunctionProcessorFactoryProvider<>(reflectiveTarget);
 		BiFunctionProcessorFactory<Object, Object, Object, Object> processorFactory = processorFactoryProvider.getFactory();
 		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>> processors = processorFactory.createProcessors(configs.values(), true, progressMonitor);
