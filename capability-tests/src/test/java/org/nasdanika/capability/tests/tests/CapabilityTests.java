@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
-import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.capability.tests.AggregatorFactory;
 import org.nasdanika.capability.tests.MyService;
 import org.nasdanika.capability.tests.TestCapabilityFactory;
