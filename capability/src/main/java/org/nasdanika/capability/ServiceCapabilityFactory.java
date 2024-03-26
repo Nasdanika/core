@@ -8,19 +8,23 @@ import java.util.function.Predicate;
 
 import org.nasdanika.common.ProgressMonitor;
 
-public interface ServiceCapabilityFactory<R,S> extends CapabilityFactory<Object,S> {
+public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory<Object,S> {
 		
 	/**
 	 * Service requirement. factoryPredicate is applied to the factory instance. 
 	 * Service requirement is passed to the factory.
 	 * @param <T> Service type
 	 */
-	record Requirement<R,S>(
+	public record Requirement<R,S>(
 			Class<S> serviceType, 
 			Predicate<? super ServiceCapabilityFactory<R,S>> factoryPredicate,
 			R serviceRequirement) {}
 	
-	static <R,S> Requirement<R,S> createRequirement(
+	public static <R,S> Requirement<R,S> createRequirement(Class<S> serviceType) {
+		return createRequirement(serviceType, null, null);
+	}
+	
+	public static <R,S> Requirement<R,S> createRequirement(
 			Class<S> serviceType, 
 			Predicate<? super ServiceCapabilityFactory<R,S>> factoryPredicate,
 			R serviceRequirement) {
@@ -28,15 +32,15 @@ public interface ServiceCapabilityFactory<R,S> extends CapabilityFactory<Object,
 	}
 	
 	@Override
-	default boolean canHandle(Object requirement) {
+	public boolean canHandle(Object requirement) {
 		return requirement instanceof Class || requirement instanceof Requirement;
 	}
 
-	boolean isForServiceType(Class<?> type);
+	public abstract boolean isForServiceType(Class<?> type);
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	default CompletionStage<Iterable<CapabilityProvider<S>>> create(
+	public CompletionStage<Iterable<CapabilityProvider<S>>> create(
 			Object requirement,
 			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
 			ProgressMonitor progressMonitor) {
@@ -49,16 +53,17 @@ public interface ServiceCapabilityFactory<R,S> extends CapabilityFactory<Object,
 			if (isForServiceType(theRequirement.serviceType())
 					&& (theRequirement.factoryPredicate() == null || theRequirement.factoryPredicate().test(this))) {
 				// TODO - split progress monitor
-				return createService(theRequirement.serviceRequirement(), resolver, progressMonitor);
+				return createService(theRequirement.serviceType(), theRequirement.serviceRequirement(), resolver, progressMonitor);
 			}
 		} 
 		
 		return CompletableFuture.completedStage(Collections.emptyList());
 	}
 		
-	CompletionStage<Iterable<CapabilityProvider<S>>> createService(
-				R serviceRequirement,
-				BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
-				ProgressMonitor progressMonitor);	
+	protected abstract CompletionStage<Iterable<CapabilityProvider<S>>> createService(
+		Class<S> serviceType,	
+		R serviceRequirement,
+		BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+		ProgressMonitor progressMonitor);	
 	
 }

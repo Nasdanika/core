@@ -15,7 +15,7 @@ import reactor.core.publisher.Flux;
 /**
  * Creates a list containing a double for a double requirement. 
  */
-public class ListFactory implements ServiceCapabilityFactory<Double, List<Double>> {
+public class ListFactory extends ServiceCapabilityFactory<Double, List<Double>> {
 
 	@Override
 	public boolean isForServiceType(Class<?> type) {
@@ -24,6 +24,7 @@ public class ListFactory implements ServiceCapabilityFactory<Double, List<Double
 
 	@Override
 	public CompletionStage<Iterable<CapabilityProvider<List<Double>>>> createService(
+			Class<List<Double>> serviceType,
 			Double serviceRequirement,
 			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
 			ProgressMonitor progressMonitor) {

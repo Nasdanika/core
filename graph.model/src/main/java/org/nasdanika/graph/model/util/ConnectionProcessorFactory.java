@@ -23,7 +23,7 @@ import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.Connect
 import reactor.core.publisher.Flux;
 
 
-public abstract class ConnectionProcessorFactory implements ServiceCapabilityFactory<ConnectionProcessorRequirement, ConnectionProcessor<Object, Object, Object, Object>> {
+public abstract class ConnectionProcessorFactory extends ServiceCapabilityFactory<ConnectionProcessorRequirement, ConnectionProcessor<Object, Object, Object, Object>> {
 
 	@Override
 	public boolean isForServiceType(Class<?> type) {
@@ -32,7 +32,7 @@ public abstract class ConnectionProcessorFactory implements ServiceCapabilityFac
 	
 	@Override
 	public boolean canHandle(Object requirement) {
-		if (ServiceCapabilityFactory.super.canHandle(requirement)) {
+		if (super.canHandle(requirement)) {
 			Object serviceRequirement = ((Requirement<?,?>) requirement).serviceRequirement();
 			if (serviceRequirement instanceof  ConnectionProcessorRequirement) {
 				ConnectionProcessorRequirement connectionProcessorRequirement = (ConnectionProcessorRequirement) serviceRequirement;
@@ -51,13 +51,14 @@ public abstract class ConnectionProcessorFactory implements ServiceCapabilityFac
 	protected abstract boolean canHandleRequirement(Object requirement);
 	
 	protected abstract boolean isForModelElement(EObject eObj);
-
+	
 	@Override
-	public CompletionStage<Iterable<CapabilityProvider<ConnectionProcessor<Object, Object, Object, Object>>>> createService(
+	protected CompletionStage<Iterable<CapabilityProvider<ConnectionProcessor<Object, Object, Object, Object>>>> createService(
+			Class<ConnectionProcessor<Object, Object, Object, Object>> serviceType,
 			ConnectionProcessorRequirement serviceRequirement,
 			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
 			ProgressMonitor progressMonitor) {
-
+	
 		ConnectionProcessor<Object, Object, Object, Object> nodeProcessor = createProcessor(
 				serviceRequirement.config(), 
 				serviceRequirement.infoProvider(), 
