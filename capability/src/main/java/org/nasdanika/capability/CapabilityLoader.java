@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.ServiceLoader;
 import java.util.concurrent.CompletableFuture;
@@ -61,7 +62,13 @@ public class CapabilityLoader {
 		Runnable job = () -> { // A runnable which completes the future		
 			createCapabilityProviders(
 					requirement, 
-					(rq, pm) -> load(rq,jobCollector,pm), 
+					(rq, pm) -> {
+						if (Objects.equals(requirement, rq)) {
+							// Preventing blocking at .join() below
+							throw new IllegalArgumentException("Requirement loading loop for " + requirement);
+						}
+						return load(rq,jobCollector,pm);
+					}, 
 					progressMonitor)
 			.whenComplete((r, e) -> {						
 				if (e == null) {
