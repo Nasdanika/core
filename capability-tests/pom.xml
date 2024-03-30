@@ -10,31 +10,6 @@
 	<artifactId>capability-tests</artifactId>
 	<packaging>jar</packaging>
 	<name>Capability tests</name>
-	<build>
-	    <plugins>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.version}</version>
-				<executions>
-					<execution>
-						<id>default-prepare-agent</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-	    </plugins>
-	</build>
-
 	<dependencies>		
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
