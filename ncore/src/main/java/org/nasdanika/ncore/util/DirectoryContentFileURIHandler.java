@@ -38,12 +38,15 @@ public class DirectoryContentFileURIHandler extends FileURIHandlerImpl {
 					directory.setName(file.getName());
 					directory.setLastModified(new Date(file.lastModified()));
 					resource.getContents().add(directory);				
-					for (File child: file.listFiles()) {
-						org.nasdanika.ncore.File childFile = child.isDirectory() ? NcoreFactory.eINSTANCE.createDirectory() : NcoreFactory.eINSTANCE.createFile();
-						childFile.setName(child.getName());
-						childFile.setLastModified(new Date(child.lastModified()));
-						childFile.setLength(child.length());
-						directory.getTreeItems().add(childFile);
+					File[] children = file.listFiles();
+					if (children != null) {
+						for (File child: children) {
+							org.nasdanika.ncore.File childFile = child.isDirectory() ? NcoreFactory.eINSTANCE.createDirectory() : NcoreFactory.eINSTANCE.createFile();
+							childFile.setName(child.getName());
+							childFile.setLastModified(new Date(child.lastModified()));
+							childFile.setLength(child.length());
+							directory.getTreeItems().add(childFile);
+						}
 					}
 				} 
 				
