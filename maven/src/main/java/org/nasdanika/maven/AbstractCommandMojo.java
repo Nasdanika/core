@@ -127,7 +127,7 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 			parent.mkdirs();
 		}
 		
-		return new PrintStreamProgressMonitor(new PrintStream(progressOutput), 0, 2, true);
+		return new PrintStreamProgressMonitor(new PrintStream(progressOutput), 0, 2, true, false);
 	}
 	
 	/**
