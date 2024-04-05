@@ -796,10 +796,27 @@ public class Util {
 	 * @param keyFeature
 	 * @return
 	 */
-	public static <K, T> Map<K, List<T>> groupBy(Collection<? extends T> elements, java.util.function.Function<? super T, ? extends K> classifier) {
+	public static <K, T> Map<K, List<T>> groupBy(
+			Collection<? extends T> elements, 
+			java.util.function.Function<? super T, ? extends K> classifier) {
 		Map<K, List<T>> ret = new LinkedHashMap<>();
 		groupBy(elements, classifier, ret);
 		return ret;
+	}
+	
+	/**
+	 * Grouping by with support of null keys.
+	 * @param <K>
+	 * @param <T>
+	 * @param elements
+	 * @param keyFeature
+	 * @return
+	 */
+	public static <K, T> void groupBy(
+			Collection<? extends T> elements, 
+			java.util.function.Function<? super T, ? extends K> classifier, 
+			Map<K, List<T>> collector) {
+		groupBy(elements, classifier, collector, key -> new ArrayList<>());
 	}	
 	
 	/**
@@ -810,10 +827,15 @@ public class Util {
 	 * @param keyFeature
 	 * @return
 	 */
-	public static <K, T> void groupBy(Collection<? extends T> elements, java.util.function.Function<? super T, ? extends K> classifier, Map<K, List<T>> collector) {
+	public static <K, T, C extends Collection<T>> void groupBy(
+			Collection<? extends T> elements, 
+			java.util.function.Function<? super T, ? extends K> classifier, 
+			Map<K, C> collector, 
+			java.util.function.Function<K,C> collectionFactory) {
+		
 		for (T e: elements) {
 			K k = classifier.apply(e);
-			collector.computeIfAbsent(k, key -> new ArrayList<>()).add(e);
+			collector.computeIfAbsent(k, collectionFactory).add(e);
 		}
 	}	
 
