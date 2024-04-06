@@ -112,6 +112,27 @@ public class CapabilityLoader {
 		ServiceCapabilityFactory.Requirement<R,S> serviceReq = new ServiceCapabilityFactory.Requirement<R,S>(serviceType, factoryPredicate, serviceRequirement);
 		return (Iterable) load(serviceReq, progressMonitor);
 	}
+	
+	/**
+	 * Information about capability factory - requirement it satisfied, providers created, dependency requirements
+	 * FactoryNode can be used for troubleshooting and dependency visualization Requirement -> Factories -> Dependency Requirements
+	 * Visualization can generated using the diagram module (https://docs.nasdanika.org/core/diagram/index.html) or ECharts model (https://docs.nasdanika.org/models/echarts/index.html).  
+	 */
+	public static record FactoryNode(
+			Object requirement,
+			CapabilityFactory<Object,Object> factory,
+			Iterable<CapabilityProvider<Object>> providers,
+			Collection<Object> dependencies) {}
+	
+	private Collection<FactoryNode> factoryNodes = Collections.synchronizedCollection(new ArrayList<>());
+	
+	/**
+	 * Can be used to examine dependencies, e.g. build a dependency graph
+	 * @return
+	 */
+	public Collection<FactoryNode> getFactoryNodes() {
+		return Collections.unmodifiableCollection(factoryNodes);
+	}
 		
 	/**
 	 * 
@@ -132,7 +153,18 @@ public class CapabilityLoader {
 		for (CapabilityFactory<Object,Object> factory: factories) {
 			if (factory.canHandle(requirement)) {
 				// TODO - split progress monitor
-				CompletionStage<Iterable<CapabilityProvider<Object>>> rcs = factory.create(requirement, resolver, progressMonitor);
+				Collection<Object> dependencies = Collections.synchronizedCollection(new ArrayList<>());
+				CompletionStage<Iterable<CapabilityProvider<Object>>> rcs = factory.create(
+						requirement, 
+						(rq, pm) -> {
+							dependencies.add(rq);
+							return resolver.apply(rq, pm); 
+						},
+						progressMonitor);
+				rcs = rcs.thenApply(cp -> {
+					factoryNodes.add(new FactoryNode(requirement, factory, cp, Collections.unmodifiableCollection(dependencies)));
+					return cp;
+				});
 				accumulator.add(rcs.toCompletableFuture());
 			}
 		}		

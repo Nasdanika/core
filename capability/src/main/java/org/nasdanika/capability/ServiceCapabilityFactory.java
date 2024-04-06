@@ -8,6 +8,8 @@ import java.util.function.Predicate;
 
 import org.nasdanika.common.ProgressMonitor;
 
+import reactor.core.publisher.Flux;
+
 public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory<Object,S> {
 		
 	/**
@@ -65,5 +67,20 @@ public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory
 		R serviceRequirement,
 		BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
 		ProgressMonitor progressMonitor);	
+	
+	/**
+	 * Helper method for factories with no dependencies providing a single instance of a service.
+	 * @return
+	 */
+	protected CompletionStage<Iterable<CapabilityProvider<S>>> wrap(S service) {
+		return CompletableFuture.completedStage(Collections.singleton(new CapabilityProvider<S>() {
+			
+			@Override
+			public Flux<S> getPublisher() {
+				return Flux.just(service);
+			}
+			
+		}));		
+	}
 	
 }
