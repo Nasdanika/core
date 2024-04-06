@@ -51,7 +51,7 @@ public @interface Generated {
    /**
     * Generator-specific configuration.
     * Configuration may be used for tracking purposes. 
-    * It may also be read by the generator before generation.  
+    * It may also be modified after initial generation and then read by the generator during subsequent generations.  
     */
    String generatorConfiguration() default "";
    
