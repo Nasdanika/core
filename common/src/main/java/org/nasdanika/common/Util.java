@@ -1534,5 +1534,33 @@ public class Util {
 			throw new NasdanikaException("Error scaling SVG: " + e, e);
 		}
 	}
+		
+	static Pattern EXPANDER_PATTERN = Pattern.compile("\\$\\{(.+?)\\}");	
 	
+	/**
+	 * Expands tokens in the form of ``${token name|default value}`` to their values.
+	 * If a token is not found expansion is not processed.
+	 * @param input
+	 * @param env
+	 * @return
+	 */
+	public static String interpolate(String input, java.util.function.Function<String, String> tokenSource) {
+		if (tokenSource==null || isBlank(input)) {
+			return input;
+		}
+		Matcher matcher = EXPANDER_PATTERN.matcher(input);
+		StringBuilder output = new StringBuilder();
+		int i = 0;
+		while (matcher.find()) {
+		    String token = matcher.group();
+			Object replacement = tokenSource.apply(token.substring(2, token.length()-1));
+		    if (replacement != null) {
+			    output.append(input.substring(i, matcher.start())).append(replacement);			    
+			    i = matcher.end();
+		    }
+		}
+		output.append(input.substring(i, input.length()));
+		return output.toString();
+	}
+		
 }

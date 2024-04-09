@@ -275,8 +275,7 @@ public class TestCommon {
 			return null;
 		}
 		
-		return "[" + obj.getClass().toString() + "] " + obj;
-			
+		return "[" + obj.getClass().toString() + "] " + obj;		
 	}
 
 	@Test
@@ -381,8 +380,6 @@ public class TestCommon {
 		cf.thenAccept(v -> System.out.println("After completion handler: " + v));
 		
 		cf.complete("Universe");
-		
-		
 	}
 	
 	@Test 
@@ -396,8 +393,7 @@ public class TestCommon {
 		});
 		cf.complete("Life is good!");
 //		cf.completeExceptionally(new NasdanikaException("I failed"));
-		cf.exceptionally(e -> "After completion handler: " + e).thenAccept(v -> System.out.println("Exceptionally: " + v));
-		
+		cf.exceptionally(e -> "After completion handler: " + e).thenAccept(v -> System.out.println("Exceptionally: " + v));	
 	}
 	
 	@Test
@@ -422,6 +418,13 @@ public class TestCommon {
 	public void testSVGScale() throws Exception {
 		URL svg = getClass().getResource("web_server.svg");
 		System.out.println(Util.scaleSVG(svg.openStream(), 20));
+	}
+	
+	@Test 
+	public void testUtilInterpolate() {
+		Map<String, String> ts = Collections.singletonMap("a", "b");
+		assertEquals("Hello b!", Util.interpolate("Hello ${a}!", ts::get));
+		assertEquals("Hello ${c}!", Util.interpolate("Hello ${c}!", ts::get));
 	}
 	
 }
