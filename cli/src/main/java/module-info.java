@@ -1,6 +1,5 @@
 import org.nasdanika.capability.CapabilityFactory;
 import org.nasdanika.cli.HelpCommandFactory;
-import org.nasdanika.cli.ProgressMonitorMixInFactory;
 import org.nasdanika.cli.RootCommandFactory;
 
 module org.nasdanika.cli {
@@ -14,7 +13,6 @@ module org.nasdanika.cli {
 	
 	provides CapabilityFactory with 
 		RootCommandFactory,
-		HelpCommandFactory,
-		ProgressMonitorMixInFactory;
+		HelpCommandFactory;
 	
 }
