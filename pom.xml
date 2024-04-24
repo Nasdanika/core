@@ -220,6 +220,7 @@
 		<module>emf</module>
 		<module>maven</module>
 		<module>capability</module>
+		<module>cli</module>
 	</modules>	
 
 	<distributionManagement>

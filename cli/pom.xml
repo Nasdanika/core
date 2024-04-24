@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	  <parent>
+	    <artifactId>parent</artifactId>
+	    <groupId>org.nasdanika.core</groupId>
+	    <version>2024.4.0</version>
+	    <relativePath>..</relativePath>
+	  </parent>
+	<artifactId>cli</artifactId>
+	<packaging>jar</packaging>
+	<name>CLI</name>
+	<description>Extensible Command Line Interface</description>
+	<dependencies>		
+		<dependency>
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>capability</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>info.picocli</groupId>
+		    <artifactId>picocli</artifactId>
+		    <version>4.7.5</version>
+		</dependency>		
+	</dependencies>
+</project>
