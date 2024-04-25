@@ -18,15 +18,19 @@ import picocli.CommandLine;
  * Collects sub-commands for the {@link RootCommand} using the capability framework
  */
 public class Application {
-	
+
 	public static void main(String[] args) {
-		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		execute(Application.class.getModule().getLayer(), args);
+	}
+	
+	public static void execute(ModuleLayer moduleLayer, String[] args) {
+		CapabilityLoader capabilityLoader = new CapabilityLoader(moduleLayer);
 		ProgressMonitor progressMonitor = new NullProgressMonitor(); // new PrintStreamProgressMonitor(); - TODO configurable through system properties
 
 		// Sub-commands, sorting alphabetically
 		List<CommandLine> rootCommands = new ArrayList<>();		
 		Requirement<SubCommandRequirement, CommandLine> subCommandRequirement = ServiceCapabilityFactory.createRequirement(CommandLine.class, null,  new SubCommandRequirement(Collections.emptyList()));
-		for (CapabilityProvider<Object> cp: capabilityLoader.load(subCommandRequirement, progressMonitor)) {
+		for (CapabilityProvider<Object> cp: capabilityLoader.load( subCommandRequirement, progressMonitor)) {
 			cp.getPublisher().subscribe(cmd -> rootCommands.add((CommandLine) cmd));
 		}
 		

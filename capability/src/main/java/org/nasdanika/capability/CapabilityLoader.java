@@ -45,6 +45,10 @@ public class CapabilityLoader {
 		ServiceLoader.load(CapabilityFactory.class, classLoader).forEach(factories::add);
 	}
 	
+	public CapabilityLoader(ModuleLayer moduleLayer) {
+		ServiceLoader.load(moduleLayer, CapabilityFactory.class).forEach(factories::add);
+	}
+	
 	/**
 	 * Maps requirements to capability publishers
 	 */

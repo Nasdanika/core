@@ -49,18 +49,20 @@ public class HelpCommand extends CommandBase {
 			PrintStream out) throws IOException {
 		
 		CommandSpec commandSpec = cmd.getCommandSpec();
+		String[] version = commandSpec.version();
 		if (html) {
 			int hLevel = Math.min(cmdPath.size() + level, 6);
 			out.println("<h" + hLevel + ">" + cmd.getCommandName() + "</h" + hLevel + ">");
-			out.print("<table><tr><th valign=\"top\">Version:</th><td> ");
-			for (String vs: commandSpec.version()) {
-				out.print(vs);
-				out.print("<br/>");
+			if (version.length > 0) {
+				out.print("<table><tr><th valign=\"top\">Version:</th><td> ");			
+				for (String vs: version) {
+					out.print(vs);
+					out.print("<br/>");
+				}
+				out.print("</td></tr></table>");
 			}
-			out.print("</td></tr></table>");
 			
 			out.println("<pre style=\"padding:5px;width:max-content\">");
-			out.println("TODO - implement, HtmlAnsiOutputStream is not available in jansi anymore");
 			try (OutputStream uos = new FilterOutputStream(out) { @Override public void close() {} }) {
 				try (PrintStream ps = new PrintStream(uos)) {
 					cmd.usage(ps, Help.Ansi.OFF);
@@ -101,7 +103,7 @@ public class HelpCommand extends CommandBase {
 			out.print(center(hb, WIDTH - 4));
 			out.println(" *");
 			
-			for (String vs: commandSpec.version()) {
+			for (String vs: version) {
 				out.print("* ");
 				out.print(center(vs, WIDTH - 4));
 				out.println(" *");			

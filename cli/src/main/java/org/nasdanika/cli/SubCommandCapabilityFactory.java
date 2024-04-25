@@ -18,7 +18,7 @@ import reactor.core.publisher.Flux;
  * Base class for sub-command factories.
  * Creates {@link CommandLine} from the command object, adds sub-commands and mix-ins
  */
-public abstract class SubCommandCapabilityFactory extends ServiceCapabilityFactory<SubCommandRequirement, CommandLine> {
+public class SubCommandCapabilityFactory extends ServiceCapabilityFactory<SubCommandRequirement, CommandLine> {
 
 	@Override
 	public boolean isForServiceType(Class<?> type) {
@@ -91,6 +91,8 @@ public abstract class SubCommandCapabilityFactory extends ServiceCapabilityFacto
 	 * @param progressMonitor
 	 * @return
 	 */
-	protected abstract Object createCommand(List<CommandLine> parentPath, ProgressMonitor progressMonitor);
+	protected Object createCommand(List<CommandLine> parentPath, ProgressMonitor progressMonitor) {
+		return null;
+	};
 
 }

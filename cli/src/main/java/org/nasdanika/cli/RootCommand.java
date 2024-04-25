@@ -6,7 +6,8 @@ import picocli.CommandLine.Command;
 		description= "Nasdanika Command Line Interface" , 
 		synopsisSubcommandLabel = "COMMAND", 
 		name="nsd", 
-		mixinStandardHelpOptions = true)
+		mixinStandardHelpOptions = true,
+		versionProvider = ModuleVersionProvider.class)
 public class RootCommand {
 
 
