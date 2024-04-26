@@ -7,7 +7,10 @@ import picocli.CommandLine.Command;
 		synopsisSubcommandLabel = "COMMAND", 
 		name="nsd", 
 		mixinStandardHelpOptions = true,
-		versionProvider = ModuleVersionProvider.class)
+		versionProvider = ModuleVersionProvider.class,
+		subcommands = {
+			LauncherCommand.class	
+		})
 public class RootCommand {
 
 }

@@ -138,11 +138,11 @@ public class HelpCommand extends CommandBase {
 	
 	@Override
 	public Integer call() throws Exception {
+		// TODO - mix-ins such as  and validation of exclusiveness of html with mix-ins
+		
 		if (output == null) {
 			usage(Collections.emptyList(), root, System.out);
 		} else {
-			// TODO - mix-ins such as  and validation of exclusiveness of html with mix-ins
-			
 			try (PrintStream out = new PrintStream(output)) {
 				usage(Collections.emptyList(), root, out);
 			}
