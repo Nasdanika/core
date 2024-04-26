@@ -10,5 +10,4 @@ import picocli.CommandLine.Command;
 		versionProvider = ModuleVersionProvider.class)
 public class RootCommand {
 
-
 }
