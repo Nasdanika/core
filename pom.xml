@@ -221,7 +221,6 @@
 		<module>maven</module>
 		<module>capability</module>
 		<module>cli</module>
-		<module>launcher</module>
 	</modules>	
 
 	<distributionManagement>
