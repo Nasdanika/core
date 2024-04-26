@@ -3,6 +3,7 @@ package org.nasdanika.launcher;
 import java.io.File;
 import java.lang.module.Configuration;
 import java.lang.module.ModuleDescriptor.Requires;
+import java.lang.module.ModuleDescriptor.Requires.Modifier;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReference;
 import java.lang.reflect.Method;
@@ -29,19 +30,29 @@ public class Launcher {
 	private static final String MODULE = "org.nasdanika.cli";
 	private static final String LIB_DIR = "lib";
 	
-	private static void collectLayerModules(ModuleReference moduleReference, Function<String, Optional<ModuleReference>> resolver, Map<String, ModuleReference> layerModules) {
+	private static void collectLayerModules(ModuleReference moduleReference, Function<String, Optional<ModuleReference>> resolver, Map<String, ModuleReference> layerModules, boolean debug) {
 		String moduleName = moduleReference.descriptor().name();
 		if (!layerModules.containsKey(moduleName)) {
 			layerModules.put(moduleName, moduleReference);
-			for (Requires req: moduleReference.descriptor().requires()) {
-				if ("jdk.xml.dom".equals(req.name())) {
-					System.out.println(req);
+			if (!moduleReference.descriptor().isAutomatic()) {
+				for (Requires req: moduleReference.descriptor().requires()) {
+					Set<Modifier> modifiers = req.modifiers();
+					if (modifiers.contains(Requires.Modifier.MANDATED) || modifiers.contains(Requires.Modifier.STATIC)) {
+						// Mandated and static are not needed to be added to the layer
+						if (debug) {
+							System.out.println("[" + moduleName + "] Skipping requirement: " + req.name() + " " + modifiers);							
+						}
+						continue; 
+					}
+					
+					Optional<ModuleReference> mrOpt = resolver.apply(req.name());
+					if (mrOpt.isPresent()) {
+						collectLayerModules(mrOpt.get(), resolver, layerModules, debug);
+					} else if (debug) {
+						System.out.println("[" + moduleName + "] Required module not found: " + req.name() + " " + modifiers);
+					}
 				}
-				Optional<ModuleReference> mrOpt = resolver.apply(req.name());
-				if (mrOpt.isPresent()) {
-					collectLayerModules(mrOpt.get(), resolver, layerModules);
-				}
-			}				
+			}
 		}
 	}
 	
@@ -83,28 +94,34 @@ public class Launcher {
         };
         walk(fileConsumer, libDir);
         
-        ModuleFinder finder = ModuleFinder.compose(ModuleFinder.of(libPaths.toArray(size -> new Path[size])), ModuleFinder.ofSystem());
-        Map<String, ModuleReference> allModules = new TreeMap<>();
-        for (ModuleReference ref: finder.findAll()) {
-        	allModules.put(ref.descriptor().name(), ref);
+        ModuleFinder libFinder = ModuleFinder.of(libPaths.toArray(size -> new Path[size]));
+        
+        Map<String, ModuleReference> libModules = new TreeMap<>();
+        for (ModuleReference ref: libFinder.findAll()) {
+        	libModules.put(ref.descriptor().name(), ref);
         }
         
     	if (debug) {
     		System.out.println("--- All Modules ---");
-    		for (ModuleReference ref: allModules.values()) {
+    		for (ModuleReference ref: libModules.values()) {
 	    		System.out.print(ref.descriptor().name() + " ");
 	    		if (ref.descriptor().isAutomatic()) {
 	    			System.out.println("*");
 	    		} else {
 	    			StringBuilder reqBuilder = new StringBuilder();
     				for (Requires re: ref.descriptor().requires()) {
-    					String name = re.name();
-    					if (allModules.containsKey(name)) {
-    						if (reqBuilder.isEmpty()) {
-    							reqBuilder.append(" <- ");
-    						}
-    						reqBuilder.append(name).append(" ");
+						String name = re.name();
+    					Set<Modifier> modifiers = re.modifiers();
+    					if (!modifiers.isEmpty()) {
+    						name +=  modifiers;
     					}
+    					if (!libModules.containsKey(name)) {
+    						name = "(" + name + ")";
+    					}
+						if (reqBuilder.isEmpty()) {
+							reqBuilder.append(" <- ");
+						}
+						reqBuilder.append(name).append(" ");
     				}
     				System.out.println(reqBuilder);
 	    		}
@@ -112,10 +129,11 @@ public class Launcher {
     	}        	       
         
     	Map<String, ModuleReference> layerModules = new TreeMap<>();
-    	
-        for (Entry<String, ModuleReference> me: new ArrayList<>(allModules.entrySet())) {
+        ModuleFinder systemFinder = ModuleFinder.ofSystem();        
+    	ModuleFinder allFinder = ModuleFinder.compose(libFinder, systemFinder);
+        for (Entry<String, ModuleReference> me: new ArrayList<>(libModules.entrySet())) {
         	if (!me.getValue().descriptor().isAutomatic()) {
-        		collectLayerModules(me.getValue(), finder::find, layerModules);
+        		collectLayerModules(me.getValue(), allFinder::find, layerModules, debug);
         	}
         }
                 
@@ -151,13 +169,13 @@ public class Launcher {
                 .toList();
 
         Configuration appConfig = Configuration.resolve(
-                ModuleFinder.compose(layerFinder, ModuleFinder.ofSystem()),
+                allFinder,
                 parentLayers.stream().map(ModuleLayer::configuration).collect(Collectors.toList()),
                 ModuleFinder.of(),
                 layerRoots);
         
         List<URL> urls = new ArrayList<>();
-        for (URI uri: allModules.values().stream().filter(mr -> !layerModules.containsKey(mr.descriptor().name())).map(mr -> mr.location().get()).toList()) {
+        for (URI uri: libModules.values().stream().filter(mr -> !layerModules.containsKey(mr.descriptor().name())).map(mr -> mr.location().get()).toList()) {
         	urls.add(uri.toURL());
         }        
         
