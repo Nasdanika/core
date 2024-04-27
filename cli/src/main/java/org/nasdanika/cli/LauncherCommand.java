@@ -2,14 +2,12 @@ package org.nasdanika.cli;
 
 import java.io.File;
 import java.io.PrintStream;
-import java.lang.module.Configuration;
 import java.lang.module.ModuleDescriptor.Requires;
 import java.lang.module.ModuleDescriptor.Requires.Modifier;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReference;
 import java.net.URI;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +29,7 @@ import picocli.CommandLine.Parameters;
 public class LauncherCommand extends CommandBase {
 	
 	@Option(names = {"-o", "--output"}, description = "Output file")
-	private File output;
+	private String output;
 	
 	@Option(
 			names = {"-p", "--path-separator"}, 
@@ -44,7 +42,7 @@ public class LauncherCommand extends CommandBase {
 			"Directories to scan for modules,",
 			"defaults to lib"
 		})
-	private File[] repositories;
+	private String[] repositories;
 	
 	@Option(
 			names = {"-m", "--module"}, 
@@ -54,7 +52,16 @@ public class LauncherCommand extends CommandBase {
 				}, 
 			defaultValue = "org.nasdanika.cli")
 	private String moduleName;
+
+	@Option(
+			names = {"-b", "--base"}, 
+			description = "Base repositories directory", 
+			defaultValue = "org.nasdanika.cli")
+	private File base;
 	
+	@Option(names = {"-P", "--prefix"},	description = "Module path prefix")
+	private String prefix;	
+		
 	@Option(
 			names = {"-c", "--class"}, 
 			description = {
@@ -90,7 +97,11 @@ public class LauncherCommand extends CommandBase {
 		if (output == null) {
 			System.out.println(generateLauncherCommand());
 		} else {
-			try (PrintStream out = new PrintStream(output)) {
+		    if (base == null) {
+		    	base = new File(".");
+		    }
+			
+			try (PrintStream out = new PrintStream(new File(base, output))) {
 				out.print(generateLauncherCommand());
 			}
 		}
@@ -141,7 +152,7 @@ public class LauncherCommand extends CommandBase {
 	
 	private String generateLauncherCommand() {
 		if (repositories == null || repositories.length == 0) {
-			repositories = new File[] { new File("lib") };
+			repositories = new String[] { "lib" };
 		}
 		StringBuilder builder = new StringBuilder(javaCommand).append(" ");
 		
@@ -159,7 +170,15 @@ public class LauncherCommand extends CommandBase {
 	    		}
 	    	}
 	    };
-	    walk(null, repoListener, repositories);
+	    
+	    if (base == null) {
+	    	base = new File(".");
+	    }
+	    
+	    walk(
+	    	null, 
+	    	repoListener, 
+	    	Stream.of(repositories).map(r -> new File(base, r)).toArray(size -> new File[size]));
 	    
 	    // Adding non-automatic and required modules to the module path and other dependencies to the classpath
 	    ModuleFinder repoFinder = ModuleFinder.of(moduleMap.values().stream().map(File::toPath).toArray(size -> new Path[size]));
@@ -259,124 +278,17 @@ public class LauncherCommand extends CommandBase {
 	 * @param moduleMap
 	 * @return
 	 */
-	private static String modulePath(ModuleReference ref, Map<String,File> moduleMap) {
+	private String modulePath(ModuleReference ref, Map<String,File> moduleMap) {
 		Optional<URI> lopt = ref.location();
 		if (lopt.isPresent()) {
 			URI location = lopt.get();
 			for (Entry<String, File> mme: moduleMap.entrySet()) {
 				if (location.equals(mme.getValue().toURI())) {
-					return mme.getKey();
+					return prefix == null ? mme.getKey() : prefix + mme.getKey();
 				}
 			}
 		}		
 		return null;
-	}
-
-	public static void main(String[] args) throws Exception {
-//        
-//        Map<String, ModuleReference> libModules = new TreeMap<>();
-//        for (ModuleReference ref: libFinder.findAll()) {
-//        	libModules.put(ref.descriptor().name(), ref);
-//        }
-//        
-//    	if (debug) {
-//    		System.out.println("--- Library Modules ---");
-//    		for (ModuleReference ref: libModules.values()) {
-//	    		System.out.print(ref.descriptor().name() + " ");
-//	    		if (ref.descriptor().isAutomatic()) {
-//	    			System.out.println("*");
-//	    		} else {
-//	    			StringBuilder reqBuilder = new StringBuilder();
-//    				for (Requires re: ref.descriptor().requires()) {
-//						String name = re.name();
-//    					Set<Modifier> modifiers = re.modifiers();
-//    					if (!modifiers.isEmpty()) {
-//    						name +=  modifiers;
-//    					}
-//    					if (!libModules.containsKey(name)) {
-//    						name = "(" + name + ")";
-//    					}
-//						if (reqBuilder.isEmpty()) {
-//							reqBuilder.append(" <- ");
-//						}
-//						reqBuilder.append(name).append(" ");
-//    				}
-//    				System.out.println(reqBuilder);
-//	    		}
-//    		}
-//    	}        	       
-//        
-//                
-//		Set<Path> layerPaths = new HashSet<>();
-//        Consumer<File> layerPathsCollector = lib -> {
-//			URI libURI = lib.toURI();
-//			for (ModuleReference lmr: layerModules.values()) {
-//				URI moduleURI = lmr.location().get();
-//				if (moduleURI.equals(libURI)) {
-//					layerPaths.add(lib.toPath());
-//					break;
-//				}
-//			}
-//        };
-//        walk(layerPathsCollector, libDir);
-//		        
-//		if (debug) {
-//			System.out.println("--- Layer Paths ---");
-//			layerPaths.forEach(System.out::println);
-//		}        	       
-//                
-//        ModuleFinder layerFinder = ModuleFinder.of(layerPaths.toArray(new Path[layerPaths.size()]));
-//        List<String> layerRoots = layerFinder.findAll()
-//                .stream()
-//                .map(m -> m.descriptor().name())
-//                .toList();
-//
-//        Configuration appConfig = Configuration.resolve(
-//                allFinder,
-//                parentLayers.stream().map(ModuleLayer::configuration).collect(Collectors.toList()),
-//                ModuleFinder.of(),
-//                layerRoots);
-//        
-//        List<URL> urls = new ArrayList<>();
-//        for (URI uri: libModules.values().stream().filter(mr -> !layerModules.containsKey(mr.descriptor().name())).map(mr -> mr.location().get()).toList()) {
-//        	urls.add(uri.toURL());
-//        }        
-//        
-//		if (debug) {
-//			System.out.println("--- Class loader URL's ---");
-//			urls.forEach(System.out::println);
-//		}
-        
-        		
-//		String moduleName = System.getProperty(Launcher.class.getName()+":module", MODULE);
-//		if (debug) {
-//			System.out.println("Module: " + moduleName);
-//		}
-//		
-//        Configuration parentConfig = ModuleLayer.boot().configuration();
-//        Configuration appConfig = parentConfig.resolveAndBind(
-//        		ModuleFinder.compose(libFinder, ModuleFinder.ofSystem()), 
-//        		ModuleFinder.of(), 
-//        		Set.of(moduleName));
-//               
-//		ClassLoader classLoader = ClassLoader.getSystemClassLoader(); //new URLClassLoader(urls.toArray(size -> new URL[size]));                
-//		ModuleLayer layer = ModuleLayer.defineModulesWithOneLoader(appConfig, parentLayers, classLoader).layer();		
-//		
-//		String className = System.getProperty(Launcher.class.getName()+":class", CLASS);
-//		if (debug) {
-//			System.out.println("Class: " + className);
-//		}
-//		Class<?> appClass = layer.findLoader(moduleName).loadClass(className);
-//		String methodName = System.getProperty(Launcher.class.getName()+":method", METHOD);
-//		if (debug) {
-//			System.out.println("Method: " + methodName);
-//		}
-//		Method mainMethod = appClass.getMethod(methodName, String[].class);
-//		Object result = mainMethod.invoke(null, (Object) args);
-//		if (result instanceof Integer) {
-//			System.exit((Integer) result);
-//		}
-	}
-	
+	}	
 
 }

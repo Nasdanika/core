@@ -11,6 +11,45 @@
 	<packaging>jar</packaging>
 	<name>CLI</name>
 	<description>Extensible Command Line Interface</description>
+	
+	<build>
+		<plugins>
+			<!-- For building a minimal distribution -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.6.1</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>
+								${project.build.directory}/dist/lib
+							</outputDirectory>
+							<useRepositoryLayout>true</useRepositoryLayout>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-failsafe-plugin</artifactId>
+	            <version>3.2.5</version>
+			    <executions>
+			        <execution>
+			            <goals>
+			                <goal>integration-test</goal>
+			                <goal>verify</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+	        </plugin>			
+		</plugins>
+	</build>
 	<dependencies>		
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
