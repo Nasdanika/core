@@ -22,7 +22,7 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 
 @Command(
-		description = "Outputs usage for all registred commands to console or file as plain text or HTML",
+		description = "Outputs usage for all registred commands to console or file",
 		name = "help")
 public class HelpCommand extends CommandBase {
 	

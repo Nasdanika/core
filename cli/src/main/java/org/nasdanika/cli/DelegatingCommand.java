@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.DiagnosticException;
@@ -28,17 +28,17 @@ import picocli.CommandLine.Option;
 @Command(
 		exitCodeListHeading = "Exit codes:\n",
 		exitCodeList = {
-				"0:Success",
-				"1:Unhandled exception during execution",
-				"2:Invalid input",
-				"3:Diagnostic failed",
-				"4:Execution failed or was cancelled, successful rollback",
-				"5:Execution failed or was cancelled, rollback was not successful",
-				"6:Executor service termination timed out"
+				"Non-negative number:Delegate result",
+				"-1:Unhandled exception during execution",
+				"-2:Invalid input",
+				"-3:Diagnostic failed",
+				"-4:Execution failed or was cancelled, successful rollback",
+				"-5:Execution failed or was cancelled, rollback failed",
+				"-6:Executor service termination timed out"
 		})
 public abstract class DelegatingCommand extends ContextCommand {
 	
-	protected abstract CommandFactory getCommandFactory();
+	protected abstract SupplierFactory<Integer> getSupplierFactory();
 	
 	@Mixin
 	private ProgressMonitorMixin progressMonitorMixin;
@@ -67,36 +67,37 @@ public abstract class DelegatingCommand extends ContextCommand {
 	
 	@Override
 	public Integer call() throws Exception {		
+		int result = -1;
 		try (ProgressMonitor progressMonitor = progressMonitorMixin.createProgressMonitor(4)) {
 			Context context = createContext(progressMonitor.split("Creating context", 1));
-			try (org.nasdanika.common.Command delegate = getCommandFactory().create(context)) {
+			try (org.nasdanika.common.Supplier<Integer> delegate = getSupplierFactory().create(context)) {
 				ProgressMonitor commandMonitor = progressMonitor.split("Command monitor", 3).setWorkRemaining(3 * delegate.size());
 				Diagnostic diagnostic = delegate.splitAndDiagnose(commandMonitor);
 				if (diagnostic.getStatus() == Status.ERROR) {
 					System.err.println("Diagnostic failed");
 					diagnostic.dump(System.err, 4);
-					return 3;
+					return -3;
 				}
 				
 				try {
-					delegate.splitAndExecute(commandMonitor);
+					result = delegate.splitAndExecute(commandMonitor);
 					delegate.splitAndCommit(commandMonitor);
 				} catch (Exception e) {
 					reportException(e);
 					if (e instanceof DiagnosticException) {
 						((DiagnosticException) e).getDiagnostic().dump(System.err, 4);
 					}
-					return delegate.splitAndRollback(commandMonitor) ? 4 : 5;
+					return delegate.splitAndRollback(commandMonitor) ? -4 : -5;
 				}
 			} finally {
 				ExecutorService executorService = context.get(ExecutorService.class);
 				if (executorService != null) {
 					executorService.shutdown();
-					return executorService.awaitTermination(timeout, TimeUnit.SECONDS) ? 0 : 6;
+					return executorService.awaitTermination(timeout, TimeUnit.SECONDS) ? result : -6;
 				}
 			}
 		}
-		return 0;
+		return result;
 	}
 
 	protected void reportException(Exception e) {

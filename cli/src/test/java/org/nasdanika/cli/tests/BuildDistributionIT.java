@@ -11,8 +11,7 @@ import org.nasdanika.cli.LauncherCommand;
 import picocli.CommandLine;
 
 public class BuildDistributionIT {
-	
-	
+		
 	@Test
 	public void generateLauncher() throws IOException {
 		for (File tf: new File("target").listFiles()) {
