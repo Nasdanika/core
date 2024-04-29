@@ -38,13 +38,6 @@ public class LauncherCommand extends CommandBase {
 					"defaults to the system path separator"})
 	private String pathSeparator;
 	
-//	@Option(
-//			names = {"-f", "--file-separator"}, 
-//			description = {
-//					"File separator, " ,					
-//					"defaults to the system path separator"})
-//	private String fileSeparator;
-	
 	@Parameters(description = { 
 			"Directories to scan for modules,",
 			"defaults to lib"
@@ -288,8 +281,7 @@ public class LauncherCommand extends CommandBase {
 			URI location = lopt.get();
 			for (Entry<String, File> mme: moduleMap.entrySet()) {
 				if (location.equals(mme.getValue().toURI())) {
-//					String fs = fileSeparator == null ? File.separator : fileSeparator;
-					String path = mme.getKey(); //.replace("/", fs);					
+					String path = mme.getKey();					
 					return prefix == null ? path : prefix + path;
 				}
 			}
