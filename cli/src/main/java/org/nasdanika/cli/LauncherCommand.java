@@ -38,6 +38,13 @@ public class LauncherCommand extends CommandBase {
 					"defaults to the system path separator"})
 	private String pathSeparator;
 	
+//	@Option(
+//			names = {"-f", "--file-separator"}, 
+//			description = {
+//					"File separator, " ,					
+//					"defaults to the system path separator"})
+//	private String fileSeparator;
+	
 	@Parameters(description = { 
 			"Directories to scan for modules,",
 			"defaults to lib"
@@ -53,10 +60,7 @@ public class LauncherCommand extends CommandBase {
 			defaultValue = "org.nasdanika.cli")
 	private String moduleName;
 
-	@Option(
-			names = {"-b", "--base"}, 
-			description = "Base repositories directory", 
-			defaultValue = "org.nasdanika.cli")
+	@Option(names = {"-b", "--base"}, description = "Base repositories directory")
 	private File base;
 	
 	@Option(names = {"-P", "--prefix"},	description = "Module path prefix")
@@ -284,7 +288,9 @@ public class LauncherCommand extends CommandBase {
 			URI location = lopt.get();
 			for (Entry<String, File> mme: moduleMap.entrySet()) {
 				if (location.equals(mme.getValue().toURI())) {
-					return prefix == null ? mme.getKey() : prefix + mme.getKey();
+//					String fs = fileSeparator == null ? File.separator : fileSeparator;
+					String path = mme.getKey(); //.replace("/", fs);					
+					return prefix == null ? path : prefix + path;
 				}
 			}
 		}		
