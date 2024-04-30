@@ -20,6 +20,5 @@ public class CommandGroup extends CommandBase {
 	public Integer call() throws Exception {
 		throw new ParameterException(spec.commandLine(), "Missing required subcommand");
 	}
-	
 
 }

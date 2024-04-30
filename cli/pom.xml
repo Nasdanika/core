@@ -31,6 +31,7 @@
 								${project.build.directory}/dist/lib
 							</outputDirectory>
 							<useRepositoryLayout>true</useRepositoryLayout>
+							<includeScope>runtime</includeScope>
 						</configuration>
 					</execution>
 				</executions>

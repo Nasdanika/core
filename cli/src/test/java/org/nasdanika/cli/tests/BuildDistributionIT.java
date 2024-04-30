@@ -26,6 +26,7 @@ public class BuildDistributionIT {
 		CommandLine launcherCommandLine = new CommandLine(new LauncherCommand());
 		launcherCommandLine.execute(
 				"-b", "target/dist", 
+				"-j", "@java",
 				"-o", "nsd.bat");
 		
 		launcherCommandLine.execute(
