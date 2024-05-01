@@ -6,9 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Specifies a classloader markdown resource with a detailed description of a command.
- * The description is output to HTML documentation below the usage information.
- * By default, if value attribute is not set, a resource with the same name as the annotated type and <code>.md</code> extension is used for description if it exists. 
+ * Command description
+ * The description is add to the documentation action after the usage information.
  * @author Pavel
  *
  */
@@ -17,10 +16,22 @@ import java.lang.annotation.Target;
 public @interface Description {
 
 	/**
-	 * Description resource. 
+	 * Command description. 
 	 * @return
 	 */
 	String value() default "";
+	
+	/**
+	 * Description format - markdown, text, or html
+	 * @return
+	 */
+	String format() default "markdown";
+	
+	/**
+	 * Description resource used if the description is an empty string
+	 * @return
+	 */
+	String resource() default "";
 	
 	/**
 	 * Documentation icon. Treated as URL if there is a slash and as a CSS class otherwise.

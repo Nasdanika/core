@@ -1,16 +1,19 @@
 package org.nasdanika.cli;
 
 import java.io.File;
-import java.io.FilterOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.common.Util;
@@ -20,13 +23,28 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Help;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.Spec;
 
 @Command(
-		description = "Outputs usage for all registred commands to console or file",
+		description = "Outputs usage for all registred commands",
 		name = "help")
 public class HelpCommand extends CommandBase {
 	
+	/**
+	 * To be implemented by output format mix-ins
+	 */
+	public interface OutputFormatMixIn {
+		
+		boolean match();
+		
+		void write(OutputStream out) throws IOException;
+		
+	}
+	
 	private CommandLine root;
+		
+	@Spec 
+	private CommandSpec spec;
 	
 	public HelpCommand(CommandLine root) {
 		this.root = root;
@@ -42,6 +60,10 @@ public class HelpCommand extends CommandBase {
 	private int level;
 	
 	private static final int WIDTH = 80;
+	
+	public CommandLine getRoot() {
+		return root;
+	}
 	
 	private void usage(
 			List<String> cmdPath, 
@@ -62,14 +84,7 @@ public class HelpCommand extends CommandBase {
 				out.print("</td></tr></table>");
 			}
 			
-			out.println("<pre style=\"padding:5px;width:max-content\">");
-			try (OutputStream uos = new FilterOutputStream(out) { @Override public void close() {} }) {
-				try (PrintStream ps = new PrintStream(uos)) {
-					cmd.usage(ps, Help.Ansi.OFF);
-				}
-				uos.flush();
-			}
-			out.println("</pre>");
+			out.print(usageToHTML(cmd));
 
 			// Description 
 			Object userObject = commandSpec.userObject();
@@ -77,15 +92,19 @@ public class HelpCommand extends CommandBase {
 				Class<? extends Object> clazz = userObject.getClass();
 				Description description = clazz.getAnnotation(Description.class);
 				if (description != null) {
-					String dResource = description.value();
-					if (Util.isBlank(dResource)) {
-						dResource = clazz.getName().substring(clazz.getName().lastIndexOf('.') + 1) + ".md";						
+					String markdown = description.value();
+					if (Util.isBlank(markdown)) {
+						String dResource = description.resource();
+						if (Util.isBlank(dResource)) {
+							dResource = clazz.getName().substring(clazz.getName().lastIndexOf('.') + 1) + ".md";						
+						}
+						InputStream dStream = clazz.getResourceAsStream(dResource);
+						if (dStream != null) {
+							markdown = DefaultConverter.INSTANCE.toString(dStream);
+						}
 					}
-					InputStream dStream = clazz.getResourceAsStream(dResource);
-					if (dStream != null) {
-						String markdown = DefaultConverter.INSTANCE.toString(dStream);
-						out.println("<div class=\"markdown-body\">" + MarkdownHelper.INSTANCE.markdownToHtml(markdown) + "</div>");
-					}
+					
+					out.println("<div class=\"markdown-body\">" + MarkdownHelper.INSTANCE.markdownToHtml(markdown) + "</div>");
 				}
 			}
 		} else {
@@ -141,13 +160,54 @@ public class HelpCommand extends CommandBase {
 		// TODO - mix-ins such as  and validation of exclusiveness of html with mix-ins
 		
 		if (output == null) {
+			for (CommandSpec mixIn: spec.mixins().values()) {
+				Object userObject = mixIn.userObject();
+				if (userObject instanceof OutputFormatMixIn) {
+					OutputFormatMixIn outputFormatMixIn = (OutputFormatMixIn) userObject;
+					if (outputFormatMixIn.match()) {
+						outputFormatMixIn.write(System.out);
+						return 0;
+					}
+				}
+			}
+			
 			usage(Collections.emptyList(), root, System.out);
 		} else {
+			for (CommandSpec mixIn: spec.mixins().values()) {
+				Object userObject = mixIn.userObject();
+				if (userObject instanceof OutputFormatMixIn) {
+					OutputFormatMixIn outputFormatMixIn = (OutputFormatMixIn) userObject;
+					if (outputFormatMixIn.match()) {
+						try (OutputStream out = new FileOutputStream(output)) {
+							outputFormatMixIn.write(out);
+						}
+						return 0;
+					}
+				}
+			}
 			try (PrintStream out = new PrintStream(output)) {
 				usage(Collections.emptyList(), root, out);
 			}
 		}
 		return 0;
+	}
+	
+	/**
+	 * Writes HTML-escaped usage in PRE
+	 * @param commandLine
+	 * @return
+	 * @throws IOException 
+	 */
+	public static String usageToHTML(CommandLine commandLine) throws IOException {
+		StringBuilder builder = new StringBuilder("<pre style=\"padding:5px;width:max-content\">").append(System.lineSeparator());
+		StringWriter usageWriter = new StringWriter();		
+		try (PrintWriter pw = new PrintWriter(usageWriter)) {
+			commandLine.usage(pw, Help.Ansi.OFF);
+		}
+		usageWriter.close();
+		builder.append(StringEscapeUtils.escapeHtml4(usageWriter.toString()));
+		builder.append("</pre>").append(System.lineSeparator());
+		return builder.toString();
 	}
 
 }
