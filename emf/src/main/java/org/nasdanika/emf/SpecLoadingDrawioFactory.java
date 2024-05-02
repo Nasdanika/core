@@ -7,6 +7,8 @@ import java.util.Map;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.emf.SemanticDrawioFactory;
@@ -21,6 +23,16 @@ import org.nasdanika.persistence.ObjectLoader;
  * @param <S>
  */
 public abstract class SpecLoadingDrawioFactory<S extends EObject> extends SemanticDrawioFactory<S> {
+	
+	private ResourceSet resourceSet;
+
+	public SpecLoadingDrawioFactory(ResourceSet resourceSet) {
+		this.resourceSet = resourceSet;
+	}
+	
+	public ResourceSet getResourceSet() {
+		return resourceSet;
+	}
 	
 	protected String getSpecPropertyName() {
 		return getPropertyNamespace() + "spec";
@@ -51,6 +63,11 @@ public abstract class SpecLoadingDrawioFactory<S extends EObject> extends Semant
 			public ResolutionResult resolveEClass(String type) {
 				EClass eClass = (EClass) SpecLoadingDrawioFactory.this.getType(type, eObj);
 				return new ResolutionResult(eClass, null);
+			}
+			
+			@Override
+			public ResourceSet getResourceSet() {
+				return SpecLoadingDrawioFactory.this.getResourceSet();
 			}
 			
 		};

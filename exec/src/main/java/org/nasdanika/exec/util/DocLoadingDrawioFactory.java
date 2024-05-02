@@ -2,6 +2,7 @@ package org.nasdanika.exec.util;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.emf.SpecLoadingDrawioFactory;
 import org.nasdanika.exec.content.ContentFactory;
@@ -17,6 +18,10 @@ import org.nasdanika.exec.content.Text;
  */
 public abstract class DocLoadingDrawioFactory<S extends EObject> extends SpecLoadingDrawioFactory<S> {
 	
+
+	public DocLoadingDrawioFactory(ResourceSet resourceSet) {
+		super(resourceSet);
+	}
 
 	@Override
 	protected EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor) {
