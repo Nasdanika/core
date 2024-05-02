@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	  <parent>
+	    <artifactId>parent</artifactId>
+	    <groupId>org.nasdanika.core</groupId>
+	    <version>2024.4.0</version>
+	    <relativePath>..</relativePath>
+	  </parent>
+	<artifactId>http</artifactId>
+	<packaging>jar</packaging>
+	<name>HTTP</name>
+	<description>HTTP Server CLI server and mix-in</description>
+	
+	<dependencies>		
+		<dependency>
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>cli</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.projectreactor.netty</groupId>
+		    <artifactId>reactor-netty-http</artifactId>
+		    <version>1.1.18</version>
+		</dependency>
+	</dependencies>
+</project>

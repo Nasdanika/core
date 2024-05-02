@@ -221,6 +221,7 @@
 		<module>maven</module>
 		<module>capability</module>
 		<module>cli</module>
+		<module>http</module>
 	</modules>	
 
 	<distributionManagement>
