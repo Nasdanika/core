@@ -18,7 +18,7 @@ import reactor.core.publisher.Flux;
  * Base class for sub-command factories.
  * Creates {@link CommandLine} from the command object, adds sub-commands and mix-ins
  */
-public class SubCommandCapabilityFactory extends ServiceCapabilityFactory<SubCommandRequirement, CommandLine> {
+public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFactory<SubCommandRequirement, CommandLine> {
 
 	@Override
 	public boolean isForServiceType(Class<?> type) {
@@ -61,9 +61,11 @@ public class SubCommandCapabilityFactory extends ServiceCapabilityFactory<SubCom
 		
 		List<CommandLine> subCommands = new ArrayList<>();
 		subCommandsProviders.forEach(scp -> scp.getPublisher().subscribe(subCommands::add));
+		// TODO - group by name, selection
 		subCommands.sort((a,b) -> a.getCommandName().compareTo(b.getCommandName()));
 		subCommands.forEach(commandLine::addSubcommand);
 		
+		// TODO - group mix-ins by name, selection
 		mixInProviders.forEach(mcp -> mcp.getPublisher().subscribe(mr -> commandLine.addMixin(mr.name(), mr.mixIn())));
 		
 		return Collections.singleton(new CapabilityProvider<CommandLine>() {
@@ -76,22 +78,70 @@ public class SubCommandCapabilityFactory extends ServiceCapabilityFactory<SubCom
 		});
 	}
 	
+	protected abstract Class<T> getCommandType();
+	
+	/**
+	 * Matches command to parent using annotations.
+	 * @param parentPath
+	 * @return
+	 */
+	protected boolean match(List<CommandLine> parentPath) {
+		if (parentPath == null || parentPath.isEmpty()) {
+			return false;
+		}
+		
+		CommandLine parent = parentPath.get(parentPath.size() - 1);
+		Object userObject = parent.getCommandSpec().userObject();
+		if (userObject != null) {
+			SubCommands subCommandsAnnotation = userObject.getClass().getAnnotation(SubCommands.class);
+			Class<T> commandType = getCommandType();
+			if (subCommandsAnnotation != null && commandType != null) {
+				for (Class<?> at: subCommandsAnnotation.value()) {
+					if (at.isAssignableFrom(commandType)) {
+						return true;
+					}
+				}
+			}
+			
+			if (commandType != null) {
+				ParentCommands parentCommands = commandType.getAnnotation(ParentCommands.class);
+				if (parentCommands != null) {
+					for (Class<?> pt: parentCommands.value()) {
+						if (pt.isInstance(userObject)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * Creates a list of  command instances (user objects) to be wrapped into {@link CommandLine}
 	 * @param progressMonitor
 	 * @return
 	 */
-	protected List<Object> createCommands(List<CommandLine> parentPath, ProgressMonitor progressMonitor) {
-		Object command = createCommand(parentPath, progressMonitor);
+	protected List<T> createCommands(List<CommandLine> parentPath, ProgressMonitor progressMonitor) {
+		T command = createCommand(parentPath, progressMonitor);
 		return command == null ? Collections.emptyList() : Collections.singletonList(command);
 	}
+	
+	/**
+	 * Calls doCreateCommand if match returns true
+	 * @param progressMonitor
+	 * @return
+	 */
+	protected T createCommand(List<CommandLine> parentPath, ProgressMonitor progressMonitor) {
+		return match(parentPath) ? doCreateCommand(parentPath, progressMonitor) : null;
+	};
 	
 	/**
 	 * Creates a command instance (user object) to be wrapped into {@link CommandLine}
 	 * @param progressMonitor
 	 * @return
 	 */
-	protected Object createCommand(List<CommandLine> parentPath, ProgressMonitor progressMonitor) {
+	protected T doCreateCommand(List<CommandLine> parentPath, ProgressMonitor progressMonitor) {
 		return null;
 	};
 

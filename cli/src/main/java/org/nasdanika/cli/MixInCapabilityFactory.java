@@ -15,7 +15,7 @@ import picocli.CommandLine;
 /**
  * Base class for MixIn factories.
  */
-public abstract class MixInCapabilityFactory extends ServiceCapabilityFactory<MixInRequirement, MixInRecord> {
+public abstract class MixInCapabilityFactory<T> extends ServiceCapabilityFactory<MixInRequirement, MixInRecord> {
 
 	@Override
 	public boolean isForServiceType(Class<?> type) {
@@ -36,6 +36,49 @@ public abstract class MixInCapabilityFactory extends ServiceCapabilityFactory<Mi
 	
 	protected abstract String getName();
 	
-	protected abstract Object createMixIn(List<CommandLine> commandPath, ProgressMonitor progressMonitor);
+	protected abstract Class<T> getMixInType();
+	
+	/**
+	 * Matches command to parent using annotations.
+	 * @param commandPath
+	 * @return
+	 */
+	protected boolean match(List<CommandLine> commandPath) {
+		if (commandPath == null || commandPath.isEmpty()) {
+			return false;
+		}
+		
+		CommandLine parent = commandPath.get(commandPath.size() - 1);
+		Object userObject = parent.getCommandSpec().userObject();
+		if (userObject != null) {
+			MixIns mixInsAnnotation = userObject.getClass().getAnnotation(MixIns.class);
+			Class<T> mixInType = getMixInType();
+			if (mixInsAnnotation != null && mixInType != null) {
+				for (Class<?> at: mixInsAnnotation.value()) {
+					if (at.isAssignableFrom(mixInType)) {
+						return true;
+					}
+				}
+			}
+			
+			if (mixInType != null) {
+				ParentCommands parentCommands = mixInType.getAnnotation(ParentCommands.class);
+				if (parentCommands != null) {
+					for (Class<?> pt: parentCommands.value()) {
+						if (pt.isInstance(userObject)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	protected T createMixIn(List<CommandLine> commandPath, ProgressMonitor progressMonitor) {		
+		return match(commandPath) ? doCreateMixIn(commandPath, progressMonitor) : null;
+	}
 
+	protected abstract T doCreateMixIn(List<CommandLine> commandPath, ProgressMonitor progressMonitor);
+	
 }

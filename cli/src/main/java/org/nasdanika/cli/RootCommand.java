@@ -11,6 +11,7 @@ import picocli.CommandLine.Command;
 		subcommands = {
 			LauncherCommand.class	
 		})
+@SubCommands(HelpCommand.class)
 public class RootCommand {
 
 }

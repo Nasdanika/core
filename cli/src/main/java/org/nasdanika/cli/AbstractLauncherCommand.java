@@ -1,14 +1,16 @@
 package org.nasdanika.cli;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.Writer;
 import java.lang.module.ModuleDescriptor.Requires;
 import java.lang.module.ModuleDescriptor.Requires.Modifier;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReference;
 import java.net.URI;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.nasdanika.common.Util;
+
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
@@ -29,6 +33,9 @@ import picocli.CommandLine.Parameters;
  */
 public abstract class AbstractLauncherCommand extends CommandBase {
 	
+	private static final String SINGLE_SUFFIX = ".*";
+	private static final String DOUBLE_SUFFIX = ".**";
+
 	@Option(names = {"-o", "--output"}, description = "Output file")
 	private String output;
 	
@@ -72,6 +79,24 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 	
 	@Option(names = {"-t", "--options"}, description = "Output only options")
 	private boolean options;
+		
+	@Option(
+			names = {"-f", "--options-file"}, 
+			description = "File to output options to")
+	private String optionsFile;
+		
+	@Option(
+			names = {"-r", "--root-modules"}, 
+			description = {
+					"Comma-separated list of root modules",
+					"Supports .* and .** patterns"					
+			})
+	private String rootModules;	
+	
+	@Option(
+			names = {"-C", "--claspath-modules"}, 
+			description = "Comma-separated list of classpath modules")
+	private String classPathModules;		
 	
 	@Option(
 			names = {"-j", "--java"}, 
@@ -91,8 +116,8 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 		    	base = new File(".");
 		    }
 			
-			try (PrintStream out = new PrintStream(new File(base, output))) {
-				out.print(generateLauncherCommand());
+			try (Writer out = new FileWriter(new File(base, output))) {
+				out.write(generateLauncherCommand());
 			}
 		}
 		return 0;
@@ -112,7 +137,8 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 	}
 	
 	/**
-	 * Collects non-automatic modules and modules required by non-automatic modules. All other modules(jars) are added to the classpath. 
+	 * Collects non-automatic modules and modules required by non-automatic modules. 
+	 * All other modules(jars) are added to the classpath.
 	 */
 	private void buildModulePath(ModuleReference moduleReference, Function<String, ModuleReference> resolver, Map<String, ModuleReference> modulePath, Set<String> modulesToAdd) {
 		String moduleName = moduleReference.descriptor().name();
@@ -147,11 +173,45 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 		if (repositories == null || repositories.length == 0) {
 			repositories = new String[] { "lib" };
 		}
+		
+		if (options) {
+			return generateOptions();
+		}
+		
 		StringBuilder builder = new StringBuilder();
 		
-		if (!options) {
-			builder.append(javaCommand).append(" ");
+		builder.append(javaCommand).append(" ");
+		
+		String optionsStr = generateOptions();
+		if (Util.isBlank(optionsFile)) {
+			builder.append(optionsStr);			
+		} else {
+			File oFile = new File(base, optionsFile).getCanonicalFile();
+			try (Writer out = new FileWriter(oFile)) {
+				out.write(optionsStr);
+			}
+			builder.append("@");
+			if (absolute) {
+				builder.append(oFile.getAbsolutePath());
+			} else if (Util.isBlank(prefix)) {
+				builder.append(oFile.getName());				
+			} else {
+				builder.append(prefix).append(oFile.getName());
+			}
 		}
+		
+		builder
+			.append(" ")
+			.append(args);
+		
+		return builder.toString();
+	}
+		
+	private String generateOptions() throws IOException {
+		if (repositories == null || repositories.length == 0) {
+			repositories = new String[] { "lib" };
+		}
+		StringBuilder builder = new StringBuilder();
 		
 		Map<String,File> moduleMap = new LinkedHashMap<>();
 		
@@ -212,7 +272,7 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 		
 		Map<String, ModuleReference> modulePath = new TreeMap<>();
 		for (Entry<String, ModuleReference> me : repoModules.entrySet()) {
-			if (!me.getValue().descriptor().isAutomatic()) {
+			if (!me.getValue().descriptor().isAutomatic() && matchRootModule(me.getKey())) {
 				buildModulePath(me.getValue(), repoModules::get, modulePath, modulesToAdd);
 			}
 		}
@@ -257,7 +317,19 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 			}
 		}
 		
-		List<ModuleReference> classPath = repoModules.values().stream().filter(k -> !modulePath.containsKey(k.descriptor().name())).toList();
+		// Modules which did not make it to the module path are in the classpath		
+		List<ModuleReference> classPath = new ArrayList<>(); 		
+		repoModules.values().stream().filter(k -> !modulePath.containsKey(k.descriptor().name())).forEach(classPath::add);
+		if (classPathModules != null) {
+			String[] cpma = classPathModules.split(",");
+			for (String cpm: cpma) {
+				ModuleReference mr = repoModules.get(cpm);
+				if (mr != null && !classPath.contains(mr)) {
+					classPath.add(mr);
+				}
+			}
+		}		
+
 		if (!classPath.isEmpty()) {
 			boolean firstEntry = true;
 			for (ModuleReference e: classPath) {
@@ -283,16 +355,42 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 			.append(" -m ")
 			.append(getModuleName())
 			.append("/")
-			.append(getClassName())
-			.append(" ");
-			
-		if (!options) {
-			builder.append(args);
-		}
+			.append(getClassName());
 		
 		return builder.toString();
 	}
 	
+	
+	protected boolean matchRootModule(String moduleName) {
+		if (rootModules == null) {
+			return true;
+		}
+		
+		String[] rma = rootModules.split(",");
+		for (String rm: rma) {
+			if (moduleName.equals(rm)) {
+				return true;
+			}
+			
+			if (rm.endsWith(SINGLE_SUFFIX)) {
+				String prefix = rm.substring(0, rm.length() - 1);
+				if (moduleName.startsWith(prefix) && moduleName.indexOf('.', prefix.length()) == -1) {
+					return true;
+				}
+			}
+						
+			if (rm.endsWith(DOUBLE_SUFFIX)) {
+				String prefix = rm.substring(0, rm.length() - DOUBLE_SUFFIX.length());
+				if (moduleName.equals(prefix) || moduleName.startsWith(prefix + ".")) {
+					return true;
+				}
+			}
+			
+		}		
+		
+		return false;
+	}
+
 	/**
 	 * Finds path by matching module reference location to file URI.
 	 * @param ref

@@ -6,8 +6,9 @@ module org.nasdanika.http {
 	exports org.nasdanika.http;
 	
 	requires transitive org.nasdanika.cli;
-	requires reactor.netty.http;
-	requires reactor.netty.core;
+	requires transitive reactor.netty.http;
+	requires transitive reactor.netty.core;
+	requires static transitive io.netty.buffer; // To make Eclipse happy
 	
 	opens org.nasdanika.http to info.picocli;
 	

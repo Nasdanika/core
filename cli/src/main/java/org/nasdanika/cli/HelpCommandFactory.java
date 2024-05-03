@@ -6,14 +6,16 @@ import org.nasdanika.common.ProgressMonitor;
 
 import picocli.CommandLine;
 
-public class HelpCommandFactory extends SubCommandCapabilityFactory {
+public class HelpCommandFactory extends SubCommandCapabilityFactory<HelpCommand> {
 
 	@Override
-	protected Object createCommand(List<CommandLine> parentPath, ProgressMonitor progressMonitor) {
-		if (parentPath != null && parentPath.size() == 1 && parentPath.get(0).getCommandSpec().userObject() instanceof RootCommand) {
-			return new HelpCommand(parentPath.get(0));			
-		}
-		return null;
+	protected HelpCommand doCreateCommand(List<CommandLine> parentPath, ProgressMonitor progressMonitor) {
+		return new HelpCommand(parentPath.get(parentPath.size() - 1));			
+	}
+
+	@Override
+	protected Class<HelpCommand> getCommandType() {
+		return HelpCommand.class;
 	}
 
 }

@@ -25,13 +25,31 @@ public class BuildDistributionIT {
 		
 		CommandLine launcherCommandLine = new CommandLine(new LauncherCommand());
 		launcherCommandLine.execute(
-				"-b", "target/dist", 
+				"-b", "target/dist",
+				"-f", "options",
 				"-j", "@java",
+				"-r", "org.nasdanika.**",
 				"-o", "nsd.bat");
+		
+		launcherCommandLine.execute(
+				"-b", "target/dist",
+				"-f", "options",
+				"-j", "@java -Xdebug -Xrunjdwp:transport=dt_socket,address=8998,server=y",
+				"-r", "org.nasdanika.**",
+				"-o", "nsd-debug.bat");		
 		
 		launcherCommandLine.execute(
 				"-b", "target/dist", 
 				"-o", "nsd",
+				"-r", "org.nasdanika.**",
+				"-p", ":",
+				"-a", "$@");		
+		
+		launcherCommandLine.execute(
+				"-b", "target/dist", 
+				"-o", "nsd-debug",
+				"-j", "java -Xdebug -Xrunjdwp:transport=dt_socket,address=8998,server=y",
+				"-r", "org.nasdanika.**",
 				"-p", ":",
 				"-a", "$@");		
 		
