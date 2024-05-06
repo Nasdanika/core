@@ -27,9 +27,9 @@ public abstract class MixInCapabilityFactory<T> extends ServiceCapabilityFactory
 			MixInRequirement serviceRequirement,
 			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
 			ProgressMonitor progressMonitor) {
-		Object mixIn = createMixIn(serviceRequirement.commandPath(), progressMonitor);
-		if (mixIn != null) {
-			return wrap(new MixInRecord(getName(), mixIn));
+		CompletionStage<T> mixInCS = createMixIn(serviceRequirement.commandPath(), resolver, progressMonitor);
+		if (mixInCS != null) {
+			return wrapCompletionStage(mixInCS.thenApply(mixIn -> new MixInRecord(getName(), mixIn)));
 		}
 		return CompletableFuture.completedStage(Collections.emptyList());
 	}
@@ -75,10 +75,16 @@ public abstract class MixInCapabilityFactory<T> extends ServiceCapabilityFactory
 		return false;
 	}
 	
-	protected T createMixIn(List<CommandLine> commandPath, ProgressMonitor progressMonitor) {		
-		return match(commandPath) ? doCreateMixIn(commandPath, progressMonitor) : null;
+	protected CompletionStage<T> createMixIn(
+			List<CommandLine> commandPath, 
+			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			ProgressMonitor progressMonitor) {		
+		return match(commandPath) ? doCreateMixIn(commandPath, resolver, progressMonitor) : null;
 	}
 
-	protected abstract T doCreateMixIn(List<CommandLine> commandPath, ProgressMonitor progressMonitor);
+	protected abstract CompletionStage<T> doCreateMixIn(
+			List<CommandLine> commandPath, 
+			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			ProgressMonitor progressMonitor);
 	
 }
