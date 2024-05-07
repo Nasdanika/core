@@ -9,8 +9,11 @@ import java.lang.module.ModuleDescriptor.Requires.Modifier;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReference;
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +97,12 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 	private String rootModules;	
 	
 	@Option(
+			names = {"-M", "--modules"}, 
+			description = "Modules to add to the module path"
+			)
+	private File modulesFile;	
+	
+	@Option(
 			names = {"-C", "--claspath-modules"}, 
 			description = "Comma-separated list of classpath modules")
 	private String classPathModules;		
@@ -140,7 +149,12 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 	 * Collects non-automatic modules and modules required by non-automatic modules. 
 	 * All other modules(jars) are added to the classpath.
 	 */
-	private void buildModulePath(ModuleReference moduleReference, Function<String, ModuleReference> resolver, Map<String, ModuleReference> modulePath, Set<String> modulesToAdd) {
+	private void buildModulePath(
+			ModuleReference moduleReference, 
+			Function<String, ModuleReference> resolver, 
+			Map<String, ModuleReference> modulePath, 
+			Collection<String> modulesToAdd) {
+		
 		String moduleName = moduleReference.descriptor().name();
 		if (!modulePath.containsKey(moduleName)) {
 			modulePath.put(moduleName, moduleReference);
@@ -266,57 +280,56 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 					}
 				}
 			}
-		}	   
+		}	 
 		
-		Set<String> modulesToAdd = new TreeSet<>();
-		
-		Map<String, ModuleReference> modulePath = new TreeMap<>();
-		for (Entry<String, ModuleReference> me : repoModules.entrySet()) {
-			if (!me.getValue().descriptor().isAutomatic() && matchRootModule(me.getKey())) {
-				buildModulePath(me.getValue(), repoModules::get, modulePath, modulesToAdd);
+		if (modulesFile == null) {
+			// Inferring module place - module path, add module, or classpath
+			Collection<String> modulesToAdd = new TreeSet<>();
+			Map<String, ModuleReference> modulePath = new TreeMap<>();
+			for (Entry<String, ModuleReference> me : repoModules.entrySet()) {
+				if (!me.getValue().descriptor().isAutomatic() && matchRootModule(me.getKey())) {
+					buildModulePath(me.getValue(), repoModules::get, modulePath, modulesToAdd);
+				}
 			}
+	
+			buildModulePath(builder, moduleMap, modulePath);
+			buildAddModules(modulesToAdd, builder);			
+			buildClasspath(moduleMap, repoModules, modulePath, builder);
+		} else {
+			// Layer modules are known, adding them either to module path or add module. 
+			// The rest is added to the classpath
+			Collection<String> modules = Files.readAllLines(modulesFile.toPath());
+			Map<String, ModuleReference> modulePath = new TreeMap<>();
+			for (Entry<String, ModuleReference> me : repoModules.entrySet()) {
+				if (modules.contains(me.getKey())) {
+					modulePath.put(me.getKey(), me.getValue());
+					modules.remove(me.getKey());
+				}
+			}
+	
+			buildModulePath(builder, moduleMap, modulePath);
+			Iterator<String> mit = modules.iterator();
+			while (mit.hasNext()) {
+				String mName = mit.next();
+				if (mName.startsWith("java.")) {
+					mit.remove();
+				}
+			}
+			buildAddModules(modules, builder);			
+			buildClasspath(moduleMap, repoModules, modulePath, builder);			
 		}
+		
+		builder
+			.append(" -m ")
+			.append(getModuleName())
+			.append("/")
+			.append(getClassName());
+		
+		return builder.toString();
+	}
 
-		if (!modulePath.isEmpty()) {
-			boolean firstModuleEntry = true;
-			for (ModuleReference e: modulePath.values()) {
-				if (firstModuleEntry) {
-					builder.append(" -p \"");
-					if (verbose) {
-						System.out.println("--- Module path ---");
-					}
-					firstModuleEntry = false;
-				} else {
-					builder.append(pathSeparator == null ? File.pathSeparatorChar : pathSeparator);
-				}
-				String mp = modulePath(e, moduleMap);
-				if (verbose) {
-					System.out.println(e.descriptor().name() + " " + mp);
-				}
-				builder.append(mp);
-			}
-			builder.append("\"");
-		}
-
-		if (!modulesToAdd.isEmpty()) {
-			boolean firstModuleEntry = true;
-			for (String m: modulesToAdd) {
-				if (firstModuleEntry) {
-					builder.append(" --add-modules ");
-					if (verbose) {
-						System.out.println("--- Modules to add ---");
-					}
-					firstModuleEntry = false;
-				} else {
-					builder.append(",");
-				}
-				if (verbose) {
-					System.out.println(m);
-				}
-				builder.append(m);
-			}
-		}
-		
+	protected void buildClasspath(Map<String, File> moduleMap, Map<String, ModuleReference> repoModules,
+			Map<String, ModuleReference> modulePath, StringBuilder builder) throws IOException {
 		// Modules which did not make it to the module path are in the classpath		
 		List<ModuleReference> classPath = new ArrayList<>(); 		
 		repoModules.values().stream().filter(k -> !modulePath.containsKey(k.descriptor().name())).forEach(classPath::add);
@@ -350,14 +363,51 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 			}
 			builder.append("\"");
 		}
-		
-		builder
-			.append(" -m ")
-			.append(getModuleName())
-			.append("/")
-			.append(getClassName());
-		
-		return builder.toString();
+	}
+
+	protected void buildAddModules(Collection<String> modulesToAdd, StringBuilder builder) {
+		if (!modulesToAdd.isEmpty()) {
+			boolean firstModuleEntry = true;
+			for (String m: modulesToAdd) {
+				if (firstModuleEntry) {
+					builder.append(" --add-modules ");
+					if (verbose) {
+						System.out.println("--- Modules to add ---");
+					}
+					firstModuleEntry = false;
+				} else {
+					builder.append(",");
+				}
+				if (verbose) {
+					System.out.println(m);
+				}
+				builder.append(m);
+			}
+		}
+	}
+
+	protected void buildModulePath(StringBuilder builder, Map<String, File> moduleMap,
+			Map<String, ModuleReference> modulePath) throws IOException {
+		if (!modulePath.isEmpty()) {
+			boolean firstModuleEntry = true;
+			for (ModuleReference e: modulePath.values()) {
+				if (firstModuleEntry) {
+					builder.append(" -p \"");
+					if (verbose) {
+						System.out.println("--- Module path ---");
+					}
+					firstModuleEntry = false;
+				} else {
+					builder.append(pathSeparator == null ? File.pathSeparatorChar : pathSeparator);
+				}
+				String mp = modulePath(e, moduleMap);
+				if (verbose) {
+					System.out.println(e.descriptor().name() + " " + mp);
+				}
+				builder.append(mp);
+			}
+			builder.append("\"");
+		}
 	}
 	
 	
