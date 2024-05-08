@@ -54,6 +54,7 @@ public class BuildDistributionIT {
 		launcherCommandLine.execute(
 				"-b", "target/dist", 
 				"-M", "target/dist/modules", 
+				"-j", "#!/bin/bash\n\njava",
 				"-o", "nsd",
 //				"-r", "org.nasdanika.**",
 				"-p", ":",
@@ -63,7 +64,7 @@ public class BuildDistributionIT {
 				"-b", "target/dist", 
 				"-M", "target/dist/modules", 
 				"-o", "nsd-debug",
-				"-j", "java -Xdebug -Xrunjdwp:transport=dt_socket,address=8998,server=y",
+				"-j", "#!/bin/bash\n\njava -Xdebug -Xrunjdwp:transport=dt_socket,address=8998,server=y",
 //				"-r", "org.nasdanika.**",
 				"-p", ":",
 				"-a", "$@");		
