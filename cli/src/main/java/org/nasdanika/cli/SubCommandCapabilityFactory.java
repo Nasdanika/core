@@ -3,6 +3,7 @@ package org.nasdanika.cli;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
@@ -10,6 +11,7 @@ import java.util.function.BiFunction;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Util;
 
 import picocli.CommandLine;
 
@@ -89,11 +91,59 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 		CommandLine commandLine = commandLineAndPath.commandLine();
 		List<CommandLine> subCommands = new ArrayList<>();
 		subCommandsProviders.forEach(scp -> scp.getPublisher().subscribe(subCommands::add));
-		// TODO - group by name, selection
 		subCommands.sort((a,b) -> a.getCommandName().compareTo(b.getCommandName()));
-		subCommands.forEach(commandLine::addSubcommand);
+		for (Entry<String, List<CommandLine>> commandGroup: Util.groupBy(subCommands, CommandLine::getCommandName).entrySet()) {
+			if (commandGroup.getValue().size() == 1) {
+				commandGroup.getValue().forEach(commandLine::addSubcommand);				
+			} else {
+				// Selecting one of several if possible
+				CommandLine[] sca = commandGroup.getValue().toArray(size -> new CommandLine[size]);
+				Z: for (int i = 0; i < sca.length; ++i) {
+					if (sca[i] != null) {
+						for (int j = i + 1; j < sca.length; ++j) {
+							if (sca[j] != null) {
+								if (overrides(sca[i].getCommandSpec().userObject(), sca[j].getCommandSpec().userObject())) {
+									sca[j] = null;
+								} else if (overrides(sca[j].getCommandSpec().userObject(), sca[i].getCommandSpec().userObject())) {
+									sca[i] = null;
+									continue Z;		
+								}
+							}
+						}
+					}
+				}
+				for (CommandLine sc: sca) {
+					if (sc != null) {
+						commandLine.addSubcommand(sc);
+					}
+				}				
+			}
+		}
 		return commandLine;
 	};
+	
+	/**
+	 * @param a
+	 * @param b
+	 * @return true if a overrides b
+	 */
+	protected boolean overrides(Object a, Object b) {
+		if (a instanceof Overrider && ((Overrider) a).overrides(b)) {
+			return true;
+		}
+		Class<?> aClass = a.getClass();
+		Overrides ova = aClass.getAnnotation(Overrides.class);
+		if (ova != null) {
+			for (Class<?> oc: ova.value()) {
+				if (oc.isInstance(b)) {
+					return true;
+				}
+			}
+		}
+		
+		Class<?> bClass = b.getClass();
+		return bClass != aClass && bClass.isAssignableFrom(aClass);
+	}
 	
 	protected CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> createMixIns(
 			List<CommandLine> path,
@@ -109,8 +159,38 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	private CommandLine combineMixIns(
 			CommandLine commandLine,
 			Iterable<CapabilityProvider<MixInRecord>> mixInProviders) {
-		// TODO - group mix-ins by name, selection
-		mixInProviders.forEach(mcp -> mcp.getPublisher().subscribe(mr -> commandLine.addMixin(mr.name(), mr.mixIn())));		
+
+		List<MixInRecord> mixIns = new ArrayList<>();
+		mixInProviders.forEach(mcp -> mcp.getPublisher().subscribe(mixIns::add));		
+		
+		for (Entry<String, List<MixInRecord>> mixInGroup: Util.groupBy(mixIns, MixInRecord::name).entrySet()) {
+			if (mixInGroup.getValue().size() == 1) {
+				mixInGroup.getValue().forEach(mr -> commandLine.addMixin(mr.name(), mr.mixIn()));				
+			} else {
+				// Selecting one of several if possible
+				MixInRecord[] mra = mixInGroup.getValue().toArray(size -> new MixInRecord[size]);
+				Z: for (int i = 0; i < mra.length; ++i) {
+					if (mra[i] != null) {
+						for (int j = i + 1; j < mra.length; ++j) {
+							if (mra[j] != null) {
+								if (overrides(mra[i].mixIn(), mra[j].mixIn())) {
+									mra[j] = null;
+								} else if (overrides(mra[j].mixIn(), mra[i].mixIn())) {
+									mra[i] = null;
+									continue Z;		
+								}
+							}
+						}
+					}
+				}
+				for (MixInRecord mr: mra) {
+					if (mr != null) {
+						commandLine.addMixin(mr.name(), mr.mixIn());
+					}
+				}				
+			}
+		}
+				
 		return commandLine;
 	};
 	
