@@ -25,7 +25,7 @@ public class ProgressMonitorMixin {
 	@Option(names = {"-j", "--json"}, description = "Output progress in JSON")
 	private boolean jsonProgress;
 	
-	@Option(names = {"-d", "--data"}, description = "Output data")
+	@Option(names = {"-d", "--data"}, description = "Output progress data")
 	private boolean data;
 		
 	public ProgressMonitor createProgressMonitor(double size) throws Exception {
@@ -35,7 +35,7 @@ public class ProgressMonitorMixin {
 					
 					@Override
 					public void close() {
-						System.out.println(toString());
+						System.out.println(toJSON(0, data).toString(4));
 						super.close();
 					}
 					
@@ -50,7 +50,7 @@ public class ProgressMonitorMixin {
 				@Override
 				public void close() {
 					try (Writer w = new FileWriter(progressOutput)) {
-						toJSON(0, true).write(w, 4, 0);
+						toJSON(0, data).write(w, 4, 0);
 					} catch (IOException e) {
 						System.err.println("Error closing progress writer");
 						e.printStackTrace();

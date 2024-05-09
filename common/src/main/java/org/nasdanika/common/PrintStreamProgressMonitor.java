@@ -68,8 +68,8 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 		if (isCancelled()) {
 			throw new CancellationException();
 		}
-		out.println(indent+"  "+taskName+" ("+size+")");
-		if (data != null) {
+		out.println(indent + "  " + taskName + " (" + size + ")");
+		if (printData && data != null) {
 			for (Object d: data) {
 				out.println(formatDetail(d, indent + "    "));			
 			}
