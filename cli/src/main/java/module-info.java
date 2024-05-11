@@ -10,7 +10,7 @@ module org.nasdanika.cli {
 	requires transitive info.picocli;
 	requires org.apache.commons.text;
 	
-	opens org.nasdanika.cli to info.picocli;
+	opens org.nasdanika.cli to info.picocli, org.nasdanika.html.model.app.gen.cli;
 	
 	provides CapabilityFactory with 
 		RootCommandFactory,
