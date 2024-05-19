@@ -19,7 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * @param <S>
  * @param <T>
  */
-public interface Mapper<S extends EObject, T extends EObject> extends Composeable<Mapper<S,T>> {
+public interface Mapper<S extends EObject, T extends EObject> extends Composable<Mapper<S,T>> {
 	
 	/**
 	 * Wires all elements in the registry

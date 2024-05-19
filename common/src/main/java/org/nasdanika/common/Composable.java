@@ -7,11 +7,11 @@ package org.nasdanika.common;
  *
  * @param <T>
  */
-public interface Composeable<T> {
+public interface Composable<T> {
 	
 	/**
-	 * @param <T> Instances of T shall implement {@link Composeable}.
-	 * @return Composing operator which can be use in reducing streams of {@link Composeable}s to a single composeable.
+	 * @param <T> Instances of T shall implement {@link Composable}.
+	 * @return Composing operator which can be use in reducing streams of {@link Composable}s to a single composeable.
 	 */
 	@SuppressWarnings("unchecked")
 	static <T> T composer(T a, T b) {	
@@ -21,7 +21,7 @@ public interface Composeable<T> {
 		if (b == null) {
 			return a;
 		}
-		return ((Composeable<T>) a).compose(b);
+		return ((Composable<T>) a).compose(b);
 	}
 
 	/**

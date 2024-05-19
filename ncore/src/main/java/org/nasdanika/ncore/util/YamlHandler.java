@@ -4,9 +4,9 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 
 import org.eclipse.emf.ecore.EObject;
-import org.nasdanika.common.Composeable;
+import org.nasdanika.common.Composable;
 
-public interface YamlHandler extends Composeable<YamlHandler> {
+public interface YamlHandler extends Composable<YamlHandler> {
 	
 	/**
 	 * Possibly loads {@link EObject} from YAML object - Map, List or Scalar. 

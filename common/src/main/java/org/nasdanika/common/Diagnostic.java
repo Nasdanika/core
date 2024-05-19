@@ -4,7 +4,7 @@ import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 
-public interface Diagnostic extends Composeable<Diagnostic> {
+public interface Diagnostic extends Composable<Diagnostic> {
 	
 	Diagnostic SUCCESS = new Diagnostic() {
 		

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 /**
  * A simple context context implementation.
- * This implementation composes {@link Composeable} services into a single service.
+ * This implementation composes {@link Composable} services into a single service.
  * 
  * Also it implements sub-context lookup if property key has one or more slashes (/).
  * For example, for a property key ``my/important/property`` it will work like explained below:
@@ -114,13 +114,13 @@ public class SimpleMutableContext implements MutableContext {
 			return (T) svcs.toArray((T[]) Array.newInstance(type.getComponentType(), svcs.size()));
 		}
 		
-		if (Composeable.class.isAssignableFrom(type)) {
+		if (Composable.class.isAssignableFrom(type)) {
 			List<T> svcs = new ArrayList<>(getServices(type));
 			T chained = chain.get(type); 
 			if (chained!=null) {
 				svcs.add(chained);
 			}
-			return svcs.stream().reduce(Composeable::composer).orElse(null);
+			return svcs.stream().reduce(Composable::composer).orElse(null);
 		}
 		
 		List<T> svcs = getServices(type);
@@ -151,13 +151,13 @@ public class SimpleMutableContext implements MutableContext {
 			return (T) svcs.toArray((T[]) Array.newInstance(type.getComponentType(), svcs.size()));
 		}
 				
-		if (Composeable.class.isAssignableFrom(type)) {
+		if (Composable.class.isAssignableFrom(type)) {
 			List<T> svcs = new ArrayList<>(getServices(type).stream().filter(predicate).toList());
 			T chained = chain.get(type, predicate); 
 			if (chained!=null) {
 				svcs.add(chained);
 			}
-			return svcs.stream().reduce(Composeable::composer).orElse(null);
+			return svcs.stream().reduce(Composable::composer).orElse(null);
 		}
 		
 		return getServices(type).stream().filter(predicate).findFirst().orElse(chain.get(type, predicate));

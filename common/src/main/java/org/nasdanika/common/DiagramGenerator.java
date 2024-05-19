@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
  * @author Pavel
  *
  */
-public interface DiagramGenerator extends Composeable<DiagramGenerator> {
+public interface DiagramGenerator extends Composable<DiagramGenerator> {
 	
 	public static String UML_DIALECT = "uml";
 	public static String SALT_DIALECT = "salt";

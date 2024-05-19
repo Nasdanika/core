@@ -8,7 +8,7 @@ package org.nasdanika.common;
  * @param <T> Target type
  * @param <C> Context type
  */
-public interface Converter extends Composeable<Converter> {
+public interface Converter extends Composable<Converter> {
 	
 	<T> T convert(Object source, Class<T> type);
 	

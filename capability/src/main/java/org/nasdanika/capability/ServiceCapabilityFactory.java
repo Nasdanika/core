@@ -75,6 +75,13 @@ public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory
 	protected CompletionStage<Iterable<CapabilityProvider<S>>> wrap(S service) {
 		return wrapCompletionStage(service == null ? null : CompletableFuture.completedStage(service));
 	}
+
+	/**
+	 * @return Completed stage with no providers.
+	 */
+	protected CompletionStage<Iterable<CapabilityProvider<S>>> empty() {
+		return CompletableFuture.completedStage(Collections.emptyList());
+	}
 	
 	/**
 	 * Helper method for factories with no dependencies providing a single instance of a service.

@@ -16,7 +16,7 @@ package org.nasdanika.common;
  * @author Pavel
  *
  */
-public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMonitor> {
+public interface ProgressMonitor extends AutoCloseable, Composable<ProgressMonitor> {
 			
 	/**
 	 * Closes this monitor.

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BasicDiagnostic implements Diagnostic, DiagnosticChain, Composeable<Diagnostic> {
+public class BasicDiagnostic implements Diagnostic, DiagnosticChain, Composable<Diagnostic> {
 	
 	private List<Object> data = new ArrayList<>();
 	private Status status;

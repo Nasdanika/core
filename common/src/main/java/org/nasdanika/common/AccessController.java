@@ -7,7 +7,7 @@ import org.eclipse.emf.ecore.EOperation;
  * @author Pavel Vlasov
  *
  */
-public interface AccessController extends Composeable<AccessController> {
+public interface AccessController extends Composable<AccessController> {
 	
 	public static final String PERMISSION_READ = "read";
 

@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * @author Pavel
  *
  */
-public interface Context extends Composeable<Context> {
+public interface Context extends Composable<Context> {
 	
 	/**
 	 * Constant for base URI property.
@@ -388,7 +388,7 @@ public interface Context extends Composeable<Context> {
 	/**
 	 * Creates a new mutable context with a given prefix and service predicate. 
 	 * @param mapper Mapper functions, the same as in map();
-	 * @param servicePredicate Predicate to use during look up of parent services. One possible scenario is to filter-out {@link Composeable} services from the parent.
+	 * @param servicePredicate Predicate to use during look up of parent services. One possible scenario is to filter-out {@link Composable} services from the parent.
 	 * @return
 	 */
 	default MutableContext fork(Function<String,String> mapper, Predicate<Object> servicePredicate) {
