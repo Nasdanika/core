@@ -1,3 +1,6 @@
+import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.graph.model.util.GraphEPackageResourceSetCapabilityFactory;
+
 module org.nasdanika.graph.model {
 	exports org.nasdanika.graph.model;
 	exports org.nasdanika.graph.model.adapters;
@@ -6,5 +9,8 @@ module org.nasdanika.graph.model {
 	
 	requires transitive org.nasdanika.exec;
 	requires transitive org.nasdanika.capability;
+	
+	provides CapabilityFactory with
+		GraphEPackageResourceSetCapabilityFactory;
 	
 }

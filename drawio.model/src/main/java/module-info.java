@@ -1,3 +1,6 @@
+import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.drawio.model.util.DrawioEPackageResourceSetCapabilityFactory;
+
 module org.nasdanika.drawio.model {
 	exports org.nasdanika.drawio.model;
 	exports org.nasdanika.drawio.model.comparators;
@@ -7,5 +10,8 @@ module org.nasdanika.drawio.model {
 	requires transitive org.nasdanika.ncore;
 	requires org.jsoup;
 	requires transitive java.scripting;
+	
+	provides CapabilityFactory with
+		DrawioEPackageResourceSetCapabilityFactory;
 
 }

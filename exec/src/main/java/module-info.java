@@ -1,3 +1,8 @@
+import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.exec.content.util.ContentEPackageResourceSetCapabilityFactory;
+import org.nasdanika.exec.resources.util.ResourcesEPackageResourceSetCapabilityFactory;
+import org.nasdanika.exec.util.ExecEPackageResourceSetCapabilityFactory;
+
 module org.nasdanika.exec {
 	exports org.nasdanika.exec;
 	exports org.nasdanika.exec.content;
@@ -10,4 +15,9 @@ module org.nasdanika.exec {
 	exports org.nasdanika.exec.util;
 	
 	requires transitive org.nasdanika.emf;
+	
+	provides CapabilityFactory with
+		ExecEPackageResourceSetCapabilityFactory,
+		ContentEPackageResourceSetCapabilityFactory,
+		ResourcesEPackageResourceSetCapabilityFactory;
 }

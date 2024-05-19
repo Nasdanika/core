@@ -1,4 +1,5 @@
 import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.capability.emf.ClassPathURIHandlerResourceSetCapabilityFactory;
 import org.nasdanika.capability.emf.ResourceSetCapabilityFactory;
 import org.nasdanika.capability.emf.XMIResourceFactoryCapabilityFactory;
 
@@ -16,6 +17,7 @@ module org.nasdanika.capability {
 	
 	provides CapabilityFactory with 
 		ResourceSetCapabilityFactory,
-		XMIResourceFactoryCapabilityFactory;
+		XMIResourceFactoryCapabilityFactory,
+		ClassPathURIHandlerResourceSetCapabilityFactory;
 		
 }
