@@ -17,7 +17,7 @@ import picocli.CommandLine.Option;
  * @author Pavel
  *
  */
-public class ProgressMonitorMixin {
+public class ProgressMonitorMixIn {
 	
 	@Option(names = {"-p", "--progress"}, description = "Output file for progress monitor")
 	private File progressOutput;

@@ -41,7 +41,7 @@ public abstract class DelegatingCommand extends ContextCommand {
 	protected abstract SupplierFactory<Integer> getSupplierFactory();
 	
 	@Mixin
-	private ProgressMonitorMixin progressMonitorMixin;
+	private ProgressMonitorMixIn progressMonitorMixin;
 		
 	@Option(
 			names = { "-P", "--parallelism" }, 

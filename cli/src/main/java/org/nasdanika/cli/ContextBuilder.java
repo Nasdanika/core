@@ -15,6 +15,6 @@ public interface ContextBuilder {
 	 * @param progressMonitor Progress monitor
 	 * @return New context built or the context passed as an argument.
 	 */
-	Context build(Context context, ProgressMonitor progressMonitor) throws Exception;
+	Context build(Context context, ProgressMonitor progressMonitor);
 
 }
