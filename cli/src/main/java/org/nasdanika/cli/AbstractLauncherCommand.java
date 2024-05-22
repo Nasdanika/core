@@ -409,8 +409,7 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 			builder.append("\"");
 		}
 	}
-	
-	
+		
 	protected boolean matchRootModule(String moduleName) {
 		if (rootModules == null) {
 			return true;
