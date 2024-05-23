@@ -275,12 +275,16 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			URI ePackageNsURI = typeURI.trimFragment();
 			for (EPackage ePackage: getEPackages().values()) {
 				if (ePackageNsURI.equals(URI.createURI(ePackage.getNsURI()))) {
-					String eClassifierName = typeURI.fragment().substring(2);
-					EClassifier eClassifier = ePackage.getEClassifier(eClassifierName);
-					if (eClassifier == null) {
-						throw new ConfigurationException("EClassifier " + eClassifierName + " not found in EPackage: " + ePackageNsURI, asMarked(source)); 				
-					}
-					return eClassifier;
+					String fragment = typeURI.fragment();
+					if (fragment.startsWith("//")) {
+						String eClassifierName = fragment.substring(2);
+						EClassifier eClassifier = ePackage.getEClassifier(eClassifierName);
+						if (eClassifier == null) {
+							throw new ConfigurationException("EClassifier " + eClassifierName + " not found in EPackage: " + ePackageNsURI, asMarked(source)); 				
+						}
+						return eClassifier;
+					} 
+					throw new ConfigurationException("Unsuppported fragment, expected '//<class name>': " + fragment, asMarked(source)); 
 				}
 			}
 			throw new ConfigurationException("EPackage not found: " + ePackageNsURI, asMarked(source)); 
