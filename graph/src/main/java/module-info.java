@@ -1,6 +1,5 @@
 module org.nasdanika.graph {
 
-	requires transitive org.nasdanika.persistence;
 	requires transitive org.nasdanika.ncore;
 	requires org.yaml.snakeyaml;
 	requires transitive org.jgrapht.core;

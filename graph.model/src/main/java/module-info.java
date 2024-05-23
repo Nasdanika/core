@@ -8,7 +8,6 @@ module org.nasdanika.graph.model {
 	exports org.nasdanika.graph.model.util;
 	
 	requires transitive org.nasdanika.exec;
-	requires transitive org.nasdanika.capability;
 	
 	provides CapabilityFactory with
 		GraphEPackageResourceSetCapabilityFactory;

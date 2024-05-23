@@ -3,7 +3,6 @@ module org.nasdanika.emf {
 	exports org.nasdanika.emf.localization;
 	exports org.nasdanika.emf.persistence;
 	
-	requires transitive org.nasdanika.ncore;
 	requires transitive org.nasdanika.drawio;
 	requires org.jsoup;
 	requires org.eclipse.emf.ecore.xmi;
