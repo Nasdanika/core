@@ -36,6 +36,7 @@ public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionP
 		
 		Map<String, Object> extensionToFactoryMap = ret.getResourceFactoryRegistry().getExtensionToFactoryMap();
 		extensionToFactoryMap.put("yml", objectLoaderResourceFactory);
+		extensionToFactoryMap.put("yaml", objectLoaderResourceFactory);
 		extensionToFactoryMap.put("json", objectLoaderResourceFactory);
 		
 		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put("data", objectLoaderResourceFactory);

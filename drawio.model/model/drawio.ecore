@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="ecore://nasdanika.org/core/drawio/model" nsPrefix="org.nasdanika.drawio.model">
+  <eAnnotations source="urn:org.nasdanika">
+    <details key="load-key" value="drawio"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Document" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked">
     <eOperations name="getPageByName" eType="#//Page">
       <eParameters name="pageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

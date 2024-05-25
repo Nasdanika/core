@@ -273,7 +273,8 @@ public class MarkdownHelper {
 	}
 	
 	protected ClassLoader getResourceClassLoader() {
-		return getClass().getClassLoader();
+		return Thread.currentThread().getContextClassLoader();
+
 	}
 	
 	/**

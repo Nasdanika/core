@@ -21,7 +21,7 @@ public class NcoreAdapterFactory extends ComposedAdapterFactory {
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, org.nasdanika.ncore.String>(
 					NcorePackage.Literals.STRING, 
 					getInputStreamSupplierFactoryClass(), 
-					this.getClass().getClassLoader(), 
+					Thread.currentThread().getContextClassLoader(), 
 					StringSupplierFactoryAdapter::new));
 				
 	}

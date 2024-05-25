@@ -26,35 +26,35 @@ public class ContentAdapterFactory extends ComposedAdapterFactory {
 			new FunctionAdapterFactory<SupplierFactory<InputStream>, Resource>(
 				ContentPackage.Literals.RESOURCE, 
 				getInputStreamSupplierFactoryClass(), 
-				this.getClass().getClassLoader(), 
+				Thread.currentThread().getContextClassLoader(), 
 				ResourceSupplierFactoryAdapter::new));
 		
 		registerAdapterFactory(
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Text>(
 					ContentPackage.Literals.TEXT, 
 					getInputStreamSupplierFactoryClass(), 
-					this.getClass().getClassLoader(), 
+					Thread.currentThread().getContextClassLoader(), 
 					TextSupplierFactoryAdapter::new));
 		
 		registerAdapterFactory(
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Markdown>(
 					ContentPackage.Literals.MARKDOWN, 
 					getInputStreamSupplierFactoryClass(), 
-					this.getClass().getClassLoader(), 
+					Thread.currentThread().getContextClassLoader(), 
 					MarkdownSupplierFactoryAdapter::new));
 		
 		registerAdapterFactory(
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Interpolator>(
 					ContentPackage.Literals.INTERPOLATOR, 
 					getInputStreamSupplierFactoryClass(), 
-					this.getClass().getClassLoader(), 
+					Thread.currentThread().getContextClassLoader(), 
 					InterpolatorSupplierFactoryAdapter::new));
 		
 		registerAdapterFactory(
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Base64>(
 					ContentPackage.Literals.BASE64, 
 					getInputStreamSupplierFactoryClass(), 
-					this.getClass().getClassLoader(), 
+					Thread.currentThread().getContextClassLoader(), 
 					Base64SupplierFactoryAdapter::new));
 				
 	}

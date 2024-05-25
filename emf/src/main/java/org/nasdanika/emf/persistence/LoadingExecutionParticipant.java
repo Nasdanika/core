@@ -229,7 +229,7 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 	 * This implementation returns this class classloader.
 	 */
 	protected ClassLoader getClassLoader() {
-		return getClass().getClassLoader();
+		return Thread.currentThread().getContextClassLoader();
 	}
 	
 }

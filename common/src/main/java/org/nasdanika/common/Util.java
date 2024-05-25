@@ -1392,7 +1392,7 @@ public class Util {
 				throw th;
 			}
 		};
-		return (T) Proxy.newProxyInstance(targetClass.getClassLoader(), interfaces, invocationHandler);
+		return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), interfaces, invocationHandler);
 	}
 	
 	public static <T> T createListeningProxy(T target, java.util.function.Consumer<InvocationRecord<T>> invocationRecordConsumer) {

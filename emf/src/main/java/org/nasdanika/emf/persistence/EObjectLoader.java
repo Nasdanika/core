@@ -471,6 +471,20 @@ public class EObjectLoader extends DispatchingLoader {
 				}
 			}
 		}
+		
+		// <Ns URI>#//<class name> 
+		for (Entry<String, EPackageEntry> re: getRegistry()) {
+			EPackageEntry ePackageEntry = re.getValue();
+			EPackage ePackage = ePackageEntry.ePackage;
+			String nsURI = ePackage.getNsURI();
+			for (EClassifier eClassifier: ePackage.getEClassifiers()) {
+				String cName = nsURI + "#//" + eClassifier.getName();
+				if (cName.equals(type)) {
+					return resolveResult(ePackageEntry, eClassifier);
+				}
+			}
+		}
+				
 		return null;		
 	}
 

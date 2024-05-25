@@ -859,7 +859,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}
 	
 	protected ClassLoader getClassLoader(EObject obj) {
-		return getClass().getClassLoader();
+		return Thread.currentThread().getContextClassLoader();
 	}
 		
 	/**

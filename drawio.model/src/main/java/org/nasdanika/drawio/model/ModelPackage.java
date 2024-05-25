@@ -23,6 +23,7 @@ import org.nasdanika.ncore.NcorePackage;
  * <!-- end-user-doc -->
  * @see org.nasdanika.drawio.model.ModelFactory
  * @model kind="package"
+ *        annotation="urn:org.nasdanika load-key='drawio'"
  * @generated
  */
 public interface ModelPackage extends EPackage {

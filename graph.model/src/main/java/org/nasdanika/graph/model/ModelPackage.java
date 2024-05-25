@@ -26,6 +26,7 @@ import org.nasdanika.ncore.NcorePackage;
  * <!-- end-model-doc -->
  * @see org.nasdanika.graph.model.ModelFactory
  * @model kind="package"
+ *        annotation="urn:org.nasdanika load-key='graph'"
  * @generated
  */
 public interface ModelPackage extends EPackage {

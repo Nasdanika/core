@@ -296,7 +296,8 @@ public class DefaultConverter extends ReflectiveConverter {
 	
 	@ConverterMethod
 	public InputStream toInputStream(URI uri) throws IOException {
-		return toInputStream(uri, getClass().getClassLoader());
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();		
+		return toInputStream(uri, cl);
 	}
 	
 	/**

@@ -1256,7 +1256,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	protected ClassLoader getClassLoader(EObject context) {
 		EObject logicalParent = getLogicalParent(context);
 		if (logicalParent == null) {
-			return getClass().getClassLoader();
+			return Thread.currentThread().getContextClassLoader();
 		}
 		return getClassLoader(logicalParent);
 	}

@@ -176,7 +176,7 @@ public class ExecutionParticpantAdapterFactory extends NcoreAdapterFactory {
 	}
 
 	protected ClassLoader getClassLoader() {
-		return getClass().getClassLoader();
+		return Thread.currentThread().getContextClassLoader();
 	}
 	
 }

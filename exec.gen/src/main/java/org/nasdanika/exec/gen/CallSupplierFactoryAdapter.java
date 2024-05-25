@@ -118,7 +118,7 @@ public class CallSupplierFactoryAdapter extends AdapterImpl implements SupplierF
 						return new BasicDiagnostic(Status.ERROR, "Cannot specify properties for property", call);								
 					}
 				} else {
-					ClassLoader classLoader = context.get(ClassLoader.class, getClass().getClassLoader());
+					ClassLoader classLoader = context.get(ClassLoader.class, Thread.currentThread().getContextClassLoader());
 					String service = call.getService();
 					if (!Util.isBlank(service)) {
 						try {

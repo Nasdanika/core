@@ -4,6 +4,9 @@
   <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
     <details key="documentation" value="Base classes for graph-like models such as process/flow and architecture models"/>
   </eAnnotations>
+  <eAnnotations source="urn:org.nasdanika">
+    <details key="load-key" value="graph"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="GraphElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity ../../org.nasdanika.drawio.model/model/drawio.ecore#//SemanticElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Graph element uniquely identified in the containing graph by a string identifier. This allows to implement graph inheritance - deriving a graph from another graph by removing, adding and replacing graph elements similar to how inheritance works in object-oriented languages."/>

@@ -21,14 +21,14 @@ public class ResourcesAdapterFactory extends ComposedAdapterFactory {
 			new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, File>(
 				ResourcesPackage.Literals.FILE, 
 				getBinaryEntityContainerConsumerFactoryClass(), 
-				this.getClass().getClassLoader(), 
+				Thread.currentThread().getContextClassLoader(), 
 				FileConsumerFactoryAdapter::new));
 		
 		registerAdapterFactory(
 			new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Container>(
 				ResourcesPackage.Literals.CONTAINER, 
 				getBinaryEntityContainerConsumerFactoryClass(), 
-				this.getClass().getClassLoader(), 
+				Thread.currentThread().getContextClassLoader(), 
 				ContainerConsumerFactoryAdapter::new));
 				
 	}
