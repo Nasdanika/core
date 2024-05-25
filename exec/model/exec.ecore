@@ -153,9 +153,6 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eSubpackages name="content" nsURI="ecore://nasdanika.org/core/exec/content" nsPrefix="org.nasdanika.exec.content">
-    <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/content/package-summary.md"/>
-    </eAnnotations>
     <eClassifiers xsi:type="ecore:EClass" name="Filter" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Base class for filters which take an object, adapt to ${javadoc/org.nasdanika.common.SupplierFactory}&lt;InputStream>, obtain a stream and produce another stream from it."/>
@@ -236,9 +233,6 @@
       </eStructuralFeatures>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Markdown" eSuperTypes="#//content/Filter">
-      <eAnnotations source="urn:org.nasdanika">
-        <details key="documentation-reference" value="doc/content/markdown.md"/>
-      </eAnnotations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="style" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
   </eSubpackages>

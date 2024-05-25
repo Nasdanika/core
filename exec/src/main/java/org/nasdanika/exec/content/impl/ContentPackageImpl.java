@@ -394,10 +394,10 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		initEAttribute(getMarkdown_Style(), ecorePackage.getEBoolean(), "style", null, 0, 1, Markdown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create annotations
-		// urn:org.nasdanika
-		createUrnorgAnnotations();
 		// http://www.eclipse.org/emf/2002/GenModel
 		createGenModelAnnotations();
+		// urn:org.nasdanika
+		createUrnorgAnnotations();
 	}
 
 	/**
@@ -408,12 +408,6 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	 */
 	protected void createUrnorgAnnotations() {
 		String source = "urn:org.nasdanika";
-		addAnnotation
-		  (this,
-		   source,
-		   new String[] {
-			   "documentation-reference", "doc/content/package-summary.md"
-		   });
 		addAnnotation
 		  (base64EClass,
 		   source,
@@ -462,12 +456,6 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		   source,
 		   new String[] {
 			   "resolve-uri", "true"
-		   });
-		addAnnotation
-		  (markdownEClass,
-		   source,
-		   new String[] {
-			   "documentation-reference", "doc/content/markdown.md"
 		   });
 	}
 
