@@ -16,7 +16,7 @@ import org.nasdanika.common.ProgressMonitor;
 public class ResourceSetCapabilityFactory extends ServiceCapabilityFactory<ResourceSetRequirement, ResourceSet> {
 
 	@Override
-	public boolean isForServiceType(Class<?> type) {
+	public boolean isFor(Class<?> type, Object requirement) {
 		return ResourceSet.class == type;
 	}
 

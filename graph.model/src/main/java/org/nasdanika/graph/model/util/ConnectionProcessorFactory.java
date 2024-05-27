@@ -26,7 +26,7 @@ import reactor.core.publisher.Flux;
 public abstract class ConnectionProcessorFactory extends ServiceCapabilityFactory<ConnectionProcessorRequirement, ConnectionProcessor<Object, Object, Object, Object>> {
 
 	@Override
-	public boolean isForServiceType(Class<?> type) {
+	public boolean isFor(Class<?> type, Object requirement) {
 		return ConnectionProcessor.class.equals(type);
 	}
 	

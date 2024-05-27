@@ -18,7 +18,7 @@ import picocli.CommandLine;
 public abstract class MixInCapabilityFactory<T> extends ServiceCapabilityFactory<MixInRequirement, MixInRecord> {
 
 	@Override
-	public boolean isForServiceType(Class<?> type) {
+	public boolean isFor(Class<?> type, Object requirement) {
 		return MixInRecord.class == type;
 	}
 	

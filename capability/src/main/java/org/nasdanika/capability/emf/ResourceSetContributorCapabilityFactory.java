@@ -11,7 +11,7 @@ import org.nasdanika.capability.ServiceCapabilityFactory;
 public abstract class ResourceSetContributorCapabilityFactory extends ServiceCapabilityFactory<Predicate<ResourceSetContributor>, ResourceSetContributor> {
 	
 	@Override
-	public boolean isForServiceType(Class<?> type) {
+	public boolean isFor(Class<?> type, Object requirement) {
 		return ResourceSetContributor.class == type;
 	}
 	

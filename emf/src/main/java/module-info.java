@@ -1,3 +1,6 @@
+import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.emf.persistence.EObjectCapabilityFactory;
+
 module org.nasdanika.emf {
 	exports org.nasdanika.emf;
 	exports org.nasdanika.emf.localization;
@@ -10,5 +13,7 @@ module org.nasdanika.emf {
 	requires org.eclipse.jgit;
 	requires transitive org.apache.poi.ooxml;
 	requires spring.core;
+	
+	provides CapabilityFactory with EObjectCapabilityFactory;
 	
 }

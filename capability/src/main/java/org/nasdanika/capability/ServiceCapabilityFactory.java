@@ -38,7 +38,7 @@ public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory
 		return requirement instanceof Class || requirement instanceof Requirement;
 	}
 
-	public abstract boolean isForServiceType(Class<?> type);
+	public abstract boolean isFor(Class<?> type, Object serviceRequirement);
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -52,7 +52,7 @@ public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory
 		
 		if (requirement instanceof Requirement) {
 			Requirement<R,S> theRequirement = (Requirement<R,S>) requirement;
-			if (isForServiceType(theRequirement.serviceType())
+			if (isFor(theRequirement.serviceType(), theRequirement.serviceRequirement())
 					&& (theRequirement.factoryPredicate() == null || theRequirement.factoryPredicate().test(this))) {
 				// TODO - split progress monitor
 				return createService(theRequirement.serviceType(), theRequirement.serviceRequirement(), resolver, progressMonitor);

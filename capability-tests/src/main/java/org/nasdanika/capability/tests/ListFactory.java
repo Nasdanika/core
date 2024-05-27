@@ -15,7 +15,7 @@ import org.nasdanika.common.ProgressMonitor;
 public class ListFactory extends ServiceCapabilityFactory<Double, List<Double>> {
 
 	@Override
-	public boolean isForServiceType(Class<?> type) {
+	public boolean isFor(Class<?> type, Object requirement) {
 		return List.class.equals(type);
 	}
 

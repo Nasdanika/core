@@ -22,7 +22,7 @@ import picocli.CommandLine;
 public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFactory<SubCommandRequirement, CommandLine> {
 
 	@Override
-	public boolean isForServiceType(Class<?> type) {
+	public boolean isFor(Class<?> type, Object requirement) {
 		return CommandLine.class == type;
 	}
 	
