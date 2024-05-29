@@ -2,6 +2,7 @@ package org.nasdanika.capability.emf;
 
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -44,6 +45,10 @@ public class ResourceSetCapabilityFactory extends ServiceCapabilityFactory<Resou
 		ResourceSet resourceSet = createResourceSet(requirement);
 		for (CapabilityProvider<Object> cp: contributorProviders) {
 			cp.getPublisher().subscribe(contributor -> ((ResourceSetContributor) contributor).contribute(resourceSet, progressMonitor));
+		}
+		Consumer<ResourceSet> configurator = requirement.configurator();
+		if (configurator != null) {
+			configurator.accept(resourceSet);
 		}
 				
 		return resourceSet;		

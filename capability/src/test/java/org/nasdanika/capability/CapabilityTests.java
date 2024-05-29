@@ -31,10 +31,16 @@ public class CapabilityTests {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		
-		ResourceSetRequirement serviceRequirement = new ResourceSetRequirement(null, contributor -> {
-			System.out.println(contributor);
-			return true;
-		});
+		ResourceSetRequirement serviceRequirement = new ResourceSetRequirement(
+				null, 
+				resourceSet -> {
+					System.out.println(resourceSet);					
+				}, 
+				contributor -> {
+					System.out.println(contributor);
+					return true;
+				}
+		);
 		
 		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class, null, serviceRequirement);		
 		for (CapabilityProvider<?> cp: capabilityLoader.load(requirement, progressMonitor)) {

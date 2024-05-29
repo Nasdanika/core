@@ -41,16 +41,18 @@ public class ResourceSetMixIn {
 		
 	public ResourceSet createResourceSet(ProgressMonitor progressMonitor) {
 		CapabilityLoader capabilityLoader = getCapabilityLoader();
-		ResourceSetRequirement serviceRequirement = new ResourceSetRequirement(createRequirementResourceSet(), this::testContributor);		
+		ResourceSetRequirement serviceRequirement = new ResourceSetRequirement(createRequirementResourceSet(), this::configureResourceSet, this::testContributor);		
 		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class, this::testFactory, serviceRequirement);		
 		for (CapabilityProvider<?> cp: capabilityLoader.load(requirement, progressMonitor)) {
-			return configureResourceSet((ResourceSet) cp.getPublisher().blockFirst());
+			return (ResourceSet) cp.getPublisher().blockFirst();
 		}	
 		
-		return configureResourceSet(createDefaultResourceSet()); // Fall-back if there are no capability providers.
+		ResourceSetImpl defaultResourceSet = createDefaultResourceSet();
+		configureResourceSet(defaultResourceSet);
+		return defaultResourceSet; // Fall-back if there are no capability providers.
 	}
 	
-	protected ResourceSet configureResourceSet(ResourceSet resourceSet) {
+	protected void configureResourceSet(ResourceSet resourceSet) {
 		if (extensionResourceFactories != null) {
 			Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
 			for (Entry<String, Class<?>> ee: extensionResourceFactories.entrySet()) {
@@ -81,7 +83,6 @@ public class ResourceSetMixIn {
 				}
 			}
 		}
-		return resourceSet;
 	}
 
 	protected ResourceSetImpl createDefaultResourceSet() {

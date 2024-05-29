@@ -36,7 +36,7 @@ public class EObjectCapabilityFactory extends ObjectLoaderCapabilityFactory<EObj
 	@Override
 	protected ResourceSetRequirement getResourceSetRequirement(EObjectRequirement serviceRequirement) {
 		ResourceSetRequirement resourceSetRequirement = serviceRequirement.resourceSetRequirement();		
-		return resourceSetRequirement == null ? new ResourceSetRequirement(new NcoreResourceSet(), null) : resourceSetRequirement;
+		return resourceSetRequirement == null ? new ResourceSetRequirement(new NcoreResourceSet(), null, null) : resourceSetRequirement;
 	}
 
 }
