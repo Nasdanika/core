@@ -35,7 +35,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
-import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.Temporal;
@@ -155,8 +154,6 @@ public final class NcoreUtil {
 		}
 		return ret;
 	}
-	
-	
 
 	/**
 	 * Finds objects referencing the argument object (target) via the specified reference.
@@ -190,6 +187,17 @@ public final class NcoreUtil {
 			}			
 		}
 		return ret;
+	}
+	
+	/**
+	 * Get a list of all objects in the resource set which point to this 
+	 * object with the provided {@link EReference}'s opposite.
+	 * @param <T>
+	 * @param eReference
+	 * @return
+	 */
+	public <T extends EObject> EList<T> getOppositeReferrers(EObject target, EReference reference) {
+		return getReferrers(target, Objects.requireNonNull(NcoreUtil.getOpposite(reference), "Opposite is null: " + reference));
 	}
 
 	@SuppressWarnings("unchecked")

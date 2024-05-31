@@ -46,9 +46,12 @@ public class ResourceSetCapabilityFactory extends ServiceCapabilityFactory<Resou
 		for (CapabilityProvider<Object> cp: contributorProviders) {
 			cp.getPublisher().subscribe(contributor -> ((ResourceSetContributor) contributor).contribute(resourceSet, progressMonitor));
 		}
-		Consumer<ResourceSet> configurator = requirement.configurator();
-		if (configurator != null) {
-			configurator.accept(resourceSet);
+
+		if (requirement != null) {
+			Consumer<ResourceSet> configurator = requirement.configurator();
+			if (configurator != null) {
+				configurator.accept(resourceSet);
+			}
 		}
 				
 		return resourceSet;		
