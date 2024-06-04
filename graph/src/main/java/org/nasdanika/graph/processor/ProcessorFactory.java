@@ -26,7 +26,7 @@ import org.nasdanika.graph.Element;
  * @param <E> Endpoint type. Endpoints pass invocations to handlers.
  * @param <R> Registry type
  */
-public abstract class ProcessorFactory<P> {
+public class ProcessorFactory<P> {
 	
 	/**
 	 * Creates a processor
