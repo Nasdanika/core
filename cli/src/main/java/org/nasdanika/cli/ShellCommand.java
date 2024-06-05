@@ -62,7 +62,7 @@ public class ShellCommand extends CommandBase {
         	PrintWriter terminalWriter = terminal.writer();
         	root.setOut(terminalWriter);
 			terminalWriter.println("Nasdanika shell, type -h for help");
-        	String prompt = "nsd>";
+        	String prompt = root.getCommandName() + ">";
             while (!exitCommand.get()) {
                 String line = lineReader.readLine(prompt);
                 if (!Util.isBlank(line)) {
