@@ -100,7 +100,7 @@ public class Reflector {
 	 * @author Pavel
 	 *
 	 */
-	protected class AnnotatedElementRecord implements Predicate<Object> {
+	public class AnnotatedElementRecord implements Predicate<Object> {
 		
 		private Predicate<Object> predicate;
 		private Object target;
@@ -109,7 +109,7 @@ public class Reflector {
 		private Class<?> declaringClass;
 		private List<Object> factoryPath;
 
-		public AnnotatedElementRecord(
+		AnnotatedElementRecord(
 				Predicate<Object> predicate, 
 				Object target, 
 				AnnotatedElement annotatedElement,
@@ -222,7 +222,7 @@ public class Reflector {
 	 * @param target
 	 * @return
 	 */
-	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, List<Object> factoryPath) {
+	public Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, List<Object> factoryPath) {
 		Predicate<Object> targetPredicate = getTargetPredicate(target);
 		return Util.getFieldsAndMethods(target.getClass()).flatMap(ae -> getAnnotatedElementRecords(target, ae, factoryPath)).map(aer -> aer.and(targetPredicate));
 	}

@@ -6,10 +6,12 @@ import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Reflector;
 import org.nasdanika.graph.processor.CapabilityProcessorFactory.ProcessorRequirement;
 
 import reactor.core.publisher.Flux;
@@ -38,30 +40,54 @@ public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapa
 		}
 		
 		return collectorCS
-				.thenApply(targets -> createProcessor(processorType, serviceRequirement, resolver, targets, progressMonitor))
-				.thenApply(this::wrapProcessor);
+				.thenApply(targets -> createProcessors(processorType, serviceRequirement, resolver, targets, progressMonitor))
+				.thenApply(this::wrapProcessors);
 	}
 	
-	protected Iterable<CapabilityProvider<P>> wrapProcessor(P processor) {
+	protected Iterable<CapabilityProvider<P>> wrapProcessors(Stream<P> processors) {
 		return Collections.singleton(new CapabilityProvider<P>() {
 			
 			@Override
 			public Flux<P> getPublisher() {
-				return Flux.just(processor);
+				return Flux.fromStream(processors);
 			}
 			
 		});		
 	}
 	
-	protected P createProcessor(
+	protected Stream<P> createProcessors(
 			Class<P> processorType,
 			ProcessorRequirement<R, P> serviceRequirement,
 			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
-			Collection<Object> targets, 
+			Collection<Object> factories, 
 			ProgressMonitor progressMonitor) {
 		
-		// TODO - reflector, find a factory method.
-		return null;
+		Reflector reflector = new Reflector();
+		return factories
+			.stream()
+			.flatMap(factory -> reflector.getAnnotatedElementRecords(factory, Collections.singletonList(factory)))
+			.filter(aer -> match(aer, processorType, serviceRequirement, progressMonitor))
+			.map(aer -> create(aer, processorType, serviceRequirement, progressMonitor));
+	}
+
+	protected boolean match(
+			Reflector.AnnotatedElementRecord aer,
+			Class<P> processorType,
+			ProcessorRequirement<R, P> serviceRequirement,
+			ProgressMonitor progressMonitor) {
+		
+		// TODO - @ProcessorFactory annotation, type, value type (for suppliers), ...
+		throw new UnsupportedOperationException("Work in progress...");
+	}
+	
+	protected P create(
+			Reflector.AnnotatedElementRecord aer,
+			Class<P> processorType,
+			ProcessorRequirement<R, P> serviceRequirement,
+			ProgressMonitor progressMonitor) {
+		
+		// TODO pre-defined signature with all
+		throw new UnsupportedOperationException("Work in progress...");
 	}
 	
 	/**
