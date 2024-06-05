@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Writer;
 
+import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.ProgressRecorder;
@@ -20,29 +21,36 @@ import picocli.CommandLine.Option;
  */
 public class ProgressMonitorMixIn {
 	
-	@Option(names = {"-p", "--progress"}, description = "Output file for progress monitor")
+	@Option(names = "--progress-output", description = "Output file for progress monitor")
 	private File progressOutput;
 	
-	@Option(names = {"-j", "--json"}, description = "Output progress in JSON")
+	@Option(names = "--progress-json", description = "Output progress in JSON")
 	private boolean jsonProgress;
 	
-	@Option(names = {"-d", "--data"}, description = "Output progress data")
+	@Option(names = "--progress-console", description = "Output progress to console")
+	private boolean consoleProgress;
+	
+	@Option(names = "--progress-data", description = "Output progress data")
 	private boolean data;
 		
 	public ProgressMonitor createProgressMonitor(double size) throws FileNotFoundException {
 		if (progressOutput == null) {
-			if (jsonProgress) {
-				return new ProgressRecorder() {
-					
-					@Override
-					public void close() {
-						System.out.println(toJSON(0, data).toString(4));
-						super.close();
-					}
-					
-				};			
+			if (consoleProgress) {
+				if (jsonProgress) {
+					return new ProgressRecorder() {
+						
+						@Override
+						public void close() {
+							System.out.println(toJSON(0, data).toString(4));
+							super.close();
+						}
+						
+					};			
+				}
+				return new PrintStreamProgressMonitor(System.out, 0, 4, false, data);
 			}
-			return new PrintStreamProgressMonitor(System.out, 0, 4, false, data);
+			
+			return new NullProgressMonitor();
 		}
 		
 		if (jsonProgress) {

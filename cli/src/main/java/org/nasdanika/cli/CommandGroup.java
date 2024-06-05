@@ -1,9 +1,7 @@
 package org.nasdanika.cli;
 
-import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.ParentCommand;
-import picocli.CommandLine.Spec;
 
 /**
  * A base class for commands which are used for grouping and do not provide 
@@ -13,8 +11,6 @@ import picocli.CommandLine.Spec;
  *
  */
 public class CommandGroup extends CommandBase {
-	
-	@Spec CommandSpec spec;
 
 	@Override
 	public Integer call() throws Exception {

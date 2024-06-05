@@ -9,6 +9,7 @@ module org.nasdanika.cli {
 	requires transitive org.nasdanika.capability;
 	requires transitive info.picocli;
 	requires org.apache.commons.text;
+	requires transitive org.jline;
 	
 	opens org.nasdanika.cli to info.picocli, org.nasdanika.html.model.app.gen.cli;
 	

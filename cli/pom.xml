@@ -61,6 +61,11 @@
 		    <groupId>info.picocli</groupId>
 		    <artifactId>picocli</artifactId>
 		    <version>4.7.6</version>
-		</dependency>		
+		</dependency>				
+		<dependency>
+		    <groupId>org.jline</groupId>
+		    <artifactId>jline</artifactId>
+		    <version>3.26.1</version>
+		</dependency>
 	</dependencies>
 </project>

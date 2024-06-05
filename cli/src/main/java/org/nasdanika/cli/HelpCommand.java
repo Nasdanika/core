@@ -23,7 +23,6 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Help;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.Spec;
 
 @Command(
 		description = "Outputs usage for all registred commands",
@@ -42,9 +41,6 @@ public class HelpCommand extends CommandBase {
 	}
 	
 	private CommandLine root;
-		
-	@Spec 
-	private CommandSpec spec;
 	
 	public HelpCommand(CommandLine root) {
 		this.root = root;

@@ -8,6 +8,7 @@ import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
+import org.nasdanika.common.Closeable;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -36,7 +37,15 @@ public class Application {
 		
 		// Executing the first one
 		for (CommandLine rootCommand: rootCommands) {	
-			int exitCode = rootCommand.execute(args);
+			rootCommand.addSubcommand(new ShellCommand(rootCommand));
+			int exitCode;
+			try {
+				exitCode = rootCommand.execute(args);
+			} finally {
+				if (rootCommand instanceof Closeable) {
+					((Closeable) rootCommand).close(progressMonitor.split("Closing root command", 1));
+				}
+			}
 			System.exit(exitCode);
 		}
 		
