@@ -1,18 +1,29 @@
 package org.nasdanika.graph.processor;
 
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
-import java.util.stream.Stream;
+import java.util.function.Supplier;
 
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.capability.SupercedingCapabilityProvider;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reflector;
+import org.nasdanika.common.Util;
 import org.nasdanika.graph.processor.CapabilityProcessorFactory.ProcessorRequirement;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.EvaluationException;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import reactor.core.publisher.Flux;
 
@@ -23,6 +34,76 @@ import reactor.core.publisher.Flux;
  * @param <P>
  */
 public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapabilityFactory<ProcessorRequirement<R, P>, P> {
+	
+	public @interface ProcessorFactory {
+		/**
+		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
+		 * which is evaluated in the context of a {@link ProcessorConfig} with requirement variable 
+		 * @return
+		 */
+		String condition() default "";
+
+		/**
+		 * Matching by element type.
+		 * @return
+		 */
+		Class<?> type() default Object.class; 
+		
+		/**
+		 * Matching by element value type for elements implementing Supplier.
+		 * @return
+		 */
+		Class<?> valueType() default Object.class; 
+		
+		/**
+		 * Factory priority
+		 * @return
+		 */
+		int priority() default 0;
+		
+	}
+	
+	protected interface ProcessorCapabilityProvider<T> extends SupercedingCapabilityProvider<T> {
+		
+		/**
+		 * One processor (capability provider) supercedes another if it has higher priority,
+		 * its type is a subtype of the other, or, if types are equal,  value type is a sub-type of the other value type.
+		 * @param other
+		 * @return
+		 */
+		default boolean supercedes(CapabilityProvider<?> other) {
+			if (other == this) {
+				return false;
+			}
+			if (other == null) {
+				return true;
+			}
+			
+			if (other instanceof ProcessorCapabilityProvider) {
+				ProcessorCapabilityProvider<?> pOther = (ProcessorCapabilityProvider<?>) other;
+				if (getPriority() > pOther.getPriority()) {
+					return true;
+				}
+				
+				if (getType() == pOther.getType()) {
+					if (pOther.getValueType().isAssignableFrom(getValueType())) {
+						return true;
+					}
+				} else if (pOther.getType().isAssignableFrom(getType())) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+
+		Class<?> getType(); 
+		
+		Class<?> getValueType(); 
+		
+		int getPriority();
+		
+	}
 
 	@Override
 	protected CompletionStage<Iterable<CapabilityProvider<P>>> createService(
@@ -39,23 +120,10 @@ public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapa
 			});
 		}
 		
-		return collectorCS
-				.thenApply(targets -> createProcessors(processorType, serviceRequirement, resolver, targets, progressMonitor))
-				.thenApply(this::wrapProcessors);
+		return collectorCS.thenApply(targets -> createProcessors(processorType, serviceRequirement, resolver, targets, progressMonitor));
 	}
 	
-	protected Iterable<CapabilityProvider<P>> wrapProcessors(Stream<P> processors) {
-		return Collections.singleton(new CapabilityProvider<P>() {
-			
-			@Override
-			public Flux<P> getPublisher() {
-				return Flux.fromStream(processors);
-			}
-			
-		});		
-	}
-	
-	protected Stream<P> createProcessors(
+	protected Iterable<CapabilityProvider<P>> createProcessors(
 			Class<P> processorType,
 			ProcessorRequirement<R, P> serviceRequirement,
 			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
@@ -67,29 +135,162 @@ public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapa
 			.stream()
 			.flatMap(factory -> reflector.getAnnotatedElementRecords(factory, Collections.singletonList(factory)))
 			.filter(aer -> match(aer, processorType, serviceRequirement, progressMonitor))
-			.map(aer -> create(aer, processorType, serviceRequirement, progressMonitor));
+			.map(aer -> create(aer, processorType, serviceRequirement, progressMonitor))
+			.toList();
 	}
-
+	
 	protected boolean match(
 			Reflector.AnnotatedElementRecord aer,
 			Class<P> processorType,
 			ProcessorRequirement<R, P> serviceRequirement,
 			ProgressMonitor progressMonitor) {
 		
-		// TODO - @ProcessorFactory annotation, type, value type (for suppliers), ...
-		throw new UnsupportedOperationException("Work in progress...");
+		ProcessorFactory processorFactory = aer.getAnnotation(ProcessorFactory.class);
+		if (processorFactory == null) {
+			return false;
+		}
+		
+		AnnotatedElement annotatedElement = aer.getAnnotatedElement();
+		if (!(annotatedElement instanceof Method)) {
+			return false;
+		}
+		
+		Method method = (Method) annotatedElement;
+		
+		// processor type
+		if (!processorType.isAssignableFrom(method.getReturnType())) {
+			return false;
+		}		
+		
+		Object element = serviceRequirement.config().getElement();
+		// type
+		if (!processorFactory.type().isInstance(element)) {
+			return false;
+		}
+		
+		// value type
+		if (element instanceof Supplier && !processorFactory.valueType().isInstance(((Supplier<?>) element).get())) {
+			return false;
+		}
+		
+		// condition
+		if (!evaluatePredicate(serviceRequirement.config(), processorFactory.condition(), Map.of("requirement", serviceRequirement.requirement()))) {
+			return false;
+		}
+
+		Class<?>[] parameterTypes = method.getParameterTypes();
+		/*
+		 * Method signature:
+		 * ProcessorConfig config, 
+		 * BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
+		 * Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
+ 		 * R requirement,
+		 * ProgressMonitor progressMonitor
+		 */
+		
+		if (!parameterTypes[0].isInstance(serviceRequirement.config())) {
+			return false;
+		}
+		
+		return serviceRequirement.requirement() == null || parameterTypes[3].isInstance(serviceRequirement.requirement());
 	}
 	
-	protected P create(
+	protected CapabilityProvider<P> create(
 			Reflector.AnnotatedElementRecord aer,
 			Class<P> processorType,
 			ProcessorRequirement<R, P> serviceRequirement,
 			ProgressMonitor progressMonitor) {
 		
-		// TODO pre-defined signature with all
-		throw new UnsupportedOperationException("Work in progress...");
+		ProcessorFactory processorFactory = aer.getAnnotation(ProcessorFactory.class);
+		
+		return new ProcessorCapabilityProvider<P>() {
+			
+			@Override
+			public Flux<P> getPublisher() {
+				/*
+				 * Method signature:
+				 * ProcessorConfig config, 
+				 * BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
+				 * Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
+		 		 * R requirement,
+				 * ProgressMonitor progressMonitor
+				 */
+				
+				@SuppressWarnings("unchecked")
+				P processor = (P) aer.invoke(
+						serviceRequirement.config(), 
+						serviceRequirement.infoProvider(),
+						serviceRequirement.endpointWiringStageConsumer(),
+						serviceRequirement.requirement(),
+						progressMonitor);
+				
+				return processor == null ? Flux.empty() : Flux.just(processor);
+			}
+
+			@Override
+			public Class<?> getType() {
+				return processorFactory.type();
+			}
+
+			@Override
+			public Class<?> getValueType() {
+				return processorFactory.valueType();
+			}
+
+			@Override
+			public int getPriority() {
+				return processorFactory.priority();
+			}
+			
+		};		
 	}
 	
+	protected boolean evaluatePredicate(Object obj, String expr, Map<String,Object> variables) {
+		if (Util.isBlank(expr)) {
+			return true;
+		}
+		
+		ExpressionParser parser = getExpressionParser();
+		Expression exp = parser.parseExpression(expr);
+		EvaluationContext evaluationContext = getEvaluationContext();
+		if (variables != null) {
+			variables.entrySet().forEach(ve -> evaluationContext.setVariable(ve.getKey(), ve.getValue()));
+		}
+		try {			
+			return evaluationContext == null ? exp.getValue(obj, Boolean.class) : exp.getValue(evaluationContext, obj, Boolean.class);
+		} catch (EvaluationException e) {
+			onEvaluationException(obj, expr, evaluationContext, e);
+			return false;
+		}
+	}
+	
+	protected EvaluationContext getEvaluationContext() {
+		return new StandardEvaluationContext();
+	}
+	
+	protected ThreadLocal<SpelExpressionParser> expressionParserThreadLocal = new ThreadLocal<>() {
+		
+		@Override
+		protected SpelExpressionParser initialValue() {
+			return new SpelExpressionParser();			
+		}
+		
+	};
+
+	protected SpelExpressionParser getExpressionParser() {
+		return expressionParserThreadLocal.get();
+	}
+	
+	/**
+	 * Override to troubleshoot SPEL predicates.
+	 * @param obj
+	 * @param expr
+	 * @param evaluationContext
+	 */
+	protected void onEvaluationException(Object obj, String expr, EvaluationContext evaluationContext, EvaluationException exception) {
+		
+	}
+		
 	/**
 	 * Loads/creates reflection targets.
 	 * @param processorType

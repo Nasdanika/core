@@ -64,15 +64,8 @@ public interface Diagnostic extends Composable<Diagnostic> {
 			out.print("    ");
 		}
 				
-		Status status = getStatus();
-		boolean match = statuses.length == 0;
-		for (Status s: statuses) {
-			if (s == status) {
-				match = true;
-				break;
-			}
-		}
-		if (match) {
+		if (match(statuses)) {
+			Status status = getStatus();
 			if (status != null) {
 				// TODO - ANSI coloring of statuses
 				out.print(status.name());
@@ -100,6 +93,40 @@ public interface Diagnostic extends Composable<Diagnostic> {
 		    }
 		}		
 	}
+	
+	private boolean match(Status... statuses) {
+		if (statuses.length == 0) {
+			return true;
+		}
+		Status status = getStatus();
+		for (Status s: statuses) {
+			if (s == status) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	default void dump(ProgressMonitor progressMonitor, Status... statuses) {
+		Status status = getStatus();
+		if (match(statuses)) {
+			ProgressMonitor scaled = progressMonitor.scale(1 + getChildren().size());
+			List<Object> data = getData();
+			Object[] da = data == null ? new Object[0] : data.toArray();
+			scaled.worked(status, 1, getMessage(), da);
+			
+		    List<Diagnostic> children = getChildren();
+			if (children != null) {
+				for (Diagnostic child: children) {
+					if (child.match(statuses)) {
+						try (ProgressMonitor childPm = scaled.split(child.getMessage(), 1)) {
+							child.dump(childPm, statuses);
+						}
+					}
+				}
+		    }
+		}		
+	}	
 	
 	@Override
 	default Diagnostic compose(Diagnostic other) {

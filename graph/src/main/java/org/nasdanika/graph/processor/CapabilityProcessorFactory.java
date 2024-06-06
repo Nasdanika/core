@@ -2,6 +2,7 @@ package org.nasdanika.graph.processor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
@@ -11,6 +12,7 @@ import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
+import org.nasdanika.capability.SupercedingCapabilityProvider;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 
@@ -62,8 +64,22 @@ public class CapabilityProcessorFactory<R,P> extends ProcessorFactory<P> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected P select(Iterable<CapabilityProvider<Object>> providers) {
-		Collection<Object> processors = new ArrayList<>();
-		for (CapabilityProvider<Object> provider: providers) {
+		Collection<CapabilityProvider<Object>> accumulator = new ArrayList<>();
+		Z: for (CapabilityProvider<Object> provider: providers) {
+			Iterator<CapabilityProvider<Object>> ait = accumulator.iterator();
+			while (ait.hasNext()) {
+				CapabilityProvider<Object> accumulatedProvider = ait.next();
+				if (accumulatedProvider instanceof SupercedingCapabilityProvider && ((SupercedingCapabilityProvider<?>) accumulatedProvider).supercedes(provider)) {
+					continue Z;
+				}
+				if (provider instanceof SupercedingCapabilityProvider && ((SupercedingCapabilityProvider<?>) provider).supercedes(accumulatedProvider)) {
+					ait.remove();
+				}
+			}
+			accumulator.add(provider);
+		}
+		for (CapabilityProvider<Object> provider: accumulator) {
+			Collection<Object> processors = new ArrayList<>();
 			provider.getPublisher().filter(Objects::nonNull).subscribe(processors::add);
 			if (!processors.isEmpty()) {
 				return (P) processors.iterator().next();
