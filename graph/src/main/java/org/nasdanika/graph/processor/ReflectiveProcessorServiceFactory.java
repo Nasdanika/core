@@ -1,11 +1,17 @@
 package org.nasdanika.graph.processor;
 
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
@@ -35,6 +41,8 @@ import reactor.core.publisher.Flux;
  */
 public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapabilityFactory<ProcessorRequirement<R, P>, P> {
 	
+	@Retention(RUNTIME)
+	@Target(METHOD)	
 	public @interface ProcessorFactory {
 		/**
 		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
@@ -54,6 +62,18 @@ public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapa
 		 * @return
 		 */
 		Class<?> valueType() default Object.class; 
+
+		/**
+		 * Matching by handler type.
+		 * @return
+		 */
+		Class<?> handlerType() default Object.class; 
+
+		/**
+		 * Matching by element type.
+		 * @return
+		 */
+		Class<?> endpointType() default Object.class; 
 		
 		/**
 		 * Factory priority
@@ -136,6 +156,7 @@ public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapa
 			.flatMap(factory -> reflector.getAnnotatedElementRecords(factory, Collections.singletonList(factory)))
 			.filter(aer -> match(aer, processorType, serviceRequirement, progressMonitor))
 			.map(aer -> create(aer, processorType, serviceRequirement, progressMonitor))
+			.filter(Objects::nonNull)
 			.toList();
 	}
 	
@@ -173,8 +194,18 @@ public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapa
 			return false;
 		}
 		
+		// handler type
+		if (serviceRequirement.handlerType() != null && !serviceRequirement.handlerType().isAssignableFrom(processorFactory.handlerType())) {
+			return false;
+		}
+		
+		// endpoint type
+		if (serviceRequirement.endpointType() != null && !serviceRequirement.endpointType().isAssignableFrom(processorFactory.endpointType())) {
+			return false;
+		}
+				
 		// condition
-		if (!evaluatePredicate(serviceRequirement.config(), processorFactory.condition(), Map.of("requirement", serviceRequirement.requirement()))) {
+		if (!evaluatePredicate(serviceRequirement.config(), processorFactory.condition(), Collections.singletonMap("requirement", serviceRequirement.requirement()))) {
 			return false;
 		}
 
@@ -202,29 +233,38 @@ public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapa
 			ProgressMonitor progressMonitor) {
 		
 		ProcessorFactory processorFactory = aer.getAnnotation(ProcessorFactory.class);
+
+		/*
+		 * Method signature:
+		 * ProcessorConfig config, 
+		 * BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
+		 * Consumer<CompletionStage<?>> endpointWiringStageConsumer,
+		 * Class<P> processorType,
+		 * Class<?> handlerType,
+		 * Class<?> endpointType, 
+ 		 * R requirement,
+		 * ProgressMonitor progressMonitor
+		 */
+		@SuppressWarnings("unchecked")
+		P processor = (P) aer.invoke(
+				serviceRequirement.config(), 
+				serviceRequirement.infoProvider(),
+				serviceRequirement.endpointWiringStageConsumer(),
+				processorType,
+				serviceRequirement.handlerType(),
+				serviceRequirement.endpointType(),
+				serviceRequirement.requirement(),
+				progressMonitor);
+		
+		if (processor == null) {
+			return null;
+		}
 		
 		return new ProcessorCapabilityProvider<P>() {
 			
 			@Override
 			public Flux<P> getPublisher() {
-				/*
-				 * Method signature:
-				 * ProcessorConfig config, 
-				 * BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
-				 * Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
-		 		 * R requirement,
-				 * ProgressMonitor progressMonitor
-				 */
-				
-				@SuppressWarnings("unchecked")
-				P processor = (P) aer.invoke(
-						serviceRequirement.config(), 
-						serviceRequirement.infoProvider(),
-						serviceRequirement.endpointWiringStageConsumer(),
-						serviceRequirement.requirement(),
-						progressMonitor);
-				
-				return processor == null ? Flux.empty() : Flux.just(processor);
+				return Flux.just(processor);
 			}
 
 			@Override

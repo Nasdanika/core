@@ -25,20 +25,28 @@ public class CapabilityProcessorFactory<R,P> extends ProcessorFactory<P> {
 	
 	private CapabilityLoader capabilityLoader;
 	private R requirement;
-	private Class<P> processorType;
+	private Class<?> processorType;
+	private Class<?> handlerType;
+	private Class<?> endpointType;
 
 	public static record ProcessorRequirement<R,P>(
 			ProcessorConfig config, 
 			BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
+			Class<?> handlerType,
+			Class<?> endpointType,
 			R requirement) {}
 	
 	public CapabilityProcessorFactory(
-			Class<P> processorType,
+			Class<?> processorType,
+			Class<?> handlerType,
+			Class<?> endpointType,
 			R requirement, 
 			CapabilityLoader capabilityLoader) {
 		
 		this.processorType = processorType;
+		this.handlerType = handlerType;
+		this.endpointType = endpointType;
 		this.requirement = requirement;
 		this.capabilityLoader = capabilityLoader;		
 	}
@@ -50,8 +58,15 @@ public class CapabilityProcessorFactory<R,P> extends ProcessorFactory<P> {
 		BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
 		Consumer<CompletionStage<?>> endpointWiringStageConsumer, ProgressMonitor progressMonitor) {
 		
-		ProcessorRequirement<R,P> processorRequirement = new ProcessorRequirement<>(config, infoProvider, endpointWiringStageConsumer, requirement);
-		Requirement<ProcessorRequirement<R, P>, P> serviceRequirement = ServiceCapabilityFactory.createRequirement(processorType, this::testFactory, processorRequirement);
+		ProcessorRequirement<R,P> processorRequirement = new ProcessorRequirement<>(
+				config, 
+				infoProvider, 
+				endpointWiringStageConsumer,
+				handlerType,
+				endpointType,
+				requirement);
+		
+		Requirement<ProcessorRequirement<R, P>, ?> serviceRequirement = ServiceCapabilityFactory.createRequirement(processorType, this::testFactory, processorRequirement);
 		Iterable<CapabilityProvider<Object>> providers = capabilityLoader.load(serviceRequirement, progressMonitor);
 		return ProcessorInfo.of(config, select(providers));
 	}
@@ -88,7 +103,7 @@ public class CapabilityProcessorFactory<R,P> extends ProcessorFactory<P> {
 		return null;
 	}
 	
-	protected boolean testFactory(ServiceCapabilityFactory<ProcessorRequirement<R,P>,P> factory) {
+	protected boolean testFactory(ServiceCapabilityFactory<ProcessorRequirement<R,P>,?> factory) {
 		return true;		
 	}
 
