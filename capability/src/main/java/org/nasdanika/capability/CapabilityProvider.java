@@ -13,5 +13,22 @@ public interface CapabilityProvider<T> {
 	 * @return Publisher of provided capabilities 
 	 */
 	Flux<T> getPublisher();
+	
+	/**
+	 * Wraps capabilities into a capability provider
+	 * @param <T>
+	 * @param capabilities
+	 * @return
+	 */
+	@SafeVarargs
+	static <T> CapabilityProvider<T> of(T... capabilities) {
+		return new CapabilityProvider<T>() {
+
+			@Override
+			public Flux<T> getPublisher() {
+				return Flux.just(capabilities);
+			}
+		};
+	}
 
 }

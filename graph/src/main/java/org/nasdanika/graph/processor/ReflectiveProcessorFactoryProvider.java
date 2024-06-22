@@ -142,7 +142,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected P createProcessor(
+	public P createProcessor(
 			ProcessorConfig config, 
 			boolean parallel, 
 			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,

@@ -11,9 +11,9 @@ import org.nasdanika.graph.Element;
 
 /**
  * Annotation for a method creating an {@link Element} processor.
- * The method shall have 5 parameters compatible with:
+ * The method shall have 4 parameters compatible with:
  * <pre>
-NodeProcessorConfig&lt;H,E&gt; config, 
+ProcessorConfig&lt;H,E&gt; config, 
 boolean parallel, 
 BiConsumer&lt;Element,BiConsumer&lt;ProcessorInfo&lt;Object&gt;,ProgressMonitor&gt;&gt; infoProvider,
 ProgressMonitor progressMonitor

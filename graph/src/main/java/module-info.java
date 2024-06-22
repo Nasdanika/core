@@ -1,3 +1,6 @@
+import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.graph.processor.ReflectiveProcessorServiceFactory;
+
 module org.nasdanika.graph {
 
 	requires transitive org.nasdanika.ncore;
@@ -12,5 +15,7 @@ module org.nasdanika.graph {
 	
 	opens org.nasdanika.graph.emf;
 	opens org.nasdanika.graph.processor.emf;
+	
+	provides CapabilityFactory with ReflectiveProcessorServiceFactory;
 	
 }
