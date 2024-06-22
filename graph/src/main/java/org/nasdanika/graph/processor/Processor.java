@@ -52,5 +52,10 @@ public @interface Processor {
 	 * @return If true, handlers, children, and endpoints wired to annotated methods and fields are removed from wired maps for handlers, children, and endpoints  
 	 */
 	boolean hideWired() default true;
+	
+	/**
+	 * @return If true, reflection is used to wire endpoints, handlers, registry entries and other configuration.  
+	 */
+	boolean wire() default true;
 
 }

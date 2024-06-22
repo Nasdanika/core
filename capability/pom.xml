@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2024.5.1</version>
+	    <version>2024.6.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>capability</artifactId>
@@ -20,7 +20,7 @@
 		<dependency>
 		    <groupId>io.projectreactor</groupId>
 		    <artifactId>reactor-core</artifactId>
-		    <version>3.6.4</version>
+		    <version>3.6.7</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -81,6 +81,16 @@ public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapa
 		 */
 		int priority() default 0;
 		
+		/**
+		 * @return If true, handlers, children, and endpoints wired to annotated methods and fields are removed from wired maps for handlers, children, and endpoints  
+		 */
+		boolean hideWired() default true;
+		
+		/**
+		 * @return If true, reflection is used to wire endpoints, handlers, registry entries and other configuration.  
+		 */
+		boolean wire() default true;
+		
 	}
 	
 	protected interface ProcessorCapabilityProvider<T> extends SupercedingCapabilityProvider<T> {
@@ -226,6 +236,16 @@ public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapa
 		return serviceRequirement.requirement() == null || parameterTypes[3].isInstance(serviceRequirement.requirement());
 	}
 	
+	protected ReflectiveProcessorWirer<P, ?, ?> processorWirer = new ReflectiveProcessorWirer<>();
+	
+	/**
+	 * Override to return true to perform wiring in multiple threads.
+	 * @return
+	 */
+	protected boolean isParallel() {
+		return false;
+	}
+	
 	protected CapabilityProvider<P> create(
 			Reflector.AnnotatedElementRecord aer,
 			Class<P> processorType,
@@ -258,6 +278,17 @@ public abstract class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapa
 		
 		if (processor == null) {
 			return null;
+		}
+		
+		if (processorWirer != null && processorFactory.wire()) {
+			processorWirer.wireProcessor(
+					serviceRequirement.config(), 
+					processor, 
+					processorFactory.hideWired(),
+					isParallel(),
+					serviceRequirement.infoProvider(),
+					serviceRequirement.endpointWiringStageConsumer(),
+					progressMonitor);
 		}
 		
 		return new ProcessorCapabilityProvider<P>() {
