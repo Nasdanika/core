@@ -19,6 +19,7 @@ public class ReflectiveProcessorFactory {
 			boolean parallel, 
 			Function<Element,CompletionStage<ProcessorInfo<Object>>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
+			Function<ProgressMonitor, Object> next,
 			ProgressMonitor progressMonitor) {
 
 		return null;

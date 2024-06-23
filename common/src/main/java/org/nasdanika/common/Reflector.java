@@ -100,7 +100,7 @@ public class Reflector {
 	 * @author Pavel
 	 *
 	 */
-	public class AnnotatedElementRecord implements Predicate<Object> {
+	public class AnnotatedElementRecord implements Predicate<Object>, Invocable {
 		
 		private Predicate<Object> predicate;
 		private Object target;
@@ -170,6 +170,7 @@ public class Reflector {
 			return Reflector.this.get(target, annotatedElement);
 		}
 
+		@Override
 		public Object invoke(Object... args) {
 			return Reflector.this.invokeMethod(target, (Method) annotatedElement, args);
 		}

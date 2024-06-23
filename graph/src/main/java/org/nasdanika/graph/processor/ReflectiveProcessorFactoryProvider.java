@@ -8,12 +8,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 
@@ -69,7 +70,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 		};
 	}
 	
-	protected boolean matchFactoryMethod(ProcessorConfig elementProcessorConfig, Method method) {
+	protected boolean matchFactoryMethod(ProcessorConfig elementProcessorConfig, Method method, Object target) {
 		if (Modifier.isAbstract(method.getModifiers())) {
 			return false;
 		}
@@ -84,14 +85,16 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 			return false;
 		}
 		
-		if (method.getParameterCount() != 4 ||
+		if (method.getParameterCount() != 5 ||
 				!method.getParameterTypes()[1].isAssignableFrom(boolean.class) ||
 				!method.getParameterTypes()[2].isAssignableFrom(BiConsumer.class) ||
-				!method.getParameterTypes()[3].isAssignableFrom(ProgressMonitor.class)) {
-			throw new IllegalArgumentException("Factory method shall have 4 parameters compatible with: "
+				!method.getParameterTypes()[3].isAssignableFrom(Function.class) ||				
+				!method.getParameterTypes()[4].isAssignableFrom(ProgressMonitor.class)) {
+			throw new IllegalArgumentException("Factory method shall have 5 parameters compatible with: "
 					+ "ProcessorConfig config, "
 					+ "boolean parallel, "
 					+ "BiConsumer<Element, BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider, "
+					+ "Function<ProgressMonitor, P> next"
 					+ "ProgressMonitor progressMonitor: " + method);
 		}
 		
@@ -99,7 +102,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 			return false;
 		}
 		
-		return matchPredicate(elementProcessorConfig.getElement(), elementProcessorAnnotation.value());
+		return evaluatePredicate(elementProcessorConfig.getElement(), elementProcessorAnnotation.value(), Collections.singletonMap("target", target));
 	}
 
 	protected int compareProcessorMethods(Method a, Method b) {
@@ -141,7 +144,6 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 		return a.getName().compareTo(b.getName());
 	}
 	
-	@SuppressWarnings("unchecked")
 	public P createProcessor(
 			ProcessorConfig config, 
 			boolean parallel, 
@@ -150,34 +152,68 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 			ProgressMonitor progressMonitor) {
 		
 		// TODO - progress steps.
-		Optional<AnnotatedElementRecord> match = (parallel ? annotatedElementRecords.parallelStream() : annotatedElementRecords.stream())
-			.filter(r -> r.test(config.getElement()) && r.getAnnotatedElement() instanceof Method && matchFactoryMethod(config, (Method) r.getAnnotatedElement()))
-			.sorted((a, b) -> compareProcessorMethods((Method) a.getAnnotatedElement(), (Method) b.getAnnotatedElement()))
-			.findFirst();
+		Invocable match = (parallel ? annotatedElementRecords.parallelStream() : annotatedElementRecords.stream())
+			.filter(r -> r.test(config.getElement()) && r.getAnnotatedElement() instanceof Method && matchFactoryMethod(config, (Method) r.getAnnotatedElement(), r.getTarget()))
+			.sorted((a, b) -> compareProcessorMethods((Method) b.getAnnotatedElement(), (Method) a.getAnnotatedElement())) // Reverse comparison for reduction			
+			.map(aer -> bind(aer, config, parallel, infoProvider, endpointWiringStageConsumer))
+			.reduce(null, this::chain);
 		
-		if (match.isEmpty()) {
+		if (match == null) {
 			return null;			
 		}
 		
-		AnnotatedElementRecord matchedRecord = match.get();
-		Method method = (Method) matchedRecord.getAnnotatedElement();
-		P processor = (P) matchedRecord.invoke(config, parallel, infoProvider, progressMonitor);
-		if (processor == null) {
-			return processor;			
-		}		
-		Processor elementProcessorAnnotation = method.getAnnotation(Processor.class);
-		if (elementProcessorAnnotation.wire()) {
+		@SuppressWarnings("unchecked")
+		P processor = (P) match.invoke(progressMonitor);
+		if (processor != null) {
 			wireProcessor(
 					config, 
 					processor, 
-					elementProcessorAnnotation.hideWired(), 
+					true, 
 					parallel, 
 					infoProvider, 
 					endpointWiringStageConsumer, 
 					progressMonitor);
 		}
 		
-		return (P) processor;
+		return processor;
+	}
+	
+	/**
+	 * @param next Can be null
+	 * @param prev 
+	 * @return
+	 */
+	protected Invocable chain(Invocable next, Invocable prev) {
+		Function<ProgressMonitor, Object> nextWrapper = next == null ? null : progressMonitor -> next.invoke(progressMonitor);
+		return prev.bind(nextWrapper);		
+	}
+	
+	/**
+	 * Invocable which takes two arguments - Function<ProgressMonitor, P> next, ProgressMonitor progressMonitor and returns unwired processor 
+	 * @param aer
+	 * @param config
+	 * @param parallel
+	 * @param infoProvider
+	 * @param endpointWiringStageConsumer
+	 * @param progressMonitor
+	 * @return
+	 */
+	protected Invocable bind(
+			AnnotatedElementRecord aer,
+			ProcessorConfig config, 
+			boolean parallel, 
+			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer) {
+		
+		return new Invocable() {
+			
+			@Override
+			public Object invoke(Object... args) {
+				return aer.bind(config, parallel, infoProvider).invoke(args);
+			}
+			
+		};
+		
 	}
 	
 }

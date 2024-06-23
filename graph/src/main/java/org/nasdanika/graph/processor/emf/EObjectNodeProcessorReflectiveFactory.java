@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -63,6 +64,7 @@ public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
 			NodeProcessorConfig<H,E> config, 
 			boolean parallel, 
 			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+			Function<ProgressMonitor, Object> next,			
 			ProgressMonitor progressMonitor) {
 		EObject eObj = ((EObjectNode) config.getElement()).get();
 		

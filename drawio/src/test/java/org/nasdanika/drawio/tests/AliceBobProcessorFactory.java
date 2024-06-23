@@ -2,7 +2,6 @@ package org.nasdanika.drawio.tests;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -21,6 +20,7 @@ public class AliceBobProcessorFactory {
 			NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
 			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+			Function<ProgressMonitor, Object> next,
 			ProgressMonitor progressMonitor) {
 		return new AliceProcessor();
 	}	
@@ -30,6 +30,7 @@ public class AliceBobProcessorFactory {
 			NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
 			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+			Function<ProgressMonitor, Object> next,
 			ProgressMonitor progressMonitor) {
 		return new BobProcessor();
 	}
@@ -39,6 +40,7 @@ public class AliceBobProcessorFactory {
 			NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
 			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+			Function<ProgressMonitor, Object> next,
 			ProgressMonitor progressMonitor) {
 		return new BobHouseProcessor();
 	}
@@ -51,6 +53,7 @@ public class AliceBobProcessorFactory {
 				NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 				boolean parallel, 
 				BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+				Function<ProgressMonitor, Object> next,
 				ProgressMonitor progressMonitor) {
 			return question -> "Answer to " + question;
 		}
@@ -62,7 +65,8 @@ public class AliceBobProcessorFactory {
 			ConnectionProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
 			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
-			ProgressMonitor progressMonitor			) {
+			Function<ProgressMonitor, Object> next,
+			ProgressMonitor progressMonitor) {
 		return new AliceBobConnectionProcessor();
 	}
 	

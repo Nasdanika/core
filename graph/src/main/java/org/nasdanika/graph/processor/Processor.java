@@ -11,11 +11,12 @@ import org.nasdanika.graph.Element;
 
 /**
  * Annotation for a method creating an {@link Element} processor.
- * The method shall have 4 parameters compatible with:
+ * The method shall have 5 parameters compatible with:
  * <pre>
 ProcessorConfig&lt;H,E&gt; config, 
 boolean parallel, 
 BiConsumer&lt;Element,BiConsumer&lt;ProcessorInfo&lt;Object&gt;,ProgressMonitor&gt;&gt; infoProvider,
+Function<ProgressMonitor,P> next,
 ProgressMonitor progressMonitor
 </pre>
  *  The first parameter type shall be assignable from 
@@ -47,15 +48,16 @@ public @interface Processor {
 	 * @return
 	 */
 	Class<? extends Element> type() default Element.class; 
-	
-	/**
-	 * @return If true, handlers, children, and endpoints wired to annotated methods and fields are removed from wired maps for handlers, children, and endpoints  
-	 */
-	boolean hideWired() default true;
-	
-	/**
-	 * @return If true, reflection is used to wire endpoints, handlers, registry entries and other configuration.  
-	 */
-	boolean wire() default true;
+
+// Too complex with chaining, always wiring and hiding wired	
+//	/**
+//	 * @return If true, handlers, children, and endpoints wired to annotated methods and fields are removed from wired maps for handlers, children, and endpoints  
+//	 */
+//	boolean hideWired() default true;
+//	
+//	/**
+//	 * @return If true, reflection is used to wire endpoints, handlers, registry entries and other configuration.  
+//	 */
+//	boolean wire() default true;
 
 }
