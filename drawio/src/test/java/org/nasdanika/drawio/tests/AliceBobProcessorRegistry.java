@@ -1,6 +1,5 @@
 package org.nasdanika.drawio.tests;
 
-import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.graph.processor.RegistryEntry;
 
 public class AliceBobProcessorRegistry {
