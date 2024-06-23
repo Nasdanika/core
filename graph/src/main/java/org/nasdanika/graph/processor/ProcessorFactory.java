@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
@@ -75,7 +76,11 @@ public class ProcessorFactory<P> {
 	public Map<Element, ProcessorInfo<P>> createProcessors(Collection<ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
 		record ProcessorInfoCompletableFutureRecord<P>(ProcessorConfig config, CompletableFuture<ProcessorInfo<P>> processorInfoCompletableFuture) {}
 		Map<Element, ProcessorInfoCompletableFutureRecord<P>> processors = Collections.synchronizedMap(new LinkedHashMap<>());
-		configs.forEach(c -> processors.put(c.getElement(), new ProcessorInfoCompletableFutureRecord<P>(c, new CompletableFuture<ProcessorInfo<P>>())));
+		configs
+			.stream()
+			.filter(Objects::nonNull)
+			.forEach(c -> processors.put(c.getElement(), new ProcessorInfoCompletableFutureRecord<P>(c, new CompletableFuture<ProcessorInfo<P>>())));
+		
 		Stream<ProcessorInfoCompletableFutureRecord<P>> recordStream = processors.values().stream();
 		if (parallel) {
 			recordStream = recordStream.parallel();
