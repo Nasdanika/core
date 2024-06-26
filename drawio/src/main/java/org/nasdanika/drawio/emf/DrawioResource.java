@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -17,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.nasdanika.common.NasdanikaException;
+import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.persistence.Marker;
@@ -29,15 +31,28 @@ import org.xml.sax.SAXException;
  */
 public class DrawioResource extends ResourceImpl {
 	
+	private boolean png;
+	
+	protected static boolean isPng(URI uri) {
+		return uri != null && !Util.isBlank(uri.lastSegment()) && uri.lastSegment().toLowerCase().endsWith(".png");
+	}
+	
 	public DrawioResource(URI uri) {
+		this(uri, isPng(uri));
+	}
+
+	public DrawioResource(URI uri, boolean png) {
 		super(uri);
+		this.png = png;
 	}
 		
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		try {
-			Document document = loadDocument(inputStream);
-			getContents().add(document.toModelDocument(getFactory(), getMarkerFactory()));
+			Iterable<Document> documents = loadDocuments(inputStream);
+			for (Document document: documents) {
+				getContents().add(document.toModelDocument(getFactory(), getMarkerFactory()));
+			}
 		} catch (ParserConfigurationException | SAXException | TransformerException e) {
 			throw new NasdanikaException(e);
 		}
@@ -60,8 +75,11 @@ public class DrawioResource extends ResourceImpl {
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */
-	protected Document loadDocument(InputStream inputStream) throws IOException, ParserConfigurationException, SAXException {
-		return Document.load(inputStream, getURI().trimFragment(), getURIHandler(), this::getProperty);
+	protected Iterable<Document> loadDocuments(InputStream inputStream) throws IOException, ParserConfigurationException, SAXException {
+		if (png) {
+			return Document.loadFromPngMetadata(inputStream, getURI().trimFragment(), getURIHandler(), this::getProperty);			
+		}
+		return Collections.singleton(Document.load(inputStream, getURI().trimFragment(), getURIHandler(), this::getProperty));
 	}
 	
 	@Override

@@ -2,17 +2,19 @@ package org.nasdanika.emf;
 
 import java.net.URL;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.emf.SemanticDrawioFactory;
 import org.nasdanika.emf.persistence.EObjectLoader;
+import org.nasdanika.ncore.util.NcoreUtil;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marked;
 import org.nasdanika.persistence.ObjectLoader;
@@ -108,6 +110,28 @@ public abstract class SpecLoadingDrawioFactory<S extends EObject> extends Semant
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Override to de-dup epackages if needed.
+	 * @param ePackage
+	 * @return
+	 */
+	protected String getEPackageName(EPackage ePackage) {
+		return NcoreUtil.getNasdanikaAnnotationDetail(ePackage, EObjectLoader.LOAD_KEY, ePackage.getName());
+	}
+	
+	/**
+	 * Returns a map with registered packages from resource set.
+	 */
+	@Override
+	protected Map<String, EPackage> getEPackages() {
+		Map<String, EPackage> ret = new LinkedHashMap<>();
+		for (Object ep: resourceSet.getPackageRegistry().values()) {
+			EPackage ePackage = (EPackage) ep;
+			ret.put(getEPackageName(ePackage), ePackage);
+		}
+		return ret;
 	}
 	
 }
