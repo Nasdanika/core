@@ -11,6 +11,10 @@ import javax.xml.transform.TransformerException;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.capability.CapabilityLoader;
+import org.nasdanika.capability.CapabilityProvider;
+import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Page;
@@ -25,7 +29,29 @@ import org.xml.sax.SAXException;
  */
 public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractDrawioFactory<S> {
 	
+	/**
+	 * Service/capability interface for filtering representation elements
+	 */
+	public interface RepresentationElementFilter {
+		
+		void filterRepresentationElement(
+				org.nasdanika.drawio.ModelElement representationElement, 
+				EObject semanticElement,
+				Map<EObject, EObject> registry,
+				ProgressMonitor progressMonitor);		
+	}
+	
 	public static final String SEMANTIC_UUID_KEY = "semantic-uuid";
+	
+	protected CapabilityLoader capabilityLoader;
+	
+	public SemanticDrawioFactory() {
+		this(new CapabilityLoader());
+	}
+	
+	public SemanticDrawioFactory(CapabilityLoader capabilityLoader) {
+		this.capabilityLoader = capabilityLoader;
+	}
 		
 	@Override
 	protected void addRepresentationPage(
@@ -144,7 +170,24 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 				.filter(t -> !Util.isBlank(t))
 				.findFirst()
 				.ifPresent(representationElement::setTooltip);					
-		}						
+		}	
+		
+		// Capabilities
+		if (capabilityLoader != null) {
+			Requirement<? extends SemanticDrawioFactory<S>, RepresentationElementFilter> requirement = createRepresentationElementFilterRequirement();
+			Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
+			for (CapabilityProvider<Object> cp: cpi) {
+				cp.getPublisher().subscribe(filter -> ((RepresentationElementFilter) filter).filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor));
+			}
+		}
+	}
+
+	protected Requirement<? extends SemanticDrawioFactory<S>, RepresentationElementFilter> createRepresentationElementFilterRequirement() {
+		return ServiceCapabilityFactory.createRequirement(RepresentationElementFilter.class, null, this);
+	}
+	
+	protected CapabilityLoader getCapabilityLoader() {
+		return capabilityLoader;
 	}
 
 	protected String getSemanticUUIDPropertyName() {
