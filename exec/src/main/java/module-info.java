@@ -15,6 +15,9 @@ module org.nasdanika.exec {
 	exports org.nasdanika.exec.util;
 	
 	requires transitive org.nasdanika.emf;
+	requires info.picocli;
+	
+	opens org.nasdanika.exec.util to info.picocli;
 	
 	provides CapabilityFactory with
 		ExecEPackageResourceSetCapabilityFactory,

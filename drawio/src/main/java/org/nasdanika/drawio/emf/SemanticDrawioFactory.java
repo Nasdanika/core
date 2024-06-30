@@ -2,7 +2,10 @@ package org.nasdanika.drawio.emf;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,7 +41,17 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 				org.nasdanika.drawio.ModelElement representationElement, 
 				EObject semanticElement,
 				Map<EObject, EObject> registry,
-				ProgressMonitor progressMonitor);		
+				ProgressMonitor progressMonitor);	
+		
+	}
+
+	/**
+	 * Service/capability interface for loading properties.
+	 */
+	public interface PropertySource {
+		
+		Optional<String> getProperty(String name, URI sourceURI);
+		
 	}
 	
 	public static final String SEMANTIC_UUID_KEY = "semantic-uuid";
@@ -58,14 +71,13 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 			org.nasdanika.ncore.ModelElement semanticModelElement, 
 			org.nasdanika.drawio.model.Page modelPage,
 			Map<EObject, EObject> registry,
-			ProgressMonitor progressMonitor) {
-		
+			ProgressMonitor progressMonitor) {		
 		
 		org.nasdanika.drawio.model.Document modelDocument = (org.nasdanika.drawio.model.Document) modelPage.eContainer();
 		String source = modelDocument.getSource();
 		URI sourceURI = URI.createURI(source);		
 		try {
-			org.nasdanika.drawio.Document sourceDocument = org.nasdanika.drawio.Document.load(sourceURI, getUriHandler(), this::getProperty);
+			org.nasdanika.drawio.Document sourceDocument = org.nasdanika.drawio.Document.load(sourceURI, getUriHandler(), name -> getProperty(name, sourceURI, progressMonitor));
 			Z: for (Page page: sourceDocument.getPages()) {
 				if (page.getId().equals(modelPage.getId())) {
 					page.accept(pageElement -> filterRepresentation(pageElement, modelPage, registry, progressMonitor));
@@ -92,8 +104,26 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 		}
 	}
 
-	protected String getProperty(String name) {
-		return null;
+	protected String getProperty(String name, URI sourceURI, ProgressMonitor progressMonitor) {
+		if (capabilityLoader != null) {
+			Requirement<? extends SemanticDrawioFactory<S>, PropertySource> requirement = createPropertySourceRequirement();
+			Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
+			Collection<Object> propertySources = new ArrayList<>();
+			for (CapabilityProvider<Object> cp: cpi) {				
+				cp.getPublisher().subscribe(propertySources::add);
+			}
+			for (Object ps: propertySources) {
+				Optional<String> pOpt = ((PropertySource) ps).getProperty(name, sourceURI);
+				if (pOpt != null) {
+					return pOpt.orElse(null);
+				}
+			}
+		}
+		return null; 
+	}
+	
+	protected Requirement<? extends SemanticDrawioFactory<S>, PropertySource> createPropertySourceRequirement() {
+		return ServiceCapabilityFactory.createRequirement(PropertySource.class, null, this);
 	}
 
 	protected Function<URI, InputStream> getUriHandler() {

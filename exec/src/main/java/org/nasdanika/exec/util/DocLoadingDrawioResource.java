@@ -115,10 +115,11 @@ public class DocLoadingDrawioResource extends ResourceImpl {
 			protected Iterable<Entry<String, Object>> getVariables(EObject context) {
 				return DocLoadingDrawioResource.this.getVariables(context);
 			}
-						
+			
 			@Override
-			protected String getProperty(String name) {
-				return DocLoadingDrawioResource.this.getProperty(name);
+			protected String getProperty(String name, URI sourceURI, ProgressMonitor progressMonitor) {
+				String value = DocLoadingDrawioResource.this.getProperty(name);
+				return value == null ? super.getProperty(name,  sourceURI, progressMonitor) : value;
 			}
 			
 		};

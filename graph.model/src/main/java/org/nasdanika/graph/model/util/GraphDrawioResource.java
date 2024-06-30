@@ -115,9 +115,9 @@ public class GraphDrawioResource extends ResourceImpl {
 			protected Iterable<Entry<String, Object>> getVariables(EObject context) {
 				return GraphDrawioResource.this.getVariables(context);
 			}
-						
+			
 			@Override
-			protected String getProperty(String name) {
+			protected String getProperty(String name, URI sourceURI, ProgressMonitor progressMonitor) {
 				return GraphDrawioResource.this.getProperty(name);
 			}
 			

@@ -43,5 +43,10 @@
 			<artifactId>emf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>cli</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -69,7 +69,7 @@ public class DocLoadingDrawioResourceFactory implements Resource.Factory {
 		};
 	}
 	
-	protected String getProperty(DocLoadingDrawioResource graphDrawioResource, String name) {
+	protected String getProperty(DocLoadingDrawioResource drawioResource, String name) {
 		return null;
 	}
 
