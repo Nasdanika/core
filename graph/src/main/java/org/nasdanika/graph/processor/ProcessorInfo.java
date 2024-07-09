@@ -1,7 +1,5 @@
 package org.nasdanika.graph.processor;
 
-import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -10,7 +8,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 
-public class ProcessorInfo<P> implements ProcessorConfig {
+public class ProcessorInfo<P> extends ProcessorConfigFilter<ProcessorConfig> {
 	
 	/**
 	 * Functional interface for processor/info creation.
@@ -27,36 +25,15 @@ public class ProcessorInfo<P> implements ProcessorConfig {
 				ProgressMonitor progressMonitor);		
 	}
 	
-	protected ProcessorConfig config;
 	private P processor;
 
 	public ProcessorInfo(ProcessorConfig config, P processor) {
-		this.config = Objects.requireNonNull(config);
+		super(config);
 		this.processor = processor;
 	}
 	
 	public P getProcessor() {
 		return processor;
-	}
-
-	@Override
-	public Element getElement() {
-		return config.getElement();
-	}
-
-	@Override
-	public Map<Element, ProcessorConfig> getChildProcessorConfigs() {
-		return config.getChildProcessorConfigs();
-	}
-
-	@Override
-	public ProcessorConfig getParentProcessorConfig() {
-		return config.getParentProcessorConfig();
-	}
-
-	@Override
-	public Map<Element, ProcessorConfig> getRegistry() {
-		return config.getRegistry();
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
