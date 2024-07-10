@@ -119,7 +119,7 @@
 								
 								<!-- Core -->
 								<link>https://javadoc.io/doc/org.nasdanika.core/drawio/latest/</link>
-								<link>https://javadoc.io/doc/org.nasdanika.core/drawio.model/latest/</link>
+								<link>https://javadoc.io/doc/org.nasdanika.core/drawio-model/latest/</link>
 								<link>https://javadoc.io/doc/org.nasdanika.core/diagram/latest/</link>
 								<link>https://javadoc.io/doc/org.nasdanika.core/common/latest/</link>
 								<link>https://javadoc.io/doc/org.nasdanika.core/persistence/latest/</link>
