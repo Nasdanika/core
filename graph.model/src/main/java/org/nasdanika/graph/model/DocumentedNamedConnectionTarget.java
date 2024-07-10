@@ -8,10 +8,6 @@ package org.nasdanika.graph.model;
  * A representation of the model object '<em><b>Documented Named Connection Target</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * Connection target with a name and documentation
- * <!-- end-model-doc -->
- *
  *
  * @see org.nasdanika.graph.model.ModelPackage#getDocumentedNamedConnectionTarget()
  * @model

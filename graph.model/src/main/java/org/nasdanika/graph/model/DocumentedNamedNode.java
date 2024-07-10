@@ -8,10 +8,6 @@ package org.nasdanika.graph.model;
  * A representation of the model object '<em><b>Documented Named Node</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * Node with a name and documentation
- * <!-- end-model-doc -->
- *
  *
  * @see org.nasdanika.graph.model.ModelPackage#getDocumentedNamedNode()
  * @model

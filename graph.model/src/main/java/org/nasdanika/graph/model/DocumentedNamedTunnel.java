@@ -8,10 +8,6 @@ package org.nasdanika.graph.model;
  * A representation of the model object '<em><b>Documented Named Tunnel</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * Tunnel with a name and documentation
- * <!-- end-model-doc -->
- *
  *
  * @see org.nasdanika.graph.model.ModelPackage#getDocumentedNamedTunnel()
  * @model

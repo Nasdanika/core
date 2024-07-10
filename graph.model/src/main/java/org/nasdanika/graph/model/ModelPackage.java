@@ -21,9 +21,6 @@ import org.nasdanika.ncore.NcorePackage;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * <!-- begin-model-doc -->
- * Base classes for graph-like models such as process/flow and architecture models
- * <!-- end-model-doc -->
  * @see org.nasdanika.graph.model.ModelFactory
  * @model kind="package"
  *        annotation="urn:org.nasdanika load-key='graph'"

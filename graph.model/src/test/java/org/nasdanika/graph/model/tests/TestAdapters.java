@@ -60,7 +60,7 @@ public class TestAdapters {
 				
 		// Creating adapters
 		GraphAdapterFactory graphAdapterFactory = new GraphAdapterFactory();  
-		Transformer<EObject,ElementAdapter<?>> graphFactory = new Transformer<>(graphAdapterFactory); // Reflective node creation using @ElementFactory annotation
+		Transformer<EObject,ElementAdapter<?>> graphFactory = new Transformer<>(graphAdapterFactory); // Reflective creation
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		Map<EObject, ElementAdapter<?>> registry = graphFactory.transform(Collections.singleton(graph), false, progressMonitor);
 		System.out.println("Registry size: " + registry.size());
