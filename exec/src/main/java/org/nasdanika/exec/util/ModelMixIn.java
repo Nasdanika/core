@@ -98,7 +98,7 @@ public class ModelMixIn {
 		for (EObject result: results) {
 			return result;
 		}
-		throw new ParameterException(spec.commandLine(), "Architecture model not found for URI: " + modelURI);
+		throw new ParameterException(spec.commandLine(), "Model not found for URI: " + modelURI);
 	}
 
 }

@@ -56,13 +56,13 @@ public class EObjectGraphFactory {
 		new EReferenceConnection(source, target, reference, index, referencePath(source, target, reference, index));
 	}
 	
-	protected boolean isCompactPath() {
+	protected boolean isCompactPath(EObjectNode source, EObjectNode target, EReference reference, int index) {
 		return false;
 	}
 	
 	protected String referencePath(EObjectNode source, EObjectNode target, EReference reference, int index) {
 		if (reference.isMany()) {
-			if (isCompactPath()) {
+			if (isCompactPath(source, target, reference, index)) {
 				return Integer.toString(index, Character.MAX_RADIX);
 			}
 			
