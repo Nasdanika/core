@@ -4,24 +4,19 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2024.7.1</version>
+	    <version>2024.7.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
-	<artifactId>http</artifactId>
+	<artifactId>ncore-gen</artifactId>
 	<packaging>jar</packaging>
-	<name>HTTP</name>
-	<description>HTTP Server CLI server and mix-in</description>
+	<name>Nasdanika Ncore Generation Adapters</name>
+	<url>https://docs.nasdanika.org/modules/core/modules/exec/modules/gen/index.html</url>
 	
-	<dependencies>		
+	<dependencies>
 		<dependency>
-			<groupId>org.nasdanika.core</groupId>
-			<artifactId>cli</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>emf</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>io.projectreactor.netty</groupId>
-		    <artifactId>reactor-netty-http</artifactId>
-		    <version>1.1.20</version>
 		</dependency>
 	</dependencies>
 </project>

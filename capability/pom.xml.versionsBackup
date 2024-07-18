@@ -4,24 +4,23 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2024.7.1</version>
+	    <version>2024.7.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
-	<artifactId>http</artifactId>
+	<artifactId>capability</artifactId>
 	<packaging>jar</packaging>
-	<name>HTTP</name>
-	<description>HTTP Server CLI server and mix-in</description>
-	
+	<name>Capability</name>
+	<description>Capability provider/loader framework</description>
 	<dependencies>		
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
-			<artifactId>cli</artifactId>
+			<artifactId>common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>io.projectreactor.netty</groupId>
-		    <artifactId>reactor-netty-http</artifactId>
-		    <version>1.1.20</version>
+		    <groupId>io.projectreactor</groupId>
+		    <artifactId>reactor-core</artifactId>
+		    <version>3.6.7</version>
 		</dependency>
 	</dependencies>
 </project>

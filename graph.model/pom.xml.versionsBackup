@@ -5,13 +5,13 @@
 	<parent>
 		<artifactId>parent</artifactId>
 		<groupId>org.nasdanika.core</groupId>
-		<version>2024.7.1</version>
+		<version>2024.7.0</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>drawio-model</artifactId>
+	<artifactId>graph-model</artifactId>
 	<packaging>jar</packaging>
-	<name>Ecore Model of Drawio diagrams</name>
-	<description>Bi-directional data exchange with Drawio diagrams.</description>
+	<name>Base Ecore Model for graphs</name>
+	<description>Provides different types of nodes and connections</description>
 	<build>
 		<plugins>
 			<plugin>
@@ -39,9 +39,19 @@
 
 	<dependencies>	
 		<dependency>
-		    <groupId>org.nasdanika.core</groupId>
-		    <artifactId>ncore</artifactId>
+		    <groupId>${project.groupId}</groupId>
+		    <artifactId>drawio-model</artifactId>
 		    <version>${project.version}</version>
 		</dependency> 		
+		<dependency>
+		    <groupId>${project.groupId}</groupId>
+		    <artifactId>exec</artifactId>
+		    <version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>capability</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -5,13 +5,13 @@
 	<parent>
 		<artifactId>parent</artifactId>
 		<groupId>org.nasdanika.core</groupId>
-		<version>2024.7.1</version>
+		<version>2024.7.0</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>drawio-model</artifactId>
+	<artifactId>exec</artifactId>
 	<packaging>jar</packaging>
-	<name>Ecore Model of Drawio diagrams</name>
-	<description>Bi-directional data exchange with Drawio diagrams.</description>
+	<name>Nasdanika Execution Model</name>
+	<url>https://docs.nasdanika.org/modules/core/modules/exec/modules/model/index.html</url>
 	<build>
 		<plugins>
 			<plugin>
@@ -37,11 +37,16 @@
 		</plugins>
 	</build>
 
-	<dependencies>	
+	<dependencies>
 		<dependency>
-		    <groupId>org.nasdanika.core</groupId>
-		    <artifactId>ncore</artifactId>
-		    <version>${project.version}</version>
-		</dependency> 		
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>emf</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>cli</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
