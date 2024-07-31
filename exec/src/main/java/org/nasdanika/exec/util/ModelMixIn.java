@@ -33,7 +33,7 @@ public class ModelMixIn {
 		
 	@Option(
 		names = {"-f", "--file"},
-		description = "Mdel parameter is a file path")
+		description = "Model parameter is a file path")
 	private boolean isFile;
 	
 	@Spec CommandSpec spec;
@@ -47,7 +47,7 @@ public class ModelMixIn {
 			modelURI = URI.createFileURI(modelFile.getAbsolutePath()).appendFragment("/");				
 		} else {
 			URI baseURI = URI.createFileURI(currentDir.getAbsolutePath()).appendSegment("");
-			 modelURI = URI.createURI(model).resolve(baseURI);
+			modelURI = URI.createURI(model).resolve(baseURI);
 		}
 		
 		NcoreResourceSet resourceSet = new NcoreResourceSet();
