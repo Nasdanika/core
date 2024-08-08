@@ -76,9 +76,19 @@ public class ModelSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ModelPackage.LINK_TARGET: {
+				LinkTarget linkTarget = (LinkTarget)theEObject;
+				T result = caseLinkTarget(linkTarget);
+				if (result == null) result = caseMarked(linkTarget);
+				if (result == null) result = caseStringIdentity(linkTarget);
+				if (result == null) result = caseIMarked(linkTarget);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ModelPackage.PAGE: {
 				Page page = (Page)theEObject;
 				T result = casePage(page);
+				if (result == null) result = caseLinkTarget(page);
 				if (result == null) result = caseMarked(page);
 				if (result == null) result = caseStringIdentity(page);
 				if (result == null) result = caseIMarked(page);
@@ -104,6 +114,7 @@ public class ModelSwitch<T> extends Switch<T> {
 			case ModelPackage.MODEL_ELEMENT: {
 				ModelElement modelElement = (ModelElement)theEObject;
 				T result = caseModelElement(modelElement);
+				if (result == null) result = caseLinkTarget(modelElement);
 				if (result == null) result = caseMarked(modelElement);
 				if (result == null) result = caseStringIdentity(modelElement);
 				if (result == null) result = caseIMarked(modelElement);
@@ -114,6 +125,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				Root root = (Root)theEObject;
 				T result = caseRoot(root);
 				if (result == null) result = caseModelElement(root);
+				if (result == null) result = caseLinkTarget(root);
 				if (result == null) result = caseMarked(root);
 				if (result == null) result = caseStringIdentity(root);
 				if (result == null) result = caseIMarked(root);
@@ -124,6 +136,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				Layer layer = (Layer)theEObject;
 				T result = caseLayer(layer);
 				if (result == null) result = caseModelElement(layer);
+				if (result == null) result = caseLinkTarget(layer);
 				if (result == null) result = caseMarked(layer);
 				if (result == null) result = caseStringIdentity(layer);
 				if (result == null) result = caseIMarked(layer);
@@ -134,6 +147,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				LayerElement layerElement = (LayerElement)theEObject;
 				T result = caseLayerElement(layerElement);
 				if (result == null) result = caseModelElement(layerElement);
+				if (result == null) result = caseLinkTarget(layerElement);
 				if (result == null) result = caseMarked(layerElement);
 				if (result == null) result = caseStringIdentity(layerElement);
 				if (result == null) result = caseIMarked(layerElement);
@@ -146,6 +160,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLayer(node);
 				if (result == null) result = caseLayerElement(node);
 				if (result == null) result = caseModelElement(node);
+				if (result == null) result = caseLinkTarget(node);
 				if (result == null) result = caseMarked(node);
 				if (result == null) result = caseStringIdentity(node);
 				if (result == null) result = caseIMarked(node);
@@ -157,6 +172,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				T result = caseConnection(connection);
 				if (result == null) result = caseLayerElement(connection);
 				if (result == null) result = caseModelElement(connection);
+				if (result == null) result = caseLinkTarget(connection);
 				if (result == null) result = caseMarked(connection);
 				if (result == null) result = caseStringIdentity(connection);
 				if (result == null) result = caseIMarked(connection);
@@ -204,6 +220,21 @@ public class ModelSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDocument(Document object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Link Target</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Link Target</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLinkTarget(LinkTarget object) {
 		return null;
 	}
 

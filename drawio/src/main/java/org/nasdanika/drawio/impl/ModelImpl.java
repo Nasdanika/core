@@ -215,7 +215,7 @@ class ModelImpl extends ElementImpl implements Model {
 	@Override
 	public URI getURI() {
 		URI pageURI = getPage().getURI();
-		return pageURI == null ? URI.createURI("model") : pageURI.appendSegment("model");
+		return pageURI == null ? URI.createURI("model") : pageURI.appendFragment(pageURI.fragment() + "/model");
 	}
 
 	@Override

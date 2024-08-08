@@ -50,9 +50,11 @@ import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Mapper;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SetterFeatureMapper;
+import org.nasdanika.common.SourceRecord;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.model.Connection;
 import org.nasdanika.drawio.model.Document;
+import org.nasdanika.drawio.model.LinkTarget;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.drawio.model.Node;
 import org.nasdanika.drawio.model.Page;
@@ -74,7 +76,6 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeLocator;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
-import org.nasdanika.common.SourceRecord;
 
 /**
  * Base class for classes which map/transform Drawio model to a specific semantic model. For example, architecture model or flow/process model.
@@ -313,6 +314,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 				.map(Map.Entry::getValue)
 				.map(ep -> findEClassifier(ep, type.substring(dotIdx + 1)))
 				.filter(Objects::nonNull)
+				.sorted((a, b) -> a.getEPackage().getNsURI().compareTo(b.getEPackage().getNsURI()))
 				.findFirst();
 			
 		if (typeOpt.isPresent()) {
@@ -936,6 +938,32 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		registry.put(modelElement, linkSemanticElementOpt.get());
 		return true;
 	}
+	
+	/**
+	 * Wires elements with selector property. Remaps which triggers wireContainment.
+	 * @param modelElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
+	public final boolean wireModelElementLinkTarget(
+			org.nasdanika.drawio.model.ModelElement modelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		LinkTarget linkTarget = modelElement.getLinkTarget();
+		if (linkTarget instanceof org.nasdanika.drawio.model.ModelElement) {
+			EObject semanticTarget = registry.get(linkTarget);
+			if (semanticTarget == null) {
+				return false; // Not there yet
+			}
+			registry.put(modelElement, semanticTarget); // Тriggers a new wave of wiring
+		}
+		
+		return true;						
+	}	
 	
 	/**
 	 * Wires elements with selector property. Remaps which triggers wireContainment.
@@ -1653,11 +1681,11 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
 			// Page representation
 			org.nasdanika.ncore.ModelElement semanticModelElement = (org.nasdanika.ncore.ModelElement) semanticElement;
-			Page linkedPage = drawioModelElement.getLinkedPage();
-			if (linkedPage != null) {
+			LinkTarget linkTarget = drawioModelElement.getLinkTarget();
+			if (linkTarget instanceof Page) {
 				addRepresentationPage(
 						semanticModelElement, 
-						linkedPage, 
+						(Page) linkTarget, 
 						registry, 
 						progressMonitor);
 				

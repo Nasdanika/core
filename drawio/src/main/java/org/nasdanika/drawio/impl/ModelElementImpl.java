@@ -1,8 +1,6 @@
 package org.nasdanika.drawio.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -12,8 +10,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.CompletableFuture;
+import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -25,14 +24,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.AbstractSplitJoinSet;
 import org.nasdanika.common.DelimitedStringMap;
-import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.ConnectionBase;
-import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
+import org.nasdanika.drawio.LinkTarget;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marker;
 import org.w3c.dom.Attr;
 import org.w3c.dom.NamedNodeMap;
@@ -41,10 +40,12 @@ import org.xml.sax.SAXException;
 class ModelElementImpl extends ElementImpl implements ModelElement {
 	
 	private static final String MX_CELL_TAG_NAME = "mxCell";
-	private static final String PAGE_LINK_PREFIX = "data:page";
-	private static final String ID_DATA_PAGE_PREFIX = PAGE_LINK_PREFIX + "/id,"; // Page identified by id - internal references
-	private static final String NAME_DATA_PAGE_PREFIX = PAGE_LINK_PREFIX + "/name,"; // Page identified by name - external references
-	private static final String FIRST_DATA_PAGE_PREFIX = PAGE_LINK_PREFIX + ","; // First document page
+	private static final String PAGE_LINK_PREFIX = "data:page/";
+	private static final String ELEMENT_LINK_PREFIX = "data:element/";
+	
+	private static final String ID_PREFIX = "id,";
+	private static final String NAME_PREFIX = "name,"; 
+	
 	private static final String ATTRIBUTE_TAGS = "tags";
 	static final String ATTRIBUTE_VALUE = "value";
 	static final String ATTRIBUTE_PARENT = "parent";
@@ -317,67 +318,106 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	}
 	
 	@Override
-	public boolean isPageLink() {
+	public boolean isTargetLink() {
 		String link = getLink();
 		return !Util.isBlank(link) && link.startsWith(PAGE_LINK_PREFIX);
 	}
+	
+	protected Page findPage(String pageSelector) {
+		if (Util.isBlank(pageSelector)) {
+			return null;
+		}
+		
+		DocumentImpl document = (DocumentImpl) getModel().getPage().getDocument();
+		
+		int hashIdx = pageSelector.indexOf("#");
+		if (hashIdx != -1) {
+			String docLocation = pageSelector.substring(0, hashIdx);
+			try {
+				document = (DocumentImpl) document.getDocument(URI.createURI(docLocation));
+			} catch (IOException | ParserConfigurationException | SAXException e) {
+				throw new ConfigurationException("Error loading document from " + docLocation + "': " + e, e, this);
+			}
+			pageSelector = pageSelector.substring(hashIdx + 1);
+		}
+		
+		if (pageSelector.startsWith(ID_PREFIX)) {
+			String id = pageSelector.substring(ID_PREFIX.length());
+			for (Page page: document.getPages()) {
+				if (id.equals(page.getId())) {
+					return page;
+				}
+			}
+			throw new ConfigurationException("Page with id '" + id + "' not found in " + document.getURI(), this);
+		} 
+		
+		if (pageSelector.startsWith(NAME_PREFIX)) {			
+			String name = URLDecoder.decode(pageSelector.substring(NAME_PREFIX.length()), StandardCharsets.UTF_8);
+			for (Page page: document.getPages()) {
+				if (name.equals(page.getName())) {
+					return page;
+				}
+			}
+			throw new ConfigurationException("Page with name '" + name + "' not found in " + document.getURI(), this);			
+		}
+		
+		throw new ConfigurationException("Invalid page selector: " + pageSelector, this);					
+	}
 
 	@Override
-	public Page getLinkedPage() {
+	public LinkTarget getLinkTarget() {
 		String link = getLink();
 		if (Util.isBlank(link)) {
 			return null;
 		}
 		
-		Document document = getModel().getPage().getDocument();
-		if (link.startsWith(FIRST_DATA_PAGE_PREFIX)) {
-			URI targetURI = URI.createURI(link.substring(FIRST_DATA_PAGE_PREFIX.length()));
-			URI docURI = document.getURI();
-			if (targetURI.isRelative() && docURI != null && !docURI.isRelative() && docURI.isHierarchical()) {
-				targetURI = targetURI.resolve(docURI);
+		DocumentImpl document = (DocumentImpl) getModel().getPage().getDocument();
+		
+		if (link.startsWith(PAGE_LINK_PREFIX)) {
+			String pageSelector = link.substring(PAGE_LINK_PREFIX.length());
+			return findPage(pageSelector);			
+		} 
+		
+		if (link.startsWith(ELEMENT_LINK_PREFIX)) {
+			String elementSelector = link.substring(ELEMENT_LINK_PREFIX.length());
+			Page page = getModel().getPage();
+			int slashIdx = elementSelector.indexOf("/");
+			if (slashIdx != -1) {
+				page = findPage(elementSelector.substring(0, slashIdx));
+				elementSelector =  elementSelector.substring(slashIdx + 1);
 			}
 			
-			try {
-				Document targetDocument = Document.load(targetURI);
-				for (Page page: targetDocument.getPages()) {
-					return page;
+			if (elementSelector.startsWith(ID_PREFIX)) {
+				String id = elementSelector.substring(ID_PREFIX.length());
+				Optional<ModelElement> target = page
+					.stream()
+					.filter(ModelElement.class::isInstance)
+					.map(ModelElement.class::cast)
+					.filter(me -> id.equals(me.getId()))
+					.findFirst();
+					
+				if (target.isEmpty()) {
+					throw new ConfigurationException("Element with id '" + id + "' not found on page '" + page.getName() + "' in " + document.getURI(), this);
 				}
-			} catch (IOException | ParserConfigurationException | SAXException e) {
-				throw new NasdanikaException("Failed to load document from " + targetURI, e);
-			}
-			throw new IllegalArgumentException("No pages in " + targetURI);
-		}
-
-		if (link.startsWith(ID_DATA_PAGE_PREFIX)) {
-			String targetId = link.substring(ID_DATA_PAGE_PREFIX.length());
-			for (Page page: document.getPages()) {
-				if (targetId.equals(page.getId())) {
-					return page;
-				}
-			}
-			throw new IllegalArgumentException("Linked page not found: " + targetId);
-		}
-
-		if (link.startsWith(NAME_DATA_PAGE_PREFIX)) {
-			String targetUriStr = link.substring(NAME_DATA_PAGE_PREFIX.length());
-			URI targetURI = URI.createURI(targetUriStr);
-			URI docURI = document.getURI();
-			if (targetURI.isRelative() && docURI != null && !docURI.isRelative() && docURI.isHierarchical()) {
-				targetURI = targetURI.resolve(docURI);
-			}
-				
-			try {
-				Function<URI, InputStream> uriHandler = ((DocumentImpl) document).getUriHandler();
-				Document targetDocument = uriHandler == null ? Document.load(new URL(targetURI.toString()), uriHandler, this::getProperty) : Document.load(uriHandler.apply(targetURI), targetURI, uriHandler, this::getProperty);
-				for (Page page: targetDocument.getPages()) {
-					if (Util.isBlank(targetURI.fragment()) || URLDecoder.decode(targetURI.fragment(), StandardCharsets.UTF_8).equals(page.getName())) {
-						return page;
+				return target.get();
+			} 
+			
+			if (elementSelector.startsWith(NAME_PREFIX)) {			
+				String name = URLDecoder.decode(elementSelector.substring(NAME_PREFIX.length()), StandardCharsets.UTF_8);
+				Optional<ModelElement> target = page
+						.stream()
+						.filter(ModelElement.class::isInstance)
+						.map(ModelElement.class::cast)
+						.filter(me -> !Util.isBlank(me.getLabel()) && name.equals(Jsoup.parse(me.getLabel()).text()))
+						.findFirst();
+						
+					if (target.isEmpty()) {
+						throw new ConfigurationException("Element with name '" + name + "' not found on page '" + page.getName() + "' in " + document.getURI(), this);
 					}
-				}
-			} catch (IOException | ParserConfigurationException | SAXException e) {
-				throw new NasdanikaException("Failed to load document from " + targetURI, e);
+					return target.get();
 			}
-			throw new IllegalArgumentException("Linked page not found: " + targetURI);
+			
+			throw new ConfigurationException("Invalid element selector: " + elementSelector, this);								
 		}
 
 		return null;
@@ -386,7 +426,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	@Override
 	public URI getURI() {
 		URI parentURI = getParent().getURI();
-		return parentURI == null ? URI.createURI(URLEncoder.encode(getId(), StandardCharsets.UTF_8)) : parentURI.appendSegment(URLEncoder.encode(getId(), StandardCharsets.UTF_8));
+		return parentURI == null ? URI.createURI(URLEncoder.encode(getId(), StandardCharsets.UTF_8)) : parentURI.appendFragment(parentURI.fragment() + "/" + URLEncoder.encode(getId(), StandardCharsets.UTF_8));
 	}
 	
 	@Override
@@ -454,9 +494,9 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		mElement.setId(getId());
 		mElement.setLabel(getLabel());
 		mElement.setLink(getLink());
-		Page linkedPage = getLinkedPage();
-		if (linkedPage != null) {
-			modelElementProvider.apply(linkedPage).thenAccept(mlp -> mElement.setLinkedPage((org.nasdanika.drawio.model.Page) mlp));
+		LinkTarget linkTarget = getLinkTarget();
+		if (linkTarget != null) {
+			modelElementProvider.apply(linkTarget).thenAccept(mlp -> mElement.setLinkTarget((org.nasdanika.drawio.model.LinkTarget) mlp));
 		}
 		for (String pName: getPropertyNames()) {
 			mElement.getProperties().put(pName, getProperty(pName));

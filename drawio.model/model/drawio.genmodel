@@ -31,10 +31,12 @@
         <genParameters ecoreParameter="drawio.ecore#//Document/getModelElementsByProperty/value"/>
       </genOperations>
     </genClasses>
+    <genClasses ecoreClass="drawio.ecore#//LinkTarget">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference drawio.ecore#//LinkTarget/links"/>
+    </genClasses>
     <genClasses ecoreClass="drawio.ecore#//Page">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//Page/model"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//Page/name"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference drawio.ecore#//Page/links"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//Page/tags"/>
       <genOperations ecoreOperation="drawio.ecore#//Page/getModelElementById">
         <genParameters ecoreParameter="drawio.ecore#//Page/getModelElementById/modelElementId"/>
@@ -62,7 +64,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//ModelElement/properties"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//ModelElement/label"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//ModelElement/link"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference drawio.ecore#//ModelElement/linkedPage"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference drawio.ecore#//ModelElement/linkTarget"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//ModelElement/style"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference drawio.ecore#//ModelElement/tags"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//ModelElement/tooltip"/>

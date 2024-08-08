@@ -170,14 +170,14 @@ public interface ModelPackage extends EPackage {
 
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.PageImpl <em>Page</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.LinkTargetImpl <em>Link Target</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.drawio.model.impl.PageImpl
-	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getPage()
+	 * @see org.nasdanika.drawio.model.impl.LinkTargetImpl
+	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getLinkTarget()
 	 * @generated
 	 */
-	int PAGE = 1;
+	int LINK_TARGET = 1;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -186,7 +186,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE__MARKERS = NcorePackage.MARKED__MARKERS;
+	int LINK_TARGET__MARKERS = NcorePackage.MARKED__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -195,25 +195,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE__ID = NcorePackage.MARKED_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PAGE__MODEL = NcorePackage.MARKED_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PAGE__NAME = NcorePackage.MARKED_FEATURE_COUNT + 2;
+	int LINK_TARGET__ID = NcorePackage.MARKED_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Links</b></em>' reference list.
@@ -222,7 +204,80 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE__LINKS = NcorePackage.MARKED_FEATURE_COUNT + 3;
+	int LINK_TARGET__LINKS = NcorePackage.MARKED_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Link Target</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINK_TARGET_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Link Target</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINK_TARGET_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.PageImpl <em>Page</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.drawio.model.impl.PageImpl
+	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getPage()
+	 * @generated
+	 */
+	int PAGE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE__MARKERS = LINK_TARGET__MARKERS;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE__ID = LINK_TARGET__ID;
+
+	/**
+	 * The feature id for the '<em><b>Links</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE__LINKS = LINK_TARGET__LINKS;
+
+	/**
+	 * The feature id for the '<em><b>Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE__MODEL = LINK_TARGET_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE__NAME = LINK_TARGET_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Tags</b></em>' containment reference list.
@@ -231,7 +286,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE__TAGS = NcorePackage.MARKED_FEATURE_COUNT + 4;
+	int PAGE__TAGS = LINK_TARGET_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Page</em>' class.
@@ -240,7 +295,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 5;
+	int PAGE_FEATURE_COUNT = LINK_TARGET_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Model Element By Id</em>' operation.
@@ -249,7 +304,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE___GET_MODEL_ELEMENT_BY_ID__STRING = NcorePackage.MARKED_OPERATION_COUNT + 0;
+	int PAGE___GET_MODEL_ELEMENT_BY_ID__STRING = LINK_TARGET_OPERATION_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Get Tag</em>' operation.
@@ -258,7 +313,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE___GET_TAG__STRING = NcorePackage.MARKED_OPERATION_COUNT + 1;
+	int PAGE___GET_TAG__STRING = LINK_TARGET_OPERATION_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Model Element By Property</em>' operation.
@@ -267,7 +322,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING = NcorePackage.MARKED_OPERATION_COUNT + 2;
+	int PAGE___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING = LINK_TARGET_OPERATION_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Model Elements By Property</em>' operation.
@@ -276,7 +331,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = NcorePackage.MARKED_OPERATION_COUNT + 3;
+	int PAGE___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = LINK_TARGET_OPERATION_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Page</em>' class.
@@ -285,7 +340,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 4;
+	int PAGE_OPERATION_COUNT = LINK_TARGET_OPERATION_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.TagImpl <em>Tag</em>}' class.
@@ -295,7 +350,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getTag()
 	 * @generated
 	 */
-	int TAG = 2;
+	int TAG = 3;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -350,7 +405,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getModel()
 	 * @generated
 	 */
-	int MODEL = 3;
+	int MODEL = 4;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -396,7 +451,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getModelElement()
 	 * @generated
 	 */
-	int MODEL_ELEMENT = 4;
+	int MODEL_ELEMENT = 5;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -405,7 +460,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__MARKERS = NcorePackage.MARKED__MARKERS;
+	int MODEL_ELEMENT__MARKERS = LINK_TARGET__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -414,7 +469,16 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__ID = NcorePackage.MARKED_FEATURE_COUNT + 0;
+	int MODEL_ELEMENT__ID = LINK_TARGET__ID;
+
+	/**
+	 * The feature id for the '<em><b>Links</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT__LINKS = LINK_TARGET__LINKS;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' map.
@@ -423,7 +487,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__PROPERTIES = NcorePackage.MARKED_FEATURE_COUNT + 1;
+	int MODEL_ELEMENT__PROPERTIES = LINK_TARGET_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Label</b></em>' attribute.
@@ -432,7 +496,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__LABEL = NcorePackage.MARKED_FEATURE_COUNT + 2;
+	int MODEL_ELEMENT__LABEL = LINK_TARGET_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Link</b></em>' attribute.
@@ -441,16 +505,16 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__LINK = NcorePackage.MARKED_FEATURE_COUNT + 3;
+	int MODEL_ELEMENT__LINK = LINK_TARGET_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Linked Page</b></em>' reference.
+	 * The feature id for the '<em><b>Link Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__LINKED_PAGE = NcorePackage.MARKED_FEATURE_COUNT + 4;
+	int MODEL_ELEMENT__LINK_TARGET = LINK_TARGET_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Style</b></em>' map.
@@ -459,7 +523,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__STYLE = NcorePackage.MARKED_FEATURE_COUNT + 5;
+	int MODEL_ELEMENT__STYLE = LINK_TARGET_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Tags</b></em>' reference list.
@@ -468,7 +532,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__TAGS = NcorePackage.MARKED_FEATURE_COUNT + 6;
+	int MODEL_ELEMENT__TAGS = LINK_TARGET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Tooltip</b></em>' attribute.
@@ -477,7 +541,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__TOOLTIP = NcorePackage.MARKED_FEATURE_COUNT + 7;
+	int MODEL_ELEMENT__TOOLTIP = LINK_TARGET_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Visible</b></em>' attribute.
@@ -486,7 +550,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__VISIBLE = NcorePackage.MARKED_FEATURE_COUNT + 8;
+	int MODEL_ELEMENT__VISIBLE = LINK_TARGET_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Element</em>' class.
@@ -495,7 +559,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 9;
+	int MODEL_ELEMENT_FEATURE_COUNT = LINK_TARGET_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Document</em>' operation.
@@ -504,7 +568,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT___GET_DOCUMENT = NcorePackage.MARKED_OPERATION_COUNT + 0;
+	int MODEL_ELEMENT___GET_DOCUMENT = LINK_TARGET_OPERATION_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Get Page</em>' operation.
@@ -513,7 +577,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT___GET_PAGE = NcorePackage.MARKED_OPERATION_COUNT + 1;
+	int MODEL_ELEMENT___GET_PAGE = LINK_TARGET_OPERATION_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Element</em>' class.
@@ -522,7 +586,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_OPERATION_COUNT = NcorePackage.MARKED_OPERATION_COUNT + 2;
+	int MODEL_ELEMENT_OPERATION_COUNT = LINK_TARGET_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.drawio.model.impl.RootImpl <em>Root</em>}' class.
@@ -532,7 +596,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getRoot()
 	 * @generated
 	 */
-	int ROOT = 5;
+	int ROOT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -551,6 +615,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int ROOT__ID = MODEL_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Links</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROOT__LINKS = MODEL_ELEMENT__LINKS;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' map.
@@ -580,13 +653,13 @@ public interface ModelPackage extends EPackage {
 	int ROOT__LINK = MODEL_ELEMENT__LINK;
 
 	/**
-	 * The feature id for the '<em><b>Linked Page</b></em>' reference.
+	 * The feature id for the '<em><b>Link Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROOT__LINKED_PAGE = MODEL_ELEMENT__LINKED_PAGE;
+	int ROOT__LINK_TARGET = MODEL_ELEMENT__LINK_TARGET;
 
 	/**
 	 * The feature id for the '<em><b>Style</b></em>' map.
@@ -704,7 +777,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getLayer()
 	 * @generated
 	 */
-	int LAYER = 6;
+	int LAYER = 7;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -723,6 +796,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int LAYER__ID = MODEL_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Links</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER__LINKS = MODEL_ELEMENT__LINKS;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' map.
@@ -752,13 +834,13 @@ public interface ModelPackage extends EPackage {
 	int LAYER__LINK = MODEL_ELEMENT__LINK;
 
 	/**
-	 * The feature id for the '<em><b>Linked Page</b></em>' reference.
+	 * The feature id for the '<em><b>Link Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LAYER__LINKED_PAGE = MODEL_ELEMENT__LINKED_PAGE;
+	int LAYER__LINK_TARGET = MODEL_ELEMENT__LINK_TARGET;
 
 	/**
 	 * The feature id for the '<em><b>Style</b></em>' map.
@@ -876,7 +958,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getLayerElement()
 	 * @generated
 	 */
-	int LAYER_ELEMENT = 7;
+	int LAYER_ELEMENT = 8;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -895,6 +977,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int LAYER_ELEMENT__ID = MODEL_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Links</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER_ELEMENT__LINKS = MODEL_ELEMENT__LINKS;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' map.
@@ -924,13 +1015,13 @@ public interface ModelPackage extends EPackage {
 	int LAYER_ELEMENT__LINK = MODEL_ELEMENT__LINK;
 
 	/**
-	 * The feature id for the '<em><b>Linked Page</b></em>' reference.
+	 * The feature id for the '<em><b>Link Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LAYER_ELEMENT__LINKED_PAGE = MODEL_ELEMENT__LINKED_PAGE;
+	int LAYER_ELEMENT__LINK_TARGET = MODEL_ELEMENT__LINK_TARGET;
 
 	/**
 	 * The feature id for the '<em><b>Style</b></em>' map.
@@ -1021,7 +1112,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getNode()
 	 * @generated
 	 */
-	int NODE = 8;
+	int NODE = 9;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -1040,6 +1131,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int NODE__ID = LAYER__ID;
+
+	/**
+	 * The feature id for the '<em><b>Links</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE__LINKS = LAYER__LINKS;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' map.
@@ -1069,13 +1169,13 @@ public interface ModelPackage extends EPackage {
 	int NODE__LINK = LAYER__LINK;
 
 	/**
-	 * The feature id for the '<em><b>Linked Page</b></em>' reference.
+	 * The feature id for the '<em><b>Link Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NODE__LINKED_PAGE = LAYER__LINKED_PAGE;
+	int NODE__LINK_TARGET = LAYER__LINK_TARGET;
 
 	/**
 	 * The feature id for the '<em><b>Style</b></em>' map.
@@ -1220,7 +1320,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getConnection()
 	 * @generated
 	 */
-	int CONNECTION = 9;
+	int CONNECTION = 10;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -1239,6 +1339,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONNECTION__ID = LAYER_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Links</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__LINKS = LAYER_ELEMENT__LINKS;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' map.
@@ -1268,13 +1377,13 @@ public interface ModelPackage extends EPackage {
 	int CONNECTION__LINK = LAYER_ELEMENT__LINK;
 
 	/**
-	 * The feature id for the '<em><b>Linked Page</b></em>' reference.
+	 * The feature id for the '<em><b>Link Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__LINKED_PAGE = LAYER_ELEMENT__LINKED_PAGE;
+	int CONNECTION__LINK_TARGET = LAYER_ELEMENT__LINK_TARGET;
 
 	/**
 	 * The feature id for the '<em><b>Style</b></em>' map.
@@ -1384,7 +1493,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getPoint()
 	 * @generated
 	 */
-	int POINT = 10;
+	int POINT = 11;
 
 	/**
 	 * The feature id for the '<em><b>X</b></em>' attribute.
@@ -1430,7 +1539,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getGeometry()
 	 * @generated
 	 */
-	int GEOMETRY = 11;
+	int GEOMETRY = 12;
 
 	/**
 	 * The feature id for the '<em><b>X</b></em>' attribute.
@@ -1540,7 +1649,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getSemanticMapping()
 	 * @generated
 	 */
-	int SEMANTIC_MAPPING = 12;
+	int SEMANTIC_MAPPING = 13;
 
 	/**
 	 * The feature id for the '<em><b>Document URI</b></em>' attribute.
@@ -1604,7 +1713,7 @@ public interface ModelPackage extends EPackage {
 	 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getSemanticElement()
 	 * @generated
 	 */
-	int SEMANTIC_ELEMENT = 13;
+	int SEMANTIC_ELEMENT = 14;
 
 	/**
 	 * The feature id for the '<em><b>Semantic Mappings</b></em>' containment reference list.
@@ -1728,6 +1837,27 @@ public interface ModelPackage extends EPackage {
 	EOperation getDocument__GetModelElementsByProperty__String_String();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.LinkTarget <em>Link Target</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Link Target</em>'.
+	 * @see org.nasdanika.drawio.model.LinkTarget
+	 * @generated
+	 */
+	EClass getLinkTarget();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.drawio.model.LinkTarget#getLinks <em>Links</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Links</em>'.
+	 * @see org.nasdanika.drawio.model.LinkTarget#getLinks()
+	 * @see #getLinkTarget()
+	 * @generated
+	 */
+	EReference getLinkTarget_Links();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Page <em>Page</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1758,17 +1888,6 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPage_Name();
-
-	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.drawio.model.Page#getLinks <em>Links</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Links</em>'.
-	 * @see org.nasdanika.drawio.model.Page#getLinks()
-	 * @see #getPage()
-	 * @generated
-	 */
-	EReference getPage_Links();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link org.nasdanika.drawio.model.Page#getTags <em>Tags</em>}'.
@@ -1918,15 +2037,15 @@ public interface ModelPackage extends EPackage {
 	EAttribute getModelElement_Link();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.nasdanika.drawio.model.ModelElement#getLinkedPage <em>Linked Page</em>}'.
+	 * Returns the meta object for the reference '{@link org.nasdanika.drawio.model.ModelElement#getLinkTarget <em>Link Target</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Linked Page</em>'.
-	 * @see org.nasdanika.drawio.model.ModelElement#getLinkedPage()
+	 * @return the meta object for the reference '<em>Link Target</em>'.
+	 * @see org.nasdanika.drawio.model.ModelElement#getLinkTarget()
 	 * @see #getModelElement()
 	 * @generated
 	 */
-	EReference getModelElement_LinkedPage();
+	EReference getModelElement_LinkTarget();
 
 	/**
 	 * Returns the meta object for the map '{@link org.nasdanika.drawio.model.ModelElement#getStyle <em>Style</em>}'.
@@ -2462,6 +2581,22 @@ public interface ModelPackage extends EPackage {
 		 */
 		EOperation DOCUMENT___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING = eINSTANCE.getDocument__GetModelElementsByProperty__String_String();
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.LinkTargetImpl <em>Link Target</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.drawio.model.impl.LinkTargetImpl
+		 * @see org.nasdanika.drawio.model.impl.ModelPackageImpl#getLinkTarget()
+		 * @generated
+		 */
+		EClass LINK_TARGET = eINSTANCE.getLinkTarget();
+		/**
+		 * The meta object literal for the '<em><b>Links</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LINK_TARGET__LINKS = eINSTANCE.getLinkTarget_Links();
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.PageImpl <em>Page</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2484,13 +2619,6 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PAGE__NAME = eINSTANCE.getPage_Name();
-		/**
-		 * The meta object literal for the '<em><b>Links</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PAGE__LINKS = eINSTANCE.getPage_Links();
 		/**
 		 * The meta object literal for the '<em><b>Tags</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
@@ -2596,12 +2724,12 @@ public interface ModelPackage extends EPackage {
 		 */
 		EAttribute MODEL_ELEMENT__LINK = eINSTANCE.getModelElement_Link();
 		/**
-		 * The meta object literal for the '<em><b>Linked Page</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Link Target</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MODEL_ELEMENT__LINKED_PAGE = eINSTANCE.getModelElement_LinkedPage();
+		EReference MODEL_ELEMENT__LINK_TARGET = eINSTANCE.getModelElement_LinkTarget();
 		/**
 		 * The meta object literal for the '<em><b>Style</b></em>' map feature.
 		 * <!-- begin-user-doc -->

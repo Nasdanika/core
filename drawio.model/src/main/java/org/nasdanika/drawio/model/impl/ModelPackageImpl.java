@@ -15,6 +15,7 @@ import org.nasdanika.drawio.model.Document;
 import org.nasdanika.drawio.model.Geometry;
 import org.nasdanika.drawio.model.Layer;
 import org.nasdanika.drawio.model.LayerElement;
+import org.nasdanika.drawio.model.LinkTarget;
 import org.nasdanika.drawio.model.Model;
 import org.nasdanika.drawio.model.ModelElement;
 import org.nasdanika.drawio.model.ModelFactory;
@@ -41,6 +42,13 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	private EClass documentEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass linkTargetEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -285,6 +293,26 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getLinkTarget() {
+		return linkTargetEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getLinkTarget_Links() {
+		return (EReference)linkTargetEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPage() {
 		return pageEClass;
 	}
@@ -315,18 +343,8 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPage_Links() {
-		return (EReference)pageEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getPage_Tags() {
-		return (EReference)pageEClass.getEStructuralFeatures().get(3);
+		return (EReference)pageEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -465,7 +483,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getModelElement_LinkedPage() {
+	public EReference getModelElement_LinkTarget() {
 		return (EReference)modelElementEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -928,10 +946,12 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEOperation(documentEClass, DOCUMENT___GET_MODEL_ELEMENT_BY_PROPERTY__STRING_STRING);
 		createEOperation(documentEClass, DOCUMENT___GET_MODEL_ELEMENTS_BY_PROPERTY__STRING_STRING);
 
+		linkTargetEClass = createEClass(LINK_TARGET);
+		createEReference(linkTargetEClass, LINK_TARGET__LINKS);
+
 		pageEClass = createEClass(PAGE);
 		createEReference(pageEClass, PAGE__MODEL);
 		createEAttribute(pageEClass, PAGE__NAME);
-		createEReference(pageEClass, PAGE__LINKS);
 		createEReference(pageEClass, PAGE__TAGS);
 		createEOperation(pageEClass, PAGE___GET_MODEL_ELEMENT_BY_ID__STRING);
 		createEOperation(pageEClass, PAGE___GET_TAG__STRING);
@@ -949,7 +969,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEReference(modelElementEClass, MODEL_ELEMENT__PROPERTIES);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__LABEL);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__LINK);
-		createEReference(modelElementEClass, MODEL_ELEMENT__LINKED_PAGE);
+		createEReference(modelElementEClass, MODEL_ELEMENT__LINK_TARGET);
 		createEReference(modelElementEClass, MODEL_ELEMENT__STYLE);
 		createEReference(modelElementEClass, MODEL_ELEMENT__TAGS);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__TOOLTIP);
@@ -1035,12 +1055,12 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		// Add supertypes to classes
 		documentEClass.getESuperTypes().add(theNcorePackage.getMarked());
-		pageEClass.getESuperTypes().add(theNcorePackage.getMarked());
-		pageEClass.getESuperTypes().add(theNcorePackage.getStringIdentity());
+		linkTargetEClass.getESuperTypes().add(theNcorePackage.getMarked());
+		linkTargetEClass.getESuperTypes().add(theNcorePackage.getStringIdentity());
+		pageEClass.getESuperTypes().add(this.getLinkTarget());
 		tagEClass.getESuperTypes().add(theNcorePackage.getMarked());
 		modelEClass.getESuperTypes().add(theNcorePackage.getMarked());
-		modelElementEClass.getESuperTypes().add(theNcorePackage.getMarked());
-		modelElementEClass.getESuperTypes().add(theNcorePackage.getStringIdentity());
+		modelElementEClass.getESuperTypes().add(this.getLinkTarget());
 		rootEClass.getESuperTypes().add(this.getModelElement());
 		layerEClass.getESuperTypes().add(this.getModelElement());
 		layerElementEClass.getESuperTypes().add(this.getModelElement());
@@ -1073,10 +1093,12 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
 
+		initEClass(linkTargetEClass, LinkTarget.class, "LinkTarget", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getLinkTarget_Links(), this.getModelElement(), this.getModelElement_LinkTarget(), "links", null, 0, -1, LinkTarget.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(pageEClass, Page.class, "Page", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPage_Model(), this.getModel(), null, "model", null, 1, 1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPage_Name(), ecorePackage.getEString(), "name", null, 1, 1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPage_Links(), this.getModelElement(), this.getModelElement_LinkedPage(), "links", null, 0, -1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPage_Tags(), this.getTag(), null, "tags", null, 0, -1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getPage_Tags().getEKeys().add(this.getTag_Name());
 
@@ -1105,7 +1127,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEReference(getModelElement_Properties(), theNcorePackage.getStringEntry(), null, "properties", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Label(), ecorePackage.getEString(), "label", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Link(), ecorePackage.getEString(), "link", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getModelElement_LinkedPage(), this.getPage(), this.getPage_Links(), "linkedPage", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getModelElement_LinkTarget(), this.getLinkTarget(), this.getLinkTarget_Links(), "linkTarget", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_Style(), theNcorePackage.getStringEntry(), null, "style", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_Tags(), this.getTag(), this.getTag_Elements(), "tags", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Tooltip(), ecorePackage.getEString(), "tooltip", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1219,7 +1241,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 			   "documentation", "Source diagram document"
 		   });
 		addAnnotation
-		  (getPage_Links(),
+		  (getLinkTarget_Links(),
 		   source,
 		   new String[] {
 			   "documentation", "Model elements linking to this page"

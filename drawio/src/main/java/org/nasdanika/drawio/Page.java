@@ -2,7 +2,7 @@ package org.nasdanika.drawio;
 
 import java.util.List;
 
-public interface Page extends Element {
+public interface Page extends LinkTarget {
 
 	Model getModel();
 

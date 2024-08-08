@@ -31,7 +31,15 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Page" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked ../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity">
+  <eClassifiers xsi:type="ecore:EClass" name="LinkTarget" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked ../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//ModelElement" eOpposite="#//ModelElement/linkTarget">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Model elements linking to this page"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Page" eSuperTypes="#//LinkTarget">
     <eOperations name="getModelElementById" eType="#//ModelElement">
       <eParameters name="modelElementId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
@@ -49,12 +57,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1" eType="#//Model"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
-        eType="#//ModelElement" eOpposite="#//ModelElement/linkedPage">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Model elements linking to this page"/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1" eType="#//Tag"
         containment="true" eKeys="#//Tag/name"/>
   </eClassifiers>
@@ -67,7 +69,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="root" lowerBound="1" eType="#//Root"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked ../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity">
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true" eSuperTypes="#//LinkTarget">
     <eOperations name="getDocument" eType="#//Document"/>
     <eOperations name="getPage" eType="#//Page"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
@@ -75,8 +77,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="link" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedPage" eType="#//Page"
-        eOpposite="#//Page/links"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkTarget" eType="#//LinkTarget"
+        eOpposite="#//LinkTarget/links"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="style" upperBound="-1"
         eType="ecore:EClass ../../org.nasdanika.ncore/model/ncore.ecore#//StringEntry"
         containment="true"/>

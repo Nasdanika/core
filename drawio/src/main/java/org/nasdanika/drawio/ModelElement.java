@@ -13,7 +13,7 @@ import org.nasdanika.common.PropertySource;
  * @author Pavel
  *
  */
-public interface ModelElement extends Element, PropertySource<String, String> {
+public interface ModelElement extends LinkTarget, PropertySource<String, String> {
 	
 	/**
 	 * Containing model
@@ -99,11 +99,14 @@ public interface ModelElement extends Element, PropertySource<String, String> {
 		}, connectionBase);
 	}
 	
-	Page getLinkedPage();
-	
 	/**
-	 * @return True if there is a link and it is in one of page link formats.
+	 * @return Linked {@link Page} or {@link ModelElement}.
 	 */
-	boolean isPageLink();
+	LinkTarget getLinkTarget();
+		
+	/**
+	 * @return True if there is a link and it is in one of {@link LinkTarget} ({@link Page} / {@link ModelElement}) formats.
+	 */
+	boolean isTargetLink();
 	
 }

@@ -344,21 +344,23 @@ public final class Util {
 	 * @param connectionBase Connection base for visiting linked pages.
 	 * @return Visitor which passes itself to linked pages and adds linked pages' result to child results.
 	 */
-	public static <T> BiFunction<Element, Map<Element, T>, T> withLinkedPages(BiFunction<? super Element, Map<? extends Element, T>, T> visitor, ConnectionBase connectionBase) {
+	public static <T> BiFunction<Element, Map<Element, T>, T> withLinkTargets(BiFunction<? super Element, Map<? extends Element, T>, T> visitor, ConnectionBase connectionBase) {
 		return new BiFunction<Element, Map<Element, T>, T>() {
+			
+			Collection<LinkTarget> visited = new HashSet<>();
 
 			@Override
 			public T apply(Element element, Map<Element, T> childResults) {				
 				if (element instanceof ModelElement) {
-					Page linkedPage = ((ModelElement) element).getLinkedPage();
-					if (linkedPage != null) {
+					LinkTarget linkTarget = ((ModelElement) element).getLinkTarget();
+					if (linkTarget != null && visited.add(linkTarget)) { // No double-visiting
 						Map<Element, T> cr = new LinkedHashMap<>();
 						if (childResults != null) {
 							cr.putAll(childResults);
 						}
-						T linkedPageResult = linkedPage.accept(this, connectionBase);
-						if (linkedPageResult != null) {
-							cr.put(linkedPage, linkedPageResult);
+						T linkTargetResult = linkTarget.accept(this, connectionBase);
+						if (linkTargetResult != null) {
+							cr.put(linkTarget, linkTargetResult);
 						}
 						return visitor.apply(element, cr);
 					}
@@ -375,15 +377,17 @@ public final class Util {
 	 * @param connectionBase Connection base for visiting linked pages.
 	 * @return Visitor which passes itself to linked pages and adds linked pages' result to child results.
 	 */
-	public static <T> Consumer<Element> withLinkedPages(Consumer<Element> visitor, ConnectionBase connectionBase) {
+	public static <T> Consumer<Element> withLinkTargets(Consumer<Element> visitor, ConnectionBase connectionBase) {
 		return new Consumer<Element>() {
+			
+			Collection<LinkTarget> visited = new HashSet<>();
 
 			@Override
 			public void accept(Element element) {				
 				if (element instanceof ModelElement) {
-					Page linkedPage = ((ModelElement) element).getLinkedPage();
-					if (linkedPage != null) {
-						linkedPage.accept(this, connectionBase);
+					LinkTarget linkTarget = ((ModelElement) element).getLinkTarget();
+					if (linkTarget != null && visited.add(linkTarget)) { // No double-visiting
+						linkTarget.accept(this, connectionBase);
 					}
 				}
 				visitor.accept(element);
@@ -392,13 +396,5 @@ public final class Util {
 		};
 	}
 	
-//	/**
-//	 * Creates an element wrapper which substitutes accept()'s visitor with a visitor which also traverses linked pages.
-//	 * @param element
-//	 * @return
-//	 */
-//	public static org.nasdanika.graph.Element withLinkedPages(org.nasdanika.graph.Element element) {
-//		
-//	}
 
 }

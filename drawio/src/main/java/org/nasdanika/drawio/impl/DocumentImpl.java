@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
@@ -52,7 +53,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 	private static final String ATTRIBUTE_COMPRESSED = "compressed";
 	private org.w3c.dom.Document document;
 	private URI uri;	
-	private Function<URI, InputStream> uriHandler;
+	private Function<URI, Document> uriHandler;
 	private Function<String,String> propertySource;
 	
 	/**
@@ -68,7 +69,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 	public DocumentImpl(
 			InputStream in, 
 			URI uri, 
-			Function<URI, InputStream> uriHandler,
+			Function<URI, Document> uriHandler,
 			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -92,7 +93,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 	public DocumentImpl(
 			Reader reader, 
 			URI uri, 
-			Function<URI, InputStream> uriHandler,
+			Function<URI, Document> uriHandler,
 			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -113,7 +114,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 	public DocumentImpl(
 			boolean compressed, 
 			URI uri, 
-			Function<URI, InputStream> uriHandler,
+			Function<URI, Document> uriHandler,
 			Function<String,String> propertySource) throws ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -133,13 +134,34 @@ public class DocumentImpl extends ElementImpl implements Document {
 	public DocumentImpl(
 			String docStr, 
 			URI uri, 
-			Function<URI, InputStream> uriHandler,
+			Function<URI, Document> uriHandler,
 			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
 		this(new StringReader(docStr), uri, uriHandler, propertySource);
 	}
 	
-	Function<URI, InputStream> getUriHandler() {
-		return uriHandler;
+	/**
+	 * Resolved source URI against this document URI.
+	 * Returns this document if source is equal to this document URI.
+	 * Then loads the document.
+	 * @param uri
+	 * @return
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
+	 * @throws IOException 
+	 */
+	Document getDocument(URI source) throws IOException, ParserConfigurationException, SAXException {
+		if (source == null) {
+			return null;
+		}
+		URI thisURI = getURI();
+		if (Objects.equals(thisURI, source)) {
+			return this;
+		}
+		if (source.isRelative() && thisURI != null && !thisURI.isRelative() && thisURI.isHierarchical()) {
+			source = source.resolve(thisURI);
+		}
+		
+		return uriHandler == null ? Document.load(source, null, this::getProperty) : uriHandler.apply(source);
 	}
 
 	@Override

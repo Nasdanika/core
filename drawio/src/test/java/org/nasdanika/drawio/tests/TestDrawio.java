@@ -1,6 +1,8 @@
 package org.nasdanika.drawio.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.awt.Point;
@@ -336,56 +338,6 @@ public class TestDrawio {
 	public void testLoadFromPngMetadata() throws Exception {
 		List<Document> documents = Document.loadFromPngMetadata(getClass().getResource("illustration.png"));
 		assertThat(documents).singleElement();
-	}
-		
-	@Test 
-	public void testInternalPageLink() throws Exception {
-		Document document = Document.load(getClass().getResource("links.drawio"));
-		Optional<Node> linkToPage2 = document.stream(null).filter(Node.class::isInstance).map(Node.class::cast).filter(n -> "Link to Page 2".equals(n.getLabel())).findFirst();
-		assertThat(linkToPage2.isPresent()).isEqualTo(true);		
-		Page linkedPage = linkToPage2.get().getLinkedPage();
-		assertThat(linkedPage).isNotNull();
-		assertThat(linkedPage.getName()).isEqualTo("Page 2");
-	}
-	
-	@Test 
-	public void testExternalPageLink() throws Exception {
-		Document document = Document.load(getClass().getResource("links.drawio"));
-		Optional<Node> linkToPage = document.stream(null).filter(Node.class::isInstance).map(Node.class::cast).filter(n -> "Link to compressed second page".equals(n.getLabel())).findFirst();
-		assertThat(linkToPage.isPresent()).isEqualTo(true);		
-		Page linkedPage = linkToPage.get().getLinkedPage();
-		assertThat(linkedPage).isNotNull();
-		assertThat(linkedPage.getName()).isEqualTo("Page 2");
-		URI linkedDocURI = linkedPage.getDocument().getURI();
-		assertThat(linkedDocURI.toString().endsWith("compressed.drawio#Page+2")).isEqualTo(true);
-	}
-	
-	@Test 
-	public void testDocumentFirstPageLink() throws Exception {
-		Document document = Document.load(getClass().getResource("links.drawio"));
-		Optional<Node> linkToPage = document.stream(null).filter(Node.class::isInstance).map(Node.class::cast).filter(n -> "Link to compressed first page".equals(n.getLabel())).findFirst();
-		assertThat(linkToPage.isPresent()).isEqualTo(true);		
-		Page linkedPage = ((Node) linkToPage.get()).getLinkedPage();
-		assertThat(linkedPage).isNotNull();
-		assertThat(linkedPage.getName()).isEqualTo("Page-1");
-		assertThat(linkedPage.getDocument().getURI().toString().endsWith("compressed.drawio")).isEqualTo(true);
-	}
-		
-	@Test 
-	public void testLinkedPagesTraversal() throws Exception {
-		Document document = Document.load(getClass().getResource("links.drawio"));
-		Consumer<Element> visitor = e -> {
-			if (e instanceof ModelElement) {
-//				System.out.println(((ModelElement) e).getLabel());
-			} else if (e instanceof Page) {
-				Page page = (Page) e;
-				System.out.println(page.getName() + " " + page.getId() + " " + page.getDocument().getURI());				
-			}
-		};
-		
-		document.accept(visitor, null);
-		System.out.println("===");
-		document.accept(org.nasdanika.drawio.Util.withLinkedPages(visitor, null), null);
 	}
 	
 	/**

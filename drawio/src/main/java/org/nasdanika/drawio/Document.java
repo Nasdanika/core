@@ -8,6 +8,8 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import javax.imageio.ImageIO;
@@ -20,6 +22,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.drawio.impl.DocumentImpl;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -48,6 +51,36 @@ public interface Document extends Element {
 	 */
 	Page createPage();
 	
+	
+	
+	
+	/**
+	 * Creates a cache (map URI -&gt; Document) of loaded documents, loads document on demand.
+	 * Similar in functionality to ResourceSet.
+	 * @param uriHandler
+	 * @return
+	 */
+	private static Function<URI, Document> wrap(Function<URI,InputStream> uriHandler, Function<String,String> propertySource) {
+		return new Function<URI, Document>() {
+			
+			Map<URI, Document> documents = new ConcurrentHashMap<>();
+
+			@Override
+			public Document apply(URI source) {
+				return documents.computeIfAbsent(source, this::load);
+			}
+			
+			private Document load(URI source) {
+				try (InputStream in = uriHandler == null ? new URL(source.toString()).openStream() : uriHandler.apply(source)) {					
+					return new DocumentImpl(in, source, this, propertySource);
+				} catch (IOException | ParserConfigurationException | SAXException e) {
+					throw new NasdanikaException("Error loading document from " + source + ": " + e, e);
+				}
+			}
+			
+		};
+	}
+	
 	/**
 	 * Loads document from an XML string.
 	 * @param docStr
@@ -62,7 +95,7 @@ public interface Document extends Element {
 			URI uri, 
 			Function<URI, InputStream> uriHandler,
 			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
-		return new DocumentImpl(docStr, uri, uriHandler, propertySource);
+		return new DocumentImpl(docStr, uri, wrap(uriHandler, propertySource), propertySource);
 	}
 
 	/**
@@ -92,7 +125,7 @@ public interface Document extends Element {
 			URI uri, 
 			Function<URI, InputStream> uriHandler,
 			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
-		return new DocumentImpl(reader, uri, uriHandler, propertySource);
+		return new DocumentImpl(reader, uri, wrap(uriHandler, propertySource), propertySource);
 	}
 
 	/**
@@ -120,7 +153,7 @@ public interface Document extends Element {
 			URI uri, 
 			Function<URI, InputStream> uriHandler,
 			Function<String,String> propertySource) throws ParserConfigurationException {
-		return new DocumentImpl(compressed, uri, uriHandler, propertySource);
+		return new DocumentImpl(compressed, uri, wrap(uriHandler, propertySource), propertySource);
 	}
 	
 	/**
@@ -148,7 +181,7 @@ public interface Document extends Element {
 			URI uri, 
 			Function<URI, InputStream> uriHandler,
 			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
-		return new DocumentImpl(in, uri, uriHandler, propertySource);
+		return new DocumentImpl(in, uri, wrap(uriHandler, propertySource), propertySource);
 	}
 
 	/**
@@ -243,7 +276,7 @@ public interface Document extends Element {
 	}
 		
 	/**
-	 * Loads document from URL by opening a stream.
+	 * Loads document from a URL by opening a stream.
 	 * @param source
 	 * @return
 	 * @throws IOException
@@ -254,15 +287,8 @@ public interface Document extends Element {
 			URL source, 
 			Function<URI, InputStream> uriHandler,
 			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
-		URI sourceUri = URI.createURI(source.toString());
-		if (uriHandler == null) {
-			try (InputStream in = source.openStream()) {
-				return load(in, sourceUri, uriHandler, propertySource);
-			}
-		}
-		try (InputStream in = uriHandler.apply(sourceUri)) {
-			return load(in, sourceUri, uriHandler, propertySource);
-		}
+
+		return wrap(uriHandler, propertySource).apply(URI.createURI(source.toString()));
 	}
 	
 	/**

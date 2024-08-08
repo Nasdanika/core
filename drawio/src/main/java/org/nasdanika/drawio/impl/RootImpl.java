@@ -44,7 +44,7 @@ class RootImpl extends ModelElementImpl implements Root {
 	@Override
 	public URI getURI() {
 		URI modelURI = getModel().getURI();
-		return modelURI == null ? URI.createURI(getId()) : modelURI.appendSegment(URLEncoder.encode(getId(), StandardCharsets.UTF_8));
+		return modelURI == null ? URI.createURI(getId()) : modelURI.appendFragment(modelURI.fragment() + "/" + URLEncoder.encode(getId(), StandardCharsets.UTF_8));
 	}
 	
 	org.nasdanika.drawio.model.Root toModelRoot(

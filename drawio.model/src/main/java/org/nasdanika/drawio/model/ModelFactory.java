@@ -31,6 +31,15 @@ public interface ModelFactory extends EFactory {
 	Document createDocument();
 
 	/**
+	 * Returns a new object of class '<em>Link Target</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Link Target</em>'.
+	 * @generated
+	 */
+	LinkTarget createLinkTarget();
+
+	/**
 	 * Returns a new object of class '<em>Page</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

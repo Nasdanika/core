@@ -4,8 +4,6 @@ package org.nasdanika.drawio.model;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.nasdanika.ncore.Marked;
-import org.nasdanika.ncore.StringIdentity;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,7 +17,7 @@ import org.nasdanika.ncore.StringIdentity;
  *   <li>{@link org.nasdanika.drawio.model.ModelElement#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.ModelElement#getLabel <em>Label</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.ModelElement#getLink <em>Link</em>}</li>
- *   <li>{@link org.nasdanika.drawio.model.ModelElement#getLinkedPage <em>Linked Page</em>}</li>
+ *   <li>{@link org.nasdanika.drawio.model.ModelElement#getLinkTarget <em>Link Target</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.ModelElement#getStyle <em>Style</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.ModelElement#getTags <em>Tags</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.ModelElement#getTooltip <em>Tooltip</em>}</li>
@@ -30,7 +28,7 @@ import org.nasdanika.ncore.StringIdentity;
  * @model abstract="true"
  * @generated
  */
-public interface ModelElement extends Marked, StringIdentity {
+public interface ModelElement extends LinkTarget {
 	/**
 	 * Returns the value of the '<em><b>Properties</b></em>' map.
 	 * The key is of type {@link java.lang.String},
@@ -89,28 +87,28 @@ public interface ModelElement extends Marked, StringIdentity {
 	void setLink(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Linked Page</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.nasdanika.drawio.model.Page#getLinks <em>Links</em>}'.
+	 * Returns the value of the '<em><b>Link Target</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.drawio.model.LinkTarget#getLinks <em>Links</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Linked Page</em>' reference.
-	 * @see #setLinkedPage(Page)
-	 * @see org.nasdanika.drawio.model.ModelPackage#getModelElement_LinkedPage()
-	 * @see org.nasdanika.drawio.model.Page#getLinks
+	 * @return the value of the '<em>Link Target</em>' reference.
+	 * @see #setLinkTarget(LinkTarget)
+	 * @see org.nasdanika.drawio.model.ModelPackage#getModelElement_LinkTarget()
+	 * @see org.nasdanika.drawio.model.LinkTarget#getLinks
 	 * @model opposite="links"
 	 * @generated
 	 */
-	Page getLinkedPage();
+	LinkTarget getLinkTarget();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.drawio.model.ModelElement#getLinkedPage <em>Linked Page</em>}' reference.
+	 * Sets the value of the '{@link org.nasdanika.drawio.model.ModelElement#getLinkTarget <em>Link Target</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Linked Page</em>' reference.
-	 * @see #getLinkedPage()
+	 * @param value the new value of the '<em>Link Target</em>' reference.
+	 * @see #getLinkTarget()
 	 * @generated
 	 */
-	void setLinkedPage(Page value);
+	void setLinkTarget(LinkTarget value);
 
 	/**
 	 * Returns the value of the '<em><b>Style</b></em>' map.

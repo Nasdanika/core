@@ -57,6 +57,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case ModelPackage.DOCUMENT: return createDocument();
+			case ModelPackage.LINK_TARGET: return createLinkTarget();
 			case ModelPackage.PAGE: return createPage();
 			case ModelPackage.TAG: return createTag();
 			case ModelPackage.MODEL: return createModel();
@@ -82,6 +83,17 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	public Document createDocument() {
 		DocumentImpl document = new DocumentImpl();
 		return document;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LinkTarget createLinkTarget() {
+		LinkTargetImpl linkTarget = new LinkTargetImpl();
+		return linkTarget;
 	}
 
 	/**

@@ -14,8 +14,8 @@ import java.util.function.Predicate;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.model.Connection;
+import org.nasdanika.drawio.model.LinkTarget;
 import org.nasdanika.drawio.model.Node;
-import org.nasdanika.drawio.model.Page;
 import org.nasdanika.drawio.model.Tag;
 import org.nasdanika.drawio.model.comparators.AngularNodeComparator;
 import org.nasdanika.drawio.model.comparators.CartesianNodeComparator;
@@ -40,10 +40,10 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 			return ((Tag) eObject).getElements();
 		}
 		if (eObject instanceof org.nasdanika.drawio.model.ModelElement) {
-			Page linkedPage = ((org.nasdanika.drawio.model.ModelElement) eObject).getLinkedPage();
-			if (linkedPage != null && tracker.test(linkedPage)) {
+			LinkTarget linkTarget = ((org.nasdanika.drawio.model.ModelElement) eObject).getLinkTarget();
+			if (linkTarget != null && tracker.test(linkTarget)) {
 				List<EObject> ret = new ArrayList<>(super.contents(eObject, tracker));
-				ret.add(linkedPage);
+				ret.add(linkTarget);
 				return ret;
 			}
 		}

@@ -13,19 +13,14 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.nasdanika.drawio.model.Document;
+import org.nasdanika.drawio.model.LinkTarget;
 import org.nasdanika.drawio.model.ModelElement;
 import org.nasdanika.drawio.model.ModelPackage;
 import org.nasdanika.drawio.model.Page;
 import org.nasdanika.drawio.model.Tag;
-import org.nasdanika.ncore.Marker;
-import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.StringIdentity;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,12 +30,10 @@ import org.nasdanika.ncore.StringIdentity;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getMarkers <em>Markers</em>}</li>
- *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getId <em>Id</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getLink <em>Link</em>}</li>
- *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getLinkedPage <em>Linked Page</em>}</li>
+ *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getLinkTarget <em>Link Target</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getStyle <em>Style</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getTags <em>Tags</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getTooltip <em>Tooltip</em>}</li>
@@ -49,17 +42,7 @@ import org.nasdanika.ncore.StringIdentity;
  *
  * @generated
  */
-public abstract class ModelElementImpl extends MinimalEObjectImpl.Container implements ModelElement {
-	/**
-	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getId()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String ID_EDEFAULT = null;
-
+public abstract class ModelElementImpl extends LinkTargetImpl implements ModelElement {
 	/**
 	 * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -123,51 +106,10 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<Marker> getMarkers() {
-		return (EList<Marker>)eDynamicGet(ModelPackage.MODEL_ELEMENT__MARKERS, NcorePackage.Literals.MARKED__MARKERS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public EMap<String, String> getProperties() {
 		return (EMap<String, String>)eDynamicGet(ModelPackage.MODEL_ELEMENT__PROPERTIES, ModelPackage.Literals.MODEL_ELEMENT__PROPERTIES, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getId() {
-		return (String)eDynamicGet(ModelPackage.MODEL_ELEMENT__ID, NcorePackage.Literals.STRING_IDENTITY__ID, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setId(String newId) {
-		eDynamicSet(ModelPackage.MODEL_ELEMENT__ID, NcorePackage.Literals.STRING_IDENTITY__ID, newId);
 	}
 
 	/**
@@ -216,8 +158,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
-	public Page getLinkedPage() {
-		return (Page)eDynamicGet(ModelPackage.MODEL_ELEMENT__LINKED_PAGE, ModelPackage.Literals.MODEL_ELEMENT__LINKED_PAGE, true, true);
+	public LinkTarget getLinkTarget() {
+		return (LinkTarget)eDynamicGet(ModelPackage.MODEL_ELEMENT__LINK_TARGET, ModelPackage.Literals.MODEL_ELEMENT__LINK_TARGET, true, true);
 	}
 
 	/**
@@ -225,8 +167,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Page basicGetLinkedPage() {
-		return (Page)eDynamicGet(ModelPackage.MODEL_ELEMENT__LINKED_PAGE, ModelPackage.Literals.MODEL_ELEMENT__LINKED_PAGE, false, true);
+	public LinkTarget basicGetLinkTarget() {
+		return (LinkTarget)eDynamicGet(ModelPackage.MODEL_ELEMENT__LINK_TARGET, ModelPackage.Literals.MODEL_ELEMENT__LINK_TARGET, false, true);
 	}
 
 	/**
@@ -234,8 +176,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetLinkedPage(Page newLinkedPage, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newLinkedPage, ModelPackage.MODEL_ELEMENT__LINKED_PAGE, msgs);
+	public NotificationChain basicSetLinkTarget(LinkTarget newLinkTarget, NotificationChain msgs) {
+		msgs = eDynamicInverseAdd((InternalEObject)newLinkTarget, ModelPackage.MODEL_ELEMENT__LINK_TARGET, msgs);
 		return msgs;
 	}
 
@@ -245,8 +187,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
-	public void setLinkedPage(Page newLinkedPage) {
-		eDynamicSet(ModelPackage.MODEL_ELEMENT__LINKED_PAGE, ModelPackage.Literals.MODEL_ELEMENT__LINKED_PAGE, newLinkedPage);
+	public void setLinkTarget(LinkTarget newLinkTarget) {
+		eDynamicSet(ModelPackage.MODEL_ELEMENT__LINK_TARGET, ModelPackage.Literals.MODEL_ELEMENT__LINK_TARGET, newLinkTarget);
 	}
 
 	/**
@@ -350,11 +292,11 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ModelPackage.MODEL_ELEMENT__LINKED_PAGE:
-				Page linkedPage = basicGetLinkedPage();
-				if (linkedPage != null)
-					msgs = ((InternalEObject)linkedPage).eInverseRemove(this, ModelPackage.PAGE__LINKS, Page.class, msgs);
-				return basicSetLinkedPage((Page)otherEnd, msgs);
+			case ModelPackage.MODEL_ELEMENT__LINK_TARGET:
+				LinkTarget linkTarget = basicGetLinkTarget();
+				if (linkTarget != null)
+					msgs = ((InternalEObject)linkTarget).eInverseRemove(this, ModelPackage.LINK_TARGET__LINKS, LinkTarget.class, msgs);
+				return basicSetLinkTarget((LinkTarget)otherEnd, msgs);
 			case ModelPackage.MODEL_ELEMENT__TAGS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getTags()).basicAdd(otherEnd, msgs);
 		}
@@ -369,12 +311,10 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ModelPackage.MODEL_ELEMENT__MARKERS:
-				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
 			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
 				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
-			case ModelPackage.MODEL_ELEMENT__LINKED_PAGE:
-				return basicSetLinkedPage(null, msgs);
+			case ModelPackage.MODEL_ELEMENT__LINK_TARGET:
+				return basicSetLinkTarget(null, msgs);
 			case ModelPackage.MODEL_ELEMENT__STYLE:
 				return ((InternalEList<?>)getStyle()).basicRemove(otherEnd, msgs);
 			case ModelPackage.MODEL_ELEMENT__TAGS:
@@ -391,10 +331,6 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ModelPackage.MODEL_ELEMENT__MARKERS:
-				return getMarkers();
-			case ModelPackage.MODEL_ELEMENT__ID:
-				return getId();
 			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
 				if (coreType) return getProperties();
 				else return getProperties().map();
@@ -402,9 +338,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return getLabel();
 			case ModelPackage.MODEL_ELEMENT__LINK:
 				return getLink();
-			case ModelPackage.MODEL_ELEMENT__LINKED_PAGE:
-				if (resolve) return getLinkedPage();
-				return basicGetLinkedPage();
+			case ModelPackage.MODEL_ELEMENT__LINK_TARGET:
+				if (resolve) return getLinkTarget();
+				return basicGetLinkTarget();
 			case ModelPackage.MODEL_ELEMENT__STYLE:
 				if (coreType) return getStyle();
 				else return getStyle().map();
@@ -427,13 +363,6 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ModelPackage.MODEL_ELEMENT__MARKERS:
-				getMarkers().clear();
-				getMarkers().addAll((Collection<? extends Marker>)newValue);
-				return;
-			case ModelPackage.MODEL_ELEMENT__ID:
-				setId((String)newValue);
-				return;
 			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
 				((EStructuralFeature.Setting)getProperties()).set(newValue);
 				return;
@@ -443,8 +372,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case ModelPackage.MODEL_ELEMENT__LINK:
 				setLink((String)newValue);
 				return;
-			case ModelPackage.MODEL_ELEMENT__LINKED_PAGE:
-				setLinkedPage((Page)newValue);
+			case ModelPackage.MODEL_ELEMENT__LINK_TARGET:
+				setLinkTarget((LinkTarget)newValue);
 				return;
 			case ModelPackage.MODEL_ELEMENT__STYLE:
 				((EStructuralFeature.Setting)getStyle()).set(newValue);
@@ -471,12 +400,6 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ModelPackage.MODEL_ELEMENT__MARKERS:
-				getMarkers().clear();
-				return;
-			case ModelPackage.MODEL_ELEMENT__ID:
-				setId(ID_EDEFAULT);
-				return;
 			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
 				getProperties().clear();
 				return;
@@ -486,8 +409,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case ModelPackage.MODEL_ELEMENT__LINK:
 				setLink(LINK_EDEFAULT);
 				return;
-			case ModelPackage.MODEL_ELEMENT__LINKED_PAGE:
-				setLinkedPage((Page)null);
+			case ModelPackage.MODEL_ELEMENT__LINK_TARGET:
+				setLinkTarget((LinkTarget)null);
 				return;
 			case ModelPackage.MODEL_ELEMENT__STYLE:
 				getStyle().clear();
@@ -513,18 +436,14 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ModelPackage.MODEL_ELEMENT__MARKERS:
-				return !getMarkers().isEmpty();
-			case ModelPackage.MODEL_ELEMENT__ID:
-				return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
 			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
 				return !getProperties().isEmpty();
 			case ModelPackage.MODEL_ELEMENT__LABEL:
 				return LABEL_EDEFAULT == null ? getLabel() != null : !LABEL_EDEFAULT.equals(getLabel());
 			case ModelPackage.MODEL_ELEMENT__LINK:
 				return LINK_EDEFAULT == null ? getLink() != null : !LINK_EDEFAULT.equals(getLink());
-			case ModelPackage.MODEL_ELEMENT__LINKED_PAGE:
-				return basicGetLinkedPage() != null;
+			case ModelPackage.MODEL_ELEMENT__LINK_TARGET:
+				return basicGetLinkTarget() != null;
 			case ModelPackage.MODEL_ELEMENT__STYLE:
 				return !getStyle().isEmpty();
 			case ModelPackage.MODEL_ELEMENT__TAGS:
@@ -535,38 +454,6 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return isVisible() != VISIBLE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == StringIdentity.class) {
-			switch (derivedFeatureID) {
-				case ModelPackage.MODEL_ELEMENT__ID: return NcorePackage.STRING_IDENTITY__ID;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == StringIdentity.class) {
-			switch (baseFeatureID) {
-				case NcorePackage.STRING_IDENTITY__ID: return ModelPackage.MODEL_ELEMENT__ID;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
