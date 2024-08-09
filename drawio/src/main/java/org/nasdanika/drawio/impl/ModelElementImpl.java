@@ -40,11 +40,15 @@ import org.xml.sax.SAXException;
 class ModelElementImpl extends ElementImpl implements ModelElement {
 	
 	private static final String MX_CELL_TAG_NAME = "mxCell";
-	private static final String PAGE_LINK_PREFIX = "data:page/";
-	private static final String ELEMENT_LINK_PREFIX = "data:element/";
 	
 	private static final String ID_PREFIX = "id,";
-	private static final String NAME_PREFIX = "name,"; 
+	private static final String NAME_PREFIX = "name,";	
+
+	private static final String PAGE_LINK_ID_PREFIX = "data:page/" + ID_PREFIX;
+	private static final String PAGE_LINK_NAME_PREFIX = "data:page/" + NAME_PREFIX;
+			
+	private static final String ELEMENT_LINK_ID_PREFIX = "data:element/" + ID_PREFIX;
+	private static final String ELEMENT_LINK_NAME_PREFIX = "data:element/" + NAME_PREFIX;
 	
 	private static final String ATTRIBUTE_TAGS = "tags";
 	static final String ATTRIBUTE_VALUE = "value";
@@ -320,10 +324,22 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	@Override
 	public boolean isTargetLink() {
 		String link = getLink();
-		return !Util.isBlank(link) && link.startsWith(PAGE_LINK_PREFIX);
+		return !Util.isBlank(link) && (
+				link.startsWith(PAGE_LINK_ID_PREFIX)
+				|| link.startsWith(PAGE_LINK_NAME_PREFIX)
+				|| link.startsWith(ELEMENT_LINK_ID_PREFIX)
+				|| link.startsWith(ELEMENT_LINK_NAME_PREFIX)
+				);
 	}
 	
-	protected Page findPage(String pageSelector) {
+	/**
+	 * Finds a page
+	 * @param pageSelector Page id or name possibly prefixed by document URI and #
+	 * @param qualified if selector is qualified, i.e. starts with id, or name,
+	 * @param name selector is a name
+	 * @return
+	 */
+	protected Page findPage(String pageSelector, boolean qualified, boolean name) {
 		if (Util.isBlank(pageSelector)) {
 			return null;
 		}
@@ -341,27 +357,34 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			pageSelector = pageSelector.substring(hashIdx + 1);
 		}
 		
-		if (pageSelector.startsWith(ID_PREFIX)) {
-			String id = pageSelector.substring(ID_PREFIX.length());
-			for (Page page: document.getPages()) {
-				if (id.equals(page.getId())) {
-					return page;
-				}
+		if (qualified) {
+			if (pageSelector.startsWith(ID_PREFIX)) {
+				name = false;
+				pageSelector = pageSelector.substring(ID_PREFIX.length());
+			} else if (pageSelector.startsWith(NAME_PREFIX)) {
+				name = true;				
+				pageSelector = pageSelector.substring(NAME_PREFIX.length());
+			} else {			
+				throw new ConfigurationException("Invalid qualified page selector: '" + pageSelector, this);
 			}
-			throw new ConfigurationException("Page with id '" + id + "' not found in " + document.getURI(), this);
-		} 
-		
-		if (pageSelector.startsWith(NAME_PREFIX)) {			
-			String name = URLDecoder.decode(pageSelector.substring(NAME_PREFIX.length()), StandardCharsets.UTF_8);
-			for (Page page: document.getPages()) {
-				if (name.equals(page.getName())) {
-					return page;
-				}
-			}
-			throw new ConfigurationException("Page with name '" + name + "' not found in " + document.getURI(), this);			
 		}
 		
-		throw new ConfigurationException("Invalid page selector: " + pageSelector, this);					
+		if (name) {			
+			String pageName = URLDecoder.decode(pageSelector, StandardCharsets.UTF_8);
+			for (Page page: document.getPages()) {
+				if (pageName.equals(page.getName())) {
+					return page;
+				}
+			}
+			throw new ConfigurationException("Page with name '" + pageName + "' not found in " + document.getURI(), this);			
+		}
+		
+		for (Page page: document.getPages()) {
+			if (pageSelector.equals(page.getId())) {
+				return page;
+			}
+		}
+		throw new ConfigurationException("Page with id '" + pageSelector + "' not found in " + document.getURI(), this);
 	}
 
 	@Override
@@ -373,51 +396,60 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		
 		DocumentImpl document = (DocumentImpl) getModel().getPage().getDocument();
 		
-		if (link.startsWith(PAGE_LINK_PREFIX)) {
-			String pageSelector = link.substring(PAGE_LINK_PREFIX.length());
-			return findPage(pageSelector);			
+		if (link.startsWith(PAGE_LINK_ID_PREFIX)) {
+			String pageId = link.substring(PAGE_LINK_ID_PREFIX.length());
+			return findPage(pageId, false, false);			
 		} 
 		
-		if (link.startsWith(ELEMENT_LINK_PREFIX)) {
-			String elementSelector = link.substring(ELEMENT_LINK_PREFIX.length());
+		if (link.startsWith(PAGE_LINK_NAME_PREFIX)) {
+			String pageName = link.substring(PAGE_LINK_NAME_PREFIX.length());
+			return findPage(pageName, false, true);			
+		} 
+		
+		if (link.startsWith(ELEMENT_LINK_ID_PREFIX)) {
+			String elementSelector = link.substring(ELEMENT_LINK_ID_PREFIX.length());
 			Page page = getModel().getPage();
 			int slashIdx = elementSelector.indexOf("/");
 			if (slashIdx != -1) {
-				page = findPage(elementSelector.substring(0, slashIdx));
+				page = findPage(elementSelector.substring(0, slashIdx), true, false);
 				elementSelector =  elementSelector.substring(slashIdx + 1);
 			}
 			
-			if (elementSelector.startsWith(ID_PREFIX)) {
-				String id = elementSelector.substring(ID_PREFIX.length());
-				Optional<ModelElement> target = page
+			String id = elementSelector;
+			Optional<ModelElement> target = page
+				.stream()
+				.filter(ModelElement.class::isInstance)
+				.map(ModelElement.class::cast)
+				.filter(me -> id.equals(me.getId()))
+				.findFirst();
+				
+			if (target.isEmpty()) {
+				throw new ConfigurationException("Element with id '" + id + "' not found on page '" + page.getName() + "' in " + document.getURI(), this);
+			}
+			return target.get();
+		}
+		
+		if (link.startsWith(ELEMENT_LINK_NAME_PREFIX)) {
+			String elementSelector = link.substring(ELEMENT_LINK_NAME_PREFIX.length());
+			Page page = getModel().getPage();
+			int slashIdx = elementSelector.indexOf("/");
+			if (slashIdx != -1) {
+				page = findPage(elementSelector.substring(0, slashIdx), true, false);
+				elementSelector =  elementSelector.substring(slashIdx + 1);
+			}
+			
+			String name = URLDecoder.decode(elementSelector, StandardCharsets.UTF_8);
+			Optional<ModelElement> target = page
 					.stream()
 					.filter(ModelElement.class::isInstance)
 					.map(ModelElement.class::cast)
-					.filter(me -> id.equals(me.getId()))
+					.filter(me -> !Util.isBlank(me.getLabel()) && name.equals(Jsoup.parse(me.getLabel()).text()))
 					.findFirst();
 					
-				if (target.isEmpty()) {
-					throw new ConfigurationException("Element with id '" + id + "' not found on page '" + page.getName() + "' in " + document.getURI(), this);
-				}
-				return target.get();
-			} 
-			
-			if (elementSelector.startsWith(NAME_PREFIX)) {			
-				String name = URLDecoder.decode(elementSelector.substring(NAME_PREFIX.length()), StandardCharsets.UTF_8);
-				Optional<ModelElement> target = page
-						.stream()
-						.filter(ModelElement.class::isInstance)
-						.map(ModelElement.class::cast)
-						.filter(me -> !Util.isBlank(me.getLabel()) && name.equals(Jsoup.parse(me.getLabel()).text()))
-						.findFirst();
-						
-					if (target.isEmpty()) {
-						throw new ConfigurationException("Element with name '" + name + "' not found on page '" + page.getName() + "' in " + document.getURI(), this);
-					}
-					return target.get();
+			if (target.isEmpty()) {
+				throw new ConfigurationException("Element with name '" + name + "' not found on page '" + page.getName() + "' in " + document.getURI(), this);
 			}
-			
-			throw new ConfigurationException("Invalid element selector: " + elementSelector, this);								
+			return target.get();
 		}
 
 		return null;

@@ -4,64 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
-import java.awt.Point;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.CompletionStage;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
-import javax.xml.transform.TransformerException;
-
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.nasdanika.common.NasdanikaException;
-import org.nasdanika.common.PrintStreamProgressMonitor;
-import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Transformer;
-import org.nasdanika.common.Util;
-import org.nasdanika.drawio.Connection;
-import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
-import org.nasdanika.drawio.Layer;
-import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.LinkTarget;
-import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
-import org.nasdanika.drawio.Rectangle;
-import org.nasdanika.drawio.Root;
-import org.nasdanika.graph.processor.ConnectionProcessorConfig;
-import org.nasdanika.graph.processor.NodeProcessorConfig;
-import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
-import org.nasdanika.graph.processor.ProcessorConfig;
-import org.nasdanika.graph.processor.ProcessorFactory;
-import org.nasdanika.graph.processor.ProcessorInfo;
-import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
-import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory;
-import org.nasdanika.graph.processor.function.ReflectiveBiFunctionProcessorFactoryProvider;
 
 public class TestLinkTargets {
 	
