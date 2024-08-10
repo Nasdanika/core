@@ -47,7 +47,13 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 					Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 					ProgressMonitor progressMonitor) {
 				
-				P processor = ReflectiveProcessorFactoryProvider.this.createProcessor(config, parallel, infoProvider, endpointWiringStageConsumer, progressMonitor);
+				P processor = ReflectiveProcessorFactoryProvider.this.createProcessor(
+						config, 
+						parallel, 
+						infoProvider, 
+						endpointWiringStageConsumer, 
+						progressMonitor);
+				
 				return ProcessorInfo.of(config, processor);
 			}
 			
@@ -60,7 +66,11 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 					};
 					
 					List<AnnotatedElementRecord> registryTargetAnnotatedElementRecords = getAnnotatedElementRecords(registryTarget, Collections.singletonList(registryTarget)).toList();
-					wireRegistryEntry(parallel ? registryTargetAnnotatedElementRecords.parallelStream() : registryTargetAnnotatedElementRecords.stream(), configs, infoProvider);
+					wireRegistryEntry(
+							parallel ? registryTargetAnnotatedElementRecords.parallelStream() : registryTargetAnnotatedElementRecords.stream(), 
+							configs,
+							Collections.singletonMap("target", registryTarget),
+							infoProvider);
 					wireRegistry(parallel ? registryTargetAnnotatedElementRecords.parallelStream() : registryTargetAnnotatedElementRecords.stream(), configs, infoProvider);
 				}				
 				

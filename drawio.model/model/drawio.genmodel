@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.nasdanika.drawio.model/src/main/java" creationIcons="false"
     editorDirectory="" modelPluginID="org.nasdanika.drawio.model" modelName="Drawio"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
-    featureDelegation="Dynamic" complianceLevel="17.0" suppressGenModelAnnotations="false"
+    bundleManifest="false" featureDelegation="Dynamic" complianceLevel="17.0" suppressGenModelAnnotations="false"
     copyrightFields="false" usedGenPackages="../../org.nasdanika.ncore/model/ncore.genmodel#//ncore"
     operationReflection="true" importOrganizing="true">
   <foreignModel>drawio.ecore</foreignModel>

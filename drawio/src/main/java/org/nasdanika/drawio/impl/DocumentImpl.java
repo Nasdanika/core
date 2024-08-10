@@ -403,5 +403,10 @@ public class DocumentImpl extends ElementImpl implements Document {
 		
 		return ret;
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + " " + uri;
+	}
 
 }

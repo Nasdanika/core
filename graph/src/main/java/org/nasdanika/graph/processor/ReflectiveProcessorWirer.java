@@ -76,6 +76,11 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 		wireRegistryEntry(
 				processorAnnotatedElementRecordsStreamSupplier.get(), 
 				config.getRegistry().values(), 
+				Map.of(
+					"config", config,
+					"element", config.getElement(),
+					"processor", processor
+				),		
 				infoProvider);
 		
 		wireRegistry(

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
@@ -117,6 +118,11 @@ public class TestNcore {
 		Diagnostic error = duplicateKeyYamlResource.getErrors().get(0);
 		System.out.println(error.getMessage());
 		System.out.println(error.getLocation());		
+	}
+	
+	@Test
+	public void testContentType() {
+		System.out.println(URLConnection.guessContentTypeFromName("doc.txt"));
 	}
 
 }

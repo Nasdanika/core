@@ -17,11 +17,11 @@ import java.lang.annotation.Target;
 public @interface RegistryEntry {
 	
 	/**
-	 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
-	 * which is evaluated in the context of an element. 
+	 * A <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
+	 * which is evaluated in the context of an element with <code>target</code> variable for registry targets and <code>element</code>,<code>config</code>, and <code>processor</code> for element processors. 
 	 * @return
 	 */
-	String value() default "";
+	String value();
 	
 	/**
 	 * If <code>true</code> {@link ProcessorInfo} is injected, processor otherwise.
