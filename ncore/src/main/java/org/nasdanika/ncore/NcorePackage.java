@@ -2833,6 +2833,52 @@ public interface NcorePackage extends EPackage {
 	int STACK_TRACE_ELEMENT_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.TreeItemReferenceImpl <em>Tree Item Reference</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.TreeItemReferenceImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTreeItemReference()
+	 * @generated
+	 */
+	int TREE_ITEM_REFERENCE = 44;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TREE_ITEM_REFERENCE__NAME = TREE_ITEM__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TREE_ITEM_REFERENCE__TARGET = TREE_ITEM_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Tree Item Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TREE_ITEM_REFERENCE_FEATURE_COUNT = TREE_ITEM_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Tree Item Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TREE_ITEM_REFERENCE_OPERATION_COUNT = TREE_ITEM_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '<em>Instant</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2840,7 +2886,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 44;
+	int INSTANT = 45;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -2850,7 +2896,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 45;
+	int DURATION = 46;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -3986,6 +4032,16 @@ public interface NcorePackage extends EPackage {
 	EAttribute getStackTraceElement_Native();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.TreeItemReference <em>Tree Item Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Tree Item Reference</em>'.
+	 * @see org.nasdanika.ncore.TreeItemReference
+	 * @generated
+	 */
+	EClass getTreeItemReference();
+
+	/**
 	 * Returns the meta object for data type '{@link java.time.Instant <em>Instant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4988,6 +5044,16 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute STACK_TRACE_ELEMENT__NATIVE = eINSTANCE.getStackTraceElement_Native();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.TreeItemReferenceImpl <em>Tree Item Reference</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.TreeItemReferenceImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTreeItemReference()
+		 * @generated
+		 */
+		EClass TREE_ITEM_REFERENCE = eINSTANCE.getTreeItemReference();
 
 		/**
 		 * The meta object literal for the '<em>Instant</em>' data type.

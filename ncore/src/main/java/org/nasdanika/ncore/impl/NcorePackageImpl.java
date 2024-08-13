@@ -48,6 +48,7 @@ import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
 import org.nasdanika.ncore.Tree;
 import org.nasdanika.ncore.TreeItem;
+import org.nasdanika.ncore.TreeItemReference;
 import org.nasdanika.ncore.ValueObject;
 import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.ncore.util.NcoreValidator;
@@ -366,6 +367,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass stackTraceElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass treeItemReferenceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1528,6 +1536,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getTreeItemReference() {
+		return treeItemReferenceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getInstant() {
 		return instantEDataType;
 	}
@@ -1722,6 +1740,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(stackTraceElementEClass, STACK_TRACE_ELEMENT__LINE_NUMBER);
 		createEAttribute(stackTraceElementEClass, STACK_TRACE_ELEMENT__NATIVE);
 
+		treeItemReferenceEClass = createEClass(TREE_ITEM_REFERENCE);
+
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
 		durationEDataType = createEDataType(DURATION);
@@ -1850,6 +1870,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		fileEClass.getESuperTypes().add(this.getTreeItem());
 		directoryEClass.getESuperTypes().add(this.getFile());
 		directoryEClass.getESuperTypes().add(this.getTree());
+		g1 = createEGenericType(this.getTreeItem());
+		treeItemReferenceEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getReference());
+		g2 = createEGenericType(this.getTreeItem());
+		g1.getETypeArguments().add(g2);
+		treeItemReferenceEClass.getEGenericSuperTypes().add(g1);
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(adaptableEClass, Adaptable.class, "Adaptable", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -2021,6 +2047,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getStackTraceElement_MethodName(), ecorePackage.getEString(), "methodName", null, 0, 1, org.nasdanika.ncore.StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStackTraceElement_LineNumber(), ecorePackage.getEInt(), "lineNumber", null, 0, 1, org.nasdanika.ncore.StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStackTraceElement_Native(), ecorePackage.getEBoolean(), "native", null, 0, 1, org.nasdanika.ncore.StackTraceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(treeItemReferenceEClass, TreeItemReference.class, "TreeItemReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

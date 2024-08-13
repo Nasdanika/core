@@ -319,6 +319,15 @@ public interface NcoreFactory extends EFactory {
 	StackTraceElement createStackTraceElement();
 
 	/**
+	 * Returns a new object of class '<em>Tree Item Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Tree Item Reference</em>'.
+	 * @generated
+	 */
+	TreeItemReference createTreeItemReference();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -156,5 +156,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//StackTraceElement/lineNumber"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//StackTraceElement/native"/>
     </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//TreeItemReference"/>
   </genPackages>
 </genmodel:GenModel>

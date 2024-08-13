@@ -40,6 +40,7 @@ import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
 import org.nasdanika.ncore.Tree;
 import org.nasdanika.ncore.TreeItem;
+import org.nasdanika.ncore.TreeItemReference;
 import org.nasdanika.ncore.ValueObjectProperty;
 
 /**
@@ -121,6 +122,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.DIRECTORY: return createDirectory();
 			case NcorePackage.THROWABLE: return createThrowable();
 			case NcorePackage.STACK_TRACE_ELEMENT: return createStackTraceElement();
+			case NcorePackage.TREE_ITEM_REFERENCE: return createTreeItemReference();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -541,6 +543,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public org.nasdanika.ncore.StackTraceElement createStackTraceElement() {
 		StackTraceElementImpl stackTraceElement = new StackTraceElementImpl();
 		return stackTraceElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TreeItemReference createTreeItemReference() {
+		TreeItemReferenceImpl treeItemReference = new TreeItemReferenceImpl();
+		return treeItemReference;
 	}
 
 	/**

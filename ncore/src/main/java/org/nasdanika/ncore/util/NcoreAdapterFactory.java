@@ -38,6 +38,7 @@ import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
 import org.nasdanika.ncore.Tree;
 import org.nasdanika.ncore.TreeItem;
+import org.nasdanika.ncore.TreeItemReference;
 import org.nasdanika.ncore.ValueObject;
 import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.persistence.Marked;
@@ -274,6 +275,10 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseStackTraceElement(org.nasdanika.ncore.StackTraceElement object) {
 				return createStackTraceElementAdapter();
+			}
+			@Override
+			public Adapter caseTreeItemReference(TreeItemReference object) {
+				return createTreeItemReferenceAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -908,6 +913,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createStackTraceElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.TreeItemReference <em>Tree Item Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.TreeItemReference
+	 * @generated
+	 */
+	public Adapter createTreeItemReferenceAdapter() {
 		return null;
 	}
 

@@ -43,6 +43,7 @@ import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
 import org.nasdanika.ncore.Tree;
 import org.nasdanika.ncore.TreeItem;
+import org.nasdanika.ncore.TreeItemReference;
 import org.nasdanika.ncore.ValueObject;
 import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.persistence.Marked;
@@ -208,6 +209,8 @@ public class NcoreValidator extends EObjectValidator {
 				return validateThrowable((org.nasdanika.ncore.Throwable)value, diagnostics, context);
 			case NcorePackage.STACK_TRACE_ELEMENT:
 				return validateStackTraceElement((org.nasdanika.ncore.StackTraceElement)value, diagnostics, context);
+			case NcorePackage.TREE_ITEM_REFERENCE:
+				return validateTreeItemReference((TreeItemReference)value, diagnostics, context);
 			case NcorePackage.INSTANT:
 				return validateInstant((Instant)value, diagnostics, context);
 			case NcorePackage.DURATION:
@@ -716,6 +719,15 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateStackTraceElement(org.nasdanika.ncore.StackTraceElement stackTraceElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(stackTraceElement, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateTreeItemReference(TreeItemReference treeItemReference, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(treeItemReference, diagnostics, context);
 	}
 
 	/**

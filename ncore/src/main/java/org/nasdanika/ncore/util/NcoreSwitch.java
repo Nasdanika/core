@@ -36,6 +36,7 @@ import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
 import org.nasdanika.ncore.Tree;
 import org.nasdanika.ncore.TreeItem;
+import org.nasdanika.ncore.TreeItemReference;
 import org.nasdanika.ncore.ValueObject;
 import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.persistence.Marked;
@@ -481,6 +482,14 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 			case NcorePackage.STACK_TRACE_ELEMENT: {
 				org.nasdanika.ncore.StackTraceElement stackTraceElement = (org.nasdanika.ncore.StackTraceElement)theEObject;
 				T1 result = caseStackTraceElement(stackTraceElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.TREE_ITEM_REFERENCE: {
+				TreeItemReference treeItemReference = (TreeItemReference)theEObject;
+				T1 result = caseTreeItemReference(treeItemReference);
+				if (result == null) result = caseTreeItem(treeItemReference);
+				if (result == null) result = caseReference(treeItemReference);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1145,6 +1154,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseStackTraceElement(org.nasdanika.ncore.StackTraceElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Tree Item Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Tree Item Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseTreeItemReference(TreeItemReference object) {
 		return null;
 	}
 
