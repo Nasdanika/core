@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import org.eclipse.emf.common.util.AbstractTreeIterator;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.ncore.Reference;
 
 /**
@@ -20,6 +21,30 @@ public class DereferencingTreeIterator implements TreeIterator<EObject> {
 	private Stack<Map.Entry<Object, TreeIterator<EObject>>> stack = new Stack<>();
 	private Predicate<? super EObject> refTargetPredicate;
 	
+	public DereferencingTreeIterator(EObject obj) {
+		this(obj, true, null);
+	}
+	
+	public DereferencingTreeIterator(
+			Resource resource, 
+			boolean includeRoot,
+			Predicate<? super EObject> refTargetPredicate) {
+		for (EObject obj: resource.getContents()) {
+			stack.push(Map.entry(obj, createTreeIterator(obj, includeRoot)));
+		}
+		this.refTargetPredicate = refTargetPredicate;
+	}
+	
+	public DereferencingTreeIterator(
+			Iterable<EObject> objs, 
+			boolean includeRoot,
+			Predicate<? super EObject> refTargetPredicate) {
+		for (EObject obj: objs) {
+			stack.push(Map.entry(obj, createTreeIterator(obj, includeRoot)));
+		}
+		this.refTargetPredicate = refTargetPredicate;
+	}
+		
 	public DereferencingTreeIterator(
 			EObject obj, 
 			boolean includeRoot,
@@ -27,6 +52,7 @@ public class DereferencingTreeIterator implements TreeIterator<EObject> {
 		stack.push(Map.entry(obj, createTreeIterator(obj, includeRoot)));
 		this.refTargetPredicate = refTargetPredicate;
 	}
+	
 	
 	@Override
 	public boolean hasNext() {
