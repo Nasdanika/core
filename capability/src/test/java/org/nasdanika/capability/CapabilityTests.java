@@ -1,10 +1,12 @@
 package org.nasdanika.capability;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.junit.jupiter.api.Test;
 import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.capability.emf.ResourceSetRequirement;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
@@ -60,6 +62,19 @@ public class CapabilityTests {
 		for (CapabilityProvider<?> cp: capabilityLoader.load(requirement, progressMonitor)) {
 			System.out.println(cp);
 			cp.getPublisher().subscribe(System.out::println);
+		}
+	}
+	
+	@Test
+	public void testMarkdownHelper() {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Requirement<URI, MarkdownHelper> requirement = ServiceCapabilityFactory.createRequirement(MarkdownHelper.class, null, URI.createURI("https://docs.nasdanika.org"));		
+		for (CapabilityProvider<?> cp: capabilityLoader.load(requirement, progressMonitor)) {
+			System.out.println(cp);
+			cp.getPublisher().subscribe(mh -> {
+				System.out.println(mh);	
+			});
 		}
 	}
 

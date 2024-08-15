@@ -2,6 +2,9 @@ import org.nasdanika.capability.CapabilityFactory;
 import org.nasdanika.exec.content.util.ContentEPackageResourceSetCapabilityFactory;
 import org.nasdanika.exec.resources.util.ResourcesEPackageResourceSetCapabilityFactory;
 import org.nasdanika.exec.util.ExecEPackageResourceSetCapabilityFactory;
+import org.nasdanika.exec.util.HtmlDocumentationFactory;
+import org.nasdanika.exec.util.MarkdownDocumentationFactory;
+import org.nasdanika.exec.util.TextDocumentationFactory;
 
 module org.nasdanika.exec {
 	exports org.nasdanika.exec;
@@ -22,5 +25,8 @@ module org.nasdanika.exec {
 	provides CapabilityFactory with
 		ExecEPackageResourceSetCapabilityFactory,
 		ContentEPackageResourceSetCapabilityFactory,
-		ResourcesEPackageResourceSetCapabilityFactory;
+		ResourcesEPackageResourceSetCapabilityFactory,
+		HtmlDocumentationFactory,
+		MarkdownDocumentationFactory,
+		TextDocumentationFactory;
 }
