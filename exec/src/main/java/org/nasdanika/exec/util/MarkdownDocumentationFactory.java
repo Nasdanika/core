@@ -1,5 +1,7 @@
 package org.nasdanika.exec.util;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 
@@ -7,13 +9,13 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.Interpolator;
 import org.nasdanika.exec.content.Markdown;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.content.Text;
-import org.nasdanika.ncore.DocumentationFactory;
 
 public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Void, DocumentationFactory> {
 	
@@ -37,7 +39,7 @@ public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Void,
 			}
 			
 			@Override
-			public EObject createDocumentation(URI docRef, ProgressMonitor progressMonitor) {
+			public Collection<EObject> createDocumentation(URI docRef, ProgressMonitor progressMonitor) {
 				Markdown ret = ContentFactory.eINSTANCE.createMarkdown();
 				Interpolator interpolator = ContentFactory.eINSTANCE.createInterpolator();
 				Resource resource = ContentFactory.eINSTANCE.createResource();
@@ -45,11 +47,11 @@ public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Void,
 				interpolator.setSource(resource);
 				ret.setSource(interpolator);
 				ret.setStyle(true);
-				return ret;
+				return Collections.singleton(ret);
 			}
 			
 			@Override
-			public EObject createDocumentation(String doc, URI baseUri, ProgressMonitor progressMonitor) {
+			public Collection<EObject> createDocumentation(String doc, URI baseUri, ProgressMonitor progressMonitor) {
 				Markdown ret = ContentFactory.eINSTANCE.createMarkdown();
 				Interpolator interpolator = ContentFactory.eINSTANCE.createInterpolator();
 				Text text = ContentFactory.eINSTANCE.createText(); // Interpolate with element properties?
@@ -64,7 +66,7 @@ public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Void,
 //					ret.getMarkers().add(marker); 
 //				}
 				
-				return ret;
+				return Collections.singleton(ret);
 			}
 		};
 		

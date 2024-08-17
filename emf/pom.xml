@@ -36,6 +36,11 @@
 		    <artifactId>poi-ooxml</artifactId>
 		    <version>5.2.5</version>
 		</dependency>
+		<dependency>
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>cli</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 	</dependencies>
 </project>

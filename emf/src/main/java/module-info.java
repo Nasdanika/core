@@ -13,6 +13,9 @@ module org.nasdanika.emf {
 	requires org.eclipse.jgit;
 	requires transitive org.apache.poi.ooxml;
 	requires spring.core;
+	requires info.picocli;
+	
+	opens org.nasdanika.emf to info.picocli;
 	
 	provides CapabilityFactory with EObjectCapabilityFactory;
 	

@@ -1,5 +1,6 @@
 package org.nasdanika.drawio;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -22,6 +23,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.drawio.impl.DocumentImpl;
 import org.w3c.dom.Node;
@@ -304,6 +306,18 @@ public interface Document extends Element {
 	}
 	
 	/**
+	 * Loads document from URL by opening a stream.
+	 * @param source
+	 * @return
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
+	static Document load(File source) throws IOException, ParserConfigurationException, SAXException {
+		return load(source.toURI().toURL(), null, null);
+	}
+	
+	/**
 	 * Loads documents stored in PNG metadata using UTF-8 encoding.
 	 * @param in
 	 * @return
@@ -387,7 +401,29 @@ public interface Document extends Element {
 	 * @return div tag with the embedded document which can be inserted into HTML pages.
 	 */
 	String toHtml(Boolean compress, String viewer) throws TransformerException, IOException;
-
+	
+	/**
+	 * Generates HTML with a veiwer from Jsdelivr
+	 * @param compress
+	 * @return
+	 * @throws TransformerException
+	 * @throws IOException
+	 */
+	default String toHtml(Boolean compress) throws TransformerException, IOException {
+		return toHtml(compress, DiagramGenerator.JSDELIVR_DRAWIO_VIEWER);
+	}
+		
+	/**
+	 * Generates HTML with a compressed diagram and a veiwer from Jsdelivr
+	 * @param compress
+	 * @return
+	 * @throws TransformerException
+	 * @throws IOException
+	 */
+	default String toHtml() throws TransformerException, IOException {
+		return toHtml(true, DiagramGenerator.JSDELIVR_DRAWIO_VIEWER);
+	}
+		
 	/**
 	 * Encodes document as data: URI.
 	 * @return

@@ -55,7 +55,7 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 					org.eclipse.emf.ecore.resource.Resource eResource = resource.eResource();
 					if (eResource != null) {
 						URI base = eResource.getURI();
-						if (base != null) {
+						if (uri.isRelative() && base != null && base.isHierarchical() && !base.isRelative()) {
 							uri = uri.resolve(base);
 						}
 					}

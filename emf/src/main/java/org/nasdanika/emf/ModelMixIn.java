@@ -1,4 +1,4 @@
-package org.nasdanika.exec.util;
+package org.nasdanika.emf;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,7 +51,7 @@ public class ModelMixIn {
 		}
 		
 		NcoreResourceSet resourceSet = new NcoreResourceSet();
-		DocLoadingDrawioResourceFactory resourceFactory = new DocLoadingDrawioResourceFactory(uri -> resourceSet.getEObject(uri, true)) {
+		SpecLoadingDrawioResourceFactory resourceFactory = new SpecLoadingDrawioResourceFactory(uri -> resourceSet.getEObject(uri, true)) {
 			
 			@Override
 			protected void filterRepresentationElement(
@@ -69,7 +69,7 @@ public class ModelMixIn {
 			}
 			
 			@Override
-			protected String getProperty(DocLoadingDrawioResource drawioResource, String name) {
+			protected String getProperty(SpecLoadingDrawioResource drawioResource, String name) {
 				for (CommandSpec mixIn: spec.mixins().values()) {
 					Object userObject = mixIn.userObject();
 					if (userObject instanceof PropertySource) {

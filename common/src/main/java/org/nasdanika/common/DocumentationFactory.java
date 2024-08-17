@@ -1,14 +1,13 @@
-package org.nasdanika.ncore;
+package org.nasdanika.common;
 
 import java.net.URLConnection;
+import java.util.Collection;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Util;
 
 /**
- * Service/capability interface for classes converting a specific documentation format to EObject to add to {@link Documented}
+ * Service/capability interface for classes converting a specific documentation format to EObject
  */
 public interface DocumentationFactory {
 	
@@ -36,8 +35,8 @@ public interface DocumentationFactory {
 		return canHandle(URLConnection.guessContentTypeFromName(lastSegment));
 	}
 	
-	EObject createDocumentation(java.lang.String doc, URI baseUri, ProgressMonitor progressMonitor);
+	Collection<EObject> createDocumentation(java.lang.String doc, URI baseUri, ProgressMonitor progressMonitor);
 	
-	EObject createDocumentation(URI docRef, ProgressMonitor progressMonitor);	
+	Collection<EObject> createDocumentation(URI docRef, ProgressMonitor progressMonitor);	
 
 }

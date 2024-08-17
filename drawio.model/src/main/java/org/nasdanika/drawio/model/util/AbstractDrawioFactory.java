@@ -45,8 +45,13 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.jsoup.Jsoup;
+import org.nasdanika.capability.CapabilityLoader;
+import org.nasdanika.capability.CapabilityProvider;
+import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.Mapper;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SetterFeatureMapper;
@@ -95,6 +100,20 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	
 	private static final String DATA_URI_PNG_PREFIX_NO_BASE_64 = "data:image/png,";
 	private static final String DATA_URI_JPEG_PREFIX_NO_BASE_64 = "data:image/jpeg,";
+	
+	protected CapabilityLoader capabilityLoader;
+	
+	public AbstractDrawioFactory() {
+		this(new CapabilityLoader());
+	}
+	
+	public AbstractDrawioFactory(CapabilityLoader capabilityLoader) {
+		this.capabilityLoader = capabilityLoader;
+	}
+		
+	protected CapabilityLoader getCapabilityLoader() {
+		return capabilityLoader;
+	}	
 
 	public String getPropertyNamespace() {
 		return "";
@@ -510,8 +529,6 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	protected String getDocRefProperty() {
 		return getPropertyNamespace() + "doc-ref";
 	}	
-	
-	protected enum DocumentationFormat { markdown, text, html }
 	
 	protected String getDocFormatProperty() {
 		return getPropertyNamespace() + "doc-format"; 
@@ -1883,9 +1900,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		}
 	}
 	
-	protected void addDocumentation(S semanticElement, EObject documentation) {
+	protected void addDocumentation(S semanticElement, Collection<EObject> documentation) {
 		if (semanticElement instanceof org.nasdanika.ncore.Documented) {
-			((org.nasdanika.ncore.Documented) semanticElement).getDocumentation().add(documentation);
+			((org.nasdanika.ncore.Documented) semanticElement).getDocumentation().addAll(documentation);
 		}	
 	}
 	
@@ -1905,6 +1922,22 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(tooltip);
 		}
 	}	
+	
+	private Collection<DocumentationFactory> documentationFactories;
+	
+	protected Collection<DocumentationFactory> getDocumentationFactories(ProgressMonitor progressMonitor) {
+		if (documentationFactories == null) {
+			documentationFactories = new ArrayList<>();
+			if (capabilityLoader != null) {
+				Requirement<Object, DocumentationFactory> requirement = ServiceCapabilityFactory.createRequirement(DocumentationFactory.class);
+				Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
+				for (CapabilityProvider<Object> cp: cpi) {				
+					cp.getPublisher().subscribe(df -> documentationFactories.add((DocumentationFactory) df));
+				}
+			}
+		}
+		return documentationFactories;
+	}
 	
 	protected void configureSemanticElement(
 			EObject eObj,
@@ -1963,27 +1996,24 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		if (!Util.isBlank(docProperty)) {
 			String doc = getProperty(eObj, docProperty);
 			if (!Util.isBlank(doc)) {
-				DocumentationFormat docFormat = DocumentationFormat.markdown;
+				String[] docFormatStr = { null };
 				String docFormatProperty = getDocFormatProperty();
 				if (!Util.isBlank(docFormatProperty)) {
-					String docFormatStr = getProperty(eObj, docFormatProperty);
-					if (!Util.isBlank(docFormatStr)) {
-						docFormat = DocumentationFormat.valueOf(docFormatStr);						
-					}					
+					docFormatStr[0] = getProperty(eObj, docFormatProperty);
 				}
-				switch (docFormat) {
-				case html:
-					addDocumentation(semanticElement, createHtmlDoc(doc, baseUri, progressMonitor));
-					break;
-				case markdown:
-					addDocumentation(semanticElement, createMarkdownDoc(doc, baseUri, progressMonitor));
-					break;
-				case text:
-					addDocumentation(semanticElement, createTextDoc(doc, baseUri, progressMonitor));
-					break;
-				default:
-					throw new ConfigurationException("Unsupported documentation format: " + docFormat, eObj instanceof Marked ? (Marked) eObj : null);
+				if (Util.isBlank(docFormatStr[0])) {
+					docFormatStr[0] = "markdown";
+				}
 				
+				Optional<DocumentationFactory> dfo = getDocumentationFactories(progressMonitor)
+					.stream()
+					.filter(df -> df.canHandle(docFormatStr[0]))
+					.findAny();
+				
+				if (dfo.isPresent()) {
+					addDocumentation(semanticElement, dfo.get().createDocumentation(doc, baseUri, progressMonitor));
+				} else {
+					throw new ConfigurationException("Unsupported documentation format: " + docFormatStr, eObj instanceof Marked ? (Marked) eObj : null);
 				}
 			}
 		}
@@ -1992,38 +2022,40 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		if (!Util.isBlank(docRefProperty)) {
 			String docRefStr = getProperty(eObj, docRefProperty);
 			if (!Util.isBlank(docRefStr)) {					
-				DocumentationFormat docFormat = null;
-				if (docRefStr.toLowerCase().endsWith(".html") || docRefStr.toLowerCase().endsWith(".htm")) {
-					docFormat = DocumentationFormat.html;
-				} else if (docRefStr.toLowerCase().endsWith(".txt")) {
-					docFormat = DocumentationFormat.text;
-				} else {					
-					docFormat = DocumentationFormat.markdown; // Default
-				}
 				String docFormatProperty = getDocFormatProperty();
-				if (!Util.isBlank(docFormatProperty)) {
+				DocumentationFactory docFactory = null;
+				if (Util.isBlank(docFormatProperty)) {
 					String docFormatStr = getProperty(eObj, docFormatProperty);
 					if (!Util.isBlank(docFormatStr)) {
-						docFormat = DocumentationFormat.valueOf(docFormatStr);						
-					}					
+						Optional<DocumentationFactory> dfo = getDocumentationFactories(progressMonitor)
+								.stream()
+								.filter(df -> df.canHandle(docFormatStr))
+								.findAny();
+						if (dfo.isPresent()) {
+							docFactory = dfo.get();
+						} else {
+							throw new ConfigurationException("Unsupported documentation format: " + docFormatStr, eObj instanceof Marked ? (Marked) eObj : null);												
+						}
+					}
 				}
-				URI docRefURI = URI.createURI(docRefStr);
+				URI[] docRefURI = { URI.createURI(docRefStr) };
 				if (baseUri != null && !baseUri.isRelative()) {
-					docRefURI = docRefURI.resolve(baseUri);
+					docRefURI[0] = docRefURI[0].resolve(baseUri);
 				}
-				switch (docFormat) {
-				case html:
-					addDocumentation(semanticElement, createHtmlDoc(docRefURI, progressMonitor));
-					break;
-				case markdown:
-					addDocumentation(semanticElement, createMarkdownDoc(docRefURI, progressMonitor));
-					break;
-				case text:
-					addDocumentation(semanticElement, createTextDoc(docRefURI, progressMonitor));
-					break;
-				default:
-					throw new ConfigurationException("Unsupported documentation format: " + docFormat, eObj instanceof Marked ? (Marked) eObj : null);					
+				if (docFactory == null) {
+					Optional<DocumentationFactory> dfo = getDocumentationFactories(progressMonitor)
+							.stream()
+							.filter(df -> df.canHandle(docRefURI[0]))
+							.findAny();		
+					
+					if (dfo.isPresent()) {
+						docFactory = dfo.get();
+					} else {
+						throw new ConfigurationException("Unsupported documentation URI: " + docRefURI, eObj instanceof Marked ? (Marked) eObj : null);												
+					}
 				}
+				
+				addDocumentation(semanticElement, docFactory.createDocumentation(docRefURI[0], progressMonitor));				
 			}
 		}
 				
@@ -2043,18 +2075,18 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 			}
 		}		
 	}
-		
-	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-	
-	protected abstract EObject createTextDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-	
-	protected abstract EObject createMarkdownDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-	
-	protected abstract EObject createHtmlDoc(URI docRef, ProgressMonitor progressMonitor);
-	
-	protected abstract EObject createTextDoc(URI docRef, ProgressMonitor progressMonitor);
-	
-	protected abstract EObject createMarkdownDoc(URI docRef, ProgressMonitor progressMonitor);
+//		
+//	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
+//	
+//	protected abstract EObject createTextDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
+//	
+//	protected abstract EObject createMarkdownDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
+//	
+//	protected abstract EObject createHtmlDoc(URI docRef, ProgressMonitor progressMonitor);
+//	
+//	protected abstract EObject createTextDoc(URI docRef, ProgressMonitor progressMonitor);
+//	
+//	protected abstract EObject createMarkdownDoc(URI docRef, ProgressMonitor progressMonitor);
 	
 	// --- Phase 5: Operations
 		

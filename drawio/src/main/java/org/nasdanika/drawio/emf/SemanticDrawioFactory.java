@@ -56,14 +56,12 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 	
 	public static final String SEMANTIC_UUID_KEY = "semantic-uuid";
 	
-	protected CapabilityLoader capabilityLoader;
-	
 	public SemanticDrawioFactory() {
-		this(new CapabilityLoader());
+		super();
 	}
 	
 	public SemanticDrawioFactory(CapabilityLoader capabilityLoader) {
-		this.capabilityLoader = capabilityLoader;
+		super(capabilityLoader);
 	}
 		
 	@Override
@@ -100,7 +98,7 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 				}
 			}
 		} catch (IOException | ParserConfigurationException | SAXException | TransformerException e) {
-			throw new ConfigurationException("Error filtering source document: " + source, modelPage); 				
+			throw new ConfigurationException("Error filtering source document: " + source, e, modelPage); 				
 		}
 	}
 
@@ -214,10 +212,6 @@ public abstract class SemanticDrawioFactory<S extends EObject> extends AbstractD
 
 	protected Requirement<? extends SemanticDrawioFactory<S>, RepresentationElementFilter> createRepresentationElementFilterRequirement() {
 		return ServiceCapabilityFactory.createRequirement(RepresentationElementFilter.class, null, this);
-	}
-	
-	protected CapabilityLoader getCapabilityLoader() {
-		return capabilityLoader;
 	}
 
 	protected String getSemanticUUIDPropertyName() {

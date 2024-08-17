@@ -1,4 +1,4 @@
-package org.nasdanika.exec.util;
+package org.nasdanika.emf;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,16 +26,16 @@ import org.nasdanika.persistence.Marker;
 /**
  * Loads Drawio model using {@link DrawioResource} and then transforms it to a model.
  */
-public class DocLoadingDrawioResource extends ResourceImpl {
+public class SpecLoadingDrawioResource extends ResourceImpl {
 		
 	protected Function<URI,EObject> uriResolver;
 	
-	public DocLoadingDrawioResource(Function<URI,EObject> uriResolver) {
+	public SpecLoadingDrawioResource(Function<URI,EObject> uriResolver) {
 		super();
 		this.uriResolver = uriResolver;
 	}
 
-	public DocLoadingDrawioResource(URI uri, Function<URI,EObject> uriResolver) {
+	public SpecLoadingDrawioResource(URI uri, Function<URI,EObject> uriResolver) {
 		super(uri);
 		this.uriResolver = uriResolver;
 	}
@@ -46,33 +46,33 @@ public class DocLoadingDrawioResource extends ResourceImpl {
 
 			@Override
 			protected Function<Marker, org.nasdanika.ncore.Marker> getMarkerFactory() {
-				return DocLoadingDrawioResource.this.getMarkerFactory();
+				return SpecLoadingDrawioResource.this.getMarkerFactory();
 			}
 
 			@Override
 			protected ModelFactory getFactory() {
-				return DocLoadingDrawioResource.this.getDrawioFactory();
+				return SpecLoadingDrawioResource.this.getDrawioFactory();
 			}
 			
 			@Override
 			protected URIConverter getURIConverter() {
-				return DocLoadingDrawioResource.this.getURIConverter();
+				return SpecLoadingDrawioResource.this.getURIConverter();
 			}
 			
 			@Override
 			protected String getProperty(String name) {
-				return DocLoadingDrawioResource.this.getProperty(name);
+				return SpecLoadingDrawioResource.this.getProperty(name);
 			}
 			
 		};
 		
 		diagramResource.load(inputStream, options);
 		
-		DocLoadingDrawioFactory<EObject> docLoadingDrawioFactory = new DocLoadingDrawioFactory<EObject>(getResourceSet()) {
+		SpecLoadingDrawioFactory<EObject> docLoadingDrawioFactory = new SpecLoadingDrawioFactory<EObject>(getResourceSet()) {
 
 			@Override
 			protected EObject getByRefId(EObject eObj, String refId, int pass, Map<EObject, EObject> registry) {				
-				return DocLoadingDrawioResource.this.getByRefId(eObj, getBaseURI(eObj),  refId, pass, registry);
+				return SpecLoadingDrawioResource.this.getByRefId(eObj, getBaseURI(eObj),  refId, pass, registry);
 			}
 			
 			@Override
@@ -90,7 +90,7 @@ public class DocLoadingDrawioResource extends ResourceImpl {
 					
 					return getClassLoader(logicalParent);
 				};
-				return DocLoadingDrawioResource.this.getClassLoader(
+				return SpecLoadingDrawioResource.this.getClassLoader(
 						context,
 						getBaseURI(context),
 						lpcs);
@@ -98,7 +98,7 @@ public class DocLoadingDrawioResource extends ResourceImpl {
 			
 			@Override
 			protected URI getAppBase() {
-				return DocLoadingDrawioResource.this.getAppBase();
+				return SpecLoadingDrawioResource.this.getAppBase();
 			}
 			
 			@Override
@@ -108,17 +108,17 @@ public class DocLoadingDrawioResource extends ResourceImpl {
 					Map<EObject, EObject> registry,
 					ProgressMonitor progressMonitor) {
 				super.filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor);
-				DocLoadingDrawioResource.this.filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor);
+				SpecLoadingDrawioResource.this.filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor);
 			}
 			
 			@Override
 			protected Iterable<Entry<String, Object>> getVariables(EObject context) {
-				return DocLoadingDrawioResource.this.getVariables(context);
+				return SpecLoadingDrawioResource.this.getVariables(context);
 			}
 			
 			@Override
 			protected String getProperty(String name, URI sourceURI, ProgressMonitor progressMonitor) {
-				String value = DocLoadingDrawioResource.this.getProperty(name);
+				String value = SpecLoadingDrawioResource.this.getProperty(name);
 				return value == null ? super.getProperty(name,  sourceURI, progressMonitor) : value;
 			}
 			

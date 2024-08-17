@@ -130,7 +130,7 @@ public class DiagramGeneratorImpl implements DiagramGenerator {
 	}
 
 	protected String getDrawioViewer() {		
-		return "https://cdn.jsdelivr.net/gh/jgraph/drawio@v22.1.11/src/main/webapp/js/viewer.min.js"; // Last known working viewer, update during release.
+		return JSDELIVR_DRAWIO_VIEWER; // Last known working viewer, update during release.
 		/*
 		 * An alternative in a page (template) script:
 		 * window.DRAWIO_BASE_URL = "...";

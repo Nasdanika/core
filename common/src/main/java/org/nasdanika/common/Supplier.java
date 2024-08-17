@@ -112,6 +112,49 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			
 		};
 	}
+		
+	default <R> Supplier<R> then(java.util.function.BiFunction<? super T,ProgressMonitor,R> then) {
+		return new Supplier<R>() {
+			
+			@Override
+			public R execute(ProgressMonitor progressMonitor) {			
+				// TODO - split monitor
+				return then.apply(Supplier.this.execute(progressMonitor), progressMonitor);
+			}
+			
+			@Override
+			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+				return Supplier.this.diagnose(progressMonitor);
+			}
+			
+			@Override
+			public void close() {
+				Supplier.this.close();
+			}
+			
+			@Override
+			public void commit(ProgressMonitor progressMonitor) {
+				Supplier.this.commit(progressMonitor);
+			}
+			
+			@Override
+			public boolean rollback(ProgressMonitor progressMonitor) {
+				return Supplier.this.rollback(progressMonitor);
+			}
+			
+			@Override
+			public double size() {
+				return Supplier.this.size();
+			}
+			
+			@Override
+			public String name() {
+				return Supplier.this.name();
+			}
+			
+		};
+	}
+	
 	
 	default <V> Supplier<V> then(Function<? super T,V> then) {
 		List<ExecutionParticipant> elements = new ArrayList<>();

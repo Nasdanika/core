@@ -1,4 +1,4 @@
-package org.nasdanika.exec.util;
+package org.nasdanika.emf;
 
 import java.util.Collections;
 import java.util.Map;
@@ -24,26 +24,26 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
  * @author Pavel
  *
  */
-public class DocLoadingDrawioResourceFactory implements Resource.Factory {
+public class SpecLoadingDrawioResourceFactory implements Resource.Factory {
 	
 	protected Function<URI,EObject> uriResolver;
 	
-	public DocLoadingDrawioResourceFactory(Function<URI,EObject> uriResolver) {
+	public SpecLoadingDrawioResourceFactory(Function<URI,EObject> uriResolver) {
 		this.uriResolver = uriResolver;
 	}
 		
 	@Override
 	public Resource createResource(URI uri) {
-		return new DocLoadingDrawioResource(uri, uriResolver) {
+		return new SpecLoadingDrawioResource(uri, uriResolver) {
 			
 			@Override
 			protected ClassLoader getClassLoader(EObject context, URI baseURI, Supplier<ClassLoader> logicalParentClassLoaderSupplier) {
-				return DocLoadingDrawioResourceFactory.this.getClassLoader(context, baseURI, logicalParentClassLoaderSupplier);
+				return SpecLoadingDrawioResourceFactory.this.getClassLoader(context, baseURI, logicalParentClassLoaderSupplier);
 			};
 			
 			@Override
 			protected URI getAppBase() {
-				return DocLoadingDrawioResourceFactory.this.getAppBase();
+				return SpecLoadingDrawioResourceFactory.this.getAppBase();
 			}
 			
 			@Override
@@ -53,23 +53,23 @@ public class DocLoadingDrawioResourceFactory implements Resource.Factory {
 					Map<EObject, EObject> registry,
 					ProgressMonitor progressMonitor) {
 				
-				DocLoadingDrawioResourceFactory.this.filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor);			
+				SpecLoadingDrawioResourceFactory.this.filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor);			
 			}
 			
 			@Override
 			protected Iterable<Entry<String, Object>> getVariables(EObject context) {
-				return DocLoadingDrawioResourceFactory.this.getVariables(this, context);
+				return SpecLoadingDrawioResourceFactory.this.getVariables(this, context);
 			}
 			
 			@Override
 			protected String getProperty(String name) {
-				return DocLoadingDrawioResourceFactory.this.getProperty(this, name);
+				return SpecLoadingDrawioResourceFactory.this.getProperty(this, name);
 			}
 			
 		};
 	}
 	
-	protected String getProperty(DocLoadingDrawioResource drawioResource, String name) {
+	protected String getProperty(SpecLoadingDrawioResource drawioResource, String name) {
 		return null;
 	}
 
@@ -114,7 +114,7 @@ public class DocLoadingDrawioResourceFactory implements Resource.Factory {
 	
 	protected void configureScriptEngine(
 			ScriptEngine engine, 
-			DocLoadingDrawioResource resource,
+			SpecLoadingDrawioResource resource,
 			EObject diagramElement, 
 			EObject semanticElement,
 			Map<EObject, EObject> registry, 
@@ -123,7 +123,7 @@ public class DocLoadingDrawioResourceFactory implements Resource.Factory {
 		
 	}	
 	
-	protected Iterable<Entry<String, Object>> getVariables(DocLoadingDrawioResource resource, EObject context) {
+	protected Iterable<Entry<String, Object>> getVariables(SpecLoadingDrawioResource resource, EObject context) {
 		return Collections.emptySet();
 	}
 			
