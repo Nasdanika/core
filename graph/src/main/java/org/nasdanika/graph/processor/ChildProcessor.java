@@ -8,7 +8,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Field or method to inject 
+ * Field or method to inject a child processor
+ * Must have (parameter) type assignable from the processor type or ProcessorConfig if info is set to true 
  * @author Pavel
  *
  */

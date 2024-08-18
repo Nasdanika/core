@@ -51,6 +51,8 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 		List<AnnotatedElementRecord> processorAnnotatedElementRecords = getAnnotatedElementRecords(processor, Collections.emptyList()).toList();
 		Supplier<Stream<AnnotatedElementRecord>> processorAnnotatedElementRecordsStreamSupplier = () -> parallel ? processorAnnotatedElementRecords.parallelStream() : processorAnnotatedElementRecords.stream();
 		
+		wireProcessorElement(processorAnnotatedElementRecordsStreamSupplier.get(), config.getElement());		
+		
 		Map<Element, ProcessorConfig> childProcessorConfigsCopy = new LinkedHashMap<>(config.getChildProcessorConfigs());
 		wireChildProcessor(
 				processorAnnotatedElementRecordsStreamSupplier.get(), 
@@ -70,8 +72,6 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 			};
 			wireParentProcessor(processorAnnotatedElementRecordsStreamSupplier.get(), parentProcessorInfoConsumerCallback);
 		}
-		
-		wireProcessorElement(processorAnnotatedElementRecordsStreamSupplier.get(), config.getElement());		
 		
 		wireRegistryEntry(
 				processorAnnotatedElementRecordsStreamSupplier.get(), 
@@ -186,7 +186,7 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 
 		processorAnnotatedElementRecords
 			.filter(aer -> aer.getAnnotation(ChildProcessor.class) != null)
-			.filter(aer -> aer.mustSet(null, "Fields/methods annotated with ChildProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if config is set to true: " + aer.getAnnotatedElement()))
+			.filter(aer -> aer.mustSet(null, "Fields/methods annotated with ChildProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if info is set to true: " + aer.getAnnotatedElement()))
 			.forEach(aer -> {
 				for (Entry<Element, ProcessorConfig> ce: childProcessorConfigs.entrySet()) {
 					ChildProcessor childProcessorAnnotation = aer.getAnnotation(ChildProcessor.class);
