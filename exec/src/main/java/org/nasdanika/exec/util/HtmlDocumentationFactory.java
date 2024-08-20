@@ -40,6 +40,7 @@ public class HtmlDocumentationFactory extends ServiceCapabilityFactory<Void, Doc
 			public Collection<EObject> createDocumentation(URI docRef, ProgressMonitor progressMonitor) {
 				Resource ret = ContentFactory.eINSTANCE.createResource();
 				ret.setLocation(docRef.toString());
+				ret.setErrorMessage("Error loading documentation from '" + docRef.toString() + "' (${url}): ${exception}");
 				return Collections.singleton(ret);
 			}
 			

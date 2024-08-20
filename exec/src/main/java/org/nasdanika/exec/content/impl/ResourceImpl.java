@@ -17,6 +17,7 @@ import org.nasdanika.ncore.impl.ModelElementImpl;
  * <ul>
  *   <li>{@link org.nasdanika.exec.content.impl.ResourceImpl#getLocation <em>Location</em>}</li>
  *   <li>{@link org.nasdanika.exec.content.impl.ResourceImpl#isInterpolate <em>Interpolate</em>}</li>
+ *   <li>{@link org.nasdanika.exec.content.impl.ResourceImpl#getErrorMessage <em>Error Message</em>}</li>
  * </ul>
  *
  * @generated
@@ -41,6 +42,16 @@ public class ResourceImpl extends ModelElementImpl implements Resource {
 	 * @ordered
 	 */
 	protected static final boolean INTERPOLATE_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getErrorMessage()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ERROR_MESSAGE_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -107,12 +118,34 @@ public class ResourceImpl extends ModelElementImpl implements Resource {
 	 * @generated
 	 */
 	@Override
+	public String getErrorMessage() {
+		return (String)eDynamicGet(ContentPackage.RESOURCE__ERROR_MESSAGE, ContentPackage.Literals.RESOURCE__ERROR_MESSAGE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setErrorMessage(String newErrorMessage) {
+		eDynamicSet(ContentPackage.RESOURCE__ERROR_MESSAGE, ContentPackage.Literals.RESOURCE__ERROR_MESSAGE, newErrorMessage);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ContentPackage.RESOURCE__LOCATION:
 				return getLocation();
 			case ContentPackage.RESOURCE__INTERPOLATE:
 				return isInterpolate();
+			case ContentPackage.RESOURCE__ERROR_MESSAGE:
+				return getErrorMessage();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -130,6 +163,9 @@ public class ResourceImpl extends ModelElementImpl implements Resource {
 				return;
 			case ContentPackage.RESOURCE__INTERPOLATE:
 				setInterpolate((Boolean)newValue);
+				return;
+			case ContentPackage.RESOURCE__ERROR_MESSAGE:
+				setErrorMessage((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -149,6 +185,9 @@ public class ResourceImpl extends ModelElementImpl implements Resource {
 			case ContentPackage.RESOURCE__INTERPOLATE:
 				setInterpolate(INTERPOLATE_EDEFAULT);
 				return;
+			case ContentPackage.RESOURCE__ERROR_MESSAGE:
+				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -165,6 +204,8 @@ public class ResourceImpl extends ModelElementImpl implements Resource {
 				return LOCATION_EDEFAULT == null ? getLocation() != null : !LOCATION_EDEFAULT.equals(getLocation());
 			case ContentPackage.RESOURCE__INTERPOLATE:
 				return isInterpolate() != INTERPOLATE_EDEFAULT;
+			case ContentPackage.RESOURCE__ERROR_MESSAGE:
+				return ERROR_MESSAGE_EDEFAULT == null ? getErrorMessage() != null : !ERROR_MESSAGE_EDEFAULT.equals(getErrorMessage());
 		}
 		return super.eIsSet(featureID);
 	}

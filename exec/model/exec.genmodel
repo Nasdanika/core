@@ -53,6 +53,7 @@
       <genClasses ecoreClass="exec.ecore#//content/Resource">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Resource/location"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Resource/interpolate"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Resource/errorMessage"/>
       </genClasses>
       <genClasses ecoreClass="exec.ecore#//content/Text">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Text/content"/>

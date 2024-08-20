@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.nasdanika.exec.*;
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Call;
 import org.nasdanika.exec.Configurator;

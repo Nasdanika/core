@@ -7,7 +7,6 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.exec.content.*;
 import org.nasdanika.exec.content.Base64;
 import org.nasdanika.exec.content.ContentPackage;
 import org.nasdanika.exec.content.Filter;

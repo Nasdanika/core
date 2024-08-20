@@ -188,6 +188,11 @@
           <details key="documentation" value="If true, location is interpolated. Default is false."/>
         </eAnnotations>
       </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorMessage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="If set, the message content is used as resource content if there is an error loading the resource content. The message is interpolated with url and exception tokens."/>
+        </eAnnotations>
+      </eStructuralFeatures>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Text" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
       <eAnnotations source="urn:org.nasdanika">

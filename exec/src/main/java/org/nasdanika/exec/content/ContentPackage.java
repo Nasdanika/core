@@ -359,13 +359,22 @@ public interface ContentPackage extends EPackage {
 	int RESOURCE__INTERPOLATE = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__ERROR_MESSAGE = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Resource</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+	int RESOURCE_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Resource</em>' class.
@@ -747,6 +756,17 @@ public interface ContentPackage extends EPackage {
 	EAttribute getResource_Interpolate();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.exec.content.Resource#getErrorMessage <em>Error Message</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Error Message</em>'.
+	 * @see org.nasdanika.exec.content.Resource#getErrorMessage()
+	 * @see #getResource()
+	 * @generated
+	 */
+	EAttribute getResource_ErrorMessage();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.exec.content.Text <em>Text</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -910,6 +930,14 @@ public interface ContentPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute RESOURCE__INTERPOLATE = eINSTANCE.getResource_Interpolate();
+
+		/**
+		 * The meta object literal for the '<em><b>Error Message</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RESOURCE__ERROR_MESSAGE = eINSTANCE.getResource_ErrorMessage();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.exec.content.impl.TextImpl <em>Text</em>}' class.

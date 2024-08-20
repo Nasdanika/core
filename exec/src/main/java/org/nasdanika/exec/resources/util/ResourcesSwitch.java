@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.exec.resources.*;
 import org.nasdanika.exec.resources.Container;
 import org.nasdanika.exec.resources.File;
 import org.nasdanika.exec.resources.Resource;

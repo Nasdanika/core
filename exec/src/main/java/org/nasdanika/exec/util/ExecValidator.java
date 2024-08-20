@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.nasdanika.common.Util;
 import org.nasdanika.emf.DiagnosticHelper;
-import org.nasdanika.exec.*;
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Call;
 import org.nasdanika.exec.Configurator;

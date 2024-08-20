@@ -190,6 +190,16 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getResource_ErrorMessage() {
+		return (EAttribute)resourceEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getText() {
 		return textEClass;
 	}
@@ -321,6 +331,7 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		resourceEClass = createEClass(RESOURCE);
 		createEAttribute(resourceEClass, RESOURCE__LOCATION);
 		createEAttribute(resourceEClass, RESOURCE__INTERPOLATE);
+		createEAttribute(resourceEClass, RESOURCE__ERROR_MESSAGE);
 
 		textEClass = createEClass(TEXT);
 		createEAttribute(textEClass, TEXT__CONTENT);
@@ -381,6 +392,7 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getResource_Location(), ecorePackage.getEString(), "location", null, 1, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getResource_Interpolate(), ecorePackage.getEBoolean(), "interpolate", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getResource_ErrorMessage(), ecorePackage.getEString(), "errorMessage", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(textEClass, Text.class, "Text", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getText_Content(), ecorePackage.getEString(), "content", null, 1, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -490,6 +502,12 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		   source,
 		   new String[] {
 			   "documentation", "If true, location is interpolated. Default is false."
+		   });
+		addAnnotation
+		  (getResource_ErrorMessage(),
+		   source,
+		   new String[] {
+			   "documentation", "If set, the message content is used as resource content if there is an error loading the resource content. The message is interpolated with uri and exception tokens."
 		   });
 		addAnnotation
 		  (getText_Content(),

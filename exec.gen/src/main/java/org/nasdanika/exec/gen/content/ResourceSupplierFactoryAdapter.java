@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -12,6 +13,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.ProgressMonitor;
@@ -104,7 +106,16 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 					}
 					return theURL.openStream();
 				} catch (IOException e) {
-					throw new ExecutionException(e, this);
+					String errorMesage = ((Resource) getTarget()).getErrorMessage();
+					if (Util.isBlank(errorMesage)) {
+						throw new ExecutionException(e, this);
+					}
+					String interpolatedErrorMessage = Util.interpolate(errorMesage, Map.of("url", theURL.toString(), "exception", e.toString())::get);
+					try {
+						return DefaultConverter.INSTANCE.toInputStream("<div class=\"nsd-error\">" + interpolatedErrorMessage + "</div>");
+					} catch (IOException e1) {
+						throw new ExecutionException("Should never happen...", e, this);
+					}
 				}
 			}
 			

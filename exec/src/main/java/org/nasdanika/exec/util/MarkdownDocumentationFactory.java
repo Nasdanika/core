@@ -44,6 +44,7 @@ public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Void,
 				Interpolator interpolator = ContentFactory.eINSTANCE.createInterpolator();
 				Resource resource = ContentFactory.eINSTANCE.createResource();
 				resource.setLocation(docRef.toString());
+				resource.setErrorMessage("Error loading documentation from '" + docRef.toString() + "' (${url}): ${exception}");
 				interpolator.setSource(resource);
 				ret.setSource(interpolator);
 				ret.setStyle(true);

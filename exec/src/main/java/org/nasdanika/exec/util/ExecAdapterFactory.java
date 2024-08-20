@@ -9,7 +9,6 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.exec.*;
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Call;
 import org.nasdanika.exec.Configurator;

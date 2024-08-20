@@ -15,6 +15,7 @@ import org.nasdanika.ncore.ModelElement;
  * <ul>
  *   <li>{@link org.nasdanika.exec.content.Resource#getLocation <em>Location</em>}</li>
  *   <li>{@link org.nasdanika.exec.content.Resource#isInterpolate <em>Interpolate</em>}</li>
+ *   <li>{@link org.nasdanika.exec.content.Resource#getErrorMessage <em>Error Message</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.exec.content.ContentPackage#getResource()
@@ -72,5 +73,30 @@ public interface Resource extends ModelElement {
 	 * @generated
 	 */
 	void setInterpolate(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * If set, the message content is used as resource content if there is an error loading the resource content. The message is interpolated with uri and exception tokens.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Error Message</em>' attribute.
+	 * @see #setErrorMessage(String)
+	 * @see org.nasdanika.exec.content.ContentPackage#getResource_ErrorMessage()
+	 * @model
+	 * @generated
+	 */
+	String getErrorMessage();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.exec.content.Resource#getErrorMessage <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Error Message</em>' attribute.
+	 * @see #getErrorMessage()
+	 * @generated
+	 */
+	void setErrorMessage(String value);
 
 } // Resource
