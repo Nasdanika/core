@@ -39,7 +39,6 @@ public class ModelMixIn {
 	@Spec CommandSpec spec;
 			
 	public EObject getEObject(String model, ProgressMonitor progressMonitor) throws FileNotFoundException {
-		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		File currentDir = new File(".");
 		URI modelURI;
 		if (isFile) {
@@ -90,6 +89,7 @@ public class ModelMixIn {
 		
 		ResourceSetRequirement resourceSetRequirement = new ResourceSetRequirement(resourceSet, null, null);
 		EObjectRequirement requirement = EObjectCapabilityFactory.createRequirement(modelURI, resourceSetRequirement);
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		Iterable<CapabilityProvider<Object>> providers = capabilityLoader.load(ServiceCapabilityFactory.createRequirement(EObject.class, null, requirement), progressMonitor);
 		Collection<EObject> results = Collections.synchronizedCollection(new ArrayList<>());
 		for (CapabilityProvider<Object> provider: providers) {

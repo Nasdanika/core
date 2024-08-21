@@ -1,4 +1,5 @@
 import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.cli.DrawioCommandFactory;
 import org.nasdanika.cli.HelpCommandFactory;
 import org.nasdanika.cli.RootCommandFactory;
 
@@ -7,6 +8,7 @@ module org.nasdanika.cli {
 	exports org.nasdanika.cli;
 	
 	requires transitive org.nasdanika.capability;
+	requires transitive org.nasdanika.drawio;
 	requires transitive info.picocli;
 	requires org.apache.commons.text;
 	requires transitive org.jline;
@@ -15,6 +17,7 @@ module org.nasdanika.cli {
 	
 	provides CapabilityFactory with 
 		RootCommandFactory,
-		HelpCommandFactory;
+		HelpCommandFactory,
+		DrawioCommandFactory;
 	
 }

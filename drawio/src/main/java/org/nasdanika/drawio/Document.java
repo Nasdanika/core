@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.NasdanikaException;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.impl.DocumentImpl;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -37,6 +38,15 @@ import org.xml.sax.SAXException;
  *
  */
 public interface Document extends Element {
+
+	/**
+	 * Functional/service interface
+	 */
+	interface Supplier {
+		
+		Document getDocument(ProgressMonitor progressMonitor);
+		
+	}	
 	
 	/**
 	 * @return a list of pages. This list supports add() method to insert pages from other documents. The add() method creates a clone of the page passed as a parameter. 
@@ -52,9 +62,6 @@ public interface Document extends Element {
 	 * @return Creates a new page and adds it to the list of pages.
 	 */
 	Page createPage();
-	
-	
-	
 	
 	/**
 	 * Creates a cache (map URI -&gt; Document) of loaded documents, loads document on demand.
@@ -301,6 +308,22 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */
+	static Document load(
+			File source, 
+			Function<URI, InputStream> uriHandler,
+			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
+		return load(source.toURI().toURL(), uriHandler, propertySource);
+	}
+	
+	
+	/**
+	 * Loads document from URL by opening a stream.
+	 * @param source
+	 * @return
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
 	static Document load(URL source) throws IOException, ParserConfigurationException, SAXException {
 		return load(source, null, null);
 	}
@@ -314,7 +337,7 @@ public interface Document extends Element {
 	 * @throws SAXException
 	 */
 	static Document load(File source) throws IOException, ParserConfigurationException, SAXException {
-		return load(source.toURI().toURL(), null, null);
+		return load(source, null, null);
 	}
 	
 	/**
