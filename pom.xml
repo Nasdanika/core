@@ -8,7 +8,7 @@
 	<name>Nasdanika Core Parent</name>
 	<description>Parent pom.</description>
 
-	<url>https://docs.nasdanika.org/modules/core/index.html</url>
+	<url>https://docs.nasdanika.org/core/index.html</url>
 		
 	<licenses>
 		<license>
@@ -208,7 +208,9 @@
 		<module>exec</module>
 		<module>exec.gen</module>
 		<module>emf</module>
-		<module>maven</module>
+		<!--
+		<module>maven</module> Maven plugins are not module-aware, capability framework does not work
+		-->
 		<module>capability</module>
 		<module>cli</module>
 		<module>http</module>
