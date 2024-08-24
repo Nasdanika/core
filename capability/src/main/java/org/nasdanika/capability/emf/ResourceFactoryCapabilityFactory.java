@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Factory;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -25,8 +26,8 @@ public abstract class ResourceFactoryCapabilityFactory extends ResourceSetContri
 		ResourceFactoryResourceSetContributor contributor = new ResourceFactoryResourceSetContributor() {
 
 			@Override
-			public Factory getResourceFactory() {
-				return ResourceFactoryCapabilityFactory.this.getResourceFactory();
+			public Factory getResourceFactory(ResourceSet resourceSet) {
+				return ResourceFactoryCapabilityFactory.this.getResourceFactory(resourceSet);
 			}
 
 			@Override
@@ -52,7 +53,7 @@ public abstract class ResourceFactoryCapabilityFactory extends ResourceSetContri
 		return empty();
 	}
 		
-	protected abstract Resource.Factory getResourceFactory();
+	protected abstract Resource.Factory getResourceFactory(ResourceSet resourceSet);
 	
 	protected String getContentType() {
 		return null;

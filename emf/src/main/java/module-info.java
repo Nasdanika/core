@@ -1,5 +1,7 @@
 import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.emf.SpecLoadingDrawioResourceFactoryCapabilityFactory;
 import org.nasdanika.emf.persistence.EObjectCapabilityFactory;
+import org.nasdanika.emf.persistence.EObjectLoaderYamlResourceFactoryCapabilityFactory;
 
 module org.nasdanika.emf {
 	exports org.nasdanika.emf;
@@ -17,6 +19,9 @@ module org.nasdanika.emf {
 	
 	opens org.nasdanika.emf to info.picocli;
 	
-	provides CapabilityFactory with EObjectCapabilityFactory;
+	provides CapabilityFactory with 
+		EObjectCapabilityFactory,
+		SpecLoadingDrawioResourceFactoryCapabilityFactory,
+		EObjectLoaderYamlResourceFactoryCapabilityFactory;
 	
 }

@@ -9,7 +9,7 @@ import org.nasdanika.common.Util;
 
 public interface ResourceFactoryResourceSetContributor extends ResourceSetContributor {
 	
-	Resource.Factory getResourceFactory();
+	Resource.Factory getResourceFactory(ResourceSet resourceSet);
 	
 	String getContentType(); 
 	
@@ -21,7 +21,7 @@ public interface ResourceFactoryResourceSetContributor extends ResourceSetContri
 	default void contribute(ResourceSet resourceSet, ProgressMonitor progressMonitor) {
 		Registry registry = resourceSet.getResourceFactoryRegistry();
 		String contentType = getContentType();
-		Factory resourceFactory = getResourceFactory();
+		Factory resourceFactory = getResourceFactory(resourceSet);
 		if (!Util.isBlank(contentType)) {
 			registry.getContentTypeToFactoryMap().put(contentType, resourceFactory);
 		}
