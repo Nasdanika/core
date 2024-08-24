@@ -43,8 +43,6 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 	public Document getDocument(ProgressMonitor progressMonitor) {		
 		File currentDir = new File(".");
 		
-		
-		
 		// TODO - URI handlers from capability. E.g. classpath
 		// TODO - property source from properties, YAML, JSON, context, ...
 		if (isFile) {

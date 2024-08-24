@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONString;
@@ -425,6 +426,13 @@ public class TestCommon {
 		Map<String, String> ts = Collections.singletonMap("a", "b");
 		assertEquals("Hello b!", Util.interpolate("Hello ${a}!", ts::get));
 		assertEquals("Hello ${c}!", Util.interpolate("Hello ${c}!", ts::get));
+	}
+	
+	@Test
+	public void testAppendSegment() {
+		URI uri = URI.createURI("tmp://a");
+		URI suri =URI.createURI("bmp://b/");
+		System.out.println(suri.resolve(uri));
 	}
 	
 }

@@ -2,7 +2,10 @@ package org.nasdanika.cli;
 
 import java.io.File;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.EObjectSupplier;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -29,13 +32,19 @@ public class SaveModelCommand extends CommandBase {
 	EObjectSupplier<EObject> eObjectSupplier;
 	
 	@Mixin
-	ProgressMonitorMixIn progressMonitorMixIn;	
+	ProgressMonitorMixIn progressMonitorMixIn;
+	
+	@Mixin
+	ResourceSetMixIn resourceSetMixIn;
 
 	@Override
 	public Integer call() throws Exception {
 		ProgressMonitor progressMonitor = progressMonitorMixIn.createProgressMonitor(1);
-		System.out.println(eObjectSupplier.getEObject(progressMonitor));
-		// TODO Auto-generated method stub
+		ResourceSet resourceSet = resourceSetMixIn.createResourceSet(progressMonitor.split("Creating a resource set", 1));
+		URI resourceURI = URI.createFileURI(output.getAbsolutePath());		
+		Resource resource = resourceSet.createResource(resourceURI);
+		resource.getContents().add(eObjectSupplier.getEObject(progressMonitor.split("Generating contents", 1)));
+		resource.save(null);		
 		return 0;
 	}	
 
