@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -55,6 +58,11 @@ public final class NcoreUtil {
 	public static final String FEATURE_KEY = "feature-key";
 	
 	public static final String NASDANIKA_ANNOTATION_SOURCE = "urn:org.nasdanika";
+	
+	/**
+	 * Use this annotation to customize load keys. Use feature-key annotation for features to also customize containment path calculation.
+	 */
+	public static final String LOAD_KEY = "load-key";
 	
 	private NcoreUtil() {
 		throw new UnsupportedOperationException("Utility class");
@@ -644,5 +652,130 @@ public final class NcoreUtil {
 		}
 		return null;		
 	}
+	
+	public static EClassifier getType(
+			String type,
+			ResourceSet resourceSet,
+			java.util.function.Function<String,RuntimeException> errorFactory) {
+		
+		return getType(
+				type,
+				resourceSet.getPackageRegistry().values(),
+				errorFactory);
+	}
+	
+	public static EClassifier getType(
+			String type,
+			Iterable<Object> ePackages,
+			java.util.function.Function<String,RuntimeException> errorFactory) {
+		
+		Map<String, EPackage> ePackageMap = new LinkedHashMap<>();
+		for (Object ep: ePackages) {
+			EPackage ePackage = (EPackage) ep;
+			ePackageMap.put(getEPackageName(ePackage), ePackage);
+		}
+		return getType(type, ePackageMap, errorFactory);
+	}
+	
+	public static EClassifier getType(
+			String type,
+			Map<String,EPackage> ePackages,
+			java.util.function.Function<String,RuntimeException> errorFactory) {
+		if (Util.isBlank(type)) {
+			return null;
+		}
+		URI typeURI = URI.createURI(type);
+		if (typeURI.hasFragment()) {
+			URI ePackageNsURI = typeURI.trimFragment();
+			for (EPackage ePackage: ePackages.values()) {
+				if (ePackageNsURI.equals(URI.createURI(ePackage.getNsURI()))) {
+					String fragment = typeURI.fragment();
+					if (fragment.startsWith("//")) {
+						String eClassifierName = fragment.substring(2);
+						EClassifier eClassifier = ePackage.getEClassifier(eClassifierName);
+						if (eClassifier == null) {
+							throw errorFactory.apply("EClassifier " + eClassifierName + " not found in EPackage: " + ePackageNsURI); 				
+						}
+						return eClassifier;
+					} 
+					throw errorFactory.apply("Unsuppported fragment, expected '//<class name>': " + fragment); 
+				}
+			}
+			throw errorFactory.apply("EPackage not found: " + ePackageNsURI); 
+		}
+		
+		int dotIdx = type.indexOf('.');
+		if (dotIdx == -1) {
+			Optional<EClassifier> typeOpt = ePackages
+				.values()
+				.stream()
+				.flatMap(NcoreUtil::withSubPackages)
+				.map(ep -> ep.getEClassifier(type))
+				.filter(Objects::nonNull)
+				.findFirst();
+			
+			if (typeOpt.isPresent()) {
+				return typeOpt.get();
+			}
+			throw errorFactory.apply("Unknown type: " + type); 				
+		}
+		
+		Optional<EClassifier> typeOpt = ePackages
+				.entrySet()
+				.stream()
+				.filter(pe -> pe.getKey().equals(type.substring(0, dotIdx)))
+				.map(Map.Entry::getValue)
+				.map(ep -> findEClassifier(ep, type.substring(dotIdx + 1)))
+				.filter(Objects::nonNull)
+				.sorted((a, b) -> a.getEPackage().getNsURI().compareTo(b.getEPackage().getNsURI()))
+				.findFirst();
+			
+		if (typeOpt.isPresent()) {
+			return typeOpt.get();
+		}
+		throw errorFactory.apply("Unknown type: " + type); 				
+	}
+
+	
+	private static Stream<EPackage> withSubPackages(EPackage ePackage) {
+		Stream<EPackage> subPackagesStream = ePackage
+			.getESubpackages()
+			.stream()
+			.flatMap(NcoreUtil::withSubPackages);
+		
+		return Stream.concat(Stream.of(ePackage), subPackagesStream);
+	}
+	
+	/**
+	 * Override to de-dup epackages if needed.
+	 * @param ePackage
+	 * @return
+	 */
+	protected static String getEPackageName(EPackage ePackage) {
+		return getNasdanikaAnnotationDetail(ePackage, LOAD_KEY, ePackage.getName());
+	}
+	
+	/**
+	 * Finds eClassifier in the package and sub-packages
+	 * @param ePackage
+	 * @param name dot-separated classifier name relative to the argument package. e.g. MyClassifier for a classifier in the package, and mySubPackage.MyClassifier
+	 * for a classfier in a sub-package.
+	 * @return
+	 */
+	private static EClassifier findEClassifier(EPackage ePackage, String name) {
+		int dotIdx = name.indexOf('.');
+		if (dotIdx == -1) {
+			return ePackage.getEClassifier(name);
+		}
+		String spName = name.substring(0, dotIdx);
+		Optional<EPackage> subPackageOpt = ePackage
+				.getESubpackages()
+				.stream()
+				.filter(sp -> spName.equals(sp.getName()))
+				.findFirst();
+		
+		return subPackageOpt.isPresent() ? findEClassifier(subPackageOpt.get(), name.substring(dotIdx + 1)) : null;		
+	}
+	
 	
 }

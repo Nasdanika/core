@@ -56,11 +56,6 @@ public class EObjectLoader extends DispatchingLoader {
 	public static final String LATE_PROXY_RESOLUTION_URI_PREFIX = "./";	
 	
 	static final String HREF_KEY = "href";
-
-	/**
-	 * Use this annotation to customize load keys. Use feature-key annotation for features to also customize containment path calculation.
-	 */
-	public static final String LOAD_KEY = "load-key";
 	
 	/**
 	 * Information about how element is loaded in markdown. For {@link EStructuralFeature}s overrides feature documentation if present.  
@@ -239,8 +234,8 @@ public class EObjectLoader extends DispatchingLoader {
 			if (na.getDetails().containsKey(IS_LOADABLE) && "false".equals(na.getDetails().get(IS_LOADABLE))) {
 				return null;
 			}
-			if (na.getDetails().containsKey(LOAD_KEY)) {
-				return na.getDetails().get(LOAD_KEY);
+			if (na.getDetails().containsKey(NcoreUtil.LOAD_KEY)) {
+				return na.getDetails().get(NcoreUtil.LOAD_KEY);
 			}
 		}
 

@@ -118,7 +118,7 @@ public abstract class SpecLoadingDrawioFactory<S extends EObject> extends Semant
 	 * @return
 	 */
 	protected String getEPackageName(EPackage ePackage) {
-		return NcoreUtil.getNasdanikaAnnotationDetail(ePackage, EObjectLoader.LOAD_KEY, ePackage.getName());
+		return NcoreUtil.getNasdanikaAnnotationDetail(ePackage, NcoreUtil.LOAD_KEY, ePackage.getName());
 	}
 	
 	/**

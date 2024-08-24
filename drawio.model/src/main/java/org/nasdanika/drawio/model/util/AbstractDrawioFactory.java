@@ -68,6 +68,7 @@ import org.nasdanika.drawio.model.SemanticMapping;
 import org.nasdanika.drawio.model.Tag;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
+import org.nasdanika.ncore.util.NcoreUtil;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marked;
 import org.springframework.expression.EvaluationContext;
@@ -254,92 +255,9 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @return
 	 */
 	protected abstract Map<String,EPackage> getEPackages();
-	
-	private Stream<EPackage> withSubPackages(EPackage ePackage) {
-		Stream<EPackage> subPackagesStream = ePackage
-			.getESubpackages()
-			.stream()
-			.flatMap(this::withSubPackages);
-		
-		return Stream.concat(Stream.of(ePackage), subPackagesStream);
-	}
-	
-	/**
-	 * Finds eClassifier in the package and sub-packages
-	 * @param ePackage
-	 * @param name dot-separated classifier name relative to the argument package. e.g. MyClassifier for a classifier in the package, and mySubPackage.MyClassifier
-	 * for a classfier in a sub-package.
-	 * @return
-	 */
-	private EClassifier findEClassifier(EPackage ePackage, String name) {
-		int dotIdx = name.indexOf('.');
-		if (dotIdx == -1) {
-			return ePackage.getEClassifier(name);
-		}
-		String spName = name.substring(0, dotIdx);
-		Optional<EPackage> subPackageOpt = ePackage
-				.getESubpackages()
-				.stream()
-				.filter(sp -> spName.equals(sp.getName()))
-				.findFirst();
-		
-		return subPackageOpt.isPresent() ? findEClassifier(subPackageOpt.get(), name.substring(dotIdx + 1)) : null;		
-	}
 		
 	public EClassifier getType(String type, EObject source) {
-		if (Util.isBlank(type)) {
-			return null;
-		}
-		URI typeURI = URI.createURI(type);
-		if (typeURI.hasFragment()) {
-			URI ePackageNsURI = typeURI.trimFragment();
-			for (EPackage ePackage: getEPackages().values()) {
-				if (ePackageNsURI.equals(URI.createURI(ePackage.getNsURI()))) {
-					String fragment = typeURI.fragment();
-					if (fragment.startsWith("//")) {
-						String eClassifierName = fragment.substring(2);
-						EClassifier eClassifier = ePackage.getEClassifier(eClassifierName);
-						if (eClassifier == null) {
-							throw new ConfigurationException("EClassifier " + eClassifierName + " not found in EPackage: " + ePackageNsURI, asMarked(source)); 				
-						}
-						return eClassifier;
-					} 
-					throw new ConfigurationException("Unsuppported fragment, expected '//<class name>': " + fragment, asMarked(source)); 
-				}
-			}
-			throw new ConfigurationException("EPackage not found: " + ePackageNsURI, asMarked(source)); 
-		}
-		
-		int dotIdx = type.indexOf('.');
-		if (dotIdx == -1) {
-			Optional<EClassifier> typeOpt = getEPackages()
-				.values()
-				.stream()
-				.flatMap(this::withSubPackages)
-				.map(ep -> ep.getEClassifier(type))
-				.filter(Objects::nonNull)
-				.findFirst();
-			
-			if (typeOpt.isPresent()) {
-				return typeOpt.get();
-			}
-			throw new ConfigurationException("Unknown type: " + type, asMarked(source)); 				
-		}
-		
-		Optional<EClassifier> typeOpt = getEPackages()
-				.entrySet()
-				.stream()
-				.filter(pe -> pe.getKey().equals(type.substring(0, dotIdx)))
-				.map(Map.Entry::getValue)
-				.map(ep -> findEClassifier(ep, type.substring(dotIdx + 1)))
-				.filter(Objects::nonNull)
-				.sorted((a, b) -> a.getEPackage().getNsURI().compareTo(b.getEPackage().getNsURI()))
-				.findFirst();
-			
-		if (typeOpt.isPresent()) {
-			return typeOpt.get();
-		}
-		throw new ConfigurationException("Unknown type: " + type, asMarked(source)); 				
+		return NcoreUtil.getType(type, getEPackages(), msg -> new ConfigurationException(msg, asMarked(source)));
 	}
 	
 	/**
