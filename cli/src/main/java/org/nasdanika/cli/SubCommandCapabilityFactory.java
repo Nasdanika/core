@@ -28,6 +28,12 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	
 	private record CommandLineAndPath(CommandLine commandLine, List<CommandLine> path) {};
 	
+	public static final int DEFAULT_MAX_COMMAND_PATH = 50;
+	
+	protected int getMaxPath() {
+		return DEFAULT_MAX_COMMAND_PATH;
+	}
+	
 	@Override
 	protected CompletionStage<Iterable<CapabilityProvider<CommandLine>>> createService(
 			Class<CommandLine> serviceType,
@@ -36,24 +42,26 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 			ProgressMonitor progressMonitor) {
 		
 		List<CommandLine> parentPath = serviceRequirement.parentPath();
-		CompletionStage<T> commandCS = createCommand(parentPath, resolver, progressMonitor);
-		if (commandCS != null) {
-			CompletionStage<CommandLineAndPath> commandLineAndPathCS = commandCS.thenApply(command -> createCommandLine(command, serviceRequirement, progressMonitor));
-			CompletionStage<Iterable<CapabilityProvider<CommandLine>>> subCommandsCS = commandLineAndPathCS.thenCompose(
-					commandLineAndPath -> createSubCommands(
-							commandLineAndPath.path(),
-							resolver,
-							progressMonitor));
-			
-			CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> mixInsCS = commandLineAndPathCS.thenCompose(
-					commandLineAndPath -> createMixIns(
-							commandLineAndPath.path(),
-							resolver,
-							progressMonitor));
-			
-			CompletionStage<CommandLine> commandLineWithSubCommandsCS = commandLineAndPathCS.thenCombine(subCommandsCS, this::combineSubCommands);
-			CompletionStage<CommandLine> commandLineWithSubCommandsAndMixInsCS = commandLineWithSubCommandsCS.thenCombine(mixInsCS, this::combineMixIns);
-			return wrapCompletionStage(commandLineWithSubCommandsAndMixInsCS);
+		if (parentPath == null || parentPath.size() <= getMaxPath()) {
+			CompletionStage<T> commandCS = createCommand(parentPath, resolver, progressMonitor);
+			if (commandCS != null) {
+				CompletionStage<CommandLineAndPath> commandLineAndPathCS = commandCS.thenApply(command -> createCommandLine(command, serviceRequirement, progressMonitor));
+				CompletionStage<Iterable<CapabilityProvider<CommandLine>>> subCommandsCS = commandLineAndPathCS.thenCompose(
+						commandLineAndPath -> createSubCommands(
+								commandLineAndPath.path(),
+								resolver,
+								progressMonitor));
+				
+				CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> mixInsCS = commandLineAndPathCS.thenCompose(
+						commandLineAndPath -> createMixIns(
+								commandLineAndPath.path(),
+								resolver,
+								progressMonitor));
+				
+				CompletionStage<CommandLine> commandLineWithSubCommandsCS = commandLineAndPathCS.thenCombine(subCommandsCS, this::combineSubCommands);
+				CompletionStage<CommandLine> commandLineWithSubCommandsAndMixInsCS = commandLineWithSubCommandsCS.thenCombine(mixInsCS, this::combineMixIns);
+				return wrapCompletionStage(commandLineWithSubCommandsAndMixInsCS);
+			}
 		}
 		
 		return CompletableFuture.completedStage(Collections.emptyList());
