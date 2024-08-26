@@ -8,12 +8,14 @@ import java.util.function.Function;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.emf.common.util.URI;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.Document;
 import org.xml.sax.SAXException;
 
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
@@ -39,6 +41,9 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		description = "Document parameter is a file path")
 	private boolean isFile;
 	
+	@Mixin
+	ContextMixIn contextMixIn;
+	
 	@Override
 	public Document getDocument(ProgressMonitor progressMonitor) {		
 		File currentDir = new File(".");
@@ -48,7 +53,7 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		if (isFile) {
 			File documentFile = new File(document);
 			try {
-				return Document.load(documentFile, getUriHandler(), getPropertySource());
+				return Document.load(documentFile, getUriHandler(progressMonitor), getPropertySource(progressMonitor));
 			} catch (IOException | ParserConfigurationException | SAXException e) {
 				throw new NasdanikaException("Error loading document from '" + documentFile.getAbsolutePath() + "': " + e, e);
 			}
@@ -57,21 +62,25 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		URI baseURI = URI.createFileURI(currentDir.getAbsolutePath()).appendSegment("");
 		URI documentURI = URI.createURI(document).resolve(baseURI);
 		try {
-			return Document.load(documentURI, getUriHandler(), getPropertySource());
+			return Document.load(documentURI, getUriHandler(progressMonitor), getPropertySource(progressMonitor));
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			throw new NasdanikaException("Error loading document from '" + documentURI.toString() + "': " + e, e);
 		}
 	}
 
-	protected Function<URI, InputStream> getUriHandler() {
+	protected Function<URI, InputStream> getUriHandler(ProgressMonitor progressMonitor) {
 		// TODO 
 		return null;
 	}
 
 
-	protected Function<String, String> getPropertySource() {
-		// TODO 
-		return null;
+	protected Function<String, String> getPropertySource(ProgressMonitor progressMonitor) {
+		try {
+			Context context = contextMixIn.createContext(progressMonitor);
+			return context::getString;
+		} catch (IOException e) {
+			throw new NasdanikaException(e);
+		}
 	}
 
 }
