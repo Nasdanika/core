@@ -8,6 +8,7 @@ public class SpecLoadingDrawioResourceFactoryCapabilityFactory extends ResourceF
 
 	@Override
 	protected Factory getResourceFactory(ResourceSet resourceSet) {
+		// TODO - representation filters capability providers
 		return new SpecLoadingDrawioResourceFactory(uri -> resourceSet.getEObject(uri, true));
 	}
 	

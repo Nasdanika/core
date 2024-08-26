@@ -28,7 +28,9 @@ import picocli.CommandLine.Spec;
 
 /**
  * Mix-in for loading a model from a resource. Registers {@link DocLoadingDrawioResourceFactory} for .drawio and .png
+ * @deprecated Use org.nasdanika.cli.ModelCommand and chain
  */
+@Deprecated 
 public class ModelMixIn {
 		
 	@Option(
