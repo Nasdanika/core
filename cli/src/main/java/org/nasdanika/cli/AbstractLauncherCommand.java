@@ -74,7 +74,7 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 			defaultValue = "%*")
 	private String args;	
 	
-	@Option(names = {"-v", "--verbose"}, description = "Output debug invformation")
+	@Option(names = {"-v", "--verbose"}, description = "Output debug information")
 	private boolean verbose;
 	
 	@Option(names = {"-s", "--absolute"}, description = "Use absolute paths")

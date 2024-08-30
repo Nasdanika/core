@@ -435,4 +435,11 @@ public class TestCommon {
 		System.out.println(suri.resolve(uri));
 	}
 	
+	@Test 
+	public void testYaml() {
+		Yaml yaml = new Yaml();
+		Object map = yaml.load("key:");
+		System.out.println(map);
+	}
+	
 }
