@@ -1,5 +1,7 @@
 package org.nasdanika.common;
 
+import java.util.Collection;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -8,6 +10,6 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface EObjectSupplier<T> {
 
-	T getEObject(ProgressMonitor progressMonitor);
+	Collection<T> getEObjects(ProgressMonitor progressMonitor);
 	
 }

@@ -1,6 +1,8 @@
 package org.nasdanika.cli;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -39,13 +41,13 @@ public class ModelCommand extends CommandGroup implements EObjectSupplier<EObjec
 	private ResourceSetMixIn resourceSetMixIn;
 
 	@Override
-	public EObject getEObject(ProgressMonitor progressMonitor) {
-		URI theURI = isFile ? URI.createFileURI(new File(uri).getAbsolutePath()) : URI.createURI(uri).resolve(URI.createFileURI(new File(".").getAbsolutePath()).appendSegment(""));
-		if (!theURI.hasFragment()) {
-			theURI = theURI.appendFragment("/");
-		}
+	public Collection<EObject> getEObjects(ProgressMonitor progressMonitor) {
 		ResourceSet rSet = resourceSetMixIn.createResourceSet(progressMonitor);		
-		return rSet.getEObject(theURI, true);
+		URI theURI = isFile ? URI.createFileURI(new File(uri).getAbsolutePath()) : URI.createURI(uri).resolve(URI.createFileURI(new File(".").getAbsolutePath()).appendSegment(""));
+		if (theURI.hasFragment()) {
+			return Collections.singleton(rSet.getEObject(theURI, true));
+		}
+		return rSet.getResource(theURI, true).getContents();
 	}
 
 }
