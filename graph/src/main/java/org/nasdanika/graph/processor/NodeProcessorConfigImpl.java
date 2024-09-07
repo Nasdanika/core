@@ -38,7 +38,7 @@ class NodeProcessorConfigImpl<H,E> extends ProcessorConfigImpl implements NodePr
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
-		return (Map) incomingEndpoints; // Rude cast to make the compile happy
+		return (Map) incomingEndpoints; // Rude cast to make the compiler happy
 	}
 
 	@Override
@@ -49,7 +49,7 @@ class NodeProcessorConfigImpl<H,E> extends ProcessorConfigImpl implements NodePr
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
-		return (Map) outgoingEndpoints;// Rude cast to make the compile happy
+		return (Map) outgoingEndpoints;// Rude cast to make the compiler happy
 	}
 
 	@Override

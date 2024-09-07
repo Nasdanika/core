@@ -87,15 +87,18 @@ public abstract class ProcessorConfigFactory<H,E> {
 			
 			for (Connection incomingConnection: node.getIncomingConnections()) {
 				if (isPassThrough(incomingConnection)) {
-					configProvider.accept(incomingConnection.getSource(), (sourceConfig, pMonitor) -> {
-						configImpl.wireIncomingHandlerEndpoint(
-								incomingConnection, 
-								incomingConnectionHandler -> createEndpoint(
-										incomingConnection, 
-										incomingConnectionHandler, 
-										HandlerType.INCOMING), 
-								ep -> ((NodeProcessorConfigImpl<H,E>) sourceConfig).setOutgoingEndpoint(incomingConnection, ep));											
-					});					
+					Node source = incomingConnection.getSource();
+					if (source != null) {
+						configProvider.accept(source, (sourceConfig, pMonitor) -> {
+							configImpl.wireIncomingHandlerEndpoint(
+									incomingConnection, 
+									incomingConnectionHandler -> createEndpoint(
+											incomingConnection, 
+											incomingConnectionHandler, 
+											HandlerType.INCOMING), 
+									ep -> ((NodeProcessorConfigImpl<H,E>) sourceConfig).setOutgoingEndpoint(incomingConnection, ep));											
+						});
+					}
 				} else {
 					configProvider.accept(incomingConnection, (connectionConfig, pMonitor) -> {
 						configImpl.wireIncomingHandlerEndpoint(
@@ -111,15 +114,18 @@ public abstract class ProcessorConfigFactory<H,E> {
 			
 			for (Connection outgoingConnection: node.getOutgoingConnections()) {
 				if (isPassThrough(outgoingConnection)) {
-					configProvider.accept(outgoingConnection.getTarget(), (targetConfig, pMonitor) -> {
-						configImpl.wireOutgoingHandlerEndpoint(
-								outgoingConnection, 
-								outgoingConnectionHandler -> createEndpoint(
-										outgoingConnection, 
-										outgoingConnectionHandler, 
-										HandlerType.OUTGOING), 
-								ep -> ((NodeProcessorConfigImpl<H,E>) targetConfig).setIncomingEndpoint(outgoingConnection, ep));											
-					});					
+					Node target = outgoingConnection.getTarget();
+					if (target != null) {
+						configProvider.accept(target, (targetConfig, pMonitor) -> {
+							configImpl.wireOutgoingHandlerEndpoint(
+									outgoingConnection, 
+									outgoingConnectionHandler -> createEndpoint(
+											outgoingConnection, 
+											outgoingConnectionHandler, 
+											HandlerType.OUTGOING), 
+									ep -> ((NodeProcessorConfigImpl<H,E>) targetConfig).setIncomingEndpoint(outgoingConnection, ep));											
+						});
+					}
 				} else {
 					configProvider.accept(outgoingConnection, (connectionConfig, pMonitor) -> {
 						configImpl.wireOutgoingHandlerEndpoint(
