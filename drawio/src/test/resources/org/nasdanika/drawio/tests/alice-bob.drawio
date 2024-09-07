@@ -1,1 +1,27 @@
-<mxfile host="Electron" modified="2022-08-15T10:12:34.358Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/20.2.3 Chrome/102.0.5005.167 Electron/19.0.11 Safari/537.36" etag="pPncgI4oAvsMgHO8qp1c" version="20.2.3" type="device"><diagram id="O7xMnYN76NBTG_cgu26A" name="Page-1">xZVRb5swEMc/DdpTJQMhbR/TNGtUZVLVdEvWNxOu4NRwxJgA/fQzwRQIGUq1VnsC/33Gd7/7nzDsaZjfCRoHP9ADbljEyw371rAs2x5Z6lEqRaWY1yOnUnzBPK01wpK9gRaJVlPmQdIJlIhcsrgrbjCKYCM7GhUCs27YC/LurTH1oScsN5T31RXzZFCpVw5p9DkwP6hvNoneCWkdrIUkoB5mLcmeGfZUIMrqLcynwEt6NZfq3Pe/7L4nJiCS5xxYb50r8/51srMmwl3t1o/P4dOFrXOTRV0weKp+vUQhA/QxonzWqDcC08iD8qtErZqYBWKsRFOJW5Cy0M2kqUQlBTLkerefuS4mwVRsYCDd2gFU+CAH4rTrylpaF2gud4AhSFGoAAGcSrbv9ppqy/jvcQ1V9aLBHpbobkvTWYRTF3h1bMKZqqHyQHERC4xBSG3/vHirdgab0k5WN7HVoAZ/yTILmIRlTA/YMjWEZ6Leq6QgH4RTD/FYG1jXMK69nzXzYNYmD1qzUJ/7AE+11EhPe/j3r5/r1ap44CQ2X537nYiIW5tiT3mqEd2g+y1R0hzTBHoOTzIWchrB5+BxRkd4SB+PRU7gMe2P8zlvqK1TQHoY/tFHg604m94RvC+0Vg+dv88fC/K8XljwcPnkJPPx8vaElxbMFVR/+X+O4ehoDC+vv3QMm//SYa/1e7dnfwA=</diagram></mxfile>
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.8 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.8">
+  <diagram id="O7xMnYN76NBTG_cgu26A" name="Page-1">
+    <mxGraphModel dx="1709" dy="1690" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Xj581JkAq2ArbWqXRZmT-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Xj581JkAq2ArbWqXRZmT-1" target="Xj581JkAq2ArbWqXRZmT-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <object label="Alice" my-property="xyz" id="Xj581JkAq2ArbWqXRZmT-1">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+            <mxGeometry x="360" y="650" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="YVUXWWyPl0p1k5Jqrn0b-1" value="Bob&#39;s House" style="swimlane;" parent="1" vertex="1">
+          <mxGeometry x="540" y="600" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="Xj581JkAq2ArbWqXRZmT-2" value="Bob" style="rounded=1;whiteSpace=wrap;html=1;" parent="YVUXWWyPl0p1k5Jqrn0b-1" vertex="1">
+          <mxGeometry x="40" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gvxRy0ZXL2eP7T5sH6SD-1" value="Library" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="460" y="790" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
