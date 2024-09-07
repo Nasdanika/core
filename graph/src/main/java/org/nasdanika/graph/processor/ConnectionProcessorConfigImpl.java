@@ -32,7 +32,9 @@ class ConnectionProcessorConfigImpl<H,E> extends ProcessorConfigImpl implements 
 
 	@Override
 	public void setSourceHandler(H sourceHandler) {
-		sourceHandlerConsumer.accept(sourceHandler);		
+		if (sourceHandlerConsumer != null) {
+			sourceHandlerConsumer.accept(sourceHandler);
+		}
 	}
 
 	@Override
@@ -42,7 +44,9 @@ class ConnectionProcessorConfigImpl<H,E> extends ProcessorConfigImpl implements 
 
 	@Override
 	public void setTargetHandler(H targetHandler) {
-		targetHandlerConsumer.accept(targetHandler);
+		if (targetHandlerConsumer != null) {
+			targetHandlerConsumer.accept(targetHandler);
+		}
 	}
 	
 	// --- Wiring methods ---

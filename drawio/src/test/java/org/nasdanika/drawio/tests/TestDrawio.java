@@ -857,4 +857,21 @@ public class TestDrawio {
 		Files.writeString(new File("target/container.drawio").toPath(), document.save(null));
 	}
 	
+	@Test 
+	public void testDanglingConnections() throws Exception {
+		Document document = Document.load(getClass().getResource("compute-graph.drawio"));
+		NopEndpointProcessorConfigFactory<Function<String,String>> processorConfigFactory = new NopEndpointProcessorConfigFactory<>() {
+			
+			@Override
+			protected boolean isPassThrough(org.nasdanika.graph.Connection incomingConnection) {
+				return false;
+			}
+			
+		};
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();				
+		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
+		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
+		System.out.println(configs.size());
+	}
+	
 }
