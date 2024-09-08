@@ -6,6 +6,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.nasdanika.common.Adaptable;
+
 /**
  * Types of sub-commands to add to the annotated type.
  */

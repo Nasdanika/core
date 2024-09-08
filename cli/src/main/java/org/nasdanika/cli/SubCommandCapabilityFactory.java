@@ -10,6 +10,7 @@ import java.util.function.BiFunction;
 
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 
@@ -220,7 +221,7 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 			SubCommands subCommandsAnnotation = userObject.getClass().getAnnotation(SubCommands.class);
 			Class<T> commandType = getCommandType();
 			if (subCommandsAnnotation != null && commandType != null) {
-				for (Class<?> at: subCommandsAnnotation.value()) {
+				for (Class<?> at: subCommandsAnnotation.value()) {					
 					if (at.isAssignableFrom(commandType)) {
 						return true;
 					}
@@ -231,7 +232,7 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 				ParentCommands parentCommands = commandType.getAnnotation(ParentCommands.class);
 				if (parentCommands != null) {
 					for (Class<?> pt: parentCommands.value()) {
-						if (pt.isInstance(userObject)) {
+						if (Adaptable.adaptTo(userObject, pt)  != null) {
 							return true;
 						}
 					}

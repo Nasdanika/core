@@ -8,6 +8,7 @@ import java.util.function.BiFunction;
 
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.ProgressMonitor;
 
 import picocli.CommandLine;
@@ -65,7 +66,7 @@ public abstract class MixInCapabilityFactory<T> extends ServiceCapabilityFactory
 				ParentCommands parentCommands = mixInType.getAnnotation(ParentCommands.class);
 				if (parentCommands != null) {
 					for (Class<?> pt: parentCommands.value()) {
-						if (pt.isInstance(userObject)) {
+						if (Adaptable.adaptTo(userObject, pt) != null) {
 							return true;
 						}
 					}
