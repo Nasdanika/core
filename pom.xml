@@ -208,9 +208,7 @@
 		<module>exec</module>
 		<module>exec.gen</module>
 		<module>emf</module>
-		<!--
-		<module>maven</module> Maven plugins are not module-aware, capability framework does not work
-		-->
+		<module>maven</module> 
 		<module>capability</module>
 		<module>cli</module>
 		<module>http</module>
