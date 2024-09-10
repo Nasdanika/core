@@ -6,8 +6,10 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
@@ -15,6 +17,7 @@ import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.collection.CollectRequest;
+import org.eclipse.aether.collection.CollectResult;
 import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.repository.LocalRepository;
@@ -26,7 +29,10 @@ import org.junit.jupiter.api.Test;
 
 public class MavenArtifactResolverTests {
 		
-	private static final String COORDINATES = "org.apache.groovy:groovy-all:pom:4.0.22";
+	private static final String[] COORDINATES = {
+			"org.apache.groovy:groovy-all:pom:4.0.22",
+			"org.springframework:spring-expression:6.1.12"
+	};
 	
 	/**
 	 * @param art
@@ -41,12 +47,15 @@ public class MavenArtifactResolverTests {
 	}
 	
 	@Test
-	public void testResolve() throws Exception {
-		DefaultArtifact artifact = new DefaultArtifact(COORDINATES);
-		Dependency dependency = new Dependency(artifact, "compile");
+	public void testResolve() throws Exception {		
+		// Creating request
 		
-		CollectRequest collectRequest = new CollectRequest();
-		collectRequest.setRoot(dependency);
+		List<Dependency> dependencies = Stream.of(COORDINATES)
+				.map(DefaultArtifact::new)
+				.map(artifact -> new Dependency(artifact, "runtime"))
+				.toList();
+		
+		List<Dependency> managedDependencies = Collections.emptyList();
 		
 		// Proxy
 //		Proxy proxy = new Proxy(Proxy.TYPE_HTTP, "todo", 8888);
@@ -59,8 +68,11 @@ public class MavenArtifactResolverTests {
 //			.setProxy(proxy)
 //			.set...	
 			.build();
+
+		List<RemoteRepository> remoteRepos = Collections.singletonList(remoteRepo);
+		CollectRequest collectRequest = new CollectRequest(dependencies, managedDependencies, remoteRepos);		
 		
-		collectRequest.addRepository(remoteRepo);
+		// Collecting 
 		
 		RepositorySystemSupplier repositorySystemSupplier = new RepositorySystemSupplier();
 		RepositorySystem repositorySystem = repositorySystemSupplier.get();
@@ -68,14 +80,19 @@ public class MavenArtifactResolverTests {
 		LocalRepository localRepo = new LocalRepository("target/test-repository");
 		session.setLocalRepositoryManager(repositorySystem.newLocalRepositoryManager(session, localRepo));
 		
-		DependencyNode node = repositorySystem.collectDependencies(session, collectRequest).getRoot();
+		// Resolving
+		
+		CollectResult collectResult = repositorySystem.collectDependencies(session, collectRequest);
+		DependencyNode node = collectResult.getRoot();
 		DependencyRequest request = new DependencyRequest();
 		request.setRoot(node);
 		repositorySystem.resolveDependencies(session, request);
 		
 		PreorderNodeListGenerator preorderNodeListGenerator = new PreorderNodeListGenerator();
 		node.accept(preorderNodeListGenerator);
-			
+		
+		// Building classloader and module layer
+		
 		List<URL> classPath = new ArrayList<>();
 		List<Path> modulePath = new ArrayList<>();
 		for (Artifact art: preorderNodeListGenerator.getArtifacts(false)) {
