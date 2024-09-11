@@ -468,9 +468,18 @@ public interface Invocable {
 						}
 						return ret;
 					}
-					throw new IllegalArgumentException("Not a collection: " + source);
+					
+					// Treating as single element 
+					Object ret = Array.newInstance(componentType, 1);
+					if (componentType.isInstance(source)) {
+						Array.set(ret, 0, source);
+					} else {
+						Object convertedElement = this.apply(source, componentType);
+						Array.set(ret, 0, convertedElement);								
+					}
+					return ret;
 				}
-				
+								
 				// Not an array, not of expected type - use factory
 				if (source instanceof Map) {				
 					Invocable factory = factoryProvider.apply(type);

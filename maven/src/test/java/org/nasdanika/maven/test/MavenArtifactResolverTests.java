@@ -25,6 +25,7 @@ import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.supplier.RepositorySystemSupplier;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
+import org.eclipse.aether.util.repository.AuthenticationBuilder;
 import org.junit.jupiter.api.Test;
 
 public class MavenArtifactResolverTests {
@@ -67,7 +68,7 @@ public class MavenArtifactResolverTests {
 		
 		RemoteRepository remoteRepo = new RemoteRepository.Builder("central", "default", "https://repo.maven.apache.org/maven2/")
 //			.setAuthentication(authentication)
-			.setProxy(proxy)
+//			.setProxy(proxy)
 //			.set...	
 			.build();
 
