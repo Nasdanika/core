@@ -57,6 +57,8 @@ public class MavenArtifactResolverTests {
 		
 		List<Dependency> managedDependencies = Collections.emptyList();
 		
+		// TODO - trace
+		
 		// Proxy
 //		Proxy proxy = new Proxy(Proxy.TYPE_HTTP, "todo", 8888);
 		
@@ -106,8 +108,8 @@ public class MavenArtifactResolverTests {
 		}
 		
 		ModuleFinder finder = ModuleFinder.of(modulePath.toArray(size -> new Path[size]));
-		Module thisModule = getClass().getModule();
-		ClassLoader parentClassLoader = thisModule.getClassLoader();
+		Module thisModule = getClass().getModule(); // From requirement defaulting to ? 
+		ClassLoader parentClassLoader = thisModule.getClassLoader(); // From requirement
 		if (!classPath.isEmpty()) {
 			parentClassLoader = new URLClassLoader(classPath.toArray(size -> new URL[size]), parentClassLoader);
 		}
@@ -118,11 +120,13 @@ public class MavenArtifactResolverTests {
 		} else {
 			ModuleLayer parentLayer = thisModule.getLayer();
 			Configuration parentConfiguration = parentLayer.configuration();
-			Configuration config = parentConfiguration.resolveAndBind(finder, ModuleFinder.of(), Set.of());
+			Configuration config = parentConfiguration.resolveAndBind(finder, ModuleFinder.of(), Set.of()); // Configurable from requirement
+			
+			// TODO - excludes
 			
 			ModuleLayer newLayer = parentLayer.defineModulesWithOneLoader(config, parentClassLoader);
 			newLayer.modules().forEach(System.out::println);
-			String firstModuleName = newLayer.modules().iterator().next().getName();
+			String firstModuleName = newLayer.modules().iterator().next().getName(); // Configurable from requirement
 			Class<?> c = newLayer.findLoader(firstModuleName).loadClass(className);
 			System.out.println(c);
 		}

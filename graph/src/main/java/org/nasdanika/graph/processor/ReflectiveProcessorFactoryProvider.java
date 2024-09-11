@@ -215,15 +215,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer) {
 		
-		return new Invocable() {
-			
-			@Override
-			public Object invoke(Object... args) {
-				return aer.bind(config, parallel, infoProvider).invoke(args);
-			}
-			
-		};
-		
+		return aer.bind(config, parallel, infoProvider);		
 	}
 	
 }

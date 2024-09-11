@@ -17,7 +17,7 @@ public interface Invocable {
 	 * 
 	 * @return null for unknown parameter names
 	 */
-	default String[] parameterNames() {
+	default String[] getParameterNames() {
 		return null;
 	}
 	
@@ -25,14 +25,49 @@ public interface Invocable {
 	 * 
 	 * @return null for unknown parameter types
 	 */
-	default Class<?>[] parameterTypes() {
+	default Class<?>[] getParameterTypes() {
 		return null; 
+	}
+	
+	/**
+	 * 
+	 * @return null for unknown return type
+	 */
+	default Class<?> getReturnType() {
+		return null;
 	}
 	
 	Object invoke(Object... args);
 	
+	/**
+	 * Different name to avoid ambiguity 
+	 * @param argumentProvider
+	 * @return
+	 */
+	default Object call(java.util.function.BiFunction<String,Class<?>,Object> argumentProvider) {
+		String[] parameterNames = getParameterNames();
+		if (parameterNames == null) {
+			throw new UnsupportedOperationException("Parameter names are null");
+		}
+		Class<?>[] parameterTypes = getParameterTypes();
+		if (parameterTypes == null) {
+			throw new UnsupportedOperationException("Parameter types are null");
+		}
+		if (parameterTypes.length != parameterNames.length) {
+			throw new IllegalStateException("Parameter names and types lengths are different");
+		}
+		
+		Object[] args = new Object[parameterNames.length];
+		
+		for (int i = 0; i < args.length; ++i) {
+			args[i] = argumentProvider.apply(parameterNames[i], parameterTypes[i]);
+		}
+		
+		return invoke(args);
+	}
+	
 	default Invocable bind(String name, Object binding) {		
-		String[] pNames = parameterNames();
+		String[] pNames = getParameterNames();
 		if (pNames == null) {
 			throw new UnsupportedOperationException("Cannot bind by name because parameter names are not available");
 		}
@@ -63,13 +98,14 @@ public interface Invocable {
 			return this;
 		}		
 		
-		String[] pNames = parameterNames();
-		Class<?>[] pTypes = parameterTypes();		
+		String[] pNames = getParameterNames();
+		Class<?>[] pTypes = getParameterTypes();	
+		Class<?> returnType = getReturnType();
 		
 		return new Invocable() {
 			
 			@Override
-			public String[] parameterNames() {
+			public String[] getParameterNames() {
 				if (pNames == null) {
 					return pNames;
 				}
@@ -81,7 +117,7 @@ public interface Invocable {
 			}
 			
 			@Override
-			public Class<?>[] parameterTypes() {
+			public Class<?>[] getParameterTypes() {
 				if (pTypes == null) {
 					return pTypes;
 				}
@@ -90,6 +126,11 @@ public interface Invocable {
 					ret[i] = pTypes[i < offset ? i : i + bindings.length];
 				}
 				return ret;
+			}
+			
+			@Override
+			public Class<?> getReturnType() {
+				return returnType;
 			}
 
 			@Override
@@ -121,13 +162,18 @@ public interface Invocable {
 			}
 			
 			@Override
-			public Class<?>[] parameterTypes() {
+			public Class<?>[] getParameterTypes() {
 				return method.getParameterTypes();
 			}
 			
 			@Override
-			public String[] parameterNames() {
+			public String[] getParameterNames() {
 				return Stream.of(method.getParameters()).map(Parameter::getName).toArray(size -> new String[size]);
+			}
+			
+			@Override
+			public Class<?> getReturnType() {
+				return method.getReturnType();
 			}
 			
 		};
@@ -146,13 +192,18 @@ public interface Invocable {
 			}
 			
 			@Override
-			public Class<?>[] parameterTypes() {
+			public Class<?>[] getParameterTypes() {
 				return constructor.getParameterTypes();
 			}
 			
 			@Override
-			public String[] parameterNames() {
+			public String[] getParameterNames() {
 				return Stream.of(constructor.getParameters()).map(Parameter::getName).toArray(size -> new String[size]);
+			}
+			
+			@Override
+			public Class<?> getReturnType() {
+				return constructor.getDeclaringClass();
 			}
 			
 		};
@@ -182,6 +233,205 @@ public interface Invocable {
 		};
 		
 		return Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
+	}
+	
+	// of
+	
+	static Invocable ofValue(Object value) {
+		return new Invocable() {
+			
+			@Override
+			public Class<?> getReturnType() {				
+				return value == null ? null : value.getClass();
+			}
+			
+			@Override
+			public String[] getParameterNames() {
+				return new String[0];
+			}
+			
+			@Override
+			public Class<?>[] getParameterTypes() {
+				return new Class<?>[0];
+			}
+			
+			@Override
+			public Object invoke(Object... args) {
+				return value;
+			}
+		};
+	}
+	
+	static <T> Invocable of(java.util.function.Supplier<T> supplier, Class<T> type) {
+		return new Invocable() {
+			
+			@Override
+			public Class<?> getReturnType() {				
+				return type;
+			}
+			
+			@Override
+			public String[] getParameterNames() {
+				return new String[0];
+			}
+			
+			@Override
+			public Class<?>[] getParameterTypes() {
+				return new Class<?>[0];
+			}
+			
+			@Override
+			public Object invoke(Object... args) {
+				return supplier.get();
+			}
+		};
+		
+	}
+		
+	static <T,R> Invocable of(
+			java.util.function.Function<T,R> function, 
+			Class<T> parameterType,
+			String parameterName,
+			Class<R> returnType) {
+		return new Invocable() {
+			
+			@Override
+			public Class<?> getReturnType() {				
+				return returnType;
+			}
+			
+			@Override
+			public String[] getParameterNames() {
+				return new String[] { parameterName };
+			}
+			
+			@Override
+			public Class<?>[] getParameterTypes() {
+				return new Class<?>[] { parameterType };
+			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public Object invoke(Object... args) {
+				return function.apply((T) args[0]);
+			}
+			
+		};
+		
+	}
+	
+	static <T,U,R> Invocable of(
+			java.util.function.BiFunction<T,U,R> biFunction, 
+			Class<T> firstParameterType,
+			String firstParameterName,
+			Class<U> secondParameterType,
+			String secondParameterName,
+			Class<R> returnType) {
+		return new Invocable() {
+			
+			@Override
+			public Class<?> getReturnType() {				
+				return returnType;
+			}
+			
+			@Override
+			public String[] getParameterNames() {
+				return new String[] { firstParameterName, secondParameterName };
+			}
+			
+			@Override
+			public Class<?>[] getParameterTypes() {
+				return new Class<?>[] { firstParameterType, secondParameterType };
+			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public Object invoke(Object... args) {
+				return biFunction.apply((T) args[0], (U) args[1]);
+			}
+		};
+		
+	}
+	
+	// as
+	
+	default java.util.function.Supplier<?> asSupplier() {
+		return () -> invoke();
+	}
+	
+	default java.util.function.Function<?,?> asFunction() {
+		return arg -> invoke(arg);
+	}
+	
+	default java.util.function.BiFunction<?,?,?> asBiFunction() {
+		return (a,b) -> invoke(a,b);
+	}
+	
+	// map - by index and by name
+	
+	default Invocable map(
+			java.util.function.BiFunction<Integer,String,String> parameterNameMapper,
+			java.util.function.BiFunction<Integer,Class<?>,Class<?>> parameterTypeMapper,
+			java.util.function.Function<Class<?>, Class<?>> returnTypeMapper,
+			java.util.function.BiFunction<Integer,Object,Object> argumentMapper) {
+		
+		String[] pNames = getParameterNames();
+		if (pNames != null && parameterNameMapper != null) {
+			for (int i = 0; i < pNames.length; ++i) {
+				pNames[i] = parameterNameMapper.apply(i, pNames[i]);
+			}
+		}
+		
+		Class<?>[] pTypes = getParameterTypes();	
+		if (pTypes != null && parameterTypeMapper != null) {
+			for (int i = 0; i < pNames.length; ++i) {
+				pTypes[i] = parameterTypeMapper.apply(i, pTypes[i]);
+			}
+		}
+		
+		Class<?> returnType = returnTypeMapper == null ?  getReturnType() : returnTypeMapper.apply(getReturnType());
+		
+		return new Invocable() {
+			
+			@Override
+			public Class<?> getReturnType() {				
+				return returnType;
+			}
+			
+			@Override
+			public String[] getParameterNames() {
+				return pNames;
+			}
+			
+			@Override
+			public Class<?>[] getParameterTypes() {
+				return pTypes;
+			}
+			
+			@Override
+			public Object invoke(Object... args) {
+				if (argumentMapper == null) {
+					Invocable.this.invoke(args);
+				}
+				Object[] mappedArgs = new Object[args.length];
+				for (int i = 0; i < mappedArgs.length; ++i) {
+					mappedArgs[i] = argumentMapper.apply(i, args[i]);
+				}
+				return Invocable.this.invoke(mappedArgs);
+			}
+			
+		};
+		
+	}
+		
+	/**
+	 * 
+	 * @param config
+	 * @param converter
+	 * @return
+	 */
+	default Object call(Map<?,?> config, BiFunction<Object,Class<?>, Object> converter) {
+		return call((name, type) -> converter.apply(config.get(name), type));				
 	}
 	
 }

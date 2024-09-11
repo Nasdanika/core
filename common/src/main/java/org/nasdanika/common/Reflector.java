@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -173,6 +174,30 @@ public class Reflector {
 		@Override
 		public Object invoke(Object... args) {
 			return Reflector.this.invokeMethod(target, (Method) annotatedElement, args);
+		}
+		
+		@Override
+		public String[] getParameterNames() {
+			if (annotatedElement instanceof Method) {
+				return Stream.of(((Method) annotatedElement).getParameters()).map(Parameter::getName).toArray(size -> new String[size]);				
+			}
+			return Invocable.super.getParameterNames();
+		}
+		
+		@Override
+		public Class<?>[] getParameterTypes() {
+			if (annotatedElement instanceof Method) {
+				return ((Method) annotatedElement).getParameterTypes();				
+			}
+			return Invocable.super.getParameterTypes();
+		}
+		
+		@Override
+		public Class<?> getReturnType() {
+			if (annotatedElement instanceof Method) {
+				return ((Method) annotatedElement).getReturnType();				
+			}
+			return Invocable.super.getReturnType();
 		}
 		
 		public boolean canSet(Class<?> type) {
