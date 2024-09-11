@@ -67,7 +67,7 @@ public class MavenArtifactResolverTests {
 		
 		RemoteRepository remoteRepo = new RemoteRepository.Builder("central", "default", "https://repo.maven.apache.org/maven2/")
 //			.setAuthentication(authentication)
-//			.setProxy(proxy)
+			.setProxy(proxy)
 //			.set...	
 			.build();
 

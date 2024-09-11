@@ -1,13 +1,16 @@
 package org.nasdanika.common;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
@@ -432,6 +435,80 @@ public interface Invocable {
 	 */
 	default Object call(Map<?,?> config, BiFunction<Object,Class<?>, Object> converter) {
 		return call((name, type) -> converter.apply(config.get(name), type));				
+	}
+	
+	/**
+	 * Uses converter which leverages factory provider. 
+	 * @param config
+	 * @param converter
+	 * @return
+	 */
+	default Object call(Map<?,?> config, java.util.function.Function<Class<?>, Invocable> factoryProvider) {
+		BiFunction<Object,Class<?>, Object> converter = new BiFunction<Object, Class<?>, Object>() {
+			
+			@Override
+			public Object apply(Object source, Class<?> type) {
+				if (source == null || type.isInstance(source)) {
+					return source;
+				}
+				
+				if (type.isArray()) {
+					Class<?> componentType = type.getComponentType();
+					if (source instanceof Collection) {
+						Collection<?> sourceCollection = (Collection<?>) source;
+						Object ret = Array.newInstance(componentType, sourceCollection.size());
+						int idx = 0;
+						for (Object element: sourceCollection) {
+							if (element == null || componentType.isInstance(element)) {
+								Array.set(ret, idx++, element);
+							} else {
+								Object convertedElement = this.apply(element, componentType);
+								Array.set(ret, idx++, convertedElement);								
+							}
+						}
+						return ret;
+					}
+					throw new IllegalArgumentException("Not a collection: " + source);
+				}
+				
+				// Not an array, not of expected type - use factory
+				if (source instanceof Map) {				
+					Invocable factory = factoryProvider.apply(type);
+					return factory.call((Map<?,?>) source, factoryProvider);
+				}
+				
+				throw new IllegalArgumentException("Not a map: " + source);				
+			}			
+			
+		};
+		
+		return call(config, converter);				
+	}
+	
+	/**
+	 * Factory provider which uses canonical or longest constructor
+	 * @param config
+	 * @return
+	 */
+	default Object call(Map<?,?> config) {
+		java.util.function.Function<Class<?>, Invocable> factoryProvider = type -> {
+	        Constructor<?>[] constructors = type.getDeclaredConstructors();
+			if (type.isRecord()) {
+		        for (Constructor<?> constructor : constructors) {
+		            if (constructor.getParameterCount() == type.getRecordComponents().length) {
+		            	return Invocable.of(constructor);
+		            }
+		        }				
+			}
+			
+			Optional<Constructor<?>> longestConstructorOpt = Stream.of(constructors).reduce((a, b) -> a.getParameterCount() > b.getParameterCount() ? a : b);
+			if (longestConstructorOpt.isPresent()) {
+				return Invocable.of(longestConstructorOpt.get());
+			}
+			
+			throw new IllegalArgumentException("No constructors in " + type);
+		};
+		return call(config, factoryProvider);
 	}
 	
 }
