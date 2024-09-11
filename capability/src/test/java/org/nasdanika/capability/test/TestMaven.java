@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-import org.nasdanika.capability.maven.DependenciesRequestRecord;
+import org.nasdanika.capability.maven.DependencyRequestRecord;
 import org.nasdanika.capability.maven.ProxyRecord;
 import org.nasdanika.capability.maven.RemoteRepoRecord;
 import org.nasdanika.common.Invocable;
@@ -77,8 +77,7 @@ public class TestMaven {
 		
 		Yaml yaml = new Yaml();
 		Map<?,?> config = yaml.load(spec);
-		Constructor<?> constructor = DependenciesRequestRecord.class.getConstructors()[0];
-		Invocable ci = Invocable.of(constructor);
+		Invocable ci = Invocable.of(DependencyRequestRecord.class);
 		Object result = ci.call(config);
 		System.out.println(result);		
 	}

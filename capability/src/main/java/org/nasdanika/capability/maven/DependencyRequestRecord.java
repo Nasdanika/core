@@ -1,9 +1,10 @@
 package org.nasdanika.capability.maven;
 
-public record DependenciesRequestRecord(
+public record DependencyRequestRecord(
 		String[] dependencies,
 		String[] managedDependencies,
-		RemoteRepoRecord[] repoteRepositories,
+		RemoteRepoRecord[] remoteRepositories,
 		String localRepository) {
-
+	
+	
 }

@@ -14,6 +14,9 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
+/**
+ * 
+ */
 public interface Invocable {
 	
 	/**
@@ -518,6 +521,76 @@ public interface Invocable {
 			throw new IllegalArgumentException("No constructors in " + type);
 		};
 		return call(config, factoryProvider);
+	}
+	
+	/**
+	 * 
+	 * @param invocable
+	 * @return Invocable which invokes the most specific of the argument invocables based on argument types and parameter types.. 
+	 */
+	static Invocable of(Invocable... invocable) {
+		return new Invocable() {
+			
+			private boolean matchArgs(Object[] args, Class<?>[] parameterTypes) {
+				if (parameterTypes == null) {
+					return true;
+				}
+				if (parameterTypes.length != args.length) {
+					return false;
+				}
+				for (int i = 0; i < args.length; ++i) {
+					if (args[i] != null && !parameterTypes[i].isInstance(args[i])) {
+						return false;
+					}
+				}
+				return true;
+			}
+			
+			@Override
+			public Object invoke(Object... args) {
+				Optional<Invocable> mostSpecificOpt = Stream.of(invocable)
+					.filter(i -> matchArgs(args, i.getParameterTypes()))
+					.reduce((a,b) -> a.isMoreSpecific(b) ? a : b);
+				
+				if (mostSpecificOpt.isPresent()) {
+					return mostSpecificOpt.get().invoke(args);
+				}
+				throw new UnsupportedOperationException("No matching invocable");
+			}
+			
+		};
+	}
+	
+	/**
+	 * Invocable which calls the best matching (most specific) constructor
+	 * @param type
+	 * @return
+	 */
+	static Invocable of(Class<?> type) {
+		Constructor<?>[] constructors = type.getConstructors();
+		if (constructors.length == 1) {
+			return of(constructors[0]);
+		}
+		return of(Stream.of(constructors).map(Invocable::of).toArray(size -> new Invocable[size]));
+	}
+	
+	private boolean isMoreSpecific(Invocable o) {
+		// Looking for more specific parameters
+		int counter = 0;
+		Class<?>[] pt = getParameterTypes();
+		Class<?>[] opt = o.getParameterTypes();
+		for (int i = 0; i < pt.length; ++i) {
+			if (pt[i].equals(opt[i])) {
+				continue;
+			}
+			if (pt[i].isAssignableFrom(opt[i])) {
+				--counter;
+			} else if (opt[i].isAssignableFrom(pt[i])) {
+				++counter;
+			} 
+		}
+		
+		return counter >= 0;
 	}
 	
 }

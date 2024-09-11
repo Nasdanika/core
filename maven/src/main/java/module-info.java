@@ -1,3 +1,6 @@
+import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.maven.DependencyCapabilityFactory;
+
 module org.nasdanika.maven {
 	requires transitive org.apache.maven.resolver.supplier;
 	
@@ -7,5 +10,7 @@ module org.nasdanika.maven {
 	requires org.apache.maven.resolver.util;
 	
 	exports org.nasdanika.maven;
+	
+	provides CapabilityFactory with DependencyCapabilityFactory;
 	
 }
