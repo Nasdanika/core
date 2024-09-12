@@ -13,6 +13,7 @@ module org.nasdanika.capability {
 	requires transitive reactor.core;
 	requires transitive org.reactivestreams;
 	requires org.eclipse.emf.ecore.xmi;
+	requires java.scripting;
 	
 	exports org.nasdanika.capability;
 	exports org.nasdanika.capability.emf;

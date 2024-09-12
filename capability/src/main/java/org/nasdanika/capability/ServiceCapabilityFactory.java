@@ -109,4 +109,20 @@ public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory
 		}));		
 	}
 	
+	/**
+	 * Helper method for factories with no dependencies providing a single instance of a service.
+	 * @return
+	 */
+	protected CompletionStage<Iterable<CapabilityProvider<S>>> wrapError(Throwable error) {
+		CapabilityProvider<S> capabilityProvider = new CapabilityProvider<S>() {
+
+			@Override
+			public Flux<S> getPublisher() {
+				return Flux.error(error);
+			}
+			
+		};
+		return CompletableFuture.completedStage(Collections.singleton(capabilityProvider));		
+	}
+	
 }
