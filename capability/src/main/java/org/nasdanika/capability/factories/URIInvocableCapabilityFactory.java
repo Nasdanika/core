@@ -40,7 +40,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<URI,
 			String opaquePart = serviceRequirement.opaquePart();
 			int commaIdx = opaquePart.indexOf(",");
 			if (commaIdx == -1) {
-				return null;
+				return empty();
 			}
 			String dataPart = opaquePart.substring(commaIdx + 1);
 			byte[] data = Util.isBlank(dataPart) ? null : dataPart.getBytes();
@@ -98,13 +98,13 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<URI,
 			
 			// TODO - application prefix
 			
-			return null;
+			return empty();
 		}
 		
 		// TODO - loader
 		
 		// TODO Auto-generated method stub
-		return null;
+		return empty();
 	}
 	
 	protected Object loadValue(Class<?> type, byte[] data) {

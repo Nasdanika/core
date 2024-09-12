@@ -4,6 +4,7 @@ import org.eclipse.emf.common.util.URI;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertySource;
+import org.nasdanika.common.Util;
 import org.nasdanika.graph.Element;
 
 /**
@@ -36,7 +37,7 @@ public class PropertySourceProcessorFactory<P> extends URIInvocableCapabilityPro
 				URI uri = (URI) property;
 				return base == null ? uri : uri.resolve(base);
 			}
-			if (property instanceof String) {
+			if (property instanceof String && !Util.isBlank((String) property)) {
 				URI uri = URI.createURI((String) property);
 				return base == null ? uri : uri.resolve(base);
 			}
