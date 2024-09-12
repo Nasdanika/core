@@ -1,4 +1,5 @@
 import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.maven.ClassLoaderCapabilityFactory;
 import org.nasdanika.maven.DependencyCapabilityFactory;
 
 module org.nasdanika.maven {
@@ -11,6 +12,8 @@ module org.nasdanika.maven {
 	
 	exports org.nasdanika.maven;
 	
-	provides CapabilityFactory with DependencyCapabilityFactory;
+	provides CapabilityFactory with 
+		DependencyCapabilityFactory,
+		ClassLoaderCapabilityFactory;
 	
 }

@@ -386,7 +386,9 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 		}
 	}
 
-	protected void buildModulePath(StringBuilder builder, Map<String, File> moduleMap,
+	protected void buildModulePath(
+			StringBuilder builder, 
+			Map<String, File> moduleMap,
 			Map<String, ModuleReference> modulePath) throws IOException {
 		if (!modulePath.isEmpty()) {
 			boolean firstModuleEntry = true;

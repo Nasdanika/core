@@ -7,7 +7,7 @@ import org.nasdanika.capability.tests.TestCapabilityFactory;
 
 module org.nasdanika.capability.tests {
 	
-	requires transitive org.nasdanika.capability;
+	requires transitive org.nasdanika.maven;
 	
 	exports org.nasdanika.capability.tests;
 	

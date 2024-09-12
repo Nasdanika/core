@@ -37,6 +37,7 @@ import org.nasdanika.capability.maven.AuthenticationRecord;
 import org.nasdanika.capability.maven.DependencyRequestRecord;
 import org.nasdanika.capability.maven.ProxyRecord;
 import org.nasdanika.capability.maven.RemoteRepoRecord;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
@@ -67,8 +68,7 @@ public class DependencyCapabilityFactory implements CapabilityFactory<Dependency
 			}
 			
 		};
-		return CompletableFuture.completedStage(Collections.singleton(capabilityProvider));
-		
+		return CompletableFuture.completedStage(Collections.singleton(capabilityProvider));		
 	}
 
 	protected List<File> resolveDependencies(DependencyRequestRecord requirement) {
@@ -94,8 +94,12 @@ public class DependencyCapabilityFactory implements CapabilityFactory<Dependency
 				Yaml yaml = new Yaml();
 				try (InputStream in = new FileInputStream(config)) {
 					Map<?,?> configMap = yaml.load(in);
+					Context systemPropertiesContext = Context.wrap(System.getProperties()::get);
+					Context envContext = Context.wrap(System.getenv()::get);
+					Context combinedContext = systemPropertiesContext.mount(envContext, "env.");
+					Map<?, Object> interpolatedConfigMap = combinedContext.interpolate(configMap);
 					Invocable ci = Invocable.of(DependencyRequestRecord.class);
-					configRecord = (DependencyRequestRecord) ci.call(configMap);
+					configRecord = (DependencyRequestRecord) ci.call(interpolatedConfigMap);
 				}				
 			}
 			

@@ -96,7 +96,7 @@ public interface Invocable {
 	}	
 	
 	default Invocable bind(Object... bindings) {
-		return bind(0, bindings);
+		return bindWithOffset(0, bindings);
 	}
 	
 	default Invocable bindWithOffset(int offset, Object... bindings) {
@@ -140,11 +140,7 @@ public interface Invocable {
 			}
 
 			@Override
-			public Object invoke(Object... args) {
-				if (args.length == 0) {
-					return Invocable.this.invoke();
-				}
-				
+			public Object invoke(Object... args) {				
 				Object[] finalArgs = new Object[bindings.length + args.length];
 				System.arraycopy(args, 0, finalArgs, 0, offset);
 				System.arraycopy(bindings, 0, finalArgs, offset, bindings.length);
@@ -528,7 +524,11 @@ public interface Invocable {
 	 * @param invocable
 	 * @return Invocable which invokes the most specific of the argument invocables based on argument types and parameter types.. 
 	 */
-	static Invocable of(Invocable... invocable) {
+	static Invocable of(Invocable... invocables) {
+		if (invocables.length == 1) {
+			return invocables[0];
+		}		
+		
 		return new Invocable() {
 			
 			private boolean matchArgs(Object[] args, Class<?>[] parameterTypes) {
@@ -548,7 +548,7 @@ public interface Invocable {
 			
 			@Override
 			public Object invoke(Object... args) {
-				Optional<Invocable> mostSpecificOpt = Stream.of(invocable)
+				Optional<Invocable> mostSpecificOpt = Stream.of(invocables)
 					.filter(i -> matchArgs(args, i.getParameterTypes()))
 					.reduce((a,b) -> a.isMoreSpecific(b) ? a : b);
 				
