@@ -14,17 +14,8 @@ import org.nasdanika.graph.Node;
 /**
  * Reflective {@link Transformer} target which creates {@link ProcessorConfig} and its subclasses for {@link Element} and its subclasses respectively.
  */
-public abstract class ProcessorConfigFactory<H,E> {
-	
-	/**
-	 * Creates an endpoint to invoke the argument handler of specified type.
-	 * @param connection
-	 * @param handler
-	 * @param type
-	 * @return
-	 */
-	protected abstract E createEndpoint(Connection connection, H handler, HandlerType type);	
-	
+public abstract class ProcessorConfigFactory<H,E> implements EndpointFactory<H, E> {
+		
 	private <T extends ProcessorConfigImpl> T wireConfig(
 			T config,
 			boolean parallel,
@@ -149,7 +140,7 @@ public abstract class ProcessorConfigFactory<H,E> {
 	 * @param incomingConnection
 	 * @return
 	 */
-	protected boolean isPassThrough(Connection incomingConnection) {
+	protected boolean isPassThrough(Connection connection) {
 		return true;
 	};
 	

@@ -1,7 +1,6 @@
 package org.nasdanika.capability.emf;
 
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.EPackage;
@@ -18,7 +17,7 @@ public abstract class URIConverterContributorCapabilityFactory extends ResourceS
 	protected CompletionStage<Iterable<CapabilityProvider<ResourceSetContributor>>> createService(
 			Class<ResourceSetContributor> serviceType,
 			Predicate<ResourceSetContributor> serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		URIConverterResourceSetContributor contributor = new URIConverterResourceSetContributor() {

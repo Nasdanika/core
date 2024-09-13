@@ -7,7 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -440,6 +443,12 @@ public class TestCommon {
 		Yaml yaml = new Yaml();
 		Object map = yaml.load("key:");
 		System.out.println(map);
+	}
+	@Test 
+	public void testFragment() throws UnsupportedEncodingException {
+		URI uri = URI.createURI("https://nasdanika.org/index.html");
+		URI withFragment = uri.appendFragment(URLEncoder.encode("Hello World = 33!", StandardCharsets.UTF_8.name()));
+		System.out.println(withFragment);
 	}
 	
 }

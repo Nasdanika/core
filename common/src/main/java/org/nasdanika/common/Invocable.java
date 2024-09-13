@@ -218,7 +218,8 @@ public interface Invocable {
 	 * @param interfaces
 	 * @return
 	 */
-	static Object createProxy(
+	@SuppressWarnings("unchecked")
+	static <T> T createProxy(
 			ClassLoader classLoader, 
 			BiFunction<Method, Object[], Invocable> resolver, Class<?>... interfaces) {
 		
@@ -234,7 +235,7 @@ public interface Invocable {
 			}
 		};
 		
-		return Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
+		return (T) Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
 	}
 	
 	// of

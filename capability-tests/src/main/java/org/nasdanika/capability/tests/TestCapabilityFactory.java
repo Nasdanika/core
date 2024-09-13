@@ -2,7 +2,6 @@ package org.nasdanika.capability.tests;
 
 import java.util.Collections;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.nasdanika.capability.CapabilityFactory;
@@ -26,10 +25,10 @@ public class TestCapabilityFactory implements CapabilityFactory<TestCapabilityFa
 	@Override
 	public CompletionStage<Iterable<CapabilityProvider<Integer>>> create(
 			Requirement requirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
-		return resolver.apply(MyService.class, progressMonitor).thenApply(cp -> {;
+		return loader.load(MyService.class, progressMonitor).thenApply(cp -> {;
 			@SuppressWarnings({ "unchecked", "rawtypes" })
 			Flux<MyService> myServiceCapabilityPublisher = (Flux) cp.iterator().next().getPublisher();
 			

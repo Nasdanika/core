@@ -3,7 +3,6 @@ package org.nasdanika.capability.tests;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
@@ -23,7 +22,7 @@ public class ListFactory extends ServiceCapabilityFactory<Double, List<Double>> 
 	public CompletionStage<Iterable<CapabilityProvider<List<Double>>>> createService(
 			Class<List<Double>> serviceType,
 			Double serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		return wrap(Collections.singletonList(serviceRequirement));

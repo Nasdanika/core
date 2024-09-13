@@ -1,7 +1,6 @@
 package org.nasdanika.capability.factories;
 
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.capability.CapabilityProvider;
@@ -23,7 +22,7 @@ public class MarkdownHelperCapabilityFactory extends ServiceCapabilityFactory<UR
 	protected CompletionStage<Iterable<CapabilityProvider<MarkdownHelper>>> createService(
 			Class<MarkdownHelper> serviceType, 
 			URI serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		MarkdownHelper markdownHelper = new MarkdownHelper() {

@@ -3,6 +3,7 @@ package org.nasdanika.capability;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
@@ -11,7 +12,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -63,26 +63,31 @@ public class CapabilityLoader {
 		registry.put(requirement, ret);
 		progressMonitor.worked(1, "Created a registry entry", requirement);
 		
-		Runnable job = () -> { // A runnable which completes the future		
-			createCapabilityProviders(
-					requirement, 
-					(rq, pm) -> {
-						if (Objects.equals(requirement, rq)) {
-							// Preventing blocking at .join() below
-							throw new IllegalArgumentException("Requirement loading loop for " + requirement);
-						}
-						return load(rq,jobCollector,pm);
-					}, 
-					progressMonitor)
-			.whenComplete((r, e) -> {						
-				if (e == null) {
-					((CompletableFuture<Iterable<CapabilityProvider<Object>>>) ret).complete(r);
-					progressMonitor.worked(1, "Completed capability providers", requirement);
-				} else {
-					((CompletableFuture<Iterable<CapabilityProvider<Object>>>) ret).completeExceptionally(e);
-					progressMonitor.worked(Status.ERROR, 1, "Exception while completing capability providers", requirement, e);
+		CapabilityFactory.Loader subLoader = new CapabilityFactory.Loader() {
+
+			@SuppressWarnings({ "rawtypes", "unchecked" })
+			@Override
+			public <Т> CompletionStage<Iterable<CapabilityProvider<Т>>> load(Object rq, ProgressMonitor pm) {
+				if (Objects.equals(requirement, rq)) {
+					// Preventing blocking at .join() below
+					throw new IllegalArgumentException("Requirement loading loop for " + requirement);
 				}
-			});
+				return (CompletionStage) CapabilityLoader.this.load(rq,jobCollector,pm);
+			}
+			
+		};
+		
+		Runnable job = () -> { // A runnable which completes the future			
+			createCapabilityProviders(requirement, subLoader, progressMonitor)
+				.whenComplete((r, e) -> {						
+					if (e == null) {
+						((CompletableFuture<Iterable<CapabilityProvider<Object>>>) ret).complete(r);
+						progressMonitor.worked(1, "Completed capability providers", requirement);
+					} else {
+						((CompletableFuture<Iterable<CapabilityProvider<Object>>>) ret).completeExceptionally(e);
+						progressMonitor.worked(Status.ERROR, 1, "Exception while completing capability providers", requirement, e);
+					}
+				});
 			progressMonitor.worked(1, "Created capability providers", requirement);
 		};
 		jobCollector.accept(job);
@@ -106,6 +111,24 @@ public class CapabilityLoader {
 		return result.toCompletableFuture().join();		
 	}
 		
+	public List<Object> loadAll(Object requirement, ProgressMonitor progressMonitor) {
+	
+		List<Object> ret = Collections.synchronizedList(new ArrayList<>());
+		for (CapabilityProvider<Object> cp: load(requirement, progressMonitor)) {
+			cp.getPublisher().subscribe(ret::add);
+		}
+		
+		return ret;		
+	}
+	
+	public Object loadOne(Object requirement, ProgressMonitor progressMonitor) {
+		for (CapabilityProvider<Object> cp: load(requirement, progressMonitor)) {
+			return cp.getPublisher().blockFirst();
+		}
+		
+		return null;		
+	}	
+		
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <R,S> Iterable<CapabilityProvider<S>> loadServices(
 			Class<S> serviceType, 
@@ -115,6 +138,33 @@ public class CapabilityLoader {
 
 		ServiceCapabilityFactory.Requirement<R,S> serviceReq = new ServiceCapabilityFactory.Requirement<R,S>(serviceType, factoryPredicate, serviceRequirement);
 		return (Iterable) load(serviceReq, progressMonitor);
+	}
+	
+	public <R,S> List<S> loadAllServices(
+			Class<S> serviceType, 
+			Predicate<? super ServiceCapabilityFactory<R,S>> factoryPredicate,
+			R serviceRequirement,
+			ProgressMonitor progressMonitor) {
+	
+		List<S> ret = Collections.synchronizedList(new ArrayList<>());
+		for (CapabilityProvider<S> cp: loadServices(serviceType, factoryPredicate, serviceRequirement, progressMonitor)) {
+			cp.getPublisher().subscribe(ret::add);
+		}
+		
+		return ret;		
+	}
+	
+	public <R,S> S loadService(
+			Class<S> serviceType, 
+			Predicate<? super ServiceCapabilityFactory<R,S>> factoryPredicate,
+			R serviceRequirement,
+			ProgressMonitor progressMonitor) {
+	
+		for (CapabilityProvider<S> cp: loadServices(serviceType, factoryPredicate, serviceRequirement, progressMonitor)) {
+			return cp.getPublisher().blockFirst();
+		}
+		
+		return null;		
 	}
 	
 	/**
@@ -137,6 +187,8 @@ public class CapabilityLoader {
 	public Collection<FactoryNode> getFactoryNodes() {
 		return Collections.unmodifiableCollection(factoryNodes);
 	}
+	
+//	private <T>  load(Object requirement, ProgressMonitor progressMonitor) 
 		
 	/**
 	 * 
@@ -150,7 +202,7 @@ public class CapabilityLoader {
 	 */
 	protected CompletionStage<Iterable<CapabilityProvider<Object>>> createCapabilityProviders(
 			Object requirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver, 
+			CapabilityFactory.Loader loader, 
 			ProgressMonitor progressMonitor) {
 
 		Collection<CompletableFuture<Iterable<CapabilityProvider<Object>>>> accumulator = new ArrayList<>();
@@ -158,13 +210,16 @@ public class CapabilityLoader {
 			if (factory.canHandle(requirement)) {
 				// TODO - split progress monitor
 				Collection<Object> dependencies = Collections.synchronizedCollection(new ArrayList<>());
-				CompletionStage<Iterable<CapabilityProvider<Object>>> rcs = factory.create(
-						requirement, 
-						(rq, pm) -> {
-							dependencies.add(rq);
-							return resolver.apply(rq, pm); 
-						},
-						progressMonitor);
+				CapabilityFactory.Loader subLoader = new CapabilityFactory.Loader() {
+
+					@Override
+					public <Т> CompletionStage<Iterable<CapabilityProvider<Т>>> load(Object rq, ProgressMonitor pm) {
+						dependencies.add(rq);
+						return loader.load(rq, pm); 
+					}
+					
+				};
+				CompletionStage<Iterable<CapabilityProvider<Object>>> rcs = factory.create(requirement,	subLoader, progressMonitor);
 				rcs = rcs.thenApply(cp -> {
 					factoryNodes.add(new FactoryNode(requirement, factory, cp, Collections.unmodifiableCollection(dependencies)));
 					return cp;

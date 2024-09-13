@@ -6,6 +6,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 
 import org.nasdanika.capability.CapabilityProvider;
+import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.common.ProgressMonitor;
 
 import picocli.CommandLine;
@@ -15,7 +16,7 @@ public class HelpCommandFactory extends SubCommandCapabilityFactory<HelpCommand>
 	@Override
 	protected CompletionStage<HelpCommand> doCreateCommand(
 			List<CommandLine> parentPath, 
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		return CompletableFuture.completedStage(new HelpCommand(parentPath.get(parentPath.size() - 1)));			
 	}

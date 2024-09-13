@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
@@ -39,24 +38,24 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	protected CompletionStage<Iterable<CapabilityProvider<CommandLine>>> createService(
 			Class<CommandLine> serviceType,
 			SubCommandRequirement serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		List<CommandLine> parentPath = serviceRequirement.parentPath();
 		if (parentPath == null || parentPath.size() <= getMaxPath()) {
-			CompletionStage<T> commandCS = createCommand(parentPath, resolver, progressMonitor);
+			CompletionStage<T> commandCS = createCommand(parentPath, loader, progressMonitor);
 			if (commandCS != null) {
 				CompletionStage<CommandLineAndPath> commandLineAndPathCS = commandCS.thenApply(command -> createCommandLine(command, serviceRequirement, progressMonitor));
 				CompletionStage<Iterable<CapabilityProvider<CommandLine>>> subCommandsCS = commandLineAndPathCS.thenCompose(
 						commandLineAndPath -> createSubCommands(
 								commandLineAndPath.path(),
-								resolver,
+								loader,
 								progressMonitor));
 				
 				CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> mixInsCS = commandLineAndPathCS.thenCompose(
 						commandLineAndPath -> createMixIns(
 								commandLineAndPath.path(),
-								resolver,
+								loader,
 								progressMonitor));
 				
 				CompletionStage<CommandLine> commandLineWithSubCommandsCS = commandLineAndPathCS.thenCombine(subCommandsCS, this::combineSubCommands);
@@ -85,12 +84,12 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	
 	protected CompletionStage<Iterable<CapabilityProvider<CommandLine>>> createSubCommands(
 				List<CommandLine> path,
-				BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+				Loader loader,
 				ProgressMonitor progressMonitor) {
 		
 		Requirement<SubCommandRequirement, CommandLine> subCommandRequirement = ServiceCapabilityFactory.createRequirement(CommandLine.class, null, new SubCommandRequirement(path));
 		@SuppressWarnings({ "rawtypes", "unchecked" })
-		CompletionStage<Iterable<CapabilityProvider<CommandLine>>> subCommandsCS = (CompletionStage) resolver.apply(subCommandRequirement, progressMonitor);
+		CompletionStage<Iterable<CapabilityProvider<CommandLine>>> subCommandsCS = (CompletionStage) loader.load(subCommandRequirement, progressMonitor);
 		return subCommandsCS;
 	}
 	
@@ -156,12 +155,12 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	
 	protected CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> createMixIns(
 			List<CommandLine> path,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 	
 		Requirement<MixInRequirement, MixInRecord> mixInRequirement = ServiceCapabilityFactory.createRequirement(MixInRecord.class, null,  new MixInRequirement(path));
 		@SuppressWarnings({ "rawtypes", "unchecked" })
-		CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> mixInsCS = (CompletionStage) resolver.apply(mixInRequirement, progressMonitor);
+		CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> mixInsCS = (CompletionStage) loader.load(mixInRequirement, progressMonitor);
 		return mixInsCS;
 	}
 	
@@ -262,9 +261,9 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	 */
 	protected CompletionStage<T> createCommand(
 			List<CommandLine> parentPath, 
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
-		return match(parentPath) ? doCreateCommand(parentPath, resolver, progressMonitor) : null;
+		return match(parentPath) ? doCreateCommand(parentPath, loader, progressMonitor) : null;
 	};
 	
 	/**
@@ -274,7 +273,7 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	 */
 	protected CompletionStage<T> doCreateCommand(
 			List<CommandLine> parentPath, 
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		return null;
 	}

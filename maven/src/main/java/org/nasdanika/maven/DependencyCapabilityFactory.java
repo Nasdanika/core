@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
@@ -57,7 +56,7 @@ public class DependencyCapabilityFactory implements CapabilityFactory<Dependency
 	@Override
 	public CompletionStage<Iterable<CapabilityProvider<Collection<File>>>> create(
 			DependencyRequestRecord requirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 
 		CapabilityProvider<Collection<File>> capabilityProvider = new CapabilityProvider<Collection<File>>() {

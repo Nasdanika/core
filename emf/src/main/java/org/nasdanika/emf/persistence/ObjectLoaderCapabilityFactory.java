@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -30,12 +29,12 @@ public abstract class ObjectLoaderCapabilityFactory<R,S> extends ServiceCapabili
 	protected CompletionStage<Iterable<CapabilityProvider<S>>> createService(
 			Class<S> serviceType, 
 			R serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		ResourceSetRequirement resourceSetRequirement = getResourceSetRequirement(serviceRequirement); 
 		Requirement<Object, ResourceSet> resourceSetServiceRequirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class, this::testResourceSetFactory, resourceSetRequirement);
-		CompletionStage<Iterable<CapabilityProvider<Object>>> rsCS = resolver.apply(resourceSetServiceRequirement, progressMonitor);
+		CompletionStage<Iterable<CapabilityProvider<Object>>> rsCS = loader.load(resourceSetServiceRequirement, progressMonitor);
 		return rsCS.thenApply(resourceSets -> load(serviceRequirement, resourceSets, progressMonitor));
 	}
 

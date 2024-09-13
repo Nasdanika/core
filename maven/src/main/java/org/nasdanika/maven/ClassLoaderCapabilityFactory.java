@@ -1,12 +1,12 @@
 package org.nasdanika.maven;
 
 import java.io.File;
-import java.lang.module.ModuleFinder;
-import java.lang.module.ModuleReference;
 import java.lang.module.Configuration;
 import java.lang.module.ModuleDescriptor;
 import java.lang.module.ModuleDescriptor.Requires;
 import java.lang.module.ModuleDescriptor.Requires.Modifier;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleReference;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -16,14 +16,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.nasdanika.capability.CapabilityProvider;
@@ -50,7 +47,7 @@ public class ClassLoaderCapabilityFactory extends ServiceCapabilityFactory<Class
 	protected CompletionStage<Iterable<CapabilityProvider<ClassLoader>>> createService(
 			Class<ClassLoader> serviceType,
 			ClassLoaderRequirement serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		if (serviceRequirement.dependencies() == null && serviceRequirement.managedDependencies() == null) {
@@ -64,7 +61,7 @@ public class ClassLoaderCapabilityFactory extends ServiceCapabilityFactory<Class
 				serviceRequirement.remoteRepositories(), 
 				serviceRequirement.localRepository());
 		
-		CompletionStage<Iterable<CapabilityProvider<Object>>> dependencyCS = resolver.apply(dependencyRequest, progressMonitor);
+		CompletionStage<Iterable<CapabilityProvider<Object>>> dependencyCS = loader.load(dependencyRequest, progressMonitor);
 		CompletionStage<ClassLoader> clcs = dependencyCS.thenApply(cp -> createClassLoader(serviceRequirement, cp, progressMonitor));
 		return wrapCompletionStage(clcs);
 	}

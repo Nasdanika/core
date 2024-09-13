@@ -15,7 +15,7 @@ public class NopEndpointProcessorConfigFactory<H> extends ProcessorConfigFactory
 	 * Returns argument handler.
 	 */
 	@Override
-	protected H createEndpoint(Connection connection, H handler, HandlerType type) {
+	public H createEndpoint(Connection connection, H handler, HandlerType type) {
 		return handler;
 	}
 	

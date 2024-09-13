@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.ServiceLoader.Provider;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -52,7 +51,7 @@ public abstract class ServiceFactory<S> implements CapabilityFactory<Object,S> {
 	@Override
 	public CompletionStage<Iterable<CapabilityProvider<S>>> create(
 			Object requirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		if (requirement instanceof Class) {
 			requirement = new Requirement<S>((Class<S>) requirement, null, null);

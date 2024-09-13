@@ -3,7 +3,6 @@ package org.nasdanika.capability;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import org.nasdanika.common.ProgressMonitor;
@@ -44,7 +43,7 @@ public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory
 	@Override
 	public CompletionStage<Iterable<CapabilityProvider<S>>> create(
 			Object requirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		if (requirement instanceof Class) {
 			requirement = new Requirement<R,S>((Class<S>) requirement, null, null);
@@ -55,7 +54,7 @@ public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory
 			if (isFor(theRequirement.serviceType(), theRequirement.serviceRequirement())
 					&& (theRequirement.factoryPredicate() == null || theRequirement.factoryPredicate().test(this))) {
 				// TODO - split progress monitor
-				return createService(theRequirement.serviceType(), theRequirement.serviceRequirement(), resolver, progressMonitor);
+				return createService(theRequirement.serviceType(), theRequirement.serviceRequirement(), loader, progressMonitor);
 			}
 		} 
 		
@@ -65,7 +64,7 @@ public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory
 	protected abstract CompletionStage<Iterable<CapabilityProvider<S>>> createService(
 		Class<S> serviceType,	
 		R serviceRequirement,
-		BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+		Loader loader,
 		ProgressMonitor progressMonitor);	
 	
 	/**

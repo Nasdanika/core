@@ -1,9 +1,7 @@
 package org.nasdanika.capability.tests;
 
 import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 
 import org.nasdanika.capability.CapabilityFactory;
 import org.nasdanika.capability.CapabilityProvider;
@@ -26,14 +24,14 @@ public class AggregatorFactory implements CapabilityFactory<AggregatorFactory.Re
 	@Override
 	public CompletionStage<Iterable<CapabilityProvider<String>>> create(
 			Requirement requirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		String reqValue = ((Requirement) requirement).value();
 		
 		@SuppressWarnings({ "rawtypes", "unchecked" })
-		CompletionStage<Iterable<CapabilityProvider<MyService>>> myServiceProviders = (CompletionStage) resolver.apply(MyService.class, progressMonitor);
-		CompletionStage<Iterable<CapabilityProvider<Object>>> testProviders = resolver.apply(new TestCapabilityFactory.Requirement(reqValue) , progressMonitor);
+		CompletionStage<Iterable<CapabilityProvider<MyService>>> myServiceProviders = (CompletionStage) loader.load(MyService.class, progressMonitor);
+		CompletionStage<Iterable<CapabilityProvider<Object>>> testProviders = loader.load(new TestCapabilityFactory.Requirement(reqValue) , progressMonitor);
 		
 		return myServiceProviders.thenCombine(testProviders, this::combine);
 	}

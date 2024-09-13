@@ -1,7 +1,6 @@
 package org.nasdanika.capability.emf;
 
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -25,14 +24,14 @@ public class ResourceSetCapabilityFactory extends ServiceCapabilityFactory<Resou
 	protected CompletionStage<Iterable<CapabilityProvider<ResourceSet>>> createService(
 			Class<ResourceSet> serviceType,
 			ResourceSetRequirement serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		Requirement<Predicate<ResourceSetContributor>, ResourceSetContributor> contributorRequirement = ServiceCapabilityFactory.createRequirement(
 				ResourceSetContributor.class, 
 				null, 
 				serviceRequirement == null ? null : serviceRequirement.contributorPredicate());
-		CompletionStage<Iterable<CapabilityProvider<Object>>> contributorsCS = resolver.apply(contributorRequirement, progressMonitor);
+		CompletionStage<Iterable<CapabilityProvider<Object>>> contributorsCS = loader.load(contributorRequirement, progressMonitor);
 		CompletionStage<ResourceSet> rscs = contributorsCS.thenApply(cp -> contribute(serviceRequirement, cp, progressMonitor));
 		return wrapCompletionStage(rscs);
 	}

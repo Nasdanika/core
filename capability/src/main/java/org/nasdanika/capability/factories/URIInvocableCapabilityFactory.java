@@ -15,6 +15,7 @@ import javax.script.ScriptException;
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.NasdanikaException;
@@ -34,7 +35,6 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<URI,
 		
 	private static final ScriptEngineManager SCRIPT_ENGINE_MANAGER = new ScriptEngineManager();
 
-
 	@Override
 	public boolean isFor(Class<?> type, Object serviceRequirement) {
 		return type == Invocable.class && serviceRequirement instanceof URI;
@@ -44,11 +44,11 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<URI,
 	protected CompletionStage<Iterable<CapabilityProvider<Invocable>>> createService(
 			Class<Invocable> serviceType,
 			URI serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		if ("data".equals(serviceRequirement.scheme())) {
-			return handleDataScheme(serviceRequirement, resolver, progressMonitor);
+			return handleDataScheme(serviceRequirement, loader, progressMonitor);
 		}
 		
 		if (serviceRequirement.lastSegment() != null) {
@@ -57,7 +57,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<URI,
 			String extension = lastSegment.substring(lastDot + 1);
 			if (lastDot != -1) {
 				if (extension.equalsIgnoreCase("yml") || extension.equalsIgnoreCase("yaml") ) {			
-					return handleYamlSpec(serviceRequirement, resolver, progressMonitor);
+					return handleYamlSpec(serviceRequirement, loader, progressMonitor);
 				}
 				
 				ScriptEngine scriptEngine = SCRIPT_ENGINE_MANAGER.getEngineByExtension(extension);
@@ -83,7 +83,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<URI,
 						
 					};
 					
-					return wrap(result.bind(serviceRequirement.fragment()));
+					return wrap(result.bind(loader, progressMonitor, serviceRequirement.fragment()));
 				} catch (IOException e) {
 					return wrapError(e);
 				}				
@@ -98,7 +98,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<URI,
 	
 	protected CompletionStage<Iterable<CapabilityProvider<Invocable>>> handleYamlSpec(
 			URI serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		throw new UnsupportedOperationException();
@@ -106,7 +106,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<URI,
 
 	protected CompletionStage<Iterable<CapabilityProvider<Invocable>>> handleDataScheme(
 			URI serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		String opaquePart = serviceRequirement.opaquePart();
 		int commaIdx = opaquePart.indexOf(",");
@@ -161,7 +161,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<URI,
 					result = Invocable.of(invocables);	
 				}
 				
-				return wrap(result.bind(data));
+				return wrap(result.bind(loader, progressMonitor, data));
 			} catch (ClassNotFoundException e) {
 				return wrapError(e);
 			}
@@ -191,7 +191,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<URI,
 			
 		};
 		
-		return wrap(result.bind((String) null)); // Binding for consistency with hierarchical URL/fragment 
+		return wrap(result.bind(loader, progressMonitor, (String) null)); // Binding for consistency with hierarchical URL/fragment 
 	}
 	
 	protected Object loadValue(Class<?> type, byte[] data) {

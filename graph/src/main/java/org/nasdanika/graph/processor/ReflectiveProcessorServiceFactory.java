@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
@@ -40,18 +39,18 @@ public class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapabilityFac
 	protected CompletionStage<Iterable<CapabilityProvider<P>>> createService(
 			Class<P> processorType,
 			ProcessorRequirement<R, P> serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		ReflectiveProcessorFactoryProviderTargetRequirement<R,P> targetRequirement = new ReflectiveProcessorFactoryProviderTargetRequirement<>(processorType, serviceRequirement);		
-		CompletionStage<Iterable<CapabilityProvider<Object>>> targetsCS = resolver.apply(targetRequirement, progressMonitor);
-		return targetsCS.thenApply(targets -> createProcessors(processorType, serviceRequirement, resolver, targets, progressMonitor));
+		CompletionStage<Iterable<CapabilityProvider<Object>>> targetsCS = loader.load(targetRequirement, progressMonitor);
+		return targetsCS.thenApply(targets -> createProcessors(processorType, serviceRequirement, loader, targets, progressMonitor));
 	}
 	
 	protected Iterable<CapabilityProvider<P>> createProcessors(
 			Class<P> processorType,
 			ProcessorRequirement<R, P> serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			Iterable<CapabilityProvider<Object>> targetCapabilityProviders, 
 			ProgressMonitor progressMonitor) {
 				

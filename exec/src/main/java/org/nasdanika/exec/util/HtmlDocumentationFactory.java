@@ -3,7 +3,6 @@ package org.nasdanika.exec.util;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -26,7 +25,7 @@ public class HtmlDocumentationFactory extends ServiceCapabilityFactory<Void, Doc
 	protected CompletionStage<Iterable<CapabilityProvider<DocumentationFactory>>> createService(
 			Class<DocumentationFactory> serviceType, 
 			Void serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
 		DocumentationFactory markdownDocumentationFactory = new DocumentationFactory() {

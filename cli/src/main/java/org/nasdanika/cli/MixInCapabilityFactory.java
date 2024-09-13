@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
@@ -26,9 +25,9 @@ public abstract class MixInCapabilityFactory<T> extends ServiceCapabilityFactory
 	@Override
 	protected CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> createService(Class<MixInRecord> serviceType,
 			MixInRequirement serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {
-		CompletionStage<T> mixInCS = createMixIn(serviceRequirement.commandPath(), resolver, progressMonitor);
+		CompletionStage<T> mixInCS = createMixIn(serviceRequirement.commandPath(), loader, progressMonitor);
 		if (mixInCS != null) {
 			return wrapCompletionStage(mixInCS.thenApply(mixIn -> new MixInRecord(getName(), mixIn)));
 		}
@@ -78,14 +77,14 @@ public abstract class MixInCapabilityFactory<T> extends ServiceCapabilityFactory
 	
 	protected CompletionStage<T> createMixIn(
 			List<CommandLine> commandPath, 
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor) {		
-		return match(commandPath) ? doCreateMixIn(commandPath, resolver, progressMonitor) : null;
+		return match(commandPath) ? doCreateMixIn(commandPath, loader, progressMonitor) : null;
 	}
 
 	protected abstract CompletionStage<T> doCreateMixIn(
 			List<CommandLine> commandPath, 
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+			Loader loader,
 			ProgressMonitor progressMonitor);
 	
 }
