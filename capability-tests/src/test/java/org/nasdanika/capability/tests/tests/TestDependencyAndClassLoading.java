@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
-import org.nasdanika.capability.maven.ClassLoaderRequirement;
-import org.nasdanika.capability.maven.DependencyRequestRecord;
+import org.nasdanika.capability.requirements.ClassLoaderRequirement;
+import org.nasdanika.capability.requirements.DependencyRequestRecord;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -48,13 +48,10 @@ public class TestDependencyAndClassLoading {
 				System.out::println);
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(
+		ClassLoader result = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(ClassLoader.class, null, requirement),
 				progressMonitor);
-		for (CapabilityProvider<Object> cp: cpi) {
-			ClassLoader result = (ClassLoader) cp.getPublisher().blockFirst();
-			System.out.println(result == requirement.parentClassLoader());
-		}
+		System.out.println(result == requirement.parentClassLoader());
 	}
 
 }

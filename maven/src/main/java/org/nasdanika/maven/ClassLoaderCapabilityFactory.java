@@ -25,8 +25,8 @@ import java.util.stream.Stream;
 
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
-import org.nasdanika.capability.maven.ClassLoaderRequirement;
-import org.nasdanika.capability.maven.DependencyRequestRecord;
+import org.nasdanika.capability.requirements.ClassLoaderRequirement;
+import org.nasdanika.capability.requirements.DependencyRequestRecord;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 

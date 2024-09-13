@@ -1,4 +1,4 @@
-package org.nasdanika.capability.maven;
+package org.nasdanika.capability.requirements;
 
 public record DependencyRequestRecord(
 		String[] dependencies,

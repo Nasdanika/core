@@ -39,6 +39,10 @@ import org.nasdanika.common.ServiceComputer;
 import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.Util;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.yaml.snakeyaml.Yaml;
 
 
@@ -119,15 +123,32 @@ public class TestCommon {
 		assertEquals("World", mapContext.get("map/a"));
 	}
 	
-//	@Test
-//	public void testSpEL() {
-//		ExpressionParser parser = new SpelExpressionParser();
-//		Expression exp = parser.parseExpression("new Mama()");
-//		StandardEvaluationContext evaluationContext = new StandardEvaluationContext("mama");
-//		evaluationContext.setTypeLocator(null);
-//		Object result = exp.getValue(evaluationContext, "papa", Object.class);
-//		System.out.println(result);
-//	}
+	@Test
+	public void testSpEL() {
+		String data = """
+				a: 33
+				b:
+				  c: 44
+				  d: 55
+				e:
+				  - 66
+				  - 77
+				f:
+				  g:
+				    - 88
+				    - 99    
+				""";
+		
+		Yaml yaml = new Yaml();		
+		Map<String, Object> config = yaml.load(data); 
+				
+		StandardEvaluationContext evaluationContext = new StandardEvaluationContext(config);
+		
+		ExpressionParser parser = new SpelExpressionParser();
+		Expression exp = parser.parseExpression("a");		
+		Object result = exp.getValue(evaluationContext);
+		System.out.println(result);
+	}
 	
 	@Test 
 	public void testProgressMonitor() {

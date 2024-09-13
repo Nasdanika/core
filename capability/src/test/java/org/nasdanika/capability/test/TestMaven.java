@@ -4,9 +4,9 @@ import java.lang.reflect.Constructor;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-import org.nasdanika.capability.maven.DependencyRequestRecord;
-import org.nasdanika.capability.maven.ProxyRecord;
-import org.nasdanika.capability.maven.RemoteRepoRecord;
+import org.nasdanika.capability.requirements.DependencyRequestRecord;
+import org.nasdanika.capability.requirements.ProxyRecord;
+import org.nasdanika.capability.requirements.RemoteRepoRecord;
 import org.nasdanika.common.Invocable;
 import org.yaml.snakeyaml.Yaml;
 

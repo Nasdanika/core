@@ -17,7 +17,7 @@ module org.nasdanika.capability {
 	
 	exports org.nasdanika.capability;
 	exports org.nasdanika.capability.emf;
-	exports org.nasdanika.capability.maven;	
+	exports org.nasdanika.capability.requirements;	
 	
 	uses CapabilityFactory;
 	

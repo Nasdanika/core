@@ -43,14 +43,14 @@ public interface Invocable {
 		return null;
 	}
 	
-	Object invoke(Object... args);
+	<T> T invoke(Object... args);
 	
 	/**
 	 * Different name to avoid ambiguity 
 	 * @param argumentProvider
 	 * @return
 	 */
-	default Object call(java.util.function.BiFunction<String,Class<?>,Object> argumentProvider) {
+	default <T> T call(java.util.function.BiFunction<String,Class<?>,Object> argumentProvider) {
 		String[] parameterNames = getParameterNames();
 		if (parameterNames == null) {
 			throw new UnsupportedOperationException("Parameter names are null");
@@ -139,6 +139,7 @@ public interface Invocable {
 				return returnType;
 			}
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object invoke(Object... args) {				
 				Object[] finalArgs = new Object[bindings.length + args.length];
@@ -154,6 +155,7 @@ public interface Invocable {
 	static Invocable of(Object target, Method method) {
 		return new Invocable() {
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object invoke(Object... args) {
 				try {
@@ -184,6 +186,7 @@ public interface Invocable {
 	static Invocable of(Constructor<?> constructor) {
 		return new Invocable() {
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object invoke(Object... args) {
 				try {
@@ -319,6 +322,7 @@ public interface Invocable {
 				return new Class<?>[0];
 			}
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object invoke(Object... args) {
 				return value;
@@ -344,6 +348,7 @@ public interface Invocable {
 				return new Class<?>[0];
 			}
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object invoke(Object... args) {
 				return supplier.get();
@@ -472,6 +477,7 @@ public interface Invocable {
 				return pTypes;
 			}
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object invoke(Object... args) {
 				if (argumentMapper == null) {
@@ -494,7 +500,7 @@ public interface Invocable {
 	 * @param converter
 	 * @return
 	 */
-	default Object call(Map<?,?> config, BiFunction<Object,Class<?>, Object> converter) {
+	default <T> T call(Map<?,?> config, BiFunction<Object,Class<?>, Object> converter) {
 		return call((name, type) -> converter.apply(config.get(name), type));				
 	}
 	
@@ -504,7 +510,7 @@ public interface Invocable {
 	 * @param converter
 	 * @return
 	 */
-	default Object call(Map<?,?> config, java.util.function.Function<Class<?>, Invocable> factoryProvider) {
+	default <T> T call(Map<?,?> config, java.util.function.Function<Class<?>, Invocable> factoryProvider) {
 		BiFunction<Object,Class<?>, Object> converter = new BiFunction<Object, Class<?>, Object>() {
 			
 			@Override
@@ -560,7 +566,7 @@ public interface Invocable {
 	 * @param config
 	 * @return
 	 */
-	default Object call(Map<?,?> config) {
+	default <T> T call(Map<?,?> config) {
 		java.util.function.Function<Class<?>, Invocable> factoryProvider = type -> {
 	        Constructor<?>[] constructors = type.getDeclaredConstructors();
 			if (type.isRecord()) {
@@ -608,6 +614,7 @@ public interface Invocable {
 				return true;
 			}
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object invoke(Object... args) {
 				Optional<Invocable> mostSpecificOpt = Stream.of(invocables)

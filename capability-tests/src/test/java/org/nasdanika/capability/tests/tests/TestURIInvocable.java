@@ -1,13 +1,17 @@
 package org.nasdanika.capability.tests.tests;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.util.URI;
 import org.junit.jupiter.api.Test;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.capability.requirements.DependencyRequestRecord;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
+import org.yaml.snakeyaml.Yaml;
 
 public class TestURIInvocable {
 		
@@ -71,6 +75,56 @@ public class TestURIInvocable {
 		}
 	}
 	
+	@Test
+	public void testDependenciesRequestRecord() {
+		String spec = """
+				dependencies: purum
+				id: central
+				type: default
+				url: https://repo.maven.apache.org/maven2/
+				proxy:
+				  type: http
+				  host: my-host
+				  port: 8080
+				auth:
+				  username: Joe
+				  password: Doe  
+				mirroredRepositories:
+				  id: not-so-central  
+				""";
+		
+		Yaml yaml = new Yaml();
+		Map<?,?> config = yaml.load(spec);
+		Invocable ci = Invocable.of(DependencyRequestRecord.class);
+		Object result = ci.call(config);
+		System.out.println(result);		
+	}
+	
+//	@Test
+//	public void testDependenciesRequestRecord() {
+//		String spec = """
+//				dependencies: purum
+//				id: central
+//				type: default
+//				url: https://repo.maven.apache.org/maven2/
+//				proxy:
+//				  type: http
+//				  host: my-host
+//				  port: 8080
+//				auth:
+//				  username: Joe
+//				  password: Doe  
+//				mirroredRepositories:
+//				  id: not-so-central  
+//				""";
+//		
+//		Yaml yaml = new Yaml();
+//		Map<?,?> config = yaml.load(spec);
+//		Invocable ci = Invocable.of(DependencyRequestRecord.class);
+//		Object result = ci.call(config);
+//		System.out.println(result);		
+//	}
+		
 	@Test
 	public void testScriptInvocable() {
 //		CapabilityLoader capabilityLoader = new CapabilityLoader();
