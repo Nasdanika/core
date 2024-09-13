@@ -5,7 +5,6 @@ import java.io.Reader;
 import java.lang.reflect.Modifier;
 import java.util.Base64;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import javax.script.ScriptEngine;
@@ -15,7 +14,6 @@ import javax.script.ScriptException;
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
-import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.NasdanikaException;
@@ -30,7 +28,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<URI,
 	private static final String METHOD_REF = "::";
 	private static final String BASE_64 = ";base64";
 	private static final String VALUE_MEDIA_TYPE_PREFIX = "value/"; // Value wrapped into invocable
-	private static final String JAVA_MEDIA_TYPE_PREFIX = "java/"; // Construction of a given type - binding data as "data" argument if present (length > 0) 
+	private static final String JAVA_MEDIA_TYPE_PREFIX = "java/"; // Construction of a given type - binding data as "data" argument 
 	private static final String SPEC_MEDIA_TYPE = "application/yaml/invocable";
 		
 	private static final ScriptEngineManager SCRIPT_ENGINE_MANAGER = new ScriptEngineManager();

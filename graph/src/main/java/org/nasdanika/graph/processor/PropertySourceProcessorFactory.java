@@ -62,7 +62,7 @@ public abstract class PropertySourceProcessorFactory<P,K,V> extends URIInvocable
 			@Override
 			protected boolean isPassThrough(Connection connection) {
 				if (connection instanceof PropertySource) {
-					return PropertySourceProcessorFactory.this.getURI(connection) != null;
+					return PropertySourceProcessorFactory.this.getURI(connection) == null;
 				}
 				
 				return super.isPassThrough(connection);
