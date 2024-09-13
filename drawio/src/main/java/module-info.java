@@ -16,5 +16,6 @@ module org.nasdanika.drawio {
 	exports org.nasdanika.drawio;
 	exports org.nasdanika.drawio.comparators;
 	exports org.nasdanika.drawio.emf;
+	exports org.nasdanika.drawio.processor;
 		
 }

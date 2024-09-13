@@ -210,7 +210,7 @@ public interface Invocable {
 			
 		};
 	}	
-		
+			
 	/**
 	 * Creates a dynamic proxy dispatching to invocables.
 	 * @param classLoader
@@ -221,7 +221,8 @@ public interface Invocable {
 	@SuppressWarnings("unchecked")
 	static <T> T createProxy(
 			ClassLoader classLoader, 
-			BiFunction<Method, Object[], Invocable> resolver, Class<?>... interfaces) {
+			BiFunction<Method, Object[], Invocable> resolver, 
+			Class<?>... interfaces) {
 		
 		InvocationHandler invocationHandler = new InvocationHandler() {
 			
@@ -236,6 +237,66 @@ public interface Invocable {
 		};
 		
 		return (T) Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
+	}
+	
+	/**
+	 * Creates a dynamic proxy dispatching to invocables.
+	 * @param classLoader
+	 * @param resolver
+	 * @param interfaces
+	 * @return
+	 */
+	static <T> T createProxy(BiFunction<Method, Object[], Invocable> resolver, Class<?>... interfaces) {
+		return createProxy(
+				Thread.currentThread().getContextClassLoader(),
+				resolver, 
+				interfaces);
+	}
+	
+	/**
+	 * Resolves by signature or method name.
+	 * @param <T>
+	 * @param classLoader
+	 * @param resolver
+	 * @param interfaces
+	 * @return
+	 */
+	static <T> T createProxy(
+			ClassLoader classLoader, 
+			java.util.function.Function<String, Invocable> resolver, 
+			Class<?>... interfaces) {
+		
+		BiFunction<Method, Object[], Invocable> r = (method, args) -> {
+			StringBuilder signatureBuilder = new StringBuilder(method.getName()).append("(");		
+			Class<?>[] pt = method.getParameterTypes();
+			for (int i = 0; i < pt.length; ++i) {
+				if (i > 0) {
+					signatureBuilder.append(",");
+				}
+				signatureBuilder.append(pt[i]);
+			}
+			Invocable ret = resolver.apply(signatureBuilder.append(")").toString());
+			if (ret != null) {
+				return ret;
+			}
+			return resolver.apply(method.getName());
+		};
+		
+		return createProxy(classLoader, r, interfaces);
+	}
+	
+	/**
+	 * Creates a dynamic proxy dispatching to invocables.
+	 * @param classLoader
+	 * @param resolver
+	 * @param interfaces
+	 * @return
+	 */
+	static <T> T createProxy(java.util.function.Function<String, Invocable> resolver, Class<?>... interfaces) {
+		return createProxy(
+				Thread.currentThread().getContextClassLoader(),
+				resolver, 
+				interfaces);
 	}
 	
 	// of

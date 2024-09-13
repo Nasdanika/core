@@ -1,23 +1,23 @@
 package org.nasdanika.drawio.processor;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertySource;
+import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.EndpointFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
 
-public class DocumentInvocableFactory<P> extends DocumentProcessorFactory<Invocable> {
+public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable> {
 
 	public DocumentInvocableFactory(Document document, CapabilityLoader capabilityLoader, String processorProperty) {
 		super(document, capabilityLoader, processorProperty);
@@ -28,37 +28,20 @@ public class DocumentInvocableFactory<P> extends DocumentProcessorFactory<Invoca
 	}
 		
 	public <H,E,T> T createProxy(
-			Collection<? extends Element> source,
 			String bindProperty,
 			EndpointFactory<H, E> endpointFactory, 
+			ConnectionBase connectionBase,
 			boolean parallel,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
 			Class<?>... interfaces) throws Exception {
 		
-		Map<Element, ProcessorInfo<Invocable>> processors = createProcessors(source, endpointFactory, parallel, progressMonitor);		
-		return Invocable.createProxy(classLoader, (method, args) -> resolve(method, args, processors, bindProperty), interfaces);		
+		Map<Element, ProcessorInfo<Invocable>> processors = createProcessors(endpointFactory, connectionBase, parallel, progressMonitor);		
+		return Invocable.createProxy(classLoader, nameOrSignature -> resolve(nameOrSignature, processors, bindProperty), interfaces);		
 	}	
 	
-	protected boolean match(String propertyValue, Method method, Object args) {
-		if (method.getName().equals(propertyValue)) {
-			return true;
-		}
-		
-		StringBuilder signatureBuilder = new StringBuilder(method.getName()).append("(");		
-		Class<?>[] pt = method.getParameterTypes();
-		for (int i = 0; i < pt.length; ++i) {
-			if (i > 0) {
-				signatureBuilder.append(",");
-			}
-			signatureBuilder.append(pt[i]);
-		}
-		return signatureBuilder.append(")").toString().equals(propertyValue);
-	}
-	
 	protected Invocable resolve(
-			Method method, 
-			Object[] args, 
+			String nameOrSignature, 
 			Map<Element, ProcessorInfo<Invocable>> processors,
 			String bindProperty) {
 		
@@ -67,7 +50,7 @@ public class DocumentInvocableFactory<P> extends DocumentProcessorFactory<Invoca
 			if (pe.getKey() instanceof PropertySource) { 
 				@SuppressWarnings("unchecked")
 				String bindValue = ((PropertySource<String,String>) pe.getKey()).getProperty(bindProperty);
-				if (match(bindValue, method, args)) {
+				if (Objects.equals(nameOrSignature, bindValue)) {
 					Invocable processor = pe.getValue().getProcessor();
 					if (processor != null) {
 						matches.add(processor);
@@ -76,6 +59,51 @@ public class DocumentInvocableFactory<P> extends DocumentProcessorFactory<Invoca
 			}
 		}
 		return matches.isEmpty() ? null : Invocable.of(matches.toArray(size -> new Invocable[size]));
+	}
+	
+	public <H,E,T> T createProxy(
+			String bindProperty,
+			EndpointFactory<H, E> endpointFactory, 
+			ConnectionBase connectionBase,
+			boolean parallel,
+			ProgressMonitor progressMonitor,
+			Class<?>... interfaces) throws Exception {
+		
+		return createProxy(
+				bindProperty, 
+				endpointFactory,
+				connectionBase,
+				parallel,
+				progressMonitor,
+				Thread.currentThread().getContextClassLoader(),
+				interfaces);
+	}	
+	
+	/**
+	 * Creates processors with NOP endpoint factory
+	 * @param source
+	 * @param processorProperty
+	 * @param parallel
+	 * @param progressMonitor
+	 * @return
+	 * @throws Exception
+	 */
+	public <T> T createProxy(
+			String bindProperty,
+			ConnectionBase connectionBase,
+			boolean parallel,
+			ProgressMonitor progressMonitor,
+			ClassLoader classLoader, 			 
+			Class<?>... interfaces) throws Exception {
+		
+		return createProxy(
+				bindProperty,
+				EndpointFactory.nopEndpointFactory(),
+				connectionBase,
+				parallel,
+				progressMonitor,
+				classLoader,
+				interfaces);
 	}
 	
 	/**
@@ -88,21 +116,19 @@ public class DocumentInvocableFactory<P> extends DocumentProcessorFactory<Invoca
 	 * @throws Exception
 	 */
 	public <T> T createProxy(
-			Collection<? extends Element> source,
 			String bindProperty,
+			ConnectionBase connectionBase,
 			boolean parallel,
 			ProgressMonitor progressMonitor,
-			ClassLoader classLoader, 			 
 			Class<?>... interfaces) throws Exception {
 		
 		return createProxy(
-				source,
 				bindProperty,
-				EndpointFactory.nopEndpointFactory(),
+				connectionBase,
 				parallel,
 				progressMonitor,
-				classLoader,
+				Thread.currentThread().getContextClassLoader(),
 				interfaces);
 	}	
-		
+	
 }
