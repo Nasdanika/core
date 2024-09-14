@@ -103,6 +103,19 @@ public class TestURIInvocable {
 	}
 	
 	@Test
+	public void testGroovyDataYamlSpec() throws IOException {
+		String base64spec = "c2NyaXB0OgogIGVuZ2luZUZhY3Rvcnk6IG9yZy5jb2RlaGF1cy5ncm9vdnkuanNyMjIzLkdyb292eVNjcmlwdEVuZ2luZUZhY3RvcnkKICBzb3VyY2U6IHwKICAgICJIZWxsbywgd29ybGQhIgpkZXBlbmRlbmNpZXM6IG9yZy5hcGFjaGUuZ3Jvb3Z5Omdyb292eS1hbGw6cG9tOjQuMC4yMgpsb2NhbFJlcG9zaXRvcnk6IHRhcmdldC9ncm9vdnktdGVzdC1yZXBv";		
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		URI specUri = URI.createURI("data:application/yaml/invocable;base64," + base64spec);
+		Invocable invocable = capabilityLoader.loadOne(
+				ServiceCapabilityFactory.createRequirement(Invocable.class, null, new URIInvocableRequirement(specUri)),
+				progressMonitor);
+		Object result = invocable.invoke();
+		System.out.println(result);
+	}
+	
+	@Test
 	public void testDependenciesRequestRecord() {
 		String spec = """
 				dependencies: purum
