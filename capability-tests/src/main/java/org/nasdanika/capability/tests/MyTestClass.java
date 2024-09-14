@@ -12,5 +12,8 @@ public class MyTestClass {
 		System.out.println("Here I am: " + loader + ", " + progressMonitor);
 	}
 	
+	public MyTestClass(CapabilityFactory.Loader loader, ProgressMonitor progressMonitor, String binding) {
+		System.out.println("Here I am: " + loader + ", " + progressMonitor + ", " + binding);
+	}
 
 }

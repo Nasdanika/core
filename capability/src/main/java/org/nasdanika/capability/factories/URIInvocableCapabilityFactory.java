@@ -8,9 +8,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -176,12 +178,41 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 		
 		// Type
 		if (invocableRequirement.type() != null) {
-			return classLoaderCS.thenCompose(classLoader -> handleType(
-					requirement, 
-					invocableRequirement,
-					classLoader,
-					loader, 
-					progressMonitor));							
+			if (invocableRequirement.bind() == null) {
+				return classLoaderCS.thenCompose(classLoader -> handleType(
+						requirement,
+						invocableRequirement,
+						classLoader,
+						Collections.emptyList(),
+						loader, 
+						progressMonitor));
+			}
+			
+			CompletionStage<List<Invocable>> bindingsCS = CompletableFuture.completedStage(new ArrayList<>());
+			for (String binding: invocableRequirement.bind()) {
+				URI bindingURI = requirement.uriHandler().normalize(URI.createURI(binding));
+				CompletionStage<Object> bindingRequirementCS = classLoaderCS.thenApply(classLoader -> {
+					URIInvocableRequirement req = new URIInvocableRequirement(bindingURI, requirement.uriHandler(), classLoader, null);						
+					return ServiceCapabilityFactory.createRequirement(Invocable.class, null, req);
+				});
+				CompletionStage<Invocable> bindingCS = bindingRequirementCS.thenCompose(bindingRequirement -> {
+					return loader.loadOne(bindingRequirement, progressMonitor);	
+				});
+				bindingsCS = bindingsCS.thenCombine(bindingCS, (bindings, value) -> {
+					bindings.add(value);
+					return bindings;
+				});
+			}
+			
+			record ClassLoaderAndBindingsListRecord(ClassLoader classLoader, List<Invocable> bindings) {};
+			CompletionStage<ClassLoaderAndBindingsListRecord> classLoaderAndBindingsListCS = classLoaderCS.thenCombine(bindingsCS, ClassLoaderAndBindingsListRecord::new);
+			return classLoaderAndBindingsListCS.thenCompose(classLoaderAndBindingsMap -> handleType(
+						requirement,
+						invocableRequirement,
+						classLoaderAndBindingsMap.classLoader(),
+						classLoaderAndBindingsMap.bindings(),
+						loader, 
+						progressMonitor));			
 		}
 		
 		// Script
@@ -212,13 +243,13 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 				});
 			}
 
-			record ClassLoaderAndBindingsRecord(ClassLoader classLoader, Map<String,Invocable> bindings) {};
-			CompletionStage<ClassLoaderAndBindingsRecord> classLoaderAndBindingsCS = classLoaderCS.thenCombine(bindingsCS, ClassLoaderAndBindingsRecord::new);
-			return classLoaderAndBindingsCS.thenCompose(classLoaderAndBindings -> handleScript(
+			record ClassLoaderAndBindingsMapRecord(ClassLoader classLoader, Map<String,Invocable> bindings) {};
+			CompletionStage<ClassLoaderAndBindingsMapRecord> classLoaderAndBindingsMapCS = classLoaderCS.thenCombine(bindingsCS, ClassLoaderAndBindingsMapRecord::new);
+			return classLoaderAndBindingsMapCS.thenCompose(classLoaderAndBindingsMap -> handleScript(
 						requirement,
 						invocableRequirement,
-						classLoaderAndBindings.classLoader(),
-						classLoaderAndBindings.bindings(),
+						classLoaderAndBindingsMap.classLoader(),
+						classLoaderAndBindingsMap.bindings(),
 						loader, 
 						progressMonitor));			
 		} 
@@ -370,6 +401,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			URIInvocableRequirement requirement,
 			InvocableRequirement spec, 
 			ClassLoader classLoader,
+			List<Invocable> bindings,
 			Loader loader, 
 			ProgressMonitor progressMonitor) {
 		String typeName = spec.type();
@@ -396,16 +428,13 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 				result = Invocable.of(invocables);	
 			}
 			
-			CompletionStage<Invocable> resultCS = CompletableFuture.completedStage(result.bind(loader, progressMonitor));				
-			if (spec.bind() != null) {
-				for (int i = 0; i < spec.bind().length; ++i) {
-					URI bindingURI = requirement.uriHandler().normalize(URI.createURI(spec.bind()[i]));
-					URIInvocableRequirement bindingRequirement = new URIInvocableRequirement(bindingURI, requirement.uriHandler(), classLoader, null); // No modules yet
-					CompletionStage<Object> bindingCS = loader.loadOne(bindingRequirement, progressMonitor);
-					resultCS = resultCS.thenCombine(bindingCS, (r,b) -> r.bind(b));
-				}
+			result = result.bind(loader, progressMonitor);
+			
+			for (Invocable toBind: bindings) {
+				Object value = toBind.invoke();
+				result = result.bind(value);
 			}
-			return wrapCompletionStage(resultCS);
+			return wrap(result);
 		} catch (ClassNotFoundException e) {
 			return wrapError(e); 
 		}
@@ -523,10 +552,11 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 		if (String.class == type) {
 			return new String(data);
 		}
-		
-		// TODO - numbers, date, ...
-		
-		throw new UnsupportedOperationException();
+		Object result = DefaultConverter.INSTANCE.convert(data, type);
+		if (result == null) {
+			result = DefaultConverter.INSTANCE.convert(new String(data), type);
+		}
+		return result;
 	}
 
 }

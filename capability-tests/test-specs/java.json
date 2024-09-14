@@ -1,3 +1,6 @@
 {
-	"type": "org.nasdanika.capability.tests.MyTestClass"
+	"type": "org.nasdanika.capability.tests.MyTestClass",
+	"bind": [
+		"data:value/String,Some+other+value"
+	]
 }	
