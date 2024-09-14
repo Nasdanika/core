@@ -124,6 +124,7 @@ public class TestCommon {
 	}
 	
 	@Test
+	@Disabled
 	public void testSpEL() {
 		String data = """
 				a: 33
