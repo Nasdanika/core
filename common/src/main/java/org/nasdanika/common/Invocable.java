@@ -233,6 +233,9 @@ public interface Invocable {
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 				Invocable target = resolver.apply(method, args);
 				if (target == null) {
+					if (method.getDeclaringClass().isInstance(resolver)) {
+						return method.invoke(resolver, args);
+					}
 					throw new UnsupportedOperationException("No invocable for " + method); 
 				}
 				return target.invoke(args);

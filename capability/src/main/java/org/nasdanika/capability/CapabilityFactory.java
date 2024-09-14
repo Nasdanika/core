@@ -36,8 +36,6 @@ public interface CapabilityFactory<R,C> {
 			});
 		}
 		
-		
-		
 		default <T> CompletionStage<T> loadOne(Object requirement, ProgressMonitor progressMonitor) {
 			CompletionStage<Iterable<CapabilityProvider<T>>> cpcs = load(requirement, progressMonitor);
 			return cpcs.thenApply(capabilityProviders -> {
