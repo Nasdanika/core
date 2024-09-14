@@ -10,6 +10,7 @@ import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.requirements.DependencyRequestRecord;
+import org.nasdanika.capability.requirements.ScriptRecord;
 import org.nasdanika.capability.requirements.URIInvocableRequirement;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.PrintStreamProgressMonitor;
@@ -22,7 +23,7 @@ public class TestURIInvocable {
 	public void testStringInvocable() {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		URI requirement = URI.createURI("data:value/String,Hello");
+		URI requirement = URI.createURI("data:value/String,Hello+World");
 		Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 				progressMonitor);
@@ -89,11 +90,25 @@ public class TestURIInvocable {
 		Object result = invocable.invoke();
 		System.out.println(result);
 	}
+	
+	@Test
+	public void testScriptRecord() {
+		String spec = """
+				bindings: 
+				  a: b
+				""";
+		
+		Yaml yaml = new Yaml();
+		Map<?,?> config = yaml.load(spec);
+		Invocable ci = Invocable.of(ScriptRecord.class);
+		Object result = ci.call(config);
+		System.out.println(result);		
+	}
 		
 	@Test
 	public void testGroovyYamlSpec() throws IOException {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
-		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor(true);
 		URI specUri = URI.createFileURI(new File("test-specs/groovy.yml").getCanonicalPath());
 		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, new URIInvocableRequirement(specUri)),
@@ -102,12 +117,20 @@ public class TestURIInvocable {
 		System.out.println(result);
 	}
 	
+//	"""
+//    c2NyaXB0OgogIGVuZ2luZUZhY3Rvcnk6IG9yZy5jb2RlaGF1cy5ncm9vdnkuanNyMjIzLkdyb292
+//    eVNjcmlwdEVuZ2luZUZhY3RvcnkKICBzb3VyY2U6IHwKICAgICJIZWxsbywgd29ybGQhIgpkZXBl
+//    bmRlbmNpZXM6IG9yZy5hcGFjaGUuZ3Jvb3Z5Omdyb292eS1hbGw6cG9tOjQuMC4yMgpsb2NhbFJl
+//    cG9zaXRvcnk6IHRhcmdldC9ncm9vdnktdGVzdC1yZXBv				
+//	"""	
+	
+	//"";
+	
 	@Test
 	public void testGroovyDataYamlSpec() throws IOException {
-		String base64spec = "c2NyaXB0OgogIGVuZ2luZUZhY3Rvcnk6IG9yZy5jb2RlaGF1cy5ncm9vdnkuanNyMjIzLkdyb292eVNjcmlwdEVuZ2luZUZhY3RvcnkKICBzb3VyY2U6IHwKICAgICJIZWxsbywgd29ybGQhIgpkZXBlbmRlbmNpZXM6IG9yZy5hcGFjaGUuZ3Jvb3Z5Omdyb292eS1hbGw6cG9tOjQuMC4yMgpsb2NhbFJlcG9zaXRvcnk6IHRhcmdldC9ncm9vdnktdGVzdC1yZXBv";		
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		URI specUri = URI.createURI("data:application/yaml/invocable;base64," + base64spec);
+		URI specUri = URI.createURI("data:application/yaml/invocable;base64,c2NyaXB0OgogIGVuZ2luZUZhY3Rvcnk6IG9yZy5jb2RlaGF1cy5ncm9vdnkuanNyMjIzLkdyb292eVNjcmlwdEVuZ2luZUZhY3RvcnkKICBzb3VyY2U6IHwKICAgICJIZWxsbywgd29ybGQhIgpkZXBlbmRlbmNpZXM6IG9yZy5hcGFjaGUuZ3Jvb3Z5Omdyb292eS1hbGw6cG9tOjQuMC4yMgpsb2NhbFJlcG9zaXRvcnk6IHRhcmdldC9ncm9vdnktdGVzdC1yZXBv");
 		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, new URIInvocableRequirement(specUri)),
 				progressMonitor);

@@ -30,7 +30,12 @@ public class DiagramCapabilityFactory extends AbstractCapabilityFactory<DiagramR
 			ProgressMonitor progressMonitor) {
 		
 		try {
-			Document document = Document.load(requirement.uri(), requirement.uriHandler(), requirement.propertySource());
+			Document document;
+			if (requirement.uri() != null) {
+				document = Document.load(requirement.uri(), requirement.uriHandler(), requirement.propertySource());
+			} else {
+				document = Document.load(requirement.source(), requirement.base(), requirement.uriHandler(), requirement.propertySource());
+			}
 			if (requirement.processor() == null) {
 				// Just document value invocable
 				return wrap(document);

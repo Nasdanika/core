@@ -7,6 +7,16 @@ public record DiagramRecord(
 		String location,
 		
 		/**
+		 * Inline diagram
+		 */
+		String source,
+		
+		/**
+		 * For source - base URI
+		 */
+		String base,		
+		
+		/**
 		 * properties to pass to the diagram.
 		 * Can be specified inline (if map) or loaded from YAML, JSON, or properties URL - format is determined by by extension.
 		 * Nested properties can be addressed using "." (dot) separator. For arrays index is used as key. E.g. people.3.name

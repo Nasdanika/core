@@ -9,6 +9,10 @@ public record DiagramRequirement(
 		
 		URI uri,
 		
+		String source,
+		
+		URI base,
+		
 		Function<String, String> propertySource,
 		
 		Function<URI, InputStream> uriHandler,
