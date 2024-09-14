@@ -3,12 +3,15 @@ package org.nasdanika.capability.requirements;
 import java.util.Map;
 
 public record DiagramRecord(
+		
+		String location,
+		
 		/**
 		 * properties to pass to the diagram.
 		 * Can be specified inline (if map) or loaded from YAML, JSON, or properties URL - format is determined by by extension.
 		 * Nested properties can be addressed using "." (dot) separator. For arrays index is used as key. E.g. people.3.name
 		 */
-		Map<String,String> properties,
+		Map<String,?> properties,
 		
 		/**
 		 * Processor property

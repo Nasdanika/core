@@ -30,5 +30,16 @@ public interface CapabilityProvider<T> {
 			}
 		};
 	}
+	
+	static <T> CapabilityProvider<T> ofError(Throwable error) {
+		return new CapabilityProvider<T>() {
+	
+				@Override
+				public Flux<T> getPublisher() {
+					return Flux.error(error);
+				}
+				
+		};
+	}
 
 }

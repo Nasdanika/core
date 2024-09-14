@@ -20,20 +20,9 @@ public record InvocableRequirement(
 		String type,
 		
 		/**
-		 * URI of script source relative to the URI of this spec.
-		 * If script language is not specified, it is derived from extension.
+		 * Script spec 
 		 */
-		String source,
-		
-		/**
-		 * Inline script. Ignored if source is not null. Requires scriptLanguage. 
-		 */
-		String script,
-		
-		/**
-		 * Script language MIME type. e.g. application/groovy
-		 */
-		String scriptLanguage,
+		ScriptRecord script,
 		
 		/**
 		 * Invocable URI's of bindings.

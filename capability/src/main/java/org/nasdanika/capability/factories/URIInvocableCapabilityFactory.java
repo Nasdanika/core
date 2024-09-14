@@ -1,12 +1,15 @@
 package org.nasdanika.capability.factories;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Modifier;
 import java.util.Base64;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -23,7 +26,10 @@ import org.json.JSONTokener;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.requirements.ClassLoaderRequirement;
+import org.nasdanika.capability.requirements.DiagramRecord;
+import org.nasdanika.capability.requirements.DiagramRequirement;
 import org.nasdanika.capability.requirements.InvocableRequirement;
+import org.nasdanika.capability.requirements.ScriptRecord;
 import org.nasdanika.capability.requirements.URIInvocableRequirement;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Invocable;
@@ -41,7 +47,8 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 	private static final String BASE_64 = ";base64";
 	private static final String VALUE_MEDIA_TYPE_PREFIX = "value/"; // Value wrapped into invocable
 	private static final String JAVA_MEDIA_TYPE_PREFIX = "java/"; // Construction of a given type - binding data as "data" argument 
-	private static final String SPEC_MEDIA_TYPE = "application/yaml/invocable";
+	private static final String YAML_SPEC_MEDIA_TYPE = "application/yaml/invocable";
+	private static final String JSON_SPEC_MEDIA_TYPE = "application/json/invocable";
 		
 	@Override
 	public boolean isFor(Class<?> type, Object serviceRequirement) {
@@ -156,6 +163,29 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 		return classLoaderCS.thenApply(classLoader -> handleSpec(requirement, invocableRequirement, classLoader, loader, progressMonitor));
 	}	
 	
+	protected String getProperty(Map<?,?> properties, String name) {
+		if (properties == null) {
+			return null;
+		}
+		if (properties.containsKey(name)) {
+			Object value = properties.get(name);
+			return value == null ? null : value.toString();
+		}
+		int dotIdx = name.indexOf('.');
+		if (dotIdx != -1) {
+			Object group = properties.get(name.substring(0, dotIdx));
+			if (group instanceof Map) {
+				return getProperty((Map<?,?>) group, name.substring(dotIdx + 1));
+			}
+			if (group instanceof Iterable) {
+				Map<Object,Object> indexMap = new HashMap<>();
+				((Iterable<?>) group).forEach(e -> indexMap.put(String.valueOf(indexMap.size()), e));
+				return getProperty(indexMap, name.substring(dotIdx + 1));
+			}
+		}
+		return null;
+	}
+	
 	protected Iterable<CapabilityProvider<Invocable>> handleSpec(
 			URIInvocableRequirement requirement,
 			InvocableRequirement spec,
@@ -163,81 +193,159 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
-		// Diagram
-		if (spec.diagram() != null) {
-			throw new UnsupportedOperationException();
+		ClassLoader prev = Thread.currentThread().getContextClassLoader();
+		if (classLoader != null) {
+			Thread.currentThread().setContextClassLoader(classLoader);
 		}
-		
-		// Type
-		if (spec.type() != null) {
-			String typeName = spec.type();
-			if (typeName.indexOf('.') == -1) {
-				typeName = "java.lang." + typeName;
-			}
-			int methodRefIdx = typeName.indexOf(METHOD_REF);
-			String methodName = null;
-			if (methodRefIdx != -1) {
-				methodName = typeName.substring(methodRefIdx + METHOD_REF.length());
-				typeName = typeName.substring(0, methodRefIdx);
-			}
-			try {
-				Class<?> type = getClass().getClassLoader().loadClass(typeName);
-				Invocable result;
-				if (methodName == null) {
-					result = Invocable.of(type);
+		try {
+			// Diagram
+			DiagramRecord diagramRecord = spec.diagram();
+			if (diagramRecord != null) {
+				String[] diagramInterfaces = spec.diagram().interfaces();
+				Class<?>[] interfaces;
+				if (diagramInterfaces == null) {
+					interfaces = new Class[0];  
 				} else {
-					String theMethodName = methodName;
-					Invocable[] invocables = Stream.of(type.getMethods())
-						.filter(m -> Modifier.isStatic(m.getModifiers()) && theMethodName.equals(m.getName()))
-						.map(m -> Invocable.of(null, m))
-						.toArray(size -> new Invocable[size]);
-					result = Invocable.of(invocables);	
+					 interfaces = new Class[diagramInterfaces.length];
+					 for (int i = 0; i < interfaces.length; ++i) {
+						 try {
+							interfaces[i] = classLoader.loadClass(diagramInterfaces[i]);
+						} catch (ClassNotFoundException e) {
+							throw new NasdanikaException(e);
+						}
+					 }
 				}
 				
-				result = result.bind(loader, progressMonitor);
+				DiagramRequirement diagramRequirement = new DiagramRequirement(
+						requirement.uriHandler().normalize(URI.createURI(spec.diagram().location()).resolve(requirement.uri())), 
+						pName -> getProperty(spec.diagram().properties(), pName), 
+						uri -> {
+							try {
+								return requirement.uriHandler().openStream(uri); 
+							} catch (IOException e) {
+								throw new NasdanikaException(e);
+							}
+						},
+						spec.diagram().processor(), 
+						spec.diagram().bind(), 
+						classLoader, 
+						interfaces);
 				
-				Iterator<URI> bindingIterator;
-				if (spec.bind() == null) {
-					bindingIterator = Collections.emptyIterator();
-				} else {
-					bindingIterator = Stream.of(spec.bind())
-							.map(URI::createURI)
-							.map(uri -> requirement.uriHandler().normalize(uri))
-							.iterator();
-				}
-				result = bind(result, bindingIterator, spec, classLoader, loader, progressMonitor);								
-				return wrap(result).toCompletableFuture().join();
-			} catch (ClassNotFoundException e) {
-				return wrapError(e).toCompletableFuture().join(); 
+				Object result = loader.loadOne(diagramRequirement, progressMonitor).toCompletableFuture().join();
+				return Collections.singleton(CapabilityProvider.of(Invocable.ofValue(result)));
 			}
-						
+			
+			// Type
+			if (spec.type() != null) {
+				String typeName = spec.type();
+				if (typeName.indexOf('.') == -1) {
+					typeName = "java.lang." + typeName;
+				}
+				int methodRefIdx = typeName.indexOf(METHOD_REF);
+				String methodName = null;
+				if (methodRefIdx != -1) {
+					methodName = typeName.substring(methodRefIdx + METHOD_REF.length());
+					typeName = typeName.substring(0, methodRefIdx);
+				}
+				try {
+					Class<?> type = getClass().getClassLoader().loadClass(typeName);
+					Invocable result;
+					if (methodName == null) {
+						result = Invocable.of(type);
+					} else {
+						String theMethodName = methodName;
+						Invocable[] invocables = Stream.of(type.getMethods())
+							.filter(m -> Modifier.isStatic(m.getModifiers()) && theMethodName.equals(m.getName()))
+							.map(m -> Invocable.of(null, m))
+							.toArray(size -> new Invocable[size]);
+						result = Invocable.of(invocables);	
+					}
+					
+					CompletionStage<Invocable> resultCS = CompletableFuture.completedStage(result.bind(loader, progressMonitor));				
+					if (spec.bind() != null) {
+						for (int i = 0; i < spec.bind().length; ++i) {
+							URI bindingURI = requirement.uriHandler().normalize(URI.createURI(spec.bind()[i]));
+							URIInvocableRequirement bindingRequirement = new URIInvocableRequirement(bindingURI, requirement.uriHandler(), classLoader, null); // No modules yet
+							CompletionStage<Object> bindingCS = loader.loadOne(bindingRequirement, progressMonitor);
+							resultCS = resultCS.thenCombine(bindingCS, (r,b) -> r.bind(b));
+						}
+					}
+					return Collections.singleton(CapabilityProvider.of(resultCS.toCompletableFuture().join()));
+				} catch (ClassNotFoundException e) {
+					return Collections.singleton(CapabilityProvider.ofError(e)); 
+				}
+							
+			}
+			
+			// Script
+			ScriptRecord scriptRecord = spec.script();
+			if (scriptRecord != null) {
+				URI locationURI = scriptRecord.location() == null ? null : requirement.uriHandler().normalize(URI.createURI(scriptRecord.location()));
+				ScriptEngineManager scriptEngineManager = new ScriptEngineManager(classLoader);
+				ScriptEngine scriptEngine;
+				if (scriptRecord.language() != null) {
+					scriptEngine = scriptEngineManager.getEngineByMimeType(scriptRecord.language());
+					if (scriptEngine == null) {
+						return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("No script engine found for MIME type '" + scriptRecord.language() + "': " + requirement.uri())));						
+					}
+				} else if (locationURI == null) {
+					return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("Script language is required: " + requirement.uri())));											
+				} else {	
+					String lastSegment = locationURI.lastSegment();
+					int lastDot = lastSegment.lastIndexOf('.');
+					String extension = lastSegment.substring(lastDot + 1);
+					if (lastDot == -1) {
+						return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("Script language is required for " + locationURI)));																					
+					}
+					
+					scriptEngine = scriptEngineManager.getEngineByExtension(extension);
+					if (scriptEngine == null) {
+						return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("No script engine found for extension '" + extension + "': " + locationURI)));
+					}
+				}
+				
+				Map<String, Object> bindings = new HashMap<>();
+				if (scriptRecord.bindings() != null) {
+					for (Entry<String, String> be: scriptRecord.bindings().entrySet()) {
+						URI bindingURI = requirement.uriHandler().normalize(URI.createURI(be.getValue()));
+						URIInvocableRequirement bindingRequirement = new URIInvocableRequirement(bindingURI, requirement.uriHandler(), classLoader, null);
+						CompletionStage<Object> bindingCS = loader.loadOne(bindingRequirement, progressMonitor);
+						bindings.put(be.getKey(), bindingCS.toCompletableFuture().join());
+					}
+				}
+				
+				Invocable result = new Invocable() {
+					
+					@SuppressWarnings("unchecked")
+					@Override
+					public Object invoke(Object... args) {
+						bindings.forEach(scriptEngine::put);
+						scriptEngine.put("args", args);
+						try {
+							if (scriptRecord.source() != null) {
+								return scriptEngine.eval(scriptRecord.source());
+							}
+							URIInvocableRequirement sourceRequirement = new URIInvocableRequirement(locationURI, requirement.uriHandler(), classLoader, null);
+							try {
+								return scriptEngine.eval(new InputStreamReader(openStream(sourceRequirement)));
+							} catch (IOException e) {
+								throw new NasdanikaException("Error loading script at '" + locationURI + "': " + e, e);
+							}
+						} catch (ScriptException e) {
+							throw new NasdanikaException("Error evaluating script at '" + locationURI + "': " + e, e);
+						}
+					}
+					
+				};
+				
+				return Collections.singleton(CapabilityProvider.of(result.bind(loader, progressMonitor, (String) null))); // Binding for consistency with hierarchical URL/fragment 				
+			} 
+			
+			return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("Not supported spec: " + spec)));
+		} finally {
+			Thread.currentThread().setContextClassLoader(prev);
 		}
-		return wrapError(new IllegalArgumentException("Not supported spec: " + spec)).toCompletableFuture().join(); 
 	}
-
-	/**
-	 * Loads invocable from a URI returned by the iterator, invokes it and binds. 
-	 * Then calls itself recursively until the iteration is over.  
-	 * @param requirement
-	 * @param classLoader
-	 * @param loader
-	 * @param progressMonitor
-	 * @return
-	 */
-	protected Invocable bind(
-			Invocable invocable,
-			Iterator<URI> bindingIterator,
-			InvocableRequirement requirement,
-			ClassLoader classLoader,
-			Loader loader,
-			ProgressMonitor progressMonitor) {
-		
-		if (bindingIterator.hasNext()) {
-			throw new UnsupportedOperationException();
-		}
-		
-		return invocable;
-	}	
 
 	protected CompletionStage<Iterable<CapabilityProvider<Invocable>>> handleDataScheme(
 			URIInvocableRequirement requirement,
@@ -302,8 +410,15 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			}
 		}
 		
-		if (mediaType.equals(SPEC_MEDIA_TYPE)) {
-			throw new UnsupportedOperationException();
+		if (mediaType.equals(YAML_SPEC_MEDIA_TYPE)) {
+			Yaml yaml = new Yaml();
+			Map<?,?> spec = yaml.load(new ByteArrayInputStream(data));
+			return handleSpec(requirement, spec, loader, progressMonitor);
+		}
+		
+		if (mediaType.equals(JSON_SPEC_MEDIA_TYPE)) {
+			JSONObject spec = new JSONObject(new JSONTokener(new ByteArrayInputStream(data)));
+			return handleSpec(requirement, spec.toMap(), loader, progressMonitor);
 		}
 		
 		// Scripts		
@@ -332,6 +447,12 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 	}
 	
 	protected Object loadValue(Class<?> type, byte[] data) {
+		if (data == null) {
+			return null;
+		}
+		if (type.isInstance(data)) {
+			return data;
+		}
 		if (String.class == type) {
 			return new String(data);
 		}

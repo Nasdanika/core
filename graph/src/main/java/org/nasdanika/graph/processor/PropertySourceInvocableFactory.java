@@ -30,7 +30,7 @@ public abstract class PropertySourceInvocableFactory<K,V> extends PropertySource
 			boolean parallel,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
-			Class<?>... interfaces) throws Exception {
+			Class<?>... interfaces) {
 		
 		Map<Element, ProcessorInfo<Invocable>> processors = createProcessors(source, endpointFactory, parallel, progressMonitor);		
 		return Invocable.createProxy(classLoader, (method, args) -> resolve(method, args, processors, bindProperty), interfaces);		
@@ -67,7 +67,6 @@ public abstract class PropertySourceInvocableFactory<K,V> extends PropertySource
 	 * @param parallel
 	 * @param progressMonitor
 	 * @return
-	 * @throws Exception
 	 */
 	public <T> T createProxy(
 			Collection<? extends Element> source,
@@ -75,7 +74,7 @@ public abstract class PropertySourceInvocableFactory<K,V> extends PropertySource
 			boolean parallel,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
-			Class<?>... interfaces) throws Exception {
+			Class<?>... interfaces) {
 		
 		return createProxy(
 				source,

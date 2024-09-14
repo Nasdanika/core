@@ -34,7 +34,7 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 			boolean parallel,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
-			Class<?>... interfaces) throws Exception {
+			Class<?>... interfaces) {
 		
 		Map<Element, ProcessorInfo<Invocable>> processors = createProcessors(endpointFactory, connectionBase, parallel, progressMonitor);		
 		return Invocable.createProxy(classLoader, nameOrSignature -> resolve(nameOrSignature, processors, bindProperty), interfaces);		
@@ -67,7 +67,7 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 			ConnectionBase connectionBase,
 			boolean parallel,
 			ProgressMonitor progressMonitor,
-			Class<?>... interfaces) throws Exception {
+			Class<?>... interfaces) {
 		
 		return createProxy(
 				bindProperty, 
@@ -86,7 +86,6 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 	 * @param parallel
 	 * @param progressMonitor
 	 * @return
-	 * @throws Exception
 	 */
 	public <T> T createProxy(
 			String bindProperty,
@@ -94,7 +93,7 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 			boolean parallel,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
-			Class<?>... interfaces) throws Exception {
+			Class<?>... interfaces) {
 		
 		return createProxy(
 				bindProperty,
@@ -113,14 +112,13 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 	 * @param parallel
 	 * @param progressMonitor
 	 * @return
-	 * @throws Exception
 	 */
 	public <T> T createProxy(
 			String bindProperty,
 			ConnectionBase connectionBase,
 			boolean parallel,
 			ProgressMonitor progressMonitor,
-			Class<?>... interfaces) throws Exception {
+			Class<?>... interfaces) {
 		
 		return createProxy(
 				bindProperty,

@@ -7,9 +7,7 @@ import java.util.function.Predicate;
 
 import org.nasdanika.common.ProgressMonitor;
 
-import reactor.core.publisher.Flux;
-
-public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory<Object,S> {
+public abstract class ServiceCapabilityFactory<R,S> extends AbstractCapabilityFactory<Object,S> {
 		
 	/**
 	 * Service requirement. factoryPredicate is applied to the factory instance. 
@@ -66,62 +64,5 @@ public abstract class ServiceCapabilityFactory<R,S> implements CapabilityFactory
 		R serviceRequirement,
 		Loader loader,
 		ProgressMonitor progressMonitor);	
-	
-	/**
-	 * Helper method for factories with no dependencies providing a single instance of a service.
-	 * @return
-	 */
-	protected CompletionStage<Iterable<CapabilityProvider<S>>> wrap(S service) {
-		return wrapCompletionStage(service == null ? null : CompletableFuture.completedStage(service));
-	}
-
-	/**
-	 * @return Completed stage with no providers.
-	 */
-	protected CompletionStage<Iterable<CapabilityProvider<S>>> empty() {
-		return CompletableFuture.completedStage(Collections.emptyList());
-	}
-	
-	/**
-	 * Helper method for factories with no dependencies providing a single instance of a service.
-	 * @return
-	 */
-	protected CompletionStage<Iterable<CapabilityProvider<S>>> wrapCompletionStage(CompletionStage<S> serviceCompletionStage) {
-		if (serviceCompletionStage == null) {
-			return CompletableFuture.completedStage(Collections.singleton(new CapabilityProvider<S>() {
-				
-				@Override
-				public Flux<S> getPublisher() {
-					return Flux.empty();
-				}
-				
-			}));		
-		}
-		
-		return serviceCompletionStage.thenApply(service -> Collections.singleton(new CapabilityProvider<S>() {
-			
-			@Override
-			public Flux<S> getPublisher() {
-				return service == null ? Flux.empty() : Flux.just(service);
-			}
-			
-		}));		
-	}
-	
-	/**
-	 * Helper method for factories with no dependencies providing a single instance of a service.
-	 * @return
-	 */
-	protected CompletionStage<Iterable<CapabilityProvider<S>>> wrapError(Throwable error) {
-		CapabilityProvider<S> capabilityProvider = new CapabilityProvider<S>() {
-
-			@Override
-			public Flux<S> getPublisher() {
-				return Flux.error(error);
-			}
-			
-		};
-		return CompletableFuture.completedStage(Collections.singleton(capabilityProvider));		
-	}
 	
 }

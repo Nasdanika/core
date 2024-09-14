@@ -30,7 +30,8 @@ import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.supplier.RepositorySystemSupplier;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
 import org.eclipse.aether.util.repository.AuthenticationBuilder;
-import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.capability.AbstractCapabilityFactory;
+import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.requirements.AuthenticationRecord;
 import org.nasdanika.capability.requirements.DependencyRequestRecord;
@@ -44,7 +45,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import reactor.core.publisher.Flux;
 
-public class DependencyCapabilityFactory implements CapabilityFactory<DependencyRequestRecord, Collection<File>> {
+public class DependencyCapabilityFactory extends AbstractCapabilityFactory<DependencyRequestRecord, Collection<File>> {
 
 	private static final String DEFAULT_CONFIG_NAME = "dependency-reolver-config.yml";
 

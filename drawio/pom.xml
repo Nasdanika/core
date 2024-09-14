@@ -27,5 +27,10 @@
 			<artifactId>graph</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>capability</artifactId>
+			<version>2024.9.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>

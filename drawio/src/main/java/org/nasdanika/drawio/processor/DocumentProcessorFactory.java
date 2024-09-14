@@ -37,13 +37,12 @@ public class DocumentProcessorFactory<P> extends PropertySourceProcessorFactory<
 	 * @param <E>
 	 * @param endpointFactory
 	 * @param processorProperty
-	 * @throws Exception
 	 */
 	public <H,E> Map<Element, ProcessorInfo<P>> createProcessors(
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
 			boolean parallel,
-			ProgressMonitor progressMonitor) throws Exception {
+			ProgressMonitor progressMonitor) {
 		
 		Collection<Element> elements = new ArrayList<>();
 		Consumer<org.nasdanika.drawio.Element> consumer = org.nasdanika.drawio.Util.withLinkTargets(elements::add, ConnectionBase.SOURCE);
@@ -63,12 +62,11 @@ public class DocumentProcessorFactory<P> extends PropertySourceProcessorFactory<
 	 * @param parallel
 	 * @param progressMonitor
 	 * @return
-	 * @throws Exception
 	 */
 	public Map<Element, ProcessorInfo<P>> createNopEndpointProcessors(
 			ConnectionBase connectionBase,
 			boolean parallel,
-			ProgressMonitor progressMonitor) throws Exception {
+			ProgressMonitor progressMonitor) {
 		
 		return createProcessors(
 				EndpointFactory.nopEndpointFactory(),

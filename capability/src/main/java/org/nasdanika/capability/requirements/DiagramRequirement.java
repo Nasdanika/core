@@ -1,0 +1,34 @@
+package org.nasdanika.capability.requirements;
+
+import java.io.InputStream;
+import java.util.function.Function;
+
+import org.eclipse.emf.common.util.URI;
+
+public record DiagramRequirement(
+		
+		URI uri,
+		
+		Function<String, String> propertySource,
+		
+		Function<URI, InputStream> uriHandler,
+		
+		/**
+		 * Processor property
+		 */
+		String processor,
+		
+		/**
+		 * Bind property for dynamic proxy
+		 */
+		String bind,
+		
+		ClassLoader classLoader,
+		
+		/**
+		 * Interfaces to be implemented by a proxy.
+		 * If not provided, no proxy is created and a map of elements to processor info (registry) is used as a result.
+		 */
+		Class<?>[] interfaces) {
+
+}

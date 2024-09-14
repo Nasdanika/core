@@ -72,7 +72,7 @@ public interface Invocable {
 		return invoke(args);
 	}
 	
-	default Invocable bind(String name, Object binding) {		
+	default Invocable bindByName(String name, Object binding) {		
 		String[] pNames = getParameterNames();
 		if (pNames == null) {
 			throw new UnsupportedOperationException("Cannot bind by name because parameter names are not available");
@@ -87,10 +87,10 @@ public interface Invocable {
 		throw new IllegalArgumentException("Parameter not found: " + name);
 	}
 		
-	default Invocable bind(Map<String,Object> bindings) {
+	default Invocable bindMap(Map<String,Object> bindings) {
 		Invocable ret = this;
 		for (Entry<String, Object> bindingEntry: bindings.entrySet()) {
-			ret = ret.bind(bindingEntry.getKey(), bindingEntry.getValue());
+			ret = ret.bindByName(bindingEntry.getKey(), bindingEntry.getValue());
 		}		
 		return ret;
 	}	

@@ -50,13 +50,12 @@ public abstract class PropertySourceProcessorFactory<P,K,V> extends URIInvocable
 	 * @param <E>
 	 * @param endpointFactory
 	 * @param processorProperty
-	 * @throws Exception
 	 */
 	public <H,E> Map<Element, ProcessorInfo<P>> createProcessors(
 			Collection<? extends Element> source,
 			EndpointFactory<H, E> endpointFactory, 
 			boolean parallel,
-			ProgressMonitor progressMonitor) throws Exception {
+			ProgressMonitor progressMonitor) {
 		ProcessorConfigFactory<H,E> processorConfigFactory = new ProcessorConfigFactory<H,E>() {
 			
 			@Override
@@ -87,12 +86,11 @@ public abstract class PropertySourceProcessorFactory<P,K,V> extends URIInvocable
 	 * @param parallel
 	 * @param progressMonitor
 	 * @return
-	 * @throws Exception
 	 */
 	public Map<Element, ProcessorInfo<P>> createNopEndpointProcessors(
 			Collection<? extends Element> source,
 			boolean parallel,
-			ProgressMonitor progressMonitor) throws Exception {
+			ProgressMonitor progressMonitor) {
 		
 		return createProcessors(
 				source,
