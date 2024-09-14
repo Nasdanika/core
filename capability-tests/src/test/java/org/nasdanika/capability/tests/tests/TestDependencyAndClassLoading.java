@@ -33,7 +33,7 @@ public class TestDependencyAndClassLoading {
 	}
 	
 	@Test
-	public void testClassLoading() {
+	public void testClassLoading() throws ClassNotFoundException {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ClassLoaderRequirement requirement = new ClassLoaderRequirement(
 				null, // String[] modulePath,
@@ -51,7 +51,8 @@ public class TestDependencyAndClassLoading {
 		ClassLoader result = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(ClassLoader.class, null, requirement),
 				progressMonitor);
-		System.out.println(result == requirement.parentClassLoader());
+		
+		System.out.println(result.loadClass("javax.script.ScriptEngine"));
 	}
 
 }

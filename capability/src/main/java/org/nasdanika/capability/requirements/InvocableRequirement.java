@@ -34,7 +34,7 @@ public record InvocableRequirement(
 		String[] rootModules,
 		ModuleLayer[] parentModuleLayers,
 		ClassLoader parentClassLoader,
-		boolean oneLayerClassLoader,
+		Boolean oneLayerClassLoader,
 		String[] dependencies,
 		String[] managedDependencies,
 		RemoteRepoRecord[] remoteRepositories,

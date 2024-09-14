@@ -20,6 +20,13 @@ public record ScriptRecord(
 		String language,
 		
 		/**
+		 * Fully qualified name of a script engine factory implementation.
+		 * Use if the engine is loaded from dependencies and therefore is not visible
+		 * to the script engine manager.
+		 */
+		String engineFactory,
+		
+		/**
 		 * Bindings for the script.
 		 * Values are treated as invocable URI's. 
 		 */

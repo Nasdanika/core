@@ -1,0 +1,7 @@
+script:
+  engineFactory: org.codehaus.groovy.jsr223.GroovyScriptEngineFactory
+  source: |
+    "Hello, world!"
+dependencies: org.apache.groovy:groovy-all:pom:4.0.22
+localRepository: target/groovy-test-repo
+    

@@ -1,5 +1,7 @@
 package org.nasdanika.capability.tests.tests;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
@@ -8,6 +10,7 @@ import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.requirements.DependencyRequestRecord;
+import org.nasdanika.capability.requirements.URIInvocableRequirement;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
@@ -73,6 +76,30 @@ public class TestURIInvocable {
 			Object result = invocable.invoke();
 			System.out.println(result);
 		}
+	}
+	
+	@Test
+	public void testJavaJsonSpec() throws IOException {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		URI specUri = URI.createFileURI(new File("test-specs/java.json").getCanonicalPath());
+		Invocable invocable = capabilityLoader.loadOne(
+				ServiceCapabilityFactory.createRequirement(Invocable.class, null, new URIInvocableRequirement(specUri)),
+				progressMonitor);
+		Object result = invocable.invoke();
+		System.out.println(result);
+	}
+		
+	@Test
+	public void testGroovyYamlSpec() throws IOException {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		URI specUri = URI.createFileURI(new File("test-specs/groovy.yml").getCanonicalPath());
+		Invocable invocable = capabilityLoader.loadOne(
+				ServiceCapabilityFactory.createRequirement(Invocable.class, null, new URIInvocableRequirement(specUri)),
+				progressMonitor);
+		Object result = invocable.invoke();
+		System.out.println(result);
 	}
 	
 	@Test

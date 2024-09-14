@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Base64;
 import java.util.Collections;
@@ -16,6 +17,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.stream.Stream;
 
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
@@ -149,8 +151,11 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
+		Map<Object,Object> fullSpec = new HashMap<>(spec);
+		fullSpec.put("parentClassLoader", requirement.classLoader());
+		fullSpec.put("parentModuleLayers", requirement.parentModuleLayers());
 		Invocable ci = Invocable.of(InvocableRequirement.class);
-		InvocableRequirement invocableRequirement = ci.call(spec);		
+		InvocableRequirement invocableRequirement = ci.call(fullSpec);	
 		ClassLoaderRequirement classLoaderRequirement = invocableRequirement.getClassLoaderRequirement();
 		CompletionStage<ClassLoader> classLoaderCS;		
 		if (classLoaderRequirement == null) {
@@ -280,27 +285,43 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			// Script
 			ScriptRecord scriptRecord = spec.script();
 			if (scriptRecord != null) {
-				URI locationURI = scriptRecord.location() == null ? null : requirement.uriHandler().normalize(URI.createURI(scriptRecord.location()));
-				ScriptEngineManager scriptEngineManager = new ScriptEngineManager(classLoader);
 				ScriptEngine scriptEngine;
-				if (scriptRecord.language() != null) {
-					scriptEngine = scriptEngineManager.getEngineByMimeType(scriptRecord.language());
-					if (scriptEngine == null) {
-						return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("No script engine found for MIME type '" + scriptRecord.language() + "': " + requirement.uri())));						
+				URI locationURI = scriptRecord.location() == null ? null : requirement.uriHandler().normalize(URI.createURI(scriptRecord.location()));
+				if (scriptRecord.engineFactory() == null) {
+					ScriptEngineManager scriptEngineManager = new ScriptEngineManager(classLoader);
+					if (scriptRecord.language() != null) {
+						scriptEngine = scriptEngineManager.getEngineByMimeType(scriptRecord.language());
+						if (scriptEngine == null) {
+							return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("No script engine found for MIME type '" + scriptRecord.language() + "': " + requirement.uri())));						
+						}
+					} else if (locationURI == null) {
+						return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("Script language is required: " + requirement.uri())));											
+					} else {	
+						String lastSegment = locationURI.lastSegment();
+						int lastDot = lastSegment.lastIndexOf('.');
+						String extension = lastSegment.substring(lastDot + 1);
+						if (lastDot == -1) {
+							return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("Script language is required for " + locationURI)));																					
+						}
+						
+						scriptEngine = scriptEngineManager.getEngineByExtension(extension);
+						if (scriptEngine == null) {
+							return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("No script engine found for extension '" + extension + "': " + locationURI)));
+						}
 					}
-				} else if (locationURI == null) {
-					return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("Script language is required: " + requirement.uri())));											
-				} else {	
-					String lastSegment = locationURI.lastSegment();
-					int lastDot = lastSegment.lastIndexOf('.');
-					String extension = lastSegment.substring(lastDot + 1);
-					if (lastDot == -1) {
-						return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("Script language is required for " + locationURI)));																					
-					}
-					
-					scriptEngine = scriptEngineManager.getEngineByExtension(extension);
-					if (scriptEngine == null) {
-						return Collections.singleton(CapabilityProvider.ofError(new IllegalArgumentException("No script engine found for extension '" + extension + "': " + locationURI)));
+				} else {
+					try {
+						ScriptEngineFactory scriptEngineFactory = (ScriptEngineFactory) classLoader.loadClass(scriptRecord.engineFactory()).getConstructor().newInstance();
+						scriptEngine = scriptEngineFactory.getScriptEngine();
+					} catch (InstantiationException 
+							| IllegalAccessException 
+							| IllegalArgumentException
+							| InvocationTargetException 
+							| NoSuchMethodException 
+							| SecurityException
+							| ClassNotFoundException e) {
+						
+						throw new NasdanikaException("Could not load script engine factory " + scriptRecord.engineFactory() + ": " + e, e);
 					}
 				}
 				
