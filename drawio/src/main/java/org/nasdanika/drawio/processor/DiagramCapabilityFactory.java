@@ -51,7 +51,6 @@ public class DiagramCapabilityFactory extends AbstractCapabilityFactory<DiagramR
 			java.util.function.Function<Object,Object> proxy = documentInvocableFactory.createProxy(
 					requirement.bind(),
 					null,
-					false,
 					progressMonitor,
 					requirement.classLoader(),
 					requirement.interfaces());
