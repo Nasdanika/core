@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -498,22 +499,24 @@ public interface Invocable {
 	}
 		
 	/**
-	 * 
+	 * Calls with conversion.
 	 * @param config
 	 * @param converter
 	 * @return
 	 */
-	default <T> T call(Map<?,?> config, BiFunction<Object,Class<?>, Object> converter) {
+	default <T> T convert(Map<?,?> config, BiFunction<Object,Class<?>, Object> converter) {
 		return call((name, type) -> converter.apply(config.get(name), type));				
 	}
-	
+
 	/**
-	 * Uses converter which leverages factory provider. 
+	 * 
+	 * @param <T>
 	 * @param config
-	 * @param converter
+	 * @param factoryProvider
+	 * @param keyValidator
 	 * @return
 	 */
-	default <T> T call(Map<?,?> config, java.util.function.Function<Class<?>, Invocable> factoryProvider) {
+	default <T> T call(Map<?,?> config, BiFunction<Class<?>, Collection<?>, Invocable> factoryProvider) {
 		BiFunction<Object,Class<?>, Object> converter = new BiFunction<Object, Class<?>, Object>() {
 			
 			@Override
@@ -552,7 +555,7 @@ public interface Invocable {
 								
 				// Not an array, not of expected type - use factory
 				if (source instanceof Map) {				
-					Invocable factory = factoryProvider.apply(type);
+					Invocable factory = factoryProvider.apply(type, ((Map<?,?>) source).keySet());
 					return factory.call((Map<?,?>) source, factoryProvider);
 				}
 				
@@ -561,7 +564,42 @@ public interface Invocable {
 			
 		};
 		
-		return call(config, converter);				
+		return convert(config, converter);				
+	}
+	
+	/**
+	 * A convenience method to check for presence of unsupported configuration keys
+	 * @param config Configuration map.
+	 * @param supportedKeys Supported keys.
+	 * @param marker Map location.
+	 * @return config argument.
+	 */
+	private void checkUnsupportedKeys(Collection<?> keys, Parameter[] parameters, Object target) {
+		if (keys == null) {
+			return;
+		}
+		
+		Collection<String> supportedKeys = Stream.of(parameters).map(Parameter::getName).toList();
+		
+		Collection<?> unsupportedKeys = new ArrayList<Object>(keys);
+		unsupportedKeys.removeAll(supportedKeys);
+		if (unsupportedKeys.isEmpty()) {
+			return;
+		}		
+		
+		if (unsupportedKeys.size() == 1) {
+			Object unsupportedKey = unsupportedKeys.iterator().next();
+			throw new IllegalArgumentException("Unsupported configuration key for " + target + ": " + unsupportedKey + ", supported keys: " + supportedKeys);
+		}
+		
+		StringBuilder keyList = new StringBuilder();
+		for (Object uk: unsupportedKeys) {
+			if (keyList.length() > 0) {
+				keyList.append(", ");
+			}
+			keyList.append(uk);
+		}
+		throw new IllegalArgumentException("Unsupported configuration keys for " + target + ": " + keyList + ", supported keys: " + supportedKeys);
 	}
 	
 	/**
@@ -570,11 +608,12 @@ public interface Invocable {
 	 * @return
 	 */
 	default <T> T call(Map<?,?> config) {
-		java.util.function.Function<Class<?>, Invocable> factoryProvider = type -> {
+		java.util.function.BiFunction<Class<?>, Collection<?>, Invocable> factoryProvider = (type, keys) -> {
 	        Constructor<?>[] constructors = type.getDeclaredConstructors();
 			if (type.isRecord()) {
 		        for (Constructor<?> constructor : constructors) {
 		            if (constructor.getParameterCount() == type.getRecordComponents().length) {
+		               	checkUnsupportedKeys(keys, constructor.getParameters(), constructor);
 		            	return Invocable.of(constructor);
 		            }
 		        }				
@@ -582,7 +621,9 @@ public interface Invocable {
 			
 			Optional<Constructor<?>> longestConstructorOpt = Stream.of(constructors).reduce((a, b) -> a.getParameterCount() > b.getParameterCount() ? a : b);
 			if (longestConstructorOpt.isPresent()) {
-				return Invocable.of(longestConstructorOpt.get());
+				Constructor<?> constructor = longestConstructorOpt.get();
+            	checkUnsupportedKeys(keys, constructor.getParameters(), constructor);
+				return Invocable.of(constructor);
 			}
 			
 			throw new IllegalArgumentException("No constructors in " + type);
