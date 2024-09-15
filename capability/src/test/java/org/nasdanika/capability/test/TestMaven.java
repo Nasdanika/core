@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.nasdanika.capability.requirements.ClassLoaderRequirement;
 import org.nasdanika.capability.requirements.DependencyRequestRecord;
 import org.nasdanika.capability.requirements.ProxyRecord;
 import org.nasdanika.capability.requirements.RemoteRepoRecord;
@@ -78,6 +79,19 @@ public class TestMaven {
 		Yaml yaml = new Yaml();
 		Map<?,?> config = yaml.load(spec);
 		Invocable ci = Invocable.of(DependencyRequestRecord.class);
+		Object result = ci.call(config);
+		System.out.println(result);		
+	}
+	
+	@Test
+	public void testClassLoaderRequirement() {
+		String spec = """
+				localRepository: purum
+				""";
+		
+		Yaml yaml = new Yaml();
+		Map<?,?> config = yaml.load(spec);
+		Invocable ci = Invocable.of(ClassLoaderRequirement.class);
 		Object result = ci.call(config);
 		System.out.println(result);		
 	}

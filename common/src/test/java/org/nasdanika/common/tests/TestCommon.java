@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -466,11 +467,18 @@ public class TestCommon {
 		Object map = yaml.load("key:");
 		System.out.println(map);
 	}
+	
 	@Test 
 	public void testFragment() throws UnsupportedEncodingException {
 		URI uri = URI.createURI("https://nasdanika.org/index.html");
 		URI withFragment = uri.appendFragment(URLEncoder.encode("Hello World = 33!", StandardCharsets.UTF_8.name()));
 		System.out.println(withFragment);
+	}
+	
+	@Test 
+	@Disabled
+	public void testPrimitiveDefaults() throws Exception {
+		System.out.println(ClassUtils.primitiveToWrapper(char.class).getConstructor(String.class).newInstance("0"));
 	}
 	
 }

@@ -31,7 +31,6 @@ import org.eclipse.aether.supplier.RepositorySystemSupplier;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
 import org.eclipse.aether.util.repository.AuthenticationBuilder;
 import org.nasdanika.capability.AbstractCapabilityFactory;
-import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.requirements.AuthenticationRecord;
 import org.nasdanika.capability.requirements.DependencyRequestRecord;

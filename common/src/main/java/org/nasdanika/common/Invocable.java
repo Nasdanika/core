@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.ClassUtils;
+
 /**
  * 
  */
@@ -160,8 +162,18 @@ public interface Invocable {
 			@Override
 			public Object invoke(Object... args) {
 				try {
+					Class<?>[] pTypes = method.getParameterTypes();
+					for (int i = 0; i < args.length; ++i) {
+						if (args[i] == null && pTypes[i].isPrimitive()) {
+							if (pTypes[i] == char.class) {
+								args[i] = Character.valueOf('0');
+							} else {
+								args[i] = ClassUtils.primitiveToWrapper(pTypes[i]).getConstructor(String.class).newInstance("0");								
+							}							
+						}
+					}
 					return method.invoke(target, args);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException | NoSuchMethodException | SecurityException e) {
 					throw new ExecutionException("Exception invoking " + method + " of " + target + ": " + e, e);
 				}
 			}
@@ -191,8 +203,19 @@ public interface Invocable {
 			@Override
 			public Object invoke(Object... args) {
 				try {
+					Class<?>[] pTypes = constructor.getParameterTypes();
+					for (int i = 0; i < args.length; ++i) {
+						if (args[i] == null && pTypes[i].isPrimitive()) {
+							if (pTypes[i] == char.class) {
+								args[i] = Character.valueOf('0');
+							} else {
+								args[i] = ClassUtils.primitiveToWrapper(pTypes[i]).getConstructor(String.class).newInstance("0");								
+							}							
+						}
+					}
+					
 					return constructor.newInstance(args);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException | NoSuchMethodException | SecurityException e) {
 					throw new ExecutionException("Exception invoking " + constructor + ": " + e, e);
 				}
 			}

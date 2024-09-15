@@ -10,7 +10,7 @@ public record ClassLoaderRequirement(
 		String[] rootModules,
 		ModuleLayer[] parentModuleLayers,
 		ClassLoader parentClassLoader,
-		Boolean oneLayerClassLoader,
+		boolean oneLayerClassLoader,
 		String[] dependencies,
 		String[] managedDependencies,
 		RemoteRepoRecord[] remoteRepositories,
