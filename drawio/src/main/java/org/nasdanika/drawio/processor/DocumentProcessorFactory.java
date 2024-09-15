@@ -41,7 +41,6 @@ public class DocumentProcessorFactory<P> extends PropertySourceProcessorFactory<
 	public <H,E> Map<Element, ProcessorInfo<P>> createProcessors(
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
-			boolean parallel,
 			ProgressMonitor progressMonitor) {
 		
 		Collection<Element> elements = new ArrayList<>();
@@ -51,7 +50,7 @@ public class DocumentProcessorFactory<P> extends PropertySourceProcessorFactory<
 		return createProcessors(
 				elements,
 				endpointFactory, 
-				parallel,
+				false,
 				progressMonitor);
 	}	
 	
@@ -65,13 +64,11 @@ public class DocumentProcessorFactory<P> extends PropertySourceProcessorFactory<
 	 */
 	public Map<Element, ProcessorInfo<P>> createNopEndpointProcessors(
 			ConnectionBase connectionBase,
-			boolean parallel,
 			ProgressMonitor progressMonitor) {
 		
 		return createProcessors(
 				EndpointFactory.nopEndpointFactory(),
 				connectionBase,
-				parallel,
 				progressMonitor);
 	}
 

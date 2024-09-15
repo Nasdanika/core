@@ -31,12 +31,11 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 			String bindProperty,
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
-			boolean parallel,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
 			Class<?>... interfaces) {
 		
-		Map<Element, ProcessorInfo<Invocable>> processors = createProcessors(endpointFactory, connectionBase, parallel, progressMonitor);		
+		Map<Element, ProcessorInfo<Invocable>> processors = createProcessors(endpointFactory, connectionBase, progressMonitor);		
 		return Invocable.createProxy(classLoader, nameOrSignature -> resolve(nameOrSignature, processors, bindProperty), interfaces);		
 	}	
 	
@@ -65,7 +64,6 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 			String bindProperty,
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
-			boolean parallel,
 			ProgressMonitor progressMonitor,
 			Class<?>... interfaces) {
 		
@@ -73,7 +71,6 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 				bindProperty, 
 				endpointFactory,
 				connectionBase,
-				parallel,
 				progressMonitor,
 				Thread.currentThread().getContextClassLoader(),
 				interfaces);
@@ -90,7 +87,6 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 	public <T> T createProxy(
 			String bindProperty,
 			ConnectionBase connectionBase,
-			boolean parallel,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
 			Class<?>... interfaces) {
@@ -99,7 +95,6 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 				bindProperty,
 				EndpointFactory.nopEndpointFactory(),
 				connectionBase,
-				parallel,
 				progressMonitor,
 				classLoader,
 				interfaces);
@@ -116,14 +111,12 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 	public <T> T createProxy(
 			String bindProperty,
 			ConnectionBase connectionBase,
-			boolean parallel,
 			ProgressMonitor progressMonitor,
 			Class<?>... interfaces) {
 		
 		return createProxy(
 				bindProperty,
 				connectionBase,
-				parallel,
 				progressMonitor,
 				Thread.currentThread().getContextClassLoader(),
 				interfaces);
