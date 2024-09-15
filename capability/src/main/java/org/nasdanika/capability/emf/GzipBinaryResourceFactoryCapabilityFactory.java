@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
 
 public class GzipBinaryResourceFactoryCapabilityFactory extends ResourceFactoryCapabilityFactory {
 
-	public static final String GZIP_BINARY_RESOURCE_EXTENSION = "gz";
+	public static final String GZIP_BINARY_RESOURCE_EXTENSION = "egz";
 
 	@Override
 	protected Factory getResourceFactory(ResourceSet resourceSet) {

@@ -8,7 +8,7 @@ import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
 
 public class BinaryResourceFactoryCapabilityFactory extends ResourceFactoryCapabilityFactory {
 
-	public static final String BINARY_RESOURCE_EXTENSION = "bin";
+	public static final String BINARY_RESOURCE_EXTENSION = "ebin";
 
 	@Override
 	protected Factory getResourceFactory(ResourceSet resourceSet) {
