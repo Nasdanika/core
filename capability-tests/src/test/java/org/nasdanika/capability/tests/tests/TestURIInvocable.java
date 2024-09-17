@@ -142,18 +142,19 @@ public class TestURIInvocable {
 	public void testDependenciesRequestRecord() {
 		String spec = """
 				dependencies: purum
-				id: central
-				type: default
-				url: https://repo.maven.apache.org/maven2/
-				proxy:
-				  type: http
-				  host: my-host
-				  port: 8080
-				auth:
-				  username: Joe
-				  password: Doe  
-				mirroredRepositories:
-				  id: not-so-central  
+				remoteRepositories:
+				  id: central
+				  type: default
+				  url: https://repo.maven.apache.org/maven2/
+				  proxy:
+				    type: http
+				    host: my-host
+				    port: 8080
+				  auth:
+				    username: Joe
+				    password: Doe  
+				  mirroredRepositories:
+				    id: not-so-central  
 				""";
 		
 		Yaml yaml = new Yaml();
