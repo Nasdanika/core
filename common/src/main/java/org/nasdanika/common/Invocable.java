@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -68,19 +69,16 @@ public interface Invocable {
 	 * @param argumentProvider
 	 * @return
 	 */
-	default <T> T call(java.util.function.BiFunction<String,Class<?>,Object> argumentProvider) {
+	default <T> T call(java.util.function.BiFunction<Integer,Parameter,Object> argumentProvider) {
 		Parameter[] parameters = getParameters();
 		if (parameters == null) {
 			throw new UnsupportedOperationException("Parameters are null (unknown)");
 		}
-		
+						
 		Object[] args = new Object[parameters.length];
 		
 		for (int i = 0; i < args.length; ++i) {
-			String pName = parameters[i].getName();
-			if (!Util.isBlank(pName)) {
-				args[i] = argumentProvider.apply(pName, parameters[i].getType());
-			}
+			args[i] = argumentProvider.apply(i, parameters[i]);
 		}
 		
 		return invoke(args);
@@ -494,21 +492,28 @@ public interface Invocable {
 	 * @return
 	 */
 	default <T> T convert(
-			Map<?,?> config, 
+			Object config, 
 			BiFunction<Object,Class<?>, Object> converter) {
-		return call((name, type) -> converter.apply(config.get(name), type));				
+		
+		if (config instanceof Map) {		
+			return call((index, parameter) -> converter.apply(((Map<?,?>) config).get(parameter.getName()), parameter.getType()));
+		}
+		if (config instanceof List) {		
+			return call((index, parameter) -> converter.apply(((List<?>) config).get(index), parameter.getType()));
+		}
+		throw new IllegalArgumentException("Config is neither a Map nor a List: " + config);
 	}
 
 	/**
 	 * 
 	 * @param <T>
-	 * @param config
+	 * @param config - Map for construction by name and Iterable for positional construction
 	 * @param factoryProvider
 	 * @param keyValidator
 	 * @return
 	 */
 	default <T> T call(
-			Map<?,?> config, 
+			Object config, 
 			BiFunction<Object,Class<?>, Optional<Object>> converter,			
 			BiFunction<Class<?>, Collection<?>, Invocable> factoryProvider) {
 		BiFunction<Object,Class<?>, Object> theConverter = new BiFunction<Object, Class<?>, Object>() {
@@ -557,10 +562,14 @@ public interface Invocable {
 				// Not an array, not of expected type - use factory
 				if (source instanceof Map) {				
 					Invocable factory = factoryProvider.apply(type, ((Map<?,?>) source).keySet());
-					return factory.call((Map<?,?>) source, converter, factoryProvider);
+					return factory.call(source, converter, factoryProvider);
+				}
+				if (source instanceof List) {				
+					Invocable factory = factoryProvider.apply(type, null);
+					return factory.call(source, converter, factoryProvider);
 				}
 				
-				throw new IllegalArgumentException("Not a map: " + source);				
+				throw new IllegalArgumentException("Neither a map nor a list: " + source);				
 			}			
 			
 		};
@@ -600,6 +609,14 @@ public interface Invocable {
 		}
 		throw new IllegalArgumentException("Unsupported configuration keys for " + target + ": " + keyList + ", supported keys: " + supportedKeys);
 	}
+	/**
+	 * Factory provider which uses canonical or longest constructor
+	 * @param config
+	 * @return
+	 */
+	default <T> T call(List<?> config) {
+		return call(config, null);
+	}
 	
 	/**
 	 * Factory provider which uses canonical or longest constructor
@@ -616,17 +633,19 @@ public interface Invocable {
 	 * @return
 	 */
 	default <T> T call(
-			Map<?,?> config,
+			Object config,
 			BiFunction<Object,Class<?>, Optional<Object>> converter) {
 		java.util.function.BiFunction<Class<?>, Collection<?>, Invocable> factoryProvider = (type, keys) -> {
 	        Constructor<?>[] constructors = type.getDeclaredConstructors();
 			if (type.isRecord()) {
 		        for (Constructor<?> constructor : constructors) {
 		            if (constructor.getParameterCount() == type.getRecordComponents().length) {
-		               	checkUnsupportedKeys(
-		               			keys,
-		               			Stream.of(constructor.getParameters()).map(java.lang.reflect.Parameter::getName).toList(),
-		               			constructor);
+		            	if (keys != null) {
+			               	checkUnsupportedKeys(
+			               			keys,
+			               			Stream.of(constructor.getParameters()).map(java.lang.reflect.Parameter::getName).toList(),
+			               			constructor);
+		            	}
 		            	return Invocable.of(constructor);
 		            }
 		        }				
@@ -635,10 +654,12 @@ public interface Invocable {
 			Optional<Constructor<?>> longestConstructorOpt = Stream.of(constructors).reduce((a, b) -> a.getParameterCount() > b.getParameterCount() ? a : b);
 			if (longestConstructorOpt.isPresent()) {
 				Constructor<?> constructor = longestConstructorOpt.get();
-            	checkUnsupportedKeys(
-            			keys, 
-               			Stream.of(constructor.getParameters()).map(java.lang.reflect.Parameter::getName).toList(),
-            			constructor);
+				if (keys != null) {
+	            	checkUnsupportedKeys(
+	            			keys, 
+	               			Stream.of(constructor.getParameters()).map(java.lang.reflect.Parameter::getName).toList(),
+	            			constructor);
+				}
 				return Invocable.of(constructor);
 			}
 			
@@ -648,11 +669,15 @@ public interface Invocable {
 		if (parameters == null) {
 			throw new IllegalArgumentException("Parameters are unknown (null)");
 		}
-		checkUnsupportedKeys(
-				config.keySet(), 
-       			Stream.of(parameters).map(Parameter::getName).toList(), 
-				this);
-		return call(config, converter, factoryProvider);
+		
+		if (config instanceof Map) {
+			checkUnsupportedKeys(
+					((Map<?,?>) config).keySet(), 
+	       			Stream.of(parameters).map(Parameter::getName).toList(), 
+					this);
+		}
+		
+		return call(config, converter, factoryProvider);		
 	}
 	
 	/**

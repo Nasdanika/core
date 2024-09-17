@@ -2,6 +2,7 @@ package org.nasdanika.capability.tests.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
@@ -159,6 +160,33 @@ public class TestURIInvocable {
 		
 		Yaml yaml = new Yaml();
 		Map<?,?> config = yaml.load(spec);
+		Invocable ci = Invocable.of(DependencyRequestRecord.class);
+		Object result = ci.call(config);
+		System.out.println(result);		
+	}
+	
+	@Test
+	public void testDependenciesRequestRecordLIst() {
+		String spec = """
+				- purum
+				- 
+				- id: central
+				  type: default
+				  url: https://repo.maven.apache.org/maven2/
+				  proxy:
+				    type: http
+				    host: my-host
+				    port: 8080
+				  auth:
+				    username: Joe
+				    password: Doe  
+				  mirroredRepositories:
+				    id: not-so-central  
+				-
+				""";
+		
+		Yaml yaml = new Yaml();
+		List<?> config = yaml.load(spec);
 		Invocable ci = Invocable.of(DependencyRequestRecord.class);
 		Object result = ci.call(config);
 		System.out.println(result);		
