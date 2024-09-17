@@ -33,12 +33,13 @@ public abstract class PropertySourceInvocableFactory<K,V> extends PropertySource
 			Class<?>... interfaces) {
 		
 		Map<Element, ProcessorInfo<Invocable>> processors = createProcessors(source, endpointFactory, parallel, progressMonitor);		
-		return Invocable.createProxy(classLoader, (method, args) -> resolve(method, args, processors, bindProperty), interfaces);		
+		return Invocable.createProxy(classLoader, (proxy, method, args) -> resolve(proxy, method, args, processors, bindProperty), interfaces);		
 	}	
 	
 	protected abstract boolean match(V propertyValue, Method method, Object args);
 	
 	protected Invocable resolve(
+			Object proxy,
 			Method method, 
 			Object[] args, 
 			Map<Element, ProcessorInfo<Invocable>> processors,
@@ -52,7 +53,7 @@ public abstract class PropertySourceInvocableFactory<K,V> extends PropertySource
 				if (match(bindValue, method, args)) {
 					Invocable processor = pe.getValue().getProcessor();
 					if (processor != null) {
-						matches.add(processor);
+						matches.add(processor.bind(proxy)); // 
 					}
 				}
 			}

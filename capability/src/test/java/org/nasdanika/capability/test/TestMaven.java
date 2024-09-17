@@ -1,7 +1,11 @@
 package org.nasdanika.capability.test;
 
 import java.lang.reflect.Constructor;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Test;
 import org.nasdanika.capability.requirements.ClassLoaderRequirement;
@@ -62,24 +66,36 @@ public class TestMaven {
 	public void testDependenciesRequestRecord() {
 		String spec = """
 				dependencies: purum
-				id: central
-				type: default
-				url: https://repo.maven.apache.org/maven2/
-				proxy:
-				  type: http
-				  host: my-host
-				  port: 8080
-				auth:
-				  username: Joe
-				  password: Doe  
-				mirroredRepositories:
-				  id: not-so-central  
+				remoteRepositories:
+				  id: central
+				  type: default
+				  url: https://repo.maven.apache.org/maven2/
+				  proxy:
+				    type: http
+				    host: my-host
+				    port: 8080
+				  auth:
+				    username: Joe
+				    password: Doe  
+				  mirroredRepositories:
+				    id: not-so-central  
 				""";
 		
 		Yaml yaml = new Yaml();
 		Map<?,?> config = yaml.load(spec);
 		Invocable ci = Invocable.of(DependencyRequestRecord.class);
-		Object result = ci.call(config);
+		BiFunction<Object,Class<?>, Optional<Object>> converter = (source, type) -> {
+//			System.out.println(source + " -> " + type);
+			if (source instanceof String && type == URL.class) {
+				try {
+					return Optional.of(new URL((String) source));
+				} catch (MalformedURLException e) {
+					throw new IllegalArgumentException(e);
+				}
+			}
+			return null;
+		};
+		Object result = ci.call(config, converter);
 		System.out.println(result);		
 	}
 	

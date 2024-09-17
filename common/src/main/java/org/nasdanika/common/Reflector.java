@@ -15,7 +15,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -171,25 +170,18 @@ public class Reflector {
 			return Reflector.this.get(target, annotatedElement);
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public Object invoke(Object... args) {
 			return Reflector.this.invokeMethod(target, (Method) annotatedElement, args);
 		}
 		
 		@Override
-		public String[] getParameterNames() {
+		public Parameter[] getParameters() {
 			if (annotatedElement instanceof Method) {
-				return Stream.of(((Method) annotatedElement).getParameters()).map(Parameter::getName).toArray(size -> new String[size]);				
+				return Stream.of(((Method) annotatedElement).getParameters()).map(p -> Parameter.of(p.getName(), p.getType())).toArray(size -> new Parameter[size]);				
 			}
-			return Invocable.super.getParameterNames();
-		}
-		
-		@Override
-		public Class<?>[] getParameterTypes() {
-			if (annotatedElement instanceof Method) {
-				return ((Method) annotatedElement).getParameterTypes();				
-			}
-			return Invocable.super.getParameterTypes();
+			return Invocable.super.getParameters();
 		}
 		
 		@Override

@@ -15,5 +15,13 @@ public class MyTestClass {
 	public MyTestClass(CapabilityFactory.Loader loader, ProgressMonitor progressMonitor, String binding) {
 		System.out.println("Here I am: " + loader + ", " + progressMonitor + ", " + binding);
 	}
+	
+	public MyTestClass(CapabilityFactory.Loader loader, ProgressMonitor progressMonitor, byte[] binding) {
+		System.out.println("Here I am: " + loader + ", " + progressMonitor + ", " + binding);
+	}
+	
+	public static  MyTestClass factory(CapabilityFactory.Loader loader, ProgressMonitor progressMonitor, byte[] binding) {
+		return new MyTestClass(loader, progressMonitor, binding);
+	}
 
 }

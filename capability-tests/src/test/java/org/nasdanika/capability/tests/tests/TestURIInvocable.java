@@ -50,10 +50,10 @@ public class TestURIInvocable {
 	}
 	
 	@Test
-	public void testStringConstructorInvocable() {
+	public void testConstructorInvocable() {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		URI requirement = URI.createURI("data:java/String;base64,SGVsbG8=");
+		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass;base64,SGVsbG8=");
 		Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 				progressMonitor);
@@ -65,10 +65,10 @@ public class TestURIInvocable {
 	}
 	
 	@Test
-	public void testStringStaticMethodInvocable() {
+	public void testStaticMethodInvocable() {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		URI requirement = URI.createURI("data:java/String::valueOf;base64,SGVsbG8=");
+		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass::factory;base64,SGVsbG8=");
 		Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 				progressMonitor);

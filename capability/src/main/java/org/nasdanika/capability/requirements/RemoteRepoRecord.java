@@ -1,5 +1,7 @@
 package org.nasdanika.capability.requirements;
 
+import java.net.URL;
+
 public record RemoteRepoRecord(
 		String id, 
 		String type, 

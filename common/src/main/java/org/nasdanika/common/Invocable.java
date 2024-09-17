@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,20 +21,36 @@ import org.apache.commons.lang3.ClassUtils;
  */
 public interface Invocable {
 	
-	/**
-	 * 
-	 * @return null for unknown parameter names
-	 */
-	default String[] getParameterNames() {
-		return null;
+	public interface Parameter {
+		
+		String getName();
+		
+		Class<?> getType();
+		
+		static Parameter of(String name, Class<?> type) {
+			return new Parameter() {
+
+				@Override
+				public String getName() {
+					return name;
+				}
+
+				@Override
+				public Class<?> getType() {
+					return type;
+				}
+				
+			};
+		}
+		
 	}
 	
 	/**
 	 * 
-	 * @return null for unknown parameter types
+	 * @return null for unknown parameters
 	 */
-	default Class<?>[] getParameterTypes() {
-		return null; 
+	default Parameter[] getParameters() {
+		return null;
 	}
 	
 	/**
@@ -54,35 +69,31 @@ public interface Invocable {
 	 * @return
 	 */
 	default <T> T call(java.util.function.BiFunction<String,Class<?>,Object> argumentProvider) {
-		String[] parameterNames = getParameterNames();
-		if (parameterNames == null) {
-			throw new UnsupportedOperationException("Parameter names are null");
-		}
-		Class<?>[] parameterTypes = getParameterTypes();
-		if (parameterTypes == null) {
-			throw new UnsupportedOperationException("Parameter types are null");
-		}
-		if (parameterTypes.length != parameterNames.length) {
-			throw new IllegalStateException("Parameter names and types lengths are different");
+		Parameter[] parameters = getParameters();
+		if (parameters == null) {
+			throw new UnsupportedOperationException("Parameters are null (unknown)");
 		}
 		
-		Object[] args = new Object[parameterNames.length];
+		Object[] args = new Object[parameters.length];
 		
 		for (int i = 0; i < args.length; ++i) {
-			args[i] = argumentProvider.apply(parameterNames[i], parameterTypes[i]);
+			String pName = parameters[i].getName();
+			if (!Util.isBlank(pName)) {
+				args[i] = argumentProvider.apply(pName, parameters[i].getType());
+			}
 		}
 		
 		return invoke(args);
 	}
 	
 	default Invocable bindByName(String name, Object binding) {		
-		String[] pNames = getParameterNames();
-		if (pNames == null) {
-			throw new UnsupportedOperationException("Cannot bind by name because parameter names are not available");
+		Parameter[] parameters = getParameters();
+		if (parameters == null) {
+			throw new UnsupportedOperationException("Cannot bind by name because parameters are unknown");
 		}
 		
-		for (int i = 0; i < pNames.length; ++i) {
-			if (name.equals(pNames[i])) {
+		for (int i = 0; i < parameters.length; ++i) {
+			if (name.equals(parameters[i].getName())) {
 				return bindWithOffset(i, binding);
 			}
 		}
@@ -107,32 +118,19 @@ public interface Invocable {
 			return this;
 		}		
 		
-		String[] pNames = getParameterNames();
-		Class<?>[] pTypes = getParameterTypes();	
+		Parameter[] parameters = getParameters();
 		Class<?> returnType = getReturnType();
 		
 		return new Invocable() {
 			
 			@Override
-			public String[] getParameterNames() {
-				if (pNames == null) {
-					return pNames;
+			public Parameter[] getParameters() {
+				if (parameters == null) {
+					return parameters;
 				}
-				String[] ret = new String[pNames.length - bindings.length];
+				Parameter[] ret = new Parameter[parameters.length - bindings.length];
 				for (int i = 0; i < ret.length; ++i) {
-					ret[i] = pNames[i < offset ? i : i + bindings.length];
-				}
-				return ret;
-			}
-			
-			@Override
-			public Class<?>[] getParameterTypes() {
-				if (pTypes == null) {
-					return pTypes;
-				}
-				Class<?>[] ret = new Class<?>[pTypes.length - bindings.length];
-				for (int i = 0; i < ret.length; ++i) {
-					ret[i] = pTypes[i < offset ? i : i + bindings.length];
+					ret[i] = parameters[i < offset ? i : i + bindings.length];
 				}
 				return ret;
 			}
@@ -179,13 +177,8 @@ public interface Invocable {
 			}
 			
 			@Override
-			public Class<?>[] getParameterTypes() {
-				return method.getParameterTypes();
-			}
-			
-			@Override
-			public String[] getParameterNames() {
-				return Stream.of(method.getParameters()).map(Parameter::getName).toArray(size -> new String[size]);
+			public Parameter[] getParameters() {
+				return Stream.of(method.getParameters()).map(p -> Parameter.of(p.getName(), p.getType())).toArray(size -> new Parameter[size]);
 			}
 			
 			@Override
@@ -221,13 +214,8 @@ public interface Invocable {
 			}
 			
 			@Override
-			public Class<?>[] getParameterTypes() {
-				return constructor.getParameterTypes();
-			}
-			
-			@Override
-			public String[] getParameterNames() {
-				return Stream.of(constructor.getParameters()).map(Parameter::getName).toArray(size -> new String[size]);
+			public Parameter[] getParameters() {
+				return Stream.of(constructor.getParameters()).map(p -> Parameter.of(p.getName(), p.getType())).toArray(size -> new Parameter[size]);
 			}
 			
 			@Override
@@ -237,6 +225,12 @@ public interface Invocable {
 			
 		};
 	}	
+	
+	interface ProxyTargetResolver {
+		
+		Invocable resolve(Object proxy, Method method, Object[] args);
+		
+	}
 			
 	/**
 	 * Creates a dynamic proxy dispatching to invocables.
@@ -248,14 +242,14 @@ public interface Invocable {
 	@SuppressWarnings("unchecked")
 	static <T> T createProxy(
 			ClassLoader classLoader, 
-			BiFunction<Method, Object[], Invocable> resolver, 
+			ProxyTargetResolver resolver, 
 			Class<?>... interfaces) {
 		
 		InvocationHandler invocationHandler = new InvocationHandler() {
 			
 			@Override
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				Invocable target = resolver.apply(method, args);
+				Invocable target = resolver.resolve(proxy, method, args);
 				if (target == null) {
 					if (method.getDeclaringClass().isInstance(resolver)) {
 						return method.invoke(resolver, args);
@@ -276,7 +270,7 @@ public interface Invocable {
 	 * @param interfaces
 	 * @return
 	 */
-	static <T> T createProxy(BiFunction<Method, Object[], Invocable> resolver, Class<?>... interfaces) {
+	static <T> T createProxy(ProxyTargetResolver resolver, Class<?>... interfaces) {
 		return createProxy(
 				Thread.currentThread().getContextClassLoader(),
 				resolver, 
@@ -296,7 +290,7 @@ public interface Invocable {
 			java.util.function.Function<String, Invocable> resolver, 
 			Class<?>... interfaces) {
 		
-		BiFunction<Method, Object[], Invocable> r = (method, args) -> {
+		ProxyTargetResolver r = (proxy, method, args) -> {
 			StringBuilder signatureBuilder = new StringBuilder(method.getName()).append("(");		
 			Class<?>[] pt = method.getParameterTypes();
 			for (int i = 0; i < pt.length; ++i) {
@@ -340,13 +334,8 @@ public interface Invocable {
 			}
 			
 			@Override
-			public String[] getParameterNames() {
-				return new String[0];
-			}
-			
-			@Override
-			public Class<?>[] getParameterTypes() {
-				return new Class<?>[0];
+			public Parameter[] getParameters() {
+				return new Parameter[0];
 			}
 			
 			@SuppressWarnings("unchecked")
@@ -366,13 +355,8 @@ public interface Invocable {
 			}
 			
 			@Override
-			public String[] getParameterNames() {
-				return new String[0];
-			}
-			
-			@Override
-			public Class<?>[] getParameterTypes() {
-				return new Class<?>[0];
+			public Parameter[] getParameters() {
+				return new Parameter[0];
 			}
 			
 			@SuppressWarnings("unchecked")
@@ -397,13 +381,11 @@ public interface Invocable {
 			}
 			
 			@Override
-			public String[] getParameterNames() {
-				return new String[] { parameterName };
-			}
-			
-			@Override
-			public Class<?>[] getParameterTypes() {
-				return new Class<?>[] { parameterType };
+			public Parameter[] getParameters() {
+				if (parameterType == null && parameterName == null) {
+					return null;
+				}
+				return new Parameter[] { Parameter.of(parameterName, parameterType) };
 			}
 			
 			@SuppressWarnings("unchecked")
@@ -431,13 +413,10 @@ public interface Invocable {
 			}
 			
 			@Override
-			public String[] getParameterNames() {
-				return new String[] { firstParameterName, secondParameterName };
-			}
-			
-			@Override
-			public Class<?>[] getParameterTypes() {
-				return new Class<?>[] { firstParameterType, secondParameterType };
+			public Parameter[] getParameters() {
+				return new Parameter[] { 
+						Parameter.of(firstParameterName, firstParameterType), 
+						Parameter.of(secondParameterName, secondParameterType) };
 			}
 			
 			@SuppressWarnings("unchecked")
@@ -466,22 +445,14 @@ public interface Invocable {
 	// map - by index and by name
 	
 	default Invocable map(
-			java.util.function.BiFunction<Integer,String,String> parameterNameMapper,
-			java.util.function.BiFunction<Integer,Class<?>,Class<?>> parameterTypeMapper,
+			java.util.function.BiFunction<Integer,Parameter,Parameter> parameterMapper,
 			java.util.function.Function<Class<?>, Class<?>> returnTypeMapper,
 			java.util.function.BiFunction<Integer,Object,Object> argumentMapper) {
 		
-		String[] pNames = getParameterNames();
-		if (pNames != null && parameterNameMapper != null) {
-			for (int i = 0; i < pNames.length; ++i) {
-				pNames[i] = parameterNameMapper.apply(i, pNames[i]);
-			}
-		}
-		
-		Class<?>[] pTypes = getParameterTypes();	
-		if (pTypes != null && parameterTypeMapper != null) {
-			for (int i = 0; i < pNames.length; ++i) {
-				pTypes[i] = parameterTypeMapper.apply(i, pTypes[i]);
+		Parameter[] parameters = getParameters();
+		if (parameters != null && parameterMapper != null) {
+			for (int i = 0; i < parameters.length; ++i) {
+				parameters[i] = parameterMapper.apply(i, parameters[i]);
 			}
 		}
 		
@@ -495,13 +466,8 @@ public interface Invocable {
 			}
 			
 			@Override
-			public String[] getParameterNames() {
-				return pNames;
-			}
-			
-			@Override
-			public Class<?>[] getParameterTypes() {
-				return pTypes;
+			public Parameter[] getParameters() {
+				return parameters;
 			}
 			
 			@SuppressWarnings("unchecked")
@@ -527,7 +493,9 @@ public interface Invocable {
 	 * @param converter
 	 * @return
 	 */
-	default <T> T convert(Map<?,?> config, BiFunction<Object,Class<?>, Object> converter) {
+	default <T> T convert(
+			Map<?,?> config, 
+			BiFunction<Object,Class<?>, Object> converter) {
 		return call((name, type) -> converter.apply(config.get(name), type));				
 	}
 
@@ -539,11 +507,21 @@ public interface Invocable {
 	 * @param keyValidator
 	 * @return
 	 */
-	default <T> T call(Map<?,?> config, BiFunction<Class<?>, Collection<?>, Invocable> factoryProvider) {
-		BiFunction<Object,Class<?>, Object> converter = new BiFunction<Object, Class<?>, Object>() {
+	default <T> T call(
+			Map<?,?> config, 
+			BiFunction<Object,Class<?>, Optional<Object>> converter,			
+			BiFunction<Class<?>, Collection<?>, Invocable> factoryProvider) {
+		BiFunction<Object,Class<?>, Object> theConverter = new BiFunction<Object, Class<?>, Object>() {
 			
 			@Override
 			public Object apply(Object source, Class<?> type) {
+				if (converter != null) {
+					Optional<Object> result = converter.apply(source, type);
+					if (result != null) {
+						return result.orElse(null);
+					}
+				}
+				
 				if (source == null || type.isInstance(source)) {
 					return source;
 				}
@@ -579,7 +557,7 @@ public interface Invocable {
 				// Not an array, not of expected type - use factory
 				if (source instanceof Map) {				
 					Invocable factory = factoryProvider.apply(type, ((Map<?,?>) source).keySet());
-					return factory.call((Map<?,?>) source, factoryProvider);
+					return factory.call((Map<?,?>) source, converter, factoryProvider);
 				}
 				
 				throw new IllegalArgumentException("Not a map: " + source);				
@@ -587,7 +565,7 @@ public interface Invocable {
 			
 		};
 		
-		return convert(config, converter);				
+		return convert(config, theConverter);				
 	}
 	
 	/**
@@ -597,12 +575,10 @@ public interface Invocable {
 	 * @param marker Map location.
 	 * @return config argument.
 	 */
-	private void checkUnsupportedKeys(Collection<?> keys, Parameter[] parameters, Object target) {
+	private void checkUnsupportedKeys(Collection<?> keys, Collection<String> supportedKeys, Object target) {
 		if (keys == null) {
 			return;
 		}
-		
-		Collection<String> supportedKeys = Stream.of(parameters).map(Parameter::getName).toList();
 		
 		Collection<?> unsupportedKeys = new ArrayList<Object>(keys);
 		unsupportedKeys.removeAll(supportedKeys);
@@ -631,12 +607,26 @@ public interface Invocable {
 	 * @return
 	 */
 	default <T> T call(Map<?,?> config) {
+		return call(config, null);
+	}
+	
+	/**
+	 * Factory provider which uses canonical or longest constructor
+	 * @param config
+	 * @return
+	 */
+	default <T> T call(
+			Map<?,?> config,
+			BiFunction<Object,Class<?>, Optional<Object>> converter) {
 		java.util.function.BiFunction<Class<?>, Collection<?>, Invocable> factoryProvider = (type, keys) -> {
 	        Constructor<?>[] constructors = type.getDeclaredConstructors();
 			if (type.isRecord()) {
 		        for (Constructor<?> constructor : constructors) {
 		            if (constructor.getParameterCount() == type.getRecordComponents().length) {
-		               	checkUnsupportedKeys(keys, constructor.getParameters(), constructor);
+		               	checkUnsupportedKeys(
+		               			keys,
+		               			Stream.of(constructor.getParameters()).map(java.lang.reflect.Parameter::getName).toList(),
+		               			constructor);
 		            	return Invocable.of(constructor);
 		            }
 		        }				
@@ -645,13 +635,24 @@ public interface Invocable {
 			Optional<Constructor<?>> longestConstructorOpt = Stream.of(constructors).reduce((a, b) -> a.getParameterCount() > b.getParameterCount() ? a : b);
 			if (longestConstructorOpt.isPresent()) {
 				Constructor<?> constructor = longestConstructorOpt.get();
-            	checkUnsupportedKeys(keys, constructor.getParameters(), constructor);
+            	checkUnsupportedKeys(
+            			keys, 
+               			Stream.of(constructor.getParameters()).map(java.lang.reflect.Parameter::getName).toList(),
+            			constructor);
 				return Invocable.of(constructor);
 			}
 			
 			throw new IllegalArgumentException("No constructors in " + type);
 		};
-		return call(config, factoryProvider);
+		Parameter[] parameters = getParameters();
+		if (parameters == null) {
+			throw new IllegalArgumentException("Parameters are unknown (null)");
+		}
+		checkUnsupportedKeys(
+				config.keySet(), 
+       			Stream.of(parameters).map(Parameter::getName).toList(), 
+				this);
+		return call(config, converter, factoryProvider);
 	}
 	
 	/**
@@ -666,15 +667,15 @@ public interface Invocable {
 		
 		return new Invocable() {
 			
-			private boolean matchArgs(Object[] args, Class<?>[] parameterTypes) {
-				if (parameterTypes == null) {
+			private boolean matchArgs(Object[] args, Parameter[] parameters) {
+				if (parameters == null) {
 					return true;
 				}
-				if (parameterTypes.length != args.length) {
+				if (parameters.length != args.length) {
 					return false;
 				}
 				for (int i = 0; i < args.length; ++i) {
-					if (args[i] != null && !parameterTypes[i].isInstance(args[i])) {
+					if (args[i] != null && !parameters[i].getType().isInstance(args[i])) {
 						return false;
 					}
 				}
@@ -685,7 +686,7 @@ public interface Invocable {
 			@Override
 			public Object invoke(Object... args) {
 				Optional<Invocable> mostSpecificOpt = Stream.of(invocables)
-					.filter(i -> matchArgs(args, i.getParameterTypes()))
+					.filter(i -> matchArgs(args, i.getParameters()))
 					.reduce((a,b) -> a.isMoreSpecific(b) ? a : b);
 				
 				if (mostSpecificOpt.isPresent()) {
@@ -713,15 +714,15 @@ public interface Invocable {
 	private boolean isMoreSpecific(Invocable o) {
 		// Looking for more specific parameters
 		int counter = 0;
-		Class<?>[] pt = getParameterTypes();
-		Class<?>[] opt = o.getParameterTypes();
-		for (int i = 0; i < pt.length; ++i) {
-			if (pt[i].equals(opt[i])) {
+		Parameter[] parameters = getParameters();
+		Parameter[] otherParameters = o.getParameters();
+		for (int i = 0; i < parameters.length; ++i) {
+			if (parameters[i].getType().equals(otherParameters[i].getType())) {
 				continue;
 			}
-			if (pt[i].isAssignableFrom(opt[i])) {
+			if (parameters[i].getType().isAssignableFrom(otherParameters[i].getType())) {
 				--counter;
-			} else if (opt[i].isAssignableFrom(pt[i])) {
+			} else if (otherParameters[i].getType().isAssignableFrom(parameters[i].getType())) {
 				++counter;
 			} 
 		}
