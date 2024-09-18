@@ -36,10 +36,11 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 			Class<?>... interfaces) {
 		
 		Map<Element, ProcessorInfo<Invocable>> processors = createProcessors(endpointFactory, connectionBase, progressMonitor);		
-		return Invocable.createProxy(classLoader, nameOrSignature -> resolve(nameOrSignature, processors, bindProperty), interfaces);		
+		return Invocable.createProxy(classLoader, (proxy, nameOrSignature) -> resolve(proxy, nameOrSignature, processors, bindProperty), interfaces);		
 	}	
 	
 	protected Invocable resolve(
+			Object proxy,
 			String nameOrSignature, 
 			Map<Element, ProcessorInfo<Invocable>> processors,
 			String bindProperty) {
@@ -52,7 +53,7 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 				if (Objects.equals(nameOrSignature, bindValue)) {
 					Invocable processor = pe.getValue().getProcessor();
 					if (processor != null) {
-						matches.add(processor);
+						matches.add(processor.bind(proxy));
 					}
 				}
 			}

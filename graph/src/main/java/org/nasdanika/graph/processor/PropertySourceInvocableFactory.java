@@ -53,7 +53,7 @@ public abstract class PropertySourceInvocableFactory<K,V> extends PropertySource
 				if (match(bindValue, method, args)) {
 					Invocable processor = pe.getValue().getProcessor();
 					if (processor != null) {
-						matches.add(processor.bind(proxy)); // 
+						matches.add(processor.bind(proxy)); 
 					}
 				}
 			}

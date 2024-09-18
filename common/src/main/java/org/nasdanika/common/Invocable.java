@@ -280,13 +280,13 @@ public interface Invocable {
 	 * Resolves by signature or method name.
 	 * @param <T>
 	 * @param classLoader
-	 * @param resolver
+	 * @param resolver Takes proxy as its first argument and name/signature as second
 	 * @param interfaces
 	 * @return
 	 */
 	static <T> T createProxy(
 			ClassLoader classLoader, 
-			java.util.function.Function<String, Invocable> resolver, 
+			BiFunction<Object, String, Invocable> resolver, 
 			Class<?>... interfaces) {
 		
 		ProxyTargetResolver r = (proxy, method, args) -> {
@@ -298,11 +298,11 @@ public interface Invocable {
 				}
 				signatureBuilder.append(pt[i]);
 			}
-			Invocable ret = resolver.apply(signatureBuilder.append(")").toString());
+			Invocable ret = resolver.apply(proxy, signatureBuilder.append(")").toString());
 			if (ret != null) {
 				return ret;
 			}
-			return resolver.apply(method.getName());
+			return resolver.apply(proxy, method.getName());
 		};
 		
 		return createProxy(classLoader, r, interfaces);
@@ -311,11 +311,11 @@ public interface Invocable {
 	/**
 	 * Creates a dynamic proxy dispatching to invocables.
 	 * @param classLoader
-	 * @param resolver
+	 * @param resolver Takes proxy as its first argument and signature as second
 	 * @param interfaces
 	 * @return
 	 */
-	static <T> T createProxy(java.util.function.Function<String, Invocable> resolver, Class<?>... interfaces) {
+	static <T> T createProxy(BiFunction<Object, String, Invocable> resolver, Class<?>... interfaces) {
 		return createProxy(
 				Thread.currentThread().getContextClassLoader(),
 				resolver, 
