@@ -2,8 +2,12 @@ package org.nasdanika.capability.tests.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
 import org.junit.jupiter.api.Test;
@@ -142,7 +146,7 @@ public class TestURIInvocable {
 	@Test
 	public void testDependenciesRequestRecord() {
 		String spec = """
-				dependencies: purum
+				dependencies: org.apache.groovy:groovy-all:pom:4.0.22
 				remoteRepositories:
 				  id: central
 				  type: default
@@ -161,14 +165,24 @@ public class TestURIInvocable {
 		Yaml yaml = new Yaml();
 		Map<?,?> config = yaml.load(spec);
 		Invocable ci = Invocable.of(DependencyRequestRecord.class);
-		Object result = ci.call(config);
+//		BiFunction<Object,Class<?>, Optional<Object>> converter = (source, type) -> {
+//			if (type == URL.class && source instanceof String) {
+//				try {
+//					return Optional.of(new URL((String) source)); // Possibly resolve
+//				} catch (MalformedURLException e) {
+//					throw new IllegalArgumentException(e);
+//				}  
+//			}
+//			return null;
+//		};
+		Object result = ci.call(config /*, converter */);
 		System.out.println(result);		
 	}
 	
 	@Test
 	public void testDependenciesRequestRecordLIst() {
 		String spec = """
-				- purum
+				- org.apache.groovy:groovy-all:pom:4.0.22
 				- 
 				- id: central
 				  type: default
@@ -178,11 +192,11 @@ public class TestURIInvocable {
 				    host: my-host
 				    port: 8080
 				  auth:
-				    username: Joe
-				    password: Doe  
+				    - Joe
+				    - Doe  
 				  mirroredRepositories:
 				    id: not-so-central  
-				-
+				-  
 				""";
 		
 		Yaml yaml = new Yaml();

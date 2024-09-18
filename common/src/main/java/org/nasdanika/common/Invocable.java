@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ClassUtils;
@@ -503,6 +504,15 @@ public interface Invocable {
 		}
 		throw new IllegalArgumentException("Config is neither a Map nor a List: " + config);
 	}
+	
+	interface FactoryProvider {
+		
+		Invocable getFactory(
+				Class<?> type, 
+				Collection<?> keys,
+				Predicate<Parameter[]> parameterPredicate);
+		
+	}
 
 	/**
 	 * 
@@ -515,7 +525,7 @@ public interface Invocable {
 	default <T> T call(
 			Object config, 
 			BiFunction<Object,Class<?>, Optional<Object>> converter,			
-			BiFunction<Class<?>, Collection<?>, Invocable> factoryProvider) {
+			FactoryProvider factoryProvider) {
 		BiFunction<Object,Class<?>, Object> theConverter = new BiFunction<Object, Class<?>, Object>() {
 			
 			@Override
@@ -561,15 +571,16 @@ public interface Invocable {
 								
 				// Not an array, not of expected type - use factory
 				if (source instanceof Map) {				
-					Invocable factory = factoryProvider.apply(type, ((Map<?,?>) source).keySet());
+					Map<?,?> sourceMap = (Map<?,?>) source;
+					Invocable factory = factoryProvider.getFactory(type, sourceMap.keySet(), parameters -> sourceMap.size() <= parameters.length); // TODO Additional matching by type if possible 
 					return factory.call(source, converter, factoryProvider);
 				}
 				if (source instanceof List) {				
-					Invocable factory = factoryProvider.apply(type, null);
+					Invocable factory = factoryProvider.getFactory(type, null, parameters -> ((List<?>) source).size() == parameters.length); // TODO Additional matching by type if possible 
 					return factory.call(source, converter, factoryProvider);
 				}
 				
-				throw new IllegalArgumentException("Neither a map nor a list: " + source);				
+				throw new IllegalArgumentException("Cannot create " + type + " from " + source);				
 			}			
 			
 		};
@@ -627,6 +638,10 @@ public interface Invocable {
 		return call(config, null);
 	}
 	
+	private static Parameter[] adaptParameters(Constructor<?> constructor) {	
+		return Stream.of(constructor.getParameters()).map(p -> Parameter.of(p.getName(), p.getType())).toArray(size -> new Parameter[size]);
+	}
+	
 	/**
 	 * Factory provider which uses canonical or longest constructor
 	 * @param config
@@ -635,9 +650,9 @@ public interface Invocable {
 	default <T> T call(
 			Object config,
 			BiFunction<Object,Class<?>, Optional<Object>> converter) {
-		java.util.function.BiFunction<Class<?>, Collection<?>, Invocable> factoryProvider = (type, keys) -> {
+		FactoryProvider factoryProvider = (type, keys, parametersPredicate) -> {
 	        Constructor<?>[] constructors = type.getDeclaredConstructors();
-			if (type.isRecord()) {
+			if (type.isRecord() && parametersPredicate == null) {
 		        for (Constructor<?> constructor : constructors) {
 		            if (constructor.getParameterCount() == type.getRecordComponents().length) {
 		            	if (keys != null) {
@@ -651,9 +666,11 @@ public interface Invocable {
 		        }				
 			}
 			
-			Optional<Constructor<?>> longestConstructorOpt = Stream.of(constructors).reduce((a, b) -> a.getParameterCount() > b.getParameterCount() ? a : b);
-			if (longestConstructorOpt.isPresent()) {
-				Constructor<?> constructor = longestConstructorOpt.get();
+			Optional<Constructor<?>> longestMatchingConstructorOpt = Stream.of(constructors)
+					.filter(c -> parametersPredicate == null || parametersPredicate.test(adaptParameters(c)))
+					.reduce((a, b) -> a.getParameterCount() > b.getParameterCount() ? a : b);
+			if (longestMatchingConstructorOpt.isPresent()) {
+				Constructor<?> constructor = longestMatchingConstructorOpt.get();
 				if (keys != null) {
 	            	checkUnsupportedKeys(
 	            			keys, 
@@ -663,14 +680,14 @@ public interface Invocable {
 				return Invocable.of(constructor);
 			}
 			
-			throw new IllegalArgumentException("No constructors in " + type);
+			throw new IllegalArgumentException("No matching constructor in " + type);
 		};
-		Parameter[] parameters = getParameters();
-		if (parameters == null) {
-			throw new IllegalArgumentException("Parameters are unknown (null)");
-		}
 		
 		if (config instanceof Map) {
+			Parameter[] parameters = getParameters();
+			if (parameters == null) {
+				throw new IllegalArgumentException("Parameters are unknown (null)");
+			}
 			checkUnsupportedKeys(
 					((Map<?,?>) config).keySet(), 
 	       			Stream.of(parameters).map(Parameter::getName).toList(), 
