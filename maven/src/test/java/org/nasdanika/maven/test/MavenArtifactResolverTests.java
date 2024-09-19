@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 public class MavenArtifactResolverTests {
 		
 	private static final String[] COORDINATES = {
-			"org.apache.groovy:groovy-all:pom:4.0.22",
+			"org.apache.groovy:groovy-all:pom:4.0.23",
 			"org.springframework:spring-expression:6.1.12"
 	};
 	

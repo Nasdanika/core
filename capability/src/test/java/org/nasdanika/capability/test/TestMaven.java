@@ -65,7 +65,7 @@ public class TestMaven {
 	@Test
 	public void testDependenciesRequestRecord() {
 		String spec = """
-				dependencies: org.apache.groovy:groovy-all:pom:4.0.22
+				dependencies: org.apache.groovy:groovy-all:pom:4.0.23
 				remoteRepositories:
 				  id: central
 				  type: default

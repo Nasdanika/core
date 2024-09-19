@@ -146,7 +146,7 @@ public class TestURIInvocable {
 	@Test
 	public void testDependenciesRequestRecord() {
 		String spec = """
-				dependencies: org.apache.groovy:groovy-all:pom:4.0.22
+				dependencies: org.apache.groovy:groovy-all:pom:4.0.23
 				remoteRepositories:
 				  id: central
 				  type: default
@@ -182,7 +182,7 @@ public class TestURIInvocable {
 	@Test
 	public void testDependenciesRequestRecordLIst() {
 		String spec = """
-				- org.apache.groovy:groovy-all:pom:4.0.22
+				- org.apache.groovy:groovy-all:pom:4.0.23
 				- 
 				- id: central
 				  type: default
@@ -240,7 +240,7 @@ public class TestURIInvocable {
 //				new ModuleLayer[] { getClass().getModule().getLayer() }, 
 //				getClass().getClassLoader(), // ClassLoader parentClassLoader,
 //				true, // boolean singleLayerClassLoader,				
-//				new String[] { "org.apache.groovy:groovy-all:pom:4.0.22" }, 
+//				new String[] { "org.apache.groovy:groovy-all:pom:4.0.23" }, 
 //				null, 
 //				null, 
 //				"target/test-repo",

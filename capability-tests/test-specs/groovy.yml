@@ -4,6 +4,6 @@ script:
     "Hello, world! " + myBinding
   bindings:
     myBinding: data:value/String,Some+value
-dependencies: org.apache.groovy:groovy-all:pom:4.0.22
+dependencies: org.apache.groovy:groovy-all:pom:4.0.23
 localRepository: target/groovy-test-repo
     
