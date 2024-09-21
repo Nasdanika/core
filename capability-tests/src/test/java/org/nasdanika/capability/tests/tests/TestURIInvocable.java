@@ -29,14 +29,11 @@ public class TestURIInvocable {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		URI requirement = URI.createURI("data:value/String,Hello+World");
-		Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(
+		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 				progressMonitor);
-		for (CapabilityProvider<Object> cp: cpi) {
-			Invocable invocable = (Invocable) cp.getPublisher().blockFirst();
-			Object result = invocable.invoke();
-			System.out.println(result);
-		}
+		Object result = invocable.invoke();
+		System.out.println(result);
 	}
 	
 	@Test
@@ -44,14 +41,11 @@ public class TestURIInvocable {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		URI requirement = URI.createURI("data:value/String;base64,SGVsbG8=");
-		Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(
+		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 				progressMonitor);
-		for (CapabilityProvider<Object> cp: cpi) {
-			Invocable invocable = (Invocable) cp.getPublisher().blockFirst();
-			Object result = invocable.invoke();
-			System.out.println(result);
-		}
+		Object result = invocable.invoke();
+		System.out.println(result);
 	}
 	
 	@Test
@@ -59,29 +53,47 @@ public class TestURIInvocable {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass;base64,SGVsbG8=");
-		Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(
+		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 				progressMonitor);
-		for (CapabilityProvider<Object> cp: cpi) {
-			Invocable invocable = (Invocable) cp.getPublisher().blockFirst();
-			Object result = invocable.invoke();
-			System.out.println(result);
-		}
+		Object result = invocable.invoke();
+		System.out.println(result);
 	}
 	
+	@Test
+	public void testConstructorInvocableWithArgument() {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass;base64,SGVsbG8=");
+		Invocable invocable = capabilityLoader.loadOne(
+				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
+				progressMonitor);
+		Object result = invocable.invoke(33);
+		System.out.println(result);
+	}
+		
 	@Test
 	public void testStaticMethodInvocable() {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass::factory;base64,SGVsbG8=");
-		Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(
+		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 				progressMonitor);
-		for (CapabilityProvider<Object> cp: cpi) {
-			Invocable invocable = (Invocable) cp.getPublisher().blockFirst();
-			Object result = invocable.invoke();
-			System.out.println(result);
-		}
+		Object result = invocable.invoke();
+		System.out.println(result);
+	}
+	
+	@Test
+	public void testStaticMethodInvocableWithArgument() {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass::factory;base64,SGVsbG8=");
+		Invocable invocable = capabilityLoader.loadOne(
+				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
+				progressMonitor);
+		Object result = invocable.invoke(55);
+		System.out.println(result);
 	}
 	
 	@Test

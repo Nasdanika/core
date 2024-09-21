@@ -717,7 +717,12 @@ public interface Invocable {
 					return false;
 				}
 				for (int i = 0; i < args.length; ++i) {
-					if (args[i] != null && !parameters[i].getType().isInstance(args[i])) {
+					Class<?> pType = parameters[i].getType();
+					if (pType.isPrimitive()) {
+						pType = ClassUtils.primitiveToWrapper(pType);								
+					}							
+					
+					if (args[i] != null && !pType.isInstance(args[i])) {
 						return false;
 					}
 				}
