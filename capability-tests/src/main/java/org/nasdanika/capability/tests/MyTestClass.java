@@ -24,6 +24,14 @@ public class MyTestClass {
 	public MyTestClass(
 			CapabilityFactory.Loader loader, 
 			ProgressMonitor progressMonitor, 
+			String fragment,
+			String bind) {
+		System.out.println("Here I am: " + loader + ", " + progressMonitor + ", " + fragment + ", " + bind);
+	}	
+	
+	public MyTestClass(
+			CapabilityFactory.Loader loader, 
+			ProgressMonitor progressMonitor, 
 			byte[] binding) {
 		System.out.println("Here I am: " + loader + ", " + progressMonitor + ", " + binding);
 	}

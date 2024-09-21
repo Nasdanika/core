@@ -1,7 +1,7 @@
 script:
   engineFactory: org.codehaus.groovy.jsr223.GroovyScriptEngineFactory
   source: |
-    "Hello, world! " + myBinding
+    "Hello, world! " + myBinding + " " + args[2]
   bindings:
     myBinding: data:value/String,Some+value
 dependencies: org.apache.groovy:groovy-all:pom:4.0.23

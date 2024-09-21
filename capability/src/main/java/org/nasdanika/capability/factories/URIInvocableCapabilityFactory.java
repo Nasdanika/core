@@ -9,6 +9,7 @@ import java.lang.reflect.Modifier;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import javax.script.ScriptEngine;
@@ -280,6 +282,10 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 		return null;
 	}
 	
+	private static String decode(final String str) {
+		return Util.isBlank(str) ? str : URLDecoder.decode(str, StandardCharsets.UTF_8);
+	}	
+	
 	protected DiagramRequirement createDiagramRequirement(
 			URIInvocableRequirement requirement, 
 			InvocableRequirement spec, 
@@ -301,11 +307,20 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			 }
 		}
 		
+		Map<String,Object> properties = spec.diagram().properties() == null ? new HashMap<>() :  new HashMap<>(spec.diagram().properties());
+		String fragment = requirement.uri().fragment();
+		if (fragment != null) {
+			Pattern.compile("&")
+			   .splitAsStream(fragment)
+			   .map(s -> Arrays.copyOf(s.split("=", 2), 2))
+			   .forEach(entry -> properties.put(decode(entry[0]), (Object) decode(entry[1])));
+		}
+		
 		DiagramRequirement diagramRequirement = new DiagramRequirement(
 				spec.diagram().location() == null ? null : requirement.uriHandler().normalize(URI.createURI(spec.diagram().location()).resolve(requirement.uri())),
 				spec.diagram().source(),
 				spec.diagram().base() == null ? requirement.uri() : requirement.uriHandler().normalize(URI.createURI(spec.diagram().base()).resolve(requirement.uri())),				
-				pName -> getProperty(spec.diagram().properties(), pName), 
+				pName -> getProperty(properties, pName), 
 				uri -> {
 					try {
 						return requirement.uriHandler().openStream(uri); 
@@ -394,7 +409,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			
 		};
 		
-		return wrap(result.bind(loader, progressMonitor));  				
+		return wrap(result.bind(loader, progressMonitor, decode(requirement.uri().fragment())));  				
 	}
 
 	protected CompletionStage<Iterable<CapabilityProvider<Invocable>>> handleType(
@@ -428,7 +443,10 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 				result = Invocable.of(invocables);	
 			}
 			
-			result = result.bind(loader, progressMonitor);
+			result = result.bind(
+					loader, 
+					progressMonitor, 
+					decode(requirement.uri().fragment()));
 			
 			for (Invocable toBind: bindings) {
 				Object value = toBind.invoke();
@@ -444,10 +462,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			URIInvocableRequirement requirement,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
-		String opaquePart = requirement.uri().opaquePart();
-		if (!Util.isBlank(opaquePart)) {
-			opaquePart = URLDecoder.decode(opaquePart, StandardCharsets.UTF_8);
-		}
+		String opaquePart = decode(requirement.uri().opaquePart());
 		int commaIdx = opaquePart.indexOf(",");
 		if (commaIdx == -1) {
 			return empty();

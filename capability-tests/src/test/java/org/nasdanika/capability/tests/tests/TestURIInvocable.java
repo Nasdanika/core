@@ -100,7 +100,7 @@ public class TestURIInvocable {
 	public void testJavaJsonSpec() throws IOException {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		URI specUri = URI.createFileURI(new File("test-specs/java.json").getCanonicalPath());
+		URI specUri = URI.createFileURI(new File("test-specs/java.json").getCanonicalPath()).appendFragment("Hello+World");
 		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, new URIInvocableRequirement(specUri)),
 				progressMonitor);
@@ -126,7 +126,7 @@ public class TestURIInvocable {
 	public void testGroovyYamlSpec() throws IOException {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor(true);
-		URI specUri = URI.createFileURI(new File("test-specs/groovy.yml").getCanonicalPath());
+		URI specUri = URI.createFileURI(new File("test-specs/groovy.yml").getCanonicalPath()).appendFragment("Hello+World");
 		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, new URIInvocableRequirement(specUri)),
 				progressMonitor);
