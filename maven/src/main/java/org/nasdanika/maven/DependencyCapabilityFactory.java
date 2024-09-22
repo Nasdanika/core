@@ -2,6 +2,7 @@ package org.nasdanika.maven;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +31,9 @@ import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.supplier.RepositorySystemSupplier;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
 import org.eclipse.aether.util.repository.AuthenticationBuilder;
+import org.eclipse.emf.common.util.URI;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.nasdanika.capability.AbstractCapabilityFactory;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.requirements.AuthenticationRecord;
@@ -37,16 +41,25 @@ import org.nasdanika.capability.requirements.DependencyRequestRecord;
 import org.nasdanika.capability.requirements.ProxyRecord;
 import org.nasdanika.capability.requirements.RemoteRepoRecord;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Util;
 import org.yaml.snakeyaml.Yaml;
 
 import reactor.core.publisher.Flux;
 
 public class DependencyCapabilityFactory extends AbstractCapabilityFactory<DependencyRequestRecord, Collection<File>> {
 
-	private static final String DEFAULT_CONFIG_NAME = "dependency-reolver-config.yml";
+	private static final String CONFIG_YAML_PROPERTY = DependencyCapabilityFactory.class.getName()+".config.yml";
+	private static final String CONFIG_JSON_PROPERTY = DependencyCapabilityFactory.class.getName()+".config.json";
+	private static final String CONFIG_URL_YAML_ENV_VAR = "NSD_DEPENDENCY_RESOLVER_CONFIG_YAML_URL";
+	private static final String CONFIG_URL_JSON_ENV_VAR = "NSD_DEPENDENCY_RESOLVER_CONFIG_JSON_URL";
+	private static final String CONFIG_YAML_ENV_VAR = "NSD_DEPENDENCY_RESOLVER_CONFIG_YAML";
+	private static final String CONFIG_JSON_ENV_VAR = "NSD_DEPENDENCY_RESOLVER_CONFIG_JSON";
+	private static final String DEFAULT_CONFIG_NAME_YAML = "dependency-reolver-config.yml";
+	private static final String DEFAULT_CONFIG_NAME_JSON = "dependency-reolver-config.json";
 
 	@Override
 	public boolean canHandle(Object requirement) {
@@ -70,36 +83,91 @@ public class DependencyCapabilityFactory extends AbstractCapabilityFactory<Depen
 		return CompletableFuture.completedStage(Collections.singleton(capabilityProvider));		
 	}
 
-	protected List<File> resolveDependencies(DependencyRequestRecord requirement) {
-		String config = System.getProperty(DependencyCapabilityFactory.class.getName()+".config");
-		if (config == null) {
-			config = System.getenv("NSD_DEPENDENCY_RESOLVER_CONFIG");
-		}
-		if (config == null) {
-			File configFile = new File(DEFAULT_CONFIG_NAME);
-			if (configFile.isFile()) {
-				config = configFile.getName();
-			}
-		} else {
-			File configFile = new File(config);
-			if (!configFile.isFile()) {
-				throw new NasdanikaException("Dependency resolver config file does not exist: " + configFile.getAbsolutePath());
-			}
+	/**
+	 * Loads config map from properties or environment variables
+	 * @return
+	 * @throws IOException 
+	 */
+	protected Map<?,?> loadConfigMap() throws IOException {
+		URI base = URI.createFileURI(new File(".").getCanonicalPath()).appendSegment("");
+		String config = System.getProperty(CONFIG_YAML_PROPERTY);
+		if (!Util.isBlank(config)) {
+			URI configURI = URI.createURI(config).resolve(base);
+			Yaml yaml = new Yaml();
+			try (InputStream in = DefaultConverter.INSTANCE.toInputStream(configURI)) {
+				return yaml.load(in);
+			}				
 		}
 		
+		config = System.getProperty(CONFIG_JSON_PROPERTY);
+		if (!Util.isBlank(config)) {
+			URI configURI = URI.createURI(config).resolve(base);
+			try (InputStream in = DefaultConverter.INSTANCE.toInputStream(configURI)) {
+				JSONObject jsonConfig = new JSONObject(new JSONTokener(in));
+				return jsonConfig.toMap();
+			}				
+		}
+		
+		config = System.getenv(CONFIG_URL_YAML_ENV_VAR);
+		if (!Util.isBlank(config)) {
+			URI configURI = URI.createURI(config);
+			Yaml yaml = new Yaml();
+			try (InputStream in = DefaultConverter.INSTANCE.toInputStream(configURI)) {
+				return yaml.load(in);
+			}				
+		}
+		
+		config = System.getenv(CONFIG_URL_JSON_ENV_VAR);
+		if (!Util.isBlank(config)) {
+			URI configURI = URI.createURI(config).resolve(base);
+			try (InputStream in = DefaultConverter.INSTANCE.toInputStream(configURI)) {
+				JSONObject jsonConfig = new JSONObject(new JSONTokener(in));
+				return jsonConfig.toMap();
+			}				
+		}
+		
+		config = System.getenv(CONFIG_YAML_ENV_VAR);
+		if (!Util.isBlank(config)) {
+			Yaml yaml = new Yaml();
+			return yaml.load(config);
+		}
+		
+		config = System.getenv(CONFIG_JSON_ENV_VAR);
+		if (!Util.isBlank(config)) {
+			JSONObject jsonConfig = new JSONObject(config);
+			return jsonConfig.toMap();
+		}
+		
+		File configFile = new File(DEFAULT_CONFIG_NAME_YAML);
+		if (configFile.isFile()) {
+			Yaml yaml = new Yaml();
+			try (InputStream in = new FileInputStream(configFile)) {
+				return yaml.load(in);
+			}							
+		}
+		
+		configFile = new File(DEFAULT_CONFIG_NAME_JSON);
+		if (configFile.isFile()) {
+			try (InputStream in = new FileInputStream(configFile)) {
+				JSONObject jsonConfig = new JSONObject(new JSONTokener(in));
+				return jsonConfig.toMap();
+			}				
+		}
+
+		return null;
+	}
+	
+	protected List<File> resolveDependencies(DependencyRequestRecord requirement) {		
 		try {
+			Map<?,?> configMap = loadConfigMap();
 			DependencyRequestRecord configRecord = null;
-			if (config != null) {
-				Yaml yaml = new Yaml();
-				try (InputStream in = new FileInputStream(config)) {
-					Map<?,?> configMap = yaml.load(in);
-					Context systemPropertiesContext = Context.wrap(System.getProperties()::get);
-					Context envContext = Context.wrap(System.getenv()::get);
-					Context combinedContext = systemPropertiesContext.mount(envContext, "env.");
-					Map<?, Object> interpolatedConfigMap = combinedContext.interpolate(configMap);
-					Invocable ci = Invocable.of(DependencyRequestRecord.class);
-					configRecord = (DependencyRequestRecord) ci.call(interpolatedConfigMap);
-				}				
+			if (configMap != null) {
+				Context systemPropertiesContext = Context.wrap(System.getProperties()::get);
+				Context envContext = Context.wrap(System.getenv()::get);
+				Context combinedContext = systemPropertiesContext.mount(envContext, "env.");
+				Map<?, Object> interpolatedConfigMap = combinedContext.interpolate(configMap);
+				Invocable ci = Invocable.of(DependencyRequestRecord.class);
+				configRecord = ci.call(interpolatedConfigMap);
 			}
 			
 			List<Dependency> dependencies = requirement.dependencies() == null ? Collections.emptyList() : Stream.of(requirement.dependencies())

@@ -152,7 +152,7 @@ public interface Invocable {
 		};
 	}
 	
-	static Invocable of(Object target, Method method) {
+	static Invocable of(Object target, Method method, String... parameterNames) {
 		return new Invocable() {
 			
 			@SuppressWarnings("unchecked")
@@ -177,7 +177,13 @@ public interface Invocable {
 			
 			@Override
 			public Parameter[] getParameters() {
-				return Stream.of(method.getParameters()).map(p -> Parameter.of(p.getName(), p.getType())).toArray(size -> new Parameter[size]);
+				java.lang.reflect.Parameter[] parameters = method.getParameters();
+				Parameter[] ret = new Parameter[parameters.length];
+				for (int i = 0; i < parameters.length; ++i) {
+					String pName = parameterNames == null || parameterNames.length <= i ? parameters[i].getName() : parameterNames[i];					
+					ret[i] = Parameter.of(pName, parameters[i].getType());
+				}
+				return ret;
 			}
 			
 			@Override
@@ -188,7 +194,7 @@ public interface Invocable {
 		};
 	}
 		
-	static Invocable of(Constructor<?> constructor) {
+	static Invocable of(Constructor<?> constructor, String... parameterNames) {
 		return new Invocable() {
 			
 			@SuppressWarnings("unchecked")
@@ -213,8 +219,14 @@ public interface Invocable {
 			}
 			
 			@Override
-			public Parameter[] getParameters() {
-				return Stream.of(constructor.getParameters()).map(p -> Parameter.of(p.getName(), p.getType())).toArray(size -> new Parameter[size]);
+			public Parameter[] getParameters() {				
+				java.lang.reflect.Parameter[] parameters = constructor.getParameters();
+				Parameter[] ret = new Parameter[parameters.length];
+				for (int i = 0; i < parameters.length; ++i) {
+					String pName = parameterNames == null || parameterNames.length <= i ? parameters[i].getName() : parameterNames[i];					
+					ret[i] = Parameter.of(pName, parameters[i].getType());
+				}
+				return ret;
 			}
 			
 			@Override
