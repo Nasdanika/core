@@ -170,9 +170,19 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 				ServiceCapabilityFactory.createRequirement(ClassLoader.class, null, classLoaderRequirement),
 				progressMonitor);
 		}
-				
+								
 		// Diagram
 		if (invocableRequirement.diagram() != null) {
+			if (invocableRequirement.type() != null) {
+				return wrapError(new IllegalArgumentException("Diagram and type are mutually exclusive"));
+			}
+			if (invocableRequirement.bind() != null) {
+				return wrapError(new IllegalArgumentException("Diagram and bind are mutually exclusive"));
+			}
+			if (invocableRequirement.script() != null) {
+				return wrapError(new IllegalArgumentException("Diagram and script are mutually exclusive"));
+			}
+			
 			CompletionStage<DiagramRequirement> diagramRequirementCS = classLoaderCS.thenApply(classLoader -> createDiagramRequirement(requirement, invocableRequirement, classLoader, loader, progressMonitor));
 			CompletionStage<Object> diagramCS = diagramRequirementCS.thenCompose(diagramRequirement -> loader.loadOne(diagramRequirement, progressMonitor));
 			return wrapCompletionStage(diagramCS.thenApply(Invocable::ofValue));
@@ -180,6 +190,9 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 		
 		// Type
 		if (invocableRequirement.type() != null) {
+			if (invocableRequirement.script() != null) {
+				return wrapError(new IllegalArgumentException("Type and script are mutually exclusive"));
+			}
 			if (invocableRequirement.bind() == null) {
 				return classLoaderCS.thenCompose(classLoader -> handleType(
 						requirement,
@@ -219,6 +232,9 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 		
 		// Script
 		if (invocableRequirement.script() != null) {
+			if (invocableRequirement.bind() != null) {
+				return wrapError(new IllegalArgumentException("Script and bind are mutually exclusive"));
+			}
 			if (invocableRequirement.script().bindings() == null) {
 				return classLoaderCS.thenCompose(classLoader -> handleScript(
 						requirement,
@@ -465,7 +481,8 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 		String opaquePart = decode(requirement.uri().opaquePart());
 		int commaIdx = opaquePart.indexOf(",");
 		if (commaIdx == -1) {
-			return empty();
+			commaIdx = opaquePart.length();
+			opaquePart += ",";
 		}
 		String dataPart = opaquePart.substring(commaIdx + 1);
 		byte[] data = Util.isBlank(dataPart) ? null : dataPart.getBytes();
@@ -515,7 +532,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 					result = Invocable.of(invocables);	
 				}
 				
-				return wrap(result.bind(loader, progressMonitor, data));
+				return wrap(result.bind(loader, progressMonitor, data, decode(requirement.uri().fragment())));
 			} catch (ClassNotFoundException e) {
 				return wrapError(e);
 			}

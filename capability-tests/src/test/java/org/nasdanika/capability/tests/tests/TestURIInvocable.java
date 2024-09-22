@@ -2,17 +2,13 @@ package org.nasdanika.capability.tests.tests;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.nasdanika.capability.CapabilityLoader;
-import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.requirements.DependencyRequestRecord;
 import org.nasdanika.capability.requirements.ScriptRecord;
@@ -52,7 +48,7 @@ public class TestURIInvocable {
 	public void testConstructorInvocable() {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass;base64,SGVsbG8=");
+		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass;base64,SGVsbG8=#World");
 		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 				progressMonitor);
@@ -64,7 +60,19 @@ public class TestURIInvocable {
 	public void testConstructorInvocableWithArgument() {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass;base64,SGVsbG8=");
+		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass;base64,SGVsbG8=#Solar+System");
+		Invocable invocable = capabilityLoader.loadOne(
+				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
+				progressMonitor);
+		Object result = invocable.invoke(33);
+		System.out.println(result);
+	}
+	
+	@Test
+	public void testConstructorInvocableWithArgumentNoOpaquePart() {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass#Solar+System");
 		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 				progressMonitor);
@@ -76,7 +84,7 @@ public class TestURIInvocable {
 	public void testStaticMethodInvocable() {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass::factory;base64,SGVsbG8=");
+		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass::factory;base64,SGVsbG8=#Milky+Way");
 		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 				progressMonitor);
@@ -88,7 +96,7 @@ public class TestURIInvocable {
 	public void testStaticMethodInvocableWithArgument() {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass::factory;base64,SGVsbG8=");
+		URI requirement = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass::factory;base64,SGVsbG8=#Universe");
 		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 				progressMonitor);
@@ -127,6 +135,19 @@ public class TestURIInvocable {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor(true);
 		URI specUri = URI.createFileURI(new File("test-specs/groovy.yml").getCanonicalPath()).appendFragment("Hello+World");
+		Invocable invocable = capabilityLoader.loadOne(
+				ServiceCapabilityFactory.createRequirement(Invocable.class, null, new URIInvocableRequirement(specUri)),
+				progressMonitor);
+		Object result = invocable.invoke();
+		System.out.println(result);
+	}
+	
+	@Test
+	@Disabled 
+	public void testGroovyManagedDependenciesYamlSpec() throws IOException {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor(true);
+		URI specUri = URI.createFileURI(new File("test-specs/groovy-managed-dependencies.yml").getCanonicalPath()).appendFragment("Hello+World");
 		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, new URIInvocableRequirement(specUri)),
 				progressMonitor);

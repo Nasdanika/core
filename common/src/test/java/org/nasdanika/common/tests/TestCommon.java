@@ -481,4 +481,13 @@ public class TestCommon {
 		System.out.println(ClassUtils.primitiveToWrapper(char.class).getConstructor(String.class).newInstance("0"));
 	}
 	
+	@Test 
+	public void testURI() {
+		URI uri = URI.createURI("data:java/org.nasdanika.capability.tests.MyTestClass;base64,SGVsbG8=?mama=rame#theFragment");
+		System.out.println(uri.opaquePart());
+		System.out.println(uri.query());
+		System.out.println(uri.fragment());
+	}
+
+	
 }

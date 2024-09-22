@@ -32,32 +32,35 @@ public class MyTestClass {
 	public MyTestClass(
 			CapabilityFactory.Loader loader, 
 			ProgressMonitor progressMonitor, 
-			byte[] binding) {
-		System.out.println("Here I am: " + loader + ", " + progressMonitor + ", " + binding);
-	}
-	
+			byte[] binding,
+			String fragment) {
+		System.out.println("Here I am: " + loader + ", " + progressMonitor + ", " + binding + ", " + fragment);
+	}	
 	
 	public MyTestClass(
 			CapabilityFactory.Loader loader, 
 			ProgressMonitor progressMonitor, 
 			byte[] binding, 
+			String fragment,
 			int arg) {
-		System.out.println("Here I am: " + loader + ", " + progressMonitor + ", " + binding + ", " + arg);
+		System.out.println("Here I am: " + loader + ", " + progressMonitor + ", " + binding + ", " + fragment + ", " + arg);
 	}	
 	
 	public static MyTestClass factory(
 			CapabilityFactory.Loader loader, 
 			ProgressMonitor progressMonitor, 
-			byte[] binding) {
-		return new MyTestClass(loader, progressMonitor, binding);
+			byte[] binding,
+			String fragment) {
+		return new MyTestClass(loader, progressMonitor, binding, fragment);
 	}
 	
 	public static MyTestClass factory(
 			CapabilityFactory.Loader loader, 
 			ProgressMonitor progressMonitor, 
 			byte[] binding,
+			String fragment,
 			int arg) {
-		return new MyTestClass(loader, progressMonitor, binding, arg);
+		return new MyTestClass(loader, progressMonitor, binding, fragment, arg);
 	}
 
 }

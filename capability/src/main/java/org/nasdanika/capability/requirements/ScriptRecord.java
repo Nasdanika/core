@@ -15,7 +15,7 @@ public record ScriptRecord(
 		String source,		
 		
 		/**
-		 * Script language (mime type) for source. For location is language is not specified it is derived from extension. 
+		 * Script language (mime type) for source. For location if language is not specified it is derived from extension. 
 		 */
 		String language,
 		
