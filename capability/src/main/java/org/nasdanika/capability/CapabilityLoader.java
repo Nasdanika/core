@@ -12,6 +12,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -55,7 +56,10 @@ public class CapabilityLoader {
 	private Map<Object, CompletionStage<Iterable<CapabilityProvider<Object>>>> registry = new ConcurrentHashMap<>();
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected <T> CompletionStage<Iterable<CapabilityProvider<T>>> load(Object requirement, Consumer<Runnable> jobCollector, ProgressMonitor progressMonitor) {
+	protected <T> CompletionStage<Iterable<CapabilityProvider<T>>> load(
+			Object requirement, 
+			Consumer<Runnable> jobCollector, 
+			ProgressMonitor progressMonitor) {
 		CompletionStage<Iterable<CapabilityProvider<Object>>> result = registry.get(requirement);
 		if (result != null) {
 			return (CompletionStage) result;
@@ -73,6 +77,11 @@ public class CapabilityLoader {
 					throw new IllegalArgumentException("Requirement loading loop for " + requirement);
 				}
 				return (CompletionStage) CapabilityLoader.this.load(rq,jobCollector,pm);
+			}
+			
+			@Override
+			public CapabilityLoader getCapabilityLoader() {
+				return CapabilityLoader.this;
 			}
 			
 		};
@@ -102,17 +111,26 @@ public class CapabilityLoader {
 	 */
 	public <T> Iterable<CapabilityProvider<T>> load(Object requirement, ProgressMonitor progressMonitor) {		
 		Queue<Runnable> constructionQueue = new ConcurrentLinkedQueue<>(); // 
-		CompletionStage<Iterable<CapabilityProvider<T>>> result = load(requirement, constructionQueue::add, progressMonitor); 
+		AtomicBoolean done = new AtomicBoolean();
+		CompletionStage<Iterable<CapabilityProvider<T>>> result = load(
+				requirement, 
+				job -> {
+					if (done.get()) {
+						throw new IllegalStateException("Loading is done");
+					}
+					
+					constructionQueue.add(job);
+				}, 
+				progressMonitor); 
 		Runnable job;
 		while ((job = constructionQueue.poll()) != null) {
 			job.run();
 		}
-		
+		done.set(true);		
 		return result.toCompletableFuture().join();		
 	}
 		
 	public <T> List<T> loadAll(Object requirement, ProgressMonitor progressMonitor) {
-	
 		List<T> ret = Collections.synchronizedList(new ArrayList<>());
 		Iterable<CapabilityProvider<T>> capabilityProviders = load(requirement, progressMonitor);
 		for (CapabilityProvider<T> cp: capabilityProviders) {
@@ -218,6 +236,11 @@ public class CapabilityLoader {
 					public <Т> CompletionStage<Iterable<CapabilityProvider<Т>>> load(Object rq, ProgressMonitor pm) {
 						dependencies.add(rq);
 						return loader.load(rq, pm); 
+					}
+					
+					@Override
+					public CapabilityLoader getCapabilityLoader() {
+						return CapabilityLoader.this;
 					}
 					
 				};

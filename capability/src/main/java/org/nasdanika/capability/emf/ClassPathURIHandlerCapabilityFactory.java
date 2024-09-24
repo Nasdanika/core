@@ -15,10 +15,13 @@ import org.nasdanika.common.Util;
 /**
  * Contributes {@link URIHandler} loading from classpath schema
  */
-public class ClassPathURIHandlerResourceSetCapabilityFactory extends URIConverterContributorCapabilityFactory {
+public class ClassPathURIHandlerCapabilityFactory extends URIConverterContributorCapabilityFactory {
 
 	@Override
-	protected void contribute(URIConverter uriConverter, ProgressMonitor progressMonitor) {	
+	protected void contribute(
+			URIConverter uriConverter, 
+			Loader loader,
+			ProgressMonitor progressMonitor) {	
 		uriConverter.getURIHandlers().add(0, new URIHandlerImpl() {
 
 			@Override

@@ -24,7 +24,7 @@ public abstract class URIConverterContributorCapabilityFactory extends ResourceS
 
 			@Override
 			public void contribute(URIConverter uriConverter, ProgressMonitor progressMonitor) {
-				URIConverterContributorCapabilityFactory.this.contribute(uriConverter, progressMonitor);				
+				URIConverterContributorCapabilityFactory.this.contribute(uriConverter, loader, progressMonitor);				
 			}
 			
 		};
@@ -36,6 +36,9 @@ public abstract class URIConverterContributorCapabilityFactory extends ResourceS
 		return empty();
 	}
 	
-	protected abstract void contribute(URIConverter uriConverter, ProgressMonitor progressMonitor);
+	protected abstract void contribute(
+			URIConverter uriConverter, 
+			Loader loader,
+			ProgressMonitor progressMonitor);
 
 }

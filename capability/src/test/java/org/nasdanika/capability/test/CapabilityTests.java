@@ -63,10 +63,8 @@ public class CapabilityTests {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class);		
-		for (CapabilityProvider<?> cp: capabilityLoader.load(requirement, progressMonitor)) {
-			System.out.println(cp);
-			cp.getPublisher().subscribe(System.out::println);
-		}
+		ResourceSet resourceSet = capabilityLoader.loadOne(requirement, progressMonitor);
+		System.out.println(resourceSet);
 	}
 	
 	@Test

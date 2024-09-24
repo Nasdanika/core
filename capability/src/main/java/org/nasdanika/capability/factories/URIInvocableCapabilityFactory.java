@@ -38,6 +38,7 @@ import org.nasdanika.capability.requirements.DiagramRequirement;
 import org.nasdanika.capability.requirements.InvocableRequirement;
 import org.nasdanika.capability.requirements.ScriptRecord;
 import org.nasdanika.capability.requirements.URIInvocableRequirement;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.NasdanikaException;
@@ -155,8 +156,13 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			Map<?,?> spec,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
+
+		// Interpolation
+		Context systemPropertiesContext = Context.wrap(System.getProperties()::get);
+		Context envContext = Context.wrap(System.getenv()::get);
+		Context combinedContext = systemPropertiesContext.mount(envContext, "env.");
 		
-		Map<Object,Object> fullSpec = new HashMap<>(spec);
+		Map<Object,Object> fullSpec = new HashMap<>(combinedContext.interpolate(spec));
 		fullSpec.put("parentClassLoader", requirement.classLoader());
 		fullSpec.put("parentModuleLayers", requirement.parentModuleLayers());
 		Invocable ci = Invocable.of(InvocableRequirement.class);

@@ -47,6 +47,11 @@ public interface CapabilityFactory<R,C> {
 			});
 		}	
 		
+		/**
+		 * @return CapabilityLoader for requesting additional capabilities outside the loading cycle.
+		 */
+		CapabilityLoader getCapabilityLoader();
+		
 	}		
 	
 	boolean canHandle(Object requirement);
