@@ -15,7 +15,7 @@ public class MavenURIHandlerCapabilityFactory extends URIConverterContributorCap
 			URIConverter uriConverter, 
 			Loader loader,
 			ProgressMonitor progressMonitor) {	
-		uriConverter.getURIHandlers().add(0, new MavenbURIHandler(loader.getCapabilityLoader(), progressMonitor));
+		uriConverter.getURIHandlers().add(0, new MavenURIHandler(loader.getCapabilityLoader(), progressMonitor));
 		
 	}
 	

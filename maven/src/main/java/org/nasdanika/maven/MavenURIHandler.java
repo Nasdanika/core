@@ -27,7 +27,7 @@ import org.nasdanika.common.Util;
  * URI format: <code>maven://groupId/artifactId/extension/version/path[?classifier=&lt;classifier&gt;</code>
  * <groupId>:<artifactId>[:<extension>[:<classifier>]]:<version>}
  */
-public class MavenbURIHandler implements URIHandler {
+public class MavenURIHandler implements URIHandler {
 	
 	public static final String MAVEN_URI_SCHEME = "maven";
 	private CapabilityLoader loader;
@@ -38,7 +38,7 @@ public class MavenbURIHandler implements URIHandler {
 		return Util.isBlank(str) ? str : URLDecoder.decode(str, StandardCharsets.UTF_8);
 	}		
 		
-	public MavenbURIHandler(CapabilityLoader loader, ProgressMonitor progressMonitor) {
+	public MavenURIHandler(CapabilityLoader loader, ProgressMonitor progressMonitor) {
 		this.loader = loader;
 		this.progressMonitor = progressMonitor;
 	}
