@@ -56,6 +56,14 @@ public interface Invocable {
 	}
 	
 	/**
+	 * @return all known parameters for composite invocables, e.g. a group of constructors or methods
+	 */
+	default Parameter[][] getAllParameters() {
+		Parameter[] parameters = getParameters();
+		return parameters == null ? new Parameter[][] {} : new Parameter[][] { parameters };
+	}	
+	
+	/**
 	 * 
 	 * @return null for unknown return type
 	 */
@@ -720,6 +728,28 @@ public interface Invocable {
 		}		
 		
 		return new Invocable() {
+			
+			@Override
+			public Invocable bind(Object... bindings) {
+				// TODO - retain only matching, return single matching if one, throw an exception if none
+				
+				// TODO Auto-generated method stub
+				return Invocable.super.bind(bindings);
+			}
+			
+			@Override
+			public Invocable bindByName(String name, Object binding) {
+				// Iterate, return single if one, throw an exception if none
+				// TODO Auto-generated method stub
+				return Invocable.super.bindByName(name, binding);
+			}
+			
+			@Override
+			public Parameter[][] getAllParameters() {
+				// Collect from all
+				// TODO Auto-generated method stub
+				return Invocable.super.getAllParameters();
+			}
 			
 			private boolean matchArgs(Object[] args, Parameter[] parameters) {
 				if (parameters == null) {

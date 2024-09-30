@@ -138,7 +138,7 @@ public class TestURIInvocable {
 		Invocable invocable = capabilityLoader.loadOne(
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, new URIInvocableRequirement(specUri)),
 				progressMonitor);
-		Object result = invocable.invoke();
+		Object result = invocable.invoke(888);
 		System.out.println(result);
 	}
 	

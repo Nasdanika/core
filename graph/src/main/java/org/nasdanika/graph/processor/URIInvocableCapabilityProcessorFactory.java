@@ -6,7 +6,6 @@ import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.capability.CapabilityLoader;
-import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.common.Invocable;
@@ -39,14 +38,21 @@ public abstract class URIInvocableCapabilityProcessorFactory<P> extends Reflecti
 			ProgressMonitor progressMonitor) {
 		
 		URI uri = getURI(config, progressMonitor);
-		if (uri != null) {
-			Requirement<URI, Invocable> requirement = ServiceCapabilityFactory.createRequirement(Invocable.class, null, uri);
-			Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
-			for (CapabilityProvider<Object> cp: cpi) {
-				Invocable invocable = (Invocable) cp.getPublisher().blockFirst();				
-				return (P) invocable.invoke(config, infoProvider, endpointWiringStageConsumer, progressMonitor);
-			}
+		if (uri == null) {
+			return createDefaultProcessor(config, parallel, null, endpointWiringStageConsumer, progressMonitor);					
 		}
+			
+		Requirement<URI, Invocable> requirement = ServiceCapabilityFactory.createRequirement(Invocable.class, null, uri);
+		Invocable processorProvider = capabilityLoader.loadOne(requirement, progressMonitor);
+		return (P) processorProvider.invoke(config, infoProvider, endpointWiringStageConsumer, progressMonitor);
+	}
+	
+	protected P createDefaultProcessor(
+			ProcessorConfig config, 
+			boolean parallel,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
+			ProgressMonitor progressMonitor) {
 		
 		return null;
 	}
