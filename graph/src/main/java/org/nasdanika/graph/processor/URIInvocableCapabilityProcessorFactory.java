@@ -16,7 +16,7 @@ import org.nasdanika.graph.Element;
  * Creates processors by loading {@link Invocable}s by {@link URI} and calling them.
  * @param <P>
  */
-public abstract class URIInvocableCapabilityProcessorFactory<P> extends ReflectiveWiringProcessorFactory<P> {
+public abstract class URIInvocableCapabilityProcessorFactory<P> extends InvocableProcessorFactory<P> {
 	
 	protected CapabilityLoader capabilityLoader;
 
@@ -28,9 +28,8 @@ public abstract class URIInvocableCapabilityProcessorFactory<P> extends Reflecti
 		this.capabilityLoader = capabilityLoader;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	protected P doCreateProcessor(
+	protected Invocable getProcessorFactory(
 			ProcessorConfig config, 
 			boolean parallel,
 			BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
@@ -39,24 +38,13 @@ public abstract class URIInvocableCapabilityProcessorFactory<P> extends Reflecti
 		
 		URI uri = getURI(config, progressMonitor);
 		if (uri == null) {
-			return createDefaultProcessor(config, parallel, null, endpointWiringStageConsumer, progressMonitor);					
+			return null;					
 		}
 			
 		Requirement<URI, Invocable> requirement = ServiceCapabilityFactory.createRequirement(Invocable.class, null, uri);
-		Invocable processorProvider = capabilityLoader.loadOne(requirement, progressMonitor);
-		return (P) processorProvider.invoke(config, infoProvider, endpointWiringStageConsumer, progressMonitor);
+		return capabilityLoader.loadOne(requirement, progressMonitor);
 	}
 	
-	protected P createDefaultProcessor(
-			ProcessorConfig config, 
-			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
-			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
-			ProgressMonitor progressMonitor) {
-		
-		return null;
-	}
-
 	protected abstract URI getURI(ProcessorConfig config, ProgressMonitor progressMonitor);
 
 }
