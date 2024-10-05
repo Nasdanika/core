@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2024.10.0-SNAPSHOT</version>
+	    <version>2024.10.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>capability-tests</artifactId>
