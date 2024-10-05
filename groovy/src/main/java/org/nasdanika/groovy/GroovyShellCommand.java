@@ -16,7 +16,6 @@ import org.nasdanika.common.Invocable;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Parameters;
@@ -24,7 +23,7 @@ import picocli.CommandLine.ParentCommand;
 
 
 @Command(
-		description = "Start Groovy Shell",
+		description = "Groovy Shell",
 		versionProvider = ModuleVersionProvider.class,		
 		mixinStandardHelpOptions = true,
 		name = "gsh")
@@ -40,14 +39,13 @@ public class GroovyShellCommand extends CommandBase {
 	@Parameters(
 		arity = "*",
 		description = "Argument URIs")
-	private String[] args;
-		
+	private String[] args;		
 	
 	@Mixin
 	private PropertiesMixIn propertiesMixIn;
 	
 	@ParentCommand
-	CommandLine parentCommand;
+	private Object parentCommand;
 	
 	@Mixin
 	private ProgressMonitorMixIn progressMonitorMixIn;
@@ -99,12 +97,9 @@ public class GroovyShellCommand extends CommandBase {
 
 	@Override
 	public Integer call() throws Exception {
-		if (parentCommand != null) {
-			Object puo = parentCommand.getCommandSpec().userObject();
-			if (puo instanceof Invocable.Invoker) {
-				((Invocable.Invoker) puo).invoke(getInvocable());
-				return 0;
-			}
+		if (parentCommand instanceof Invocable.Invoker) {
+			((Invocable.Invoker) parentCommand).invoke(getInvocable());
+			return 0;
 		}
 		getInvocable().invoke();
 		return 0;

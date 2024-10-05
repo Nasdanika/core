@@ -30,13 +30,13 @@ public class SaveModelCommand extends CommandBase {
 	private File output;
 
 	@ParentCommand
-	EObjectSupplier<EObject> eObjectSupplier;
+	private EObjectSupplier<EObject> eObjectSupplier;
 	
 	@Mixin
-	ProgressMonitorMixIn progressMonitorMixIn;
+	private ProgressMonitorMixIn progressMonitorMixIn;
 	
 	@Mixin
-	ResourceSetMixIn resourceSetMixIn;
+	private ResourceSetMixIn resourceSetMixIn;
 
 	@Override
 	public Integer call() throws Exception {
