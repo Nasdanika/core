@@ -25,7 +25,6 @@ import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.supplier.RepositorySystemSupplier;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
-import org.eclipse.aether.util.repository.AuthenticationBuilder;
 import org.junit.jupiter.api.Test;
 
 public class MavenArtifactResolverTests {

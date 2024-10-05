@@ -3,7 +3,6 @@ package org.nasdanika.capability.factories;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.URLDecoder;
@@ -407,30 +406,20 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			}
 		}
 		
-		Invocable result = new Invocable() {
-			
-			@SuppressWarnings("unchecked")
-			@Override
-			public Object invoke(Object... args) {
-				bindings.forEach((name, valueInvocable) -> scriptEngine.put(name, valueInvocable.invoke()));
-				scriptEngine.put("args", args);
-				try {
-					if (scriptRecord.source() != null) {
-						return scriptEngine.eval(scriptRecord.source());
-					}
-					URIInvocableRequirement sourceRequirement = new URIInvocableRequirement(locationURI, requirement.uriHandler(), classLoader, null);
-					try {
-						return scriptEngine.eval(new InputStreamReader(openStream(sourceRequirement)));
-					} catch (IOException e) {
-						throw new NasdanikaException("Error loading script at '" + locationURI + "': " + e, e);
-					}
-				} catch (ScriptException e) {
-					throw new NasdanikaException("Error evaluating script at '" + locationURI + "': " + e, e);
-				}
+		String scriptSource;
+		if (scriptRecord.source() != null) {
+			scriptSource = scriptRecord.source();
+		} else {
+			URIInvocableRequirement sourceRequirement = new URIInvocableRequirement(locationURI, requirement.uriHandler(), classLoader, null);
+			try {
+				scriptSource = DefaultConverter.INSTANCE.toString(openStream(sourceRequirement));
+			} catch (IOException e) {
+				return wrapError(new NasdanikaException("Error loading script at '" + locationURI + "': " + e, e));
 			}
-			
-		};
+		}
 		
+		Invocable result = Invocable.of(scriptEngine, scriptSource);
+		bindings.forEach((name, valueInvocable) -> result.bindByName(name, valueInvocable.invoke()));		
 		return wrap(result.bind(loader, progressMonitor, decode(requirement.uri().fragment())));  				
 	}
 

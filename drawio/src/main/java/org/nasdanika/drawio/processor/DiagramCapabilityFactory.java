@@ -37,7 +37,7 @@ public class DiagramCapabilityFactory extends AbstractCapabilityFactory<DiagramR
 				document = Document.load(requirement.source(), requirement.base(), requirement.uriHandler(), requirement.propertySource());
 			}
 			if (requirement.processor() == null) {
-				// Just document value invocable
+				// Just document
 				return wrap(document);
 			}
 			

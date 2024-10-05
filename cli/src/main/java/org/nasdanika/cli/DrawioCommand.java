@@ -3,12 +3,13 @@ package org.nasdanika.cli;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.function.Function;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.emf.common.util.URI;
-import org.nasdanika.common.Context;
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.Document;
@@ -43,7 +44,7 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 	private boolean isFile;
 	
 	@Mixin
-	ContextMixIn contextMixIn;
+	PropertiesMixIn propertiesMixIn;
 	
 	@Override
 	public Document getDocument(ProgressMonitor progressMonitor) {		
@@ -76,12 +77,17 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 
 
 	protected Function<String, String> getPropertySource(ProgressMonitor progressMonitor) {
-		try {
-			Context context = contextMixIn.createContext(progressMonitor);
-			return context::getString;
-		} catch (IOException e) {
-			throw new NasdanikaException(e);
-		}
+		Map<Object, Object> properties = propertiesMixIn.getProperties();
+		return key -> {
+			if (properties.containsKey(key)) {
+				Object value = properties.get(key);
+				if (value instanceof String) {
+					return (String) value;
+				}
+				return DefaultConverter.INSTANCE.convert(value, String.class);
+			}
+			return null;
+		};
 	}
 
 }

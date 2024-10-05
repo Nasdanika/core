@@ -6,7 +6,7 @@ module org.nasdanika.common {
 	requires transitive org.eclipse.emf.common;
 	requires transitive org.eclipse.emf.ecore;
 	requires transitive org.yaml.snakeyaml;
-	requires java.scripting;
+	requires transitive java.scripting;
 	requires flexmark;
 	requires flexmark.profile.pegdown;
 	requires flexmark.util.ast;

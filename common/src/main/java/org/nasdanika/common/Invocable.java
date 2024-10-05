@@ -16,6 +16,9 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
+
 import org.apache.commons.lang3.ClassUtils;
 
 /**
@@ -23,7 +26,20 @@ import org.apache.commons.lang3.ClassUtils;
  */
 public interface Invocable {
 	
-	public interface Parameter {
+	/**
+	 * Something that invokes an invocable and returns its result, possibly post-processing.
+	 * This interface can be implemented by parent commands to which sub-commands pass their invocable so parent/sub commands can collaborate
+	 * - the sub-command creates an invocable and configures it, the parent invokes it with arguments, the parent may bind arguments
+	 * or wrap the invocable into another invocable and pass to its parent. 
+	 * 
+	 */
+	interface Invoker {
+		
+		Object invoke(Invocable invocable);
+		
+	}
+	
+	interface Parameter {
 		
 		String getName();
 		
@@ -129,6 +145,11 @@ public interface Invocable {
 		Class<?> returnType = getReturnType();
 		
 		return new Invocable() {
+			
+			@Override
+			public Invocable bindByName(String name, Object binding) {
+				return Invocable.this.bindByName(name, binding);
+			}
 			
 			@Override
 			public Parameter[] getParameters() {
@@ -817,6 +838,31 @@ public interface Invocable {
 		}
 		
 		return counter >= 0;
+	}
+	
+	static Invocable of(ScriptEngine scriptEngine, String script) {
+		
+		return new Invocable() {
+			
+			@Override
+			public Invocable bindByName(String name, Object binding) {
+				scriptEngine.put(name, binding);
+				return this;
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> T invoke(Object... args) {
+				try {
+					scriptEngine.put("args", args);
+					return (T) scriptEngine.eval(script);
+				} catch (ScriptException e) {
+					throw new NasdanikaException(e);
+				}
+			}
+			
+		};
+				
 	}
 	
 }

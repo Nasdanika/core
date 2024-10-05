@@ -7,20 +7,21 @@
 	    <version>2024.10.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
-	<artifactId>capability</artifactId>
+	<artifactId>groovy</artifactId>
 	<packaging>jar</packaging>
-	<name>Capability</name>
-	<description>Capability provider/loader framework</description>
+	<name>Groovy</name>
+	<description>Groovy shell CLI command</description>
+	
 	<dependencies>		
 		<dependency>
-			<groupId>org.nasdanika.core</groupId>
-			<artifactId>common</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cli</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>io.projectreactor</groupId>
-		    <artifactId>reactor-core</artifactId>
-		    <version>3.6.10</version>
+		    <groupId>org.apache.groovy</groupId>
+		    <artifactId>groovy-groovysh</artifactId>
+		    <version>4.0.23</version>
 		</dependency>
 	</dependencies>
 </project>
