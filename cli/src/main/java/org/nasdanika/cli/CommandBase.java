@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
+import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.Closeable;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -19,6 +20,16 @@ import picocli.CommandLine.Spec;
  */
 @Command(mixinStandardHelpOptions = true)
 public abstract class CommandBase implements Callable<Integer>, Closeable {
+	
+	protected CapabilityLoader capabilityLoader;
+
+	public CommandBase() {
+		
+	}
+	
+	public CommandBase(CapabilityLoader capabilityLoader) {
+		this.capabilityLoader = capabilityLoader;
+	}
 	
 	@Spec
 	protected CommandSpec spec;

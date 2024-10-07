@@ -20,7 +20,7 @@ public class ModelCommandFactory extends SubCommandCapabilityFactory<ModelComman
 			List<CommandLine> parentPath,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
-		return CompletableFuture.completedStage(new ModelCommand());
+		return CompletableFuture.completedStage(new ModelCommand(loader.getCapabilityLoader()));
 	}
 
 }

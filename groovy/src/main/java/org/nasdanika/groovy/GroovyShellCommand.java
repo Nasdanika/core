@@ -30,8 +30,6 @@ import picocli.CommandLine.ParentCommand;
 @ParentCommands(Invocable.Invoker.class)
 public class GroovyShellCommand extends CommandBase {
 	
-	private CapabilityLoader capabilityLoader;
-
 	public GroovyShellCommand(CapabilityLoader capablityLoader) {
 		this.capabilityLoader = capablityLoader;
 	}

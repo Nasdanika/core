@@ -27,8 +27,6 @@ import picocli.CommandLine.ParentCommand;
 @ParentCommands(Invocable.Invoker.class)
 public class InvokeCommand extends CommandBase {
 	
-	private CapabilityLoader capabilityLoader;
-
 	public InvokeCommand(CapabilityLoader capablityLoader) {
 		this.capabilityLoader = capablityLoader;
 	}

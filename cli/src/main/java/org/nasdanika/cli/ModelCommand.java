@@ -7,6 +7,7 @@ import java.util.Collections;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.EObjectSupplier;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -23,6 +24,14 @@ import picocli.CommandLine.Parameters;
 @ParentCommands(RootCommand.class)
 public class ModelCommand extends CommandGroup implements EObjectSupplier<EObject> {
 	
+	protected ModelCommand() {
+		super();
+	}
+
+	protected ModelCommand(CapabilityLoader capabilityLoader) {
+		super(capabilityLoader);
+	}
+
 	@Parameters(
 		index =  "0",	
 		arity = "1",

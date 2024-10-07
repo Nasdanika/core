@@ -1,5 +1,7 @@
 package org.nasdanika.cli;
 
+import org.nasdanika.capability.CapabilityLoader;
+
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.ParentCommand;
 
@@ -11,6 +13,14 @@ import picocli.CommandLine.ParentCommand;
  *
  */
 public class CommandGroup extends CommandBase {
+	
+	protected CommandGroup() {
+		super();
+	}
+
+	protected CommandGroup(CapabilityLoader capabilityLoader) {
+		super(capabilityLoader);
+	}
 
 	@Override
 	public Integer call() throws Exception {

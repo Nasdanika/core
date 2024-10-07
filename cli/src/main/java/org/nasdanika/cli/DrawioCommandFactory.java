@@ -20,7 +20,7 @@ public class DrawioCommandFactory extends SubCommandCapabilityFactory<DrawioComm
 			List<CommandLine> parentPath,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
-		return CompletableFuture.completedStage(new DrawioCommand());
+		return CompletableFuture.completedStage(new DrawioCommand(loader.getCapabilityLoader()));
 	}
 
 }
