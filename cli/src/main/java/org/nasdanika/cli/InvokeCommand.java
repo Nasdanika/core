@@ -12,7 +12,6 @@ import org.nasdanika.common.Invocable;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Option;
@@ -52,7 +51,7 @@ public class InvokeCommand extends CommandBase {
 	private PropertiesMixIn propertiesMixIn;
 	
 	@ParentCommand
-	CommandLine parentCommand;
+	Invocable.Invoker parentCommand;
 	
 	@Mixin
 	private ProgressMonitorMixIn progressMonitorMixIn;
@@ -110,11 +109,8 @@ public class InvokeCommand extends CommandBase {
 	@Override
 	public Integer call() throws Exception {
 		if (parentCommand != null) {
-			Object puo = parentCommand.getCommandSpec().userObject();
-			if (puo instanceof Invocable.Invoker) {
-				((Invocable.Invoker) puo).invoke(getInvocable());
-				return 0;
-			}
+			((Invocable.Invoker) parentCommand).invoke(getInvocable());
+			return 0;
 		}
 		getInvocable().invoke();
 		return 0;

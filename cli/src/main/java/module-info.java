@@ -1,6 +1,7 @@
 import org.nasdanika.capability.CapabilityFactory;
 import org.nasdanika.cli.DrawioCommandFactory;
 import org.nasdanika.cli.HelpCommandFactory;
+import org.nasdanika.cli.InvokeCommandFactory;
 import org.nasdanika.cli.ModelCommandFactory;
 import org.nasdanika.cli.RootCommandFactory;
 import org.nasdanika.cli.SaveModelCommandFactory;
@@ -22,6 +23,7 @@ module org.nasdanika.cli {
 		HelpCommandFactory,
 		DrawioCommandFactory,
 		ModelCommandFactory,
-		SaveModelCommandFactory;
+		SaveModelCommandFactory,
+		InvokeCommandFactory;
 	
 }
