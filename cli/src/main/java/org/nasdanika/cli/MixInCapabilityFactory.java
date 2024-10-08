@@ -2,6 +2,7 @@ package org.nasdanika.cli;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -9,6 +10,7 @@ import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Util;
 
 import picocli.CommandLine;
 
@@ -51,22 +53,33 @@ public abstract class MixInCapabilityFactory<T> extends ServiceCapabilityFactory
 		CommandLine parent = commandPath.get(commandPath.size() - 1);
 		Object userObject = parent.getCommandSpec().userObject();
 		if (userObject != null) {
-			MixIns mixInsAnnotation = userObject.getClass().getAnnotation(MixIns.class);
 			Class<T> mixInType = getMixInType();
-			if (mixInsAnnotation != null && mixInType != null) {
-				for (Class<?> at: mixInsAnnotation.value()) {
-					if (at.isAssignableFrom(mixInType)) {
-						return true;
+			if (mixInType != null) {
+				List<MixIns> mixInsAnnotations = Util.lineage(userObject.getClass())
+						.stream()
+						.map(c -> c.getAnnotation(MixIns.class))
+						.filter(Objects::nonNull)
+						.toList();
+				for (MixIns mixInsAnnotation: mixInsAnnotations) {
+					List<Class<?>> lineage = Util.lineage(mixInType);
+					for (Class<?> at: mixInsAnnotation.value()) {
+						for (Class<?> le: lineage) {
+							if (at.isAssignableFrom(le)) {
+								return true;
+							}
+						}
 					}
 				}
 			}
 			
 			if (mixInType != null) {
-				ParentCommands parentCommands = mixInType.getAnnotation(ParentCommands.class);
-				if (parentCommands != null) {
-					for (Class<?> pt: parentCommands.value()) {
-						if (Adaptable.adaptTo(userObject, pt) != null) {
-							return true;
+				for (Class<?> le: Util.lineage(mixInType)) {
+					ParentCommands parentCommands = le.getAnnotation(ParentCommands.class);
+					if (parentCommands != null) {
+						for (Class<?> pt: parentCommands.value()) {
+							if (Adaptable.adaptTo(userObject, pt) != null) {
+								return true;
+							}
 						}
 					}
 				}

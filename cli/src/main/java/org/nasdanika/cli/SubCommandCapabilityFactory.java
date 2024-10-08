@@ -3,6 +3,7 @@ package org.nasdanika.cli;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -217,22 +218,31 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 		CommandLine parent = parentPath.get(parentPath.size() - 1);
 		Object userObject = parent.getCommandSpec().userObject();
 		if (userObject != null) {
-			SubCommands subCommandsAnnotation = userObject.getClass().getAnnotation(SubCommands.class);
 			Class<T> commandType = getCommandType();
-			if (subCommandsAnnotation != null && commandType != null) {
-				for (Class<?> at: subCommandsAnnotation.value()) {					
-					if (at.isAssignableFrom(commandType)) {
-						return true;
+			if (commandType != null) {
+				List<SubCommands> subCommandsAnnotations = Util.lineage(userObject.getClass())
+						.stream()
+						.map(c -> c.getAnnotation(SubCommands.class))
+						.filter(Objects::nonNull)
+						.toList();
+				
+				for (SubCommands subCommandsAnnotation: subCommandsAnnotations) {
+					for (Class<?> at: subCommandsAnnotation.value()) {					
+						if (at.isAssignableFrom(commandType)) {
+							return true;
+						}
 					}
 				}
 			}
 			
 			if (commandType != null) {
-				ParentCommands parentCommands = commandType.getAnnotation(ParentCommands.class);
-				if (parentCommands != null) {
-					for (Class<?> pt: parentCommands.value()) {
-						if (Adaptable.adaptTo(userObject, pt)  != null) {
-							return true;
+				for (Class<?> le: Util.lineage(commandType)) {
+					ParentCommands parentCommands = le.getAnnotation(ParentCommands.class);
+					if (parentCommands != null) {
+						for (Class<?> pt: parentCommands.value()) {
+							if (Adaptable.adaptTo(userObject, pt)  != null) {
+								return true;
+							}
 						}
 					}
 				}
