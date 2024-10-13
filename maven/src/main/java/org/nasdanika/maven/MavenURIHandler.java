@@ -25,7 +25,7 @@ import org.nasdanika.common.Util;
  * Creates a classloader from Maven dependency and loads resource from the classloader.
  * Uses default configuration as explained at https://docs.nasdanika.org/core/maven/index.html#default-configuration
  * URI format: <code>maven://groupId/artifactId/extension/version/path[?classifier=&lt;classifier&gt;</code>
- * <groupId>:<artifactId>[:<extension>[:<classifier>]]:<version>}
+ * 
  */
 public class MavenURIHandler implements URIHandler {
 	
