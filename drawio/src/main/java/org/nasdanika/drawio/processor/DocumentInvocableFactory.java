@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.function.Function;
 
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.Invocable;
@@ -27,22 +28,38 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 		super(document, processorProperty);
 	}
 		
+	/**
+	 * 
+	 * @param <H>
+	 * @param <E>
+	 * @param <T>
+	 * @param bindProperty
+	 * @param endpointFactory
+	 * @param connectionBase
+	 * @param processorFilter Optional processor filter - can wrap a processor or provide a default processor
+	 * @param progressMonitor
+	 * @param classLoader
+	 * @param interfaces
+	 * @return
+	 */
 	public <H,E,T> T createProxy(
 			String bindProperty,
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
+			Function<ProcessorInfo<Invocable>,Invocable> processorFilter,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
 			Class<?>... interfaces) {
 		
 		Map<Element, ProcessorInfo<Invocable>> processors = createProcessors(endpointFactory, connectionBase, progressMonitor);		
-		return Invocable.createProxy(classLoader, (proxy, nameOrSignature) -> resolve(proxy, nameOrSignature, processors, bindProperty), interfaces);		
+		return Invocable.createProxy(classLoader, (proxy, nameOrSignature) -> resolve(proxy, nameOrSignature, processors, processorFilter, bindProperty), interfaces);		
 	}	
 	
 	protected Invocable resolve(
 			Object proxy,
 			String nameOrSignature, 
 			Map<Element, ProcessorInfo<Invocable>> processors,
+			Function<ProcessorInfo<Invocable>,Invocable> processorFilter,
 			String bindProperty) {
 		
 		List<Invocable> matches = new ArrayList<>();
@@ -51,7 +68,8 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 				@SuppressWarnings("unchecked")
 				String bindValue = ((PropertySource<String,String>) pe.getKey()).getProperty(bindProperty);
 				if (Objects.equals(nameOrSignature, bindValue)) {
-					Invocable processor = pe.getValue().getProcessor();
+					ProcessorInfo<Invocable> processorInfo = pe.getValue();
+					Invocable processor = processorFilter == null ?  processorInfo.getProcessor() : processorFilter.apply(processorInfo);
 					if (processor != null) {
 						matches.add(processor.bind(proxy));
 					}
@@ -65,6 +83,7 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 			String bindProperty,
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
+			Function<ProcessorInfo<Invocable>,Invocable> processorFilter,
 			ProgressMonitor progressMonitor,
 			Class<?>... interfaces) {
 		
@@ -72,6 +91,7 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 				bindProperty, 
 				endpointFactory,
 				connectionBase,
+				processorFilter,
 				progressMonitor,
 				Thread.currentThread().getContextClassLoader(),
 				interfaces);
@@ -88,6 +108,7 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 	public <T> T createProxy(
 			String bindProperty,
 			ConnectionBase connectionBase,
+			Function<ProcessorInfo<Invocable>,Invocable> processorFilter,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
 			Class<?>... interfaces) {
@@ -96,6 +117,7 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 				bindProperty,
 				EndpointFactory.nopEndpointFactory(),
 				connectionBase,
+				processorFilter,
 				progressMonitor,
 				classLoader,
 				interfaces);
@@ -112,12 +134,14 @@ public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable
 	public <T> T createProxy(
 			String bindProperty,
 			ConnectionBase connectionBase,
+			Function<ProcessorInfo<Invocable>,Invocable> processorFilter,
 			ProgressMonitor progressMonitor,
 			Class<?>... interfaces) {
 		
 		return createProxy(
 				bindProperty,
 				connectionBase,
+				processorFilter,
 				progressMonitor,
 				Thread.currentThread().getContextClassLoader(),
 				interfaces);

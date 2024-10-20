@@ -407,6 +407,29 @@ public interface Invocable {
 		};
 		
 	}
+	
+	static <T> Invocable of(Runnable task) {
+		return new Invocable() {
+			
+			@Override
+			public Class<?> getReturnType() {				
+				return Void.class;
+			}
+			
+			@Override
+			public Parameter[] getParameters() {
+				return new Parameter[0];
+			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public Object invoke(Object... args) {
+				task.run();
+				return null;
+			}
+		};
+		
+	}
 		
 	static <T,R> Invocable of(
 			java.util.function.Function<T,R> function, 

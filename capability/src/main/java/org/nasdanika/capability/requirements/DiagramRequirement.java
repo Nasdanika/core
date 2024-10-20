@@ -29,6 +29,8 @@ public record DiagramRequirement(
 		
 		ClassLoader classLoader,
 		
+//		Function<ProcessorInfo<Invocable>,Invocable> processorFilter, Not supported yet		
+		
 		/**
 		 * Interfaces to be implemented by a proxy.
 		 * If not provided, no proxy is created and a map of elements to processor info (registry) is used as a result.
