@@ -30,6 +30,7 @@ import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.DelimitedStringMap;
 import org.nasdanika.common.DiagramGenerator;
+import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ListCompoundSupplier;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.PrintStreamProgressMonitor;
@@ -38,6 +39,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertyComputer;
 import org.nasdanika.common.ServiceComputer;
 import org.nasdanika.common.SimpleMutableContext;
+import org.nasdanika.common.SourceRecord;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.Util;
 import org.springframework.expression.Expression;
@@ -487,6 +489,13 @@ public class TestCommon {
 		System.out.println(uri.opaquePart());
 		System.out.println(uri.query());
 		System.out.println(uri.fragment());
+	}
+	
+	@Test
+	public void testInvocableBindMap() {
+		Map<String,Object> data = Map.of("uri", URI.createURI("test"), "source", "test source");
+		SourceRecord result = Invocable.of(SourceRecord.class).bindMap(data).invoke();
+		System.out.println(result);		
 	}
 
 	

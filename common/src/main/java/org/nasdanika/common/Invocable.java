@@ -147,11 +147,6 @@ public interface Invocable {
 		return new Invocable() {
 			
 			@Override
-			public Invocable bindByName(String name, Object binding) {
-				return Invocable.this.bindByName(name, binding);
-			}
-			
-			@Override
 			public Parameter[] getParameters() {
 				if (parameters == null) {
 					return parameters;
