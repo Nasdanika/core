@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -881,6 +883,41 @@ public interface Invocable {
 			
 		};
 				
+	}
+		
+	default Invocable async(Executor executor) {
+		return new Invocable() {
+			
+			@Override
+			public Class<?> getReturnType() {
+				return CompletableFuture.class;
+			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> T invoke(Object... args) {				
+				if (executor == null) {
+					// Invoking in the caller thread
+					return (T) CompletableFuture.supplyAsync(() -> Invocable.this.invoke(args));
+				}
+				return (T) CompletableFuture.supplyAsync(() -> Invocable.this.invoke(args), executor);
+			}
+			
+		};
+	}
+	
+	default AsyncInvocable asAsync() {
+		if (this instanceof AsyncInvocable) {
+			return (AsyncInvocable) this;
+		}
+		return new AsyncInvocable() {
+			
+			@Override
+			public <T> T invoke(Object... args) {
+				return Invocable.this.invoke(args);
+			}
+			
+		};
 	}
 	
 }
