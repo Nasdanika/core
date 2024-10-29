@@ -12,20 +12,19 @@ import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertySource;
 import org.nasdanika.drawio.ConnectionBase;
-import org.nasdanika.drawio.Document;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.EndpointFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
 
-public class DocumentInvocableFactory extends DocumentProcessorFactory<Invocable> {
+public class ElementInvocableFactory extends ElementProcessorFactory<Invocable> {
 
-	public DocumentInvocableFactory(Document document, CapabilityLoader capabilityLoader, String processorProperty) {
-		super(document, capabilityLoader, processorProperty);
+	public ElementInvocableFactory(org.nasdanika.drawio.Element element, CapabilityLoader capabilityLoader, String processorProperty) {
+		super(element, capabilityLoader, processorProperty);
 	}
 
-	public DocumentInvocableFactory(Document document, String processorProperty) {
-		super(document, processorProperty);
+	public ElementInvocableFactory(org.nasdanika.drawio.Element element, String processorProperty) {
+		super(element, processorProperty);
 	}
 		
 	/**

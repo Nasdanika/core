@@ -10,25 +10,27 @@ import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.ConnectionBase;
-import org.nasdanika.drawio.Document;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.EndpointFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.PropertySourceProcessorFactory;
 
+/**
+ * Creates processors for {@link org.nasdanika.drawio.Element}.
+ * @param <P>
+ */
+public class ElementProcessorFactory<P> extends PropertySourceProcessorFactory<P,String,String> {
 
-public class DocumentProcessorFactory<P> extends PropertySourceProcessorFactory<P,String,String> {
+	protected org.nasdanika.drawio.Element element;
 
-	protected Document document;
-
-	public DocumentProcessorFactory(Document document, CapabilityLoader capabilityLoader, String processorProperty) {
+	public ElementProcessorFactory(org.nasdanika.drawio.Element element, CapabilityLoader capabilityLoader, String processorProperty) {
 		super(capabilityLoader, processorProperty);
-		this.document = document;
+		this.element = element;
 	}
 
-	public DocumentProcessorFactory(Document document, String processorProperty) {
+	public ElementProcessorFactory(org.nasdanika.drawio.Element element, String processorProperty) {
 		super(processorProperty);
-		this.document = document;
+		this.element = element;
 	}
 	
 	/**
@@ -45,7 +47,7 @@ public class DocumentProcessorFactory<P> extends PropertySourceProcessorFactory<
 		
 		Collection<Element> elements = new ArrayList<>();
 		Consumer<org.nasdanika.drawio.Element> consumer = org.nasdanika.drawio.Util.withLinkTargets(elements::add, ConnectionBase.SOURCE);
-		document.accept(consumer, connectionBase);
+		element.accept(consumer, connectionBase);
 		
 		return createProcessors(
 				elements,
@@ -76,7 +78,7 @@ public class DocumentProcessorFactory<P> extends PropertySourceProcessorFactory<
 	protected URI getURI(String value) {
 		if (!Util.isBlank(value)) {
 			URI uri = URI.createURI((String) value);
-			URI base = document.getURI();
+			URI base = element.getURI();
 			return base == null ? uri : uri.resolve(base);
 		}
 		return null;

@@ -13,6 +13,11 @@ public record DiagramRequirement(
 		
 		URI base,
 		
+		/**
+		 * Optional selector of an element from a document.
+		 */
+		Function<Object, Object> selector,
+		
 		Function<String, String> propertySource,
 		
 		Function<URI, InputStream> uriHandler,

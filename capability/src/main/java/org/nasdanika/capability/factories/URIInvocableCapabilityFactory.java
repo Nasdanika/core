@@ -341,6 +341,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 				spec.diagram().location() == null ? null : requirement.uriHandler().normalize(URI.createURI(spec.diagram().location()).resolve(requirement.uri())),
 				spec.diagram().source(),
 				spec.diagram().base() == null ? requirement.uri() : requirement.uriHandler().normalize(URI.createURI(spec.diagram().base()).resolve(requirement.uri())),				
+				spec.diagram()::select,		
 				pName -> getProperty(properties, pName), 
 				uri -> {
 					try {

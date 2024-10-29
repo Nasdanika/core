@@ -41,14 +41,14 @@ public class DiagramCapabilityFactory extends AbstractCapabilityFactory<DiagramR
 				return wrap(document);
 			}
 			
-			DocumentInvocableFactory documentInvocableFactory = new DocumentInvocableFactory(document, requirement.processor());
+			ElementInvocableFactory elementInvocableFactory = new ElementInvocableFactory(requirement.selector() == null ? document : (org.nasdanika.drawio.Element) requirement.selector().apply(document), requirement.processor());
 			if (requirement.bind() == null) {
 				// Processors
-				Map<Element, ProcessorInfo<Invocable>> processors = documentInvocableFactory.createProcessors(null, false, progressMonitor);						
+				Map<Element, ProcessorInfo<Invocable>> processors = elementInvocableFactory.createProcessors(null, false, progressMonitor);						
 				return wrap(processors);
 			}
 			
-			java.util.function.Function<Object,Object> proxy = documentInvocableFactory.createProxy(
+			java.util.function.Function<Object,Object> proxy = elementInvocableFactory.createProxy(
 					requirement.bind(),
 					null,
 					null,

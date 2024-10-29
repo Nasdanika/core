@@ -2,6 +2,12 @@ package org.nasdanika.capability.requirements;
 
 import java.util.Map;
 
+import org.nasdanika.common.Util;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
+
 public record DiagramRecord(
 		
 		String location,
@@ -15,6 +21,11 @@ public record DiagramRecord(
 		 * For source - base URI
 		 */
 		String base,		
+		
+		/**
+		 * An optional SpEL expression to select an element from a document
+		 */
+		String selector,
 		
 		/**
 		 * properties to pass to the diagram.
@@ -38,5 +49,18 @@ public record DiagramRecord(
 		 * If not provided, no proxy is created and a map of elements to processor info (registry) is used as a result.
 		 */
 		String[] interfaces) {
+	
+	
+	public Object select(Object object) {
+		if (Util.isBlank(selector())) {
+			return object;
+		}
+		
+		StandardEvaluationContext evaluationContext = new StandardEvaluationContext(object);
+		
+		ExpressionParser parser = new SpelExpressionParser();
+		Expression exp = parser.parseExpression(selector());		
+		return exp.getValue(evaluationContext);		
+	}
 
 }
