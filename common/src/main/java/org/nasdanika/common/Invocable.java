@@ -2,6 +2,7 @@ package org.nasdanika.common;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -176,6 +177,34 @@ public interface Invocable {
 			}
 			
 		};
+	}
+	
+	static Invocable of(Object target, Field field) {
+		return new Invocable() {
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public Object invoke(Object... args) {
+				try {
+					field.set(target, args[0]);
+					return null;
+				} catch (IllegalAccessException e) {
+					throw new NasdanikaException("Cannot access field " + field + " of " + target + ": " + e, e);
+				}					
+			}
+			
+			@Override
+			public Parameter[] getParameters() {
+				return new Parameter[] { Parameter.of(field.getName(), field.getType()) };
+			}
+			
+			@Override
+			public Class<?> getReturnType() {
+				return Void.class;
+			}
+			
+		};
+				
 	}
 	
 	static Invocable of(Object target, Method method, String... parameterNames) {

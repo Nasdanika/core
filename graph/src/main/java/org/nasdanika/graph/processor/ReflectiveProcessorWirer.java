@@ -22,6 +22,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.nasdanika.common.Invocable;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
@@ -228,7 +229,7 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 			return false;
 		}
 		
-		if (handlerMember instanceof Method) {
+		if (handlerMember instanceof Method && incomingHandlerAnnotation.wrap() == HandlerWrapper.NONE) {
 			Method handlerMethod = (Method) handlerMember;
 			int pc = handlerMethod.getParameterCount();
 			if (pc > 1) {
@@ -274,13 +275,27 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 				AnnotatedElement handlerMember = mr.annotatedElementRecord.getAnnotatedElement();
 				Connection incomingConnection = mr.connection;
 				if (wired.add(incomingConnection)) { // Wiring once
-					if (handlerMember instanceof Field) {					
-						mr.value.accept((H) mr.annotatedElementRecord.get());
-					} else {
-						Method handlerSupplierMethod = (Method) handlerMember;
-						Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(incomingConnection);
-						mr.value.accept((H) incomingHandler);
-					}
+					IncomingHandler incomingHandlerAnnotation = mr.annotatedElementRecord.getAnnotation(IncomingHandler.class);
+					switch (incomingHandlerAnnotation.wrap()) {
+					case ASYNC_INVOCABLE:
+						mr.value.accept((H) asInvocable(mr.annotatedElementRecord, incomingHandlerAnnotation.parameterNames()).asAsync());						
+						break;
+					case INVOCABLE:
+						mr.value.accept((H) asInvocable(mr.annotatedElementRecord, incomingHandlerAnnotation.parameterNames()));						
+						break;
+					case NONE:
+						
+						if (handlerMember instanceof Field) {					
+							mr.value.accept((H) mr.annotatedElementRecord.get());
+						} else {
+							Method handlerSupplierMethod = (Method) handlerMember;
+							Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(incomingConnection);
+							mr.value.accept((H) incomingHandler);
+						}
+						break;
+					default:
+						throw new UnsupportedOperationException(incomingHandlerAnnotation.wrap().name() + " wrap type is not supported (yet)");						
+					}												
 				}
 			});
 				
@@ -460,7 +475,7 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 			return false;
 		}
 		
-		if (handlerMember instanceof Method) {
+		if (handlerMember instanceof Method && outgoingHandlerAnnotation.wrap() == HandlerWrapper.NONE) {
 			Method handlerMethod = (Method) handlerMember;
 			int pc = handlerMethod.getParameterCount();
 			if (pc > 1) {
@@ -502,16 +517,38 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 				AnnotatedElement handlerMember = mr.annotatedElementRecord.getAnnotatedElement();
 				Connection outgoingConnection = mr.connection;
 				if (wired.add(outgoingConnection)) {
-					if (handlerMember instanceof Field) {					
-						mr.value.accept((H) mr.annotatedElementRecord.get());
-					} else {
-						Method handlerSupplierMethod = (Method) handlerMember;
-						Object outgoinggHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(outgoingConnection);
-						mr.value.accept((H) outgoinggHandler);
-					}
+					OutgoingHandler outgoingHandlerAnnotation = mr.annotatedElementRecord.getAnnotation(OutgoingHandler.class);
+					switch (outgoingHandlerAnnotation.wrap()) {
+					case ASYNC_INVOCABLE:
+						mr.value.accept((H) asInvocable(mr.annotatedElementRecord, outgoingHandlerAnnotation.parameterNames()).asAsync());						
+						break;
+					case INVOCABLE:
+						mr.value.accept((H) asInvocable(mr.annotatedElementRecord, outgoingHandlerAnnotation.parameterNames()));						
+						break;
+					case NONE:
+						if (handlerMember instanceof Field) {		
+							mr.value.accept((H) mr.annotatedElementRecord.get());
+						} else {
+							Method handlerSupplierMethod = (Method) handlerMember;
+							Object outgoinggHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(outgoingConnection);
+							mr.value.accept((H) outgoinggHandler);
+						}
+						break;
+					default:
+						throw new UnsupportedOperationException(outgoingHandlerAnnotation.wrap().name() + " wrap type is not supported (yet)");						
+					}												
 				}
 			});
 		return wired;
+	}
+	
+	protected Invocable asInvocable(AnnotatedElementRecord aer, String[] parameterNames) {
+		AnnotatedElement annotatedElement = aer.getAnnotatedElement();
+		if (annotatedElement instanceof Field) {
+			return Invocable.of(aer.getTarget(), (Field) annotatedElement);
+		}
+		
+		return Invocable.of(aer.getTarget(), (Method) annotatedElement, parameterNames);
 	}
 	
 	protected void wireOutgoingHandlerConsumers(

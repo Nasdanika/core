@@ -13,6 +13,9 @@ import org.nasdanika.graph.Node;
 /**
  * Annotation for methods returning an outgoing handler for {@link Node} processors or outgoing handler fields.
  * Methods may be with zero parameters or with one parameter compatible with {@link Connection}. 
+ * 
+ * Method with wrap attribute set to INVOCABLE or ASYNC_INVOCABLE can have any number of parameters.
+ * 
  * @author Pavel
  *
  */
@@ -32,5 +35,17 @@ public @interface OutgoingHandler {
 	 * @return
 	 */
 	int priority() default 0;
+	
+	/**
+	 * Handler wrapper
+	 * @return
+	 */
+	HandlerWrapper wrap() default HandlerWrapper.NONE;
+	
+	/**
+	 * Optional parameter names for method handler wrappers INVOCABLE and ASYNC_INVOCABLE 
+	 * @return
+	 */
+	String[] parameterNames() default {};
 		
 }
