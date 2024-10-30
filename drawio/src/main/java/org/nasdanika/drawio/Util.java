@@ -347,18 +347,23 @@ public final class Util {
 	public static <T> BiFunction<Element, Map<Element, T>, T> withLinkTargets(BiFunction<? super Element, Map<? extends Element, T>, T> visitor, ConnectionBase connectionBase) {
 		return new BiFunction<Element, Map<Element, T>, T>() {
 			
-			Collection<LinkTarget> visited = new HashSet<>();
+			Map<LinkTarget, T> results = new HashMap<>();
 
 			@Override
 			public T apply(Element element, Map<Element, T> childResults) {				
 				if (element instanceof ModelElement) {
 					LinkTarget linkTarget = ((ModelElement) element).getLinkTarget();
-					if (linkTarget != null && visited.add(linkTarget)) { // No double-visiting
+					if (linkTarget != null) {
 						Map<Element, T> cr = new LinkedHashMap<>();
 						if (childResults != null) {
 							cr.putAll(childResults);
 						}
-						T linkTargetResult = linkTarget.accept(this, connectionBase);
+						T linkTargetResult;
+						if (results.containsKey(linkTarget)) {
+							linkTargetResult = results.get(linkTarget);
+						} else {
+							linkTargetResult = linkTarget.accept(this, connectionBase);
+						}
 						if (linkTargetResult != null) {
 							cr.put(linkTarget, linkTargetResult);
 						}
@@ -375,7 +380,7 @@ public final class Util {
 	 * @param <T>
 	 * @param visitor
 	 * @param connectionBase Connection base for visiting linked pages.
-	 * @return Visitor which passes itself to linked pages and adds linked pages' result to child results.
+	 * @return Visitor which passes itself to linked pages.
 	 */
 	public static <T> Consumer<Element> withLinkTargets(Consumer<Element> visitor, ConnectionBase connectionBase) {
 		return new Consumer<Element>() {
@@ -396,5 +401,133 @@ public final class Util {
 		};
 	}
 	
+	
+	/**
+	 * @param <T>
+	 * @param visitor
+	 * @param connectionBase Connection base for visiting linked pages.
+	 * @return Visitor which passes itself to connected elements (incoming and outgoing connnections for nodes and source and target nodes for connections) and linked pages and adds linked pages' result to child results.
+	 */
+	public static <T> BiFunction<Element, Map<Element, T>, T> traverser(BiFunction<? super Element, Map<? extends Element, T>, T> visitor, ConnectionBase connectionBase) {
+		return new BiFunction<Element, Map<Element, T>, T>() {
+			
+			Map<Element, T> results = new HashMap<>();
+
+			@Override
+			public T apply(Element element, Map<Element, T> childResults) {
+				if (results.containsKey(element)) {
+					return results.get(element);
+				}
+				
+				if (element instanceof Node) {
+					Node node = (Node) element;
+					for (Connection oc: node.getOutgoingConnections()) {
+						if (!results.containsKey(oc)) {
+							results.put(oc, oc.accept(this, connectionBase));
+						}
+					}
+					for (Connection ic: node.getIncomingConnections()) {
+						if (!results.containsKey(ic)) {
+							results.put(ic, ic.accept(this, connectionBase));
+						}
+					}
+				}
+				if (element instanceof Connection) {
+					Connection connection = (Connection) element;
+					Node source = connection.getTarget();
+					if (source != null && !results.containsKey(source)) {
+						results.put(source, source.accept(this, connectionBase));
+					}
+					Node target = connection.getTarget();
+					if (target != null && !results.containsKey(target)) {
+						results.put(target, target.accept(this, connectionBase));
+					}
+				}
+				
+				if (element instanceof ModelElement) {
+					ModelElement modelElement = (ModelElement) element;
+					ModelElement parent = modelElement.getParent();
+					if (parent != null && !results.containsKey(parent)) {
+						results.put(parent, parent.accept(this, connectionBase));						
+					}
+					
+					LinkTarget linkTarget = modelElement.getLinkTarget();
+					if (linkTarget != null) {
+						Map<Element, T> cr = new LinkedHashMap<>();
+						if (childResults != null) {
+							cr.putAll(childResults);
+						}
+						T linkTargetResult;
+						if (results.containsKey(linkTarget)) {
+							linkTargetResult = results.get(linkTarget);
+						} else {
+							linkTargetResult = linkTarget.accept(this, connectionBase);
+						}
+						if (linkTargetResult != null) {
+							cr.put(linkTarget, linkTargetResult);
+						}
+						return visitor.apply(element, cr);
+					}
+				}								
+				
+				return visitor.apply(element, childResults);
+			}
+			
+		};
+	}
+	
+	/**
+	 * @param <T>
+	 * @param visitor
+	 * @param connectionBase Connection base for visiting linked pages.
+	 * @return Visitor which passes itself to connected elements (incoming and outgoing connnections for nodes and source and target nodes for connections) and linked pages and adds linked pages' result to child results.
+	 */
+	public static <T> Consumer<Element> traverser(Consumer<Element> visitor, ConnectionBase connectionBase) {
+		return new Consumer<Element>() {
+			
+			Collection<Element> visited = new HashSet<>();
+
+			@Override
+			public void accept(Element element) {
+				if (element != null && visited.add(element)) {
+					if (element instanceof Node) {
+						Node node = (Node) element;
+						for (Connection oc: node.getOutgoingConnections()) {
+							oc.accept(this, connectionBase);
+						}
+						for (Connection ic: node.getIncomingConnections()) {
+							ic.accept(this, connectionBase);
+						}
+					}
+					if (element instanceof Connection) {
+						Connection connection = (Connection) element;
+						Node source = connection.getSource();
+						if (source != null) {
+							source.accept(this, connectionBase);
+						}
+						Node target = connection.getTarget();
+						if (target != null) {
+							target.accept(this, connectionBase);
+						}
+					}
+					
+					if (element instanceof ModelElement) {
+						ModelElement modelElement = (ModelElement) element;
+						ModelElement parent = modelElement.getParent();
+						if (parent != null) {
+							parent.accept(this, connectionBase);						
+						}
+						
+						LinkTarget linkTarget = modelElement.getLinkTarget();
+						if (linkTarget != null && visited.add(linkTarget)) { // No double-visiting
+							linkTarget.accept(this, connectionBase);
+						}
+					}
+					visitor.accept(element);
+				}
+			}
+			
+		};
+	}
 
 }

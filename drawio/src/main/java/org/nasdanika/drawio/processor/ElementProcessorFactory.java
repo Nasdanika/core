@@ -1,7 +1,7 @@
 package org.nasdanika.drawio.processor;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -45,8 +45,8 @@ public class ElementProcessorFactory<P> extends PropertySourceProcessorFactory<P
 			ConnectionBase connectionBase,
 			ProgressMonitor progressMonitor) {
 		
-		Collection<Element> elements = new ArrayList<>();
-		Consumer<org.nasdanika.drawio.Element> consumer = org.nasdanika.drawio.Util.withLinkTargets(elements::add, ConnectionBase.SOURCE);
+		Collection<Element> elements = new HashSet<>();
+		Consumer<org.nasdanika.drawio.Element> consumer = org.nasdanika.drawio.Util.traverser(elements::add, ConnectionBase.SOURCE);
 		element.accept(consumer, connectionBase);
 		
 		return createProcessors(
