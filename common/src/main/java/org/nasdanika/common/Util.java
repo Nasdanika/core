@@ -789,19 +789,23 @@ public class Util {
 	}
 	
 	/**
-	 * Grouping by with support of null keys.
+	 * Groups and then aggregates
 	 * @param <K>
 	 * @param <T>
-	 * @param elements
-	 * @param keyFeature
+	 * @param <V>
 	 * @return
 	 */
-	public static <K, T> Map<K, List<T>> groupBy(
-			Collection<? extends T> elements, 
-			java.util.function.Function<? super T, ? extends K> classifier) {
-		Map<K, List<T>> ret = new LinkedHashMap<>();
-		groupBy(elements, classifier, ret);
-		return ret;
+	public static <K, T, V> List<V> aggregate(
+			Collection<T> elements, 
+			java.util.function.Function<? super T, ? extends K> classifier,
+			BiFunction<? super K, ? super List<? super T>, ? extends V> aggregator) {
+		
+		java.util.function.Function<Map.Entry<? extends K, ? extends List<T>>, V> mapper = e -> aggregator.apply(e.getKey(), e.getValue());
+		return groupBy(elements, classifier)
+				.entrySet()
+				.stream()
+				.map(mapper)
+				.toList();
 	}
 	
 	/**
@@ -812,12 +816,11 @@ public class Util {
 	 * @param keyFeature
 	 * @return
 	 */
-	public static <K, T> void groupBy(
+	public static <K, T> Map<K, List<T>> groupBy(
 			Collection<? extends T> elements, 
-			java.util.function.Function<? super T, ? extends K> classifier, 
-			Map<K, List<T>> collector) {
-		groupBy(elements, classifier, collector, key -> new ArrayList<>());
-	}	
+			java.util.function.Function<? super T, ? extends K> classifier) {
+		return groupBy(elements, classifier, new LinkedHashMap<>());
+	}
 	
 	/**
 	 * Grouping by with support of null keys.
@@ -827,7 +830,22 @@ public class Util {
 	 * @param keyFeature
 	 * @return
 	 */
-	public static <K, T, C extends Collection<T>> void groupBy(
+	public static <K, T> Map<K, List<T>> groupBy(
+			Collection<? extends T> elements, 
+			java.util.function.Function<? super T, ? extends K> classifier, 
+			Map<K, List<T>> collector) {
+		return groupBy(elements, classifier, collector, key -> new ArrayList<>());
+	}	
+	
+	/**
+	 * Grouping by with support of null keys.
+	 * @param <K>
+	 * @param <T>
+	 * @param elements
+	 * @param keyFeature
+	 * @return Collector argument
+	 */
+	public static <K, T, C extends Collection<T>> Map<K, C> groupBy(
 			Collection<? extends T> elements, 
 			java.util.function.Function<? super T, ? extends K> classifier, 
 			Map<K, C> collector, 
@@ -837,6 +855,7 @@ public class Util {
 			K k = classifier.apply(e);
 			collector.computeIfAbsent(k, collectionFactory).add(e);
 		}
+		return collector;
 	}	
 
 	// --- Property computers
