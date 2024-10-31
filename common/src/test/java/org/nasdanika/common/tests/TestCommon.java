@@ -497,6 +497,24 @@ public class TestCommon {
 		SourceRecord result = Invocable.of(SourceRecord.class).bindMap(data).invoke();
 		System.out.println(result);		
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testInvocableProxyDefault() {
+		Invocable invocable = new Invocable() {
+			
+			@Override
+			public <T> T invoke(Object... args) {
+				return (T) ("Hello " + args[0]);
+			}
+		};
+		
+		Function<String, String> function = invocable.createProxy(java.util.function.Function.class);
+		System.out.println(function.apply("World"));
+		System.out.println(function.andThen(String::length).apply("Universe"));
+		System.out.println(function);
+	}
+	
 
 	
 }

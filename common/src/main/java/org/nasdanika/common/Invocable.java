@@ -1,17 +1,22 @@
 package org.nasdanika.common;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -300,6 +305,7 @@ public interface Invocable {
 			
 	/**
 	 * Creates a dynamic proxy dispatching to invocables.
+	 * Handles invocation of default methods not resolved to invocables.
 	 * @param classLoader
 	 * @param resolver
 	 * @param interfaces
@@ -317,6 +323,19 @@ public interface Invocable {
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 				Invocable target = resolver.resolve(proxy, method, args);
 				if (target == null) {
+					if (method.isDefault()) {						
+						return MethodHandles.lookup()
+								.findSpecial(
+										method.getDeclaringClass(), 
+										method.getName(), 
+										MethodType.methodType(method.getReturnType(), method.getParameterTypes()), 
+										method.getDeclaringClass())
+	                            .bindTo(proxy)
+	                            .invokeWithArguments(args);					
+						
+					}					
+					
+					// A hack for object methods like toString(), hashCode(), equals()
 					if (method.getDeclaringClass().isInstance(resolver)) {
 						return method.invoke(resolver, args);
 					}
@@ -327,6 +346,35 @@ public interface Invocable {
 		};
 		
 		return (T) Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
+	}
+	
+	/**
+	 * Creates a proxy for a functional interface dispatching the functional interface method to this invocable.
+	 * @param <T>
+	 * @param type
+	 * @param classLoader
+	 * @return
+	 */
+	default <T> T createProxy(Class<T> type, ClassLoader classLoader) {
+		Method target = Arrays.stream(type.getMethods())
+	            .filter(method -> !(method.isDefault() || Modifier.isStatic(method.getModifiers())))
+	            .findFirst()
+	            .orElseThrow(() -> new IllegalArgumentException("No single abstract method found in " + type.getName()));
+		
+		return createProxy(
+				classLoader,
+				(proxy, method, args) -> Objects.equals(method, target) ? this : null,
+				type);
+	}
+	
+	/**
+	 * Creates a functional interface proxy with the context class loader
+	 * @param <T>
+	 * @param type
+	 * @return
+	 */
+	default <T> T createProxy(Class<T> type) {
+		return createProxy(type, Thread.currentThread().getContextClassLoader());
 	}
 	
 	/**

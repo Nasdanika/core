@@ -361,7 +361,11 @@ public class Reflector {
 	 * @return
 	 */
 	protected void setFieldValue(Object target, Field field, Object value) {
-		try {
+		try {			
+			// Wrapping invocable into a proxy
+			if (value instanceof Invocable && !field.getType().isInstance(value) && field.getType().isInterface()) {
+				value = ((Invocable) value).createProxy(field.getType());
+			}
 			field.set(target, value);
 		} catch (IllegalAccessException e) {
 			throw new NasdanikaException("Cannot access field " + field + " of " + target + ": " + e, e);
@@ -377,6 +381,16 @@ public class Reflector {
 	 */
 	protected Object invokeMethod(Object target, Method method, Object... args) {
 		try {
+			Class<?>[] parameterTypes = method.getParameterTypes();
+			for (int i = 0; i < args.length; ++i) {
+				Object arg = args[i];
+				// Wrapping invocable into a proxy
+				Class<?> parameterType = parameterTypes[i];
+				if (arg instanceof Invocable && !parameterType.isInstance(arg) && parameterType.isInterface()) {
+					args[i] = ((Invocable) arg).createProxy(parameterType);
+				}
+			}
+			
 			return method.invoke(target, args);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new NasdanikaException("Error invoking " + method + " of " + target + ": " + e, e);
