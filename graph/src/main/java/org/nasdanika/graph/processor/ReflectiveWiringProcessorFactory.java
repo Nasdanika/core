@@ -40,8 +40,7 @@ public abstract class ReflectiveWiringProcessorFactory<P> extends ProcessorFacto
 					endpointWiringStageConsumer, 
 					progressMonitor);
 		}
-		
-		
+				
 		return ProcessorInfo.of(config, processor);
 	}
 

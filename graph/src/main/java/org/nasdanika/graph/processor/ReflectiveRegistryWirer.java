@@ -69,7 +69,9 @@ public class ReflectiveRegistryWirer<P> extends Reflector {
 					Map<Element,ProcessorInfo<P>> r = Collections.synchronizedMap(new LinkedHashMap<>());
 					setterRecord.set(r);
 					for (ProcessorConfig re: registry) {
-						infoProvider.accept(re.getElement(), (rp, pm) -> r.put(re.getElement(), rp));
+						if (re != null) {
+							infoProvider.accept(re.getElement(), (rp, pm) -> r.put(re.getElement(), rp));
+						}
 					}
 				});
 	}

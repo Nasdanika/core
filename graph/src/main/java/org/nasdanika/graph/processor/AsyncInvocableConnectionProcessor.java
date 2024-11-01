@@ -1,13 +1,20 @@
 package org.nasdanika.graph.processor;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
+import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.Invocable;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Util;
 import org.nasdanika.graph.Element;
 
 /**
@@ -15,19 +22,51 @@ import org.nasdanika.graph.Element;
  */
 public class AsyncInvocableConnectionProcessor implements AutoCloseable {
 	
-	private Executor executor;
+	protected Executor executor;
 	private boolean shutdownExecutor;
-	private long terminationTimeout;
-	private TimeUnit terminationTimeoutUnit;
+	protected long terminationTimeout;
+	protected TimeUnit terminationTimeoutUnit;
 	
+	/**
+	 * For reflective construction. Fragment, if present, is parsed as number of threads.
+	 * Termination timeout is set to one minute - override as needed.
+	 * @param loader
+	 * @param loaderProgressMonitor
+	 * @param data
+	 * @param fragment
+	 * @param config
+	 * @param infoProvider
+	 * @param endpointWiringStageConsumer
+	 * @param wiringProgressMonitor
+	 */
+	public AsyncInvocableConnectionProcessor(
+			Loader loader,
+			ProgressMonitor loaderProgressMonitor,
+			Object data,
+			String fragment,
+			ProcessorConfig config,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<Invocable>, ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
+			ProgressMonitor wiringProgressMonitor) {
 
-	public AsyncInvocableConnectionProcessor(int threads, long terminationTimeout, TimeUnit terminationTimeoutUnit) {
+		if (!Util.isBlank(fragment)) {
+			this.executor = Executors.newFixedThreadPool(Integer.parseInt(fragment));
+			this.terminationTimeout = 1;
+			this.terminationTimeoutUnit = TimeUnit.MINUTES;
+			shutdownExecutor = true;
+			
+		}
+	}	
+	
+	public AsyncInvocableConnectionProcessor(
+			int threads, 
+			long terminationTimeout, 
+			TimeUnit terminationTimeoutUnit) {
 		this.executor = Executors.newFixedThreadPool(threads);
 		this.terminationTimeout = terminationTimeout;
 		this.terminationTimeoutUnit = terminationTimeoutUnit;
 		shutdownExecutor = true;
-	}
-	
+	}	
 
 	public AsyncInvocableConnectionProcessor(Executor executor) {
 		this.executor = executor;
@@ -51,17 +90,43 @@ public class AsyncInvocableConnectionProcessor implements AutoCloseable {
 		}
 	}
 	
-	@SourceEndpoint
-	public Invocable sourceEndpoint;
+	protected Invocable asyncTargetEndpoint;
 	
 	@TargetEndpoint
-	public Invocable targetEndpoint;
+	public void setTargetEndpoint(Invocable targetEndpoint) {
+		if (targetEndpoint != null) {
+			asyncTargetEndpoint = targetEndpoint.async(executor);
+		}
+	}
+	
+	protected Invocable asyncSourceEndpoint;
+	
+	@SourceEndpoint
+	public void setSourceEndpoint(Invocable sourceEndpoint) {
+		if (sourceEndpoint != null) {
+			asyncSourceEndpoint = sourceEndpoint.async(executor);
+		}
+	}
 	
 	@SourceHandler
-	public Invocable sourceHandler = targetEndpoint.async(executor);
+	public Invocable sourceHandler = new Invocable() {
+		
+		@Override
+		public <T> T invoke(Object... args) {
+			return Objects.requireNonNull(asyncTargetEndpoint).invoke(args);
+		}
+		
+	};
 	
 	@TargetHandler
-	public Invocable targetHandler = sourceEndpoint.async(executor);
+	public Invocable targetHandler = new Invocable() {
+		
+		@Override
+		public <T> T invoke(Object... args) {
+			return Objects.requireNonNull(asyncSourceEndpoint).invoke(args);
+		}
+		
+	};
 
 	@Override
 	public void close() throws Exception {

@@ -9,7 +9,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.nasdanika.capability.AbstractCapabilityFactory;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.requirements.DiagramRequirement;
-import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.graph.Element;
@@ -44,7 +43,7 @@ public class DiagramCapabilityFactory extends AbstractCapabilityFactory<DiagramR
 			ElementInvocableFactory elementInvocableFactory = new ElementInvocableFactory(requirement.selector() == null ? document : (org.nasdanika.drawio.Element) requirement.selector().apply(document), requirement.processor());
 			if (requirement.bind() == null) {
 				// Processors
-				Map<Element, ProcessorInfo<Invocable>> processors = elementInvocableFactory.createProcessors(null, false, progressMonitor);						
+				Map<Element, ProcessorInfo<Object>> processors = elementInvocableFactory.createProcessors(null, false, progressMonitor);						
 				return wrap(processors);
 			}
 			

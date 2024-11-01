@@ -14,6 +14,7 @@ module org.nasdanika.graph {
 	exports org.nasdanika.graph.processor.function;
 	
 	opens org.nasdanika.graph.emf;
+	opens org.nasdanika.graph.processor;
 	opens org.nasdanika.graph.processor.emf;
 	
 	provides CapabilityFactory with ReflectiveProcessorServiceFactory;

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.function.Function;
 
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.Invocable;
@@ -17,7 +16,7 @@ import org.nasdanika.graph.processor.EndpointFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
 
-public class ElementInvocableFactory extends ElementProcessorFactory<Invocable> {
+public class ElementInvocableFactory extends ElementProcessorFactory<Object> {
 
 	public ElementInvocableFactory(org.nasdanika.drawio.Element element, CapabilityLoader capabilityLoader, String processorProperty) {
 		super(element, capabilityLoader, processorProperty);
@@ -45,32 +44,30 @@ public class ElementInvocableFactory extends ElementProcessorFactory<Invocable> 
 			String bindProperty,
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
-			Function<ProcessorInfo<Invocable>,Invocable> processorFilter,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
 			Class<?>... interfaces) {
 		
-		Map<Element, ProcessorInfo<Invocable>> processors = createProcessors(endpointFactory, connectionBase, progressMonitor);		
-		return Invocable.createProxy(classLoader, (proxy, nameOrSignature) -> resolve(proxy, nameOrSignature, processors, processorFilter, bindProperty), interfaces);		
+		Map<Element, ProcessorInfo<Object>> processors = createProcessors(endpointFactory, connectionBase, progressMonitor);
+		return Invocable.createProxy(classLoader, (proxy, nameOrSignature) -> resolve(proxy, nameOrSignature, processors, bindProperty), interfaces);		
 	}	
 	
 	protected Invocable resolve(
 			Object proxy,
 			String nameOrSignature, 
-			Map<Element, ProcessorInfo<Invocable>> processors,
-			Function<ProcessorInfo<Invocable>,Invocable> processorFilter,
+			Map<Element, ProcessorInfo<Object>> processors,
 			String bindProperty) {
 		
 		List<Invocable> matches = new ArrayList<>();
-		for (Entry<Element, ProcessorInfo<Invocable>> pe: processors.entrySet()) {
+		for (Entry<Element, ProcessorInfo<Object>> pe: processors.entrySet()) {
 			if (pe.getKey() instanceof PropertySource) { 
 				@SuppressWarnings("unchecked")
 				String bindValue = ((PropertySource<String,String>) pe.getKey()).getProperty(bindProperty);
 				if (Objects.equals(nameOrSignature, bindValue)) {
-					ProcessorInfo<Invocable> processorInfo = pe.getValue();
-					Invocable processor = processorFilter == null ?  processorInfo.getProcessor() : processorFilter.apply(processorInfo);
-					if (processor != null) {
-						matches.add(processor.bind(proxy));
+					ProcessorInfo<Object> processorInfo = pe.getValue();
+					Object processor = processorInfo.getProcessor();
+					if (processor instanceof Invocable) {
+						matches.add(((Invocable) processor).bind(proxy));
 					}
 				}
 			}
@@ -82,7 +79,6 @@ public class ElementInvocableFactory extends ElementProcessorFactory<Invocable> 
 			String bindProperty,
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
-			Function<ProcessorInfo<Invocable>,Invocable> processorFilter,
 			ProgressMonitor progressMonitor,
 			Class<?>... interfaces) {
 		
@@ -90,7 +86,6 @@ public class ElementInvocableFactory extends ElementProcessorFactory<Invocable> 
 				bindProperty, 
 				endpointFactory,
 				connectionBase,
-				processorFilter,
 				progressMonitor,
 				Thread.currentThread().getContextClassLoader(),
 				interfaces);
@@ -107,7 +102,6 @@ public class ElementInvocableFactory extends ElementProcessorFactory<Invocable> 
 	public <T> T createProxy(
 			String bindProperty,
 			ConnectionBase connectionBase,
-			Function<ProcessorInfo<Invocable>,Invocable> processorFilter,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
 			Class<?>... interfaces) {
@@ -116,7 +110,6 @@ public class ElementInvocableFactory extends ElementProcessorFactory<Invocable> 
 				bindProperty,
 				EndpointFactory.nopEndpointFactory(),
 				connectionBase,
-				processorFilter,
 				progressMonitor,
 				classLoader,
 				interfaces);
@@ -133,14 +126,12 @@ public class ElementInvocableFactory extends ElementProcessorFactory<Invocable> 
 	public <T> T createProxy(
 			String bindProperty,
 			ConnectionBase connectionBase,
-			Function<ProcessorInfo<Invocable>,Invocable> processorFilter,
 			ProgressMonitor progressMonitor,
 			Class<?>... interfaces) {
 		
 		return createProxy(
 				bindProperty,
 				connectionBase,
-				processorFilter,
 				progressMonitor,
 				Thread.currentThread().getContextClassLoader(),
 				interfaces);
