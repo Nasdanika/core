@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2024.10.0</version>
+	    <version>2024.11.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>graph</artifactId>
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
 			<artifactId>common</artifactId>
-			<version>2024.10.0</version>
+			<version>2024.11.0</version>
 		</dependency>
 	</dependencies>
 </project>
