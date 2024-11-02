@@ -175,14 +175,32 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	}
 	
 	/**
+	 * Retrieves properties from the model element itself. 
+	 * Override to load properties from some other source. 
+	 * For example, load YAML from a resource identified by some property and load
+	 * properties from that YAML.
+	 * Or load from resources resolved relative to the object base URI.
+	 * It would allow to have semantic mapping configured via a single element property with all other properties
+	 * externalized.  
+	 * @param modelElement
+	 * @param property
+	 * @return
+	 */
+	protected String getModelElementProperty(org.nasdanika.drawio.model.ModelElement modelElement, String property) {
+		return modelElement.getProperties().get(property);
+	}
+	
+	/**
 	 * Returns eObject property. This implementation uses ModelElement.getProperties().get() for instances of model element. 
 	 * Returns null otherwise.
 	 * @param eObj
 	 * @return
 	 */
 	protected String getProperty(EObject eObj, String property) {
+		// TODO - loading from a resource identified by a property instead of element properties.
+		// Or, more specifically object property source provider
 		if (eObj instanceof org.nasdanika.drawio.model.ModelElement) {
-			return ((org.nasdanika.drawio.model.ModelElement) eObj).getProperties().get(property);
+			return getModelElementProperty((org.nasdanika.drawio.model.ModelElement) eObj, property);
 		}
 		
 		if (eObj instanceof Tag) {
@@ -232,7 +250,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	public boolean isTopLevelPage(Page page) {
 		String topLevelPageProperty = getTopLevelPageProperty();
 		if (!Util.isBlank(topLevelPageProperty)) {
-			String topLevelPage = page.getModel().getRoot().getProperties().get(topLevelPageProperty);
+			String topLevelPage = getModelElementProperty(page.getModel().getRoot(), topLevelPageProperty);
 			if (!Util.isBlank(topLevelPage)) {
 				return "true".equals(topLevelPage.trim());
 			}
