@@ -1,4 +1,4 @@
-package org.nasdanika.common;
+package org.nasdanika.mapping;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -15,6 +15,8 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.nasdanika.common.EStructuralFeatureAndEOperationMatcher;
+import org.nasdanika.common.Reflector;
 
 /**
  * Content mapper which uses annotations for wiring 

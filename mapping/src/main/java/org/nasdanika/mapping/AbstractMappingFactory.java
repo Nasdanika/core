@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.model.util;
+package org.nasdanika.mapping;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -44,7 +44,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.jsoup.Jsoup;
+//import org.jsoup.Jsoup;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
@@ -55,22 +55,7 @@ import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SourceRecord;
 import org.nasdanika.common.Util;
-import org.nasdanika.drawio.model.Connection;
-import org.nasdanika.drawio.model.Document;
-import org.nasdanika.drawio.model.LinkTarget;
-import org.nasdanika.drawio.model.ModelFactory;
-import org.nasdanika.drawio.model.Node;
-import org.nasdanika.drawio.model.Page;
-import org.nasdanika.drawio.model.Root;
-import org.nasdanika.drawio.model.SemanticMapping;
-import org.nasdanika.drawio.model.Tag;
-import org.nasdanika.mapping.Mapper;
-import org.nasdanika.mapping.SetterFeatureMapper;
-import org.nasdanika.ncore.Marker;
-import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.util.NcoreUtil;
-import org.nasdanika.persistence.ConfigurationException;
-import org.nasdanika.persistence.Marked;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
@@ -82,17 +67,25 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeLocator;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
+import org.nasdanika.persistence.Marked;
+import org.nasdanika.persistence.ConfigurationException;
 
 /**
- * Base class for classes which map/transform Drawio model to a specific semantic model. For example, architecture model or flow/process model.
+ * Base class for classes which map/transform Drawio diagrams to a specific semantic model. For example, architecture model or flow/process model.
  * @author Pavel
- * @deprecated Use <code>org.nasdanika.drawio.emf.AbstractDrawioFactory</code> 
  * @param <S> Semantic element type
  */
-@Deprecated
-public abstract class AbstractDrawioFactory<S extends EObject> {
+public abstract class AbstractMappingFactory<S> {
 	
-	private static final String ENGINE_PROPERTY_SUFFIX = "-engine";
+	private static final String DOC_FORMAT_PROPERTY = "doc-format";
+	private static final String DOC_REF_PROPERTY = "doc-ref";
+	private static final String DOCUMENTATION_PROPERTY = "documentation";
+	private static final String SEMANTIC_ID_PROPERTY = "semantic-id";
+	private static final String REF_SUFFIX = "-ref";
+	private static final String TYPE_PROPERTY = "type";
+	private static final String TAG_SPEC_PROPERTY = "tag-spec";
+	private static final String TOP_LEVEL_PAGE_PROPERTY = "top-level-page";
+	private static final String SEMANTIC_MAPPING_PROPERTY = "semantic-mapping";
 	private static final String PASS_KEY = "pass";
 	private static final String ARGUMENTS_KEY = "arguments";
 	private static final String ITERATOR_KEY = "iterator";
@@ -105,11 +98,11 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	
 	protected CapabilityLoader capabilityLoader;
 	
-	public AbstractDrawioFactory() {
+	public AbstractMappingFactory() {
 		this(new CapabilityLoader());
 	}
 	
-	public AbstractDrawioFactory(CapabilityLoader capabilityLoader) {
+	public AbstractMappingFactory(CapabilityLoader capabilityLoader) {
 		this.capabilityLoader = capabilityLoader;
 	}
 		
@@ -122,12 +115,59 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	}
 	
 	protected String getTopLevelPageProperty() {
-		return getPropertyNamespace() + "top-level-page";
+		return getPropertyNamespace() + TOP_LEVEL_PAGE_PROPERTY;
 	}	
 	
 	protected String getTagSpecPropertyName() {
-		return getPropertyNamespace() + "tag-spec";
+		return getPropertyNamespace() + TAG_SPEC_PROPERTY;
 	}
+
+	protected String getRefSuffix() {
+		return REF_SUFFIX;
+	}
+	
+	/**
+	 * Semantic ID is used instead of the Drawio element ID if provided. E.g. "my-process" instead of "HP_1aCX3hRniy5izKEYK"
+	 * While it is possible to edit Drawio element ID's, it shall be done with care to avoid introduction of duplicate ID's. 
+	 * Semantic ID's shall be unique within their containment collection.   
+	 * @return
+	 */
+	protected String getSemanticIdProperty() {
+		return getPropertyNamespace() + SEMANTIC_ID_PROPERTY;
+	}	
+	
+	protected String getDocumentationProperty() {
+		return getPropertyNamespace() + DOCUMENTATION_PROPERTY;
+	}	
+		
+	protected String getDocRefProperty() {
+		return getPropertyNamespace() + DOC_REF_PROPERTY;
+	}	
+	
+	protected String getDocFormatProperty() {
+		return getPropertyNamespace() + DOC_FORMAT_PROPERTY; 
+	}	
+	
+	protected abstract Marked asMarked(S obj);
+	
+	/**
+	 * Property containing domain class name.
+	 * The name can be simple <code>class  name</code>, qualified <code>package name.class name</code>, or be a URI <code>package namespace uri#//class name</code>  
+	 * @return
+	 */
+	protected String getTypeProperty() {
+		return getPropertyNamespace() + TYPE_PROPERTY;
+	}	
+	
+	public abstract URI getBaseURI(S obj);
+	
+	/**
+	 * Returns object property. This implementation uses ModelElement.getProperties().get() for instances of model element. 
+	 * Returns null otherwise.
+	 * @param eObj
+	 * @return
+	 */
+	protected abstract String getProperty(S obj, String property);
 	
 	/**
 	 * Loads source from a property or from a URL specified by refProperty
@@ -136,17 +176,17 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 * @param refProperty
 	 * @return
 	 */
-	protected SourceRecord loadSource(EObject eObj, String property, String refProperty) {
-		URI baseURI = getBaseURI(eObj);
+	protected SourceRecord loadSource(S obj, String property, String refProperty) {
+		URI baseURI = getBaseURI(obj);
 		if (!Util.isBlank(property)) {
-			String source = getProperty(eObj, property);
+			String source = getProperty(obj, property);
 			if (!Util.isBlank(source)) {
 				return new SourceRecord(baseURI, source);
 			}
 		}
 		
 		if (!Util.isBlank(refProperty)) {
-			String ref = getProperty(eObj, refProperty);
+			String ref = getProperty(obj, refProperty);
 			if (!Util.isBlank(ref)) {
 				URI refURI = URI.createURI(ref);
 				if (baseURI != null && !baseURI.isRelative()) {
@@ -157,117 +197,19 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 					Reader reader = converter.toReader(refURI);
 					return new SourceRecord(refURI, converter.toString(reader));
 				} catch (IOException e) {
-					throw new ConfigurationException("Error loading source from " + refURI, e, asMarked(eObj));
+					throw new ConfigurationException("Error loading source from " + refURI, e, asMarked(obj));
 				}
 			}
 		}
 		return null;
 	}
 	
-	protected SourceRecord loadSource(EObject eObj, String property) {
+	protected SourceRecord loadSource(S obj, String property) {
 		if (Util.isBlank(property)) {
 			return null;
 		}
-		return loadSource(eObj, property, property + getRefSuffix());
+		return loadSource(obj, property, property + getRefSuffix());
 	}
-
-	protected String getRefSuffix() {
-		return "-ref";
-	}
-	
-	/**
-	 * Retrieves properties from the model element itself. 
-	 * Override to load properties from some other source. 
-	 * For example, load YAML from a resource identified by some property and load
-	 * properties from that YAML.
-	 * Or load from resources resolved relative to the object base URI.
-	 * It would allow to have semantic mapping configured via a single element property with all other properties
-	 * externalized.  
-	 * @param modelElement
-	 * @param property
-	 * @return
-	 */
-	protected String getModelElementProperty(org.nasdanika.drawio.model.ModelElement modelElement, String property) {
-		return modelElement.getProperties().get(property);
-	}
-	
-	/**
-	 * Returns eObject property. This implementation uses ModelElement.getProperties().get() for instances of model element. 
-	 * Returns null otherwise.
-	 * @param eObj
-	 * @return
-	 */
-	protected String getProperty(EObject eObj, String property) {
-		// TODO - loading from a resource identified by a property instead of element properties.
-		// Or, more specifically object property source provider
-		if (eObj instanceof org.nasdanika.drawio.model.ModelElement) {
-			return getModelElementProperty((org.nasdanika.drawio.model.ModelElement) eObj, property);
-		}
-		
-		if (eObj instanceof Tag) {
-			Page page = (Page) eObj.eContainer();
-			Root root = page.getModel().getRoot();
-
-			SourceRecord configRecord = loadSource(root, getTagSpecPropertyName());
-			if (configRecord == null) {
-				return null;
-			}
-			try {
-				Yaml yaml = new Yaml();
-				Object tagSpecObj = yaml.load(configRecord.source());
-				if (tagSpecObj instanceof Map) {
-					Map<?,?> tagSpecMap = (Map<?,?>) tagSpecObj;
-					Object tagConfigObj = tagSpecMap.get(((Tag) eObj).getName());
-					if (tagConfigObj == null) {
-						return null;
-					}
-					
-					if (tagConfigObj instanceof Map) {
-						Map<?,?> tagConfigMap = (Map<?,?>) tagConfigObj;
-						Object value = tagConfigMap.get(property);
-						if (value instanceof String) {
-							return (String) value;
-						}
-						return yaml.dump(value);
-					}
-					
-					throw new ConfigurationException("Usupported tag configuration type: " + tagConfigObj, asMarked(eObj));
-				}
-				
-				throw new ConfigurationException("Usupported configuration type: " + tagSpecObj, asMarked(eObj));
-			} catch (YAMLException yamlException) {
-				throw new ConfigurationException("Error loading tag spec: " + yamlException , yamlException, asMarked(eObj));
-			}
-		}
-		
-		return null;
-	}
-		
-	/**
-	 * Indicates a top level page which shall be a child of document element
-	 * @param page
-	 * @return
-	 */
-	public boolean isTopLevelPage(Page page) {
-		String topLevelPageProperty = getTopLevelPageProperty();
-		if (!Util.isBlank(topLevelPageProperty)) {
-			String topLevelPage = getModelElementProperty(page.getModel().getRoot(), topLevelPageProperty);
-			if (!Util.isBlank(topLevelPage)) {
-				return "true".equals(topLevelPage.trim());
-			}
-		}
-
-		return page.getLinks().isEmpty();
-	}
-	
-	/**
-	 * Property containing domain class name.
-	 * The name can be simple <code>class  name</code>, qualified <code>package name.class name</code>, or be a URI <code>package namespace uri#//class name</code>  
-	 * @return
-	 */
-	protected String getTypeProperty() {
-		return getPropertyNamespace() + "type";
-	}	
 		
 	/**
 	 * A map of top level package aliases to {@link EPackage}
@@ -275,7 +217,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	 */
 	protected abstract Map<String,EPackage> getEPackages();
 		
-	public EClassifier getType(String type, EObject source) {
+	public EClassifier getType(String type, S source) {
 		return NcoreUtil.getType(type, getEPackages(), msg -> new ConfigurationException(msg, asMarked(source)));
 	}
 	
@@ -304,7 +246,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 		return type.getEPackage().getEFactoryInstance().create(type);
 	}
 	
-	SetterFeatureMapper<EObject, EObject> mapper = new PropertySetterFeatureMapper<EObject, EObject>() {
+	protected SetterFeatureMapper<S, EObject> mapper = new PropertySetterFeatureMapper<S, EObject>() {
 
 		@Override
 		protected URI getBaseURI(EObject source) {
@@ -450,38 +392,6 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	};
 	
 	/**
-	 * Semantic ID is used instead of the Drawio element ID if provided. E.g. "my-process" instead of "HP_1aCX3hRniy5izKEYK"
-	 * While it is possible to edit Drawio element ID's, it shall be done with care to avoid introduction of duplicate ID's. 
-	 * Semantic ID's shall be unique within their containment collection.   
-	 * @return
-	 */
-	protected String getSemanticIdProperty() {
-		return getPropertyNamespace() + "semantic-id";
-	}	
-	
-	protected String getDocumentationProperty() {
-		return getPropertyNamespace() + "documentation";
-	}	
-		
-	protected String getDocRefProperty() {
-		return getPropertyNamespace() + "doc-ref";
-	}	
-	
-	protected String getDocFormatProperty() {
-		return getPropertyNamespace() + "doc-format"; 
-	}	
-	
-	protected Marked asMarked(EObject eObject) {
-		if (eObject == null) {
-			return null;
-		}
-		if (eObject instanceof Marked) {
-			return (Marked) eObject;
-		}
-		return asMarked(eObject.eContainer());
-	}
-	
-	/**
 	 * Creates a semantic model element depending on the type
 	 * @param page
 	 * @param parallel
@@ -592,67 +502,7 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	protected String getInitializerScriptPropertyName() {
 		return getPropertyNamespace() + "initializer-script";
 	}
-	
-	/**
-	 * Executes script
-	 * @param diagramElement
-	 * @param semanticElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@SuppressWarnings("unchecked")
-	protected S executeInitializerScript(
-			EObject diagramElement,
-			S semanticElement,
-			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
-			ProgressMonitor progressMonitor) {
 		
-		SourceRecord script = loadSource(diagramElement, getInitializerScriptPropertyName());
-		
-		if (script == null || Util.isBlank(script.source())) {
-			return semanticElement;
-		}
-		
-		String isepn = getInitializerScriptPropertyName() + ENGINE_PROPERTY_SUFFIX;
-		String enginePredicateExpr = Util.isBlank(isepn) ? null : getProperty(diagramElement, isepn);
-
-		Map<String, Object> variables = Map.ofEntries(
-				Map.entry("diagramElement", diagramElement),
-				Map.entry("semanticElement", semanticElement),
-				Map.entry("registry", registry));		
-		
-		ScriptEngineManager scriptEngineManger = new ScriptEngineManager(getClassLoader(diagramElement));
-		for (ScriptEngineFactory scriptEngineFactory: scriptEngineManger.getEngineFactories()) {
-			if (!Util.isBlank(enginePredicateExpr)) {
-				if (!mapper.evaluatePredicate(scriptEngineFactory, enginePredicateExpr, variables, diagramElement)) {
-					continue;
-				}
-			} else if (script.uri() != null) {
-				String extension = script.uri().fileExtension();
-				if (!Util.isBlank(extension) && !scriptEngineFactory.getExtensions().contains(extension)) {
-					continue;
-				}
-			}
-			
-			ScriptEngine engine = scriptEngineFactory.getScriptEngine();
-			configureInitializerScriptEngine(
-					engine, 
-					diagramElement,
-					semanticElement,
-					registry, 
-					progressMonitor);
-			
-			try {
-				return (S) engine.eval(script.source());
-			} catch (ScriptException e) {
-				throw new ConfigurationException("Error evaluating initializer script: " + e, e, asMarked(diagramElement));
-			}
-		}
-		
-		throw new ConfigurationException("No matching script engine for the initializer script", asMarked(diagramElement));
-	}
-	
 	protected void configureInitializerScriptEngine(
 			ScriptEngine engine,
 			EObject diagramElement,
@@ -694,55 +544,6 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	protected String getBaseURIProperty() {
 		return getPropertyNamespace() + Context.BASE_URI_PROPERTY;
 	}	
-
-	/**
-	 * Computes logical parent - source for connection, first link for pages.
-	 * @param eObj
-	 * @return
-	 */
-	protected EObject getLogicalParent(EObject eObj) {
-		if (eObj instanceof Connection) {
-			Connection connection = (Connection) eObj;
-			Node cSource = connection.getSource();
-			return  cSource == null ? connection.eContainer() : cSource;
-		} 
-		
-		if (eObj instanceof Page) {
-			for (org.nasdanika.drawio.model.ModelElement link: ((Page) eObj).getLinks()) {
-				return link;
-			}
-		}
-		
-		return eObj.eContainer();
-	}
-	
-	public URI getBaseURI(EObject eObj) {
-		if (eObj == null) {
-			return null;
-		}
-		
-		EObject logicalParent = getLogicalParent(eObj);				
-		URI logicalParentBaseURI;
-		if (logicalParent == null) {
-			Resource eResource = eObj.eResource();			
-			logicalParentBaseURI = eResource == null ? null : eResource.getURI();
-		} else {
-			logicalParentBaseURI = getBaseURI(logicalParent);
-		}
-
-		String baseURIProperty = getBaseURIProperty();
-		if (Util.isBlank(baseURIProperty)) {
-			return logicalParentBaseURI;
-		}
-		
-		String baseURIStr = getProperty(eObj, baseURIProperty);
-		if (Util.isBlank(baseURIStr)) {
-			return logicalParentBaseURI;
-		}
-		
-		URI baseURI = URI.createURI(baseURIStr);
-		return logicalParentBaseURI == null || logicalParentBaseURI.isRelative() ? baseURI : baseURI.resolve(logicalParentBaseURI);		
-	}
 	
 	/**
 	 * Returns semantic element type name. This implementation gets it from type property.
@@ -2228,68 +2029,6 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	
 	protected String getScriptPropertyName() {
 		return getPropertyNamespace() + "script";
-	}
-	
-	/**
-	 * Executes script
-	 * @param diagramElement
-	 * @param semanticElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	protected boolean executeScript(
-			EObject diagramElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		SourceRecord script = loadSource(diagramElement, getScriptPropertyName());
-		
-		if (script == null || Util.isBlank(script.source())) {
-			return true;
-		}
-		
-		String sepn = getScriptPropertyName() + ENGINE_PROPERTY_SUFFIX;
-		String enginePredicateExpr = Util.isBlank(sepn) ? null : getProperty(diagramElement, sepn);
-
-		Map<String, Object> variables = Map.ofEntries(
-				Map.entry("diagramElement", diagramElement),
-				Map.entry("semanticElement", semanticElement),
-				Map.entry("pass", pass),
-				Map.entry("registry", registry));		
-		
-		ScriptEngineManager scriptEngineManger = new ScriptEngineManager(getClassLoader(diagramElement));
-		for (ScriptEngineFactory scriptEngineFactory: scriptEngineManger.getEngineFactories()) {
-			if (!Util.isBlank(enginePredicateExpr)) {
-				if (!mapper.evaluatePredicate(scriptEngineFactory, enginePredicateExpr, variables, diagramElement)) {
-					continue;
-				}
-			} else if (script.uri() != null) {
-				String extension = script.uri().fileExtension();
-				if (!Util.isBlank(extension) && !scriptEngineFactory.getExtensions().contains(extension)) {
-					continue;
-				}
-			}
-			
-			ScriptEngine engine = scriptEngineFactory.getScriptEngine();
-			configureScriptEngine(
-					engine, 
-					diagramElement, 
-					semanticElement, 
-					registry, 
-					pass, 
-					progressMonitor);
-			
-			try {
-				Object result = engine.eval(script.source());
-				return !Boolean.FALSE.equals(result);
-			} catch (ScriptException e) {
-				throw new ConfigurationException("Error evaluating script: " + e, e, asMarked(diagramElement));
-			}
-		}
-		throw new ConfigurationException("No matching script engine", asMarked(diagramElement));
 	}
 	
 	protected void configureScriptEngine(

@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.model.util;
+package org.nasdanika.mapping;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,11 +28,9 @@ import org.nasdanika.persistence.Marker;
 
 /**
  * Loads feature mapping configuration from properties
- * @deprecated Use <code>org.nasdanika.drawio.emf.PropertySetterFeatureMapper</code>
  * @param <S>
  * @param <T>
  */
-@Deprecated
 public abstract class PropertySetterFeatureMapper<S extends EObject, T extends EObject> extends org.nasdanika.mapping.PropertySetterFeatureMapper<S, T> {
 	
 	

@@ -1,4 +1,4 @@
-package org.nasdanika.common;
+package org.nasdanika.mapping;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -10,6 +10,8 @@ import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Transformer;
 
 /**
  * This class is intended to be used with maps produced by {@link Transformer}. 
@@ -26,7 +28,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * @param <S>
  * @param <T>
  */
-public abstract class FeatureMapper<S extends EObject, T extends EObject> implements Mapper<S,T> {
+public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T> {
 
 	private Mapper<S, T> chain;
 
@@ -55,11 +57,11 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 	@Override
 	public void wire(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
 		for (T value: select(source, registry, progressMonitor)) {
-			HashSet<EObject> tracker = new HashSet<>();			
-			for (EObject contents: contents(source, tracker::add)) {
-				LinkedList<EObject> path = new LinkedList<>();
+			HashSet<S> tracker = new HashSet<>();			
+			for (S contents: contents(source, tracker::add)) {
+				LinkedList<S> path = new LinkedList<>();
 				path.add(contents);
-				Function<LinkedList<EObject>, Boolean> pathMapper = createPathMapper(source, value, registry, progressMonitor);
+				Function<LinkedList<S>, Boolean> pathMapper = createPathMapper(source, value, registry, progressMonitor);
 				wireContents(path, pathMapper, tracker::add);
 			}
 			
@@ -160,13 +162,12 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 	 * Recursive wiring of source contents 
 	 * 
 	 * @param path containment path with the first element being the immediate child of the source element 
-	 * @param consumer Consumes descendant source path, returns true if traversal shall continue
 	 * @param tracker Tracker to avoid infinite loops
 	 */
-	protected void wireContents(LinkedList<EObject> path, Function<LinkedList<EObject>,Boolean> pathMapper, Predicate<EObject> tracker) {
+	protected void wireContents(LinkedList<S> path, Function<LinkedList<S>,Boolean> pathMapper, Predicate<S> tracker) {
 		if (pathMapper.apply(path)) {
-			for (EObject child: contents(path.getLast(), tracker)) {
-				LinkedList<EObject> subPath = new LinkedList<>(path);
+			for (S child: contents(path.getLast(), tracker)) {
+				LinkedList<S> subPath = new LinkedList<>(path);
 				subPath.add(child);
 				wireContents(subPath, pathMapper, tracker);
 			}			
@@ -174,14 +175,11 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 	}
 	
 	/**
-	 * This method returns eObject.eContents(); Override to take into account object references, e.g. page links in Drawio.  
-	 * @param eObject
+	 * Returns object contents. E.g. EObject.eContents(), Element.getChildren() for Drawio diagrams.
+	 * @param obj
 	 * @param tracker prevents infinite loops in case of circular references
-	 * @return Tree iterator which is aware of page links and fails on double-visits (circular references)
 	 */
-	public List<? extends EObject> contents(EObject eObject, Predicate<EObject> tracker) {
-    	return eObject.eContents();
-	}	
+	public abstract List<S> contents(S obj, Predicate<S> tracker);
 	
 	/**
 	 * Creates a function which maps a given containment path. 
@@ -191,10 +189,9 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 	 * @param registry
 	 * @return
 	 */
-	protected Function<LinkedList<EObject>,Boolean> createPathMapper(S container, T containerValue, Map<S,T> registry, ProgressMonitor progressMonitor) {
+	protected Function<LinkedList<S>,Boolean> createPathMapper(S container, T containerValue, Map<S,T> registry, ProgressMonitor progressMonitor) {
 		return path -> {
-			@SuppressWarnings("unchecked")
-			S contents = (S) path.getLast();
+			S contents = path.getLast();
 			boolean result = true;
 			for (T contentsValue: select(contents, registry, progressMonitor)) {
 				if (contentsValue == null && containerValue == null) {
@@ -271,7 +268,7 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 			EStructuralFeature containerValueFeature,
 			S contents,
 			T contentsValue,
-			LinkedList<EObject> sourcePath,
+			LinkedList<S> sourcePath,
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor);
 	
@@ -295,7 +292,7 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 			EStructuralFeature contentsValueFeature,
 			S container,
 			T containerValue,
-			LinkedList<EObject> sourcePath,
+			LinkedList<S> sourcePath,
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor);
 	

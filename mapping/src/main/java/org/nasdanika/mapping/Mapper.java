@@ -1,8 +1,11 @@
-package org.nasdanika.common;
+package org.nasdanika.mapping;
 
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.Composable;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Transformer;
 
 /**
  * This interface is intended to be used with maps produced by {@link Transformer}. 
@@ -19,7 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  * @param <S>
  * @param <T>
  */
-public interface Mapper<S extends EObject, T extends EObject> extends Composable<Mapper<S,T>> {
+public interface Mapper<S, T> extends Composable<Mapper<S,T>> {
 	
 	/**
 	 * Wires all elements in the registry

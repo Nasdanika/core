@@ -1,4 +1,4 @@
-package org.nasdanika.common;
+package org.nasdanika.mapping;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -17,7 +17,7 @@ import org.yaml.snakeyaml.error.YAMLException;
  * @param <S>
  * @param <T>
  */
-public abstract class PropertySetterFeatureMapper<S extends EObject, T extends EObject> extends SetterFeatureMapper<S, T> {
+public abstract class PropertySetterFeatureMapperBase<S extends EObject, T extends EObject> extends SetterFeatureMapper<S, T> {
 	
 	protected PropertySetterFeatureMapper() {
 		super();

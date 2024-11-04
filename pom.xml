@@ -200,6 +200,7 @@
 		<module>diagram</module>
 		<module>common</module>
 		<module>persistence</module>
+		<module>mapping</module>
 		<module>resources</module>
 		<module>graph</module>
 		<module>graph.model</module>

@@ -1,4 +1,4 @@
-package org.nasdanika.common;
+package org.nasdanika.mapping;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -27,7 +27,12 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.SourceRecord;
+import org.nasdanika.common.Util;
+import org.nasdanika.persistence.ConfigurationException;
+import org.nasdanika.persistence.Marked;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
@@ -43,7 +48,7 @@ import org.yaml.snakeyaml.error.YAMLException;
  * @param <S>
  * @param <T>
  */
-public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> extends FeatureMapper<S, T> {
+public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureMapper<S, T> {
 	
 	public static final String PATH_KEY = "path";
 	public static final String CONDITION_KEY = "condition";
@@ -79,7 +84,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		this.defaultFeatureMapper = defaulFeaturetMapper; 
 	}	
 	
-	protected interface Setter<S extends EObject, T extends EObject> {
+	protected interface Setter<S, T extends EObject> {
 		
 		/**
 		 * Possibly sets feature. Returns false if some preconditions were not met and the setter shall be invoked at a later phase
@@ -97,7 +102,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 				EStructuralFeature feature,
 				S argument,
 				T argumentValue,
-				LinkedList<EObject> sourcePath, 
+				LinkedList<S> sourcePath, 
 				Map<S, T> registry, 
 				ProgressMonitor progressMonitor);
 		
@@ -107,9 +112,9 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	 * @param source
 	 * @return Feature mapping configuration YAML string.
 	 */
-	protected abstract String getFeatureMapConfigStr(EObject source);
+	protected abstract String getFeatureMapConfigStr(S source);
 	
-	protected abstract EClassifier getType(String type, EObject context);
+	protected abstract EClassifier getType(String type, S context);
 	
 	protected enum ConfigType { 
 		self,
@@ -133,6 +138,89 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		end }
 	
 	protected enum ConfigSubType { self, other }
+	
+	protected abstract Marked asMarked(S source);
+	
+	protected boolean matchCondition(
+			Object config, 
+			T eObj,
+			S argument,
+			T argumentValue,
+			LinkedList<S> sourcePath,
+			Map<S, T> registry,
+			S context) {
+		if (config == Boolean.TRUE) {
+			return true;
+		}
+	
+		if (config instanceof Map) {
+			Map<?,?> configMap = (Map<?,?>) config;
+			Object condition = configMap.get(CONDITION_KEY);
+			if (condition == null) {
+				return true;
+			}
+			if (condition instanceof String) {
+				Map<String,Object> variables = new LinkedHashMap<>();
+				variables.put("value", argumentValue);
+				variables.put("path", sourcePath);
+				variables.put("registry", registry);
+				return evaluatePredicate(argument, (String) condition, variables, context);
+			}
+			throw new ConfigurationException("Unsupported condition type: " + condition.getClass() + " " + condition, null, asMarked(context));
+		}
+		
+		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
+		return true;
+	}	
+
+	public boolean evaluatePredicate(
+			Object obj, 
+			String expr, 
+			Map<String,Object> variables, 
+			S context) {
+		
+		if (Util.isBlank(expr)) {
+			return true;
+		}
+		return evaluate(obj, expr, variables, Boolean.class, context);
+	}
+
+	public <V> V evaluate(
+			Object obj, 
+			String expr, 
+			Map<String,Object> variables, 
+			Class<V> resultType, 
+			S context) {
+		
+		if (Util.isBlank(expr)) {
+			return null;
+		}
+		
+		try {			
+			ExpressionParser parser = createExpressionParser(context);
+			Expression exp = parser.parseExpression(expr);
+			EvaluationContext evaluationContext = createEvaluationContext(context);
+			if (variables != null) {
+				variables.entrySet().forEach(ve -> evaluationContext.setVariable(ve.getKey(), ve.getValue()));
+			}
+			return evaluationContext == null ? exp.getValue(obj, resultType) : exp.getValue(evaluationContext, obj, resultType);
+		} catch (ParseException e) {
+			throw new ConfigurationException("Error parsing expression: '" + expr, e, asMarked(context));
+			return null;
+		} catch (EvaluationException e) {
+			throw new ConfigurationException("Error evaluating expression: '" + expr + "' in the context of " + obj + " with variables " + variables, e, asMarked(context));
+			return null;
+		}
+	}
+	
+	protected EvaluationContext createEvaluationContext(S context) {
+		return new StandardEvaluationContext();
+	}
+
+	protected SpelExpressionParser createExpressionParser(S context) {
+		return new SpelExpressionParser();
+	}
+	
 		
 	/**
 	 * 
@@ -141,7 +229,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	 * @param isArgument
 	 * @return
 	 */
-	protected Object getFeatureMapConfig(EObject source, ConfigType configType, ConfigSubType configSubType) {
+	protected Object getFeatureMapConfig(S source, ConfigType configType, ConfigSubType configSubType) {
 		String config = getFeatureMapConfigStr(source);
 		if (Util.isBlank(config)) {
 			return null;
@@ -160,7 +248,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 							}
 						}
 					}
-					throwConfigurationException("Unsupported config type: " + ck, null, source);
+					throw new ConfigurationException("Unsupported config type: " + ck, null, asMarked(source));
 				}
 				Object subConfigObj = configMap.get(configType.name());
 				if (subConfigObj == null) {
@@ -179,7 +267,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 									}
 								}
 							}
-							throwConfigurationException("Unsupported config subtype: " + sck, null, source);
+							throw new ConfigurationException("Unsupported config subtype: " + sck, null, asMarked(source));
 						}
 						
 						return subConfigMap.get(configSubType.name());
@@ -188,37 +276,21 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 					return subConfigObj;
 				}
 				
-				throwConfigurationException("Usupported configuration type: " + subConfigObj, null, source);
+				throw new ConfigurationException("Usupported configuration type: " + subConfigObj, null, asMarked(source));
 			}
 			
-			throwConfigurationException("Usupported configuration type: " + configObj, null, source);
+			throw new ConfigurationException("Usupported configuration type: " + configObj, null, asMarked(source));
 		} catch (YAMLException yamlException) {
-			throwConfigurationException(null, yamlException, source);
+			throw new ConfigurationException(null, yamlException, asMarked(source));
 		}
 		return null; // Never gets here
-	}
-	
-	/**
-	 * Configuration exception and Marker/Marked is not available here, so throwing {@link IllegalArgumentException}.
-	 * Override to throw ConfigurationException in subclasses.
-	 * @param context
-	 * @param message
-	 */
-	protected void throwConfigurationException(String message, Throwable cause, EObject context) {
-		if (cause == null) {
-			throw new IllegalArgumentException(message);
-		}
-		if (Util.isBlank(message)) {
-			throw new IllegalArgumentException(cause);			
-		}
-		throw new IllegalArgumentException(message, cause);		
 	}
 
 	@SuppressWarnings("unchecked")
 	protected Map<String, Setter<S,T>> loadFeatureSetters(
 			Object configs, 
-			java.util.function.BiConsumer<String, EObject> featureNameValidator, 
-			EObject context, 
+			java.util.function.BiConsumer<String, S> featureNameValidator, 
+			S context, 
 			Setter<S, T> chain) {
 		
 		if (configs == null) {
@@ -245,7 +317,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 						ret.put(trimmedKey, loadFeatureSetter(true, context, chain));
 					}
 				} else {
-					throwConfigurationException("Feature config in a collection shall be a string, got: " + e, null, context);
+					throw new ConfigurationException("Feature config in a collection shall be a string, got: " + e, null, asMarked(context));
 					return null; // Never gets here
 				}
 			}
@@ -262,7 +334,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			return ret;
 		}
 		
-		throwConfigurationException("Unexpected config type: " + configs, null, context);
+		throw new ConfigurationException("Unexpected config type: " + configs, null, asMarked(context));
 		return null; // Never gets here
 	}
 			
@@ -286,7 +358,9 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	
 	protected enum Greedy { FALSE, NO_CHILDREN, TRUE }
 	
-	protected Setter<S,T> loadFeatureSetter(Object config, EObject context, Setter<S, T> chain) {
+	protected abstract boolean isAncestor(S ancestor, S obj);
+	
+	protected Setter<S,T> loadFeatureSetter(Object config, S context, Setter<S, T> chain) {
 		return new Setter<S, T>() {
 
 			@SuppressWarnings("unchecked")
@@ -296,7 +370,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 					EStructuralFeature feature, 
 					S argument,
 					T argumentValue,
-					LinkedList<EObject> sourcePath,
+					LinkedList<S> sourcePath,
 					Map<S, T> registry, 					
 					ProgressMonitor progressMonitor) {
 
@@ -343,7 +417,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 										} else if (greedy == Greedy.NO_CHILDREN) {
 											for (S eObjSource: getSources(eObj, registry) ) {
 												for (S fvcSource: getSources(fvc, registry)) {
-													if (EcoreUtil.isAncestor(eObjSource, fvcSource)) {
+													if (isAncestor(eObjSource, fvcSource)) {
 														shallSet = false; // No taking from children
 													}													
 												}												
@@ -417,19 +491,19 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}	
 	
 	
-	protected Object convert(Object value, EClassifier type, EObject context) {
+	protected Object convert(Object value, EClassifier type, S context) {
 		if (value == null || type.isInstance(value)) {
 			return value;
 		}
 		
 		Object converted = DefaultConverter.INSTANCE.convert(value, type.getInstanceClass());
 		if (converted == null) {
-			throwConfigurationException("Cannot convert " + value + " to " + type.getInstanceClass(), null, context);
+			throw new ConfigurationException("Cannot convert " + value + " to " + type.getInstanceClass(), null, asMarked(context));
 		}
 		return converted;
 	}
 			
-	protected boolean matchPath(Object config, LinkedList<EObject> path, Map<S, T> registry, EObject context) {
+	protected boolean matchPath(Object config, LinkedList<S> path, Map<S, T> registry, S context) {
 		if (config == Boolean.TRUE) {
 			return true;
 		}
@@ -451,9 +525,9 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 				Map<String,Object> variables = new LinkedHashMap<>();
 				variables.put("registry", registry);
 				
-				Iterator<EObject> pathIterator = path.iterator();				
+				Iterator<S> pathIterator = path.iterator();				
 				for (Object condition: pathConditions) {
-					EObject pathElement = pathIterator.next();
+					S pathElement = pathIterator.next();
 					if (condition instanceof Boolean) {
 						if (Boolean.FALSE.equals(condition)) {
 							return false;
@@ -461,17 +535,17 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 					} else if (condition instanceof String) {
 						if (!evaluatePredicate(pathElement, (String) condition, variables, context));
 					} else {
-						throwConfigurationException("Unsupported path condition type: " + condition.getClass() + " " + condition, null, context);						
+						throw new ConfigurationException("Unsupported path condition type: " + condition.getClass() + " " + condition, null, asMarked(context));						
 					}
 				}
 			}
 		}
 		
-		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
+		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
 		return true;
 	}
 		
-	protected boolean matchType(EObject eObj, Object config, EObject context) {
+	protected boolean matchType(EObject eObj, Object config, S context) {
 		if (config == Boolean.TRUE) {
 			return true;
 		}
@@ -488,11 +562,11 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			}
 		}
 		
-		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
+		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
 		return true;
 	}
 	
-	protected boolean matchArgumentType(Object argument, Object config, EObject context) {
+	protected boolean matchArgumentType(Object argument, Object config, S context) {
 		if (argument == null) {
 			return false;
 		}
@@ -517,14 +591,14 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 							return true;
 						}
 					} else if (ate != null) {
-						throwConfigurationException("Unsupported argument-type element type: " + ate.getClass() + " " + ate, null, context);						
+						throw new ConfigurationException("Unsupported argument-type element type: " + ate.getClass() + " " + ate, null, asMarked(context));						
 					}
 				}
 				return false;
 			}
 		}
 		
-		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
+		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
 		return true;
 	}
 	
@@ -534,92 +608,13 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	 * @param value
 	 * @param context
 	 */
-	protected boolean matchArgumentTypeValue(Object argument, String value, EObject context) {
+	protected boolean matchArgumentTypeValue(Object argument, String value, S context) {
 		boolean isNegation = value.startsWith("!");
 		String typeName = isNegation ? value.substring(1) : value;
 		EClassifier eClassifier = getType(typeName, context);
 		return eClassifier.isInstance(argument) ^ isNegation;
 	}
 	
-	protected boolean matchCondition(
-			Object config, 
-			T eObj,
-			S argument,
-			T argumentValue,
-			LinkedList<EObject> sourcePath,
-			Map<S, T> registry,
-			EObject context) {
-		if (config == Boolean.TRUE) {
-			return true;
-		}
-	
-		if (config instanceof Map) {
-			Map<?,?> configMap = (Map<?,?>) config;
-			Object condition = configMap.get(CONDITION_KEY);
-			if (condition == null) {
-				return true;
-			}
-			if (condition instanceof String) {
-				Map<String,Object> variables = new LinkedHashMap<>();
-				variables.put("value", argumentValue);
-				variables.put("path", sourcePath);
-				variables.put("registry", registry);
-				return evaluatePredicate(argument, (String) condition, variables, context);
-			}
-			throwConfigurationException("Unsupported condition type: " + condition.getClass() + " " + condition, null, context);
-		}
-		
-		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
-		return true;
-	}	
-
-	public boolean evaluatePredicate(
-			Object obj, 
-			String expr, 
-			Map<String,Object> variables, 
-			EObject context) {
-		
-		if (Util.isBlank(expr)) {
-			return true;
-		}
-		return evaluate(obj, expr, variables, Boolean.class, context);
-	}
-
-	public <V> V evaluate(
-			Object obj, 
-			String expr, 
-			Map<String,Object> variables, 
-			Class<V> resultType, 
-			EObject context) {
-		
-		if (Util.isBlank(expr)) {
-			return null;
-		}
-		
-		try {			
-			ExpressionParser parser = createExpressionParser(context);
-			Expression exp = parser.parseExpression(expr);
-			EvaluationContext evaluationContext = createEvaluationContext(context);
-			if (variables != null) {
-				variables.entrySet().forEach(ve -> evaluationContext.setVariable(ve.getKey(), ve.getValue()));
-			}
-			return evaluationContext == null ? exp.getValue(obj, resultType) : exp.getValue(evaluationContext, obj, resultType);
-		} catch (ParseException e) {
-			throwConfigurationException("Error parsing expression: '" + expr, e, context);
-			return null;
-		} catch (EvaluationException e) {
-			throwConfigurationException("Error evaluating expression: '" + expr + "' in the context of " + obj + " with variables " + variables, e, context);
-			return null;
-		}
-	}
-	
-	protected EvaluationContext createEvaluationContext(EObject context) {
-		return new StandardEvaluationContext();
-	}
-
-	protected SpelExpressionParser createExpressionParser(EObject context) {
-		return new SpelExpressionParser();
-	}
 	
 	/**
 	 * A comparator of elements for many features.
@@ -633,7 +628,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			EObject semanticElement,
 			Object config, 
 			Map<S, T> registry, 
-			EObject context) {
+			S context) {
 		if (config == Boolean.TRUE) {
 			return null;
 		}
@@ -649,8 +644,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 					registry, 
 					context);
 		}
-		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
-		return null; 
+		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
 	}
 	
 	public static final Comparator<Object> NATURAL_COMPARATOR = new Comparator<Object>() {
@@ -699,7 +693,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			EObject semanticElement,
 			Object comparatorConfig, 
 			Map<S, T> registry, 
-			EObject context) {
+			S context) {
 		if ("natural".equals(comparatorConfig)) {
 			return NATURAL_COMPARATOR;
 		} 
@@ -752,11 +746,11 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			}
 		}
 		
-		throwConfigurationException("Unsupported comparator config: " + comparatorConfig, null, context);
+		throw new ConfigurationException("Unsupported comparator config: " + comparatorConfig, null, asMarked(context));
 		return null;
 	}
 	
-	protected int getPosition(Object config, EObject context) {
+	protected int getPosition(Object config, S context) {
 		if (config == Boolean.TRUE) {
 			return -1;
 		}
@@ -769,9 +763,9 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			if (position instanceof Number) {
 				return ((Number) position).intValue();
 			}
-			throwConfigurationException("Unsupported position type: " + position.getClass() + " " + position, null, context);
+			throw new ConfigurationException("Unsupported position type: " + position.getClass() + " " + position, null, asMarked(context));
 		}
-		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
+		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
 		return -1;
 	}
 	
@@ -779,10 +773,10 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Object config,
 			S argument,
 			T argumentValue,
-			LinkedList<EObject> sourcePath,
+			LinkedList<S> sourcePath,
 			Map<S, T> registry,
 			Class<?> type,
-			EObject context) {
+			S context) {
 		if (config == Boolean.TRUE) {
 			return argumentValue;
 		}
@@ -817,7 +811,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		return result;
 	}
 	
-	protected SourceRecord getScript(Map<?,?> configMap, EObject context) {
+	protected SourceRecord getScript(Map<?,?> configMap, S context) {
 		URI baseURI = getBaseURI(context);
 		Object script = configMap.get(SCRIPT_KEY);
 		if (script instanceof String) {
@@ -826,7 +820,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 				return new SourceRecord(baseURI, ss);
 			}
 		} else if (script != null) {
-			throwConfigurationException("Script is not a string: " + script, null, context);			
+			throw new ConfigurationException("Script is not a string: " + script, null, asMarked(context));			
 		} else {
 			return null;
 		}
@@ -847,18 +841,18 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 				Reader reader = converter.toReader(refURI);
 				return new SourceRecord(refURI, converter.toString(reader));
 			} catch (IOException e) {
-				throwConfigurationException("Error loading script from " + refURI, e, context);
+				throw new ConfigurationException("Error loading script from " + refURI, e, asMarked(context));
 			}
 		}
-		throwConfigurationException("Script ref is not a string: " + ref, null, context);	
+		throw new ConfigurationException("Script ref is not a string: " + ref, null, asMarked(context));	
 		return null;
 	}
 	
-	protected URI getBaseURI(EObject eObj) {
+	protected URI getBaseURI(S eObj) {
 		return null;
 	}
 	
-	protected ClassLoader getClassLoader(EObject obj) {
+	protected ClassLoader getClassLoader(S obj) {
 		return Thread.currentThread().getContextClassLoader();
 	}
 		
@@ -867,7 +861,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	 * 
 	 * @return
 	 */
-	protected Iterable<Map.Entry<String, Object>> getVariables(EObject context) {
+	protected Iterable<Map.Entry<String, Object>> getVariables(S context) {
 		return Collections.emptySet();
 	}	
 	
@@ -883,10 +877,10 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			Map<?,?> configMap, 
 			Object argument,
 			Object argumentValue,
-			LinkedList<EObject> sourcePath,
+			LinkedList<S> sourcePath,
 			Map<S, T> registry,
 			Class<?> type,
-			EObject context) {		
+			S context) {		
 		SourceRecord script = getScript(configMap, context);
 		
 		if (script == null || Util.isBlank(script.source())) {
@@ -895,7 +889,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		
 		Object enginePredicateExpr = configMap.get(SCRIPT_ENGINE_KEY);
 		if (enginePredicateExpr != null && !(enginePredicateExpr instanceof String)) {
-			throwConfigurationException("Script engine expression is not a string: " + enginePredicateExpr, null, context);				
+			throw new ConfigurationException("Script engine expression is not a string: " + enginePredicateExpr, null, asMarked(context));				
 		}
 		
 		ScriptEngineManager scriptEngineManger = new ScriptEngineManager(getClassLoader(context));
@@ -926,14 +920,13 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			try {
 				return engine.eval(script.source());
 			} catch (ScriptException e) {
-				throwConfigurationException("Error evaluating script: " + e, e, context);
+				throw new ConfigurationException("Error evaluating script: " + e, e, asMarked(context));
 			}
 		}
-		throwConfigurationException("No matching script engine", null, context);
-		return argumentValue;
+		throw new ConfigurationException("No matching script engine", null, asMarked(context));
 	}
 	
-	protected Greedy getGreedy(Object config, EObject context) {
+	protected Greedy getGreedy(Object config, S context) {
 		if (config == Boolean.TRUE) {
 			return Greedy.NO_CHILDREN;
 		}
@@ -947,17 +940,17 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			if (greedy instanceof Boolean) {
 				return (Boolean) greedy ? Greedy.TRUE : Greedy.FALSE;
 			}
-			throwConfigurationException("Unsupported greedy type: " + greedy.getClass() + " " + greedy, null, context);
+			throw new ConfigurationException("Unsupported greedy type: " + greedy.getClass() + " " + greedy, null, asMarked(context));
 		}
-		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
+		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
 		return null;
 	}
 	
 	protected Map<String,Setter<S,T>> getFeatureSetters(
-			EObject source,
+			S source,
 			ConfigType configType, 
 			ConfigSubType configSubType,
-			java.util.function.BiConsumer<String, EObject> featureNameValidator,
+			java.util.function.BiConsumer<String, S> featureNameValidator,
 			Setter<S, T> chain) {
 		Object config = getFeatureMapConfig(source, configType, configSubType);
 		if (configType == ConfigType.self && config instanceof Map) {
@@ -972,11 +965,11 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}	
 	
 	protected Setter<S,T> getFeatureSetter(
-			EObject source, 
+			S source, 
 			ConfigType configType, 
 			ConfigSubType configSubType, 
 			String featureName,
-			java.util.function.BiConsumer<String, EObject> featureNameValidator, 
+			java.util.function.BiConsumer<String, S> featureNameValidator, 
 			Setter<S, T> chain) {
 		return getFeatureSetters(
 				source, 
@@ -988,11 +981,11 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}
 	
 	protected Setter<S,T> getFeatureSetter(
-			EObject source, 
+			S source, 
 			ConfigType configType, 
 			ConfigSubType configSubType, 
 			EStructuralFeature feature,
-			java.util.function.BiConsumer<String, EObject> featureNameValidator,
+			java.util.function.BiConsumer<String, S> featureNameValidator,
 			Setter<S, T> chain) {
 		return getFeatureSetter(
 				source, 
@@ -1003,11 +996,11 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 				chain);
 	}
 	
-	protected java.util.function.BiConsumer<String, EObject> getFeatureNameValidator(EObject value) { 
+	protected java.util.function.BiConsumer<String, S> getFeatureNameValidator(EObject value) { 
 		return (featureName, context) -> {
 			EClass valueEClass = value.eClass();
 			if (valueEClass.getEStructuralFeature(featureName) == null) {
-				throwConfigurationException("Feature " + featureName + " not found in " + valueEClass.getName(), null, context);
+				throw new ConfigurationException("Feature " + featureName + " not found in " + valueEClass.getName(), null, asMarked(context));
 			}
 		};
 	}
@@ -1062,7 +1055,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			EStructuralFeature containerValueFeature,
 			S contents, 
 			T contentsValue, 
-			LinkedList<EObject> sourcePath, 
+			LinkedList<S> sourcePath, 
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor) {
 		

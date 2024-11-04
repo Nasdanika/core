@@ -26,7 +26,7 @@ import org.nasdanika.persistence.ConfigurationException;
 import org.xml.sax.SAXException;
 
 /**
- * Filters representations and sets semantic UUID's so representation elements and be linked to semantic elements.
+ * Filters representations and sets semantic UUID's so representation elements can be linked to semantic elements.
  * @param <D>
  * @param <S>
  */
