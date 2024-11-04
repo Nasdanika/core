@@ -11,6 +11,10 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
+import org.nasdanika.common.Util;
+import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.persistence.ConfigurationException;
 
 /**
  * Loads feature mapping configuration from properties
@@ -19,6 +23,11 @@ import org.yaml.snakeyaml.error.YAMLException;
  */
 public abstract class PropertySetterFeatureMapperBase<S, T extends EObject> extends SetterFeatureMapper<S, T> {
 	
+	private static final String MAPPING_SELECTOR_REF_PROPERTY = "mapping-selector-ref";
+	private static final String MAPPING_SELECTOR_PROPERTY = "mapping-selector";
+	private static final String FEATURE_MAP_REF_PROPERTY = "feature-map-ref";
+	private static final String FEATURE_MAP_PROPERTY = "feature-map";
+
 	protected PropertySetterFeatureMapperBase() {
 		super();
 	}
@@ -36,11 +45,11 @@ public abstract class PropertySetterFeatureMapperBase<S, T extends EObject> exte
 	}
 	
 	protected String getFeatureMapConfigPropertyName() {
-		return getPropertyNamespace() + "feature-map";
+		return getPropertyNamespace() + FEATURE_MAP_PROPERTY;
 	}
 	
 	protected String getFeatureMapConfigRefPropertyName() {
-		return getPropertyNamespace() + "feature-map-ref";
+		return getPropertyNamespace() + FEATURE_MAP_REF_PROPERTY;
 	}
 	
 	/**
@@ -49,7 +58,7 @@ public abstract class PropertySetterFeatureMapperBase<S, T extends EObject> exte
 	 * @param eObj
 	 * @return
 	 */
-	protected abstract String getProperty(EObject eObj, String property);
+	protected abstract String getProperty(S eObj, String property);
 	
 	@Override
 	protected String getFeatureMapConfigStr(S source) {
@@ -75,7 +84,7 @@ public abstract class PropertySetterFeatureMapperBase<S, T extends EObject> exte
 					Reader reader = converter.toReader(refURI);
 					return converter.toString(reader);
 				} catch (IOException e) {
-					throwConfigurationException("Error loading feature map from " + refURI, e, source);
+					throw new ConfigurationException("Error loading feature map from " + refURI, e, asMarked(source));
 				}
 			}
 		}
@@ -83,14 +92,14 @@ public abstract class PropertySetterFeatureMapperBase<S, T extends EObject> exte
 	}
 		
 	protected String getMappingSelectorPropertyName() {
-		return getPropertyNamespace() + "mapping-selector";
+		return getPropertyNamespace() + MAPPING_SELECTOR_PROPERTY;
 	}
 	
 	protected String getMappingSelectorRefPropertyName() {
-		return getPropertyNamespace() + "mapping-selector-ref";
+		return getPropertyNamespace() + MAPPING_SELECTOR_REF_PROPERTY;
 	}
 	
-	protected String getMappingSelectorStr(EObject source) {
+	protected String getMappingSelectorStr(S source) {
 		String mspn = getMappingSelectorPropertyName();
 		if (!Util.isBlank(mspn)) {
 			String ms = getProperty(source, mspn);
@@ -113,7 +122,7 @@ public abstract class PropertySetterFeatureMapperBase<S, T extends EObject> exte
 					Reader reader = converter.toReader(refURI);
 					return converter.toString(reader);
 				} catch (IOException e) {
-					throwConfigurationException("Error loading mapping selector from " + refURI, e, source);
+					throw new ConfigurationException("Error loading mapping selector from " + refURI, e, asMarked(source));
 				}
 			}
 		}
@@ -148,7 +157,7 @@ public abstract class PropertySetterFeatureMapperBase<S, T extends EObject> exte
 				} else if (result instanceof Iterable) {
 					((Iterable<T>) result).forEach(ret::add);
 				} else {
-					throwConfigurationException("Usupported result type: " + result + " for mapping selector " + mappingSelector, null, source);					
+					throw new ConfigurationException("Usupported result type: " + result + " for mapping selector " + mappingSelector, null, asMarked(source));					
 				}
 			} else if (mappingObj instanceof Iterable) {
 				for (String mappingElement: (Iterable<String>) mappingObj) {
@@ -163,14 +172,14 @@ public abstract class PropertySetterFeatureMapperBase<S, T extends EObject> exte
 					} else if (result instanceof Iterable) {
 						((Iterable<T>) result).forEach(ret::add);
 					} else {
-						throwConfigurationException("Usupported result type: " + result + " for mapping element " + mappingElement, null, source);					
+						throw new ConfigurationException("Usupported result type: " + result + " for mapping element " + mappingElement, null, asMarked(source));					
 					}					
 				}				
 			} else {			
-				throwConfigurationException("Usupported configuration type: " + mappingObj, null, source);
+				throw new ConfigurationException("Usupported configuration type: " + mappingObj, null, asMarked(source));
 			}
 		} catch (YAMLException yamlException) {
-			throwConfigurationException(null, yamlException, source);
+			throw new ConfigurationException(null, yamlException, asMarked(source));
 		}
 		return ret;		
 	}	
