@@ -170,7 +170,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		}
 		
 		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
-		return true;
 	}	
 
 	public boolean evaluatePredicate(
@@ -206,10 +205,8 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			return evaluationContext == null ? exp.getValue(obj, resultType) : exp.getValue(evaluationContext, obj, resultType);
 		} catch (ParseException e) {
 			throw new ConfigurationException("Error parsing expression: '" + expr, e, asMarked(context));
-			return null;
 		} catch (EvaluationException e) {
 			throw new ConfigurationException("Error evaluating expression: '" + expr + "' in the context of " + obj + " with variables " + variables, e, asMarked(context));
-			return null;
 		}
 	}
 	
@@ -283,7 +280,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		} catch (YAMLException yamlException) {
 			throw new ConfigurationException(null, yamlException, asMarked(source));
 		}
-		return null; // Never gets here
 	}
 
 	@SuppressWarnings("unchecked")
@@ -318,7 +314,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 					}
 				} else {
 					throw new ConfigurationException("Feature config in a collection shall be a string, got: " + e, null, asMarked(context));
-					return null; // Never gets here
 				}
 			}
 			return ret;
@@ -335,7 +330,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		}
 		
 		throw new ConfigurationException("Unexpected config type: " + configs, null, asMarked(context));
-		return null; // Never gets here
 	}
 			
 	protected Collection<S> getSources(Object target, Map<S, T> registry, @SuppressWarnings("unchecked") Predicate<S>... predicates) {
@@ -542,7 +536,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		}
 		
 		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
-		return true;
 	}
 		
 	protected boolean matchType(EObject eObj, Object config, S context) {
@@ -563,7 +556,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		}
 		
 		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
-		return true;
 	}
 	
 	protected boolean matchArgumentType(Object argument, Object config, S context) {
@@ -599,7 +591,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		}
 		
 		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
-		return true;
 	}
 	
 	/**
@@ -747,7 +738,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		}
 		
 		throw new ConfigurationException("Unsupported comparator config: " + comparatorConfig, null, asMarked(context));
-		return null;
 	}
 	
 	protected int getPosition(Object config, S context) {
@@ -766,7 +756,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			throw new ConfigurationException("Unsupported position type: " + position.getClass() + " " + position, null, asMarked(context));
 		}
 		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
-		return -1;
 	}
 	
 	protected Object eval(
@@ -845,7 +834,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			}
 		}
 		throw new ConfigurationException("Script ref is not a string: " + ref, null, asMarked(context));	
-		return null;
 	}
 	
 	protected URI getBaseURI(S eObj) {
@@ -943,7 +931,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			throw new ConfigurationException("Unsupported greedy type: " + greedy.getClass() + " " + greedy, null, asMarked(context));
 		}
 		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, asMarked(context));
-		return null;
 	}
 	
 	protected Map<String,Setter<S,T>> getFeatureSetters(
@@ -1116,7 +1103,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			EStructuralFeature contentsValueFeature,
 			S container, 
 			T containerValue, 
-			LinkedList<EObject> sourcePath, 
+			LinkedList<S> sourcePath, 
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor) {
 		

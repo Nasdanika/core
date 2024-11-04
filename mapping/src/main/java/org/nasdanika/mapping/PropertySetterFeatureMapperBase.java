@@ -17,17 +17,17 @@ import org.yaml.snakeyaml.error.YAMLException;
  * @param <S>
  * @param <T>
  */
-public abstract class PropertySetterFeatureMapperBase<S extends EObject, T extends EObject> extends SetterFeatureMapper<S, T> {
+public abstract class PropertySetterFeatureMapperBase<S, T extends EObject> extends SetterFeatureMapper<S, T> {
 	
-	protected PropertySetterFeatureMapper() {
+	protected PropertySetterFeatureMapperBase() {
 		super();
 	}
 
-	protected PropertySetterFeatureMapper(Mapper<S, T> chain) {
+	protected PropertySetterFeatureMapperBase(Mapper<S, T> chain) {
 		super(chain);
 	}
 
-	protected PropertySetterFeatureMapper(Mapper<S, T> chain, FeatureMapper<S, T> defaulFeaturetMapper) {
+	protected PropertySetterFeatureMapperBase(Mapper<S, T> chain, FeatureMapper<S, T> defaulFeaturetMapper) {
 		super(chain, defaulFeaturetMapper);
 	}
 
@@ -52,7 +52,7 @@ public abstract class PropertySetterFeatureMapperBase<S extends EObject, T exten
 	protected abstract String getProperty(EObject eObj, String property);
 	
 	@Override
-	protected String getFeatureMapConfigStr(EObject source) {
+	protected String getFeatureMapConfigStr(S source) {
 		String fmcpn = getFeatureMapConfigPropertyName();
 		if (!Util.isBlank(fmcpn)) {
 			String fmc = getProperty(source, fmcpn);
