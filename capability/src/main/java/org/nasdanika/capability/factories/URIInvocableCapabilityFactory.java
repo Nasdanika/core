@@ -50,9 +50,13 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Object, Invocable> {
 	
+	private static final String JSON_EXTENSION = "json";
+	private static final String YAML_EXTENSION = "yaml";
+	private static final String YML_EXTENSION = "yml";
 	private static final String METHOD_REF = "::";
 	private static final String BASE_64 = ";base64";
 	private static final String VALUE_MEDIA_TYPE_PREFIX = "value/"; // Value wrapped into invocable
+	private static final String SPEL_MEDIA_TYPE_PREFIX = "spel/"; // Spring Expression
 	private static final String JAVA_MEDIA_TYPE_PREFIX = "java/"; // Construction of a given type - binding data as "data" argument 
 	private static final String YAML_SPEC_MEDIA_TYPE = "application/yaml/invocable";
 	private static final String JSON_SPEC_MEDIA_TYPE = "application/json/invocable";
@@ -81,11 +85,11 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			String extension = lastSegment.substring(lastDot + 1);
 			if (lastDot != -1) {
 				try {
-					if (extension.equalsIgnoreCase("yml") || extension.equalsIgnoreCase("yaml")) {			
+					if (extension.equalsIgnoreCase(YML_EXTENSION) || extension.equalsIgnoreCase(YAML_EXTENSION)) {			
 						return handleYamlSpec(requirement, loader, progressMonitor);
 					}
 					
-					if (extension.equalsIgnoreCase("json")) {			
+					if (extension.equalsIgnoreCase(JSON_EXTENSION)) {			
 						return handleJsonSpec(requirement, loader, progressMonitor);
 					}
 					
@@ -500,6 +504,11 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			} catch (ClassNotFoundException e) {
 				return wrapError(e);
 			}
+		}
+		
+		if (mediaType.startsWith(SPEL_MEDIA_TYPE_PREFIX)) {
+			String expression = mediaType.substring(SPEL_MEDIA_TYPE_PREFIX.length());
+			return wrap(Invocable.ofExpression(expression));
 		}
 		
 		// Itself should be invocable, support of :: for method name

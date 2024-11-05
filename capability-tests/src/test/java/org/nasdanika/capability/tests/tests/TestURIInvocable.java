@@ -2,8 +2,11 @@ package org.nasdanika.capability.tests.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.emf.common.util.URI;
 import org.junit.jupiter.api.Disabled;
@@ -30,6 +33,26 @@ public class TestURIInvocable {
 				progressMonitor);
 		Object result = invocable.invoke();
 		System.out.println(result);
+	}
+	
+	@Test
+	public void testExpressionInvocable() {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		String encodedExpr = URLEncoder.encode("#myVar + #this", StandardCharsets.UTF_8);
+		URI requirement = URI.createURI("data:spel/" + encodedExpr);
+		Invocable invocable = capabilityLoader.loadOne(
+				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
+				progressMonitor);
+		invocable.bindByName("myVar", "Hello ");
+		System.out.println((Object) invocable.invoke("World"));
+		
+		// Second pass - what do we get?
+		Invocable secondInvocable = capabilityLoader.loadOne(
+				ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
+				progressMonitor);
+		
+		System.out.println(Objects.equals(invocable, secondInvocable));
 	}
 	
 	@Test

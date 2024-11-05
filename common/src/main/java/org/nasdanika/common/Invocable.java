@@ -28,6 +28,12 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.EvaluationException;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 /**
  * 
@@ -995,6 +1001,37 @@ public interface Invocable {
 			}
 			
 		};
+	}
+		
+	/**
+	 * Creates an invocable wrapping <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#expressions">Spring Expression Language</a> expression.
+	 * bindByName() sets variables. invoke() passes args as the root object, if args length is 1 then the first element is passed as the root object.
+	 * 
+	 * @param expression SpEL expression
+	 * @return
+	 */
+	static Invocable ofExpression(String expression) {
+		
+		ExpressionParser parser = new SpelExpressionParser();
+		Expression exp = parser.parseExpression(expression);
+		EvaluationContext evaluationContext = new StandardEvaluationContext();
+		
+		return new Invocable() {
+			
+			@Override
+			public Invocable bindByName(String name, Object binding) {
+				evaluationContext.setVariable(name, binding);
+				return this;
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> T invoke(Object... args) {
+				return (T) exp.getValue(evaluationContext, args.length == 1 ? args[0] : args);
+			}
+			
+		};
+				
 	}
 	
 }

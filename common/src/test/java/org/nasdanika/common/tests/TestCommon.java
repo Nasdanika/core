@@ -515,6 +515,11 @@ public class TestCommon {
 		System.out.println(function);
 	}
 	
-
+	@Test
+	public void testSpelInvocable() {
+		Invocable spelInvocable = Invocable.ofExpression("#myVar + #this");
+		spelInvocable.bindByName("myVar", "Hello ");
+		System.out.println((Object) spelInvocable.invoke("World"));
+	}
 	
 }
