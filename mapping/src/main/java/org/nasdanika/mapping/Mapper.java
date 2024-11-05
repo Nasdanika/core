@@ -2,7 +2,6 @@ package org.nasdanika.mapping;
 
 import java.util.Map;
 
-import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Composable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Transformer;

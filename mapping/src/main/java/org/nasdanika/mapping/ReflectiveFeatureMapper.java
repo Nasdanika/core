@@ -17,13 +17,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.EStructuralFeatureAndEOperationMatcher;
 import org.nasdanika.common.Reflector;
+import org.nasdanika.common.ProgressMonitor;
 
 /**
  * Content mapper which uses annotations for wiring 
  * @param <S>
  * @param <T>
  */
-public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> extends FeatureMapper<S, T> implements EStructuralFeatureAndEOperationMatcher {
+public abstract class ReflectiveFeatureMapper<S, T extends EObject> extends FeatureMapper<S, T> implements EStructuralFeatureAndEOperationMatcher {
 
 	/**
 	 * Annotation for feature wiring methods. 
@@ -491,7 +492,7 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 				EStructuralFeature contentsValueFeature,
 				S container, 
 				T containerValue, 
-				LinkedList<EObject> sourcePath, 
+				LinkedList<S> sourcePath, 
 				Map<S, T> registry,
 				ProgressMonitor progressMonitor) {
 			
@@ -540,7 +541,7 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 				EStructuralFeature containerValueFeature,
 				S contents, 
 				T contentsValue, 
-				LinkedList<EObject> sourcePath, 
+				LinkedList<S> sourcePath, 
 				Map<S, T> registry,
 				ProgressMonitor progressMonitor) {
 
@@ -708,7 +709,7 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 			EStructuralFeature containerValueFeature,
 			S contents, 
 			T contentsValue, 
-			LinkedList<EObject> sourcePath, 
+			LinkedList<S> sourcePath, 
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor) {
 
@@ -730,7 +731,7 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 			EStructuralFeature contentsValueFeature,
 			S container, 
 			T containerValue, 
-			LinkedList<EObject> sourcePath, 
+			LinkedList<S> sourcePath, 
 			Map<S, T> registry,
 			ProgressMonitor progressMonitor) {
 

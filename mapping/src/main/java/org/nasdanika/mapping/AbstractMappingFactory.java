@@ -97,13 +97,99 @@ public abstract class AbstractMappingFactory<S> {
 	private static final String DATA_URI_JPEG_PREFIX_NO_BASE_64 = "data:image/jpeg,";
 	
 	protected CapabilityLoader capabilityLoader;
+	protected ContentProvider contentProvider;
 	
-	public AbstractMappingFactory() {
-		this(new CapabilityLoader());
+	public AbstractMappingFactory(ContentProvider contentProvider) {
+		this(contentProvider, new CapabilityLoader());
 	}
 	
-	public AbstractMappingFactory(CapabilityLoader capabilityLoader) {
+	public AbstractMappingFactory(ContentProvider contentProvider, CapabilityLoader capabilityLoader) {
+		this.contentProvider = contentProvider;
 		this.capabilityLoader = capabilityLoader;
+		
+		mapper = new PropertySetterFeatureMapper<S, EObject>(contentProvider) {
+				
+				@Override
+				protected EClassifier getType(String type, S context) {
+					return AbstractMappingFactory.this.getType(type, context);
+				}
+				
+				@Override
+				protected String getPropertyNamespace() {
+					return AbstractMappingFactory.this.getPropertyNamespace();
+				}
+				
+				@Override
+				protected EvaluationContext createEvaluationContext(S context) {
+					return AbstractMappingFactory.this.createEvaluationContext(context);
+				}
+				
+				@Override
+				protected SpelExpressionParser createExpressionParser(S context) {
+					return AbstractMappingFactory.this.createExpressionParser(context);
+				}
+				
+				@Override
+				protected ClassLoader getClassLoader(S source) {
+					return AbstractMappingFactory.this.getClassLoader(source);
+				}
+				
+				@Override
+				protected Iterable<Entry<String, Object>> getVariables(S context) {
+					return AbstractMappingFactory.this.getVariables(context);
+				}
+				
+				@SuppressWarnings("unchecked")
+				@Override
+				public Iterable<EObject> select(S source, Map<S, EObject> registry, ProgressMonitor progressMonitor) {
+					String referenceProperty = getReferenceProperty();
+					if (!Util.isBlank(referenceProperty)) {		
+						Object referenceSpec = getContentProvider().getProperty(source, referenceProperty);			
+						if (referenceSpec instanceof String && !Util.isBlank((String) referenceSpec)) {
+							List<EObject> ret = new ArrayList<>();
+							ReferenceMapper referenceMapper = new ReferenceMapper((String) referenceSpec, source);
+							List<S> logicalAncestorsPath = new ArrayList<>();
+							for (S logicalAncestor = getContentProvider().getParent(source); logicalAncestor != null; logicalAncestor = getContentProvider().getParent(logicalAncestor)) {
+								logicalAncestorsPath.add(logicalAncestor);					
+								for (EObject logicalAncestorSemanticElement: mapper.select(logicalAncestor, registry, progressMonitor)) {						
+									if (referenceMapper.matchLogicalAncestorSemanticelement(logicalAncestorSemanticElement, logicalAncestorsPath, registry, source)) {
+										EObject refObj = referenceMapper.getLogicalAncestorSemanticElementRefObj(logicalAncestorSemanticElement, logicalAncestorsPath, registry, source); 
+										if (refObj != null) {
+											EClass eClass = refObj.eClass();
+											String referenceName = referenceMapper.getReferenceName();
+											EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
+											if (feature == null) {
+												throw new ConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), getContentProvider().asMarked(source)); 
+											} else if (feature instanceof EReference) {
+												Object featureValue = refObj.eGet(feature);
+												if (feature.isMany()) {
+													ret.addAll((Collection<EObject>) featureValue);
+												} else if (featureValue instanceof EObject) {
+													ret.add((EObject) featureValue);
+												}
+											} else {
+												throw new ConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), null, getContentProvider().asMarked(source)); 									
+											}
+										}
+									}
+									Comparator<Object> comparator = referenceMapper.getComparator(logicalAncestorSemanticElement, registry);
+									if (comparator != null) {
+										ret.sort(comparator);
+									}
+								}
+							}					
+							return ret;
+						}
+					}
+					
+					return super.select(source, registry, progressMonitor);
+				}
+				
+			};		
+	}
+	
+	public ContentProvider<S> getContentProvider() {
+		return contentProvider;
 	}
 		
 	protected CapabilityLoader getCapabilityLoader() {
@@ -148,8 +234,6 @@ public abstract class AbstractMappingFactory<S> {
 		return getPropertyNamespace() + DOC_FORMAT_PROPERTY; 
 	}	
 	
-	protected abstract Marked asMarked(S obj);
-	
 	/**
 	 * Property containing domain class name.
 	 * The name can be simple <code>class  name</code>, qualified <code>package name.class name</code>, or be a URI <code>package namespace uri#//class name</code>  
@@ -158,17 +242,7 @@ public abstract class AbstractMappingFactory<S> {
 	protected String getTypeProperty() {
 		return getPropertyNamespace() + TYPE_PROPERTY;
 	}	
-	
-	public abstract URI getBaseURI(S obj);
-	
-	/**
-	 * Returns object property. This implementation uses ModelElement.getProperties().get() for instances of model element. 
-	 * Returns null otherwise.
-	 * @param eObj
-	 * @return
-	 */
-	protected abstract String getProperty(S obj, String property);
-	
+		
 	/**
 	 * Loads source from a property or from a URL specified by refProperty
 	 * @param source
@@ -177,18 +251,24 @@ public abstract class AbstractMappingFactory<S> {
 	 * @return
 	 */
 	protected SourceRecord loadSource(S obj, String property, String refProperty) {
-		URI baseURI = getBaseURI(obj);
+		URI baseURI = getContentProvider().getBaseURI(obj);
 		if (!Util.isBlank(property)) {
-			String source = getProperty(obj, property);
-			if (!Util.isBlank(source)) {
-				return new SourceRecord(baseURI, source);
+			Object source = getContentProvider().getProperty(obj, property);
+			if (source instanceof String && !Util.isBlank((String) source)) {
+				return new SourceRecord(baseURI, (String) source);
 			}
 		}
 		
 		if (!Util.isBlank(refProperty)) {
-			String ref = getProperty(obj, refProperty);
-			if (!Util.isBlank(ref)) {
-				URI refURI = URI.createURI(ref);
+			Object ref = getContentProvider().getProperty(obj, refProperty);
+			URI refURI = null;
+			if (ref instanceof URI) {
+				refURI = (URI) ref;
+			} else if (ref instanceof String && !Util.isBlank((String) ref)) {
+				refURI = URI.createURI((String) ref); 
+			}
+			
+			if (refURI != null) {
 				if (baseURI != null && !baseURI.isRelative()) {
 					refURI = refURI.resolve(baseURI);
 				}
@@ -197,7 +277,7 @@ public abstract class AbstractMappingFactory<S> {
 					Reader reader = converter.toReader(refURI);
 					return new SourceRecord(refURI, converter.toString(reader));
 				} catch (IOException e) {
-					throw new ConfigurationException("Error loading source from " + refURI, e, asMarked(obj));
+					throw new ConfigurationException("Error loading source from " + refURI, e, getContentProvider().asMarked(obj));
 				}
 			}
 		}
@@ -218,7 +298,7 @@ public abstract class AbstractMappingFactory<S> {
 	protected abstract Map<String,EPackage> getEPackages();
 		
 	public EClassifier getType(String type, S source) {
-		return NcoreUtil.getType(type, getEPackages(), msg -> new ConfigurationException(msg, asMarked(source)));
+		return NcoreUtil.getType(type, getEPackages(), msg -> new ConfigurationException(msg, getContentProvider().asMarked(source)));
 	}
 	
 	/**
@@ -227,7 +307,7 @@ public abstract class AbstractMappingFactory<S> {
 	 * @param kind
 	 * @return
 	 */
-	protected EObject create(String type, EObject source) {
+	protected EObject create(String type, S source) {
 		EClassifier classifier = getType(type, source);
 		if (classifier instanceof EClass) {
 			return create((EClass) classifier);
@@ -246,95 +326,7 @@ public abstract class AbstractMappingFactory<S> {
 		return type.getEPackage().getEFactoryInstance().create(type);
 	}
 	
-	protected SetterFeatureMapper<S, EObject> mapper = new PropertySetterFeatureMapper<S, EObject>() {
-
-		@Override
-		protected URI getBaseURI(EObject source) {
-			return AbstractDrawioFactory.this.getBaseURI(source);
-		}
-		
-		@Override
-		protected String getProperty(EObject eObj, String property) {
-			return AbstractDrawioFactory.this.getProperty(eObj, property);
-		}
-		
-		@Override
-		protected EClassifier getType(String type, EObject context) {
-			return AbstractDrawioFactory.this.getType(type, context);
-		}
-		
-		@Override
-		protected String getPropertyNamespace() {
-			return AbstractDrawioFactory.this.getPropertyNamespace();
-		}
-		
-		@Override
-		protected EvaluationContext createEvaluationContext(EObject context) {
-			return AbstractDrawioFactory.this.createEvaluationContext(context);
-		}
-		
-		@Override
-		protected SpelExpressionParser createExpressionParser(EObject context) {
-			return AbstractDrawioFactory.this.createExpressionParser(context);
-		}
-		
-		@Override
-		protected ClassLoader getClassLoader(EObject source) {
-			return AbstractDrawioFactory.this.getClassLoader(source);
-		}
-		
-		@Override
-		protected Iterable<Entry<String, Object>> getVariables(EObject context) {
-			return AbstractDrawioFactory.this.getVariables(context);
-		}
-		
-		@SuppressWarnings("unchecked")
-		@Override
-		public Iterable<EObject> select(EObject source, Map<EObject, EObject> registry, ProgressMonitor progressMonitor) {
-			String referenceProperty = getReferenceProperty();
-			if (!Util.isBlank(referenceProperty)) {		
-				String referenceSpec = getProperty(source, referenceProperty);			
-				if (!Util.isBlank(referenceSpec)) {
-					List<EObject> ret = new ArrayList<>();
-					ReferenceMapper referenceMapper = new ReferenceMapper(referenceSpec, source);
-					List<EObject> logicalAncestorsPath = new ArrayList<>();
-					for (EObject logicalAncestor = getLogicalParent(source); logicalAncestor != null; logicalAncestor = getLogicalParent(logicalAncestor)) {
-						logicalAncestorsPath.add(logicalAncestor);					
-						for (EObject logicalAncestorSemanticElement: mapper.select(logicalAncestor, registry, progressMonitor)) {						
-							if (referenceMapper.matchLogicalAncestorSemanticelement(logicalAncestorSemanticElement, logicalAncestorsPath, registry, source)) {
-								EObject refObj = referenceMapper.getLogicalAncestorSemanticElementRefObj(logicalAncestorSemanticElement, logicalAncestorsPath, registry, source); 
-								if (refObj != null) {
-									EClass eClass = refObj.eClass();
-									String referenceName = referenceMapper.getReferenceName();
-									EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
-									if (feature == null) {
-										throw new ConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), asMarked(source)); 
-									} else if (feature instanceof EReference) {
-										Object featureValue = refObj.eGet(feature);
-										if (feature.isMany()) {
-											ret.addAll((Collection<EObject>) featureValue);
-										} else if (featureValue instanceof EObject) {
-											ret.add((EObject) featureValue);
-										}
-									} else {
-										throw new ConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), null, asMarked(source)); 									
-									}
-								}
-							}
-							Comparator<Object> comparator = referenceMapper.getComparator(logicalAncestorSemanticElement, registry);
-							if (comparator != null) {
-								ret.sort(comparator);
-							}
-						}
-					}					
-					return ret;
-				}
-			}
-			
-			return super.select(source, registry, progressMonitor);
-		}
-		
-	};
+	protected SetterFeatureMapper<S, EObject> mapper;
 	
 	/**
 	 * Override to return content mappers for different passes. 
@@ -342,124 +334,40 @@ public abstract class AbstractMappingFactory<S> {
 	 * @param pass
 	 * @return
 	 */
-	protected Mapper<EObject, EObject> getMapper(int pass) {
+	protected Mapper<S, EObject> getMapper(int pass) {
 		return mapper;
 	}
 	
-	/**
-	 * Creates a document element from {@link Document}
-	 * @param document
-	 * @param parallel
-	 * @param elementProvider
-	 * @param registry
-	 * @param progressMonitor
-	 * @return
-	 */
-	@org.nasdanika.common.Transformer.Factory
-	public final S createDocumentElement(
-			org.nasdanika.drawio.model.Document document,
-			boolean parallel,
-			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
-			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
-			ProgressMonitor progressMonitor) {
-		
-		S documentElement = createDocumentElement(document, elementProvider, registry, progressMonitor);
-
-		if (documentElement instanceof ModelElement) {
-			ModelElement dme = (ModelElement) documentElement;
-			if (Util.isBlank(dme.getUuid())) {
-				dme.setUuid(UUID.randomUUID().toString());
-			}
-		}
-		
-		return documentElement;
-	}
-	
-	/**
-	 * 
-	 * @param document
-	 * @param elementProvider
-	 * @param registry
-	 * @param progressMonitor
-	 * @return
-	 */
-	protected S createDocumentElement(
-			org.nasdanika.drawio.model.Document document,
-			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
-			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
-			ProgressMonitor progressMonitor) {
-		return null;
-	};
-	
-	/**
-	 * Creates a semantic model element depending on the type
-	 * @param page
-	 * @param parallel
-	 * @param elementProvider
-	 * @param registry
-	 * @param progressMonitor
-	 * @return
-	 */
-	@org.nasdanika.common.Transformer.Factory
-	public final S createModelElementSemanticElement(
-			org.nasdanika.drawio.model.ModelElement modelElement,
-			boolean parallel,
-			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
-			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
-			ProgressMonitor progressMonitor) {
-
-		return createSemanticElement(
-				modelElement,
-				elementProvider,
-				registry,
-				progressMonitor);
-	}		
-
-	@org.nasdanika.common.Transformer.Factory
-	public final S createTagSemanticElement(
-			org.nasdanika.drawio.model.Tag tag,
-			boolean parallel,
-			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
-			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
-			ProgressMonitor progressMonitor) {
-	
-		return createSemanticElement(
-				tag,
-				elementProvider,
-				registry,
-				progressMonitor);
-	
-	}
 	
 	@SuppressWarnings("unchecked")
 	protected S createSemanticElement(
-			EObject eObj,
+			S obj,
 			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {	
 	
 		S semanticElement = null;		
 		String initializerPropertyName = getInitializerProperty();
-		String initializer = Util.isBlank(initializerPropertyName) ? null : getProperty(eObj, initializerPropertyName);
+		String initializer = Util.isBlank(initializerPropertyName) ? null : getProperty(obj, initializerPropertyName);
 		if (!Util.isBlank(initializer)) {
 			try {			
-				ExpressionParser parser = createExpressionParser(eObj);
+				ExpressionParser parser = createExpressionParser(obj);
 				Expression exp = parser.parseExpression(initializer);
-				EvaluationContext evaluationContext = createEvaluationContext(eObj);
+				EvaluationContext evaluationContext = createEvaluationContext(obj);
 				configureInitializerEvaluationContext(evaluationContext, registry, progressMonitor);
-				semanticElement = (S) exp.getValue(evaluationContext, eObj, EObject.class);
+				semanticElement = (S) exp.getValue(evaluationContext, obj, EObject.class);
 			} catch (ParseException e) {
-				throw new ConfigurationException("Error parsing semantic selector: '" + initializer, e, asMarked(eObj));
+				throw new ConfigurationException("Error parsing semantic selector: '" + initializer, e, getContentProvider().asMarked(obj));
 			} catch (EvaluationException e) {
-				throw new ConfigurationException("Error evaluating semantic selector: '" + initializer, e, asMarked(eObj));
+				throw new ConfigurationException("Error evaluating semantic selector: '" + initializer, e, getContentProvider().asMarked(obj));
 			}
 		}
 		
 		if (semanticElement == null) {
-			String type = getTypeName(eObj);		
+			String type = getTypeName(obj);		
 		
 			if (!Util.isBlank(type)) {
-				semanticElement = (S) create(type.trim(), eObj);
+				semanticElement = (S) create(type.trim(), obj);
 			}
 		}
 		
@@ -470,16 +378,16 @@ public abstract class AbstractMappingFactory<S> {
 			}
 		}
 		
-		semanticElement = executeInitializerScript(eObj, semanticElement, registry, progressMonitor);
+		semanticElement = executeInitializerScript(obj, semanticElement, registry, progressMonitor);
 		
 		if (semanticElement instanceof MinimalEObjectImpl && isRefIdProxyURI()) {
 			String refIdPropertyName = getRefIdProperty();
 			if (!Util.isBlank(refIdPropertyName)) {
-				String refId = getProperty(eObj, refIdPropertyName);
+				String refId = getProperty(obj, refIdPropertyName);
 				if (!Util.isBlank(refId)) {
 					URI refIdURI = URI.createURI(refId);
 					if (refIdURI.isRelative()) {
-						URI baseURI = getBaseURI(eObj);
+						URI baseURI = getBaseURI(obj);
 						if (baseURI != null) {
 							refIdURI = refIdURI.resolve(baseURI);
 						}
@@ -787,11 +695,11 @@ public abstract class AbstractMappingFactory<S> {
 			if (result == null) {
 				return true;
 			}
-			throw new ConfigurationException("Unexpected result type of selector: '" + selector + "': " + result, asMarked(eObj));			
+			throw new ConfigurationException("Unexpected result type of selector: '" + selector + "': " + result, getContentProvider().asMarked(eObj));			
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing selector: '" + selector, e, asMarked(eObj));
+			throw new ConfigurationException("Error parsing selector: '" + selector, e, getContentProvider().asMarked(eObj));
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating selector: '" + selector, e, asMarked(eObj));
+			throw new ConfigurationException("Error evaluating selector: '" + selector, e, getContentProvider().asMarked(eObj));
 		}
 	}
 
@@ -830,9 +738,9 @@ public abstract class AbstractMappingFactory<S> {
 			configurePrototypeEvaluationContext(evaluationContext, progressMonitor);
 			return exp.getValue(evaluationContext, eObj, EObject.class);
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing prototype: '" + prototypeExpr, e, asMarked(eObj));
+			throw new ConfigurationException("Error parsing prototype: '" + prototypeExpr, e, getContentProvider().asMarked(eObj));
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating prototype: '" + prototypeExpr, e, asMarked(eObj));
+			throw new ConfigurationException("Error evaluating prototype: '" + prototypeExpr, e, getContentProvider().asMarked(eObj));
 		}
 	}	
 	
@@ -898,9 +806,9 @@ public abstract class AbstractMappingFactory<S> {
 			registry.put(eObj, copy); // Тriggers a new wave of wiring
 			return true;				
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing selector: '" + prototypeExpr, e, asMarked(eObj));
+			throw new ConfigurationException("Error parsing selector: '" + prototypeExpr, e, getContentProvider().asMarked(eObj));
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating selector: '" + prototypeExpr, e, asMarked(eObj));
+			throw new ConfigurationException("Error evaluating selector: '" + prototypeExpr, e, getContentProvider().asMarked(eObj));
 		}
 	}
 
@@ -977,11 +885,11 @@ public abstract class AbstractMappingFactory<S> {
 			if (result == null) {
 				return true;
 			}
-			throw new ConfigurationException("Unexpected result type of semantic selector: '" + semanticSelector + "': " + result, asMarked(eObj));			
+			throw new ConfigurationException("Unexpected result type of semantic selector: '" + semanticSelector + "': " + result, getContentProvider().asMarked(eObj));			
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing semantic selector: '" + semanticSelector, e, asMarked(eObj));
+			throw new ConfigurationException("Error parsing semantic selector: '" + semanticSelector, e, getContentProvider().asMarked(eObj));
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating semantic selector: '" + semanticSelector, e, asMarked(eObj));
+			throw new ConfigurationException("Error evaluating semantic selector: '" + semanticSelector, e, getContentProvider().asMarked(eObj));
 		}
 	}
 
@@ -996,7 +904,7 @@ public abstract class AbstractMappingFactory<S> {
 		evaluationContext.setVariable("progressMonitor", progressMonitor);
 	}
 		
-	protected EvaluationContext createEvaluationContext(EObject context) {
+	protected EvaluationContext createEvaluationContext(S context) {
 		StandardEvaluationContext ret = new StandardEvaluationContext();
 		ClassLoader classLoader = getClassLoader(context);
 		if (classLoader != null) {
@@ -1013,11 +921,11 @@ public abstract class AbstractMappingFactory<S> {
 	 * 
 	 * @return
 	 */
-	protected Iterable<Map.Entry<String, Object>> getVariables(EObject context) {
+	protected Iterable<Map.Entry<String, Object>> getVariables(S context) {
 		return Collections.emptySet();
 	}
 	
-	protected SpelExpressionParser createExpressionParser(EObject context) {
+	protected SpelExpressionParser createExpressionParser(S context) {
 		SpelParserConfiguration config = new SpelParserConfiguration(null, getClassLoader(context));
 		return new SpelExpressionParser(config);
 	}	
@@ -1036,7 +944,7 @@ public abstract class AbstractMappingFactory<S> {
 	 * @param context
 	 * @return
 	 */
-	protected ClassLoader getClassLoader(EObject context) {
+	protected ClassLoader getClassLoader(S context) {
 		EObject logicalParent = getLogicalParent(context);
 		if (logicalParent == null) {
 			return Thread.currentThread().getContextClassLoader();
@@ -1102,9 +1010,9 @@ public abstract class AbstractMappingFactory<S> {
 		private Map<?,?> spec;
 		
 		private String referenceName;
-		private EObject context;
+		private S context;
 		
-		public ReferenceMapper(String specYaml, EObject context) {
+		public ReferenceMapper(String specYaml, S context) {
 			Yaml yaml = new Yaml();
 			Object specObj = yaml.load(specYaml);
 			if (specObj instanceof Map) {			
@@ -1112,20 +1020,20 @@ public abstract class AbstractMappingFactory<S> {
 			} else if (specObj instanceof String) {
 				 this.spec =  Collections.singletonMap(NAME_KEY, specObj);			
 			} else {						
-				throw new ConfigurationException("Usupported reference configuration type: " + specObj, asMarked(context));
+				throw new ConfigurationException("Usupported reference configuration type: " + specObj, getContentProvider().asMarked(context));
 			}
 			
 			Object rName = this.spec.get(NAME_KEY);
 			if (rName instanceof String) {
 				this.referenceName = (String) rName;
 			} else {
-				throw new ConfigurationException("Reference name is not a string: " + specObj, asMarked(context));				
+				throw new ConfigurationException("Reference name is not a string: " + specObj, getContentProvider().asMarked(context));				
 			}
 			this.context = context;
 			
 		}
 		
-		public Comparator<Object> getComparator(EObject semanticElement, Map<EObject, EObject> registry) {
+		public Comparator<Object> getComparator(EObject semanticElement, Map<S, EObject> registry) {
 			return mapper.getComparator(semanticElement, spec, registry, context);
 			
 		}
@@ -1136,9 +1044,9 @@ public abstract class AbstractMappingFactory<S> {
 
 		public boolean matchLogicalAncestorSemanticelement(
 				EObject logicalAncestorSemanticElement, 
-				List<EObject> logicalAncestorPath,
-				Map<EObject, EObject> registry,
-				EObject context) {
+				List<S> logicalAncestorPath,
+				Map<S, EObject> registry,
+				S context) {
 			
 			Object cObj = spec.get(CONDITION_KEY);
 			if (cObj == null) {
@@ -1155,14 +1063,14 @@ public abstract class AbstractMappingFactory<S> {
 						context);
 			}
 			
-			throw new ConfigurationException("Usupported reference condition type: " + cObj, asMarked(context));		
+			throw new ConfigurationException("Usupported reference condition type: " + cObj, getContentProvider().asMarked(context));		
 		}
 		
 		public EObject getLogicalAncestorSemanticElementRefObj(
 				EObject logicalAncestorSemanticElement, 
-				List<EObject> logicalAncestorPath,
-				Map<EObject, EObject> registry, 
-				EObject context) {
+				List<S> logicalAncestorPath,
+				Map<S, EObject> registry, 
+				S context) {
 			
 			Object eObj = spec.get(EXPRESSION_KEY);
 			if (eObj == null) {
@@ -1180,14 +1088,14 @@ public abstract class AbstractMappingFactory<S> {
 						context);
 			}
 			
-			throw new ConfigurationException("Usupported reference expression type: " + eObj, asMarked(context));		
+			throw new ConfigurationException("Usupported reference expression type: " + eObj, getContentProvider().asMarked(context));		
 		}
 		
 		private boolean matchContentsSemanticelement(
 				EObject contentsSemanticElement, 
-				List<EObject> sourcePath,
-				Map<EObject, EObject> registry,
-				EObject context) {
+				List<S> sourcePath,
+				Map<S, EObject> registry,
+				S context) {
 			
 			Object cObj = spec.get(ELEMENT_CONDITION_KEY);
 			if (cObj == null) {
@@ -1204,14 +1112,14 @@ public abstract class AbstractMappingFactory<S> {
 						context);
 			}
 			
-			throw new ConfigurationException("Usupported reference element condition type: " + cObj, asMarked(context));		
+			throw new ConfigurationException("Usupported reference element condition type: " + cObj, getContentProvider().asMarked(context));		
 		}
 		
 		private EObject getContentsSemanticElementRefObj(
 				EObject contentsSemanticElement, 
-				List<EObject> sourcePath,
-				Map<EObject, EObject> registry, 
-				EObject context) {
+				List<S> sourcePath,
+				Map<S, EObject> registry, 
+				S context) {
 			
 			Object eObj = spec.get(ELEMENT_EXPRESSION_KEY);
 			if (eObj == null) {
@@ -1229,18 +1137,18 @@ public abstract class AbstractMappingFactory<S> {
 						context);
 			}
 			
-			throw new ConfigurationException("Usupported reference element expression type: " + eObj, asMarked(context));		
+			throw new ConfigurationException("Usupported reference element expression type: " + eObj, getContentProvider().asMarked(context));		
 		}
 				
 		public List<EObject> getElements(
-				LinkedList<EObject> sourcePath,
-				Map<EObject, EObject> registry, 
-				Predicate<EObject> tracker,
-				EObject context,
+				LinkedList<S> sourcePath,
+				Map<S, EObject> registry, 
+				Predicate<S> tracker,
+				S context,
 				ProgressMonitor progressMonitor) {
 			
 			List<EObject> ret = new ArrayList<>();			
-			for (EObject childSource: mapper.contents(sourcePath.getLast(), tracker)) {
+			for (S childSource: getContentProvider().getContents(sourcePath.getLast(), tracker)) {
 				sourcePath.add(childSource);
 				for (EObject childSemanticElement: mapper.select(childSource, registry, null)) {
 					if (matchContentsSemanticelement(childSemanticElement, sourcePath, registry, context)) {
@@ -1582,9 +1490,9 @@ public abstract class AbstractMappingFactory<S> {
 			configurePrototypeEvaluationContext(evaluationContext, progressMonitor);
 			return exp.getValue(evaluationContext, eObj, EObject.class);
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing congfig prototype: '" + configPrototypeExpr, e, asMarked(eObj));
+			throw new ConfigurationException("Error parsing congfig prototype: '" + configPrototypeExpr, e, getContentProvider().asMarked(eObj));
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating config prototype: '" + configPrototypeExpr, e, asMarked(eObj));
+			throw new ConfigurationException("Error evaluating config prototype: '" + configPrototypeExpr, e, getContentProvider().asMarked(eObj));
 		}
 	}		
 	
@@ -1883,7 +1791,7 @@ public abstract class AbstractMappingFactory<S> {
 											continue OSE; // Already invoked if matched
 										}
 									} else if (passObj != null) {
-										throw new ConfigurationException("Usupported operation pass type: " + passObj, asMarked(diagramElement));																																				
+										throw new ConfigurationException("Usupported operation pass type: " + passObj, getContentProvider().asMarked(diagramElement));																																				
 									}
 									
 									Map<String,String> argMap = new HashMap<>(); 
@@ -1908,14 +1816,14 @@ public abstract class AbstractMappingFactory<S> {
 												if (val instanceof String) {
 													argMap.put((String) key, (String) val);
 												} else {
-													throw new ConfigurationException("Usupported operation argument expression type: " + val, asMarked(diagramElement));																																																													
+													throw new ConfigurationException("Usupported operation argument expression type: " + val, getContentProvider().asMarked(diagramElement));																																																													
 												}
 											} else {
-												throw new ConfigurationException("Usupported operation parameter name type: " + key, asMarked(diagramElement));																																																
+												throw new ConfigurationException("Usupported operation parameter name type: " + key, getContentProvider().asMarked(diagramElement));																																																
 											}
 										}
 									} else {
-										throw new ConfigurationException("Usupported operation arguments type: " + arguments, asMarked(diagramElement));																																				
+										throw new ConfigurationException("Usupported operation arguments type: " + arguments, getContentProvider().asMarked(diagramElement));																																				
 									}																		
 									
 									Object selector = opSpecElementMap.get(SELECTOR_KEY);
@@ -1924,7 +1832,7 @@ public abstract class AbstractMappingFactory<S> {
 											continue;
 										}
 									} else if (selector != null) {
-										throw new ConfigurationException("Usupported operation selector type: " + selector, asMarked(diagramElement));																										
+										throw new ConfigurationException("Usupported operation selector type: " + selector, getContentProvider().asMarked(diagramElement));																										
 									}
 									
 									Iterator<?> it = Collections.singleton(diagramElement).iterator();
@@ -1957,7 +1865,7 @@ public abstract class AbstractMappingFactory<S> {
 											it = Collections.singleton(itVal).iterator();
 										} 
 									} else if (iterator != null) {
-										throw new ConfigurationException("Usupported operation iterator type: " + iterator, asMarked(diagramElement));																										
+										throw new ConfigurationException("Usupported operation iterator type: " + iterator, getContentProvider().asMarked(diagramElement));																										
 									}
 									
 									if (it != null) {
@@ -1981,23 +1889,23 @@ public abstract class AbstractMappingFactory<S> {
 											try {
 												semanticElement.eInvoke(eOperation, argList);
 											} catch (InvocationTargetException e) {
-												throw new ConfigurationException("Error invoking eOperation " + eOperation, e, asMarked(diagramElement));																
+												throw new ConfigurationException("Error invoking eOperation " + eOperation, e, getContentProvider().asMarked(diagramElement));																
 											}
 										}
 									}
 								} else {
-									throw new ConfigurationException("Usupported operation spec element type: " + opSpecElement, asMarked(diagramElement));																
+									throw new ConfigurationException("Usupported operation spec element type: " + opSpecElement, getContentProvider().asMarked(diagramElement));																
 								}								
 							}
 						} else {
-							throw new ConfigurationException("Usupported operation spec type: " + opSpec, asMarked(diagramElement));							
+							throw new ConfigurationException("Usupported operation spec type: " + opSpec, getContentProvider().asMarked(diagramElement));							
 						}						
 					}
 				} else {				
-					throw new ConfigurationException("Usupported operation map type: " + opMapObj, asMarked(diagramElement));
+					throw new ConfigurationException("Usupported operation map type: " + opMapObj, getContentProvider().asMarked(diagramElement));
 				}
 			} catch (YAMLException yamlException) {
-				throw new ConfigurationException("Error loading operation map: " + yamlException, yamlException, asMarked(diagramElement));
+				throw new ConfigurationException("Error loading operation map: " + yamlException, yamlException, getContentProvider().asMarked(diagramElement));
 			}
 		}	
 		return result;
@@ -2181,7 +2089,7 @@ public abstract class AbstractMappingFactory<S> {
 			return ret;	
 		}
 				
-		throw new ConfigurationException("Unsupported processor type: " + result, asMarked(diagramElement));
+		throw new ConfigurationException("Unsupported processor type: " + result, getContentProvider().asMarked(diagramElement));
 	}
 		
 }

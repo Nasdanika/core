@@ -31,11 +31,20 @@ import org.nasdanika.common.Transformer;
 public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T> {
 
 	private Mapper<S, T> chain;
+	protected ContentProvider<S> contentProvider;
 
-	protected FeatureMapper() {}
+	protected FeatureMapper(ContentProvider<S> contentProvider) {
+		this.contentProvider = contentProvider;
+	}
 	
-	protected FeatureMapper(Mapper<S,T> chain) {
+	protected FeatureMapper(Mapper<S,T> chain, ContentProvider<S> contentProvider) {
 		this.chain = chain;
+		this.contentProvider = contentProvider;
+
+	}
+	
+	public ContentProvider<S> getContentProvider() {
+		return contentProvider;
 	}
 	
 	protected boolean isPassThrough(S connection, T connectionValue) {
@@ -58,7 +67,7 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 	public void wire(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
 		for (T value: select(source, registry, progressMonitor)) {
 			HashSet<S> tracker = new HashSet<>();			
-			for (S contents: contents(source, tracker::add)) {
+			for (S contents: getContentProvider().getContents(source, tracker::add)) {
 				LinkedList<S> path = new LinkedList<>();
 				path.add(contents);
 				Function<LinkedList<S>, Boolean> pathMapper = createPathMapper(source, value, registry, progressMonitor);
@@ -85,11 +94,11 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 						progressMonitor);			
 			}
 			
-			S connectionSource = getConnectionSource(source);
+			S connectionSource = getContentProvider().getConnectionSource(source);
 			for (T connectionSourceValue: connectionSource == null ? Collections.<T>singleton(null) : select(connectionSource, registry, progressMonitor)) {		
 				List<EStructuralFeature> connectionSourceValueFeatures = connectionSourceValue == null ? Collections.emptyList() : connectionSourceValue.eClass().getEAllStructuralFeatures();
 						
-				S connectionTarget = getConnectionTarget(source);
+				S connectionTarget = getContentProvider().getConnectionTarget(source);
 				for (T connectionTargetValue: connectionTarget == null ? Collections.<T>singleton(null) : select(connectionTarget, registry, progressMonitor)) {		
 					List<EStructuralFeature> connectionTargetValueFeatures = connectionTargetValue == null ? Collections.emptyList() : connectionTargetValue.eClass().getEAllStructuralFeatures();
 					
@@ -166,20 +175,13 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 	 */
 	protected void wireContents(LinkedList<S> path, Function<LinkedList<S>,Boolean> pathMapper, Predicate<S> tracker) {
 		if (pathMapper.apply(path)) {
-			for (S child: contents(path.getLast(), tracker)) {
+			for (S child: getContentProvider().getContents(path.getLast(), tracker)) {
 				LinkedList<S> subPath = new LinkedList<>(path);
 				subPath.add(child);
 				wireContents(subPath, pathMapper, tracker);
 			}			
 		}
 	}
-	
-	/**
-	 * Returns object contents. E.g. EObject.eContents(), Element.getChildren() for Drawio diagrams.
-	 * @param obj
-	 * @param tracker prevents infinite loops in case of circular references
-	 */
-	public abstract List<S> contents(S obj, Predicate<S> tracker);
 	
 	/**
 	 * Creates a function which maps a given containment path. 
@@ -297,22 +299,6 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 			ProgressMonitor progressMonitor);
 	
 	// Connection wiring
-	
-	/**
-	 * If the argument is a connection/association - returns its source. 
-	 * Otherwise returns null.
-	 * @param connection
-	 * @return
-	 */
-	protected abstract S getConnectionSource(S connection);
-	
-	/**
-	 * If the argument is a connection/association - returns its target.
-	 * Otherwise returns null.
-	 * @param connection
-	 * @return
-	 */
-	protected abstract S getConnectionTarget(S connection);
 		
 	/**
 	 * Possibly wires a {@link EStructuralFeature} of the connection source semantic element to the argument.
