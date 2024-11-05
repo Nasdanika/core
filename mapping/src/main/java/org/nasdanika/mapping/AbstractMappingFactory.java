@@ -24,9 +24,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
@@ -42,7 +39,6 @@ import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 //import org.jsoup.Jsoup;
 import org.nasdanika.capability.CapabilityLoader;
@@ -55,7 +51,10 @@ import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SourceRecord;
 import org.nasdanika.common.Util;
+import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.util.NcoreUtil;
+import org.nasdanika.persistence.ConfigurationException;
+import org.nasdanika.persistence.Marked;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
@@ -67,15 +66,14 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeLocator;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
-import org.nasdanika.persistence.Marked;
-import org.nasdanika.persistence.ConfigurationException;
+import org.nasdanika.common.Invocable;
 
 /**
  * Base class for classes which map/transform Drawio diagrams to a specific semantic model. For example, architecture model or flow/process model.
  * @author Pavel
  * @param <S> Semantic element type
  */
-public abstract class AbstractMappingFactory<S> {
+public abstract class AbstractMappingFactory<S, T extends EObject> {
 	
 	private static final String DOC_FORMAT_PROPERTY = "doc-format";
 	private static final String DOC_REF_PROPERTY = "doc-ref";
@@ -337,67 +335,78 @@ public abstract class AbstractMappingFactory<S> {
 	protected Mapper<S, EObject> getMapper(int pass) {
 		return mapper;
 	}
-	
-	
+		
+	/**
+	 * Creates target mapping from the source object
+	 * @param obj
+	 * @param elementProvider
+	 * @param registry
+	 * @param progressMonitor
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	protected S createSemanticElement(
+	protected T createTarget(
 			S obj,
 			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {	
 	
-		S semanticElement = null;		
+		T target = null;		
 		String initializerPropertyName = getInitializerProperty();
-		String initializer = Util.isBlank(initializerPropertyName) ? null : getProperty(obj, initializerPropertyName);
-		if (!Util.isBlank(initializer)) {
-			try {			
-				ExpressionParser parser = createExpressionParser(obj);
-				Expression exp = parser.parseExpression(initializer);
-				EvaluationContext evaluationContext = createEvaluationContext(obj);
-				configureInitializerEvaluationContext(evaluationContext, registry, progressMonitor);
-				semanticElement = (S) exp.getValue(evaluationContext, obj, EObject.class);
-			} catch (ParseException e) {
-				throw new ConfigurationException("Error parsing semantic selector: '" + initializer, e, getContentProvider().asMarked(obj));
-			} catch (EvaluationException e) {
-				throw new ConfigurationException("Error evaluating semantic selector: '" + initializer, e, getContentProvider().asMarked(obj));
+		Object initializer = Util.isBlank(initializerPropertyName) ? null : getContentProvider().getProperty(obj, initializerPropertyName);
+		
+		Invocable initializerInvocable = null;
+		if (initializer instanceof Invocable) {
+			initializerInvocable = (Invocable) initializer;
+		} else {			
+			URI requirement = null;
+			if (initializer instanceof URI) {
+				requirement = (URI) initializer;
+			} else if (initializer instanceof String && !Util.isBlank((String) initializer)) {
+				requirement = URI.createURI((String) initializer);
+			}
+			if (requirement != null) {
+				initializerInvocable = capabilityLoader.loadOne(
+						ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
+						progressMonitor);
 			}
 		}
+		if (initializerInvocable != null) {
+			target = configureInitializer(initializerInvocable).invoke(obj, registry, progressMonitor);
+		}
 		
-		if (semanticElement == null) {
+		if (target == null) {
 			String type = getTypeName(obj);		
 		
 			if (!Util.isBlank(type)) {
-				semanticElement = (S) create(type.trim(), obj);
+				target = (T) create(type.trim(), obj);
 			}
 		}
 		
-		if (semanticElement instanceof ModelElement) {
-			ModelElement sme = (ModelElement) semanticElement;
-			if (Util.isBlank(sme.getUuid())) {
-				sme.setUuid(UUID.randomUUID().toString());
-			}
-		}
-		
-		semanticElement = executeInitializerScript(obj, semanticElement, registry, progressMonitor);
-		
-		if (semanticElement instanceof MinimalEObjectImpl && isRefIdProxyURI()) {
+		if (target instanceof MinimalEObjectImpl && isRefIdProxyURI()) {
 			String refIdPropertyName = getRefIdProperty();
 			if (!Util.isBlank(refIdPropertyName)) {
-				String refId = getProperty(obj, refIdPropertyName);
-				if (!Util.isBlank(refId)) {
-					URI refIdURI = URI.createURI(refId);
+				Object refId = getContentProvider().getProperty(obj, refIdPropertyName);
+				URI refIdURI = null;
+				if (refId instanceof URI) {
+					refIdURI = (URI) refId;
+				} else if (refId instanceof String && !Util.isBlank((String) refId)) {
+					refIdURI = URI.createURI((String) refId);
+				}
+				if (refIdURI != null) {
 					if (refIdURI.isRelative()) {
-						URI baseURI = getBaseURI(obj);
+						URI baseURI = getContentProvider().getBaseURI(obj);
 						if (baseURI != null) {
 							refIdURI = refIdURI.resolve(baseURI);
 						}
 					}
-					((MinimalEObjectImpl) semanticElement).eSetProxyURI(refIdURI);					
+					((MinimalEObjectImpl) target).eSetProxyURI(refIdURI);					
+					
 				}
 			}
 		}
 		
-		return semanticElement;
+		return target;
 	}
 	
 	/**
@@ -435,13 +444,13 @@ public abstract class AbstractMappingFactory<S> {
 		return getPropertyNamespace() + "initializer";
 	}
 
-	protected void configureInitializerEvaluationContext(
-			EvaluationContext evaluationContext,
-			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry, 
-			ProgressMonitor progressMonitor) {
-		
-		evaluationContext.setVariable("registry", registry);
-		evaluationContext.setVariable("progressMonitor", progressMonitor);
+	/**
+	 * Override to configure the initializer invocable. E.g. bind additional arguments.
+	 * @param initializer
+	 * @return
+	 */
+	protected Invocable configureInitializer(Invocable initializer) {
+		return initializer;
 	}
 	
 	/**
@@ -460,30 +469,17 @@ public abstract class AbstractMappingFactory<S> {
 	 * @param eObj
 	 * @return
 	 */
-	protected String getTypeName(EObject eObj) {
+	protected String getTypeName(S obj) {
 		String typeProperty = getTypeProperty();
 		if (Util.isBlank(typeProperty)) {
 			return null;
 		}
 		
-		return getProperty(eObj, typeProperty);
+		Object typeName = getContentProvider().getProperty(obj, typeProperty);
+		return typeName instanceof String ? (String) typeName : null;
 	}
 	
 	// === Wiring ===
-	
-	protected String getPageElementProperty() {
-		return getPropertyNamespace() + "page-element";
-	}
-	
-	public boolean isPageElement(EObject eObj) {	
-		String pageElementProperty = getPageElementProperty();
-		if (Util.isBlank(pageElementProperty)) {
-			return false;
-		}
-		
-		String pev = getProperty(eObj, pageElementProperty);
-		return !Util.isBlank(pev) && "true".equals(pev.trim());
-	}
 	
 	// --- Wiring ---
 	
