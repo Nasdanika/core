@@ -53,6 +53,7 @@ public class TestURIInvocable {
 				progressMonitor);
 		
 		System.out.println(Objects.equals(invocable, secondInvocable));
+		System.out.println((Object) secondInvocable.invoke("Universe"));
 	}
 	
 	@Test

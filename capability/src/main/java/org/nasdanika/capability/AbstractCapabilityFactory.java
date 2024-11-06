@@ -3,8 +3,10 @@ package org.nasdanika.capability;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Supplier;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * Base class with helper methods
@@ -17,6 +19,22 @@ public abstract class AbstractCapabilityFactory<R,C> implements CapabilityFactor
 	 */
 	protected CompletionStage<Iterable<CapabilityProvider<C>>> wrap(C capability) {
 		return wrapCompletionStage(capability == null ? null : CompletableFuture.completedStage(capability));
+	}
+	
+	/**
+	 * Helper method for factories with no dependencies providing a single instance of a service.
+	 * @return
+	 */
+	protected CompletionStage<Iterable<CapabilityProvider<C>>> wrapSupplier(Supplier<C> capabilitySupplier) {
+		CapabilityProvider<C> capabilityProvider = new CapabilityProvider<C>() {
+					
+					@Override
+					public Flux<C> getPublisher() {
+						return Mono.fromSupplier(capabilitySupplier).flux();
+					}
+					
+		};		
+		return CompletableFuture.completedStage(Collections.singleton(capabilityProvider));
 	}
 
 	/**

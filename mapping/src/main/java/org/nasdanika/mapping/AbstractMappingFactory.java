@@ -75,6 +75,12 @@ import org.nasdanika.common.Invocable;
  */
 public abstract class AbstractMappingFactory<S, T extends EObject> {
 	
+	private static final String TARGET_SELECTOR_PROPERTY = "target-selector";
+	private static final String PROGRESS_MONITOR_VAR = "progressMonitor";
+	private static final String REGISTRY_VAR = "registry";
+	private static final String PROTOTYPE_PROPERTY = "prototype";
+	private static final String REF_ID_PROPERTY = "ref-id";
+	private static final String INITIALIZER_PROPERTY = "initializer";
 	private static final String DOC_FORMAT_PROPERTY = "doc-format";
 	private static final String DOC_REF_PROPERTY = "doc-ref";
 	private static final String DOCUMENTATION_PROPERTY = "documentation";
@@ -91,21 +97,25 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	public static final String DRAWIO_REPRESENTATION = "drawio";
 	public static final String IMAGE_REPRESENTATION = "image";
 	
-	private static final String DATA_URI_PNG_PREFIX_NO_BASE_64 = "data:image/png,";
-	private static final String DATA_URI_JPEG_PREFIX_NO_BASE_64 = "data:image/jpeg,";
+	private static final String NAME_KEY = "name";
+	private static final String CONDITION_KEY = "condition";
+	private static final String EXPRESSION_KEY = "expression";
+	private static final String ELEMENT_CONDITION_KEY = "element-condition";
+	private static final String ELEMENT_EXPRESSION_KEY = "element-expression";
+	private static final String SOURCE_PATH_VAR = "sourcePath";
 	
 	protected CapabilityLoader capabilityLoader;
-	protected ContentProvider contentProvider;
+	protected ContentProvider<S> contentProvider;
 	
-	public AbstractMappingFactory(ContentProvider contentProvider) {
+	public AbstractMappingFactory(ContentProvider<S> contentProvider) {
 		this(contentProvider, new CapabilityLoader());
 	}
 	
-	public AbstractMappingFactory(ContentProvider contentProvider, CapabilityLoader capabilityLoader) {
+	public AbstractMappingFactory(ContentProvider<S> contentProvider, CapabilityLoader capabilityLoader) {
 		this.contentProvider = contentProvider;
 		this.capabilityLoader = capabilityLoader;
 		
-		mapper = new PropertySetterFeatureMapper<S, EObject>(contentProvider) {
+		mapper = new PropertySetterFeatureMapper<S, T>(contentProvider) {
 				
 				@Override
 				protected EClassifier getType(String type, S context) {
@@ -133,25 +143,25 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 				}
 				
 				@Override
-				protected Iterable<Entry<String, Object>> getVariables(S context) {
+				protected Map<String, Object> getVariables(S context) {
 					return AbstractMappingFactory.this.getVariables(context);
 				}
 				
 				@SuppressWarnings("unchecked")
 				@Override
-				public Iterable<EObject> select(S source, Map<S, EObject> registry, ProgressMonitor progressMonitor) {
+				public Iterable<T> select(S source, Map<S, T> registry, ProgressMonitor progressMonitor) {
 					String referenceProperty = getReferenceProperty();
 					if (!Util.isBlank(referenceProperty)) {		
 						Object referenceSpec = getContentProvider().getProperty(source, referenceProperty);			
 						if (referenceSpec instanceof String && !Util.isBlank((String) referenceSpec)) {
-							List<EObject> ret = new ArrayList<>();
+							List<T> ret = new ArrayList<>();
 							ReferenceMapper referenceMapper = new ReferenceMapper((String) referenceSpec, source);
 							List<S> logicalAncestorsPath = new ArrayList<>();
 							for (S logicalAncestor = getContentProvider().getParent(source); logicalAncestor != null; logicalAncestor = getContentProvider().getParent(logicalAncestor)) {
 								logicalAncestorsPath.add(logicalAncestor);					
-								for (EObject logicalAncestorSemanticElement: mapper.select(logicalAncestor, registry, progressMonitor)) {						
-									if (referenceMapper.matchLogicalAncestorSemanticelement(logicalAncestorSemanticElement, logicalAncestorsPath, registry, source)) {
-										EObject refObj = referenceMapper.getLogicalAncestorSemanticElementRefObj(logicalAncestorSemanticElement, logicalAncestorsPath, registry, source); 
+								for (T ancestorTarget: mapper.select(logicalAncestor, registry, progressMonitor)) {						
+									if (referenceMapper.matchAncestorTarget(ancestorTarget, logicalAncestorsPath, registry, source)) {
+										T refObj = referenceMapper.getAncestorTargetRefObj(ancestorTarget, logicalAncestorsPath, registry, source); 
 										if (refObj != null) {
 											EClass eClass = refObj.eClass();
 											String referenceName = referenceMapper.getReferenceName();
@@ -161,16 +171,16 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 											} else if (feature instanceof EReference) {
 												Object featureValue = refObj.eGet(feature);
 												if (feature.isMany()) {
-													ret.addAll((Collection<EObject>) featureValue);
+													ret.addAll((Collection<T>) featureValue);
 												} else if (featureValue instanceof EObject) {
-													ret.add((EObject) featureValue);
+													ret.add((T) featureValue);
 												}
 											} else {
 												throw new ConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), null, getContentProvider().asMarked(source)); 									
 											}
 										}
 									}
-									Comparator<Object> comparator = referenceMapper.getComparator(logicalAncestorSemanticElement, registry);
+									Comparator<Object> comparator = referenceMapper.getComparator(ancestorTarget, registry);
 									if (comparator != null) {
 										ret.sort(comparator);
 									}
@@ -324,7 +334,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return type.getEPackage().getEFactoryInstance().create(type);
 	}
 	
-	protected SetterFeatureMapper<S, EObject> mapper;
+	protected SetterFeatureMapper<S, T> mapper;
 	
 	/**
 	 * Override to return content mappers for different passes. 
@@ -332,7 +342,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	 * @param pass
 	 * @return
 	 */
-	protected Mapper<S, EObject> getMapper(int pass) {
+	protected Mapper<S, T> getMapper(int pass) {
 		return mapper;
 	}
 		
@@ -372,7 +382,11 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			}
 		}
 		if (initializerInvocable != null) {
-			target = configureInitializer(initializerInvocable).invoke(obj, registry, progressMonitor);
+			target = configureInitializer(obj, initializerInvocable)
+				.bindByName(REGISTRY_VAR, registry)	
+				.bindByName("contentProvider", getContentProvider())	
+				.bindByName(PROGRESS_MONITOR_VAR, progressMonitor)	
+				.invoke(obj);
 		}
 		
 		if (target == null) {
@@ -415,42 +429,36 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	protected boolean isRefIdProxyURI() {
 		return false;
 	}
-		
-	protected String getInitializerScriptPropertyName() {
-		return getPropertyNamespace() + "initializer-script";
-	}
-		
-	protected void configureInitializerScriptEngine(
-			ScriptEngine engine,
-			EObject diagramElement,
-			EObject semanticElement,
-			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
-			ProgressMonitor progressMonitor) {
-		engine.put("diagramElement", diagramElement);
-		engine.put("semanticElement", diagramElement);
-		engine.put("registry", registry);
-		engine.put("baseURI", getBaseURI(diagramElement));
-		engine.put("logicalParent", getLogicalParent(diagramElement));
-		for (Entry<String, Object> ve: getVariables(diagramElement)) {
-			engine.put(ve.getKey(), ve.getValue());
-		}
-	}		
 	
 	/**
 	 * Initializer expression
 	 * @return
 	 */
 	protected String getInitializerProperty() {
-		return getPropertyNamespace() + "initializer";
+		return getPropertyNamespace() + INITIALIZER_PROPERTY;
 	}
+		
+	/**
+	 * Override to provide variables for expressions and scripts.
+	 * 
+	 * @return
+	 */
+	protected Map<String, Object> getVariables(S context) {
+		return Collections.emptyMap();
+	}	
 
 	/**
 	 * Override to configure the initializer invocable. E.g. bind additional arguments.
+	 * This method binds variables returned from <code>getVariables()</code>
 	 * @param initializer
 	 * @return
 	 */
-	protected Invocable configureInitializer(Invocable initializer) {
-		return initializer;
+	protected Invocable configureInitializer(S source, Invocable initializer) {
+		Map<String, Object> variables = getVariables(source);
+		if (variables == null || variables.isEmpty()) {
+			return initializer;
+		}
+		return initializer.bindMap(variables);
 	}
 	
 	/**
@@ -481,12 +489,10 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	
 	// === Wiring ===
 	
-	// --- Wiring ---
-	
 	// --- Phase 0 - semantic elements using ref-id's, page element, selector, prototype, semantic-selector ---	
 	
 	protected String getRefIdProperty() {
-		return getPropertyNamespace() + "ref-id";
+		return getPropertyNamespace() + REF_ID_PROPERTY;
 	}
 	
 	/**
@@ -496,49 +502,15 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	 * @return Null if element cannot be resolved yet
 	 * @throws IllegalArgumentException If refId does not resolve to a semantic element
 	 */
-	protected abstract S getByRefId(
-			EObject eObj,
+	protected abstract T getByRefId(
+			S obj,
 			String refId, 
 			int pass, 
-			Map<EObject, EObject> registry);
-	
-	/**
-	 * Wires elements with ref-id property. Remaps which triggers wireContainment.
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireModelElementRefIds(
-			org.nasdanika.drawio.model.ModelElement modelElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		return wireRefIds(modelElement, registry, pass, progressMonitor);
-	}
-		
-	/**
-	 * Wires elements with ref-id property. Remaps which triggers wireContainment.
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireTagRefIds(
-			org.nasdanika.drawio.model.Tag tag,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		return wireRefIds(tag, registry, pass, progressMonitor);
-	}
+			Map<S, T> registry);
 	
 	protected boolean wireRefIds(
-			EObject eObj,
-			Map<EObject, EObject> registry,
+			S obj,
+			Map<S, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 
@@ -546,15 +518,17 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		if (Util.isBlank(refIdPropertyName)) {
 			return true;
 		}
-		String refId = getProperty(eObj, refIdPropertyName);
-		if (Util.isBlank(refId)) {
-			return true;
-		}
+		Object refId = getContentProvider().getProperty(obj, refIdPropertyName);
+		if (refId instanceof String) {
+			String refIdStr = (String) refId;
+			if (!Util.isBlank(refIdStr)) {
+				T refTarget = getByRefId(obj, refIdStr, pass, registry);
+				if (refTarget != null) {
+					registry.put(obj, refTarget); // Resolved refId triggers a new wave of wiring
+				}
+			}
+		}		
 		
-		S refTarget = getByRefId(eObj, refId, pass, registry);
-		if (refTarget != null) {
-			registry.put(eObj, refTarget); // Resolved refId triggers a new wave of wiring
-		}
 		return true;
 	}
 		
@@ -562,103 +536,9 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return getPropertyNamespace() + SELECTOR_KEY;
 	}
 	
-	/**
-	 * Wires page elements without semantic element
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 * @return
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wirePageElement(
-			org.nasdanika.drawio.model.ModelElement modelElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		if (!isPageElement(modelElement)) {
-			return true;
-		}
-		Page page = modelElement.getPage();
-		if (isTopLevelPage(page) || page.getLinks().isEmpty()) {
-			return true;
-		}
-		Optional<EObject> linkSemanticElementOpt = page
-			.getLinks()
-			.stream()
-			.map(registry::get)
-			.filter(Objects::nonNull)
-			.findFirst();
-		
-		if (linkSemanticElementOpt.isEmpty()) {
-			return false; // Not there yet
-		}
-		registry.put(modelElement, linkSemanticElementOpt.get());
-		return true;
-	}
-	
-	/**
-	 * Wires elements with selector property. Remaps which triggers wireContainment.
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireModelElementLinkTarget(
-			org.nasdanika.drawio.model.ModelElement modelElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		LinkTarget linkTarget = modelElement.getLinkTarget();
-		if (linkTarget instanceof org.nasdanika.drawio.model.ModelElement) {
-			EObject semanticTarget = registry.get(linkTarget);
-			if (semanticTarget == null) {
-				return false; // Not there yet
-			}
-			registry.put(modelElement, semanticTarget); // Тriggers a new wave of wiring
-		}
-		
-		return true;						
-	}	
-	
-	/**
-	 * Wires elements with selector property. Remaps which triggers wireContainment.
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireModelElementSelector(
-			org.nasdanika.drawio.model.ModelElement modelElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		return wireSelector(modelElement, registry, pass, progressMonitor);
-	}	
-	
-	/**
-	 * Wires elements with selector property. Remaps which triggers wireContainment.
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireTagSelector(
-			org.nasdanika.drawio.model.Tag tag,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		return wireSelector(tag, registry, pass, progressMonitor);
-	}
-	
 	protected boolean wireSelector(
-			EObject eObj,
-			Map<EObject, EObject> registry,
+			S obj,
+			Map<S, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 
@@ -666,117 +546,98 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		if (Util.isBlank(selectorPropertyName)) {
 			return true;
 		}
-		String selector = getProperty(eObj, selectorPropertyName);
-		if (Util.isBlank(selector)) {
+		Object selector = getContentProvider().getProperty(obj, selectorPropertyName);		
+		if (selector == null) {
 			return true;
 		}
 		
-		try {			
-			ExpressionParser parser = createExpressionParser(eObj);
-			Expression exp = parser.parseExpression(selector);
-			EvaluationContext evaluationContext = createEvaluationContext(eObj);
-			configureSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
-			Object result = exp.getValue(evaluationContext, eObj, Object.class);
-			if (result instanceof EObject) {
-				EObject selectedTarget = registry.get(result);
-				if (selectedTarget == null) {
-					return false; // Not there yet
-				}
-				registry.put(eObj, selectedTarget); // Тriggers a new wave of wiring
-				return true;				
-			}
-			if (result instanceof Boolean) {
-				return (Boolean) result;
-			} 
-			if (result == null) {
+		if (selector instanceof String) {
+			String selectorStr = (String) selector;
+			if (Util.isBlank(selectorStr)) {
 				return true;
 			}
-			throw new ConfigurationException("Unexpected result type of selector: '" + selector + "': " + result, getContentProvider().asMarked(eObj));			
-		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing selector: '" + selector, e, getContentProvider().asMarked(eObj));
-		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating selector: '" + selector, e, getContentProvider().asMarked(eObj));
-		}
+			try {			
+				ExpressionParser parser = createExpressionParser(obj);
+				Expression exp = parser.parseExpression(selectorStr);
+				EvaluationContext evaluationContext = createEvaluationContext(obj);
+				configureSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
+				Object result = exp.getValue(evaluationContext, obj, Object.class);
+				if (result instanceof EObject) {
+					T selectedTarget = registry.get(result);
+					if (selectedTarget == null) {
+						return false; // Not there yet
+					}
+					registry.put(obj, selectedTarget); // Тriggers a new wave of wiring
+					return true;				
+				}
+				if (result instanceof Boolean) {
+					return (Boolean) result;
+				} 
+				if (result == null) {
+					return true;
+				}
+				throw new ConfigurationException("Unexpected result type of selector: '" + selector + "': " + result, getContentProvider().asMarked(obj));			
+			} catch (ParseException e) {
+				throw new ConfigurationException("Error parsing selector: '" + selector, e, getContentProvider().asMarked(obj));
+			} catch (EvaluationException e) {
+				throw new ConfigurationException("Error evaluating selector: '" + selector, e, getContentProvider().asMarked(obj));
+			}
+		}		
+		throw new ConfigurationException("Unsupported selector type: '" + selector, getContentProvider().asMarked(obj));			
 	}
 
 	protected void configureSelectorEvaluationContext(
 			EvaluationContext evaluationContext,
-			Map<EObject, EObject> registry, 
+			Map<S, T> registry, 
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		evaluationContext.setVariable("registry", registry);
+		evaluationContext.setVariable(REGISTRY_VAR, registry);
 		evaluationContext.setVariable(PASS_KEY, pass);
-		evaluationContext.setVariable("progressMonitor", progressMonitor);
+		evaluationContext.setVariable(PROGRESS_MONITOR_VAR, progressMonitor);
 	}
 	
 	protected String getPrototypeProperty() {
-		return getPropertyNamespace() + "prototype";
+		return getPropertyNamespace() + PROTOTYPE_PROPERTY;
 	}
 	
-	protected EObject getPrototype(
-			EObject eObj,
+	protected S getPrototype(
+			S obj,
 			ProgressMonitor progressMonitor) {
 	
 		String prototypePropertyName = getPrototypeProperty();
 		if (Util.isBlank(prototypePropertyName)) {
 			return null;
 		}
-		String prototypeExpr = getProperty(eObj, prototypePropertyName);
-		if (Util.isBlank(prototypeExpr)) {
+		Object prototypeExpr = getContentProvider().getProperty(obj, prototypePropertyName);
+		if (prototypeExpr == null) {
 			return null;
 		}
 		
-		try {			
-			ExpressionParser parser = createExpressionParser(eObj);
-			Expression exp = parser.parseExpression(prototypeExpr);
-			EvaluationContext evaluationContext = createEvaluationContext(eObj);
-			configurePrototypeEvaluationContext(evaluationContext, progressMonitor);
-			return exp.getValue(evaluationContext, eObj, EObject.class);
-		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing prototype: '" + prototypeExpr, e, getContentProvider().asMarked(eObj));
-		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating prototype: '" + prototypeExpr, e, getContentProvider().asMarked(eObj));
+		if (prototypeExpr instanceof String) {
+			String prototypeExprStr = (String) prototypeExpr;
+			if (Util.isBlank(prototypeExprStr)) {
+				return null;
+			}
+			
+			try {			
+				ExpressionParser parser = createExpressionParser(obj);
+				Expression exp = parser.parseExpression(prototypeExprStr);
+				EvaluationContext evaluationContext = createEvaluationContext(obj);
+				configurePrototypeEvaluationContext(evaluationContext, progressMonitor);
+				return (S) exp.getValue(evaluationContext, obj);
+			} catch (ParseException e) {
+				throw new ConfigurationException("Error parsing prototype: '" + prototypeExpr, e, getContentProvider().asMarked(obj));
+			} catch (EvaluationException e) {
+				throw new ConfigurationException("Error evaluating prototype: '" + prototypeExpr, e, getContentProvider().asMarked(obj));
+			}
 		}
+		throw new ConfigurationException("Unsupported prototype type: '" + prototypeExpr, getContentProvider().asMarked(obj));			
 	}	
-	
-	/**
-	 * Wires elements with prototype property. Remaps which triggers wireContainment.
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireModelElementPrototype(
-			org.nasdanika.drawio.model.ModelElement modelElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		return wirePrototype(modelElement, registry, pass, progressMonitor);
-	}
-		
-	/**
-	 * Wires elements with prototype property. Remaps which triggers wireContainment.
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireTagPrototype(
-			org.nasdanika.drawio.model.Tag tag,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		return wirePrototype(tag, registry, pass, progressMonitor);
-	}
 
 	protected boolean wirePrototype(
-			EObject eObj,
-			Map<EObject, EObject> registry,
+			S obj,
+			Map<S, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 	
@@ -784,27 +645,27 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		if (Util.isBlank(prototypePropertyName)) {
 			return true;
 		}
-		String prototypeExpr = getProperty(eObj, prototypePropertyName);
-		if (Util.isBlank(prototypeExpr)) {
+		Object prototypeExpr = getContentProvider().getProperty(obj, prototypePropertyName);
+		if (prototypeExpr == null || (prototypeExpr instanceof String && Util.isBlank((String) prototypeExpr))) {
 			return true;
 		}
 		
 		try {			
-			EObject result = getPrototype(eObj, progressMonitor);
-			EObject prototype = registry.get(result);
+			S result = getPrototype(obj, progressMonitor);
+			T prototype = registry.get(result);
 			if (prototype == null) {
 				return false; // Not there yet
 			}
-			EObject copy = EcoreUtil.copy(prototype);
+			T copy = EcoreUtil.copy(prototype);
 			if (copy instanceof ModelElement) {
 				((ModelElement) copy).setUuid(UUID.randomUUID().toString());
 			}
-			registry.put(eObj, copy); // Тriggers a new wave of wiring
+			registry.put(obj, copy); // Тriggers a new wave of wiring
 			return true;				
 		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing selector: '" + prototypeExpr, e, getContentProvider().asMarked(eObj));
+			throw new ConfigurationException("Error parsing selector: '" + prototypeExpr, e, getContentProvider().asMarked(obj));
 		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating selector: '" + prototypeExpr, e, getContentProvider().asMarked(eObj));
+			throw new ConfigurationException("Error evaluating selector: '" + prototypeExpr, e, getContentProvider().asMarked(obj));
 		}
 	}
 
@@ -812,92 +673,67 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			EvaluationContext evaluationContext,
 			ProgressMonitor progressMonitor) {
 		
-		evaluationContext.setVariable("progressMonitor", progressMonitor);
+		evaluationContext.setVariable(PROGRESS_MONITOR_VAR, progressMonitor);
 	}
 	
-	protected String getSemanticSelectorProperty() {
-		return getPropertyNamespace() + "semantic-selector";
+	protected String getTargetSelectorProperty() {
+		return getPropertyNamespace() + TARGET_SELECTOR_PROPERTY;
 	}
-	
-	/**
-	 * Wires elements with semantic selector property. Remaps which triggers wireContainment.
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireModelElementSemanticSelector(
-			org.nasdanika.drawio.model.ModelElement modelElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		return wireSemanticSelector(modelElement, registry, pass, progressMonitor);
-	}
-	
-	/**
-	 * Wires elements with semantic selector property. Remaps which triggers wireContainment.
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireTagSemanticSelector(
-			org.nasdanika.drawio.model.Tag tag,
-			Map<EObject, EObject> registry,
+
+	protected boolean wireTargetSelector(
+			S obj,
+			Map<S, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 
-		return wireSemanticSelector(tag, registry, pass, progressMonitor);
-	}	
-
-	protected boolean wireSemanticSelector(
-			EObject eObj,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-
-		String semanticSelectorPropertyName = getSemanticSelectorProperty();
-		if (Util.isBlank(semanticSelectorPropertyName)) {
+		String targetSelectorPropertyName = getTargetSelectorProperty();
+		if (Util.isBlank(targetSelectorPropertyName)) {
 			return true;
 		}
-		String semanticSelector = getProperty(eObj, semanticSelectorPropertyName);
-		if (Util.isBlank(semanticSelector)) {
+		Object targetSelector = getContentProvider().getProperty(obj, targetSelectorPropertyName);
+		if (targetSelector == null) {
 			return true;
 		}
 		
-		try {			
-			ExpressionParser parser = createExpressionParser(eObj);
-			Expression exp = parser.parseExpression(semanticSelector);
-			EvaluationContext evaluationContext = createEvaluationContext(eObj);
-			configureSemanticSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
-			Object result = exp.getValue(evaluationContext, eObj, Object.class);
-			if (result instanceof EObject) {
-				registry.put(eObj, (EObject) result); 
-				return true;				
-			}
-			if (result == null) {
+		if (targetSelector instanceof String) {
+			String targetSelectorStr = (String) targetSelector;
+			if ( Util.isBlank(targetSelectorStr)) {
 				return true;
 			}
-			throw new ConfigurationException("Unexpected result type of semantic selector: '" + semanticSelector + "': " + result, getContentProvider().asMarked(eObj));			
-		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing semantic selector: '" + semanticSelector, e, getContentProvider().asMarked(eObj));
-		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating semantic selector: '" + semanticSelector, e, getContentProvider().asMarked(eObj));
+			
+			try {			
+				ExpressionParser parser = createExpressionParser(obj);
+				Expression exp = parser.parseExpression(targetSelectorStr);
+				EvaluationContext evaluationContext = createEvaluationContext(obj);
+				configureTargetSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
+				Object result = exp.getValue(evaluationContext, obj);
+				if (result instanceof EObject) {
+					registry.put(obj, (T) result); 
+					return true;				
+				}
+				if (result == null) {
+					return true;
+				}
+				throw new ConfigurationException("Unexpected result type of target selector: '" + targetSelectorStr + "': " + result, getContentProvider().asMarked(obj));			
+			} catch (ParseException e) {
+				throw new ConfigurationException("Error parsing target selector: '" + targetSelectorStr, e, getContentProvider().asMarked(obj));
+			} catch (EvaluationException e) {
+				throw new ConfigurationException("Error evaluating semantic selector: '" + targetSelectorStr, e, getContentProvider().asMarked(obj));
+			}
 		}
+		throw new ConfigurationException("Unsupported target selector type: '" + targetSelector, getContentProvider().asMarked(obj));					
+		
 	}
 
-	protected void configureSemanticSelectorEvaluationContext(
+	protected void configureTargetSelectorEvaluationContext(
 			EvaluationContext evaluationContext,
-			Map<EObject, EObject> registry, 
+			Map<S,T> registry, 
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		evaluationContext.setVariable("registry", registry);
+		evaluationContext.setVariable(REGISTRY_VAR, registry);
 		evaluationContext.setVariable(PASS_KEY, pass);
-		evaluationContext.setVariable("progressMonitor", progressMonitor);
+		evaluationContext.setVariable(PROGRESS_MONITOR_VAR, progressMonitor);
 	}
 		
 	protected EvaluationContext createEvaluationContext(S context) {
@@ -906,19 +742,10 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		if (classLoader != null) {
 			ret.setTypeLocator(new StandardTypeLocator(classLoader));
 		}
-		for (Entry<String, Object> ve: getVariables(context)) {
+		for (Entry<String, Object> ve: getVariables(context).entrySet()) {
 			ret.setVariable(ve.getKey(), ve.getValue());
 		}
 		return ret;
-	}
-	
-	/**
-	 * Override to provide variables for expressions and scripts.
-	 * 
-	 * @return
-	 */
-	protected Iterable<Map.Entry<String, Object>> getVariables(S context) {
-		return Collections.emptySet();
 	}
 	
 	protected SpelExpressionParser createExpressionParser(S context) {
@@ -928,64 +755,20 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	
 	/**
 	 * Returns a {@link ClassLoader} for an object (diagram element). 
-	 * This implementation delegates to logical parent and returns this class' classLoader for the root object.
-	 * Classloader returned by this method is used to create SpEL parser and to execute scripts.
-	 * Override to implement object-specific classloaders. For example, load Maven POM from a property value or resource and build a classloader from dependencies:
-	 * 
-	 *  https://maven.apache.org/resolver/maven-resolver-api/index.html, 
-	 *  https://stackoverflow.com/questions/11799923/programmatically-resolving-maven-dependencies-outside-of-a-plugin-get-reposito,
-	 *  https://mvnrepository.com/artifact/org.apache.maven.resolver/maven-resolver-api, 
-	 *  https://wiki.eclipse.org/Aether, 
-	 *  https://github.com/yahro/maven-classloader/blob/master/src/main/java/com/bigfatgun/MavenClassLoader.java - old code, needs to be refactored.
+	 * This implementation delegates to the parent and returns this class' classLoader for the root object.
+	 * Classloader returned by this method is used to create SpEL parser.
 	 * @param context
 	 * @return
 	 */
 	protected ClassLoader getClassLoader(S context) {
-		EObject logicalParent = getLogicalParent(context);
-		if (logicalParent == null) {
+		// TODO - class loader property, use ClassLoaderRequirement, no need to cache - capability loader will do it				
+		S parent = getContentProvider().getParent(context);
+		if (parent == null) {
 			return Thread.currentThread().getContextClassLoader();
 		}
-		return getClassLoader(logicalParent);
+		return getClassLoader(parent);
 	}
 		
-	/**
-	 * Wires document to the page element of the top level page.
-	 * @param document
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 * @return
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-	public final boolean wireDocument(
-			org.nasdanika.drawio.model.Document document,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		for (Page page: document.getPages()) {
-			if (isTopLevelPage(page)) {
-				TreeIterator<EObject> cit = page.eAllContents();
-				while (cit.hasNext()) {
-					EObject next = cit.next();
-					if (next instanceof org.nasdanika.drawio.model.ModelElement) {
-						org.nasdanika.drawio.model.ModelElement modelElement = (org.nasdanika.drawio.model.ModelElement) next;
-						if (isPageElement(modelElement)) {
-							EObject semanticElement = registry.get(modelElement);
-							if (semanticElement == null) {
-								return false; // Not there yet
-							}
-							registry.put(document, semanticElement);
-							return true;
-						}
-					}
-				}
-			}
-		}
-		
-		return true;
-	}
-	
 	// --- Phase 1: Mapping "reference" elements
 	
 	protected String getReferenceProperty() {
@@ -993,15 +776,6 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	}
 	
 	protected class ReferenceMapper {
-		
-		private static final String NAME_KEY = "name";
-		private static final String CONDITION_KEY = "condition";
-		private static final String EXPRESSION_KEY = "expression";
-		private static final String ELEMENT_CONDITION_KEY = "element-condition";
-		private static final String ELEMENT_EXPRESSION_KEY = "element-expression";
-		
-		private static final String REGISTRY_VAR = "registry";
-		private static final String SOURCE_PATH_VAR = "sourcePath";
 		
 		private Map<?,?> spec;
 		
@@ -1029,8 +803,8 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			
 		}
 		
-		public Comparator<Object> getComparator(EObject semanticElement, Map<S, EObject> registry) {
-			return mapper.getComparator(semanticElement, spec, registry, context);
+		public Comparator<Object> getComparator(T targetElement, Map<S, T> registry) {
+			return mapper.getComparator(targetElement, spec, registry, context);
 			
 		}
 		
@@ -1038,20 +812,20 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			return referenceName;
 		}
 
-		public boolean matchLogicalAncestorSemanticelement(
-				EObject logicalAncestorSemanticElement, 
+		public boolean matchAncestorTarget(
+				T ancestorTargetElement, 
 				List<S> logicalAncestorPath,
-				Map<S, EObject> registry,
+				Map<S, T> registry,
 				S context) {
 			
 			Object cObj = spec.get(CONDITION_KEY);
 			if (cObj == null) {
-				return logicalAncestorSemanticElement != null; // Shall always be true?
+				return ancestorTargetElement != null; // Shall always be true?
 			}
 			
 			if (cObj instanceof String) {
 				mapper.evaluatePredicate(
-						logicalAncestorSemanticElement, 
+						ancestorTargetElement, 
 						(String) cObj, 
 						Map.ofEntries(
 								Map.entry(REGISTRY_VAR, registry),
@@ -1062,20 +836,20 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			throw new ConfigurationException("Usupported reference condition type: " + cObj, getContentProvider().asMarked(context));		
 		}
 		
-		public EObject getLogicalAncestorSemanticElementRefObj(
-				EObject logicalAncestorSemanticElement, 
+		public T getAncestorTargetRefObj(
+				T ancestorTarget, 
 				List<S> logicalAncestorPath,
-				Map<S, EObject> registry, 
+				Map<S, T> registry, 
 				S context) {
 			
 			Object eObj = spec.get(EXPRESSION_KEY);
 			if (eObj == null) {
-				return logicalAncestorSemanticElement;
+				return ancestorTarget;
 			}
 			
 			if (eObj instanceof String) {
 				mapper.evaluate(
-						logicalAncestorSemanticElement, 
+						ancestorTarget, 
 						(String) eObj, 
 						Map.ofEntries(
 								Map.entry(REGISTRY_VAR, registry),
@@ -1087,10 +861,10 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			throw new ConfigurationException("Usupported reference expression type: " + eObj, getContentProvider().asMarked(context));		
 		}
 		
-		private boolean matchContentsSemanticelement(
-				EObject contentsSemanticElement, 
+		private boolean matchContentsTarget(
+				T contentsTarget, 
 				List<S> sourcePath,
-				Map<S, EObject> registry,
+				Map<S, T> registry,
 				S context) {
 			
 			Object cObj = spec.get(ELEMENT_CONDITION_KEY);
@@ -1100,7 +874,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			
 			if (cObj instanceof String) {
 				mapper.evaluatePredicate(
-						contentsSemanticElement, 
+						contentsTarget, 
 						(String) cObj, 
 						Map.ofEntries(
 								Map.entry(REGISTRY_VAR, registry),
@@ -1111,20 +885,20 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			throw new ConfigurationException("Usupported reference element condition type: " + cObj, getContentProvider().asMarked(context));		
 		}
 		
-		private EObject getContentsSemanticElementRefObj(
-				EObject contentsSemanticElement, 
+		private EObject getContentsTargetRefObj(
+				T contentsTarget, 
 				List<S> sourcePath,
-				Map<S, EObject> registry, 
+				Map<S, T> registry, 
 				S context) {
 			
 			Object eObj = spec.get(ELEMENT_EXPRESSION_KEY);
 			if (eObj == null) {
-				return contentsSemanticElement;
+				return contentsTarget;
 			}
 			
 			if (eObj instanceof String) {
 				mapper.evaluate(
-						contentsSemanticElement, 
+						contentsTarget, 
 						(String) eObj, 
 						Map.ofEntries(
 								Map.entry(REGISTRY_VAR, registry),
@@ -1147,8 +921,8 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			for (S childSource: getContentProvider().getContents(sourcePath.getLast(), tracker)) {
 				sourcePath.add(childSource);
 				for (EObject childSemanticElement: mapper.select(childSource, registry, null)) {
-					if (matchContentsSemanticelement(childSemanticElement, sourcePath, registry, context)) {
-						EObject refObj = getContentsSemanticElementRefObj(childSemanticElement, sourcePath, registry, context);
+					if (matchContentsTarget(childSemanticElement, sourcePath, registry, context)) {
+						EObject refObj = getContentsTargetRefObj(childSemanticElement, sourcePath, registry, context);
 						if (refObj != null) {
 							ret.add(refObj);
 						}
@@ -1162,268 +936,21 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		}		
 		
 	}
-			
-	@SuppressWarnings("unchecked")
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 1)
-	public final void wireSemanticReferences(
-			org.nasdanika.drawio.model.Layer drawioModelElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		String referenceProperty = getReferenceProperty();
-		if (!Util.isBlank(referenceProperty)) {		
-			String referenceSpec = getProperty(drawioModelElement, referenceProperty);			
-			if (!Util.isBlank(referenceSpec)) {
-				ReferenceMapper referenceMapper = new ReferenceMapper(referenceSpec, drawioModelElement);
-				List<EObject> logicalAncestorsPath = new ArrayList<>();
-				Z: for (EObject logicalAncestor = getLogicalParent(drawioModelElement); logicalAncestor != null; logicalAncestor = getLogicalParent(logicalAncestor)) {
-					logicalAncestorsPath.add(logicalAncestor);					
-					for (EObject logicalAncestorSemanticElement: mapper.select(logicalAncestor, registry, progressMonitor)) {						
-						if (referenceMapper.matchLogicalAncestorSemanticelement(logicalAncestorSemanticElement, logicalAncestorsPath, registry, drawioModelElement)) {
-							EObject refObj = referenceMapper.getLogicalAncestorSemanticElementRefObj(logicalAncestorSemanticElement, logicalAncestorsPath, registry, drawioModelElement); 
-							if (refObj != null) {
-								EClass eClass = refObj.eClass();
-								String referenceName = referenceMapper.getReferenceName();
-								EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
-								if (feature == null) {
-									throw new ConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), drawioModelElement); 
-								} else if (feature instanceof EReference) {							
-									LinkedList<EObject> sourcePath = new LinkedList<EObject>();
-									sourcePath.add(drawioModelElement);
-									Comparator<Object> comparator = referenceMapper.getComparator(logicalAncestorSemanticElement, registry);
-									for (EObject semanticElement: referenceMapper.getElements(sourcePath, registry, new HashSet<>()::add, drawioModelElement, progressMonitor)) {
-										if (semanticElement != null && feature.getEType().isInstance(semanticElement)) {
-											if (feature.isMany()) {
-												List<EObject> fvl = (List<EObject>) logicalAncestorSemanticElement.eGet(feature);
-												if (comparator == null || fvl.isEmpty()) {										
-													fvl.add(semanticElement);
-												} else {
-													// Iterating and comparing
-													boolean added = false;
-													for (int i = 0; i < fvl.size(); ++i) {
-														Object fvle = fvl.get(i);
-														if (comparator.compare(semanticElement, fvle) < 0) {
-															fvl.add(i, semanticElement);
-															added = true;
-															break;
-														}
-													}
-													if (!added) {
-														fvl.add(semanticElement);
-													}
-												}
-											} else {
-												logicalAncestorSemanticElement.eSet(feature, semanticElement);										
-											}									
-										}
-									}
-								} else {
-									throw new ConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), drawioModelElement); 									
-								}
-								break Z;								
-							}
-						}
-					}
-				}
-			}
-		}
-	}
 
 	// --- Phase 2: Mapping features and adding representations ---
 	
-	/**
-	 * Adds contained elements into containment references.
-	 * Traverses page links.
-	 * 
-	 * @param document
-	 * @param pkg
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(phase = 2)
-	public final void mapDocument(
-			org.nasdanika.drawio.model.Document document,
-			S documentElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		Mapper<EObject,EObject> mapper = getMapper(pass);
-		if (mapper != null) {
-			mapper.wire(document, registry, progressMonitor);
-		}
-	}
-	
-	/**
-	 * Adds contained elements into containment references.
-	 * Traverses page links.
-	 * 
-	 * @param document
-	 * @param pkg
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(phase = 2)
-	public final void addDocumentReprentations(
-			org.nasdanika.drawio.model.Document document,
-			S documentElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		if (documentElement instanceof org.nasdanika.ncore.ModelElement) {
-			org.nasdanika.ncore.ModelElement documentModelElement = (org.nasdanika.ncore.ModelElement) documentElement;
-			for (Page page: document.getPages()) {
-				if (isTopLevelPage(page)) {
-					addRepresentationPage(
-							documentModelElement, 
-							page, 
-							registry, 
-							progressMonitor);
-					
-				}
-			}
-		}
-	}	
-	
-	/**
-	 * Default base URI for the Drawio application to resolve library relative URL's.
-	 */
-	public static final URI DEFAULT_APP_BASE = URI.createURI("https://app.diagrams.net/");
-	
-	/**
-	 * Application base for resolving relative image URL's. 
-	 * This implementation returns DEFAULT_APP_BASE. 
-	 * Override to customize for different (e.g. intranet) installations.
-	 * App sources - https://github.com/jgraph/drawio/tree/dev/src/main/webapp.
-	 * For the purposes of serving images and a diagram editor the web app can be deployed as a static site.
-	 * It can also be deployed as a Docker container - https://www.drawio.com/blog/diagrams-docker-app, https://hub.docker.com/r/jgraph/drawio 
-	 * @return
-	 */
-	protected URI getAppBase() {
-		return DEFAULT_APP_BASE;
-	}
-		
-	@org.nasdanika.common.Transformer.Wire(phase = 2)
-	public final void mapModelElement(
-			org.nasdanika.drawio.model.ModelElement drawioModelElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-						
-		Mapper<EObject,EObject> mapper = getMapper(pass);
-		if (mapper != null) {
-			mapper.wire(drawioModelElement, registry, progressMonitor);
-		}
-		
-		boolean isPageElement = isPageElement(drawioModelElement);
-		
-		// Semantic mapping
-		if (semanticElement instanceof org.nasdanika.drawio.model.SemanticElement) {
-			SemanticMapping semanticMapping = createSemanticMapping();
-			for (EObject eContainer = drawioModelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
-				if (eContainer instanceof Page) {
-					semanticMapping.setPageID(((Page) eContainer).getId());						
-				} else if (eContainer instanceof org.nasdanika.drawio.model.Document) {
-					semanticMapping.setDocumentURI(((org.nasdanika.drawio.model.Document) eContainer).getUri());
-				}
-			}
-			semanticMapping.setModelElementID(drawioModelElement.getId());
-			semanticMapping.setPageElement(isPageElement);
-			((org.nasdanika.drawio.model.SemanticElement) semanticElement).getSemanticMappings().add(semanticMapping);
-		}		
-		
-		if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
-			// Page representation
-			org.nasdanika.ncore.ModelElement semanticModelElement = (org.nasdanika.ncore.ModelElement) semanticElement;
-			LinkTarget linkTarget = drawioModelElement.getLinkTarget();
-			if (linkTarget instanceof Page) {
-				addRepresentationPage(
-						semanticModelElement, 
-						(Page) linkTarget, 
-						registry, 
-						progressMonitor);
-				
-			}
-			for (EObject eContainer = drawioModelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
-				if (eContainer instanceof Page) {
-					if (isPageElement) {
-						addRepresentationPage(
-								semanticModelElement, 
-								(Page) eContainer, 
-								registry, 
-								progressMonitor);
-					}
-				}
-			}
-			
-			// Image
-			EMap<String, String> style = drawioModelElement.getStyle();
-			String image = style.get("image");
-			if (!Util.isBlank(image)) {
-				// Drawio does not add ;base64 to the image URL, browsers don't understand. Fixing it here.
-				if (image.startsWith(DATA_URI_PNG_PREFIX_NO_BASE_64)) {
-					int insertIdx = DATA_URI_PNG_PREFIX_NO_BASE_64.length() - 1;
-					image = image.substring(0, insertIdx) + ";base64" + image.substring(insertIdx);
-				} else if (image.startsWith(DATA_URI_JPEG_PREFIX_NO_BASE_64)) {
-					int insertIdx = DATA_URI_JPEG_PREFIX_NO_BASE_64.length() - 1;
-					image = image.substring(0, insertIdx) + ";base64" + image.substring(insertIdx);
-				} else {
-					URI imageURI = URI.createURI(image);
-					if (imageURI.isRelative()) {
-						URI appBase = getAppBase();
-						if (appBase != null && !appBase.isRelative()) {
-							imageURI = imageURI.resolve(appBase);
-						}
-					}
-					image = imageURI.toString();
-				}
-
-				semanticModelElement.getRepresentations().put(IMAGE_REPRESENTATION,	image);					
-			}
-		}		
-	}
-	
-	/**
-	 * NOP method because drawio classes are not available here. Implemented in DocumentFilteringDrawioFactory.
-	 * @param semanticElement
-	 * @param page
-	 */
-	protected void addRepresentationPage(
-			org.nasdanika.ncore.ModelElement semanticModelElement, 
-			Page page,
-			Map<EObject, EObject> registry,
-			ProgressMonitor progressMonitor) {
-		// NOP
-	}
-
-	protected SemanticMapping createSemanticMapping() {
-		return ModelFactory.eINSTANCE.createSemanticMapping();
-	}
-	
 	// --- Phase 3: mapping features of null semantic elements such as pass-through connections
 	
-	/**
-	 * Feature maps null semantic elements, which is needed for connections as they might be pass-through.
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 3)
 	public final boolean featurMapNulls(
-			org.nasdanika.drawio.model.ModelElement modelElement,
-			Map<EObject, EObject> registry,
+			S obj,
+			Map<S, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		Mapper<EObject,EObject> mapper = getMapper(pass);
+		Mapper<S,T> mapper = getMapper(pass);
 		if (mapper != null) {
-			mapper.wire(modelElement, registry, progressMonitor);
+			mapper.wire(obj, registry, progressMonitor);
 		}		
 		return true;
 	}
@@ -1492,38 +1019,6 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		}
 	}		
 	
-	@org.nasdanika.common.Transformer.Wire(phase = 4)
-	public final void wireModelElementConfiguration(
-			org.nasdanika.drawio.model.ModelElement drawioModelElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		configureSemanticElement(
-				drawioModelElement,
-				semanticElement,
-				registry,
-				false,
-				progressMonitor);
-	}
-	
-	@org.nasdanika.common.Transformer.Wire(phase = 4)
-	public final void wireTagConfiguration(
-			org.nasdanika.drawio.model.Tag tag,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		configureSemanticElement(
-				tag,
-				semanticElement,
-				registry,
-				false,
-				progressMonitor);
-	}
-	
 	/**
 	 * Sets semantic identity if semantic element is instance of org.nasdanika.ncore.StringIdentity
 	 * @param semanticElement
@@ -1581,7 +1076,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return documentationFactories;
 	}
 	
-	protected void configureSemanticElement(
+	protected void configureTargetElement(
 			EObject eObj,
 			S semanticElement,
 			Map<EObject, EObject> registry,
@@ -1709,27 +1204,6 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		
 	}
 	
-	protected void setPageName(S semanticElement, String pageName) {
-		if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
-			org.nasdanika.ncore.NamedElement namedSemanticElement = (org.nasdanika.ncore.NamedElement) semanticElement;
-			if (Util.isBlank(namedSemanticElement.getName())) {
-				namedSemanticElement.setName(pageName);
-			}
-		}		
-	}
-//		
-//	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-//	
-//	protected abstract EObject createTextDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-//	
-//	protected abstract EObject createMarkdownDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-//	
-//	protected abstract EObject createHtmlDoc(URI docRef, ProgressMonitor progressMonitor);
-//	
-//	protected abstract EObject createTextDoc(URI docRef, ProgressMonitor progressMonitor);
-//	
-//	protected abstract EObject createMarkdownDoc(URI docRef, ProgressMonitor progressMonitor);
-	
 	// --- Phase 5: Operations
 		
 	protected String getOperationMapPropertyName() {
@@ -1746,9 +1220,9 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	 */
 	@org.nasdanika.common.Transformer.Wire(phase = 5)
 	public final boolean mapOperations(
-			EObject diagramElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
+			S diagramElement,
+			T semanticElement,
+			Map<S, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 
@@ -1838,7 +1312,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 										Object itVal = mapper.evaluate(
 												diagramElement, 
 												(String) iterator,												
-												Map.of("registry", registry),
+												Map.of(REGISTRY_VAR, registry),
 												Object.class,
 												diagramElement);
 										
@@ -1876,7 +1350,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 													Object arg = mapper.evaluate(
 															next, 
 															argExpr,												
-															Map.of("registry", registry),
+															Map.of(REGISTRY_VAR, registry),
 															Object.class,
 															diagramElement);
 													argList.add(arg);
@@ -1945,7 +1419,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		engine.put("diagramElement", diagramElement);
 		engine.put("semanticElement", semanticElement);
 		engine.put("pass", pass);
-		engine.put("registry", registry);
+		engine.put(REGISTRY_VAR, registry);
 		engine.put("baseURI", getBaseURI(diagramElement));
 		engine.put("logicalParent", getLogicalParent(diagramElement));
 		for (Entry<String, Object> ve: getVariables(diagramElement)) {
@@ -2033,7 +1507,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		Map<String, Object> variables = Map.ofEntries(
 				Map.entry("semanticElement", semanticElement),
 				Map.entry("pass", pass),
-				Map.entry("registry", registry));
+				Map.entry(REGISTRY_VAR, registry));
 		
 		Object result = mapper.evaluate(diagramElement, processorExpr, variables, Object.class, diagramElement);
 		if (result == null) {

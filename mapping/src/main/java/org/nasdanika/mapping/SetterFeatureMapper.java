@@ -846,13 +846,15 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		return Thread.currentThread().getContextClassLoader();
 	}
 		
+	// TODO - remove variables and script - invocable
+	
 	/**
 	 * Override to provide variables for expressions and scripts.
 	 * 
 	 * @return
 	 */
-	protected Iterable<Map.Entry<String, Object>> getVariables(S context) {
-		return Collections.emptySet();
+	protected Map<String, Object> getVariables(S context) {
+		return Collections.emptyMap();
 	}	
 	
 	/**
@@ -903,7 +905,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			engine.put("sourcePath", sourcePath);
 			engine.put("type", type);
 			engine.put("baseURI", getContentProvider().getBaseURI(context));
-			for (Entry<String, Object> ve: getVariables(context)) {
+			for (Entry<String, Object> ve: getVariables(context).entrySet()) {
 				engine.put(ve.getKey(), ve.getValue());
 			}
 			

@@ -508,7 +508,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 		
 		if (mediaType.startsWith(SPEL_MEDIA_TYPE_PREFIX)) {
 			String expression = mediaType.substring(SPEL_MEDIA_TYPE_PREFIX.length());
-			return wrap(Invocable.ofExpression(expression));
+			return wrapSupplier(() -> Invocable.ofExpression(expression));
 		}
 		
 		// Itself should be invocable, support of :: for method name
