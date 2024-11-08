@@ -29,7 +29,6 @@ import javax.script.ScriptException;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -958,6 +957,9 @@ public interface Invocable {
 			public <T> T invoke(Object... args) {
 				try {
 					scriptEngine.put("args", args);
+					if (args.length == 1) {
+						scriptEngine.put("arg", args[0]);
+					}
 					return (T) scriptEngine.eval(script);
 				} catch (ScriptException e) {
 					throw new NasdanikaException(e);

@@ -41,5 +41,20 @@ public interface ContentProvider<S> {
 	 * @return
 	 */
 	S getConnectionTarget(S element);	
+	
+	/**
+	 * Element name, e.g. Drawio element label.
+	 * @param element
+	 * @return
+	 */
+	String getName(S element);
+	
+	/**
+	 * Element description, e.g. Drawio element tooltip.
+	 * Not documentation.
+	 * @param element
+	 * @return
+	 */
+	String getDescription(S element);
 
 }
