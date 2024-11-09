@@ -1,7 +1,5 @@
 package org.nasdanika.mapping;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,20 +14,17 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.nasdanika.capability.CapabilityLoader;
+import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.SourceRecord;
 import org.nasdanika.common.Util;
 import org.nasdanika.persistence.ConfigurationException;
 import org.springframework.expression.EvaluationContext;
@@ -49,28 +44,44 @@ import org.yaml.snakeyaml.error.YAMLException;
  */
 public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureMapper<S, T> {
 	
-	public static final String PATH_KEY = "path";
+	private static final String PROGRESS_MONITOR_VAR = "progressMonitor";
+	private static final String ARGUMENT_VALUE_VAR = "argumentValue";
+	private static final String TYPE_VAR = "type";
+	private static final String BASE_URI_VAR = "baseURI";
+	private static final String SOURCE_PATH_VAR = "sourcePath";
+	private static final String CONTEXT_VAR = "context";
+	private static final String OTHER_KEY = "other";
+	private static final String KEY_KEY = "key";
+	private static final String NATURAL_KEY = "natural";
+	private static final String REGISTRY_VAR = "registry";
+	private static final String PATH_VAR = "path";
+	private static final String VALUE_VAR = "value";
+	public static final String PATH_KEY = PATH_VAR;
 	public static final String CONDITION_KEY = "condition";
 	public static final String NOP_KEY = "nop";
 	public static final String EXPRESSION_KEY = "expression";
 	public static final String GREEDY_KEY = "greedy";
 	public static final String GREEDY_NO_CHILDREN_KEY = "no-children";
 	public static final String POSITION_KEY = "position";
-	public static final String TYPE_KEY = "type";
+	public static final String TYPE_KEY = TYPE_VAR;
 	public static final String ARGUMENT_TYPE_KEY = "argument-type";
 	public static final String COMPARATOR_KEY = "comparator";
-	public static final String SCRIPT_KEY = "script";
-	public static final String SCRIPT_REF_KEY = "script-ref";
-	public static final String SCRIPT_ENGINE_KEY = "script-engine";
+	public static final String INVOKE_KEY = "invoke";
+//	public static final String SCRIPT_KEY = "script";
+//	public static final String SCRIPT_REF_KEY = "script-ref";
+//	public static final String SCRIPT_ENGINE_KEY = "script-engine";
 	
 	private FeatureMapper<S, T> defaultFeatureMapper;
+	protected CapabilityLoader capabilityLoader;
 	
-	protected SetterFeatureMapper(ContentProvider<S> contentProvider) {
+	protected SetterFeatureMapper(ContentProvider<S> contentProvider, CapabilityLoader capabilityLoader) {
 		super(contentProvider);
+		this.capabilityLoader = capabilityLoader;
 	}
 	
-	protected SetterFeatureMapper(Mapper<S,T> chain, ContentProvider<S> contentProvider) {
+	protected SetterFeatureMapper(Mapper<S,T> chain, ContentProvider<S> contentProvider, CapabilityLoader capabilityLoader) {
 		super(chain, contentProvider);
+		this.capabilityLoader = capabilityLoader;
 	}
 		
 	/**
@@ -80,9 +91,10 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 	 */
 	protected SetterFeatureMapper(
 			Mapper<S,T> chain, 
-			ContentProvider<S> contentProvider,
+			ContentProvider<S> contentProvider, 
+			CapabilityLoader capabilityLoader,
 			FeatureMapper<S,T> defaulFeaturetMapper) {
-		this(chain, contentProvider);
+		this(chain, contentProvider, capabilityLoader);
 		this.defaultFeatureMapper = defaulFeaturetMapper; 
 	}	
 	
@@ -92,12 +104,18 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 	 */
 	protected abstract String getFeatureMapConfigStr(S source);
 	
+	/**
+	 * Resolves type
+	 * @param type
+	 * @param context
+	 * @return
+	 */
 	protected abstract EClassifier getType(String type, S context);
 	
 	protected interface Setter<S, T extends EObject> {
 		
 		/**
-		 * Possibly sets feature. Returns false if some preconditions were not met and the setter shall be invoked at a later phase
+		 * Possibly sets a feature. Returns false if some preconditions were not met and the setter shall be invoked at a later phase
 		 * @param eObj
 		 * @param feature
 		 * @param value
@@ -161,9 +179,9 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			}
 			if (condition instanceof String) {
 				Map<String,Object> variables = new LinkedHashMap<>();
-				variables.put("value", argumentValue);
-				variables.put("path", sourcePath);
-				variables.put("registry", registry);
+				variables.put(VALUE_VAR, argumentValue);
+				variables.put(PATH_VAR, sourcePath);
+				variables.put(REGISTRY_VAR, registry);
 				return evaluatePredicate(argument, (String) condition, variables, context);
 			}
 			throw new ConfigurationException("Unsupported condition type: " + condition.getClass() + " " + condition, null, getContentProvider().asMarked(context));
@@ -216,8 +234,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 
 	protected SpelExpressionParser createExpressionParser(S context) {
 		return new SpelExpressionParser();
-	}
-	
+	}	
 		
 	/**
 	 * 
@@ -366,7 +383,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			@SuppressWarnings("unchecked")
 			@Override
 			public boolean setFeature(
-					T eObj, 
+					T target, 
 					EStructuralFeature feature, 
 					S argument,
 					T argumentValue,
@@ -376,8 +393,8 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 
 				boolean shallCallChain = true;
 				for (Object configElement: (config instanceof Iterable ? (Iterable<?>) config : Collections.singleton(config))) {
-					if (matchCondition(configElement, eObj, argument, argumentValue, sourcePath, registry, context)
-							&& matchType(eObj, configElement, context)
+					if (matchCondition(configElement, target, argument, argumentValue, sourcePath, registry, context)
+							&& matchType(target, configElement, context)
 							&& matchArgumentType(argumentValue, configElement, context)
 							&& matchPath(configElement, sourcePath, registry, context)) {
 						
@@ -388,14 +405,15 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 						Class<?> featureType = feature.getEType().getInstanceClass();
 						Object featureValue = eval(configElement, argument, argumentValue, sourcePath, registry, featureType, context);
 						if (configElement instanceof Map) {
-							featureValue = evaluateScript(
+							featureValue = invoke(
 									(Map<?,?>) configElement, 
 									argument,
 									argumentValue,
 									sourcePath,
 									registry,
 									featureType,
-									context);
+									context,
+									progressMonitor);
 						}
 
 						if (featureValue != null) {
@@ -415,7 +433,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 										if (greedy == Greedy.FALSE) {
 											shallSet = false;
 										} else if (greedy == Greedy.NO_CHILDREN) {
-											for (S eObjSource: getSources(eObj, registry) ) {
+											for (S eObjSource: getSources(target, registry) ) {
 												for (S fvcSource: getSources(fvc, registry)) {
 													if (isAncestor(eObjSource, fvcSource)) {
 														shallSet = false; // No taking from children
@@ -430,10 +448,15 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 							if (shallSet) {
 								Object element = convert(featureValue, feature.getEType(), context);
 								if (feature.isMany()) {
-									List<Object> fvl = (List<Object>) eObj.eGet(feature);
+									List<Object> fvl = (List<Object>) target.eGet(feature);
 									int position = getPosition(configElement, context);
 									if (position == -1) {
-										Comparator<Object> comparator = getComparator(eObj, configElement, registry, context);
+										Comparator<Object> comparator = getComparator(
+												target,
+												feature,
+												configElement, 
+												registry, 
+												context);
 										if (comparator == null || fvl.isEmpty()) {										
 											fvl.add(element);
 										} else {
@@ -455,7 +478,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 										fvl.add(position, element);								
 									}
 								} else {
-									eObj.eSet(feature, element);
+									target.eSet(feature, element);
 								}
 								shallCallChain = false;
 							}
@@ -465,7 +488,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 				
 				if (shallCallChain && chain != null) {
 					return chain.setFeature(
-							eObj, 
+							target, 
 							feature, 
 							argument, 
 							argumentValue, 
@@ -523,7 +546,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 					return false;
 				}
 				Map<String,Object> variables = new LinkedHashMap<>();
-				variables.put("registry", registry);
+				variables.put(REGISTRY_VAR, registry);
 				
 				Iterator<S> pathIterator = path.iterator();				
 				for (Object condition: pathConditions) {
@@ -544,7 +567,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, getContentProvider().asMarked(context));
 	}
 		
-	protected boolean matchType(EObject eObj, Object config, S context) {
+	protected boolean matchType(T eObj, Object config, S context) {
 		if (config == Boolean.TRUE) {
 			return true;
 		}
@@ -615,14 +638,16 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 	
 	/**
 	 * A comparator of elements for many features.
-	 * @param semanticElement Semantic element receiving objects being compared. For some types of comparators the semantic element may be used to compute the base coordinates/geometry for comparison.
+	 * @param target Semantic element receiving objects being compared. For some types of comparators the semantic element may be used to compute the base coordinates/geometry for comparison.
 	 * @param feature Semantic element's many feature into which object being compared are injected (set)     
 	 * @param config
 	 * @param registry
+	 * @param context
 	 * @return
 	 */
 	public Comparator<Object> getComparator(
-			EObject semanticElement,
+			T target,
+			EStructuralFeature feature,
 			Object config, 
 			Map<S, T> registry, 
 			S context) {
@@ -636,7 +661,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 				return null;
 			}
 			return createComparator(
-					semanticElement,
+					target,
 					comparatorConfig, 
 					registry, 
 					context);
@@ -687,11 +712,11 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 	 * @return
 	 */
 	public Comparator<Object> createComparator(
-			EObject semanticElement,
+			T target,
 			Object comparatorConfig, 
 			Map<S, T> registry, 
 			S context) {
-		if ("natural".equals(comparatorConfig)) {
+		if (NATURAL_KEY.equals(comparatorConfig)) {
 			return NATURAL_COMPARATOR;
 		} 
 		
@@ -699,7 +724,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			Map<?, ?> comparatorConfigMap = (Map<?,?>) comparatorConfig;
 			if (comparatorConfigMap.size() == 1) {
 				for (Entry<?, ?> cce: comparatorConfigMap.entrySet()) {
-					if ("key".equals(cce.getKey()) && cce.getValue() instanceof String) {
+					if (KEY_KEY.equals(cce.getKey()) && cce.getValue() instanceof String) {
 						return new Comparator<Object>() {
 							
 							@Override
@@ -707,14 +732,14 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 								Object key1 = evaluate(
 										o1, 
 										(String) cce.getValue(), 
-										Map.of("registry", registry), 
+										Map.of(REGISTRY_VAR, registry), 
 										Object.class, 
 										context);
 								
 								Object key2 = evaluate(
 										o2, 
 										(String) cce.getValue(), 
-										Map.of("registry", registry), 
+										Map.of(REGISTRY_VAR, registry), 
 										Object.class, 
 										context);
 								
@@ -732,8 +757,8 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 										o1, 
 										(String) cce.getValue(), 
 										Map.of(
-												"other", o2,
-												"registry", registry), 
+												OTHER_KEY, o2,
+												REGISTRY_VAR, registry), 
 										Integer.class, 
 										context);
 							}							
@@ -799,57 +824,37 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		}
 		
 		Map<String,Object> variables = new LinkedHashMap<>();
-		variables.put("value", argumentValue);
-		variables.put("path", sourcePath);
-		variables.put("registry", registry);
+		variables.put(VALUE_VAR, argumentValue);
+		variables.put(PATH_VAR, sourcePath);
+		variables.put(REGISTRY_VAR, registry);
 		Object result = evaluate(argument, (String) expression, variables, type, context);
 		return result;
 	}
 	
-	protected SourceRecord getScript(Map<?,?> configMap, S context) {
+	protected URI getInvokeURI(Map<?,?> configMap, S context) {
 		URI baseURI = getContentProvider().getBaseURI(context);
-		Object script = configMap.get(SCRIPT_KEY);
-		if (script instanceof String) {
-			String ss = (String) script;
-			if (!Util.isBlank(ss)) {		
-				return new SourceRecord(baseURI, ss);
-			}
-		} else if (script != null) {
-			throw new ConfigurationException("Script is not a string: " + script, null, getContentProvider().asMarked(context));			
-		} else {
-			return null;
-		}
-					
-		Object ref = configMap.get(SCRIPT_REF_KEY);
-		if (ref instanceof String) {
-			String sRef = (String) ref;
-			if (Util.isBlank(sRef)) {
+		Object invokeVal = configMap.get(INVOKE_KEY);
+		if (invokeVal instanceof String) {
+			String invokeStr = (String) invokeVal;
+			if (Util.isBlank(invokeStr)) {
 				return null;
 			}
 
-			URI refURI = URI.createURI(sRef);
+			URI invokeURI = URI.createURI(invokeStr);
 			if (baseURI != null && !baseURI.isRelative()) {
-				refURI = refURI.resolve(baseURI);
+				invokeURI = invokeURI.resolve(baseURI);
 			}
-			try {
-				DefaultConverter converter = DefaultConverter.INSTANCE;
-				Reader reader = converter.toReader(refURI);
-				return new SourceRecord(refURI, converter.toString(reader));
-			} catch (IOException e) {
-				throw new ConfigurationException("Error loading script from " + refURI, e, getContentProvider().asMarked(context));
-			}
+			return invokeURI;
 		}
-		throw new ConfigurationException("Script ref is not a string: " + ref, null, getContentProvider().asMarked(context));	
+		throw new ConfigurationException("Invoke value is not a string: " + invokeVal, null, getContentProvider().asMarked(context));	
 	}
 	
 	protected ClassLoader getClassLoader(S obj) {
 		return Thread.currentThread().getContextClassLoader();
 	}
-		
-	// TODO - remove variables and script - invocable
 	
 	/**
-	 * Override to provide variables for expressions and scripts.
+	 * Override to provide variables for expressions and invocable.
 	 * 
 	 * @return
 	 */
@@ -857,65 +862,39 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		return Collections.emptyMap();
 	}	
 	
-	/**
-	 * Executes script
-	 * @param diagramElement
-	 * @param semanticElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	protected Object evaluateScript(
+	protected Object invoke(
 			Map<?,?> configMap, 
 			Object argument,
 			Object argumentValue,
 			LinkedList<S> sourcePath,
 			Map<S, T> registry,
 			Class<?> type,
-			S context) {		
-		SourceRecord script = getScript(configMap, context);
+			S context,
+			ProgressMonitor progressMonitor) {		
+		URI invokeURI = getInvokeURI(configMap, context);
 		
-		if (script == null || Util.isBlank(script.source())) {
+		if (invokeURI == null) {
 			return argumentValue;
 		}
-		
-		Object enginePredicateExpr = configMap.get(SCRIPT_ENGINE_KEY);
-		if (enginePredicateExpr != null && !(enginePredicateExpr instanceof String)) {
-			throw new ConfigurationException("Script engine expression is not a string: " + enginePredicateExpr, null, getContentProvider().asMarked(context));				
+					
+		Invocable invocable = capabilityLoader.loadOne(
+				ServiceCapabilityFactory.createRequirement(Invocable.class, null, invokeURI),
+				progressMonitor);
+
+		invocable.bindByName(CONTEXT_VAR, context);
+		invocable.bindByName(ARGUMENT_VALUE_VAR, argumentValue);
+		invocable.bindByName(REGISTRY_VAR, registry);
+		invocable.bindByName(SOURCE_PATH_VAR, sourcePath);
+		invocable.bindByName(TYPE_VAR, type);
+		invocable.bindByName(BASE_URI_VAR, getContentProvider().getBaseURI(context));
+		invocable.bindByName(REGISTRY_VAR, registry);
+		invocable.bindByName(PROGRESS_MONITOR_VAR, progressMonitor);
+		// registry
+		for (Entry<String, Object> ve: getVariables(context).entrySet()) {
+			invocable.bindByName(ve.getKey(), ve.getValue());
 		}
 		
-		ScriptEngineManager scriptEngineManger = new ScriptEngineManager(getClassLoader(context));
-		for (ScriptEngineFactory scriptEngineFactory: scriptEngineManger.getEngineFactories()) {
-			if (!Util.isBlank((String) enginePredicateExpr)) {
-				if (!evaluatePredicate(scriptEngineFactory, (String) enginePredicateExpr, null, context)) {
-					continue;
-				}
-			} else if (script.uri() != null) {
-				String extension = script.uri().fileExtension();
-				if (!Util.isBlank(extension) && !scriptEngineFactory.getExtensions().contains(extension)) {
-					continue;
-				}
-			}
-			
-			ScriptEngine engine = scriptEngineFactory.getScriptEngine();
-			engine.put("context", context);
-			engine.put("argument", argument);
-			engine.put("argumentValue", argumentValue);
-			engine.put("registry", registry);
-			engine.put("sourcePath", sourcePath);
-			engine.put("type", type);
-			engine.put("baseURI", getContentProvider().getBaseURI(context));
-			for (Entry<String, Object> ve: getVariables(context).entrySet()) {
-				engine.put(ve.getKey(), ve.getValue());
-			}
-			
-			try {
-				return engine.eval(script.source());
-			} catch (ScriptException e) {
-				throw new ConfigurationException("Error evaluating script: " + e, e, getContentProvider().asMarked(context));
-			}
-		}
-		throw new ConfigurationException("No matching script engine", null, getContentProvider().asMarked(context));
+		return invocable.invoke(argument);
 	}
 	
 	protected Greedy getGreedy(Object config, S context) {

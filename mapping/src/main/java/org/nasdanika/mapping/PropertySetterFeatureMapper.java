@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.nasdanika.common.Util;
+import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.persistence.ConfigurationException;
@@ -28,19 +29,20 @@ public abstract class PropertySetterFeatureMapper<S, T extends EObject> extends 
 	private static final String FEATURE_MAP_REF_PROPERTY = "feature-map-ref";
 	private static final String FEATURE_MAP_PROPERTY = "feature-map";
 
-	protected PropertySetterFeatureMapper(ContentProvider<S> contentProvider) {
-		super(contentProvider);
+	protected PropertySetterFeatureMapper(ContentProvider<S> contentProvider, CapabilityLoader capabilityLoader) {
+		super(contentProvider, capabilityLoader);
 	}
 
-	protected PropertySetterFeatureMapper(Mapper<S, T> chain, ContentProvider<S> contentProvider) {
-		super(chain, contentProvider);
+	protected PropertySetterFeatureMapper(Mapper<S, T> chain, ContentProvider<S> contentProvider, CapabilityLoader capabilityLoader) {
+		super(chain, contentProvider, capabilityLoader);
 	}
 
 	protected PropertySetterFeatureMapper(
 			Mapper<S, T> chain,
-			ContentProvider<S> contentProvider,
+			ContentProvider<S> contentProvider, 
+			CapabilityLoader capabilityLoader,
 			FeatureMapper<S, T> defaulFeaturetMapper) {
-		super(chain, contentProvider, defaulFeaturetMapper);
+		super(chain, contentProvider, capabilityLoader, defaulFeaturetMapper);
 	}
 
 	protected String getPropertyNamespace() {

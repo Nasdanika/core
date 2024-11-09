@@ -24,7 +24,7 @@ import org.nasdanika.common.ProgressMonitor;
  * @param <S>
  * @param <T>
  */
-public abstract class ReflectiveFeatureMapper<S, T extends EObject> extends FeatureMapper<S, T> implements EStructuralFeatureAndEOperationMatcher {
+public class ReflectiveFeatureMapper<S, T extends EObject> extends FeatureMapper<S, T> implements EStructuralFeatureAndEOperationMatcher {
 
 	/**
 	 * Annotation for feature wiring methods. 
@@ -672,18 +672,9 @@ public abstract class ReflectiveFeatureMapper<S, T extends EObject> extends Feat
 	
 	protected Dispatcher dispatcher;
 	
-	public ReflectiveFeatureMapper(Object... targets) {
+	public ReflectiveFeatureMapper(ContentProvider<S> contentProvider, Object... targets) {
+		super(contentProvider);
 		dispatcher = new Dispatcher(targets);
-	}
-
-	@Override
-	protected S getConnectionSource(S connection) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	protected S getConnectionTarget(S connection) {
-		throw new UnsupportedOperationException();
 	}
 	
 	@Override

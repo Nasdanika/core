@@ -14,17 +14,12 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Transformer;
 
 /**
- * This class is intended to be used with maps produced by {@link Transformer}. 
- * For example, a map of Drawio elements to semantic elements (say, process activities).
- * In such maps there is a source content hierarchy (e.g. nesting of Drawio elements Document / Page / Layer / Node / ...). 
- * Such nesting might be semantically significant and map to features or operations in the semantic model. 
- * For example, an Activity node inside a Participant node signifies a non-containment reference from Activity to Participant.
- * <P/>
- * This class computes permutations of source element contents with target (semantic) elements (parent and child) features and operations
- * as well as "actions" which may not be feature or operation actions. 
- * It then invokes a method which "wires" the target (semantic) model based on the source model containment hierarchy.  
+ * This mapper iterates over the target (semantic) element features calls <code>wireFeature()</code> for each feature.
+ * For containment, direct and transitive, it calls <code>wireContentsFeature()</code> and <code>wireContainerFeature()</code> for every permutation of arguments.
+ * For connections it calls <code>wireConnectionEndFeature()</code>, <code>wireConnectionSourceFeature()</code>,
+<code>wireConnectionStartFeature()</code>,
+<code>wireConnectionTargetFeature()</code>
  * 
- * Similarly, it maps features of connections or associations - objects connecting other objects.
  * @param <S>
  * @param <T>
  */
@@ -40,7 +35,6 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 	protected FeatureMapper(Mapper<S,T> chain, ContentProvider<S> contentProvider) {
 		this.chain = chain;
 		this.contentProvider = contentProvider;
-
 	}
 	
 	public ContentProvider<S> getContentProvider() {
@@ -161,10 +155,6 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 		if (chain != null) {
 			chain.wire(source, registry, progressMonitor);
 		}
-	}
-	
-	protected void wireConnection(S source, T target, Map<S,T> registry, ProgressMonitor progressMonitor) {
-		
 	}
 		
 	/**

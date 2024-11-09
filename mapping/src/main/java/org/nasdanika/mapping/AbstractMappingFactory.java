@@ -94,8 +94,8 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	private static final String ARGUMENTS_KEY = "arguments";
 	private static final String ITERATOR_KEY = "iterator";
 	private static final String SELECTOR_KEY = "selector";
-	public static final String DRAWIO_REPRESENTATION = "drawio";
-	public static final String IMAGE_REPRESENTATION = "image";
+//	public static final String DRAWIO_REPRESENTATION = "drawio";
+//	public static final String IMAGE_REPRESENTATION = "image";
 	
 	private static final String NAME_KEY = "name";
 	private static final String CONDITION_KEY = "condition";
@@ -115,7 +115,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		this.contentProvider = contentProvider;
 		this.capabilityLoader = capabilityLoader;
 		
-		mapper = new PropertySetterFeatureMapper<S, T>(contentProvider) {
+		mapper = new PropertySetterFeatureMapper<S, T>(contentProvider, capabilityLoader) {
 				
 				@Override
 				protected EClassifier getType(String type, S context) {
@@ -156,12 +156,12 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 						if (referenceSpec instanceof String && !Util.isBlank((String) referenceSpec)) {
 							List<T> ret = new ArrayList<>();
 							ReferenceMapper referenceMapper = new ReferenceMapper((String) referenceSpec, source);
-							List<S> logicalAncestorsPath = new ArrayList<>();
-							for (S logicalAncestor = getContentProvider().getParent(source); logicalAncestor != null; logicalAncestor = getContentProvider().getParent(logicalAncestor)) {
-								logicalAncestorsPath.add(logicalAncestor);					
-								for (T ancestorTarget: mapper.select(logicalAncestor, registry, progressMonitor)) {						
-									if (referenceMapper.matchAncestorTarget(ancestorTarget, logicalAncestorsPath, registry, source)) {
-										T refObj = referenceMapper.getAncestorTargetRefObj(ancestorTarget, logicalAncestorsPath, registry, source); 
+							List<S> ancestorsPath = new ArrayList<>();
+							for (S ancestor = getContentProvider().getParent(source); ancestor != null; ancestor = getContentProvider().getParent(ancestor)) {
+								ancestorsPath.add(ancestor);					
+								for (T ancestorTarget: mapper.select(ancestor, registry, progressMonitor)) {						
+									if (referenceMapper.matchAncestorTarget(ancestorTarget, ancestorsPath, registry, source)) {
+										T refObj = referenceMapper.getAncestorTargetRefObj(ancestorTarget, ancestorsPath, registry, source); 
 										if (refObj != null) {
 											EClass eClass = refObj.eClass();
 											String referenceName = referenceMapper.getReferenceName();
@@ -802,7 +802,12 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		}
 		
 		public Comparator<Object> getComparator(T targetElement, Map<S, T> registry) {
-			return mapper.getComparator(targetElement, spec, registry, context);
+			return mapper.getComparator(
+					targetElement,
+					targetElement.eClass().getEStructuralFeature(referenceName),
+					spec, 
+					registry, 
+					context);
 			
 		}
 		
