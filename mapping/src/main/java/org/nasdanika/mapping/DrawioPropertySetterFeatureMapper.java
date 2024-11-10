@@ -32,7 +32,7 @@ import org.nasdanika.persistence.Marker;
  * @param <S>
  * @param <T>
  */
-public abstract class DrawioPropertySetterFeatureMapper<S, T extends EObject> extends PropertySetterFeatureMapper<S, T> {
+//public abstract class DrawioPropertySetterFeatureMapper<S, T extends EObject> extends PropertySetterFeatureMapper<S, T> {
 		
 //	@Override
 //	public List<? extends EObject> contents(EObject eObject, Predicate<EObject> tracker) {
@@ -399,4 +399,4 @@ public abstract class DrawioPropertySetterFeatureMapper<S, T extends EObject> ex
 //		};
 //	}
 
-}
+//}

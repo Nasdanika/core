@@ -1,6 +1,6 @@
 package org.nasdanika.mapping;
 
-import java.util.function.Predicate;
+import java.util.Collection;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.persistence.Marked;
@@ -18,7 +18,7 @@ public interface ContentProvider<S> {
 	 * @param predicate if not null, use to prevent infinite loops - return only elements which match the predicate.
 	 * @return
 	 */
-	Iterable<S> getContents(S element, Predicate<S> predicate);
+	Collection<? extends S> getChildren(S element /*, Predicate<S> predicate */);
 		
 	URI getBaseURI(S element);
 	
@@ -56,5 +56,12 @@ public interface ContentProvider<S> {
 	 * @return
 	 */
 	String getDescription(S element);
+
+	/**
+	 * Object identity such as a unique ID or a URI. 
+	 * @param obj
+	 * @return
+	 */
+	Object getIdentity(S obj);
 
 }

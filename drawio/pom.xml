@@ -29,7 +29,7 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>capability</artifactId>
+			<artifactId>mapping</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

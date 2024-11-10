@@ -21,7 +21,6 @@ import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Page;
-import org.nasdanika.drawio.model.util.AbstractDrawioFactory;
 import org.nasdanika.persistence.ConfigurationException;
 import org.xml.sax.SAXException;
 

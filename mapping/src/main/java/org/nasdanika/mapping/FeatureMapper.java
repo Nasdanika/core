@@ -11,7 +11,6 @@ import java.util.function.Predicate;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Transformer;
 
 /**
  * This mapper iterates over the target (semantic) element features calls <code>wireFeature()</code> for each feature.
@@ -61,11 +60,13 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 	public void wire(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
 		for (T value: select(source, registry, progressMonitor)) {
 			HashSet<S> tracker = new HashSet<>();			
-			for (S contents: getContentProvider().getContents(source, tracker::add)) {
-				LinkedList<S> path = new LinkedList<>();
-				path.add(contents);
-				Function<LinkedList<S>, Boolean> pathMapper = createPathMapper(source, value, registry, progressMonitor);
-				wireContents(path, pathMapper, tracker::add);
+			for (S contents: getContentProvider().getChildren(source)) {
+				if (tracker.add(contents)) {
+					LinkedList<S> path = new LinkedList<>();
+					path.add(contents);
+					Function<LinkedList<S>, Boolean> pathMapper = createPathMapper(source, value, registry, progressMonitor);
+					wireContents(path, pathMapper, tracker::add);
+				}
 			}
 			
 			/*
@@ -165,10 +166,12 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 	 */
 	protected void wireContents(LinkedList<S> path, Function<LinkedList<S>,Boolean> pathMapper, Predicate<S> tracker) {
 		if (pathMapper.apply(path)) {
-			for (S child: getContentProvider().getContents(path.getLast(), tracker)) {
-				LinkedList<S> subPath = new LinkedList<>(path);
-				subPath.add(child);
-				wireContents(subPath, pathMapper, tracker);
+			for (S child: getContentProvider().getChildren(path.getLast())) {
+				if (tracker.test(child)) {
+					LinkedList<S> subPath = new LinkedList<>(path);
+					subPath.add(child);
+					wireContents(subPath, pathMapper, tracker);
+				}
 			}			
 		}
 	}

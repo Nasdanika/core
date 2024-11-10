@@ -26,8 +26,8 @@ public abstract class PropertySetterFeatureMapper<S, T extends EObject> extends 
 	
 	private static final String MAPPING_SELECTOR_REF_PROPERTY = "mapping-selector-ref";
 	private static final String MAPPING_SELECTOR_PROPERTY = "mapping-selector";
-	private static final String FEATURE_MAP_REF_PROPERTY = "feature-map-ref";
-	private static final String FEATURE_MAP_PROPERTY = "feature-map";
+	private static final String FEATURE_MAP_REF_PROPERTY = "features-ref";
+	private static final String FEATURE_MAP_PROPERTY = "features";
 
 	protected PropertySetterFeatureMapper(ContentProvider<S> contentProvider, CapabilityLoader capabilityLoader) {
 		super(contentProvider, capabilityLoader);
@@ -58,12 +58,12 @@ public abstract class PropertySetterFeatureMapper<S, T extends EObject> extends 
 	}
 		
 	@Override
-	protected String getFeatureMapConfigStr(S source) {
+	protected Object getFeatureMapConfig(S source) {
 		String fmcpn = getFeatureMapConfigPropertyName();
 		if (!Util.isBlank(fmcpn)) {
 			Object fmc = getContentProvider().getProperty(source, fmcpn);
-			if (fmc instanceof String && !Util.isBlank((String) fmc)) {
-				return (String) fmc;
+			if (fmc != null && !(fmc instanceof String && Util.isBlank((String) fmc))) {
+				return fmc;
 			}
 		}
 		
@@ -102,12 +102,12 @@ public abstract class PropertySetterFeatureMapper<S, T extends EObject> extends 
 		return getPropertyNamespace() + MAPPING_SELECTOR_REF_PROPERTY;
 	}
 	
-	protected String getMappingSelectorStr(S source) {
+	protected Object getMappingSelector(S source) {
 		String mspn = getMappingSelectorPropertyName();
 		if (!Util.isBlank(mspn)) {
 			Object ms = getContentProvider().getProperty(source, mspn);
-			if (ms instanceof String && !Util.isBlank((String) ms)) {
-				return (String) ms;
+			if (ms != null) {
+				return ms;
 			}
 		}
 		
@@ -142,15 +142,15 @@ public abstract class PropertySetterFeatureMapper<S, T extends EObject> extends 
 			Map<S, T> registry, 
 			ProgressMonitor progressMonitor) {
 
-		String mappingSelector = getMappingSelectorStr(source);
-		if (Util.isBlank(mappingSelector)) {
+		Object mappingSelector = getMappingSelector(source);
+		if (mappingSelector == null || (mappingSelector instanceof String &&  Util.isBlank((String) mappingSelector))) {
 			return super.select(source, registry, progressMonitor);
 		}
 						
 		Collection<T> ret = new ArrayList<>();
 		try {
 			Yaml yaml = new Yaml();
-			Object mappingObj = yaml.load(mappingSelector);
+			Object mappingObj = mappingSelector instanceof String ?  yaml.load((String) mappingSelector) : mappingSelector;
 			if (mappingObj instanceof String) {
 				Object result = evaluate(
 						source, 

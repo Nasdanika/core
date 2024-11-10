@@ -34,7 +34,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-//import org.jsoup.Jsoup;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
@@ -44,7 +43,6 @@ import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.SourceRecord;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.util.NcoreUtil;
@@ -89,13 +87,10 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	private static final String TYPE_PROPERTY = "type";
 	private static final String TAG_SPEC_PROPERTY = "tag-spec";
 	private static final String TOP_LEVEL_PAGE_PROPERTY = "top-level-page";
-//	private static final String SEMANTIC_MAPPING_PROPERTY = "semantic-mapping";
 	private static final String PASS_KEY = PASS_VAR;
 	private static final String ARGUMENTS_KEY = "arguments";
 	private static final String ITERATOR_KEY = "iterator";
 	private static final String SELECTOR_KEY = "selector";
-//	public static final String DRAWIO_REPRESENTATION = "drawio";
-//	public static final String IMAGE_REPRESENTATION = "image";
 	
 	private static final String NAME_KEY = "name";
 	private static final String CONDITION_KEY = "condition";
@@ -153,9 +148,9 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 					String referenceProperty = getReferenceProperty();
 					if (!Util.isBlank(referenceProperty)) {		
 						Object referenceSpec = getContentProvider().getProperty(source, referenceProperty);			
-						if (referenceSpec instanceof String && !Util.isBlank((String) referenceSpec)) {
+						if (referenceSpec != null && !(referenceSpec instanceof String && Util.isBlank((String) referenceSpec))) {
 							List<T> ret = new ArrayList<>();
-							ReferenceMapper referenceMapper = new ReferenceMapper((String) referenceSpec, source);
+							ReferenceMapper referenceMapper = new ReferenceMapper(referenceSpec, source);
 							List<S> ancestorsPath = new ArrayList<>();
 							for (S ancestor = getContentProvider().getParent(source); ancestor != null; ancestor = getContentProvider().getParent(ancestor)) {
 								ancestorsPath.add(ancestor);					
@@ -250,6 +245,8 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	protected String getTypeProperty() {
 		return getPropertyNamespace() + TYPE_PROPERTY;
 	}	
+	
+	protected static record YamlSourceRecord(URI uri, Object data) {};	
 		
 	/**
 	 * Loads source from a property or from a URL specified by refProperty
@@ -258,12 +255,15 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	 * @param refProperty
 	 * @return
 	 */
-	protected SourceRecord loadSource(S obj, String property, String refProperty) {
+	protected YamlSourceRecord loadYamlSource(S obj, String property, String refProperty) {
 		URI baseURI = getContentProvider().getBaseURI(obj);
 		if (!Util.isBlank(property)) {
 			Object source = getContentProvider().getProperty(obj, property);
 			if (source instanceof String && !Util.isBlank((String) source)) {
-				return new SourceRecord(baseURI, (String) source);
+				return new YamlSourceRecord(baseURI, new Yaml().load((String) source));
+			}
+			if (source != null) {
+				return new YamlSourceRecord(baseURI, source);				
 			}
 		}
 		
@@ -283,7 +283,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 				try {
 					DefaultConverter converter = DefaultConverter.INSTANCE;
 					Reader reader = converter.toReader(refURI);
-					return new SourceRecord(refURI, converter.toString(reader));
+					return new YamlSourceRecord(refURI, new Yaml().load(converter.toString(reader)));
 				} catch (IOException e) {
 					throw new ConfigurationException("Error loading source from " + refURI, e, getContentProvider().asMarked(obj));
 				}
@@ -292,11 +292,11 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return null;
 	}
 	
-	protected SourceRecord loadSource(S obj, String property) {
+	protected YamlSourceRecord loadYamlSource(S obj, String property) {
 		if (Util.isBlank(property)) {
 			return null;
 		}
-		return loadSource(obj, property, property + getRefSuffix());
+		return loadYamlSource(obj, property, property + getRefSuffix());
 	}
 		
 	/**
@@ -780,9 +780,9 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		private String referenceName;
 		private S context;
 		
-		public ReferenceMapper(String specYaml, S context) {
+		public ReferenceMapper(Object spec, S context) {
 			Yaml yaml = new Yaml();
-			Object specObj = yaml.load(specYaml);
+			Object specObj = spec instanceof String ? yaml.load((String) spec) : spec;
 			if (specObj instanceof Map) {			
 				this.spec =  (Map<?,?>) specObj;
 			} else if (specObj instanceof String) {
@@ -921,18 +921,20 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 				ProgressMonitor progressMonitor) {
 			
 			List<EObject> ret = new ArrayList<>();			
-			for (S childSource: getContentProvider().getContents(sourcePath.getLast(), tracker)) {
-				sourcePath.add(childSource);
-				for (T childTargetElement: mapper.select(childSource, registry, null)) {
-					if (matchContentsTarget(childTargetElement, sourcePath, registry, context)) {
-						EObject refObj = getContentsTargetRefObj(childTargetElement, sourcePath, registry, context);
-						if (refObj != null) {
-							ret.add(refObj);
+			for (S childSource: getContentProvider().getChildren(sourcePath.getLast())) {
+				if (tracker.test(childSource)) {
+					sourcePath.add(childSource);
+					for (T childTargetElement: mapper.select(childSource, registry, null)) {
+						if (matchContentsTarget(childTargetElement, sourcePath, registry, context)) {
+							EObject refObj = getContentsTargetRefObj(childTargetElement, sourcePath, registry, context);
+							if (refObj != null) {
+								ret.add(refObj);
+							}
 						}
 					}
+					ret.addAll(getElements(sourcePath, registry, tracker, context, progressMonitor));
+					sourcePath.removeLast();
 				}
-				ret.addAll(getElements(sourcePath, registry, tracker, context, progressMonitor));
-				sourcePath.removeLast();				
 			}
 			
 			return ret;
@@ -1073,12 +1075,13 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		}
 		
 		if (!isPrototype) {
+			Object identity = getContentProvider().getIdentity(obj);
 			String identityProperty = getIdentityProperty();
 			if (!Util.isBlank(identityProperty)) {
-				Object identity = getContentProvider().getProperty(obj, identityProperty);
-				if (identity != null) {
-					setIdentity(target, identity);
-				}
+				identity = getContentProvider().getProperty(obj, identityProperty);
+			}
+			if (identity != null) {
+				setIdentity(target, identity);
 			}
 		}
 		
@@ -1175,16 +1178,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return getPropertyNamespace() + OPERATIONS_PROPERTY;
 	}
 	
-	/**
-	 * Invokes {@link EOperation}s of the semantic element. 	
-	 * @param obj
-	 * @param target
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(phase = 5)
-	public final boolean mapOperations(
+	protected boolean mapOperations(
 			S obj,
 			T target,
 			Map<S, T> registry,
@@ -1192,11 +1186,10 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			ProgressMonitor progressMonitor) {
 
 		boolean result = true;
-		SourceRecord operationMap = loadSource(obj, getOperationsPropertyName());
+		YamlSourceRecord operationMap = loadYamlSource(obj, getOperationsPropertyName());
 		if (operationMap != null) {
 			try {
-				Yaml yaml = new Yaml();
-				Object opMapObj = yaml.load(operationMap.source());
+				Object opMapObj = operationMap.data();
 				if (opMapObj instanceof Map) {
 					Map<?,?> opMap = (Map<?,?>) opMapObj;
 					EClass eClass = target.eClass();

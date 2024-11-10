@@ -102,7 +102,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 	 * @param source
 	 * @return Feature mapping configuration YAML string.
 	 */
-	protected abstract String getFeatureMapConfigStr(S source);
+	protected abstract Object getFeatureMapConfig(S source);
 	
 	/**
 	 * Resolves type
@@ -244,13 +244,13 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 	 * @return
 	 */
 	protected Object getFeatureMapConfig(S source, ConfigType configType, ConfigSubType configSubType) {
-		String config = getFeatureMapConfigStr(source);
-		if (Util.isBlank(config)) {
+		Object config = getFeatureMapConfig(source);
+		if (config == null || (config instanceof String && Util.isBlank((String) config))) {
 			return null;
 		}
 		try {
 			Yaml yaml = new Yaml();
-			Object configObj = yaml.load(config);
+			Object configObj = config instanceof String ? yaml.load((String) config) : config;
 			if (configObj instanceof Map) {
 				Map<?,?> configMap = (Map<?,?>) configObj;
 				// Validating keys

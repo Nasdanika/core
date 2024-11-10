@@ -18,9 +18,9 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Transformer;
+import org.nasdanika.drawio.emf.AbstractDrawioFactory;
 import org.nasdanika.drawio.emf.DrawioResource;
 import org.nasdanika.drawio.model.ModelFactory;
-import org.nasdanika.drawio.model.util.AbstractDrawioFactory;
 import org.nasdanika.persistence.Marker;
 
 /**

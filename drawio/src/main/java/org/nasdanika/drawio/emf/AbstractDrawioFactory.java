@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.model.util;
+package org.nasdanika.drawio.emf;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -64,6 +64,8 @@ import org.nasdanika.drawio.model.Page;
 import org.nasdanika.drawio.model.Root;
 import org.nasdanika.drawio.model.SemanticMapping;
 import org.nasdanika.drawio.model.Tag;
+import org.nasdanika.mapping.AbstractMappingFactory;
+import org.nasdanika.mapping.ContentProvider;
 import org.nasdanika.mapping.Mapper;
 import org.nasdanika.mapping.SetterFeatureMapper;
 import org.nasdanika.ncore.Marker;
@@ -86,12 +88,10 @@ import org.yaml.snakeyaml.error.YAMLException;
 /**
  * Base class for classes which map/transform Drawio model to a specific semantic model. For example, architecture model or flow/process model.
  * @author Pavel
- * @deprecated Use <code>org.nasdanika.drawio.emf.AbstractDrawioFactory</code> 
  * @param <S> Semantic element type
  */
-@Deprecated
-public abstract class AbstractDrawioFactory<S extends EObject> {
-	
+public abstract class AbstractDrawioFactory<S, T extends EObject> extends AbstractMappingFactory<S, T> {
+
 	private static final String ENGINE_PROPERTY_SUFFIX = "-engine";
 	private static final String PASS_KEY = "pass";
 	private static final String ARGUMENTS_KEY = "arguments";
@@ -102,31 +102,14 @@ public abstract class AbstractDrawioFactory<S extends EObject> {
 	
 	private static final String DATA_URI_PNG_PREFIX_NO_BASE_64 = "data:image/png,";
 	private static final String DATA_URI_JPEG_PREFIX_NO_BASE_64 = "data:image/jpeg,";
-	
-	protected CapabilityLoader capabilityLoader;
-	
-	public AbstractDrawioFactory() {
-		this(new CapabilityLoader());
-	}
-	
-	public AbstractDrawioFactory(CapabilityLoader capabilityLoader) {
-		this.capabilityLoader = capabilityLoader;
-	}
 		
-	protected CapabilityLoader getCapabilityLoader() {
-		return capabilityLoader;
-	}	
-
-	public String getPropertyNamespace() {
-		return "";
+	
+	protected AbstractDrawioFactory(ContentProvider<S> contentProvider, CapabilityLoader capabilityLoader) {
+		super(contentProvider, capabilityLoader);
 	}
-	
-	protected String getTopLevelPageProperty() {
-		return getPropertyNamespace() + "top-level-page";
-	}	
-	
-	protected String getTagSpecPropertyName() {
-		return getPropertyNamespace() + "tag-spec";
+
+	protected AbstractDrawioFactory(ContentProvider<S> contentProvider) {
+		super(contentProvider);
 	}
 	
 	/**
