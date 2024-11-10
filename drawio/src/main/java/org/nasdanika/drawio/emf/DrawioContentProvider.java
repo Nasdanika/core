@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.common.util.URI;
+import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.PropertySource;
@@ -290,7 +291,12 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		if (element instanceof Root) {
 			return ((Root) element).getModel().getPage().getName();
 		}
-		return element instanceof ModelElement ? ((ModelElement) element).getLabel() : null;
+		if (element instanceof ModelElement) {
+			String label = ((ModelElement) element).getLabel();
+			return org.nasdanika.common.Util.isBlank(label) ? null : Jsoup.parse(label).text();
+		}
+
+		return null;
 	}
 
 	@Override

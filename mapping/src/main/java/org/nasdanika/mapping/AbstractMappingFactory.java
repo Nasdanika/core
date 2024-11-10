@@ -67,6 +67,7 @@ import org.yaml.snakeyaml.error.YAMLException;
  */
 public abstract class AbstractMappingFactory<S, T extends EObject> {
 	
+	private static final String REFERENCE_PROPERTY = "reference";
 	private static final String PASS_VAR = "pass";
 	private static final String TARGET_VAR = "target";
 	private static final String CONTENT_PROVIDER_VAR = "contentProvider";
@@ -85,8 +86,6 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	private static final String IDENTITY_PROPERTY = "identity";
 	private static final String REF_SUFFIX = "-ref";
 	private static final String TYPE_PROPERTY = "type";
-	private static final String TAG_SPEC_PROPERTY = "tag-spec";
-	private static final String TOP_LEVEL_PAGE_PROPERTY = "top-level-page";
 	private static final String PASS_KEY = PASS_VAR;
 	private static final String ARGUMENTS_KEY = "arguments";
 	private static final String ITERATOR_KEY = "iterator";
@@ -115,11 +114,6 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 				@Override
 				protected EClassifier getType(String type, S context) {
 					return AbstractMappingFactory.this.getType(type, context);
-				}
-				
-				@Override
-				protected String getPropertyNamespace() {
-					return AbstractMappingFactory.this.getPropertyNamespace();
 				}
 				
 				@Override
@@ -199,18 +193,6 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return capabilityLoader;
 	}	
 
-	public String getPropertyNamespace() {
-		return "";
-	}
-	
-	protected String getTopLevelPageProperty() {
-		return getPropertyNamespace() + TOP_LEVEL_PAGE_PROPERTY;
-	}	
-	
-	protected String getTagSpecPropertyName() {
-		return getPropertyNamespace() + TAG_SPEC_PROPERTY;
-	}
-
 	protected String getRefSuffix() {
 		return REF_SUFFIX;
 	}
@@ -222,19 +204,19 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	 * @return
 	 */
 	protected String getIdentityProperty() {
-		return getPropertyNamespace() + IDENTITY_PROPERTY;
+		return IDENTITY_PROPERTY;
 	}	
 	
 	protected String getDocumentationProperty() {
-		return getPropertyNamespace() + DOCUMENTATION_PROPERTY;
+		return DOCUMENTATION_PROPERTY;
 	}	
 		
 	protected String getDocRefProperty() {
-		return getPropertyNamespace() + DOC_REF_PROPERTY;
+		return DOC_REF_PROPERTY;
 	}	
 	
 	protected String getDocFormatProperty() {
-		return getPropertyNamespace() + DOC_FORMAT_PROPERTY; 
+		return DOC_FORMAT_PROPERTY; 
 	}	
 	
 	/**
@@ -243,7 +225,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	 * @return
 	 */
 	protected String getTypeProperty() {
-		return getPropertyNamespace() + TYPE_PROPERTY;
+		return TYPE_PROPERTY;
 	}	
 	
 	protected static record YamlSourceRecord(URI uri, Object data) {};	
@@ -435,7 +417,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	 * @return
 	 */
 	protected String getInitializerProperty() {
-		return getPropertyNamespace() + INITIALIZER_PROPERTY;
+		return INITIALIZER_PROPERTY;
 	}
 		
 	/**
@@ -463,7 +445,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	 * @return
 	 */
 	protected String getBaseURIProperty() {
-		return getPropertyNamespace() + Context.BASE_URI_PROPERTY;
+		return Context.BASE_URI_PROPERTY;
 	}	
 	
 	/**
@@ -488,7 +470,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	// --- Phase 0 - semantic elements using ref-id's, page element, selector, prototype, semantic-selector ---	
 	
 	protected String getRefIdProperty() {
-		return getPropertyNamespace() + REF_ID_PROPERTY;
+		return REF_ID_PROPERTY;
 	}
 	
 	/**
@@ -529,7 +511,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	}
 		
 	protected String getSelectorProperty() {
-		return getPropertyNamespace() + SELECTOR_KEY;
+		return SELECTOR_KEY;
 	}
 	
 	protected boolean wireSelector(
@@ -594,7 +576,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	}
 	
 	protected String getPrototypeProperty() {
-		return getPropertyNamespace() + PROTOTYPE_PROPERTY;
+		return PROTOTYPE_PROPERTY;
 	}
 	
 	@SuppressWarnings({ "unchecked" })
@@ -674,7 +656,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	}
 	
 	protected String getTargetSelectorProperty() {
-		return getPropertyNamespace() + TARGET_SELECTOR_PROPERTY;
+		return TARGET_SELECTOR_PROPERTY;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -770,7 +752,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	// --- Phase 1: Mapping "reference" elements
 	
 	protected String getReferenceProperty() {
-		return getPropertyNamespace() + "reference";
+		return REFERENCE_PROPERTY;
 	}
 	
 	protected class ReferenceMapper {
@@ -963,7 +945,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	// --- Phase 4: Configuration ---
 	
 	protected String getConfigPrototypeProperty() {
-		return getPropertyNamespace() + CONFIG_PROTOTYPE_PROPERTY;
+		return CONFIG_PROTOTYPE_PROPERTY;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -1175,7 +1157,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	// --- Phase 5: Operations
 		
 	protected String getOperationsPropertyName() {
-		return getPropertyNamespace() + OPERATIONS_PROPERTY;
+		return OPERATIONS_PROPERTY;
 	}
 	
 	protected boolean mapOperations(
@@ -1342,7 +1324,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	// --- Phase 6: Invocable
 	
 	protected String getInvokePropertyName() {
-		return getPropertyNamespace() + INVOKE_PROPERTY;
+		return INVOKE_PROPERTY;
 	}
 	
 	/**

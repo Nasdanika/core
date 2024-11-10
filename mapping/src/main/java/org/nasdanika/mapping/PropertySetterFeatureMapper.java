@@ -44,17 +44,13 @@ public abstract class PropertySetterFeatureMapper<S, T extends EObject> extends 
 			FeatureMapper<S, T> defaulFeaturetMapper) {
 		super(chain, contentProvider, capabilityLoader, defaulFeaturetMapper);
 	}
-
-	protected String getPropertyNamespace() {
-		return "";
-	}
 	
 	protected String getFeatureMapConfigPropertyName() {
-		return getPropertyNamespace() + FEATURE_MAP_PROPERTY;
+		return FEATURE_MAP_PROPERTY;
 	}
 	
 	protected String getFeatureMapConfigRefPropertyName() {
-		return getPropertyNamespace() + FEATURE_MAP_REF_PROPERTY;
+		return FEATURE_MAP_REF_PROPERTY;
 	}
 		
 	@Override
@@ -95,11 +91,11 @@ public abstract class PropertySetterFeatureMapper<S, T extends EObject> extends 
 	}
 		
 	protected String getMappingSelectorPropertyName() {
-		return getPropertyNamespace() + MAPPING_SELECTOR_PROPERTY;
+		return MAPPING_SELECTOR_PROPERTY;
 	}
 	
 	protected String getMappingSelectorRefPropertyName() {
-		return getPropertyNamespace() + MAPPING_SELECTOR_REF_PROPERTY;
+		return MAPPING_SELECTOR_REF_PROPERTY;
 	}
 	
 	protected Object getMappingSelector(S source) {
