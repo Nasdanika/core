@@ -26,7 +26,7 @@ public abstract class ResourceFactoryCapabilityFactory extends ResourceSetContri
 
 			@Override
 			public Factory getResourceFactory(ResourceSet resourceSet) {
-				return ResourceFactoryCapabilityFactory.this.getResourceFactory(resourceSet);
+				return ResourceFactoryCapabilityFactory.this.getResourceFactory(resourceSet, loader, progressMonitor);
 			}
 
 			@Override
@@ -52,7 +52,10 @@ public abstract class ResourceFactoryCapabilityFactory extends ResourceSetContri
 		return empty();
 	}
 		
-	protected abstract Resource.Factory getResourceFactory(ResourceSet resourceSet);
+	protected abstract Resource.Factory getResourceFactory(
+			ResourceSet resourceSet, 
+			Loader loader,
+			ProgressMonitor progressMonitor);
 	
 	protected String getContentType() {
 		return null;

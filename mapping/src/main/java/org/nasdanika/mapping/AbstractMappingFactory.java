@@ -1036,16 +1036,16 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return documentationFactories;
 	}
 	
-	protected void configureTargetElement(
+	protected void configureTarget(
 			S obj,
 			T target,
-			Map<EObject, EObject> registry,
+			Map<S, T> registry,
 			boolean isPrototype,
 			ProgressMonitor progressMonitor) {
 		
 		S configPrototype = getConfigPrototype(obj, progressMonitor);
 		if (configPrototype != null) {
-			configureTargetElement(
+			configureTarget(
 					configPrototype, 
 					target, 
 					registry, 

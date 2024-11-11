@@ -1,57 +1,31 @@
 package org.nasdanika.drawio.emf;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.eclipse.emf.common.util.ECollections;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.jsoup.Jsoup;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
-import org.nasdanika.common.Context;
-import org.nasdanika.common.DefaultConverter;
-import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.SourceRecord;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
@@ -62,23 +36,8 @@ import org.nasdanika.drawio.model.SemanticMapping;
 import org.nasdanika.mapping.AbstractMappingFactory;
 import org.nasdanika.mapping.ContentProvider;
 import org.nasdanika.mapping.Mapper;
-import org.nasdanika.mapping.SetterFeatureMapper;
-import org.nasdanika.ncore.Marker;
-import org.nasdanika.ncore.util.NcoreUtil;
 import org.nasdanika.persistence.ConfigurationException;
-import org.nasdanika.persistence.Marked;
-import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.EvaluationException;
-import org.springframework.expression.Expression;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.ParseException;
-import org.springframework.expression.spel.SpelParserConfiguration;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.expression.spel.support.StandardTypeLocator;
 import org.xml.sax.SAXException;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * Base class for classes which map/transform Drawio model to a specific semantic model. For example, architecture model or flow/process model.
@@ -593,7 +552,11 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			Map<Element, T> registry,
 			ProgressMonitor progressMonitor) {		
 		
-		page.accept(pageElement -> filterRepresentation(pageElement, registry, progressMonitor));
+		page.accept(pageElement -> {
+			if (pageElement instanceof Element) {
+				filterRepresentation((Element) pageElement, registry, progressMonitor);
+			}
+		});
 		String targetRepresentation = targetModelElement.getRepresentations().get(DRAWIO_REPRESENTATION);
 		try {
 			Document representationDocument;
@@ -624,7 +587,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 * @return
 	 */
 	protected void filterRepresentation(
-			org.nasdanika.graph.Element element, 
+			Element element, 
 			Map<Element, T> registry,
 			ProgressMonitor progressMonitor) {
 		
@@ -676,7 +639,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 * @param progressMonitor
 	 */
 	protected void filterRepresentationElement(
-			org.nasdanika.graph.Element element, 
+			Element element, 
 			Map<Element, T> registry,
 			ProgressMonitor progressMonitor) {
 		
@@ -834,11 +797,11 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 3)
 	public final boolean featurMapNulls(
 			org.nasdanika.drawio.ModelElement modelElement,
-			Map<EObject, EObject> registry,
+			Map<Element, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		Mapper<EObject,EObject> mapper = getMapper(pass);
+		Mapper<Element,T> mapper = getMapper(pass);
 		if (mapper != null) {
 			mapper.wire(modelElement, registry, progressMonitor);
 		}		
@@ -852,306 +815,65 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	@org.nasdanika.common.Transformer.Wire(phase = 4)
 	public final void wireDocumentConfiguration(
-			org.nasdanika.drawio.Document document,
-			S documentElement,
-			Map<EObject, EObject> registry,
+			Document document,
+			T documentTarget,
+			Map<Element, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
 		
 		configureDocumentElement(
 				document,
-				documentElement,
+				documentTarget,
 				registry,
 				progressMonitor);
 	}
 	
 	protected void configureDocumentElement(
-			org.nasdanika.drawio.Document document,
-			S documentElement,
-			Map<EObject, EObject> registry,
+			Document document,
+			T documentTarget,
+			Map<Element,T> registry,
 			ProgressMonitor progressMonitor) {
 		
-		if (documentElement instanceof org.nasdanika.ncore.Marked) {
-			for (Marker marker: document.getMarkers()) {
-				((org.nasdanika.ncore.Marked) documentElement).getMarkers().add(EcoreUtil.copy(marker));
-			}
+		if (documentTarget instanceof org.nasdanika.ncore.Marked) {
+			((org.nasdanika.ncore.Marked) documentTarget).mark(document);
 		}		
 	}
-	
-	protected String getConfigPrototypeProperty() {
-		return getPropertyNamespace() + "config-prototype";
-	}
-	
-	protected EObject getConfigPrototype(
-			EObject eObj,
-			ProgressMonitor progressMonitor) {
-	
-		String configPrototypePropertyName = getConfigPrototypeProperty();
-		if (Util.isBlank(configPrototypePropertyName)) {
-			return getPrototype(eObj, progressMonitor);
-		}
-		String configPrototypeExpr = getProperty(eObj, configPrototypePropertyName);
-		if (Util.isBlank(configPrototypeExpr)) {
-			return getPrototype(eObj, progressMonitor);
-		}
-		
-		try {			
-			ExpressionParser parser = createExpressionParser(eObj);
-			Expression exp = parser.parseExpression(configPrototypeExpr);
-			EvaluationContext evaluationContext = createEvaluationContext(eObj);
-			configurePrototypeEvaluationContext(evaluationContext, progressMonitor);
-			return exp.getValue(evaluationContext, eObj, EObject.class);
-		} catch (ParseException e) {
-			throw new ConfigurationException("Error parsing congfig prototype: '" + configPrototypeExpr, e, asMarked(eObj));
-		} catch (EvaluationException e) {
-			throw new ConfigurationException("Error evaluating config prototype: '" + configPrototypeExpr, e, asMarked(eObj));
-		}
-	}		
 	
 	@org.nasdanika.common.Transformer.Wire(phase = 4)
 	public final void wireModelElementConfiguration(
-			org.nasdanika.drawio.ModelElement drawioModelElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
+			org.nasdanika.drawio.ModelElement modelElement,
+			T target,
+			Map<Element,T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		configureSemanticElement(
-				drawioModelElement,
-				semanticElement,
+		configureTarget(
+				modelElement,
+				target,
 				registry,
 				false,
 				progressMonitor);
 	}
 	
-	@org.nasdanika.common.Transformer.Wire(phase = 4)
-	public final void wireTagConfiguration(
-			org.nasdanika.drawio.Tag tag,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		configureSemanticElement(
-				tag,
-				semanticElement,
-				registry,
-				false,
-				progressMonitor);
-	}
-	
-	/**
-	 * Sets semantic identity if semantic element is instance of org.nasdanika.ncore.StringIdentity
-	 * @param semanticElement
-	 * @param semanticId
-	 */
-	protected void setSemanticId(S semanticElement, String semanticId, String elementId) {
-		if (semanticElement instanceof org.nasdanika.ncore.StringIdentity) {
-			org.nasdanika.ncore.StringIdentity semanticStringIdentity = (org.nasdanika.ncore.StringIdentity) semanticElement;
-			if (Util.isBlank(semanticId)) {
-				if (Util.isBlank(semanticStringIdentity.getId()) && !Util.isBlank(elementId)) {
-					semanticStringIdentity.setId(elementId);
-				}
-			} else {
-				semanticStringIdentity.setId(semanticId);
-			}
-		}
-	}
-	
-	protected void addDocumentation(S semanticElement, Collection<EObject> documentation) {
-		if (semanticElement instanceof org.nasdanika.ncore.Documented) {
-			((org.nasdanika.ncore.Documented) semanticElement).getDocumentation().addAll(documentation);
-		}	
-	}
-	
-	/**
-	 * Sets label text extracted from the label HTML.
-	 * @param semanticElement
-	 * @param labelText
-	 */
-	protected void setLabelText(S semanticElement, String labelText) {
-		if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
-			((org.nasdanika.ncore.NamedElement) semanticElement).setName(labelText);
-		}
-	}
-
-	protected void setTooltip(S semanticElement, String tooltip) {
-		if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
-			((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(tooltip);
-		}
-	}	
-	
-	private Collection<DocumentationFactory> documentationFactories;
-	
-	protected Collection<DocumentationFactory> getDocumentationFactories(ProgressMonitor progressMonitor) {
-		if (documentationFactories == null) {
-			documentationFactories = new ArrayList<>();
-			if (capabilityLoader != null) {
-				Requirement<Object, DocumentationFactory> requirement = ServiceCapabilityFactory.createRequirement(DocumentationFactory.class);
-				Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
-				for (CapabilityProvider<Object> cp: cpi) {				
-					cp.getPublisher().subscribe(df -> documentationFactories.add((DocumentationFactory) df));
-				}
-			}
-		}
-		return documentationFactories;
-	}
-	
-	protected void configureSemanticElement(
-			EObject eObj,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			boolean isPrototype,
-			ProgressMonitor progressMonitor) {
-		
-		EObject configPrototype = getConfigPrototype(eObj, progressMonitor);
-		if (configPrototype instanceof org.nasdanika.drawio.ModelElement) {
-			configureSemanticElement(
-					(org.nasdanika.drawio.ModelElement) configPrototype, 
-					semanticElement, 
-					registry, 
-					isPrototype, 
-					progressMonitor);
-		}
-
-		if (semanticElement instanceof org.nasdanika.ncore.Marked && eObj instanceof org.nasdanika.ncore.Marked) {
-			for (Marker marker: ((org.nasdanika.ncore.Marked) eObj).getMarkers()) {
-				((org.nasdanika.ncore.Marked) semanticElement).getMarkers().add(EcoreUtil.copy(marker));
-			}
-		}
-		
-		// Indicates that this element is linked from another element and as such its id shall not be used as default semantic id
-		boolean isLinked = eObj instanceof org.nasdanika.drawio.ModelElement
-				&& isPageElement(eObj)
-				&& !isTopLevelPage(((org.nasdanika.drawio.ModelElement) eObj).getPage());
-		
-		if (!isPrototype && !isLinked) {
-			String semanticIdProperty = getSemanticIdProperty();
-			if (!Util.isBlank(semanticIdProperty)) {
-				String semanticId = getProperty(eObj, semanticIdProperty);
-				String elementId = null;
-				if (eObj instanceof org.nasdanika.drawio.ModelElement) {
-					elementId = ((org.nasdanika.drawio.ModelElement) eObj).getId();
-				}
-				setSemanticId(semanticElement, semanticId, elementId);
-			}
-		}
-		
-		if (eObj instanceof org.nasdanika.drawio.ModelElement) {
-			String label = ((org.nasdanika.drawio.ModelElement) eObj).getLabel();
-			if (!Util.isBlank(label)) {
-				String labelText = Jsoup.parse(label).text();
-				setLabelText(semanticElement, labelText);				
-			}
-			String tooltip = ((org.nasdanika.drawio.ModelElement) eObj).getTooltip();
-			if (!Util.isBlank(tooltip)) {
-				setTooltip(semanticElement, tooltip);
-			}
-		}
-				
-		URI baseUri = getBaseURI(eObj);
-		String docProperty = getDocumentationProperty();
-		if (!Util.isBlank(docProperty)) {
-			String doc = getProperty(eObj, docProperty);
-			if (!Util.isBlank(doc)) {
-				String[] docFormatStr = { null };
-				String docFormatProperty = getDocFormatProperty();
-				if (!Util.isBlank(docFormatProperty)) {
-					docFormatStr[0] = getProperty(eObj, docFormatProperty);
-				}
-				if (Util.isBlank(docFormatStr[0])) {
-					docFormatStr[0] = "markdown";
-				}
-				
-				Optional<DocumentationFactory> dfo = getDocumentationFactories(progressMonitor)
-					.stream()
-					.filter(df -> df.canHandle(docFormatStr[0]))
-					.findAny();
-				
-				if (dfo.isPresent()) {
-					addDocumentation(semanticElement, dfo.get().createDocumentation(doc, baseUri, progressMonitor));
-				} else {
-					throw new ConfigurationException("Unsupported documentation format: " + docFormatStr, eObj instanceof Marked ? (Marked) eObj : null);
-				}
-			}
-		}
-		
-		String docRefProperty = getDocRefProperty();
-		if (!Util.isBlank(docRefProperty)) {
-			String docRefStr = getProperty(eObj, docRefProperty);
-			if (!Util.isBlank(docRefStr)) {					
-				String docFormatProperty = getDocFormatProperty();
-				DocumentationFactory docFactory = null;
-				if (Util.isBlank(docFormatProperty)) {
-					String docFormatStr = getProperty(eObj, docFormatProperty);
-					if (!Util.isBlank(docFormatStr)) {
-						Optional<DocumentationFactory> dfo = getDocumentationFactories(progressMonitor)
-								.stream()
-								.filter(df -> df.canHandle(docFormatStr))
-								.findAny();
-						if (dfo.isPresent()) {
-							docFactory = dfo.get();
-						} else {
-							throw new ConfigurationException("Unsupported documentation format: " + docFormatStr, eObj instanceof Marked ? (Marked) eObj : null);												
-						}
-					}
-				}
-				URI[] docRefURI = { URI.createURI(docRefStr) };
-				if (baseUri != null && !baseUri.isRelative()) {
-					docRefURI[0] = docRefURI[0].resolve(baseUri);
-				}
-				if (docFactory == null) {
-					Optional<DocumentationFactory> dfo = getDocumentationFactories(progressMonitor)
-							.stream()
-							.filter(df -> df.canHandle(docRefURI[0]))
-							.findAny();		
-					
-					if (dfo.isPresent()) {
-						docFactory = dfo.get();
-					} else {
-						throw new ConfigurationException("Unsupported documentation URI: " + docRefURI, eObj instanceof Marked ? (Marked) eObj : null);												
-					}
-				}
-				
-				addDocumentation(semanticElement, docFactory.createDocumentation(docRefURI[0], progressMonitor));				
-			}
-		}
-				
-		// Root is logically "merged" with the containing page
-		if (eObj instanceof Root) {
-			Page page = (Page) eObj.eContainer().eContainer();
-			setPageName(semanticElement, page.getName());
-		}
-		
-	}
-	
-	protected void setPageName(S semanticElement, String pageName) {
-		if (semanticElement instanceof org.nasdanika.ncore.NamedElement) {
-			org.nasdanika.ncore.NamedElement namedSemanticElement = (org.nasdanika.ncore.NamedElement) semanticElement;
-			if (Util.isBlank(namedSemanticElement.getName())) {
-				namedSemanticElement.setName(pageName);
-			}
-		}		
-	}
+//	@org.nasdanika.common.Transformer.Wire(phase = 4)
+//	public final void wireTagConfiguration(
+//			Tag tag,
+//			T target,
+//			Map<Element,T> registry,
+//			int pass,
+//			ProgressMonitor progressMonitor) {
 //		
-//	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-//	
-//	protected abstract EObject createTextDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-//	
-//	protected abstract EObject createMarkdownDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
-//	
-//	protected abstract EObject createHtmlDoc(URI docRef, ProgressMonitor progressMonitor);
-//	
-//	protected abstract EObject createTextDoc(URI docRef, ProgressMonitor progressMonitor);
-//	
-//	protected abstract EObject createMarkdownDoc(URI docRef, ProgressMonitor progressMonitor);
+//		configureTarget(
+//				tag,
+//				target,
+//				registry,
+//				false,
+//				progressMonitor);
+//	}
+	
 	
 	// --- Phase 5: Operations
-		
-	protected String getOperationMapPropertyName() {
-		return getPropertyNamespace() + "operation-map";
-	}
 	
 	/**
 	 * Invokes {@link EOperation}s of the semantic element. 	
@@ -1163,408 +885,37 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	@org.nasdanika.common.Transformer.Wire(phase = 5)
 	public final boolean mapOperations(
-			EObject diagramElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
+			Element element,
+			T target,
+			Map<Element,T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
-
-		boolean result = true;
-		SourceRecord operationMap = loadSource(semanticElement, getOperationMapPropertyName());
-		if (operationMap != null) {
-			try {
-				Yaml yaml = new Yaml();
-				Object opMapObj = yaml.load(operationMap.source());
-				if (opMapObj instanceof Map) {
-					Map<?,?> opMap = (Map<?,?>) opMapObj;
-					EClass eClass = semanticElement.eClass();
-					for (EOperation eOperation: eClass.getEAllOperations()) {
-						Object opSpec = opMap.get(eOperation.getName());
-						if (opSpec instanceof Map) {
-							opSpec = Collections.singleton(opSpec); // Wrapping into a list to simplify further logic
-						}
-						
-						if (opSpec instanceof Iterable) {
-							OSE: for (Object opSpecElement: (Iterable<?>) opSpec) {
-								if (opSpecElement instanceof Map) {
-									Map<?,?> opSpecElementMap = (Map<?,?>) opSpecElement;
-									org.nasdanika.persistence.Util.checkUnsupportedKeys(
-											opSpecElementMap, 
-											SELECTOR_KEY, 
-											ITERATOR_KEY, 
-											ARGUMENTS_KEY,
-											PASS_KEY);
-									
-									Object passObj = opSpecElementMap.get(PASS_KEY);
-									if (passObj instanceof Number) {
-										int passNum = ((Number) passObj).intValue();
-										if (passNum > pass) {
-											result = false; // This op shall be invoked later
-										} else if (passNum < pass) {
-											continue OSE; // Already invoked if matched
-										}
-									} else if (passObj != null) {
-										throw new ConfigurationException("Usupported operation pass type: " + passObj, asMarked(diagramElement));																																				
-									}
-									
-									Map<String,String> argMap = new HashMap<>(); 
-									Object arguments = opSpecElementMap.get(ARGUMENTS_KEY);
-									if (arguments instanceof Map) {
-										for (Entry<?, ?> ae: ((Map<?,?>) arguments).entrySet()) {
-											Object key = ae.getKey();
-											if (key instanceof String) {
-												boolean hasParameter = false;
-												for (EParameter prm: eOperation.getEParameters()) {
-													if (prm.getName().equals(key)) {
-														hasParameter = true;
-														break;
-													}
-												}
-												
-												if (!hasParameter) {
-													continue OSE;
-												}
-												
-												Object val = ae.getValue();
-												if (val instanceof String) {
-													argMap.put((String) key, (String) val);
-												} else {
-													throw new ConfigurationException("Usupported operation argument expression type: " + val, asMarked(diagramElement));																																																													
-												}
-											} else {
-												throw new ConfigurationException("Usupported operation parameter name type: " + key, asMarked(diagramElement));																																																
-											}
-										}
-									} else {
-										throw new ConfigurationException("Usupported operation arguments type: " + arguments, asMarked(diagramElement));																																				
-									}																		
-									
-									Object selector = opSpecElementMap.get(SELECTOR_KEY);
-									if (selector instanceof String) {
-										if (!mapper.evaluatePredicate(eOperation, (String) selector, null, diagramElement)) {
-											continue;
-										}
-									} else if (selector != null) {
-										throw new ConfigurationException("Usupported operation selector type: " + selector, asMarked(diagramElement));																										
-									}
-									
-									Iterator<?> it = Collections.singleton(diagramElement).iterator();
-									
-									Object iterator = opSpecElementMap.get(ITERATOR_KEY);
-									if (iterator instanceof String) {										
-										Object itVal = mapper.evaluate(
-												diagramElement, 
-												(String) iterator,												
-												Map.of("registry", registry),
-												Object.class,
-												diagramElement);
-										
-										if (itVal instanceof Iterator) {
-											it = (Iterator<?>) itVal;
-										} else if (itVal instanceof Iterable) {
-											it = ((Iterable<?>) itVal).iterator();
-										} else if (itVal instanceof Stream) {
-											it = ((Stream<?>) itVal).iterator();
-										} else if (itVal == null) {
-											it = Collections.emptyIterator();
-										} else if (itVal.getClass().isArray()) {
-											Collection<Object> values = new ArrayList<>();
-											for (int i = 0; i < Array.getLength(itVal); ++i) {
-												values.add(Array.get(itVal, i));
-											}
-											it = values.iterator();
-										} else {
-											
-											it = Collections.singleton(itVal).iterator();
-										} 
-									} else if (iterator != null) {
-										throw new ConfigurationException("Usupported operation iterator type: " + iterator, asMarked(diagramElement));																										
-									}
-									
-									if (it != null) {
-										while (it.hasNext()) {
-											Object next = it.next();
-											EList<Object> argList = ECollections.newBasicEList();
-											for (EParameter prm: eOperation.getEParameters()) {
-												String argExpr = argMap.get(prm.getName());
-												if (Util.isBlank(argExpr)) {
-													argList.add(null);
-												} else {
-													Object arg = mapper.evaluate(
-															next, 
-															argExpr,												
-															Map.of("registry", registry),
-															Object.class,
-															diagramElement);
-													argList.add(arg);
-												}
-											}
-											try {
-												semanticElement.eInvoke(eOperation, argList);
-											} catch (InvocationTargetException e) {
-												throw new ConfigurationException("Error invoking eOperation " + eOperation, e, asMarked(diagramElement));																
-											}
-										}
-									}
-								} else {
-									throw new ConfigurationException("Usupported operation spec element type: " + opSpecElement, asMarked(diagramElement));																
-								}								
-							}
-						} else {
-							throw new ConfigurationException("Usupported operation spec type: " + opSpec, asMarked(diagramElement));							
-						}						
-					}
-				} else {				
-					throw new ConfigurationException("Usupported operation map type: " + opMapObj, asMarked(diagramElement));
-				}
-			} catch (YAMLException yamlException) {
-				throw new ConfigurationException("Error loading operation map: " + yamlException, yamlException, asMarked(diagramElement));
-			}
-		}	
-		return result;
+		
+		return super.mapOperations(element, target, registry, pass, progressMonitor);
 	}
 	
-	// --- Phase 6: Script
+	// --- Phase 6: Invoke
 	
 	@org.nasdanika.common.Transformer.Wire(phase = 6, targetType = Void.class)
-	public final boolean wireScript(
-			EObject diagramElement,
-			Map<EObject, EObject> registry,
+	public final boolean wireInvoke(
+			Element element,
+			Map<Element,T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
-	
-		return executeScript(diagramElement, null, registry, pass, progressMonitor);
+		
+		return invoke(element, null, registry, pass, progressMonitor);
 	}
 	
 	
 	@org.nasdanika.common.Transformer.Wire(phase = 6)
-	public final boolean wireScript(
-			EObject diagramElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
+	public final boolean wireInvoke(
+			Element element,
+			T target,
+			Map<Element, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 	
-		return executeScript(diagramElement, semanticElement, registry, pass, progressMonitor);
-	}
-	
-	protected String getScriptPropertyName() {
-		return getPropertyNamespace() + "script";
-	}
-	
-	/**
-	 * Executes script
-	 * @param diagramElement
-	 * @param semanticElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	protected boolean executeScript(
-			EObject diagramElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		SourceRecord script = loadSource(diagramElement, getScriptPropertyName());
-		
-		if (script == null || Util.isBlank(script.source())) {
-			return true;
-		}
-		
-		String sepn = getScriptPropertyName() + ENGINE_PROPERTY_SUFFIX;
-		String enginePredicateExpr = Util.isBlank(sepn) ? null : getProperty(diagramElement, sepn);
-
-		Map<String, Object> variables = Map.ofEntries(
-				Map.entry("diagramElement", diagramElement),
-				Map.entry("semanticElement", semanticElement),
-				Map.entry("pass", pass),
-				Map.entry("registry", registry));		
-		
-		ScriptEngineManager scriptEngineManger = new ScriptEngineManager(getClassLoader(diagramElement));
-		for (ScriptEngineFactory scriptEngineFactory: scriptEngineManger.getEngineFactories()) {
-			if (!Util.isBlank(enginePredicateExpr)) {
-				if (!mapper.evaluatePredicate(scriptEngineFactory, enginePredicateExpr, variables, diagramElement)) {
-					continue;
-				}
-			} else if (script.uri() != null) {
-				String extension = script.uri().fileExtension();
-				if (!Util.isBlank(extension) && !scriptEngineFactory.getExtensions().contains(extension)) {
-					continue;
-				}
-			}
-			
-			ScriptEngine engine = scriptEngineFactory.getScriptEngine();
-			configureScriptEngine(
-					engine, 
-					diagramElement, 
-					semanticElement, 
-					registry, 
-					pass, 
-					progressMonitor);
-			
-			try {
-				Object result = engine.eval(script.source());
-				return !Boolean.FALSE.equals(result);
-			} catch (ScriptException e) {
-				throw new ConfigurationException("Error evaluating script: " + e, e, asMarked(diagramElement));
-			}
-		}
-		throw new ConfigurationException("No matching script engine", asMarked(diagramElement));
-	}
-	
-	protected void configureScriptEngine(
-			ScriptEngine engine,
-			EObject diagramElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		engine.put("diagramElement", diagramElement);
-		engine.put("semanticElement", semanticElement);
-		engine.put("pass", pass);
-		engine.put("registry", registry);
-		engine.put("baseURI", getBaseURI(diagramElement));
-		engine.put("logicalParent", getLogicalParent(diagramElement));
-		for (Entry<String, Object> ve: getVariables(diagramElement)) {
-			engine.put(ve.getKey(), ve.getValue());
-		}
-	}	
-	
-	// --- Phase 7: Processor
-	
-	/**
-	 * Element processor
-	 */
-	public interface Processor<S extends EObject> {
-		
-		/**
-		 * Processes elements
-		 * @param diagramElement
-		 * @param semanticElement
-		 * @param registry
-		 * @param pass
-		 * @param progressMonitor
-		 * @return false if processing shall be done in subsequent passes, e.g. pending some other processing 
-		 */
-		boolean process(
-				EObject diagramElement,
-				S semanticElement,
-				Map<EObject, EObject> registry,
-				int pass,
-				ProgressMonitor progressMonitor);
-		
-	}
-	
-	protected String getProcessorPropertyName() {
-		return getPropertyNamespace() + "processor";
-	}
-	
-	@org.nasdanika.common.Transformer.Wire(phase = 7, targetType = Void.class)
-	public final boolean wireProcessors(
-			EObject diagramElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-
-		return invokeProcessors(diagramElement, null, registry, pass, progressMonitor);
-	}
-	
-	@org.nasdanika.common.Transformer.Wire(phase = 7)
-	public final boolean wireProcessors(
-			EObject diagramElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-
-		return invokeProcessors(diagramElement, semanticElement, registry, pass, progressMonitor);
-	}
-
-	/**
-	 * Calls processors
-	 * @param diagramElement
-	 * @param semanticElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	protected boolean invokeProcessors(
-			EObject diagramElement,
-			S semanticElement,
-			Map<EObject, EObject> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-
-		String ppn = getProcessorPropertyName();
-		if (Util.isBlank(ppn)) {
-			return true;
-		}
-		
-		String processorExpr = getProperty(diagramElement, ppn);
-		if (Util.isBlank(processorExpr)) {
-			return true;
-		}
-		
-		Map<String, Object> variables = Map.ofEntries(
-				Map.entry("semanticElement", semanticElement),
-				Map.entry("pass", pass),
-				Map.entry("registry", registry));
-		
-		Object result = mapper.evaluate(diagramElement, processorExpr, variables, Object.class, diagramElement);
-		if (result == null) {
-			return true;
-		}
-		if (result instanceof Processor) {
-			return ((Processor<S>) result).process(diagramElement, semanticElement, registry, pass, progressMonitor); 
-		}
-		if (result instanceof Iterator) {
-			boolean ret = true;
-			Iterator<Processor<S>> pit = (Iterator<Processor<S>>) result;
-			while (pit.hasNext()) {
-				if (!pit.next().process(diagramElement, semanticElement, registry, pass, progressMonitor)) {
-					ret = false;
-				}
-			}
-			
-			return ret;
-		}
-		if (result instanceof Iterable) {
-			boolean ret = true;
-			for (Processor<S> processor: (Iterable<Processor<S>>) result) {
-				if (!processor.process(diagramElement, semanticElement, registry, pass, progressMonitor)) {
-					ret = false;
-				}
-			}
-				
-			return ret;	
-		}
-		if (result instanceof Stream) {
-			boolean ret = true;
-			for (Processor<S> processor: ((Stream<Processor<S>>) result).toList()) {
-				if (!processor.process(diagramElement, semanticElement, registry, pass, progressMonitor)) {
-					ret = false;
-				}
-			}
-				
-			return ret;	
-		}
-		if (result.getClass().isArray()) {
-			boolean ret = true;
-			for (int i = 0; i < Array.getLength(result); ++i) {
-				Processor<S> processor = (Processor<S>) Array.get(result, i);
-				if (!processor.process(diagramElement, semanticElement, registry, pass, progressMonitor)) {
-					ret = false;
-				}
-			}
-				
-			return ret;	
-		}
-				
-		throw new ConfigurationException("Unsupported processor type: " + result, asMarked(diagramElement));
+		return invoke(element, target, registry, pass, progressMonitor);
 	}
 		
 }

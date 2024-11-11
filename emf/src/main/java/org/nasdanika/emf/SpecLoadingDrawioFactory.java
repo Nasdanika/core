@@ -10,10 +10,13 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
-import org.nasdanika.drawio.emf.SemanticDrawioFactory;
+import org.nasdanika.drawio.Element;
+import org.nasdanika.drawio.emf.AbstractDrawioFactory;
 import org.nasdanika.emf.persistence.EObjectLoader;
+import org.nasdanika.mapping.ContentProvider;
 import org.nasdanika.ncore.util.NcoreUtil;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marked;
@@ -24,46 +27,54 @@ import org.nasdanika.persistence.ObjectLoader;
  * @param <D>
  * @param <S>
  */
-public abstract class SpecLoadingDrawioFactory<S extends EObject> extends SemanticDrawioFactory<S> {
+public abstract class SpecLoadingDrawioFactory<T extends EObject> extends AbstractDrawioFactory<T> {
 	
+	private static final String SPEC_REF_PROPERTY = "spec-ref";
+	private static final String SPEC_PROPERTY = "spec";
 	private ResourceSet resourceSet;
-
-	public SpecLoadingDrawioFactory(ResourceSet resourceSet) {
+	
+	protected SpecLoadingDrawioFactory(
+			ContentProvider<Element> contentProvider, 
+			CapabilityLoader capabilityLoader,
+			ResourceSet resourceSet) {
+		super(contentProvider, capabilityLoader);
 		this.resourceSet = resourceSet;
 	}
-	
+
+	protected SpecLoadingDrawioFactory(
+			ContentProvider<Element> contentProvider,
+			ResourceSet resourceSet) {
+		super(contentProvider);
+		this.resourceSet = resourceSet;
+	}
+
 	public ResourceSet getResourceSet() {
 		return resourceSet;
 	}
 	
 	protected String getSpecPropertyName() {
-		return getPropertyNamespace() + "spec";
+		return SPEC_PROPERTY;
 	}
 	
 	protected String getSpecRefPropertyName() {
-		return getPropertyNamespace() + "spec-ref";
+		return SPEC_REF_PROPERTY;
 	}
 	
 	@Override
-	protected void configureSemanticElement(
-			EObject eObj, 
-			S semanticElement, 
-			Map<EObject, EObject> registry,
+	protected void configureTarget(
+			Element obj, 
+			T target, 
+			Map<Element, T> registry, 
 			boolean isPrototype,
 			ProgressMonitor progressMonitor) {
-		
-		super.configureSemanticElement(
-				eObj,
-				semanticElement,
-				registry,
-				isPrototype,
-				progressMonitor);
+		// TODO Auto-generated method stub
+		super.configureTarget(obj, target, registry, isPrototype, progressMonitor);
 		
 		EObjectLoader eObjectLoader = new EObjectLoader((ObjectLoader) null) {
 		
 			@Override
 			public ResolutionResult resolveEClass(String type) {
-				EClass eClass = (EClass) SpecLoadingDrawioFactory.this.getType(type, eObj);
+				EClass eClass = (EClass) SpecLoadingDrawioFactory.this.getType(type, obj);
 				return new ResolutionResult(eClass, null);
 			}
 			
@@ -74,40 +85,65 @@ public abstract class SpecLoadingDrawioFactory<S extends EObject> extends Semant
 			
 		};
 		
-		Marked marked = asMarked(eObj);		
+		Marked marked = getContentProvider().asMarked(obj);		
 		
-		URI baseURI = getBaseURI(eObj);		
+		URI baseURI = getContentProvider().getBaseURI(obj);		
 		String spn = getSpecPropertyName();
 		if (!Util.isBlank(spn)) {
-			String specStr = getProperty(eObj, spn);
-			if (!Util.isBlank(specStr)) {
-				eObjectLoader.loadYaml(
-						specStr, 
-						semanticElement, 
+			Object specVal = getContentProvider().getProperty(obj, spn);
+			if (specVal instanceof String) {
+				String specStr = (String) specVal;
+				if (!Util.isBlank(specStr)) {
+					eObjectLoader.loadYaml(
+							specStr, 
+							target, 
+							baseURI, 
+							null, 
+							marked == null ? Collections.emptyList() : marked.getMarkers(), 
+							progressMonitor);
+				}			
+			} else if (specVal != null) {
+				eObjectLoader.load(
+						eObjectLoader,						
+						specVal, 
+						target, 
 						baseURI, 
 						null, 
 						marked == null ? Collections.emptyList() : marked.getMarkers(), 
 						progressMonitor);
-			}			
+				
+			}
 		}
 		
 		String srpn = getSpecRefPropertyName();
 		if (!Util.isBlank(srpn)) {
-			String ref = getProperty(eObj, srpn);
-			if (!Util.isBlank(ref)) {
-				URI refURI = URI.createURI(ref);
-				if (baseURI != null && !baseURI.isRelative()) {
-					refURI = refURI.resolve(baseURI);
-				}				
-				try {
-					eObjectLoader.loadYaml(
-							new URL(refURI.toString()),
-							semanticElement, 
-							null, 
-							progressMonitor);
-				} catch (Exception e) {
-					throw new ConfigurationException("Error loading spec from " + refURI, e, marked);
+			Object refVal = getContentProvider().getProperty(obj, srpn);
+			if (refVal != null) {
+				URI refURI = null;
+				if (refVal instanceof URI) {
+					refURI = (URI) refVal;
+				} else if (refVal instanceof String) {
+					String ref = (String) refVal;
+					if (!Util.isBlank(ref)) {
+						refURI = URI.createURI(ref);
+					}
+				} else {
+					throw new ConfigurationException("Unsupported spec ref type: " + refVal, marked);					
 				}
+				if (refURI != null) {
+					if (baseURI != null && !baseURI.isRelative()) {
+						refURI = refURI.resolve(baseURI);
+					}				
+					try {
+						eObjectLoader.loadYaml(
+								new URL(refURI.toString()),
+								target, 
+								null, 
+								progressMonitor);
+					} catch (Exception e) {
+						throw new ConfigurationException("Error loading spec from " + refURI, e, marked);
+					}
+				}								
 			}
 		}
 	}

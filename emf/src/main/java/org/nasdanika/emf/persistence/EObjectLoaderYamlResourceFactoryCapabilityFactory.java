@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Factory;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.capability.emf.ResourceFactoryCapabilityFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.NasdanikaException;
@@ -78,7 +79,10 @@ public class EObjectLoaderYamlResourceFactoryCapabilityFactory extends ResourceF
 	}	
 
 	@Override
-	protected Factory getResourceFactory(ResourceSet resourceSet) {
+	protected Factory getResourceFactory(
+			ResourceSet resourceSet,
+			Loader loader,
+			ProgressMonitor progressMonitor) {
 		return new Factory() {
 
 			@Override

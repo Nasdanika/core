@@ -12,13 +12,18 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Factory;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
+import org.nasdanika.capability.CapabilityFactory.Loader;
+import org.nasdanika.common.ProgressMonitor;
 
 public class GzipBinaryResourceFactoryCapabilityFactory extends ResourceFactoryCapabilityFactory {
 
 	public static final String GZIP_BINARY_RESOURCE_EXTENSION = "egz";
 
 	@Override
-	protected Factory getResourceFactory(ResourceSet resourceSet) {
+	protected Factory getResourceFactory(
+			ResourceSet resourceSet,
+			Loader loader,
+			ProgressMonitor progressMonitor) {
 		return new Resource.Factory() {
 
 			@Override

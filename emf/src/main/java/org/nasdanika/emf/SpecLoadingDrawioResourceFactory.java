@@ -2,19 +2,21 @@ package org.nasdanika.emf;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import javax.script.ScriptEngine;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.drawio.Document;
+import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.emf.AbstractDrawioFactory;
+import org.nasdanika.drawio.emf.DrawioContentProvider;
 import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.mapping.ContentProvider;
 import org.nasdanika.persistence.Marker;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -27,18 +29,20 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 public class SpecLoadingDrawioResourceFactory implements Resource.Factory {
 	
 	protected Function<URI,EObject> uriResolver;
+	protected CapabilityLoader capabilityLoader;
 	
-	public SpecLoadingDrawioResourceFactory(Function<URI,EObject> uriResolver) {
+	public SpecLoadingDrawioResourceFactory(CapabilityLoader capabilityLoader, Function<URI,EObject> uriResolver) {
+		this.capabilityLoader = capabilityLoader;
 		this.uriResolver = uriResolver;
 	}
 		
 	@Override
 	public Resource createResource(URI uri) {
-		return new SpecLoadingDrawioResource(uri, uriResolver) {
+		return new SpecLoadingDrawioResource(uri, capabilityLoader, uriResolver) {
 			
 			@Override
-			protected ClassLoader getClassLoader(EObject context, URI baseURI, Supplier<ClassLoader> logicalParentClassLoaderSupplier) {
-				return SpecLoadingDrawioResourceFactory.this.getClassLoader(context, baseURI, logicalParentClassLoaderSupplier);
+			protected ClassLoader getClassLoader(Element context, URI baseURI, Supplier<ClassLoader> ancestorClassLoaderSupplier) {
+				return SpecLoadingDrawioResourceFactory.this.getClassLoader(context, baseURI, ancestorClassLoaderSupplier);
 			};
 			
 			@Override
@@ -48,29 +52,25 @@ public class SpecLoadingDrawioResourceFactory implements Resource.Factory {
 			
 			@Override
 			protected void filterRepresentationElement(
-					org.nasdanika.drawio.ModelElement representationElement, 
-					EObject semanticElement,
-					Map<EObject, EObject> registry,
+					Element representationElement, 
+					Map<Element, EObject> registry,
 					ProgressMonitor progressMonitor) {
 				
-				SpecLoadingDrawioResourceFactory.this.filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor);			
+				SpecLoadingDrawioResourceFactory.this.filterRepresentationElement(representationElement, registry, progressMonitor);			
 			}
 			
 			@Override
-			protected Iterable<Entry<String, Object>> getVariables(EObject context) {
+			protected Map<String, Object> getVariables(Element context) {
 				return SpecLoadingDrawioResourceFactory.this.getVariables(this, context);
 			}
 			
 			@Override
-			protected String getProperty(String name) {
-				return SpecLoadingDrawioResourceFactory.this.getProperty(this, name);
+			protected ContentProvider<Element> createContentProvider(Document document) {
+				// TODO Auto-generated method stub
+				return super.createContentProvider(document);
 			}
 			
 		};
-	}
-	
-	protected String getProperty(SpecLoadingDrawioResource drawioResource, String name) {
-		return null;
 	}
 
 	protected Function<Marker, org.nasdanika.ncore.Marker> getMarkerFactory() {
@@ -89,7 +89,7 @@ public class SpecLoadingDrawioResourceFactory implements Resource.Factory {
 		return new StandardEvaluationContext();
 	}	
 	
-	protected ClassLoader getClassLoader(EObject context, URI baseURI, Supplier<ClassLoader> logicalParentClassLoaderSupplier) {
+	protected ClassLoader getClassLoader(Element context, URI baseURI, Supplier<ClassLoader> logicalParentClassLoaderSupplier) {
 		return logicalParentClassLoaderSupplier == null ? Thread.currentThread().getContextClassLoader() : logicalParentClassLoaderSupplier.get();
 	}	
 
@@ -105,26 +105,18 @@ public class SpecLoadingDrawioResourceFactory implements Resource.Factory {
 	 * @param progressMonitor
 	 */
 	protected void filterRepresentationElement(
-			org.nasdanika.drawio.ModelElement representationElement, 
-			EObject semanticElement,
-			Map<EObject, EObject> registry,
+			Element representationElement, 
+			Map<org.nasdanika.drawio.Element, EObject> registry,
 			ProgressMonitor progressMonitor) {
 		
 	}
 	
-	protected void configureScriptEngine(
-			ScriptEngine engine, 
-			SpecLoadingDrawioResource resource,
-			EObject diagramElement, 
-			EObject semanticElement,
-			Map<EObject, EObject> registry, 
-			int pass, 
-			ProgressMonitor progressMonitor) {		
-		
-	}	
+	protected Map<String, Object> getVariables(SpecLoadingDrawioResource resource, Element context) {
+		return Collections.emptyMap();
+	}
 	
-	protected Iterable<Entry<String, Object>> getVariables(SpecLoadingDrawioResource resource, EObject context) {
-		return Collections.emptySet();
+	protected ContentProvider<Element> createContentProvider(SpecLoadingDrawioResource resource, Document document) {
+		return new DrawioContentProvider(document);
 	}
 			
 }

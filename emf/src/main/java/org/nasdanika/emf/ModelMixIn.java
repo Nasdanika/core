@@ -15,10 +15,10 @@ import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.emf.ResourceSetRequirement;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.drawio.emf.SemanticDrawioFactory.PropertySource;
-import org.nasdanika.drawio.emf.SemanticDrawioFactory.RepresentationElementFilter;
+import org.nasdanika.drawio.emf.AbstractDrawioFactory.RepresentationElementFilter;
 import org.nasdanika.emf.persistence.EObjectCapabilityFactory;
 import org.nasdanika.emf.persistence.EObjectCapabilityFactory.EObjectRequirement;
+import org.nasdanika.drawio.Element;
 import org.nasdanika.ncore.util.NcoreResourceSet;
 
 import picocli.CommandLine.Model.CommandSpec;
@@ -52,38 +52,23 @@ public class ModelMixIn {
 		}
 		
 		NcoreResourceSet resourceSet = new NcoreResourceSet();
-		SpecLoadingDrawioResourceFactory resourceFactory = new SpecLoadingDrawioResourceFactory(uri -> resourceSet.getEObject(uri, true)) {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		SpecLoadingDrawioResourceFactory resourceFactory = new SpecLoadingDrawioResourceFactory(capabilityLoader, uri -> resourceSet.getEObject(uri, true)) {
 			
 			@Override
 			protected void filterRepresentationElement(
-					org.nasdanika.drawio.ModelElement representationElement, 
-					EObject semanticElement,
-					Map<EObject, EObject> registry,
-					ProgressMonitor progressMonitor) {
+					Element representationElement,
+					Map<org.nasdanika.drawio.Element, EObject> registry, ProgressMonitor progressMonitor) {
+				// TODO Auto-generated method stub
 				
 				for (CommandSpec mixIn: spec.mixins().values()) {
 					Object userObject = mixIn.userObject();
 					if (userObject instanceof RepresentationElementFilter) {
-						((RepresentationElementFilter) userObject).filterRepresentationElement(representationElement, semanticElement, registry, progressMonitor);						
+						((RepresentationElementFilter) userObject).filterRepresentationElement(representationElement, registry, progressMonitor);						
 					}
 				}
 			}
-			
-			@Override
-			protected String getProperty(SpecLoadingDrawioResource drawioResource, String name) {
-				for (CommandSpec mixIn: spec.mixins().values()) {
-					Object userObject = mixIn.userObject();
-					if (userObject instanceof PropertySource) {
-						Optional<String> pOpt = ((PropertySource) userObject).getProperty(name, drawioResource.getURI());						
-						if (pOpt != null) {
-							return pOpt.orElse(null);
-						}
-					}
-				}
-				
-				return super.getProperty(drawioResource, name);
-			}
-			
+						
 		};
 		
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("drawio", resourceFactory);
@@ -91,7 +76,6 @@ public class ModelMixIn {
 		
 		ResourceSetRequirement resourceSetRequirement = new ResourceSetRequirement(resourceSet, null, null);
 		EObjectRequirement requirement = EObjectCapabilityFactory.createRequirement(modelURI, resourceSetRequirement);
-		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		Iterable<CapabilityProvider<Object>> providers = capabilityLoader.load(ServiceCapabilityFactory.createRequirement(EObject.class, null, requirement), progressMonitor);
 		Collection<EObject> results = Collections.synchronizedCollection(new ArrayList<>());
 		for (CapabilityProvider<Object> provider: providers) {
