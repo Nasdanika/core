@@ -8,6 +8,7 @@ import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
+import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.w3c.dom.Element;
 
@@ -53,7 +54,7 @@ class ConnectionImpl extends ModelElementImpl implements Connection {
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
 			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
-			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
+			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		org.nasdanika.drawio.model.Connection mConnection = toModelElement(factory.createConnection(), markerFactory, modelElementProvider, tagProvider);
 		
 		Node sourceNode = getSource();

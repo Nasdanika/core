@@ -41,6 +41,7 @@ import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Root;
+import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.persistence.Marker;
 import org.w3c.dom.Node;
@@ -232,7 +233,7 @@ class ModelImpl extends ElementImpl implements Model {
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
 			Function<Element, CompletableFuture<EObject>> modelElementProvider,
-			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
+			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		org.nasdanika.drawio.model.Model mModel = factory.createModel();		
 		modelElementProvider.apply(this).complete(mModel);
 		

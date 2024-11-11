@@ -49,6 +49,7 @@ import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
+import org.nasdanika.drawio.Tag;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
@@ -145,15 +146,14 @@ public class TestDrawio {
 		sourceGeometry.setX(100);
 		sourceGeometry.setWidth(70);
 		sourceGeometry.setHeight(30);
-		source.getTags().add("aws");
-		
+		source.getTags().add(page.createTag("aws"));		
 		
 		Node target = newLayer.createNode();
 		target.setLabel("My target node");
 		target.getGeometry().setBounds(300, 150, 100, 30);
-		Set<String> targetTags = target.getTags();
-		targetTags.add("aws");
-		targetTags.add("azure");
+		Set<Tag> targetTags = target.getTags();
+		targetTags.add(page.createTag("aws"));
+		targetTags.add(page.createTag("azure"));
 		
 		// Add connection 
 		Connection connection = newLayer.createConnection(source, target);
@@ -294,14 +294,14 @@ public class TestDrawio {
 		Rectangle sourceGeometry = source.getGeometry();
 		sourceGeometry.setWidth(120);
 		sourceGeometry.setHeight(50);
-		source.getTags().add("aws");
+		source.getTags().add(page.createTag("aws"));
 				
 		Node target = newLayer.createNode();
 		target.setLabel("My target node");
 		target.getGeometry().setBounds(0, 0, 100, 30);
-		Set<String> targetTags = target.getTags();
-		targetTags.add("aws");
-		targetTags.add("azure");
+		Set<Tag> targetTags = target.getTags();
+		targetTags.add(page.createTag("aws"));
+		targetTags.add(page.createTag("azure"));
 		
 		// Add connection 
 		Connection connection = newLayer.createConnection(source, target);

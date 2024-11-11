@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.Root;
+import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.w3c.dom.Element;
 
@@ -51,7 +52,7 @@ class RootImpl extends ModelElementImpl implements Root {
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
 			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
-			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
+			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		org.nasdanika.drawio.model.Root mRoot = toModelElement(factory.createRoot(), markerFactory, modelElementProvider, tagProvider);
 		modelElementProvider.apply(this).complete(mRoot);
 		for (Layer layer: getLayers()) {

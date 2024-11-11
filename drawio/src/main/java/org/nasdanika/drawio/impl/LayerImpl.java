@@ -11,6 +11,7 @@ import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.Node;
+import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.persistence.Marker;
 import org.w3c.dom.Element;
@@ -65,7 +66,7 @@ class LayerImpl extends ModelElementImpl implements Layer {
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
 			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
-			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
+			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		return toModelLayer(factory, factory.createLayer(), markerFactory, modelElementProvider, tagProvider);
 	}
 	
@@ -74,7 +75,7 @@ class LayerImpl extends ModelElementImpl implements Layer {
 			T mElement,
 			Function<Marker, org.nasdanika.ncore.Marker> markerFactory,
 			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
-			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
+			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		
 		toModelElement(mElement, markerFactory, modelElementProvider, tagProvider);
 

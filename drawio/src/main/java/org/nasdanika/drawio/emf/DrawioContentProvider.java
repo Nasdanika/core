@@ -19,11 +19,12 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.PropertySource;
 import org.nasdanika.drawio.Connection;
-import org.nasdanika.drawio.Document;
+import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.LinkTarget;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
+import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.drawio.Util;
@@ -50,9 +51,10 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	private String baseURIProperty;
 	private String configProperty;
 	private String configRefProperty;
+	private ConnectionBase connectionBase;
 
 	public DrawioContentProvider(Element root) {
-		this(root, Context.BASE_URI_PROPERTY, CONFIG_REF, CONFIG_REF_PROPERTY);
+		this(root, Context.BASE_URI_PROPERTY, CONFIG_REF, CONFIG_REF_PROPERTY, ConnectionBase.SOURCE);
 	}
 
 	/**
@@ -63,7 +65,8 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			Element root, 
 			String baseURIProperty,
 			String configProperty,
-			String configRefProperty) {
+			String configRefProperty,
+			ConnectionBase connectionBase) {
 		elements = new ArrayList<>();
 		if (root != null) {
 			Consumer<Element> visitor = element -> {
@@ -76,15 +79,16 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 					}
 				}
 			};
-			root.accept(Util.withLinkTargets(visitor, null), null);
+			root.accept(Util.withLinkTargets(visitor, connectionBase), connectionBase);
 		}
 		this.baseURIProperty = baseURIProperty;
 		this.configProperty = configProperty;
 		this.configRefProperty = configRefProperty;
+		this.connectionBase = connectionBase;
 	}
 	
 	public DrawioContentProvider(Collection<Element> elements) {
-		this(elements, Context.BASE_URI_PROPERTY, CONFIG_REF, CONFIG_REF_PROPERTY);
+		this(elements, Context.BASE_URI_PROPERTY, CONFIG_REF, CONFIG_REF_PROPERTY, ConnectionBase.SOURCE);
 	}
 
 	/**
@@ -95,11 +99,13 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			Collection<Element> elements, 
 			String baseURIProperty,
 			String configProperty,
-			String configRefProperty) {
+			String configRefProperty,
+			ConnectionBase connectionBase) {
 		this.elements = elements;
 		this.baseURIProperty = baseURIProperty;
 		this.configProperty = configProperty;
 		this.configRefProperty = configRefProperty;
+		this.connectionBase = connectionBase;		
 		for (Element element: elements) {
 			if (element instanceof ModelElement) {
 				ModelElement linkSource = (ModelElement) element;
@@ -135,6 +141,16 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		if (element instanceof Page) {
 			return ((Page) element).getDocument();
 		}
+		if (element instanceof Connection) {
+			if (connectionBase == ConnectionBase.SOURCE) {
+				return ((Connection) element).getSource();
+			} 
+			
+			if (connectionBase == ConnectionBase.TARGET) {
+				return ((Connection) element).getTarget();
+			}
+		}
+		
 		if (element instanceof ModelElement) {
 			return ((ModelElement) element).getParent();
 		}
@@ -145,14 +161,19 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	public Collection<? extends Element> getChildren(Element element) {
 		if (element instanceof ModelElement) {
 			ModelElement modelElement = (ModelElement) element;
+			List<Element> children = new ArrayList<>(modelElement.getChildren());
 			LinkTarget linkTarget = modelElement.getLinkTarget();
 			if (linkTarget != null) {
-				List<Element> children = new ArrayList<>(modelElement.getChildren());
 				children.add(linkTarget);
-				return children;
 			}
-			
-			return ((Document) element).getChildren();
+			if (modelElement instanceof Node) {
+				if (connectionBase == ConnectionBase.SOURCE) {
+					children.addAll(((Node) modelElement).getOutgoingConnections());
+				} else if (connectionBase == ConnectionBase.TARGET) {
+					children.addAll(((Node) modelElement).getIncomingConnections());
+				}
+			}
+			return children;
 		}
 		if (element instanceof Page) {
 			return getChildren(((Page) element).getModel().getRoot());

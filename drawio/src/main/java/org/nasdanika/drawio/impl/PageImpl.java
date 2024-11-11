@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
@@ -16,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
+import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.drawio.model.Tag;
@@ -145,26 +148,45 @@ class PageImpl extends ElementImpl implements Page {
 				factory, 
 				markerFactory, 
 				modelElementProvider,
-				tagName -> {
-					Tag tag = mPage.getTag(tagName);
-					if (tag == null) {
-						tag = ModelFactory.eINSTANCE.createTag();
-						tag.setName(tagName);
+				tag -> {
+					Tag mTag = mPage.getTag(tag.getName());
+					if (mTag == null) {
+						mTag = ModelFactory.eINSTANCE.createTag();
+						mTag.setName(tag.getName());
 						for (Marker marker: getMarkers()) {
 							org.nasdanika.ncore.Marker tagMarker = markerFactory.apply(marker);
-							tagMarker.setLocation(tagMarker.getLocation() + ", tag=" + tagName);
-							tag.getMarkers().add(tagMarker);
+							tagMarker.setLocation(tagMarker.getLocation() + ", tag=" + tag.getName());
+							mTag.getMarkers().add(tagMarker);
 						}
 						
-						mPage.getTags().add(tag);
+						mPage.getTags().add(mTag);
 					}
-					return tag;
+					return mTag;
 				}));
 		
 		for (Marker marker: getMarkers()) {
 			mPage.getMarkers().add(markerFactory.apply(marker));
 		}
 		return mPage;
+	}
+
+	@Override
+	public Map<String, org.nasdanika.drawio.Tag> getTags() {
+		Map<String, org.nasdanika.drawio.Tag> ret = new HashMap<>();
+		accept(e -> {
+			if (e instanceof ModelElement) {
+				ModelElement modelElement = (ModelElement) e;
+				for (org.nasdanika.drawio.Tag tag: modelElement.getTags()) {
+					ret.put(tag.getName(), tag);
+				}
+			}
+		});
+		return ret;
+	}
+
+	@Override
+	public org.nasdanika.drawio.Tag createTag(String name) {
+		return new TagImpl(name, this);
 	}
 
 }

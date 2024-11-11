@@ -59,7 +59,7 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	
 	Set<String> getPropertyNames();
 	
-	Set<String> getTags();
+	Set<Tag> getTags();
 	
 	boolean isVisible();
 	

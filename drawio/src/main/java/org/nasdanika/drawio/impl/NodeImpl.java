@@ -12,6 +12,7 @@ import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Rectangle;
+import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.w3c.dom.Element;
 
@@ -85,7 +86,7 @@ class NodeImpl extends LayerImpl implements Node {
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
 			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
-			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
+			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		org.nasdanika.drawio.model.Node mNode = toModelLayer(factory, factory.createNode(), markerFactory, modelElementProvider, tagProvider);
 		Rectangle geometry = getGeometry();
 		if (geometry != null) {

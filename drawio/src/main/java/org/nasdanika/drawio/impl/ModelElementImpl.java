@@ -31,6 +31,7 @@ import org.nasdanika.drawio.LinkTarget;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.drawio.Tag;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marker;
 import org.w3c.dom.Attr;
@@ -249,8 +250,8 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	}
 
 	@Override
-	public Set<String> getTags() {
-		return new AbstractSplitJoinSet<String,String,String>() {
+	public Set<Tag> getTags() {
+		return new AbstractSplitJoinSet<String,String,Tag>() {
 
 			@Override
 			protected String getState() {
@@ -279,13 +280,13 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			}
 
 			@Override
-			protected String load(String chunk) {
-				return chunk;
+			protected Tag load(String chunk) {
+				return new TagImpl(chunk, getModel().getPage());
 			}
 
 			@Override
-			protected String store(String element) {
-				return element;
+			protected String store(Tag element) {
+				return element.getName();
 			}
 			
 		};
@@ -521,7 +522,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			T mElement, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
 			Function<Element, CompletableFuture<EObject>> modelElementProvider,
-			Function<String, org.nasdanika.drawio.model.Tag> tagProvider) {
+			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		modelElementProvider.apply(this).complete(mElement);
 		mElement.setId(getId());
 		mElement.setLabel(getLabel());
@@ -537,7 +538,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			mElement.getStyle().put(se.getKey(), se.getValue());			
 		}
 		
-		for (String tag: getTags()) {
+		for (Tag tag: getTags()) {
 			mElement.getTags().add(tagProvider.apply(tag));
 			
 		}

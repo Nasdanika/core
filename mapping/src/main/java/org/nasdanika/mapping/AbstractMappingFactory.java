@@ -870,7 +870,8 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			throw new ConfigurationException("Usupported reference element condition type: " + cObj, getContentProvider().asMarked(context));		
 		}
 		
-		private EObject getContentsTargetRefObj(
+		@SuppressWarnings("unchecked")
+		private T getContentsTargetRefObj(
 				T contentsTarget, 
 				List<S> sourcePath,
 				Map<S, T> registry, 
@@ -882,7 +883,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			}
 			
 			if (eObj instanceof String) {
-				mapper.evaluate(
+				return (T) mapper.evaluate(
 						contentsTarget, 
 						(String) eObj, 
 						Map.ofEntries(
@@ -895,20 +896,20 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			throw new ConfigurationException("Usupported reference element expression type: " + eObj, getContentProvider().asMarked(context));		
 		}
 				
-		public List<EObject> getElements(
+		public List<T> getElements(
 				LinkedList<S> sourcePath,
 				Map<S, T> registry, 
 				Predicate<S> tracker,
 				S context,
 				ProgressMonitor progressMonitor) {
 			
-			List<EObject> ret = new ArrayList<>();			
+			List<T> ret = new ArrayList<>();			
 			for (S childSource: getContentProvider().getChildren(sourcePath.getLast())) {
 				if (tracker.test(childSource)) {
 					sourcePath.add(childSource);
 					for (T childTargetElement: mapper.select(childSource, registry, null)) {
 						if (matchContentsTarget(childTargetElement, sourcePath, registry, context)) {
-							EObject refObj = getContentsTargetRefObj(childTargetElement, sourcePath, registry, context);
+							T refObj = getContentsTargetRefObj(childTargetElement, sourcePath, registry, context);
 							if (refObj != null) {
 								ret.add(refObj);
 							}
