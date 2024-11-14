@@ -5,7 +5,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -231,33 +230,32 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	@SuppressWarnings("unchecked")
 	private PropertySource<String,Object> createElementPropertySource(Element element) {
 		if (element instanceof ModelElement) {
-			ModelElement modelElement = (ModelElement) element;			
+			ModelElement modelElement = (ModelElement) element;
+			if (org.nasdanika.common.Util.isBlank(configProperty) && org.nasdanika.common.Util.isBlank(configRefProperty)) {				
+				// Using element's own properties
+				return modelElement::getProperty;
+
+			}
+			
 			if (!org.nasdanika.common.Util.isBlank(configProperty)) {
 				// Loading YAML from config property
 				String configStr = modelElement.getProperty(configProperty);
-				if (org.nasdanika.common.Util.isBlank(configStr)) {
-					return property -> null;
+				if (!org.nasdanika.common.Util.isBlank(configStr)) {
+					Yaml yaml = new Yaml();
+					Object config = yaml.load(configStr);
+					if (config instanceof Map) {
+						return ((Map<String,Object>) config)::get;
+					}
+					throw new ConfigurationException("Usupported configuration type: " + configStr, null, asMarked(element));
 				}
-				Yaml yaml = new Yaml();
-				Object config = yaml.load(configStr);
-				if (config instanceof Map) {
-					return ((Map<String,Object>) config)::get;
-				}
-				throw new ConfigurationException("Usupported configuration type: " + configStr, null, asMarked(element));								
 			}
 			
 			if (!org.nasdanika.common.Util.isBlank(configRefProperty)) {
 				// Loading YAML
-				URI baseURI = getBaseURI(element);
-				Object ref = getProperty(element, configRefProperty);
-				URI refURI = null;
-				if (ref instanceof URI) {
-					refURI = (URI) ref;
-				} else if (ref instanceof String && !org.nasdanika.common.Util.isBlank((String) ref)) {
-					refURI = URI.createURI((String) ref); 
-				}
-				
-				if (refURI != null) {
+				String ref = modelElement.getProperty(configRefProperty);
+				if (!org.nasdanika.common.Util.isBlank(ref)) {
+					URI refURI = URI.createURI(ref);
+					URI baseURI = getBaseURI(element);
 					if (baseURI != null && !baseURI.isRelative()) {
 						refURI = refURI.resolve(baseURI);
 					}
@@ -274,16 +272,11 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 						throw new ConfigurationException("Error loading source from " + refURI, e, asMarked(element));
 					}
 				}
-				return null;
 			}
-		
-			// Using element's own properties
-			return modelElement::getProperty;
 		}
 		
 		// Empty property source
-		return property -> null;
-		
+		return property -> null;		
 	}		
 
 	@Override

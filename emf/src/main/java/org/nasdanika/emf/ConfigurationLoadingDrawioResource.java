@@ -35,8 +35,8 @@ import org.xml.sax.SAXException;
  */
 public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 		
-	public static final String MAPPING_PROPERTY = "mappping";
-	public static final String MAPPING_REF_PROPERTY = "mappping";
+	public static final String MAPPING_PROPERTY = "mapping";
+	public static final String MAPPING_REF_PROPERTY = "mapping-ref";
 	
 	protected Function<URI,EObject> uriResolver;
 	private CapabilityLoader capabilityLoader;
