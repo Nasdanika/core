@@ -9,8 +9,10 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.capability.CapabilityLoader;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.emf.AbstractDrawioFactory;
@@ -26,28 +28,28 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
  * @author Pavel
  *
  */
-public class SpecLoadingDrawioResourceFactory implements Resource.Factory {
+public class ConfigurationLoadingDrawioResourceFactory implements Resource.Factory {
 	
 	protected Function<URI,EObject> uriResolver;
 	protected CapabilityLoader capabilityLoader;
 	
-	public SpecLoadingDrawioResourceFactory(CapabilityLoader capabilityLoader, Function<URI,EObject> uriResolver) {
+	public ConfigurationLoadingDrawioResourceFactory(CapabilityLoader capabilityLoader, Function<URI,EObject> uriResolver) {
 		this.capabilityLoader = capabilityLoader;
 		this.uriResolver = uriResolver;
 	}
 		
 	@Override
 	public Resource createResource(URI uri) {
-		return new SpecLoadingDrawioResource(uri, capabilityLoader, uriResolver) {
+		return new ConfigurationLoadingDrawioResource(uri, capabilityLoader, uriResolver) {
 			
 			@Override
 			protected ClassLoader getClassLoader(Element context, URI baseURI, Supplier<ClassLoader> ancestorClassLoaderSupplier) {
-				return SpecLoadingDrawioResourceFactory.this.getClassLoader(context, baseURI, ancestorClassLoaderSupplier);
+				return ConfigurationLoadingDrawioResourceFactory.this.getClassLoader(context, baseURI, ancestorClassLoaderSupplier);
 			};
 			
 			@Override
 			protected URI getAppBase() {
-				return SpecLoadingDrawioResourceFactory.this.getAppBase();
+				return ConfigurationLoadingDrawioResourceFactory.this.getAppBase();
 			}
 			
 			@Override
@@ -56,12 +58,12 @@ public class SpecLoadingDrawioResourceFactory implements Resource.Factory {
 					Map<Element, EObject> registry,
 					ProgressMonitor progressMonitor) {
 				
-				SpecLoadingDrawioResourceFactory.this.filterRepresentationElement(representationElement, registry, progressMonitor);			
+				ConfigurationLoadingDrawioResourceFactory.this.filterRepresentationElement(representationElement, registry, progressMonitor);			
 			}
 			
 			@Override
 			protected Map<String, Object> getVariables(Element context) {
-				return SpecLoadingDrawioResourceFactory.this.getVariables(this, context);
+				return ConfigurationLoadingDrawioResourceFactory.this.getVariables(this, context);
 			}
 			
 			@Override
@@ -111,12 +113,17 @@ public class SpecLoadingDrawioResourceFactory implements Resource.Factory {
 		
 	}
 	
-	protected Map<String, Object> getVariables(SpecLoadingDrawioResource resource, Element context) {
+	protected Map<String, Object> getVariables(ConfigurationLoadingDrawioResource resource, Element context) {
 		return Collections.emptyMap();
 	}
 	
-	protected ContentProvider<Element> createContentProvider(SpecLoadingDrawioResource resource, Document document) {
-		return new DrawioContentProvider(document);
+	protected ContentProvider<Element> createContentProvider(ConfigurationLoadingDrawioResource resource, Document document) {
+		return new DrawioContentProvider(
+				document, 
+				Context.BASE_URI_PROPERTY, 
+				ConfigurationLoadingDrawioResource.MAPPING_PROPERTY, 
+				ConfigurationLoadingDrawioResource.MAPPING_REF_PROPERTY, 
+				ConnectionBase.SOURCE);
 	}
 			
 }

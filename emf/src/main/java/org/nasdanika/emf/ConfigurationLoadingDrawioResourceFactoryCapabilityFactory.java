@@ -2,11 +2,10 @@ package org.nasdanika.emf;
 
 import org.eclipse.emf.ecore.resource.Resource.Factory;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.capability.emf.ResourceFactoryCapabilityFactory;
 import org.nasdanika.common.ProgressMonitor;
 
-public class SpecLoadingDrawioResourceFactoryCapabilityFactory extends ResourceFactoryCapabilityFactory {
+public class ConfigurationLoadingDrawioResourceFactoryCapabilityFactory extends ResourceFactoryCapabilityFactory {
 
 	@Override
 	protected Factory getResourceFactory(
@@ -14,7 +13,7 @@ public class SpecLoadingDrawioResourceFactoryCapabilityFactory extends ResourceF
 			Loader loader,
 			ProgressMonitor progressMonitor) {
 		// TODO - representation filters capability providers
-		return new SpecLoadingDrawioResourceFactory(loader.getCapabilityLoader(), uri -> resourceSet.getEObject(uri, true));
+		return new ConfigurationLoadingDrawioResourceFactory(loader.getCapabilityLoader(), uri -> resourceSet.getEObject(uri, true));
 	}
 	
 	@Override

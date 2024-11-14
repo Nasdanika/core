@@ -15,9 +15,11 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.nasdanika.capability.CapabilityLoader;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Transformer;
+import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.emf.AbstractDrawioFactory;
@@ -31,12 +33,15 @@ import org.xml.sax.SAXException;
 /**
  * Loads Drawio model using {@link DrawioResource} and then transforms it to a model.
  */
-public class SpecLoadingDrawioResource extends ResourceImpl {
+public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 		
+	public static final String MAPPING_PROPERTY = "mappping";
+	public static final String MAPPING_REF_PROPERTY = "mappping";
+	
 	protected Function<URI,EObject> uriResolver;
 	private CapabilityLoader capabilityLoader;
 	
-	public SpecLoadingDrawioResource(
+	public ConfigurationLoadingDrawioResource(
 			CapabilityLoader capabilityLoader,
 			Function<URI,EObject> uriResolver) {
 		super();
@@ -44,7 +49,7 @@ public class SpecLoadingDrawioResource extends ResourceImpl {
 		this.capabilityLoader = capabilityLoader;
 	}
 
-	public SpecLoadingDrawioResource(
+	public ConfigurationLoadingDrawioResource(
 			URI uri,
 			CapabilityLoader capabilityLoader,
 			Function<URI,EObject> uriResolver) {
@@ -57,11 +62,11 @@ public class SpecLoadingDrawioResource extends ResourceImpl {
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		try {
 			Document document = Document.load(inputStream, getURI());			
-			SpecLoadingDrawioFactory<EObject> drawioFactory = new SpecLoadingDrawioFactory<EObject>(createContentProvider(document), capabilityLoader, getResourceSet()) {
+			ConfigurationLoadingDrawioFactory<EObject> drawioFactory = new ConfigurationLoadingDrawioFactory<EObject>(createContentProvider(document), capabilityLoader, getResourceSet()) {
 				
 				@Override
 				protected EObject getByRefId(Element obj, String refId, int pass, Map<Element, EObject> registry) {
-					return SpecLoadingDrawioResource.this.getByRefId(obj, getContentProvider().getBaseURI(obj),  refId, pass, registry);
+					return ConfigurationLoadingDrawioResource.this.getByRefId(obj, getContentProvider().getBaseURI(obj),  refId, pass, registry);
 				}
 				
 				@Override
@@ -79,7 +84,7 @@ public class SpecLoadingDrawioResource extends ResourceImpl {
 						
 						return getClassLoader(ancestor);
 					};
-					return SpecLoadingDrawioResource.this.getClassLoader(
+					return ConfigurationLoadingDrawioResource.this.getClassLoader(
 							context,
 							getContentProvider().getBaseURI(context),
 							lpcs);
@@ -87,7 +92,7 @@ public class SpecLoadingDrawioResource extends ResourceImpl {
 				
 				@Override
 				protected URI getAppBase() {
-					return SpecLoadingDrawioResource.this.getAppBase();
+					return ConfigurationLoadingDrawioResource.this.getAppBase();
 				}
 				
 				@Override
@@ -96,12 +101,12 @@ public class SpecLoadingDrawioResource extends ResourceImpl {
 						Map<Element, EObject> registry, 
 						ProgressMonitor progressMonitor) {
 					super.filterRepresentationElement(element, registry, progressMonitor);
-					SpecLoadingDrawioResource.this.filterRepresentationElement(element, registry, progressMonitor);
+					ConfigurationLoadingDrawioResource.this.filterRepresentationElement(element, registry, progressMonitor);
 				}
 				
 				@Override
 				protected Map<String, Object> getVariables(Element context) {
-					return SpecLoadingDrawioResource.this.getVariables(context);
+					return ConfigurationLoadingDrawioResource.this.getVariables(context);
 				}
 				
 			};
@@ -111,7 +116,7 @@ public class SpecLoadingDrawioResource extends ResourceImpl {
 			Map<Element, EObject> modelElements = modelFactory.transform(documentElements, false, getProgressMonitor());
 			EList<EObject> cnt = getContents();
 			for (EObject modelElement: modelElements.values()) {
-				if (modelElement.eContainer() == null) {
+				if (modelElement != null && modelElement.eContainer() == null) {
 					cnt.add(modelElement);
 				}
 			}
@@ -168,7 +173,7 @@ public class SpecLoadingDrawioResource extends ResourceImpl {
 	}
 	
 	protected ContentProvider<Element> createContentProvider(Document document) {
-		return new DrawioContentProvider(document);
+		return new DrawioContentProvider(document, Context.BASE_URI_PROPERTY, MAPPING_PROPERTY, MAPPING_REF_PROPERTY, ConnectionBase.SOURCE);
 	}
 
 }

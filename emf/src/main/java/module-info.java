@@ -1,6 +1,6 @@
 import org.nasdanika.capability.CapabilityFactory;
-import org.nasdanika.emf.SpecLoadingDrawioResourceFactoryCapabilityFactory;
-import org.nasdanika.emf.SpecLoadingDrawioResourceFactoryPngCapabilityFactory;
+import org.nasdanika.emf.ConfigurationLoadingDrawioResourceFactoryCapabilityFactory;
+import org.nasdanika.emf.ConfigurationLoadingDrawioResourceFactoryPngCapabilityFactory;
 import org.nasdanika.emf.persistence.EObjectCapabilityFactory;
 import org.nasdanika.emf.persistence.EObjectLoaderYamlResourceFactoryCapabilityFactory;
 
@@ -22,8 +22,8 @@ module org.nasdanika.emf {
 	
 	provides CapabilityFactory with 
 		EObjectCapabilityFactory,
-		SpecLoadingDrawioResourceFactoryCapabilityFactory,
-		SpecLoadingDrawioResourceFactoryPngCapabilityFactory,
+		ConfigurationLoadingDrawioResourceFactoryCapabilityFactory,
+		ConfigurationLoadingDrawioResourceFactoryPngCapabilityFactory,
 		EObjectLoaderYamlResourceFactoryCapabilityFactory;
 	
 }

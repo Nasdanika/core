@@ -53,7 +53,7 @@ public class ModelMixIn {
 		
 		NcoreResourceSet resourceSet = new NcoreResourceSet();
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
-		SpecLoadingDrawioResourceFactory resourceFactory = new SpecLoadingDrawioResourceFactory(capabilityLoader, uri -> resourceSet.getEObject(uri, true)) {
+		ConfigurationLoadingDrawioResourceFactory resourceFactory = new ConfigurationLoadingDrawioResourceFactory(capabilityLoader, uri -> resourceSet.getEObject(uri, true)) {
 			
 			@Override
 			protected void filterRepresentationElement(

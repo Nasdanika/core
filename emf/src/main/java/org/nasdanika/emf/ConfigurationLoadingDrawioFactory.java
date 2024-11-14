@@ -23,17 +23,17 @@ import org.nasdanika.persistence.Marked;
 import org.nasdanika.persistence.ObjectLoader;
 
 /**
- * Loads specification from spec or spec-ref properties.
+ * Loads target configuration from configuration or configuration-ref properties.
  * @param <D>
  * @param <S>
  */
-public abstract class SpecLoadingDrawioFactory<T extends EObject> extends AbstractDrawioFactory<T> {
+public abstract class ConfigurationLoadingDrawioFactory<T extends EObject> extends AbstractDrawioFactory<T> {
 	
-	private static final String SPEC_REF_PROPERTY = "spec-ref";
-	private static final String SPEC_PROPERTY = "spec";
+	private static final String CONFIGURATION_REF_PROPERTY = "configuration-ref";
+	private static final String CONFIGURATION_PROPERTY = "configuration";
 	private ResourceSet resourceSet;
 	
-	protected SpecLoadingDrawioFactory(
+	protected ConfigurationLoadingDrawioFactory(
 			ContentProvider<Element> contentProvider, 
 			CapabilityLoader capabilityLoader,
 			ResourceSet resourceSet) {
@@ -41,7 +41,7 @@ public abstract class SpecLoadingDrawioFactory<T extends EObject> extends Abstra
 		this.resourceSet = resourceSet;
 	}
 
-	protected SpecLoadingDrawioFactory(
+	protected ConfigurationLoadingDrawioFactory(
 			ContentProvider<Element> contentProvider,
 			ResourceSet resourceSet) {
 		super(contentProvider);
@@ -52,12 +52,12 @@ public abstract class SpecLoadingDrawioFactory<T extends EObject> extends Abstra
 		return resourceSet;
 	}
 	
-	protected String getSpecPropertyName() {
-		return SPEC_PROPERTY;
+	protected String getConfigurationPropertyName() {
+		return CONFIGURATION_PROPERTY;
 	}
 	
-	protected String getSpecRefPropertyName() {
-		return SPEC_REF_PROPERTY;
+	protected String getConfigurationRefPropertyName() {
+		return CONFIGURATION_REF_PROPERTY;
 	}
 	
 	@Override
@@ -74,13 +74,13 @@ public abstract class SpecLoadingDrawioFactory<T extends EObject> extends Abstra
 		
 			@Override
 			public ResolutionResult resolveEClass(String type) {
-				EClass eClass = (EClass) SpecLoadingDrawioFactory.this.getType(type, obj);
+				EClass eClass = (EClass) ConfigurationLoadingDrawioFactory.this.getType(type, obj);
 				return new ResolutionResult(eClass, null);
 			}
 			
 			@Override
 			public ResourceSet getResourceSet() {
-				return SpecLoadingDrawioFactory.this.getResourceSet();
+				return ConfigurationLoadingDrawioFactory.this.getResourceSet();
 			}
 			
 		};
@@ -88,24 +88,24 @@ public abstract class SpecLoadingDrawioFactory<T extends EObject> extends Abstra
 		Marked marked = getContentProvider().asMarked(obj);		
 		
 		URI baseURI = getContentProvider().getBaseURI(obj);		
-		String spn = getSpecPropertyName();
-		if (!Util.isBlank(spn)) {
-			Object specVal = getContentProvider().getProperty(obj, spn);
-			if (specVal instanceof String) {
-				String specStr = (String) specVal;
-				if (!Util.isBlank(specStr)) {
+		String cpn = getConfigurationPropertyName();
+		if (!Util.isBlank(cpn)) {
+			Object configVal = getContentProvider().getProperty(obj, cpn);
+			if (configVal instanceof String) {
+				String configStr = (String) configVal;
+				if (!Util.isBlank(configStr)) {
 					eObjectLoader.loadYaml(
-							specStr, 
+							configStr, 
 							target, 
 							baseURI, 
 							null, 
 							marked == null ? Collections.emptyList() : marked.getMarkers(), 
 							progressMonitor);
 				}			
-			} else if (specVal != null) {
+			} else if (configVal != null) {
 				eObjectLoader.load(
 						eObjectLoader,						
-						specVal, 
+						configVal, 
 						target, 
 						baseURI, 
 						null, 
@@ -115,7 +115,7 @@ public abstract class SpecLoadingDrawioFactory<T extends EObject> extends Abstra
 			}
 		}
 		
-		String srpn = getSpecRefPropertyName();
+		String srpn = getConfigurationRefPropertyName();
 		if (!Util.isBlank(srpn)) {
 			Object refVal = getContentProvider().getProperty(obj, srpn);
 			if (refVal != null) {

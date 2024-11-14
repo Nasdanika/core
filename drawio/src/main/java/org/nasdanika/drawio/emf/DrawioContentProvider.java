@@ -35,7 +35,7 @@ import org.yaml.snakeyaml.Yaml;
 
 public class DrawioContentProvider implements ContentProvider<Element> {
 	
-	private static final String CONFIG_REF = "config";
+	private static final String CONFIG_PROPERTY = "config";
 
 	private static final String CONFIG_REF_PROPERTY = "config-ref";
 
@@ -44,7 +44,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	 */
 	private Collection<Element> elements;
 	
-	private Map<LinkTarget, Collection<ModelElement>> linkSoureMap = new HashMap<>();
+	private Map<LinkTarget, Collection<ModelElement>> linkSoureMap = new ConcurrentHashMap<>();
 	
 	private Map<Element, PropertySource<String,Object>> propertySources = new ConcurrentHashMap<>();	
 
@@ -54,7 +54,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	private ConnectionBase connectionBase;
 
 	public DrawioContentProvider(Element root) {
-		this(root, Context.BASE_URI_PROPERTY, CONFIG_REF, CONFIG_REF_PROPERTY, ConnectionBase.SOURCE);
+		this(root, Context.BASE_URI_PROPERTY, CONFIG_PROPERTY, CONFIG_REF_PROPERTY, ConnectionBase.SOURCE);
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	}
 	
 	public DrawioContentProvider(Collection<Element> elements) {
-		this(elements, Context.BASE_URI_PROPERTY, CONFIG_REF, CONFIG_REF_PROPERTY, ConnectionBase.SOURCE);
+		this(elements, Context.BASE_URI_PROPERTY, CONFIG_PROPERTY, CONFIG_REF_PROPERTY, ConnectionBase.SOURCE);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	private Element getParent(Element element, Predicate<Element> linkTracker) {
 		// First linker it the logical parent
 		if (element instanceof LinkTarget) {
-			Collection<ModelElement> sources = linkSoureMap.get(element);
+			Collection<ModelElement> sources = linkSoureMap.computeIfAbsent((LinkTarget) element, e -> new ArrayList<ModelElement>());
 			if (!sources.isEmpty()) {
 				ModelElement result = sources.iterator().next();
 				return linkTracker.test(result) ? result : null; // Avoiding infinite loops.
@@ -225,7 +225,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			return getProperty(((Model) element).getRoot(), property);
 		}
 						
-		return propertySources.computeIfAbsent(element, this::createElementPropertySource);
+		return propertySources.computeIfAbsent(element, this::createElementPropertySource).getProperty(property);
 	}
 
 	@SuppressWarnings("unchecked")
