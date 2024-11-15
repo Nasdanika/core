@@ -136,6 +136,17 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 					return AbstractMappingFactory.this.getVariables(context);
 				}
 				
+				@Override
+				public Comparator<Object> createComparator(
+						T target, 
+						Object comparatorConfig, 
+						Map<S, T> registry,
+						S context) {
+															
+					Comparator<Object> comparator = AbstractMappingFactory.this.createMapperComparator(target, comparatorConfig, registry, context);
+					return comparator == null ? super.createComparator(target, comparatorConfig, registry, context) : comparator;
+				}
+				
 				@SuppressWarnings("unchecked")
 				@Override
 				public Iterable<T> select(S source, Map<S, T> registry, ProgressMonitor progressMonitor) {
@@ -927,10 +938,12 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 
 	// --- Phase 2: Mapping features and adding representations ---
 	
+	// Implement in sub-classes
+	
 	// --- Phase 3: mapping features of null semantic elements such as pass-through connections
 	
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 3)
-	public final boolean featurMapNulls(
+	public final boolean featureMapNulls(
 			S obj,
 			Map<S, T> registry,
 			int pass,
@@ -1398,5 +1411,22 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		}
 		return invocable.bindMap(variables);
 	}
-			
+	
+	/**
+	 * Creates a comparator for the mapper.
+	 * @param target
+	 * @param comparatorConfig
+	 * @param registry
+	 * @param context
+	 * @return
+	 */
+	protected Comparator<Object> createMapperComparator(
+			T target, 
+			Object comparatorConfig, 
+			Map<S, T> registry,
+			S context) {
+	
+		return null;
+	}	
+	
 }

@@ -12,12 +12,6 @@ import org.nasdanika.drawio.ModelElement;
  *
  */
 public class LabelModelElementComparator implements Comparator<ModelElement> {
-	
-	private boolean descending;
-
-	public LabelModelElementComparator(boolean descending) {
-		this.descending = descending;
-	}
 
 	@Override
 	public int compare(ModelElement o1, ModelElement o2) {				
@@ -49,7 +43,7 @@ public class LabelModelElementComparator implements Comparator<ModelElement> {
 		if (!org.nasdanika.common.Util.isBlank(l1) && !org.nasdanika.common.Util.isBlank(l2)) {
 			int cmp = l1.compareTo(l2);
 			if (cmp != 0) {
-				return descending ? -cmp : cmp;
+				return cmp;
 			}
 		}       					
 

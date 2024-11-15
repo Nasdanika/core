@@ -85,7 +85,6 @@ public class AngularNodeComparator implements Comparator<Node> {
 	/**
 	 * 
 	 * @param parent Parent node
-	 * @param clockwise If true, the comparison is clockwise. I.e. if the base angle is 12 o'clock then a node at 2 o'clock would be greater than a node at 1 o'clock.
 	 * @param baseAngle Base angle in degrees, defaults to 90 if null.
 	 */
 	public AngularNodeComparator(Node parent, Double baseAngle) {

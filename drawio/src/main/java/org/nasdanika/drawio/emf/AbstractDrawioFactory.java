@@ -2,15 +2,21 @@ package org.nasdanika.drawio.emf;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -27,16 +33,29 @@ import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
+import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.LinkTarget;
+import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.drawio.comparators.AngularNodeComparator;
+import org.nasdanika.drawio.comparators.CartesianNodeComparator;
+import org.nasdanika.drawio.comparators.LabelModelElementComparator;
+import org.nasdanika.drawio.comparators.PropertyModelElementComparator;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.drawio.model.SemanticMapping;
+import org.nasdanika.drawio.comparators.FlowNodeComparator;
 import org.nasdanika.mapping.AbstractMappingFactory;
 import org.nasdanika.mapping.ContentProvider;
 import org.nasdanika.mapping.Mapper;
+import org.nasdanika.mapping.SetterFeatureMapper;
 import org.nasdanika.persistence.ConfigurationException;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.EvaluationException;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.ParseException;
 import org.xml.sax.SAXException;
 
 /**
@@ -45,6 +64,8 @@ import org.xml.sax.SAXException;
  * @param <S> Semantic element type
  */
 public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractMappingFactory<Element, T> {
+	
+	public static final String CONDITION_KEY = "condition";
 	
 	private static final String PAGE_ELEMENT_PROPERTY = "page-element";
 	private static final String TAG_SPEC_PROPERTY = "tag-spec";
@@ -784,30 +805,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	protected SemanticMapping createSemanticMapping() {
 		return ModelFactory.eINSTANCE.createSemanticMapping();
 	}
-	
-	// --- Phase 3: mapping features of null semantic elements such as pass-through connections
-	
-	/**
-	 * Feature maps null semantic elements, which is needed for connections as they might be pass-through.
-	 * @param modelElement
-	 * @param registry
-	 * @param pass
-	 * @param progressMonitor
-	 */
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 3)
-	public final boolean featurMapNulls(
-			org.nasdanika.drawio.ModelElement modelElement,
-			Map<Element, T> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-		
-		Mapper<Element,T> mapper = getMapper(pass);
-		if (mapper != null) {
-			mapper.wire(modelElement, registry, progressMonitor);
-		}		
-		return true;
-	}
-	
+			
 	// --- Phase 4: Configuration ---
 	
 	/**
@@ -917,5 +915,297 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	
 		return invoke(element, target, registry, pass, progressMonitor);
 	}
+
+	private enum Comparators {
+	
+		label("label"),
+		labelDescending("label-descending"),
+		
+		property("property"),
+		propertyDescending("property-descending"),
+		
+		clockwise("clockwise"),
+		counterclockwise("counterclockwise"),
+		
+		flow("flow"),
+		reverseFlow("reverse-flow"),
+	
+		rightDown("right-down"),
+		rightUp("rightUp"),
+		
+		leftDown("left-down"),
+		leftUp("left-up"),
+		
+		downRight("down-right"),
+		downLeft("down-left"),
+		
+		upRight("up-right"),
+		upLeft("up-left");
+		
+		Comparators(String key) {
+			this.key = key;
+		}
+		
+		public final String key;
+	}
+		
+	protected Collection<Element> getSources(Object target, Map<Element, T> registry, Predicate<Element> predicate) {
+		Collection<Element> result = new ArrayList<>();
+		if (target != null) {
+			for (Entry<Element, T> re: registry.entrySet()) {
+				if (Objects.equals(target, re.getValue())) {
+					Element source = re.getKey();
+					if (predicate == null || predicate.test(source)) {
+						result.add(source);
+					}
+				}
+			}
+		}
+		return result;
+	}		
+	
+	protected record JoinRecord(Element o1, Element o2) {}
+
+	protected Collection<JoinRecord> join(
+			Object ase, 
+			Object bse,
+			BiPredicate<? super Element, ? super Element> predicate,
+			Map<Element,T> registry) {
+		
+		Collection<Element> as = getSources(ase, registry, null);
+		as.add(null); // outer join
+		
+		Collection<Element> bs = getSources(bse, registry, null);
+		bs.add(null); // outer join
+		
+		Collection<JoinRecord> result = new ArrayList<>();
+		
+		for (Element aSource: as) {
+			for (Element bSource: bs) {
+				if (predicate.test(aSource, bSource)) {
+					result.add(new JoinRecord(aSource, bSource));
+				}
+			}
+		}	
+		
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <CT> Comparator<Object> adapt(
+			Comparator<CT> comparator,
+			BiPredicate<? super Element, ? super Element> predicate,			
+			Map<Element, T> registry,
+			Comparator<Object> fallback) {
+		return (a, b) -> {
+			for (JoinRecord jr: join(a, b, predicate, registry)) {
+				return comparator.compare((CT) jr.o1(), (CT) jr.o2());				
+			}
+			
+			return fallback.compare(a,b);				
+		};
+	}	
+	
+	/**
+	 * 
+	 * @param <CT>
+	 * @param comparator
+	 * @param registry
+	 * @param type
+	 * @return
+	 */
+	protected <CT> Comparator<Object> adapt(
+			Comparator<CT> comparator,
+			BiPredicate<? super Element, ? super Element> predicate,			
+			Map<Element, T> registry) {
+		return adapt(comparator, predicate, registry, SetterFeatureMapper.NATURAL_COMPARATOR);
+	}
+	
+	protected boolean areModelElements(Element a, Element b) {
+		return a instanceof org.nasdanika.drawio.ModelElement && b instanceof org.nasdanika.drawio.ModelElement;
+	}
+	
+	@Override
+	protected Comparator<Object> createMapperComparator(
+			T target, 
+			Object comparatorConfig, 
+			Map<Element, T> registry,
+			Element context) {
+		
+		if (Comparators.label.key.equals(comparatorConfig)) {
+			return adapt(
+					new LabelModelElementComparator(), 
+					this::areModelElements, 
+					registry);
+		}
+		
+		if (Comparators.labelDescending.key.equals(comparatorConfig)) {
+			return adapt(
+					new LabelModelElementComparator().reversed(), 
+					this::areModelElements, 
+					registry);
+		} 
+	
+		if (Comparators.clockwise.key.equals(comparatorConfig)) {
+			return createAngularComparator(target, null, registry, context, SetterFeatureMapper.NATURAL_COMPARATOR).reversed();
+		}
+		
+		if (Comparators.counterclockwise.key.equals(comparatorConfig)) {
+			return createAngularComparator(target, null, registry, context, SetterFeatureMapper.NATURAL_COMPARATOR);
+		}
+		
+		for (CartesianNodeComparator.Direction direction: CartesianNodeComparator.Direction.values()) {
+			if (Comparators.valueOf(direction.name()).key.equals(comparatorConfig)) {
+				return adapt(
+						new CartesianNodeComparator(direction, SetterFeatureMapper.NATURAL_COMPARATOR), 
+						this::areSamePageNodes,
+						registry);
+			}			
+		}		
+		
+		if (comparatorConfig instanceof Map) {
+			Map<?, ?> comparatorConfigMap = (Map<?,?>) comparatorConfig;
+			if (comparatorConfigMap.size() == 1) {
+				for (Entry<?, ?> cce: comparatorConfigMap.entrySet()) {
+					if (Comparators.property.key.equals(cce.getKey()) && cce.getValue() instanceof String) {
+						return adapt(
+								new PropertyModelElementComparator((String) cce.getValue()),
+								this::areModelElements, 
+								registry);
+					} 
+					if (Comparators.propertyDescending.key.equals(cce.getKey()) && cce.getValue() instanceof String) {
+						return adapt(
+								new PropertyModelElementComparator((String) cce.getValue()).reversed(),
+								this::areModelElements, 
+								registry);
+					}
+					
+					if (Comparators.clockwise.key.equals(cce.getKey())) {
+						return createAngularComparator(target, cce.getValue(), registry, context, SetterFeatureMapper.NATURAL_COMPARATOR).reversed();
+					}
+					
+					if (Comparators.counterclockwise.key.equals(cce.getKey())) {
+						return createAngularComparator(target, cce.getValue(), registry, context, SetterFeatureMapper.NATURAL_COMPARATOR);
+					}
+					
+					if (Comparators.flow.key.equals(cce.getKey()) || Comparators.reverseFlow.key.equals(cce.getKey())) {
+						Predicate<Connection> connectionPredicate; 
+						Comparator<Object> fallback; 
+						Object cConfig = cce.getValue();						
+						if (cConfig instanceof String) {
+							fallback = createMapperComparator(target, cConfig, registry, context);
+							connectionPredicate = null;
+						} else if (cConfig instanceof Map) {
+							Map<?,?> cConfigMap = (Map<?,?>) cConfig;
+							Object fallbackConfig = cConfigMap.get("fallback");
+							if (fallbackConfig == null) {
+								throw new ConfigurationException("No 'fallback' comparator definition: " + cConfig, context);								
+							} 
+							fallback = createMapperComparator(target, fallbackConfig, registry, context);
+							Object condition = cConfigMap.get(CONDITION_KEY);
+							if (condition == null) {
+								connectionPredicate = null;
+							} else {
+								if (condition instanceof String) {
+									Map<String,Object> variables = new LinkedHashMap<>();
+									variables.put("registry", registry);
+									connectionPredicate = connection -> evaluate(connection, (String) condition, variables, Boolean.class, context);
+								} else {
+									throw new ConfigurationException("Condition must be a string: " + condition, context);
+								}								
+							}
+						} else {
+							throw new ConfigurationException("Unsupported flow comparator configuration type: " + cConfig, context);
+						}
+						
+						Comparator<Object> flowComparator = adapt(
+								new FlowNodeComparator(connectionPredicate, fallback),
+								this::areSamePageNodes,
+								registry);
+						
+						return Comparators.flow.key.equals(cce.getKey()) ? flowComparator : flowComparator.reversed();
+					} 
+				}
+			}			
+		}
+		return super.createMapperComparator(target, comparatorConfig, registry, context);
+	}
+	
+	protected boolean areSamePageNodes(Element a, Element b) {
+		return a instanceof Node
+				&& b instanceof Node
+				&& Objects.equals(((Node) a).getModel().getPage(), ((Node) b).getModel().getPage());	
+	}
+	
+	protected Comparator<Object> createAngularComparator(
+			T target,
+			Object angleConfig, 
+			Map<Element, T> registry,			
+			Element context,
+			Comparator<Object> fallback) {
+
+		return (a, b) -> {		
+			for (Element base: getSources(target, registry, Node.class::isInstance)) {
+				if (base instanceof org.nasdanika.drawio.model.Node) {
+					Node baseNode = (Node) base;
+					Double angle = getAngle(angleConfig, baseNode, context);
+					if (angle == null || angle != Double.NaN) {
+						AngularNodeComparator angularComparator = new AngularNodeComparator(baseNode, angle);
+						for (JoinRecord jr: join(a, b, (o1, o2) -> areSamePageNodes(o1, base) && areSamePageNodes(o1, o2), registry)) {
+							return angularComparator.compare((Node) jr.o1(), (Node) jr.o2());				
+						}
+					}
+				}
+			}
+			return fallback.compare(a, b);
+		};
+	}
+	
+	protected <V> V evaluate(
+			Object obj, 
+			String expr, 
+			Map<String,Object> variables, 
+			Class<V> resultType, 
+			Element context) {
+		
+		if (Util.isBlank(expr)) {
+			return null;
+		}
+		
+		try {			
+			ExpressionParser parser = createExpressionParser(context);
+			Expression exp = parser.parseExpression(expr);
+			EvaluationContext evaluationContext = createEvaluationContext(context);
+			if (variables != null) {
+				variables.entrySet().forEach(ve -> evaluationContext.setVariable(ve.getKey(), ve.getValue()));
+			}
+			return evaluationContext == null ? exp.getValue(obj, resultType) : exp.getValue(evaluationContext, obj, resultType);
+		} catch (ParseException e) {
+			throw new ConfigurationException("Error parsing expression: '" + expr, e, getContentProvider().asMarked(context));
+		} catch (EvaluationException e) {
+			throw new ConfigurationException("Error evaluating expression: '" + expr + "' in the context of " + obj + " with variables " + variables, e, getContentProvider().asMarked(context));
+		}
+	}
+		
+	protected Double getAngle(Object value, Node base, Element context) {
+		if (value == null) {
+			return null;
+		}
+		if (value instanceof Number) {
+			return ((Number) value).doubleValue();
+		}
+		if (value instanceof String) {
+			Object result = evaluate(base, (String) value, null, Object.class, context);
+			if (result instanceof Number) {
+				return ((Number) result).doubleValue();
+			}
+			if (result instanceof Node) {
+				return AngularNodeComparator.angle(base, (Node) result);
+			}
+			throw new ConfigurationException("Unsupported angle expression result type: " + result + " for expression " + value, context);
+		}
+
+		throw new ConfigurationException("Unsupported angle value type: " + value, context);
+	}	
 		
 }

@@ -446,32 +446,36 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 							}
 							
 							if (shallSet) {
-								Object element = convert(featureValue, feature.getEType(), context);
+								Object element = convert(featureValue, feature.getEType(), context);								
 								if (feature.isMany()) {
 									List<Object> fvl = (List<Object>) target.eGet(feature);
 									int position = getPosition(configElement, context);
 									if (position == -1) {
-										Comparator<Object> comparator = getComparator(
-												target,
-												feature,
-												configElement, 
-												registry, 
-												context);
-										if (comparator == null || fvl.isEmpty()) {										
+										if (fvl.isEmpty()) {										
 											fvl.add(element);
 										} else {
-											// Iterating and comparing
-											boolean added = false;
-											for (int i = 0; i < fvl.size(); ++i) {
-												Object fvle = fvl.get(i);
-												if (comparator.compare(element, fvle) < 0) {
-													fvl.add(i, element);
-													added = true;
-													break;
+											Comparator<Object> comparator = getComparator(
+													target,
+													feature,
+													configElement, 
+													registry, 
+													context);
+											if (comparator == null) {
+												fvl.add(element);												
+											} else {											
+												// Iterating and comparing
+												boolean added = false;
+												for (int i = 0; i < fvl.size(); ++i) {
+													Object fvle = fvl.get(i);
+													if (comparator.compare(element, fvle) < 0) {
+														fvl.add(i, element);
+														added = true;
+														break;
+													}
 												}
-											}
-											if (!added) {
-												fvl.add(element);
+												if (!added) {
+													fvl.add(element);
+												}
 											}
 										}
 									} else {
@@ -832,8 +836,10 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 	}
 	
 	protected URI getInvokeURI(Map<?,?> configMap, S context) {
-		URI baseURI = getContentProvider().getBaseURI(context);
 		Object invokeVal = configMap.get(INVOKE_KEY);
+		if (invokeVal == null) {
+			return null;
+		}
 		if (invokeVal instanceof String) {
 			String invokeStr = (String) invokeVal;
 			if (Util.isBlank(invokeStr)) {
@@ -841,8 +847,11 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			}
 
 			URI invokeURI = URI.createURI(invokeStr);
-			if (baseURI != null && !baseURI.isRelative()) {
-				invokeURI = invokeURI.resolve(baseURI);
+			if (invokeURI.isRelative()) {
+				URI baseURI = getContentProvider().getBaseURI(context);
+				if (baseURI != null && !baseURI.isRelative()) {
+					invokeURI = invokeURI.resolve(baseURI);
+				}
 			}
 			return invokeURI;
 		}

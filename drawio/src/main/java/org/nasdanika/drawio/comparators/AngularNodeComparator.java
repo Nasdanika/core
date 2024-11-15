@@ -170,7 +170,6 @@ public class AngularNodeComparator implements Comparator<Node> {
 	}
 
 	private Node parent;
-	private boolean clockwise;
 	private Double baseAngle;
 	
 	/**
@@ -179,9 +178,8 @@ public class AngularNodeComparator implements Comparator<Node> {
 	 * @param clockwise If true, the comparison is clockwise. I.e. if the base angle is 12 o'clock then a node at 2 o'clock would be greater than a node at 1 o'clock.
 	 * @param baseAngle Base angle in degrees, defaults to 90 if null.
 	 */
-	public AngularNodeComparator(Node parent, boolean clockwise, Double baseAngle) {
+	public AngularNodeComparator(Node parent, Double baseAngle) {
 		this.parent = parent;
-		this.clockwise = clockwise;
 		this.baseAngle = baseAngle == null ? Math.PI / 2.0 : baseAngle;
 	}
 
@@ -190,22 +188,32 @@ public class AngularNodeComparator implements Comparator<Node> {
 		if (Objects.equals(o1, o2)) {
 			return 0;
 		}
+				
+		if (o1 == null) {
+			return 1;
+		}
 		
-		double angle1 = angle(parent, o1);
-		double angle2 = angle(parent, o2);
-		if (angle1 == angle2) {
-			return 0;
+		if (o2 == null) {
+			return -1;
 		}
-		double delta1 = angle1 - baseAngle;
-		if (delta1 < 0) {
-			delta1 += 2.0 * Math.PI;
+				
+		if (Objects.equals(o1.getModel().getPage(), parent.getModel().getPage()) && Objects.equals(o2.getModel().getPage(), parent.getModel().getPage())) {		
+			double angle1 = angle(parent, o1);
+			double angle2 = angle(parent, o2);
+			if (angle1 == angle2) {
+				return 0;
+			}
+			double delta1 = angle1 - baseAngle;
+			if (delta1 < 0) {
+				delta1 += 2.0 * Math.PI;
+			}
+			double delta2 = angle2 - baseAngle;
+			if (delta2 < 0) {
+				delta2 += 2.0 * Math.PI;
+			}
+			return delta1 < delta2 ? -1 : 1;
 		}
-		double delta2 = angle2 - baseAngle;
-		if (delta2 < 0) {
-			delta2 += 2.0 * Math.PI;
-		}
-		int cmp = delta1 < delta2 ? -1 : 1;
-		return clockwise ? -cmp : cmp;
+		throw new IllegalArgumentException("Nodes belong to different pages");
 	}
 
 }
