@@ -930,7 +930,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		reverseFlow("reverse-flow"),
 	
 		rightDown("right-down"),
-		rightUp("rightUp"),
+		rightUp("right-up"),
 		
 		leftDown("left-down"),
 		leftUp("left-up"),

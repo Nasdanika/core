@@ -54,16 +54,26 @@ public class CartesianNodeComparator implements Comparator<Node> {
 		
 		switch (direction) {
 		case downLeft: {
-			// Horizontal first - to the left is smaller than to the right
-			int hcmp = compareHorizontal(o1, o2);
-			if (hcmp != 0) {
-				return hcmp;
-			}
-			// Vertical 
+			// Vertical first - to the left is smaller than to the right
 			int vcmp = compareVertical(o1, o2);
-			return vcmp == 0 ? fallback.compare(o1, o2) : vcmp;
+			if (vcmp != 0) {
+				return vcmp;
+			}
+			// Horizontal 
+			int hcmp = compareHorizontal(o1, o2);
+			return hcmp == 0 ? fallback.compare(o1, o2) : -hcmp;
 		}
 		case downRight: {
+			// Vertical first - to the left is smaller than to the right
+			int vcmp = compareVertical(o1, o2);
+			if (vcmp != 0) {
+				return vcmp;
+			}
+			// Horizontal 
+			int hcmp = compareHorizontal(o1, o2);
+			return hcmp == 0 ? fallback.compare(o1, o2) : hcmp;
+		}
+		case leftDown: {
 			// Horizontal first - to the left is smaller than to the right
 			int hcmp = compareHorizontal(o1, o2);
 			if (hcmp != 0) {
@@ -73,47 +83,7 @@ public class CartesianNodeComparator implements Comparator<Node> {
 			int vcmp = compareVertical(o1, o2);
 			return vcmp == 0 ? fallback.compare(o1, o2) : vcmp;
 		}
-		case leftDown: {
-			// Vertical first - to the left is smaller than to the right
-			int vcmp = compareVertical(o1, o2);
-			if (vcmp != 0) {
-				return vcmp;
-			}
-			// Horizontal 
-			int hcmp = compareHorizontal(o1, o2);
-			return hcmp == 0 ? fallback.compare(o1, o2) : -hcmp;
-		}
 		case leftUp: {
-			// Vertical first - to the left is smaller than to the right
-			int vcmp = compareVertical(o1, o2);
-			if (vcmp != 0) {
-				return -vcmp;
-			}
-			// Horizontal 
-			int hcmp = compareHorizontal(o1, o2);
-			return hcmp == 0 ? fallback.compare(o1, o2) : -hcmp;
-		}
-		case rightUp: {
-			// Vertical first - to the left is smaller than to the right
-			int vcmp = compareVertical(o1, o2);
-			if (vcmp != 0) {
-				return -vcmp;
-			}
-			// Horizontal 
-			int hcmp = compareHorizontal(o1, o2);
-			return hcmp == 0 ? fallback.compare(o1, o2) : hcmp;
-		}
-		case rightDown: {
-			// Vertical first - to the left is smaller than to the right
-			int vcmp = compareVertical(o1, o2);
-			if (vcmp != 0) {
-				return vcmp;
-			}
-			// Horizontal 
-			int hcmp = compareHorizontal(o1, o2);
-			return hcmp == 0 ? fallback.compare(o1, o2) : hcmp;
-		}
-		case upLeft: {
 			// Horizontal first - to the left is smaller than to the right
 			int hcmp = compareHorizontal(o1, o2);
 			if (hcmp != 0) {
@@ -123,15 +93,45 @@ public class CartesianNodeComparator implements Comparator<Node> {
 			int vcmp = compareVertical(o1, o2);
 			return vcmp == 0 ? fallback.compare(o1, o2) : -vcmp;
 		}
-		case upRight: {
+		case rightUp: {
 			// Horizontal first - to the left is smaller than to the right
 			int hcmp = compareHorizontal(o1, o2);
 			if (hcmp != 0) {
-				return -hcmp;
+				return hcmp;
+			}
+			// Vertical 
+			int vcmp = compareVertical(o1, o2);
+			return vcmp == 0 ? fallback.compare(o1, o2) : -vcmp;
+		}
+		case rightDown: {
+			// Horizontal first - to the left is smaller than to the right
+			int hcmp = compareHorizontal(o1, o2);
+			if (hcmp != 0) {
+				return hcmp;
 			}
 			// Vertical 
 			int vcmp = compareVertical(o1, o2);
 			return vcmp == 0 ? fallback.compare(o1, o2) : vcmp;
+		}
+		case upLeft: {
+			// Vertical first - to the left is smaller than to the right
+			int vcmp = compareVertical(o1, o2);
+			if (vcmp != 0) {
+				return -vcmp;
+			}
+			// Horizontal 
+			int hcmp = compareHorizontal(o1, o2);
+			return hcmp == 0 ? fallback.compare(o1, o2) : -hcmp;
+		}
+		case upRight: {
+			// Vertical first - to the left is smaller than to the right
+			int vcmp = compareVertical(o1, o2);
+			if (vcmp != 0) {
+				return -vcmp;
+			}
+			// Horizontal 
+			int hcmp = compareHorizontal(o1, o2);
+			return hcmp == 0 ? fallback.compare(o1, o2) : hcmp;
 		}
 		default:
 			break;

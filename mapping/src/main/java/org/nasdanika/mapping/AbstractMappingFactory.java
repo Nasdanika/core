@@ -372,6 +372,12 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 				requirement = URI.createURI((String) initializer);
 			}
 			if (requirement != null) {
+				if (requirement.isRelative()) {
+					URI baseURI = getContentProvider().getBaseURI(obj);
+					if (baseURI != null && !baseURI.isRelative()) {
+						requirement = requirement.resolve(baseURI);
+					}
+				}
 				initializerInvocable = capabilityLoader.loadOne(
 						ServiceCapabilityFactory.createRequirement(Invocable.class, null, requirement),
 						progressMonitor);
@@ -410,8 +416,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 							refIdURI = refIdURI.resolve(baseURI);
 						}
 					}
-					((MinimalEObjectImpl) target).eSetProxyURI(refIdURI);					
-					
+					((MinimalEObjectImpl) target).eSetProxyURI(refIdURI);										
 				}
 			}
 		}
