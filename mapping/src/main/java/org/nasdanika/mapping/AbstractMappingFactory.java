@@ -387,7 +387,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		
 			if (!Util.isBlank(type)) {
 				target = (T) create(type.trim(), obj);
-			}
+			} 
 		}
 		
 		if (target instanceof MinimalEObjectImpl && isRefIdProxyURI()) {

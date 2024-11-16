@@ -178,8 +178,8 @@ public class Reflector {
 		
 		@Override
 		public Parameter[] getParameters() {
-			if (annotatedElement instanceof Method) {
-				return Stream.of(((Method) annotatedElement).getParameters()).map(p -> Parameter.of(p.getName(), p.getType())).toArray(size -> new Parameter[size]);				
+			if (annotatedElement instanceof Method) {				
+				return Stream.of(((Method) annotatedElement).getParameters()).map(p -> Invocable.createParameter(p)).toArray(size -> new Parameter[size]);				
 			}
 			return Invocable.super.getParameters();
 		}

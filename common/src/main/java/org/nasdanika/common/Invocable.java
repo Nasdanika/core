@@ -1,5 +1,11 @@
 package org.nasdanika.common;
 
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Array;
@@ -52,28 +58,68 @@ public interface Invocable {
 		
 	}
 	
-	interface Parameter {
+	/**
+	 * Allows to specify method name and optionally narrow type.
+	 */
+	@Retention(RUNTIME)
+	@Target(ElementType.PARAMETER)	
+	@interface Parameter {
 		
-		String getName();
+		String name();
 		
-		Class<?> getType();
+		Class<?> type() default Void.class;
 		
-		static Parameter of(String name, Class<?> type) {
-			return new Parameter() {
+	}
+		
+	static Parameter createParameter(String name, Class<?> type) {
+		return new Parameter() {
 
-				@Override
-				public String getName() {
-					return name;
-				}
+			@Override
+			public String name() {
+				return name;
+			}
 
-				@Override
-				public Class<?> getType() {
-					return type;
-				}
-				
-			};
-		}
+			@Override
+			public Class<?> type() {
+				return type;
+			}
+
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return Parameter.class;
+			}
+			
+		};
+	}
+	
+	/**
+	 * If the argument is annotated with Parameter, then the annotation is returned if type() is not void.
+	 * If type() is void, the parameter type is used.
+	 * Otherwise the parameter name and type is used to create the return value.
+	 * @param parameter
+	 * @return
+	 */
+	static Parameter createParameter(java.lang.reflect.Parameter parameter) {
+		Parameter pAnnotation = parameter.getAnnotation(Parameter.class);		
 		
+		return new Parameter() {
+
+			@Override
+			public String name() {
+				return pAnnotation == null ? parameter.getName() : pAnnotation.name();
+			}
+
+			@Override
+			public Class<?> type() {
+				return pAnnotation == null || pAnnotation.type() == Void.class ? parameter.getType() : pAnnotation.type();
+			}
+
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return Parameter.class;
+			}
+			
+		};
 	}
 	
 	/**
@@ -129,7 +175,7 @@ public interface Invocable {
 		}
 		
 		for (int i = 0; i < parameters.length; ++i) {
-			if (name.equals(parameters[i].getName())) {
+			if (name.equals(parameters[i].name())) {				
 				return bindWithOffset(i, binding);
 			}
 		}
@@ -156,6 +202,18 @@ public interface Invocable {
 		
 		Parameter[] parameters = getParameters();
 		Class<?> returnType = getReturnType();
+		
+		if (parameters != null) {
+			for (int i = 0; i < bindings.length; ++i) {
+				if (i + offset >= parameters.length) {
+					throw new IllegalArgumentException("Bindings exceed parameters length");
+				}				
+				Class<?> parameterType = parameters[offset + i].type();
+				if (bindings[i] != null && !parameterType.isInstance(bindings[i])) {
+					throw new IllegalArgumentException(bindings[i] + " is not an instance of " + parameterType.getName()); 
+				}
+			}
+		}
 		
 		return new Invocable() {
 			
@@ -205,7 +263,7 @@ public interface Invocable {
 			
 			@Override
 			public Parameter[] getParameters() {
-				return new Parameter[] { Parameter.of(field.getName(), field.getType()) };
+				return new Parameter[] { createParameter(field.getName(), field.getType()) };
 			}
 			
 			@Override
@@ -245,8 +303,14 @@ public interface Invocable {
 				java.lang.reflect.Parameter[] parameters = method.getParameters();
 				Parameter[] ret = new Parameter[parameters.length];
 				for (int i = 0; i < parameters.length; ++i) {
-					String pName = parameterNames == null || parameterNames.length <= i ? parameters[i].getName() : parameterNames[i];					
-					ret[i] = Parameter.of(pName, parameters[i].getType());
+					Parameter pAnnotation = parameters[i].getAnnotation(Parameter.class);
+					String pName = pAnnotation == null ? parameters[i].getName() : pAnnotation.name(); 
+					if (parameterNames != null & parameterNames.length > i) {
+						pName = parameterNames[i];					
+					}
+					ret[i] = createParameter(
+							pName, 
+							pAnnotation == null || pAnnotation.type() == Void.class ? parameters[i].getType() : pAnnotation.type());
 				}
 				return ret;
 			}
@@ -288,8 +352,14 @@ public interface Invocable {
 				java.lang.reflect.Parameter[] parameters = constructor.getParameters();
 				Parameter[] ret = new Parameter[parameters.length];
 				for (int i = 0; i < parameters.length; ++i) {
-					String pName = parameterNames == null || parameterNames.length <= i ? parameters[i].getName() : parameterNames[i];					
-					ret[i] = Parameter.of(pName, parameters[i].getType());
+					Parameter pAnnotation = parameters[i].getAnnotation(Parameter.class);
+					String pName = pAnnotation == null ? parameters[i].getName() : pAnnotation.name(); 
+					if (parameterNames != null & parameterNames.length > i) {
+						pName = parameterNames[i];					
+					}
+					ret[i] = createParameter(
+							pName, 
+							pAnnotation == null || pAnnotation.type() == Void.class ? parameters[i].getType() : pAnnotation.type());
 				}
 				return ret;
 			}
@@ -527,7 +597,7 @@ public interface Invocable {
 				if (parameterType == null && parameterName == null) {
 					return null;
 				}
-				return new Parameter[] { Parameter.of(parameterName, parameterType) };
+				return new Parameter[] { createParameter(parameterName, parameterType) };
 			}
 			
 			@SuppressWarnings("unchecked")
@@ -557,8 +627,8 @@ public interface Invocable {
 			@Override
 			public Parameter[] getParameters() {
 				return new Parameter[] { 
-						Parameter.of(firstParameterName, firstParameterType), 
-						Parameter.of(secondParameterName, secondParameterType) };
+						createParameter(firstParameterName, firstParameterType), 
+						createParameter(secondParameterName, secondParameterType) };
 			}
 			
 			@SuppressWarnings("unchecked")
@@ -640,10 +710,10 @@ public interface Invocable {
 			BiFunction<Object,Class<?>, Object> converter) {
 		
 		if (config instanceof Map) {		
-			return call((index, parameter) -> converter.apply(((Map<?,?>) config).get(parameter.getName()), parameter.getType()));
+			return call((index, parameter) -> converter.apply(((Map<?,?>) config).get(parameter.name()), parameter.type()));
 		}
 		if (config instanceof List) {		
-			return call((index, parameter) -> converter.apply(((List<?>) config).get(index), parameter.getType()));
+			return call((index, parameter) -> converter.apply(((List<?>) config).get(index), parameter.type()));
 		}
 		throw new IllegalArgumentException("Config is neither a Map nor a List: " + config);
 	}
@@ -782,7 +852,7 @@ public interface Invocable {
 	}
 	
 	private static Parameter[] adaptParameters(Constructor<?> constructor) {	
-		return Stream.of(constructor.getParameters()).map(p -> Parameter.of(p.getName(), p.getType())).toArray(size -> new Parameter[size]);
+		return Stream.of(constructor.getParameters()).map(p -> createParameter(p)).toArray(size -> new Parameter[size]);
 	}
 	
 	/**
@@ -833,7 +903,7 @@ public interface Invocable {
 			}
 			checkUnsupportedKeys(
 					((Map<?,?>) config).keySet(), 
-	       			Stream.of(parameters).map(Parameter::getName).toList(), 
+	       			Stream.of(parameters).map(Parameter::name).toList(), 
 					this);
 		}
 		
@@ -882,7 +952,7 @@ public interface Invocable {
 					return false;
 				}
 				for (int i = 0; i < args.length; ++i) {
-					Class<?> pType = parameters[i].getType();
+					Class<?> pType = parameters[i].type();
 					if (pType.isPrimitive()) {
 						pType = ClassUtils.primitiveToWrapper(pType);								
 					}							
@@ -929,12 +999,12 @@ public interface Invocable {
 		Parameter[] parameters = getParameters();
 		Parameter[] otherParameters = o.getParameters();
 		for (int i = 0; i < parameters.length; ++i) {
-			if (parameters[i].getType().equals(otherParameters[i].getType())) {
+			if (parameters[i].type().equals(otherParameters[i].type())) {
 				continue;
 			}
-			if (parameters[i].getType().isAssignableFrom(otherParameters[i].getType())) {
+			if (parameters[i].type().isAssignableFrom(otherParameters[i].type())) {
 				--counter;
-			} else if (otherParameters[i].getType().isAssignableFrom(parameters[i].getType())) {
+			} else if (otherParameters[i].type().isAssignableFrom(parameters[i].type())) {
 				++counter;
 			} 
 		}

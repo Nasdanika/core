@@ -2,6 +2,7 @@ package org.nasdanika.capability.tests.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -11,12 +12,16 @@ import java.util.Objects;
 import org.eclipse.emf.common.util.URI;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.nasdanika.capability.CapabilityFactory;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.requirements.DependencyRequestRecord;
 import org.nasdanika.capability.requirements.ScriptRecord;
 import org.nasdanika.capability.requirements.URIInvocableRequirement;
+import org.nasdanika.capability.tests.MyTestClass;
 import org.nasdanika.common.Invocable;
+import org.nasdanika.common.Invocable.Parameter;
+import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.yaml.snakeyaml.Yaml;
@@ -312,5 +317,19 @@ public class TestURIInvocable {
 //			System.out.println(result == requirement.parentClassLoader());
 //		}
 	}
+	
+	@Test
+	public void testParameterAnnotation() throws Exception {
+		Method method = MyTestClass.class.getMethod("namedParametersFactory", CapabilityFactory.Loader.class, ProgressMonitor.class);
+		Invocable invocable = Invocable.of(null, method);
+		for (Parameter p: invocable.getParameters()) {
+			System.out.println(p.name() + ": " + p.type());
+		}
+		Invocable bound = invocable.bindByName("progressMonitor", new NullProgressMonitor());
+		for (Parameter p: bound.getParameters()) {
+			System.out.println(p.name() + ": " + p.type());
+		}
+		
+	}	
 
 }

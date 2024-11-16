@@ -1,6 +1,7 @@
 package org.nasdanika.capability.tests;
 
 import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
@@ -62,5 +63,12 @@ public class MyTestClass {
 			int arg) {
 		return new MyTestClass(loader, progressMonitor, binding, fragment, arg);
 	}
+		
+	public static MyTestClass namedParametersFactory(
+			@Invocable.Parameter(name = "loader") CapabilityFactory.Loader loader, 
+			@Invocable.Parameter(name = "progressMonitor") ProgressMonitor progressMonitor) {
+		return new MyTestClass(loader, progressMonitor);
+	}
+	
 
 }
