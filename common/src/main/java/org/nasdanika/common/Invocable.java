@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
@@ -1015,22 +1017,50 @@ public interface Invocable {
 	static Invocable of(ScriptEngine scriptEngine, String script) {
 		
 		return new Invocable() {
+						
+			private Map<Integer,Optional<Object>> positionalBindings = new TreeMap<>();			
 			
+			@Override
+			public Invocable bindWithOffset(int offset, Object... bindings) {
+				for (int i = 0; i < offset; ++i) {
+					if (positionalBindings.containsKey(i)) {
+						++offset;
+					}
+				}
+				for (int i = 0; i <bindings.length; ++i) {
+					positionalBindings.put(offset + i, Optional.ofNullable(bindings[i]));
+				}
+				return this;
+			}
+
 			@Override
 			public Invocable bindByName(String name, Object binding) {
 				scriptEngine.put(name, binding);
 				return this;
 			}
-
+			
 			@SuppressWarnings("unchecked")
 			@Override
-			public <T> T invoke(Object... args) {
-				try {
-					scriptEngine.put("args", args);
-					if (args.length == 1) {
-						scriptEngine.put("arg", args[0]);
+			public Object invoke(Object... args) {
+				bind(args);
+				OptionalInt maxPositionOpt = positionalBindings.keySet().stream().mapToInt(Integer::intValue).max();
+				if (maxPositionOpt.isEmpty()) {
+					scriptEngine.put("args", new Object[0]);
+				} else {
+					Object[] argsVar = new Object[maxPositionOpt.getAsInt() + 1];
+					for (int i = 0; i < argsVar.length; ++i) {
+						Optional<Object> argOpt = positionalBindings.get(i);
+						if (argOpt == null) {
+							throw new IllegalStateException("Unbound positional argument at index " + i);
+						}
+						if (argOpt.isPresent()) {
+							argsVar[i] = argOpt.get();
+						}
 					}
-					return (T) scriptEngine.eval(script);
+					scriptEngine.put("args", argsVar);
+				}
+				try {
+					return scriptEngine.eval(script);
 				} catch (ScriptException e) {
 					throw new NasdanikaException(e);
 				}
