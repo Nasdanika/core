@@ -3,6 +3,7 @@ package org.nasdanika.emf;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -109,6 +110,13 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 					return ConfigurationLoadingDrawioResource.this.getVariables(context);
 				}
 				
+				@Override
+				protected org.nasdanika.ncore.Marker createTargetMarker(
+						Marker sourceMarker,
+						ProgressMonitor progressMonitor) {
+					return ConfigurationLoadingDrawioResource.this.createTargetMarker(sourceMarker, progressMonitor);
+				}
+				
 			};
 			
 			Transformer<Element,EObject> modelFactory = new Transformer<>(drawioFactory);
@@ -175,5 +183,19 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 	protected ContentProvider<Element> createContentProvider(Document document) {
 		return new DrawioContentProvider(document, Context.BASE_URI_PROPERTY, MAPPING_PROPERTY, MAPPING_REF_PROPERTY, ConnectionBase.SOURCE);
 	}
+				
+	protected org.nasdanika.ncore.Marker createTargetMarker(
+			org.nasdanika.persistence.Marker sourceMarker, 
+			ProgressMonitor progressMonitor) {
+		
+		if (sourceMarker == null) {
+			return null;
+		}
+		org.nasdanika.ncore.Marker ret =  org.nasdanika.ncore.NcoreFactory.eINSTANCE.createMarker();
+		ret.setDate(new Date());
+		ret.setLocation(sourceMarker.getLocation());
+		ret.setPosition(sourceMarker.getPosition());		
+		return ret;
+	}	
 
 }

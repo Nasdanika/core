@@ -1,6 +1,7 @@
 package org.nasdanika.emf;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -18,6 +19,7 @@ import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.emf.AbstractDrawioFactory;
 import org.nasdanika.drawio.emf.DrawioContentProvider;
 import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.emf.persistence.MarkerFactory;
 import org.nasdanika.mapping.ContentProvider;
 import org.nasdanika.persistence.Marker;
 import org.springframework.expression.EvaluationContext;
@@ -32,10 +34,15 @@ public class ConfigurationLoadingDrawioResourceFactory implements Resource.Facto
 	
 	protected Function<URI,EObject> uriResolver;
 	protected CapabilityLoader capabilityLoader;
+	protected MarkerFactory markerFactory;
 	
-	public ConfigurationLoadingDrawioResourceFactory(CapabilityLoader capabilityLoader, Function<URI,EObject> uriResolver) {
+	public ConfigurationLoadingDrawioResourceFactory(
+			CapabilityLoader capabilityLoader, 
+			Function<URI,EObject> uriResolver,
+			MarkerFactory markerFactory) {
 		this.capabilityLoader = capabilityLoader;
 		this.uriResolver = uriResolver;
+		this.markerFactory = markerFactory;
 	}
 		
 	@Override
@@ -68,8 +75,15 @@ public class ConfigurationLoadingDrawioResourceFactory implements Resource.Facto
 			
 			@Override
 			protected ContentProvider<Element> createContentProvider(Document document) {
+				return ConfigurationLoadingDrawioResourceFactory.this.createContentProvider(this, document);
+			}			
+			
+			@Override
+			protected org.nasdanika.ncore.Marker createTargetMarker(
+					Marker sourceMarker,
+					ProgressMonitor progressMonitor) {
 				// TODO Auto-generated method stub
-				return super.createContentProvider(document);
+				return ConfigurationLoadingDrawioResourceFactory.this.createTargetMarker(this, sourceMarker, progressMonitor);
 			}
 			
 		};
@@ -125,5 +139,25 @@ public class ConfigurationLoadingDrawioResourceFactory implements Resource.Facto
 				ConfigurationLoadingDrawioResource.MAPPING_REF_PROPERTY, 
 				ConnectionBase.SOURCE);
 	}
+				
+	protected org.nasdanika.ncore.Marker createTargetMarker(
+			ConfigurationLoadingDrawioResource resource,
+			org.nasdanika.persistence.Marker sourceMarker, 
+			ProgressMonitor progressMonitor) {
+		
+		if (sourceMarker == null) {
+			return null;
+		}
+		org.nasdanika.ncore.Marker ret;
+		if (markerFactory == null) {
+			ret =  org.nasdanika.ncore.NcoreFactory.eINSTANCE.createMarker();
+			ret.setLocation(sourceMarker.getLocation());
+		} else {
+			ret = markerFactory.createMarker(sourceMarker.getLocation(), progressMonitor);
+		}
+		ret.setDate(new Date());
+		ret.setPosition(sourceMarker.getPosition());		
+		return ret;
+	}	
 			
 }

@@ -818,8 +818,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			Map<Element, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
-		
-		
+				
 		configureDocumentElement(
 				document,
 				documentTarget,
@@ -834,7 +833,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			ProgressMonitor progressMonitor) {
 		
 		if (documentTarget instanceof org.nasdanika.ncore.Marked) {
-			((org.nasdanika.ncore.Marked) documentTarget).mark(document);
+			mark(document, (org.nasdanika.ncore.Marked) documentTarget, progressMonitor);
 		}		
 	}
 	

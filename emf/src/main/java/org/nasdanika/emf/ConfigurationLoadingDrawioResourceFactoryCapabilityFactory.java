@@ -4,6 +4,7 @@ import org.eclipse.emf.ecore.resource.Resource.Factory;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.capability.emf.ResourceFactoryCapabilityFactory;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.emf.persistence.GitMarkerFactory;
 
 public class ConfigurationLoadingDrawioResourceFactoryCapabilityFactory extends ResourceFactoryCapabilityFactory {
 
@@ -12,8 +13,11 @@ public class ConfigurationLoadingDrawioResourceFactoryCapabilityFactory extends 
 			ResourceSet resourceSet,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
-		// TODO - representation filters capability providers
-		return new ConfigurationLoadingDrawioResourceFactory(loader.getCapabilityLoader(), uri -> resourceSet.getEObject(uri, true));
+		// TODO - representation filters capability providers, marker factory from capability - composite?
+		return new ConfigurationLoadingDrawioResourceFactory(
+				loader.getCapabilityLoader(), 
+				uri -> resourceSet.getEObject(uri, true),
+				new GitMarkerFactory());
 	}
 	
 	@Override

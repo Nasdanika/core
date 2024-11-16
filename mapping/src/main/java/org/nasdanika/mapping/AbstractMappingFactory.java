@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -44,7 +45,9 @@ import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
+import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
+import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.util.NcoreUtil;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marked;
@@ -1049,6 +1052,43 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return documentationFactories;
 	}
 	
+	protected void mark(
+			Object source, 
+			org.nasdanika.ncore.Marked target, 
+			ProgressMonitor progressMonitor) {
+		if (source instanceof org.nasdanika.persistence.Marked) {
+			mark(((org.nasdanika.persistence.Marked) source).getMarkers(), target, progressMonitor);
+		} else if (source instanceof org.nasdanika.persistence.Marker) {
+			mark(Collections.singleton((org.nasdanika.persistence.Marker) source), target, progressMonitor);
+		}
+	}
+	
+	protected void mark(
+			Iterable<? extends org.nasdanika.persistence.Marker> markers,
+			org.nasdanika.ncore.Marked target, 
+			ProgressMonitor progressMonitor) {
+		if (markers != null) {
+			EList<Marker> targetMarkers = target.getMarkers();
+			for (org.nasdanika.persistence.Marker marker: markers) {
+				targetMarkers.add(createTargetMarker(marker, progressMonitor));
+			}
+		}
+	}
+			
+	protected org.nasdanika.ncore.Marker createTargetMarker(
+			org.nasdanika.persistence.Marker sourceMarker, 
+			ProgressMonitor progressMonitor) {
+		
+		if (sourceMarker == null) {
+			return null;
+		}
+		Marker ret = NcoreFactory.eINSTANCE.createMarker();
+		ret.setDate(new Date());
+		ret.setLocation(sourceMarker.getLocation());
+		ret.setPosition(sourceMarker.getPosition());		
+		return ret;
+	}
+	
 	protected void configureTarget(
 			S obj,
 			T target,
@@ -1067,7 +1107,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		}
 
 		if (target instanceof org.nasdanika.ncore.Marked && obj instanceof org.nasdanika.persistence.Marked) {			
-			((org.nasdanika.ncore.Marked) target).mark((org.nasdanika.persistence.Marked) obj);
+			mark((org.nasdanika.persistence.Marked) obj, (org.nasdanika.ncore.Marked) target, progressMonitor);
 		}
 		
 		if (!isPrototype) {

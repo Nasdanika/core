@@ -18,6 +18,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.emf.AbstractDrawioFactory.RepresentationElementFilter;
 import org.nasdanika.emf.persistence.EObjectCapabilityFactory;
 import org.nasdanika.emf.persistence.EObjectCapabilityFactory.EObjectRequirement;
+import org.nasdanika.emf.persistence.GitMarkerFactory;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.ncore.util.NcoreResourceSet;
 
@@ -53,7 +54,7 @@ public class ModelMixIn {
 		
 		NcoreResourceSet resourceSet = new NcoreResourceSet();
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
-		ConfigurationLoadingDrawioResourceFactory resourceFactory = new ConfigurationLoadingDrawioResourceFactory(capabilityLoader, uri -> resourceSet.getEObject(uri, true)) {
+		ConfigurationLoadingDrawioResourceFactory resourceFactory = new ConfigurationLoadingDrawioResourceFactory(capabilityLoader, uri -> resourceSet.getEObject(uri, true), new GitMarkerFactory()) {
 			
 			@Override
 			protected void filterRepresentationElement(

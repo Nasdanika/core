@@ -32,7 +32,7 @@ public abstract class ConfigurationLoadingDrawioFactory<T extends EObject> exten
 	private static final String CONFIGURATION_REF_PROPERTY = "configuration-ref";
 	private static final String CONFIGURATION_PROPERTY = "configuration";
 	private ResourceSet resourceSet;
-	
+			
 	protected ConfigurationLoadingDrawioFactory(
 			ContentProvider<Element> contentProvider, 
 			CapabilityLoader capabilityLoader,
