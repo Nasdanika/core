@@ -123,11 +123,11 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 			List<Element> documentElements = document.stream().filter(Element.class::isInstance).map(Element.class::cast).toList();
 			Map<Element, EObject> modelElements = modelFactory.transform(documentElements, false, getProgressMonitor());
 			EList<EObject> cnt = getContents();
-			for (EObject modelElement: modelElements.values()) {
-				if (modelElement != null && modelElement.eContainer() == null) {
-					cnt.add(modelElement);
-				}
-			}
+			modelElements.values()
+				.stream()
+				.distinct()
+				.filter(modelElement -> modelElement != null && modelElement.eContainer() == null)
+				.forEach(cnt::add);
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			throw new IOException("Error loading Drawio document from " + getURI() + ": " + e, e);
 		}

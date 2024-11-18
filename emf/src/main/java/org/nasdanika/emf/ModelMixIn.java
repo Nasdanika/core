@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -15,11 +14,11 @@ import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.emf.ResourceSetRequirement;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.emf.AbstractDrawioFactory.RepresentationElementFilter;
 import org.nasdanika.emf.persistence.EObjectCapabilityFactory;
 import org.nasdanika.emf.persistence.EObjectCapabilityFactory.EObjectRequirement;
 import org.nasdanika.emf.persistence.GitMarkerFactory;
-import org.nasdanika.drawio.Element;
 import org.nasdanika.ncore.util.NcoreResourceSet;
 
 import picocli.CommandLine.Model.CommandSpec;
