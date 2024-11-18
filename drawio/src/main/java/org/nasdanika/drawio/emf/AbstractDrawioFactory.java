@@ -69,7 +69,6 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	
 	private static final String PAGE_ELEMENT_PROPERTY = "page-element";
 	private static final String TAG_SPEC_PROPERTY = "tag-spec";
-//	private static final String TOP_LEVEL_PAGE_PROPERTY = "top-level-page";
 
 	public static final String DRAWIO_REPRESENTATION = "drawio";
 	public static final String IMAGE_REPRESENTATION = "image";
@@ -84,35 +83,11 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	protected AbstractDrawioFactory(ContentProvider<Element> contentProvider) {
 		super(contentProvider);
 	}
-	
-//	protected String getTopLevelPageProperty() {
-//		return TOP_LEVEL_PAGE_PROPERTY;
-//	}	
-	
+		
 	protected String getTagSpecPropertyName() {
 		return TAG_SPEC_PROPERTY;
 	}
-		
-//	/**
-//	 * Indicates a top level page which shall be a child of document element
-//	 * @param page
-//	 * @return
-//	 */
-//	public boolean isTopLevelPage(Page page) {
-//		String topLevelPageProperty = getTopLevelPageProperty();
-//		if (!Util.isBlank(topLevelPageProperty)) {
-//			Object topLevelPage = getContentProvider().getProperty(page, topLevelPageProperty);
-//			if (Boolean.TRUE.equals(topLevelPage)) {
-//				return true;
-//			}
-//			if (topLevelPage instanceof String && !Util.isBlank((String) topLevelPage)) {
-//				return "true".equals(((String) topLevelPage).trim());
-//			}
-//		}
-//
-//		return getContentProvider().getParent(page) instanceof Document; // No links
-//	}
-	
+			
 	/**
 	 * Creates a document element from {@link Document}
 	 * @param document
@@ -272,9 +247,6 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			return true;
 		}
 		Page page = modelElement.getModel().getPage();
-//		if (isTopLevelPage(page)) {
-//			return true;
-//		}
 		
 		Element pageParent = getContentProvider().getParent(page);
 		if (pageParent instanceof ModelElement) {
@@ -414,44 +386,6 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 //
 //		return wireSemanticSelector(tag, registry, pass, progressMonitor);
 //	}	
-		
-//	/**
-//	 * Wires document to the page element of the top level page.
-//	 * @param document
-//	 * @param registry
-//	 * @param pass
-//	 * @param progressMonitor
-//	 * @return
-//	 */
-//	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-//	public final boolean wireDocument(
-//			org.nasdanika.drawio.Document document,
-//			Map<Element, T> registry,
-//			int pass,
-//			ProgressMonitor progressMonitor) {
-//		
-//		for (Page page: document.getPages()) {
-//			if (isTopLevelPage(page)) {
-//				Optional<org.nasdanika.drawio.ModelElement> pageElementOpt = page.stream()
-//					.filter(org.nasdanika.drawio.ModelElement.class::isInstance)
-//					.map(org.nasdanika.drawio.ModelElement.class::cast)
-//					.filter(this::isPageElement)
-//					.findAny();
-//					
-//				if (pageElementOpt.isPresent()) {
-//					org.nasdanika.drawio.ModelElement pageElement = pageElementOpt.get();
-//					T pageElementTarget = registry.get(pageElement);
-//					if (pageElementTarget == null) {
-//						return false; // Not there yet
-//					}
-//					registry.put(document, pageElementTarget);
-//					return true; 
-//				}
-//			}
-//		}
-//		
-//		return true;
-//	}
 	
 	// --- Phase 1: Mapping "reference" elements
 			
@@ -547,29 +481,6 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			mapper.wire(document, registry, progressMonitor);
 		}
 	}
-	
-//	@org.nasdanika.common.Transformer.Wire(phase = 2)
-//	public final void addDocumentRepresentations(
-//			Document document,
-//			T target,
-//			Map<Element, T> registry,
-//			int pass,
-//			ProgressMonitor progressMonitor) {
-//		
-//		if (target instanceof org.nasdanika.ncore.ModelElement) {
-//			org.nasdanika.ncore.ModelElement targetModelElement = (org.nasdanika.ncore.ModelElement) target;
-//			for (Page page: document.getPages()) {
-//				if (isTopLevelPage(page)) {
-//					addRepresentationPage(
-//							targetModelElement, 
-//							page, 
-//							registry, 
-//							progressMonitor);
-//					
-//				}
-//			}
-//		}
-//	}	
 	
 	protected void addRepresentationPage(
 			org.nasdanika.ncore.ModelElement targetModelElement, 
