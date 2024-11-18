@@ -149,7 +149,8 @@ public class DocumentImpl extends ElementImpl implements Document {
 	 * @throws ParserConfigurationException 
 	 * @throws IOException 
 	 */
-	Document getDocument(URI source) throws IOException, ParserConfigurationException, SAXException {
+	@Override
+	public Document getDocument(URI source) throws IOException, ParserConfigurationException, SAXException {
 		if (source == null) {
 			return null;
 		}

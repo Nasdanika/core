@@ -1,5 +1,6 @@
 package org.nasdanika.drawio;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -63,5 +64,40 @@ public interface Element extends org.nasdanika.graph.Element, Marked {
 	 * @return Element URI for resolving relative references, e.g. links to documentation. 
 	 */
 	URI getURI();	
+		
+	default ModelElement getModelElementById(String modelElementId) {
+		if (org.nasdanika.common.Util.isBlank(modelElementId)) {
+			return null;
+		}
+		return stream()
+			.filter(ModelElement.class::isInstance)
+			.map(ModelElement.class::cast)
+			.filter(me -> modelElementId.equals(me.getId()))
+			.findFirst()
+			.orElse(null);
+	}
+	
+	default ModelElement getModelElementByProperty(String name, String value) {
+		if (org.nasdanika.common.Util.isBlank(name) || org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		return stream()
+			.filter(ModelElement.class::isInstance)
+			.map(ModelElement.class::cast)
+			.filter(me -> value.equals(me.getProperty(name)))
+			.findFirst()
+			.orElse(null);
+	}
+	
+	default List<ModelElement> getModelElementsByProperty(String name, String value) {
+		if (org.nasdanika.common.Util.isBlank(name) || org.nasdanika.common.Util.isBlank(value)) {
+			return Collections.emptyList();
+		}
+		return stream()
+			.filter(ModelElement.class::isInstance)
+			.map(ModelElement.class::cast)
+			.filter(me -> value.equals(me.getProperty(name)))
+			.toList();
+	}		
 
 }

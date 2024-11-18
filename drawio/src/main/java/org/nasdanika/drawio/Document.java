@@ -462,5 +462,34 @@ public interface Document extends Element {
 	String save(Boolean compress) throws TransformerException, IOException;
 	
 	String getProperty(String name);
+	
+	default Page getPageByName(String pageName) {
+		for (Page page: getPages()) {
+			if (pageName.equals(page.getName())) {
+				return page;
+			}
+		}
+		return null;
+	}
+
+	default Page getPageById(String pageId) {
+		for (Page page: getPages()) {
+			if (pageId.equals(page.getId())) {
+				return page;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Loads a document identified by the URI if it is not loaded yet.
+	 * URI is resolved relative to this document URI.
+	 * @param source
+	 * @return
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
+	Document getDocument(URI source) throws IOException, ParserConfigurationException, SAXException;	
 
 }

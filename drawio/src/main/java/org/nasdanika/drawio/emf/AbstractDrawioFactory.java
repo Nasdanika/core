@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
@@ -37,15 +36,16 @@ import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.LinkTarget;
+import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.comparators.AngularNodeComparator;
 import org.nasdanika.drawio.comparators.CartesianNodeComparator;
+import org.nasdanika.drawio.comparators.FlowNodeComparator;
 import org.nasdanika.drawio.comparators.LabelModelElementComparator;
 import org.nasdanika.drawio.comparators.PropertyModelElementComparator;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.drawio.model.SemanticMapping;
-import org.nasdanika.drawio.comparators.FlowNodeComparator;
 import org.nasdanika.mapping.AbstractMappingFactory;
 import org.nasdanika.mapping.ContentProvider;
 import org.nasdanika.mapping.Mapper;
@@ -277,20 +277,24 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 //		}
 		
 		Element pageParent = getContentProvider().getParent(page);
-		T pageParentTarget = registry.get(pageParent);		
-		if (pageParentTarget == null) {
-			return false; // Not there yet
+		if (pageParent instanceof ModelElement) {
+			T pageParentTarget = registry.get(pageParent);		
+			if (pageParentTarget == null) {
+				return false; // Not there yet
+			}
+			registry.put(modelElement, pageParentTarget);
 		}
-		registry.put(modelElement, pageParentTarget);
 		return true;
 	}
 	
 	/**
-	 * Wires elements with selector property. Remaps which triggers wireContainment.
+	 * Wiring elements without own mapping linking to other elements to the link's
+	 * semantic element.
 	 * @param modelElement
 	 * @param registry
 	 * @param pass
 	 * @param progressMonitor
+	 * @return
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
 	public final boolean wireModelElementLinkTarget(
