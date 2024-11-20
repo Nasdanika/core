@@ -197,6 +197,16 @@ public interface Invocable {
 		return bindWithOffset(0, bindings);
 	}
 	
+	private static boolean isInstance(Class<?> type, Object value) {
+		if (value == null) {
+			return true;
+		}
+		if (type.isInstance(value)) {
+			return true;
+		}
+		return type.isPrimitive() && ClassUtils.primitiveToWrapper(type).isInstance(value);
+	}
+	
 	default Invocable bindWithOffset(int offset, Object... bindings) {
 		if (bindings.length == 0) {
 			return this;
@@ -211,8 +221,8 @@ public interface Invocable {
 					throw new IllegalArgumentException("Bindings exceed parameters length");
 				}				
 				Class<?> parameterType = parameters[offset + i].type();
-				if (bindings[i] != null && !parameterType.isInstance(bindings[i])) {
-					throw new IllegalArgumentException(bindings[i] + " is not an instance of " + parameterType.getName()); 
+				if (!isInstance(parameterType, bindings[i])) {
+					throw new IllegalArgumentException(bindings[i].getClass() + " is not an instance of " + parameterType.getName()); 
 				}
 			}
 		}
