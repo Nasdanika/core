@@ -887,14 +887,13 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 				ServiceCapabilityFactory.createRequirement(Invocable.class, null, invokeURI),
 				progressMonitor);
 
-		invocable.bindByName(CONTEXT_VAR, context);
 		invocable.bindByName(ARGUMENT_VALUE_VAR, argumentValue);
+		invocable.bindByName(BASE_URI_VAR, getContentProvider().getBaseURI(context));
+		invocable.bindByName(CONTEXT_VAR, context);
+		invocable.bindByName(PROGRESS_MONITOR_VAR, progressMonitor);
 		invocable.bindByName(REGISTRY_VAR, registry);
 		invocable.bindByName(SOURCE_PATH_VAR, sourcePath);
 		invocable.bindByName(TYPE_VAR, type);
-		invocable.bindByName(BASE_URI_VAR, getContentProvider().getBaseURI(context));
-		invocable.bindByName(REGISTRY_VAR, registry);
-		invocable.bindByName(PROGRESS_MONITOR_VAR, progressMonitor);
 		// registry
 		for (Entry<String, Object> ve: getVariables(context).entrySet()) {
 			invocable.bindByName(ve.getKey(), ve.getValue());
