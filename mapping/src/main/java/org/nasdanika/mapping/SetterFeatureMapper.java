@@ -67,9 +67,6 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 	public static final String ARGUMENT_TYPE_KEY = "argument-type";
 	public static final String COMPARATOR_KEY = "comparator";
 	public static final String INVOKE_KEY = "invoke";
-//	public static final String SCRIPT_KEY = "script";
-//	public static final String SCRIPT_REF_KEY = "script-ref";
-//	public static final String SCRIPT_ENGINE_KEY = "script-engine";
 	
 	private FeatureMapper<S, T> defaultFeatureMapper;
 	protected CapabilityLoader capabilityLoader;

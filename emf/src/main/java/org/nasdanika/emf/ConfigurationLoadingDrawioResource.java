@@ -2,10 +2,12 @@ package org.nasdanika.emf;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -38,6 +40,8 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 		
 	public static final String MAPPING_PROPERTY = "mapping";
 	public static final String MAPPING_REF_PROPERTY = "mapping-ref";
+	
+	protected ConnectionBase connnectionBase = ConnectionBase.SOURCE;	
 	
 	protected Function<URI,EObject> uriResolver;
 	private CapabilityLoader capabilityLoader;
@@ -120,7 +124,12 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 			};
 			
 			Transformer<Element,EObject> modelFactory = new Transformer<>(drawioFactory);
-			List<Element> documentElements = document.stream().filter(Element.class::isInstance).map(Element.class::cast).toList();
+			List<Element> documentElements = new ArrayList<>();
+			Consumer<Element> visitor = documentElements::add;
+			@SuppressWarnings({ "rawtypes", "unchecked" })
+			Consumer<org.nasdanika.graph.Element> traverser = (Consumer) org.nasdanika.drawio.Util.traverser(visitor, connnectionBase);
+			document.accept(traverser);
+			
 			Map<Element, EObject> modelElements = modelFactory.transform(documentElements, false, getProgressMonitor());
 			EList<EObject> cnt = getContents();
 			modelElements.values()
@@ -181,7 +190,7 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 	}
 	
 	protected ContentProvider<Element> createContentProvider(Document document) {
-		return new DrawioContentProvider(document, Context.BASE_URI_PROPERTY, MAPPING_PROPERTY, MAPPING_REF_PROPERTY, ConnectionBase.SOURCE);
+		return new DrawioContentProvider(document, Context.BASE_URI_PROPERTY, MAPPING_PROPERTY, MAPPING_REF_PROPERTY, connnectionBase);
 	}
 				
 	protected org.nasdanika.ncore.Marker createTargetMarker(

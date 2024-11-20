@@ -1,5 +1,6 @@
 package org.nasdanika.mapping;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -40,94 +41,101 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 		return contentProvider;
 	}
 	
-	protected boolean isPassThrough(S connection, T connectionValue) {
-		return connectionValue == null;
-	}
-	
 	/**
-	 * Selects zero or more target (semantic) elements for the source element. This implementation returns registry value.
+	 * Selects zero or more target (semantic) elements for the source element. This implementation returns registry value singleton or an empty list if the registry value is null.
 	 * Override to support, for example, mapping to multiple semantic values. 
 	 * @param source
 	 * @param registry
 	 * @param progressMonitor
 	 * @return
 	 */
-	public Iterable<T> select(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
-		return Collections.singleton(registry.get(source));
+	public Collection<T> select(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
+		T target = registry.get(source);
+		return target == null ? Collections.emptyList() : Collections.singleton(target);
 	}
 	
 	@Override
 	public void wire(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
-		for (T value: select(source, registry, progressMonitor)) {
-			HashSet<S> tracker = new HashSet<>();			
-			for (S contents: getContentProvider().getChildren(source)) {
-				if (tracker.add(contents)) {
-					LinkedList<S> path = new LinkedList<>();
-					path.add(contents);
-					Function<LinkedList<S>, Boolean> pathMapper = createPathMapper(source, value, registry, progressMonitor);
-					wireContents(path, pathMapper, tracker::add);
+		Collection<T> targets = select(source, registry, progressMonitor);
+		if (targets.isEmpty()) {
+			// No target (pass-through) connection - source and target
+			S connectionSource = getContentProvider().getConnectionSource(source);
+			if (connectionSource != null) {
+				for (T connectionSourceValue: select(connectionSource, registry, progressMonitor)) {		
+					List<EStructuralFeature> connectionSourceValueFeatures = connectionSourceValue.eClass().getEAllStructuralFeatures();
+							
+					S connectionTarget = getContentProvider().getConnectionTarget(source);
+					if (connectionTarget != null) {
+						for (T connectionTargetValue: select(connectionTarget, registry, progressMonitor)) {		
+							List<EStructuralFeature> connectionTargetValueFeatures = connectionTargetValue.eClass().getEAllStructuralFeatures();
+							
+							// Connection source features		
+							for (EStructuralFeature connectionSourceValueFeature: connectionSourceValueFeatures) {
+								wireConnectionSourceFeature(
+										source,	
+										connectionSource,
+										connectionSourceValue,
+										connectionSourceValueFeature,
+										connectionTarget,
+										connectionTargetValue,
+										registry,
+										progressMonitor);
+							}
+							
+							// Connection target features		
+							for (EStructuralFeature connectionTargetValueFeature: connectionTargetValueFeatures) {
+								wireConnectionTargetFeature(
+										source,	
+										connectionTarget,
+										connectionTargetValue,
+										connectionTargetValueFeature,
+										connectionSource,
+										connectionSourceValue,
+										registry,
+										progressMonitor);
+							}
+						}
+					}
 				}
 			}
-			
-			/*
-			 * TODO Traversal of non-containment references similar to contents but with tracing of the feature used to traverse
-			 * and avoiding loops.
-			 * 
-			 * Add wireReferenceTarget and wireReferenceSource or Reference/Referrer. 
-			 * Implement support in sub-classes such as setter mapper
-			 */
-			
-			List<EStructuralFeature> valueFeatures = value == null ? Collections.emptyList() : value.eClass().getEAllStructuralFeatures();		
-			
-			// Own features, no permutations
-			for (EStructuralFeature valueFeature: valueFeatures) {
-				wireFeature(
-						source, 
-						value, 
-						valueFeature, 
-						registry, 
-						progressMonitor);			
-			}
-			
-			S connectionSource = getContentProvider().getConnectionSource(source);
-			for (T connectionSourceValue: connectionSource == null ? Collections.<T>singleton(null) : select(connectionSource, registry, progressMonitor)) {		
-				List<EStructuralFeature> connectionSourceValueFeatures = connectionSourceValue == null ? Collections.emptyList() : connectionSourceValue.eClass().getEAllStructuralFeatures();
+		} else {
+			for (T value: targets) {
+				HashSet<S> tracker = new HashSet<>();			
+				for (S contents: getContentProvider().getChildren(source)) {
+					if (tracker.add(contents)) {
+						LinkedList<S> path = new LinkedList<>();
+						path.add(contents);
+						Function<LinkedList<S>, Boolean> pathMapper = createPathMapper(source, value, registry, progressMonitor);
+						wireContents(path, pathMapper, tracker::add);
+					}
+				}
+				
+				/*
+				 * TODO Traversal of non-containment references similar to contents but with tracing of the feature used to traverse
+				 * and avoiding loops.
+				 * 
+				 * Add wireReferenceTarget and wireReferenceSource or Reference/Referrer. 
+				 * Implement support in sub-classes such as setter mapper
+				 */
+				
+				List<EStructuralFeature> valueFeatures = value.eClass().getEAllStructuralFeatures();		
+				
+				// Own features, no permutations
+				for (EStructuralFeature valueFeature: valueFeatures) {
+					wireFeature(
+							source, 
+							value, 
+							valueFeature, 
+							registry, 
+							progressMonitor);			
+				}
+							
+				S connectionSource = getContentProvider().getConnectionSource(source);
+				if (connectionSource != null) {
+					for (T connectionSourceValue: select(connectionSource, registry, progressMonitor)) {		
+						List<EStructuralFeature> connectionSourceValueFeatures = connectionSourceValue.eClass().getEAllStructuralFeatures();
 						
-				S connectionTarget = getContentProvider().getConnectionTarget(source);
-				for (T connectionTargetValue: connectionTarget == null ? Collections.<T>singleton(null) : select(connectionTarget, registry, progressMonitor)) {		
-					List<EStructuralFeature> connectionTargetValueFeatures = connectionTargetValue == null ? Collections.emptyList() : connectionTargetValue.eClass().getEAllStructuralFeatures();
-					
-					boolean isPassThrough = isPassThrough(source, value);
-					
-					// Connection source features		
-					for (EStructuralFeature connectionSourceValueFeature: connectionSourceValueFeatures) {
-						wireConnectionSourceFeature(
-								source,	
-								connectionSource,
-								connectionSourceValue,
-								connectionSourceValueFeature,
-								isPassThrough ? connectionTarget : source,
-								isPassThrough ? connectionTargetValue : value,
-								registry,
-								progressMonitor);
-					}
-					
-					// Connection target features		
-					for (EStructuralFeature connectionTargetValueFeature: connectionTargetValueFeatures) {
-						wireConnectionTargetFeature(
-								source,	
-								connectionTarget,
-								connectionTargetValue,
-								connectionTargetValueFeature,
-								isPassThrough ? connectionSource : source,
-								isPassThrough ? connectionSourceValue : value,
-								registry,
-								progressMonitor);
-					}
-					
-					// Connection start and connection end	
-					for (EStructuralFeature valueFeature: valueFeatures) {
-						if (connectionSource != null) {
+						for (EStructuralFeature valueFeature: valueFeatures) {
 							wireConnectionStartFeature(
 									source,
 									value,
@@ -138,15 +146,50 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 									progressMonitor);
 						}
 						
+								
+						S connectionTarget = getContentProvider().getConnectionTarget(source);
 						if (connectionTarget != null) {
-							wireConnectionEndFeature(
-									source,
-									value,
-									valueFeature,
-									connectionTarget,
-									connectionTargetValue,
-									registry,
-									progressMonitor);
+							for (T connectionTargetValue: select(connectionTarget, registry, progressMonitor)) {		
+								List<EStructuralFeature> connectionTargetValueFeatures = connectionTargetValue.eClass().getEAllStructuralFeatures();
+								
+								// Connection source features		
+								for (EStructuralFeature connectionSourceValueFeature: connectionSourceValueFeatures) {
+									wireConnectionSourceFeature(
+											source,	
+											connectionSource,
+											connectionSourceValue,
+											connectionSourceValueFeature,
+											source,
+											value,
+											registry,
+											progressMonitor);
+								}
+								
+								// Connection target features		
+								for (EStructuralFeature connectionTargetValueFeature: connectionTargetValueFeatures) {
+									wireConnectionTargetFeature(
+											source,	
+											connectionTarget,
+											connectionTargetValue,
+											connectionTargetValueFeature,
+											source,
+											value,
+											registry,
+											progressMonitor);
+								}
+								
+								// Connection end	
+								for (EStructuralFeature valueFeature: valueFeatures) {
+									wireConnectionEndFeature(
+											source,
+											value,
+											valueFeature,
+											connectionTarget,
+											connectionTargetValue,
+											registry,
+											progressMonitor);
+								}
+							}
 						}
 					}
 				}

@@ -392,33 +392,33 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	@SuppressWarnings("unchecked")
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 1)
 	public final void wireTargetReferences(
-			org.nasdanika.drawio.Layer drawioModelElement,
+			ModelElement modelElement,
 			Map<Element, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
 		String referenceProperty = getReferenceProperty();
 		if (!Util.isBlank(referenceProperty)) {		
-			Object referenceSpec = getContentProvider().getProperty(drawioModelElement, referenceProperty);			
+			Object referenceSpec = getContentProvider().getProperty(modelElement, referenceProperty);			
 			if (referenceSpec != null && !(referenceSpec instanceof String && Util.isBlank((String) referenceSpec))) {
-				ReferenceMapper referenceMapper = new ReferenceMapper(referenceSpec, drawioModelElement);
+				ReferenceMapper referenceMapper = new ReferenceMapper(referenceSpec, modelElement);
 				List<Element> ancestorsPath = new ArrayList<>();
-				Z: for (Element ancestor = getContentProvider().getParent(drawioModelElement); ancestor != null; ancestor = getContentProvider().getParent(ancestor)) {
+				Z: for (Element ancestor = getContentProvider().getParent(modelElement); ancestor != null; ancestor = getContentProvider().getParent(ancestor)) {
 					ancestorsPath.add(ancestor);					
 					for (T ancestorTarget: mapper.select(ancestor, registry, progressMonitor)) {						
-						if (referenceMapper.matchAncestorTarget(ancestorTarget, ancestorsPath, registry, drawioModelElement)) {
-							T refObj = referenceMapper.getAncestorTargetRefObj(ancestorTarget, ancestorsPath, registry, drawioModelElement); 
+						if (referenceMapper.matchAncestorTarget(ancestorTarget, ancestorsPath, registry, modelElement)) {
+							T refObj = referenceMapper.getAncestorTargetRefObj(ancestorTarget, ancestorsPath, registry, modelElement); 
 							if (refObj != null) {
 								EClass eClass = refObj.eClass();
 								String referenceName = referenceMapper.getReferenceName();
 								EStructuralFeature feature = eClass.getEStructuralFeature(referenceName);
 								if (feature == null) {
-									throw new ConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), drawioModelElement); 
+									throw new ConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), modelElement); 
 								} else if (feature instanceof EReference) {							
 									LinkedList<Element> sourcePath = new LinkedList<>();
-									sourcePath.add(drawioModelElement);
+									sourcePath.add(modelElement);
 									Comparator<Object> comparator = referenceMapper.getComparator(ancestorTarget, registry);
-									for (T target: referenceMapper.getElements(sourcePath, registry, new HashSet<>()::add, drawioModelElement, progressMonitor)) {
+									for (T target: referenceMapper.getElements(sourcePath, registry, new HashSet<>()::add, modelElement, progressMonitor)) {
 										if (target != null && feature.getEType().isInstance(target)) {
 											if (feature.isMany()) {
 												List<EObject> fvl = (List<EObject>) ancestorTarget.eGet(feature);
@@ -445,7 +445,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 										}
 									}
 								} else {
-									throw new ConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), drawioModelElement); 									
+									throw new ConfigurationException("Not a reference: " + referenceName + " in " + eClass.getName(), modelElement); 									
 								}
 								break Z;								
 							}
@@ -632,6 +632,19 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	protected URI getAppBase() {
 		return DEFAULT_APP_BASE;
 	}
+	
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 2)
+	public final void mapNoTargetModelElement(
+			org.nasdanika.drawio.ModelElement modelElement,
+			Map<Element, T> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+						
+		Mapper<Element,T> mapper = getMapper(pass);
+		if (mapper != null) {
+			mapper.wire(modelElement, registry, progressMonitor);
+		}
+	}	
 		
 	@org.nasdanika.common.Transformer.Wire(phase = 2)
 	public final void mapModelElement(

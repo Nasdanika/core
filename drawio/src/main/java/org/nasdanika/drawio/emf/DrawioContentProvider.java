@@ -50,7 +50,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	private String baseURIProperty;
 	private String configProperty;
 	private String configRefProperty;
-	private ConnectionBase connectionBase;
+//	private ConnectionBase connectionBase;
 
 	public DrawioContentProvider(Element root) {
 		this(root, Context.BASE_URI_PROPERTY, CONFIG_PROPERTY, CONFIG_REF_PROPERTY, ConnectionBase.SOURCE);
@@ -83,7 +83,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		this.baseURIProperty = baseURIProperty;
 		this.configProperty = configProperty;
 		this.configRefProperty = configRefProperty;
-		this.connectionBase = connectionBase;
+//		this.connectionBase = connectionBase;
 	}
 	
 	public DrawioContentProvider(Collection<Element> elements) {
@@ -104,7 +104,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		this.baseURIProperty = baseURIProperty;
 		this.configProperty = configProperty;
 		this.configRefProperty = configRefProperty;
-		this.connectionBase = connectionBase;		
+//		this.connectionBase = connectionBase;		
 		for (Element element: elements) {
 			if (element instanceof ModelElement) {
 				ModelElement linkSource = (ModelElement) element;
@@ -140,15 +140,15 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		if (element instanceof Page) {
 			return ((Page) element).getDocument();
 		}
-		if (element instanceof Connection) {
-			if (connectionBase == ConnectionBase.SOURCE) {
-				return ((Connection) element).getSource();
-			} 
-			
-			if (connectionBase == ConnectionBase.TARGET) {
-				return ((Connection) element).getTarget();
-			}
-		}
+//		if (element instanceof Connection) {
+//			if (connectionBase == ConnectionBase.SOURCE) {
+//				return ((Connection) element).getSource();
+//			} 
+//			
+//			if (connectionBase == ConnectionBase.TARGET) {
+//				return ((Connection) element).getTarget();
+//			}
+//		}
 		
 		if (element instanceof ModelElement) {
 			return ((ModelElement) element).getParent();
@@ -165,13 +165,13 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			if (linkTarget != null) {
 				children.add(linkTarget);
 			}
-			if (modelElement instanceof Node) {
-				if (connectionBase == ConnectionBase.SOURCE) {
-					children.addAll(((Node) modelElement).getOutgoingConnections());
-				} else if (connectionBase == ConnectionBase.TARGET) {
-					children.addAll(((Node) modelElement).getIncomingConnections());
-				}
-			}
+//			if (modelElement instanceof Node) {
+//				if (connectionBase == ConnectionBase.SOURCE) {
+//					children.addAll(((Node) modelElement).getOutgoingConnections());
+//				} else if (connectionBase == ConnectionBase.TARGET) {
+//					children.addAll(((Node) modelElement).getIncomingConnections());
+//				}
+//			}
 			return children;
 		}
 		if (element instanceof Page) {

@@ -152,7 +152,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 				
 				@SuppressWarnings("unchecked")
 				@Override
-				public Iterable<T> select(S source, Map<S, T> registry, ProgressMonitor progressMonitor) {
+				public Collection<T> select(S source, Map<S, T> registry, ProgressMonitor progressMonitor) {
 					String referenceProperty = getReferenceProperty();
 					if (!Util.isBlank(referenceProperty)) {		
 						Object referenceSpec = getContentProvider().getProperty(source, referenceProperty);			
@@ -162,7 +162,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 							List<S> ancestorsPath = new ArrayList<>();
 							for (S ancestor = getContentProvider().getParent(source); ancestor != null; ancestor = getContentProvider().getParent(ancestor)) {
 								ancestorsPath.add(ancestor);					
-								for (T ancestorTarget: mapper.select(ancestor, registry, progressMonitor)) {						
+								for (T ancestorTarget: mapper.select(ancestor, registry, progressMonitor)) {	
 									if (referenceMapper.matchAncestorTarget(ancestorTarget, ancestorsPath, registry, source)) {
 										T refObj = referenceMapper.getAncestorTargetRefObj(ancestorTarget, ancestorsPath, registry, source); 
 										if (refObj != null) {
@@ -356,7 +356,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {	
-	
+		
 		T target = null;		
 		String initializerPropertyName = getInitializerProperty();
 		Object initializer = Util.isBlank(initializerPropertyName) ? null : getContentProvider().getProperty(obj, initializerPropertyName);
