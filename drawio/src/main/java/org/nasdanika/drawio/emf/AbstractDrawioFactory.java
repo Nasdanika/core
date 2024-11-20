@@ -417,7 +417,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 								} else if (feature instanceof EReference) {							
 									LinkedList<Element> sourcePath = new LinkedList<>();
 									sourcePath.add(modelElement);
-									Comparator<Object> comparator = referenceMapper.getComparator(ancestorTarget, registry);
+									Comparator<Object> comparator = referenceMapper.getComparator(ancestorTarget, registry, progressMonitor);
 									for (T target: referenceMapper.getElements(sourcePath, registry, new HashSet<>()::add, modelElement, progressMonitor)) {
 										if (target != null && feature.getEType().isInstance(target)) {
 											if (feature.isMany()) {
@@ -957,7 +957,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			T target, 
 			Object comparatorConfig, 
 			Map<Element, T> registry,
-			Element context) {
+			Element context,
+			ProgressMonitor progressMonitor) {
 		
 		if (Comparators.label.key.equals(comparatorConfig)) {
 			return adapt(
@@ -1020,7 +1021,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 						Comparator<Object> fallback; 
 						Object cConfig = cce.getValue();						
 						if (cConfig instanceof String) {
-							fallback = createMapperComparator(target, cConfig, registry, context);
+							fallback = createMapperComparator(target, cConfig, registry, context, progressMonitor);
 							connectionPredicate = null;
 						} else if (cConfig instanceof Map) {
 							Map<?,?> cConfigMap = (Map<?,?>) cConfig;
@@ -1028,7 +1029,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 							if (fallbackConfig == null) {
 								throw new ConfigurationException("No 'fallback' comparator definition: " + cConfig, context);								
 							} 
-							fallback = createMapperComparator(target, fallbackConfig, registry, context);
+							fallback = createMapperComparator(target, fallbackConfig, registry, context, progressMonitor);
 							Object condition = cConfigMap.get(CONDITION_KEY);
 							if (condition == null) {
 								connectionPredicate = null;
@@ -1055,7 +1056,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 				}
 			}			
 		}
-		return super.createMapperComparator(target, comparatorConfig, registry, context);
+		return super.createMapperComparator(target, comparatorConfig, registry, context, progressMonitor);
 	}
 	
 	protected boolean areSamePageNodes(Element a, Element b) {

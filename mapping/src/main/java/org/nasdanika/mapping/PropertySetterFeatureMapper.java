@@ -147,11 +147,12 @@ public abstract class PropertySetterFeatureMapper<S, T extends EObject> extends 
 		try {
 			Yaml yaml = new Yaml();
 			Object mappingObj = mappingSelector instanceof String ?  yaml.load((String) mappingSelector) : mappingSelector;
+			Map<String, Object> variables = Map.of("registry", registry, "progressMonitor", progressMonitor);
 			if (mappingObj instanceof String) {
 				Object result = evaluate(
 						source, 
 						(String) mappingObj, 
-						Collections.singletonMap("registry", registry), 
+						variables, 
 						Object.class, 
 						source);
 				if (result instanceof EObject) {
@@ -166,7 +167,7 @@ public abstract class PropertySetterFeatureMapper<S, T extends EObject> extends 
 					Object result = evaluate(
 							source, 
 							mappingElement, 
-							Collections.singletonMap("registry", registry), 
+							variables, 
 							Object.class, 
 							source);
 					if (result instanceof EObject) {

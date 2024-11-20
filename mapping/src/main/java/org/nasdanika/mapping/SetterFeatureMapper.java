@@ -163,7 +163,8 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			T argumentValue,
 			LinkedList<S> sourcePath,
 			Map<S, T> registry,
-			S context) {
+			S context,
+			ProgressMonitor progressMonitor) {
 		if (config == Boolean.TRUE) {
 			return true;
 		}
@@ -179,6 +180,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 				variables.put(VALUE_VAR, argumentValue);
 				variables.put(PATH_VAR, sourcePath);
 				variables.put(REGISTRY_VAR, registry);
+				variables.put(PROGRESS_MONITOR_VAR, progressMonitor);
 				return evaluatePredicate(argument, (String) condition, variables, context);
 			}
 			throw new ConfigurationException("Unsupported condition type: " + condition.getClass() + " " + condition, null, getContentProvider().asMarked(context));
@@ -390,7 +392,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 
 				boolean shallCallChain = true;
 				for (Object configElement: (config instanceof Iterable ? (Iterable<?>) config : Collections.singleton(config))) {
-					if (matchCondition(configElement, target, argument, argumentValue, sourcePath, registry, context)
+					if (matchCondition(configElement, target, argument, argumentValue, sourcePath, registry, context, progressMonitor)
 							&& matchType(target, configElement, context)
 							&& matchArgumentType(argumentValue, configElement, context)
 							&& matchPath(configElement, sourcePath, registry, context)) {
@@ -400,7 +402,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 						}
 						
 						Class<?> featureType = feature.getEType().getInstanceClass();
-						Object featureValue = eval(configElement, argument, argumentValue, sourcePath, registry, featureType, context);
+						Object featureValue = eval(configElement, argument, argumentValue, sourcePath, registry, featureType, context, progressMonitor);
 						if (configElement instanceof Map) {
 							featureValue = invoke(
 									(Map<?,?>) configElement, 
@@ -456,7 +458,8 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 													feature,
 													configElement, 
 													registry, 
-													context);
+													context,
+													progressMonitor);
 											if (comparator == null) {
 												fvl.add(element);												
 											} else {											
@@ -651,7 +654,8 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			EStructuralFeature feature,
 			Object config, 
 			Map<S, T> registry, 
-			S context) {
+			S context,
+			ProgressMonitor progressMonitor) {
 		if (config == Boolean.TRUE) {
 			return null;
 		}
@@ -665,7 +669,8 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 					target,
 					comparatorConfig, 
 					registry, 
-					context);
+					context,
+					progressMonitor);
 		}
 		throw new ConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, getContentProvider().asMarked(context));
 	}
@@ -716,7 +721,8 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			T target,
 			Object comparatorConfig, 
 			Map<S, T> registry, 
-			S context) {
+			S context,
+			ProgressMonitor progressMonitor) {
 		if (NATURAL_KEY.equals(comparatorConfig)) {
 			return NATURAL_COMPARATOR;
 		} 
@@ -759,7 +765,8 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 										(String) cce.getValue(), 
 										Map.of(
 												OTHER_KEY, o2,
-												REGISTRY_VAR, registry), 
+												REGISTRY_VAR, registry,
+												PROGRESS_MONITOR_VAR, progressMonitor), 
 										Integer.class, 
 										context);
 							}							
@@ -797,7 +804,8 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			LinkedList<S> sourcePath,
 			Map<S, T> registry,
 			Class<?> type,
-			S context) {
+			S context,
+			ProgressMonitor progressMonitor) {
 		if (config == Boolean.TRUE) {
 			return argumentValue;
 		}
@@ -811,7 +819,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 			if (expression instanceof Collection) {
 				Collection<Object> ret = new ArrayList<>();
 				for (Object ee: (Collection<?>) expression) {
-					ret.add(eval(ee, argument, argumentValue, sourcePath, registry, type, context));
+					ret.add(eval(ee, argument, argumentValue, sourcePath, registry, type, context, progressMonitor));
 				}
 				return ret;
 			}
@@ -828,6 +836,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		variables.put(VALUE_VAR, argumentValue);
 		variables.put(PATH_VAR, sourcePath);
 		variables.put(REGISTRY_VAR, registry);
+		variables.put(PROGRESS_MONITOR_VAR, progressMonitor);
 		Object result = evaluate(argument, (String) expression, variables, type, context);
 		return result;
 	}
