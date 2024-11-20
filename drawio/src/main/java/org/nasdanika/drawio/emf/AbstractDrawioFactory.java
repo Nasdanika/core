@@ -829,8 +829,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			ProgressMonitor progressMonitor) {
 		
 		return invoke(element, null, registry, pass, progressMonitor);
-	}
-	
+	}	
 	
 	@org.nasdanika.common.Transformer.Wire(phase = 6)
 	public final boolean wireInvoke(
