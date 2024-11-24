@@ -22,6 +22,10 @@ import picocli.CommandLine.Spec;
 public abstract class CommandBase implements Callable<Integer>, Closeable {
 	
 	protected CapabilityLoader capabilityLoader;
+	
+	public CapabilityLoader getCapabilityLoader() {
+		return capabilityLoader;
+	}
 
 	public CommandBase() {
 		

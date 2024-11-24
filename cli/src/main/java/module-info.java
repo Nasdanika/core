@@ -16,7 +16,7 @@ module org.nasdanika.cli {
 	requires org.apache.commons.text;
 	requires transitive org.jline;
 	
-	opens org.nasdanika.cli to info.picocli, org.nasdanika.html.model.app.gen.cli;
+	opens org.nasdanika.cli to info.picocli, org.nasdanika.models.app.gen.cli;
 	
 	provides CapabilityFactory with 
 		RootCommandFactory,
