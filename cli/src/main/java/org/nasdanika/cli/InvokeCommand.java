@@ -24,6 +24,7 @@ import picocli.CommandLine.ParentCommand;
 		mixinStandardHelpOptions = true,
 		name = "invoke")
 @ParentCommands(Invocable.Invoker.class)
+@Description(icon = "https://docs.nasdanika.org/images/optimization.svg")
 public class InvokeCommand extends CommandBase {
 	
 	public InvokeCommand(CapabilityLoader capablityLoader) {

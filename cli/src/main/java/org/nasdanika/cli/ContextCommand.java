@@ -1,5 +1,6 @@
 package org.nasdanika.cli;
 
+import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -25,4 +26,12 @@ public abstract class ContextCommand extends CommandBase {
 		return contextMixIn.createContext(progressMonitor);
 	}
 	
+	public ContextCommand() {
+		
+	}
+	
+	public ContextCommand(CapabilityLoader capabilityLoader) {
+		super(capabilityLoader);
+	}
+		
 }

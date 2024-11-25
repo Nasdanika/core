@@ -9,6 +9,7 @@ import org.eclipse.emf.common.util.URI;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.cli.CommandBase;
+import org.nasdanika.cli.Description;
 import org.nasdanika.cli.ParentCommands;
 import org.nasdanika.cli.ProgressMonitorMixIn;
 import org.nasdanika.cli.PropertiesMixIn;
@@ -28,6 +29,7 @@ import picocli.CommandLine.ParentCommand;
 		mixinStandardHelpOptions = true,
 		name = "gsh")
 @ParentCommands(Invocable.Invoker.class)
+@Description(icon = "https://docs.nasdanika.org/images/command.svg")
 public class GroovyShellCommand extends CommandBase {
 	
 	public GroovyShellCommand(CapabilityLoader capablityLoader) {

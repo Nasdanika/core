@@ -5,6 +5,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.DiagnosticException;
@@ -37,6 +38,14 @@ import picocli.CommandLine.Option;
 				"-6:Executor service termination timed out"
 		})
 public abstract class DelegatingCommand extends ContextCommand {
+		
+	public DelegatingCommand() {
+		
+	}
+	
+	public DelegatingCommand(CapabilityLoader capabilityLoader) {
+		super(capabilityLoader);
+	}	
 	
 	protected abstract SupplierFactory<Integer> getSupplierFactory();
 	

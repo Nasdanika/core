@@ -24,6 +24,9 @@ public abstract class CommandBase implements Callable<Integer>, Closeable {
 	protected CapabilityLoader capabilityLoader;
 	
 	public CapabilityLoader getCapabilityLoader() {
+		if (capabilityLoader == null) {
+			capabilityLoader = new CapabilityLoader();
+		}
 		return capabilityLoader;
 	}
 
