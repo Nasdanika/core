@@ -464,7 +464,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	
 	@Override
 	public String toString() {
-		return super.toString() + " " + getLabel();
+		return super.toString() + " [" + getId() + "] " + getLabel();
 	}
 	
 	@Override

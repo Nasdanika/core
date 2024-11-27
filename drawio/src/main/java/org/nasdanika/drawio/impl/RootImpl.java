@@ -60,5 +60,22 @@ class RootImpl extends ModelElementImpl implements Root {
 		}
 		return mRoot;
 	}	
+	
+	@Override
+	public String getLabel() {
+		// Roots don't have labels, returning containing page name to make meaningful
+		return getModel().getPage().getName();
+	}
+	
+	@Override
+	public void setLabel(String label) {
+		getModel().getPage().setName(label);
+	}
+	
+	@Override
+	public String getId() {
+		// Roots always have ID 0, returning page id
+		return getModel().getPage().getId();
+	}
 
 }

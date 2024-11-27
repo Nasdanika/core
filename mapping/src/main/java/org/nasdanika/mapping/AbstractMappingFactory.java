@@ -357,7 +357,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {	
-		
+
 		T target = null;		
 		String initializerPropertyName = getInitializerProperty();
 		Object initializer = Util.isBlank(initializerPropertyName) ? null : getContentProvider().getProperty(obj, initializerPropertyName);
@@ -397,6 +397,12 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		
 			if (!Util.isBlank(type)) {
 				target = (T) create(type.trim(), obj);
+				if (target instanceof ModelElement) {
+					ModelElement met = (ModelElement) target;
+					if (Util.isBlank(met.getUuid())) {
+						met.setUuid(UUID.randomUUID().toString());
+					}
+				}
 			} 
 		}
 		
@@ -561,12 +567,6 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 				configureSelectorEvaluationContext(evaluationContext, registry, pass, progressMonitor);
 				Object result = exp.getValue(evaluationContext, obj, Object.class);
 				if (result instanceof EObject) {
-					T selectedTarget = registry.get(result);
-					if (selectedTarget == null) {
-						return false; // Not there yet
-					}
-					registry.put(obj, selectedTarget); // Тriggers a new wave of wiring
-					return true;				
 				}
 				if (result instanceof Boolean) {
 					return (Boolean) result;
@@ -574,7 +574,12 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 				if (result == null) {
 					return true;
 				}
-				throw new ConfigurationException("Unexpected result type of selector: '" + selector + "': " + result, getContentProvider().asMarked(obj));			
+				T selectedTarget = registry.get(result);
+				if (selectedTarget == null) {
+					return pass > registry.size() + 100; // Not there yet if less, never will be if more. 100 is an arbitrary "padding"
+				}
+				registry.put(obj, selectedTarget); // Тriggers a new wave of wiring
+				return true;				
 			} catch (ParseException e) {
 				throw new ConfigurationException("Error parsing selector: '" + selector, e, getContentProvider().asMarked(obj));
 			} catch (EvaluationException e) {

@@ -279,7 +279,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		if (linkTarget instanceof org.nasdanika.drawio.ModelElement) {
 			T target = registry.get(linkTarget);
 			if (target == null) {
-				return false; // Not there yet
+				return pass > registry.size() + 100; // Might not be there yes is pass is smaller, would not be there ever if larger, 100 just in case - totally non-scientific
 			}
 			registry.put(modelElement, target); // Тriggers a new wave of wiring
 		}
@@ -578,8 +578,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			Element element, 
 			Map<Element, T> registry,
 			ProgressMonitor progressMonitor) {
-		
-		if (element instanceof org.nasdanika.drawio.ModelElement) {
+
+		if (element instanceof org.nasdanika.drawio.ModelElement) {			
 			org.nasdanika.drawio.ModelElement modelElement = (org.nasdanika.drawio.ModelElement) element;
 			String semanticUUIDPropertyName = getSemanticUUIDPropertyName();
 			T target = registry.get(element);
@@ -692,15 +692,11 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 				
 			}
 			if (isPageElement) {
-				for (Element ancestor = getContentProvider().getParent(modelElement); ancestor != null; ancestor = getContentProvider().getParent(ancestor)) {
-					if (ancestor instanceof Page) {
-						addRepresentationPage(
-								targetModelElement, 
-								(Page) ancestor, 
-								registry, 
-								progressMonitor);
-					}
-				}
+				addRepresentationPage(
+						targetModelElement, 
+						modelElement.getModel().getPage(), 
+						registry, 
+						progressMonitor);
 			}
 			
 			// Image

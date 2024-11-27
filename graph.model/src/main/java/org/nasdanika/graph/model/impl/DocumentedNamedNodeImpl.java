@@ -3,6 +3,7 @@
 package org.nasdanika.graph.model.impl;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -96,6 +97,7 @@ public class DocumentedNamedNodeImpl<C extends Connection<?>> extends NodeImpl<C
 	 */
 	protected DocumentedNamedNodeImpl() {
 		super();
+		setUuid(UUID.randomUUID().toString());
 	}
 
 	/**
