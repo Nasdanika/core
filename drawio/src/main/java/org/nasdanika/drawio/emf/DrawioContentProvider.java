@@ -2,15 +2,12 @@ package org.nasdanika.drawio.emf;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import org.eclipse.emf.common.util.URI;
 import org.jsoup.Jsoup;
@@ -19,12 +16,10 @@ import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.PropertySource;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
-import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.LinkTarget;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
-import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.drawio.Util;
@@ -41,15 +36,12 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	private static final String CONFIG_PROPERTY = "config";
 
 	private static final String CONFIG_REF_PROPERTY = "config-ref";
-
-	/**
-	 * To resolve links
-	 */
-	private Collection<Element> elements;
 	
-	private Map<LinkTarget, Collection<ModelElement>> linkSoureMap = new ConcurrentHashMap<>();
+	// element -> parent
+	private Map<Element, PropertySource<String,Object>> propertySources = new LinkedHashMap<>();
 	
-	private Map<Element, PropertySource<String,Object>> propertySources = new ConcurrentHashMap<>();	
+	// element -> parent
+	private Map<Element, Element> parentMap = new ConcurrentHashMap<>();
 
 	private String baseURIProperty;
 	private String configProperty;
@@ -70,24 +62,8 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			String configProperty,
 			String configRefProperty,
 			ConnectionBase connectionBase) {
-		elements = new ArrayList<>();
-		if (root != null) {
-			Consumer<Element> visitor = element -> {
-				elements.add(element);
-				if (element instanceof ModelElement) {
-					ModelElement linkSource = (ModelElement) element;
-					LinkTarget linkTarget = linkSource.getLinkTarget();
-					if (linkTarget != null) {
-						linkSoureMap.computeIfAbsent(linkTarget, lt -> new ArrayList<ModelElement>()).add(linkSource);
-					}
-				}
-			};
-			root.accept(Util.withLinkTargets(visitor, connectionBase), connectionBase);
-		}
-		this.baseURIProperty = baseURIProperty;
-		this.configProperty = configProperty;
-		this.configRefProperty = configRefProperty;
-		this.connectionBase = connectionBase;
+		
+		this(Collections.singleton(root), baseURIProperty, configProperty, configRefProperty, connectionBase);
 	}
 	
 	public DrawioContentProvider(Collection<Element> elements) {
@@ -104,42 +80,42 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			String configProperty,
 			String configRefProperty,
 			ConnectionBase connectionBase) {
-		this.elements = elements;
 		this.baseURIProperty = baseURIProperty;
 		this.configProperty = configProperty;
 		this.configRefProperty = configRefProperty;
-		this.connectionBase = connectionBase;		
-		for (Element element: elements) {
+		this.connectionBase = connectionBase;
+
+		
+		Consumer<Element> visitor = element -> parentMap.computeIfAbsent(element, this::computeParent);
+		
+		// "regular" parents
+		for (Element element: elements) {	
+			element.accept(Util.withLinkTargets(visitor, connectionBase), connectionBase);
+		}		
+		
+		// link parents override
+		for (Element element: parentMap.keySet()) {	
 			if (element instanceof ModelElement) {
-				ModelElement linkSource = (ModelElement) element;
-				LinkTarget linkTarget = linkSource.getLinkTarget();
-				if (linkTarget != null) {
-					linkSoureMap.computeIfAbsent(linkTarget, lt -> new ArrayList<ModelElement>()).add(linkSource);
+				LinkTarget linkTarget = ((ModelElement) element).getLinkTarget();
+				if (linkTarget instanceof Page) {
+					Page targetPage = (Page) linkTarget;
+					parentMap.put(targetPage, element);
+					parentMap.put(targetPage.getModel(), element);
+					parentMap.put(targetPage.getModel().getRoot(), element);
+				} else if (linkTarget != null) {
+					parentMap.put(linkTarget, element);
 				}
 			}
-		}		
+		}				
 	}
 	
-	@Override
-	public Element getParent(Element element) {
-		return getParent(element, new HashSet<Element>()::add);
-	}
-
-	private Element getParent(Element element, Predicate<Element> linkTracker) {
-		// First linker it the logical parent
-		if (element instanceof LinkTarget) {
-			Collection<ModelElement> sources = linkSoureMap.computeIfAbsent((LinkTarget) element, e -> new ArrayList<ModelElement>());
-			if (!sources.isEmpty()) {
-				ModelElement result = sources.iterator().next();
-				return linkTracker.test(result) ? result : null; // Avoiding infinite loops.
-			}
-		}
+	private Element computeParent(Element element) {
 		 // Logically merging Root, Model, and Page
 		if (element instanceof Root) {
-			return getParent(((Root) element).getModel().getPage(), linkTracker);
+			return computeParent(((Root) element).getModel().getPage());
 		}
 		if (element instanceof Model) {
-			return getParent(((Model) element).getPage(), linkTracker);			
+			return computeParent(((Model) element).getPage());			
 		}
 		if (element instanceof Page) {
 			return ((Page) element).getDocument();
@@ -158,87 +134,8 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			return ((ModelElement) element).getParent();
 		}
 		return null;
-	}
-
-	@Override
-	public Collection<? extends Element> getChildren(Element element) {
-		if (element instanceof ModelElement) {
-			ModelElement modelElement = (ModelElement) element;
-			List<Element> children = new ArrayList<>();
-			for (Element child: modelElement.getChildren()) {
-				if (child instanceof Connection && (connectionBase == ConnectionBase.SOURCE || connectionBase == ConnectionBase.TARGET)) {
-					continue;
-				}
-				children.add(child);
-			}
-			LinkTarget linkTarget = modelElement.getLinkTarget();
-			if (linkTarget != null) {
-				children.add(linkTarget);
-			}
-			if (modelElement instanceof Node) {
-				if (connectionBase == ConnectionBase.SOURCE) {
-					children.addAll(((Node) modelElement).getOutgoingConnections());
-				} else if (connectionBase == ConnectionBase.TARGET) {
-					children.addAll(((Node) modelElement).getIncomingConnections());
-				}
-			}
-			return children;
-		}
-		if (element instanceof Document) {
-			return ((Document) element).getPages().stream().map(p -> p.getModel().getRoot()).toList();
-		}
-		if (element instanceof Page) {
-			return getChildren(((Page) element).getModel().getRoot());
-		}
-		if (element instanceof Model) {
-			return getChildren(((Model) element).getRoot());
-		}
-		
-		return element == null ? Collections.emptyList() : element.getChildren();
-	}
-
-	@Override
-	public URI getBaseURI(Element element) {
-		if (element == null) {
-			return null;
-		}
-		
-		if (element instanceof ModelElement && !org.nasdanika.common.Util.isBlank(baseURIProperty)) {
-			String baseURIStr = ((ModelElement) element).getProperty(baseURIProperty);
-			if (!org.nasdanika.common.Util.isBlank(baseURIStr)) {
-				URI baseURI = URI.createURI(baseURIStr);
-				if (baseURI.isRelative()) {
-					URI resolveBase = element.getURI();
-					Element parent = getParent(element);
-					if (parent != null) {
-						URI parentBaseURI = getBaseURI(parent);
-						if (parentBaseURI != null && !parentBaseURI.isRelative()) {
-							resolveBase = parentBaseURI;
-						}
-					}
-					if (resolveBase == null || resolveBase.isRelative()) {
-						return baseURI;
-					}
-					return baseURI.resolve(resolveBase);
-				}
-			}
-		}
-		
-		return element.getURI();
-	}
-
-	@Override
-	public Object getProperty(Element element, String property) {
-		if (element instanceof Page) {
-			return getProperty(((Page) element).getModel().getRoot(), property);
-		}
-		if (element instanceof Model) {
-			return getProperty(((Model) element).getRoot(), property);
-		}
-						
-		return propertySources.computeIfAbsent(element, this::createElementPropertySource).getProperty(property);
-	}
-
+	}	
+	
 	@SuppressWarnings("unchecked")
 	private PropertySource<String,Object> createElementPropertySource(Element element) {
 		if (element instanceof ModelElement) {
@@ -290,6 +187,59 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		// Empty property source
 		return property -> null;		
 	}		
+	
+	@Override
+	public Element getParent(Element element) {
+		return parentMap.get(element);
+	}
+
+	@Override
+	public Collection<? extends Element> getChildren(Element element) {
+		return parentMap.entrySet().stream().filter(e -> e.getValue() == element).map(Map.Entry::getKey).toList();
+	}
+
+	@Override
+	public URI getBaseURI(Element element) {
+		if (element == null) {
+			return null;
+		}
+		
+		Element parent = getParent(element);
+		URI resolveBase = element.getURI();
+		if (parent != null) {
+			URI parentBaseURI = getBaseURI(parent);
+			if (parentBaseURI != null && !parentBaseURI.isRelative()) {
+				resolveBase = parentBaseURI;
+			}
+		}
+		
+		if (element instanceof ModelElement && !org.nasdanika.common.Util.isBlank(baseURIProperty)) {
+			String baseURIStr = ((ModelElement) element).getProperty(baseURIProperty);
+			if (!org.nasdanika.common.Util.isBlank(baseURIStr)) {
+				URI baseURI = URI.createURI(baseURIStr);
+				if (baseURI.isRelative()) {
+					if (resolveBase == null || resolveBase.isRelative()) {
+						return baseURI;
+					}
+					return baseURI.resolve(resolveBase);
+				}
+			}
+		}
+		
+		return resolveBase;
+	}
+
+	@Override
+	public Object getProperty(Element element, String property) {
+		if (element instanceof Page) {
+			return getProperty(((Page) element).getModel().getRoot(), property);
+		}
+		if (element instanceof Model) {
+			return getProperty(((Model) element).getRoot(), property);
+		}
+		
+		return propertySources.computeIfAbsent(element, this::createElementPropertySource).getProperty(property);
+	}
 
 	@Override
 	public Marked asMarked(Element element) {
