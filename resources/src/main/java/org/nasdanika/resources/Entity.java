@@ -1,7 +1,6 @@
 package org.nasdanika.resources;
 
 import java.util.function.BiFunction;
-import java.util.zip.ZipFile;
 
 import org.nasdanika.common.ProgressMonitor;
 

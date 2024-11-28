@@ -1104,6 +1104,24 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return ret;
 	}
 	
+	/**
+	 * Capability/service interface
+	 */
+	public interface TargetConfigurator<S,T extends EObject> {
+		
+		boolean canHandle(Object source, EObject target);
+		
+		void configureTarget(
+				S obj,
+				T target,
+				ContentProvider<S> contentProvider,
+				Map<S, T> registry,
+				boolean isPrototype,
+				ProgressMonitor progressMonitor);
+		
+	}
+	
+	@SuppressWarnings("unchecked")
 	protected void configureTarget(
 			S obj,
 			T target,
@@ -1221,6 +1239,30 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			}
 		}
 		
+		// Capabilities
+		if (capabilityLoader != null) {
+			Requirement<? extends AbstractMappingFactory<S,T>, TargetConfigurator<S,T>> requirement = createTargetConfiguratorRequirement();
+			Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
+			for (CapabilityProvider<Object> cp: cpi) {
+				cp.getPublisher().subscribe(targetConfigurator -> {
+					TargetConfigurator<S, T> theTargetConfigurator = (TargetConfigurator<S,T>) targetConfigurator;
+					if (theTargetConfigurator.canHandle(obj, target)) {
+						theTargetConfigurator.configureTarget(
+								obj, 
+								target,
+								getContentProvider(),
+								registry, 
+								isPrototype, 
+								progressMonitor);						
+					}
+				});
+			}
+		}		
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected Requirement<? extends AbstractMappingFactory<S,T>, TargetConfigurator<S,T>> createTargetConfiguratorRequirement() {
+		return (Requirement) ServiceCapabilityFactory.createRequirement(TargetConfigurator.class, null, this);
 	}
 	
 	// --- Phase 5: Operations
