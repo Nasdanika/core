@@ -131,6 +131,7 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 			document.accept(traverser);
 			
 			Map<Element, EObject> modelElements = modelFactory.transform(documentElements, false, getProgressMonitor());
+			
 			EList<EObject> cnt = getContents();
 			modelElements.values()
 				.stream()

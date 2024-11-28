@@ -93,7 +93,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			element.accept(Util.withLinkTargets(visitor, connectionBase), connectionBase);
 		}		
 		
-		// link parents override
+		// link parents override - page targets are "children", model elements targets are "parents"
 		for (Element element: parentMap.keySet()) {	
 			if (element instanceof ModelElement) {
 				LinkTarget linkTarget = ((ModelElement) element).getLinkTarget();
@@ -103,7 +103,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 					parentMap.put(targetPage.getModel(), element);
 					parentMap.put(targetPage.getModel().getRoot(), element);
 				} else if (linkTarget != null) {
-					parentMap.put(linkTarget, element);
+					parentMap.put(element, linkTarget); // Linking element is a "child" of the link target
 				}
 			}
 		}				
@@ -195,7 +195,13 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 
 	@Override
 	public Collection<? extends Element> getChildren(Element element) {
-		return parentMap.entrySet().stream().filter(e -> e.getValue() == element).map(Map.Entry::getKey).toList();
+		return parentMap
+				.entrySet()
+				.stream()
+				.filter(e -> e.getValue() == element)
+				.map(Map.Entry::getKey)
+				.filter(ModelElement.class::isInstance)
+				.toList();
 	}
 
 	@Override

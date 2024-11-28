@@ -302,23 +302,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			ProgressMonitor progressMonitor) {
 		return wireSelector(modelElement, registry, pass, progressMonitor);
 	}	
-	
-//	/**
-//	 * Wires elements with selector property. Remaps which triggers wireContainment.
-//	 * @param modelElement
-//	 * @param registry
-//	 * @param pass
-//	 * @param progressMonitor
-//	 */
-//	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-//	public final boolean wireTagSelector(
-//			org.nasdanika.drawio.Tag tag,
-//			Map<EObject, EObject> registry,
-//			int pass,
-//			ProgressMonitor progressMonitor) {
-//		return wireSelector(tag, registry, pass, progressMonitor);
-//	}
-	
+		
 	/**
 	 * Wires elements with prototype property. Remaps which triggers wireContainment.
 	 * @param modelElement
@@ -335,24 +319,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		
 		return wirePrototype(modelElement, registry, pass, progressMonitor);
 	}
-		
-//	/**
-//	 * Wires elements with prototype property. Remaps which triggers wireContainment.
-//	 * @param modelElement
-//	 * @param registry
-//	 * @param pass
-//	 * @param progressMonitor
-//	 */
-//	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-//	public final boolean wireTagPrototype(
-//			org.nasdanika.drawio.Tag tag,
-//			Map<Element, T> registry,
-//			int pass,
-//			ProgressMonitor progressMonitor) {
-//		
-//		return wirePrototype(tag, registry, pass, progressMonitor);
-//	}
-	
+			
 	/**
 	 * Wires elements with semantic selector property. Remaps which triggers wireContainment.
 	 * @param modelElement
@@ -369,23 +336,6 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		
 		return wireTargetSelector(modelElement, registry, pass, progressMonitor);
 	}
-	
-//	/**
-//	 * Wires elements with semantic selector property. Remaps which triggers wireContainment.
-//	 * @param modelElement
-//	 * @param registry
-//	 * @param pass
-//	 * @param progressMonitor
-//	 */
-//	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
-//	public final boolean wireTagSemanticSelector(
-//			org.nasdanika.drawio.Tag tag,
-//			Map<EObject, EObject> registry,
-//			int pass,
-//			ProgressMonitor progressMonitor) {
-//
-//		return wireSemanticSelector(tag, registry, pass, progressMonitor);
-//	}	
 	
 	// --- Phase 1: Mapping "reference" elements
 			
@@ -653,7 +603,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			Map<Element, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
-						
+
 		Mapper<Element,T> mapper = getMapper(pass);
 		if (mapper != null) {
 			mapper.wire(modelElement, registry, progressMonitor);

@@ -1122,11 +1122,14 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			mark((org.nasdanika.persistence.Marked) obj, (org.nasdanika.ncore.Marked) target, progressMonitor);
 		}
 		
-		if (!isPrototype) {
+		if (!isPrototype) {			
 			Object identity = getContentProvider().getIdentity(obj);
 			String identityProperty = getIdentityProperty();
 			if (!Util.isBlank(identityProperty)) {
-				identity = getContentProvider().getProperty(obj, identityProperty);
+				Object pIdentity = getContentProvider().getProperty(obj, identityProperty);
+				if (pIdentity != null) {
+					identity = pIdentity;
+				}
 			}
 			if (identity != null) {
 				setIdentity(target, identity);

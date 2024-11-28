@@ -67,7 +67,7 @@ public abstract class ConfigurationLoadingDrawioFactory<T extends EObject> exten
 			Map<Element, T> registry, 
 			boolean isPrototype,
 			ProgressMonitor progressMonitor) {
-		// TODO Auto-generated method stub
+
 		super.configureTarget(obj, target, registry, isPrototype, progressMonitor);
 		
 		EObjectLoader eObjectLoader = new EObjectLoader((ObjectLoader) null) {
