@@ -93,7 +93,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			element.accept(Util.withLinkTargets(visitor, connectionBase), connectionBase);
 		}		
 		
-		// link parents override - page targets are "children", model elements targets are "parents"
+		// link parents override - page targets are "children"
 		for (Element element: parentMap.keySet()) {	
 			if (element instanceof ModelElement) {
 				LinkTarget linkTarget = ((ModelElement) element).getLinkTarget();
@@ -102,8 +102,6 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 					parentMap.put(targetPage, element);
 					parentMap.put(targetPage.getModel(), element);
 					parentMap.put(targetPage.getModel().getRoot(), element);
-				} else if (linkTarget != null) {
-					parentMap.put(element, linkTarget); // Linking element is a "child" of the link target
 				}
 			}
 		}				

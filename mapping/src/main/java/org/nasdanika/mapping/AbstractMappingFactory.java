@@ -1018,10 +1018,12 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	 * @param target
 	 * @param identity
 	 */
-	protected void setIdentity(T target, Object identity) {
+	protected void setIdentity(T target, Object identity, boolean force) {
 		if (identity instanceof String && target instanceof org.nasdanika.ncore.StringIdentity) {
 			org.nasdanika.ncore.StringIdentity targetStringIdentity = (org.nasdanika.ncore.StringIdentity) target;
-			targetStringIdentity.setId((String) identity);
+			if (force || Util.isBlank(targetStringIdentity.getId())) {
+				targetStringIdentity.setId((String) identity);
+			}
 		}
 	}
 	
@@ -1123,17 +1125,14 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		}
 		
 		if (!isPrototype) {			
-			Object identity = getContentProvider().getIdentity(obj);
 			String identityProperty = getIdentityProperty();
 			if (!Util.isBlank(identityProperty)) {
-				Object pIdentity = getContentProvider().getProperty(obj, identityProperty);
-				if (pIdentity != null) {
-					identity = pIdentity;
+				Object identity = getContentProvider().getProperty(obj, identityProperty);
+				if (identity != null) {
+					setIdentity(target, identity, true);
 				}
 			}
-			if (identity != null) {
-				setIdentity(target, identity);
-			}
+			setIdentity(target, getContentProvider().getIdentity(obj), false);
 		}
 		
 		String name = getContentProvider().getName(obj);
