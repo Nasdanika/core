@@ -279,7 +279,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		if (linkTarget instanceof org.nasdanika.drawio.ModelElement) {
 			T target = registry.get(linkTarget);
 			if (target == null) {
-				return pass > registry.size() + 100; // Might not be there yes is pass is smaller, would not be there ever if larger, 100 just in case - totally non-scientific
+				return pass > registry.size() + PASS_PADDING; // Might not be there yes is pass is smaller, would not be there ever if larger, 100 just in case - totally non-scientific
 			}
 			registry.put(modelElement, target); // Тriggers a new wave of wiring
 		}

@@ -70,6 +70,7 @@ import org.yaml.snakeyaml.error.YAMLException;
  */
 public abstract class AbstractMappingFactory<S, T extends EObject> {
 	
+	protected static final int PASS_PADDING = 100; // Arbitrary pass padding just in case, not really needed.
 	private static final String REFERENCE_PROPERTY = "reference";
 	private static final String PASS_VAR = "pass";
 	private static final String TARGET_VAR = "target";
@@ -576,7 +577,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 				}
 				T selectedTarget = registry.get(result);
 				if (selectedTarget == null) {
-					return pass > registry.size() + 100; // Not there yet if less, never will be if more. 100 is an arbitrary "padding"
+					return pass > registry.size() + PASS_PADDING; // Not there yet if less, never will be if more. 100 is an arbitrary "padding"
 				}
 				registry.put(obj, selectedTarget); // Тriggers a new wave of wiring
 				return true;				
@@ -658,7 +659,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			S result = getPrototype(obj, progressMonitor);
 			T prototype = registry.get(result);
 			if (prototype == null) {
-				return false; // Not there yet
+				return pass > registry.size() + PASS_PADDING; // Not there yet or never will be
 			}
 			T copy = EcoreUtil.copy(prototype);
 			if (copy instanceof ModelElement) {
