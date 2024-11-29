@@ -36,15 +36,17 @@ public abstract class ConfigurationLoadingDrawioFactory<T extends EObject> exten
 	protected ConfigurationLoadingDrawioFactory(
 			ContentProvider<Element> contentProvider, 
 			CapabilityLoader capabilityLoader,
-			ResourceSet resourceSet) {
-		super(contentProvider, capabilityLoader);
+			ResourceSet resourceSet,
+			ProgressMonitor progressMonitor) {
+		super(contentProvider, capabilityLoader, progressMonitor);
 		this.resourceSet = resourceSet;
 	}
 
 	protected ConfigurationLoadingDrawioFactory(
 			ContentProvider<Element> contentProvider,
-			ResourceSet resourceSet) {
-		super(contentProvider);
+			ResourceSet resourceSet,
+			ProgressMonitor progressMonitor) {
+		super(contentProvider, progressMonitor);
 		this.resourceSet = resourceSet;
 	}
 

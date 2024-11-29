@@ -67,7 +67,7 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		try {
 			Document document = Document.load(inputStream, getURI());			
-			ConfigurationLoadingDrawioFactory<EObject> drawioFactory = new ConfigurationLoadingDrawioFactory<EObject>(createContentProvider(document), capabilityLoader, getResourceSet()) {
+			ConfigurationLoadingDrawioFactory<EObject> drawioFactory = new ConfigurationLoadingDrawioFactory<EObject>(createContentProvider(document), capabilityLoader, getResourceSet(), getProgressMonitor()) {
 				
 				@Override
 				protected EObject getByRefId(Element obj, String refId, int pass, Map<Element, EObject> registry) {

@@ -76,12 +76,15 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	private static final String DATA_URI_PNG_PREFIX_NO_BASE_64 = "data:image/png,";
 	private static final String DATA_URI_JPEG_PREFIX_NO_BASE_64 = "data:image/jpeg,";
 
-	protected AbstractDrawioFactory(ContentProvider<Element> contentProvider, CapabilityLoader capabilityLoader) {
-		super(contentProvider, capabilityLoader);
+	protected AbstractDrawioFactory(
+			ContentProvider<Element> contentProvider, 
+			CapabilityLoader capabilityLoader,
+			ProgressMonitor progressMonitor) {
+		super(contentProvider, capabilityLoader, progressMonitor);
 	}
 
-	protected AbstractDrawioFactory(ContentProvider<Element> contentProvider) {
-		super(contentProvider);
+	protected AbstractDrawioFactory(ContentProvider<Element> contentProvider, ProgressMonitor progressMonitor) {
+		super(contentProvider, progressMonitor);
 	}
 		
 	protected String getTagSpecPropertyName() {

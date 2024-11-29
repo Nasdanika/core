@@ -70,6 +70,52 @@ import org.yaml.snakeyaml.error.YAMLException;
  */
 public abstract class AbstractMappingFactory<S, T extends EObject> {
 	
+	/**
+	 * Capability/service interface for contributing to the mapping process
+	 */
+	public interface Contributor<S,T extends EObject> {
+		
+		boolean canHandle(Object source, EObject target);
+		
+		/**
+		 * Called from createTarget(), allows to customize both the source and target for further mapping
+		 * @param obj
+		 * @param target
+		 * @param elementProvider
+		 * @param registry
+		 * @param progressMonitor
+		 */
+		default void initialize(
+				S obj,
+				T target,
+				BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
+				Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
+				ProgressMonitor progressMonitor) {
+			
+		}		
+		
+		/**
+		 * Called from configureTarget()
+		 * @param obj
+		 * @param documentation
+		 * @param target
+		 * @param contentProvider
+		 * @param registry
+		 * @param isPrototype
+		 * @param progressMonitor
+		 */
+		default void configure(
+				S obj,
+				Collection<EObject> documentation,
+				T target,
+				Map<S, T> registry,
+				boolean isPrototype,
+				ProgressMonitor progressMonitor) {
+			
+		}
+		
+	}
+	
 	protected static final int PASS_PADDING = 100; // Arbitrary pass padding just in case, not really needed.
 	private static final String REFERENCE_PROPERTY = "reference";
 	private static final String PASS_VAR = "pass";
@@ -105,13 +151,30 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	protected CapabilityLoader capabilityLoader;
 	protected ContentProvider<S> contentProvider;
 	
-	public AbstractMappingFactory(ContentProvider<S> contentProvider) {
-		this(contentProvider, new CapabilityLoader());
+	public AbstractMappingFactory(ContentProvider<S> contentProvider, ProgressMonitor progressMonitor) {
+		this(contentProvider, new CapabilityLoader(), progressMonitor);
 	}
+		
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected Requirement<? extends AbstractMappingFactory<S,T>, Contributor<S,T>> createContributorRequirement() {
+		return (Requirement) ServiceCapabilityFactory.createRequirement(Contributor.class, null, this);
+	}	
 	
-	public AbstractMappingFactory(ContentProvider<S> contentProvider, CapabilityLoader capabilityLoader) {
+	protected Collection<Contributor<S,T>> contributors = new ArrayList<>();
+	
+	@SuppressWarnings("unchecked")
+	public AbstractMappingFactory(ContentProvider<S> contentProvider, CapabilityLoader capabilityLoader, ProgressMonitor progressMonitor) {
 		this.contentProvider = contentProvider;
 		this.capabilityLoader = capabilityLoader;
+		
+		// Capabilities
+		if (capabilityLoader != null) {
+			Requirement<? extends AbstractMappingFactory<S,T>, Contributor<S,T>> requirement = createContributorRequirement();
+			Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
+			for (CapabilityProvider<Object> cp: cpi) {
+				cp.getPublisher().subscribe(obj -> contributors.add((Contributor<S,T>) obj));
+			}
+		}				
 		
 		mapper = new PropertySetterFeatureMapper<S, T>(contentProvider, capabilityLoader) {
 				
@@ -152,7 +215,6 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 					return comparator == null ? super.createComparator(target, comparatorConfig, registry, context, progressMonitor) : comparator;
 				}
 				
-				@SuppressWarnings("unchecked")
 				@Override
 				public Collection<T> select(S source, Map<S, T> registry, ProgressMonitor progressMonitor) {
 					String referenceProperty = getReferenceProperty();
@@ -426,6 +488,17 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 					}
 					((MinimalEObjectImpl) target).eSetProxyURI(refIdURI);										
 				}
+			}
+		}
+		
+		for (Contributor<S,T> contributor: contributors) {
+			if (contributor.canHandle(obj, target)) {				
+				contributor.initialize(
+						obj, 
+						target,
+						elementProvider,
+						registry, 
+						progressMonitor);						
 			}
 		}
 		
@@ -1104,25 +1177,6 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return ret;
 	}
 	
-	/**
-	 * Capability/service interface
-	 */
-	public interface TargetConfigurator<S,T extends EObject> {
-		
-		boolean canHandle(Object source, EObject target);
-		
-		void configureTarget(
-				S obj,
-				Collection<EObject> documentation,
-				T target,
-				ContentProvider<S> contentProvider,
-				Map<S, T> registry,
-				boolean isPrototype,
-				ProgressMonitor progressMonitor);
-		
-	}
-	
-	@SuppressWarnings("unchecked")
 	protected void configureTarget(
 			S obj,
 			T target,
@@ -1243,33 +1297,17 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			}
 		}
 		
-		Collection<EObject> theDocumentation = documentation;
-		
-		// Capabilities
-		if (capabilityLoader != null) {
-			Requirement<? extends AbstractMappingFactory<S,T>, TargetConfigurator<S,T>> requirement = createTargetConfiguratorRequirement();
-			Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
-			for (CapabilityProvider<Object> cp: cpi) {
-				cp.getPublisher().subscribe(targetConfigurator -> {
-					TargetConfigurator<S, T> theTargetConfigurator = (TargetConfigurator<S,T>) targetConfigurator;
-					if (theTargetConfigurator.canHandle(obj, target)) {
-						theTargetConfigurator.configureTarget(
-								obj, 
-								theDocumentation,
-								target,
-								getContentProvider(),
-								registry, 
-								isPrototype, 
-								progressMonitor);						
-					}
-				});
+		for (Contributor<S,T> contributor: contributors) {
+			if (contributor.canHandle(obj, target)) {
+				contributor.configure(
+						obj, 
+						documentation,
+						target,
+						registry, 
+						isPrototype, 
+						progressMonitor);						
 			}
-		}		
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Requirement<? extends AbstractMappingFactory<S,T>, TargetConfigurator<S,T>> createTargetConfiguratorRequirement() {
-		return (Requirement) ServiceCapabilityFactory.createRequirement(TargetConfigurator.class, null, this);
+		}
 	}
 	
 	// --- Phase 5: Operations
