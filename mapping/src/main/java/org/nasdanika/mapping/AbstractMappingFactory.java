@@ -1113,6 +1113,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		
 		void configureTarget(
 				S obj,
+				Collection<EObject> documentation,
 				T target,
 				ContentProvider<S> contentProvider,
 				Map<S, T> registry,
@@ -1164,6 +1165,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		}
 				
 		URI baseUri = getContentProvider().getBaseURI(obj);
+		Collection<EObject> documentation = null;
 		String docProperty = getDocumentationProperty();
 		if (!Util.isBlank(docProperty)) {
 			Object doc = getContentProvider().getProperty(obj, docProperty);			
@@ -1183,7 +1185,8 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 					.findAny();
 				
 				if (dfo.isPresent()) {
-					addDocumentation(target, dfo.get().createDocumentation((String) doc, baseUri, progressMonitor));
+					documentation = dfo.get().createDocumentation((String) doc, baseUri, progressMonitor);
+					addDocumentation(target, documentation);
 				} else {
 					throw new ConfigurationException("Unsupported documentation format: " + docFormatStr, obj instanceof Marked ? (Marked) obj : null);
 				}
@@ -1235,9 +1238,12 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 					}
 				}
 				
-				addDocumentation(target, docFactory.createDocumentation(docRefURI[0], progressMonitor));				
+				documentation =  docFactory.createDocumentation(docRefURI[0], progressMonitor);
+				addDocumentation(target, documentation);				
 			}
 		}
+		
+		Collection<EObject> theDocumentation = documentation;
 		
 		// Capabilities
 		if (capabilityLoader != null) {
@@ -1249,6 +1255,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 					if (theTargetConfigurator.canHandle(obj, target)) {
 						theTargetConfigurator.configureTarget(
 								obj, 
+								theDocumentation,
 								target,
 								getContentProvider(),
 								registry, 
