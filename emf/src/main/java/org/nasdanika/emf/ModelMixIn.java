@@ -64,7 +64,7 @@ public class ModelMixIn {
 				for (CommandSpec mixIn: spec.mixins().values()) {
 					Object userObject = mixIn.userObject();
 					if (userObject instanceof RepresentationElementFilter) {
-						((RepresentationElementFilter) userObject).filterRepresentationElement(representationElement, registry, progressMonitor);						
+						((RepresentationElementFilter<?>) userObject).filterRepresentationElement(representationElement, registry, progressMonitor);						
 					}
 				}
 			}

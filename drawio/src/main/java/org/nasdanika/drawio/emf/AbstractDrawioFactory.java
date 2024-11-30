@@ -27,9 +27,6 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.capability.CapabilityLoader;
-import org.nasdanika.capability.CapabilityProvider;
-import org.nasdanika.capability.ServiceCapabilityFactory;
-import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Connection;
@@ -505,7 +502,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	/**
 	 * Service/capability interface for filtering representation elements
 	 */
-	public interface RepresentationElementFilter {
+	public interface RepresentationElementFilter<T extends EObject> extends Contributor<Element,T> {
 		
 		void filterRepresentationElement(
 				Element element, 
@@ -513,10 +510,6 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 				ProgressMonitor progressMonitor);	
 		
 	}	
-	
-	protected Requirement<? extends AbstractDrawioFactory<T>, RepresentationElementFilter> createRepresentationElementFilterRequirement() {
-		return ServiceCapabilityFactory.createRequirement(RepresentationElementFilter.class, null, this);
-	}
 			
 	/**
 	 * Override to implement filtering of a representation element. 
@@ -555,15 +548,13 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 					.ifPresent(modelElement::setTooltip);					
 			}
 		}
-		
-		if (element instanceof Element) {
-			// Capabilities
-			if (capabilityLoader != null) {
-				Requirement<? extends AbstractDrawioFactory<T>, RepresentationElementFilter> requirement = createRepresentationElementFilterRequirement();
-				Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
-				for (CapabilityProvider<Object> cp: cpi) {
-					cp.getPublisher().subscribe(filter -> ((RepresentationElementFilter) filter).filterRepresentationElement((Element) element, registry, progressMonitor));
-				}
+				
+		for (Contributor<Element,T> contributor: contributors) {
+			if (contributor instanceof RepresentationElementFilter && contributor.canHandle(element, null)) {
+				((RepresentationElementFilter<?>) contributor).filterRepresentationElement(
+						element, 
+						registry,
+						progressMonitor);						
 			}
 		}
 	}
