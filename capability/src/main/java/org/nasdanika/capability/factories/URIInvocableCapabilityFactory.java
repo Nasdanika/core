@@ -123,17 +123,19 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 		
 		Invocable result = new Invocable() {
 			
-			private Map<Integer,Optional<Object>> positionalBindings = new TreeMap<>();			
+			private Map<Integer,Optional<Object>> positionalBindings = new TreeMap<>();
+			
+			private void bindOneWithOffset(int offset, Object binding) {
+				while (positionalBindings.containsKey(offset)) {
+					++offset;
+				}
+				positionalBindings.put(offset, Optional.ofNullable(binding));
+			}
 			
 			@Override
 			public Invocable bindWithOffset(int offset, Object... bindings) {
-				for (int i = 0; i < offset; ++i) {
-					if (positionalBindings.containsKey(i)) {
-						++offset;
-					}
-				}
-				for (int i = 0; i <bindings.length; ++i) {
-					positionalBindings.put(offset + i, Optional.ofNullable(bindings[i]));
+				for (int i = 0; i < bindings.length; ++i) {
+					bindOneWithOffset(offset, bindings[i]);
 				}
 				return this;
 			}
