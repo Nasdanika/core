@@ -1032,7 +1032,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	// --- Phase 3: mapping features of null semantic elements such as pass-through connections
 	
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 3)
-	public final boolean featureMapNulls(
+	public final void featureMapNoTarget(
 			S obj,
 			Map<S, T> registry,
 			int pass,
@@ -1042,7 +1042,6 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		if (mapper != null) {
 			mapper.wire(obj, registry, progressMonitor);
 		}		
-		return true;
 	}
 	
 	// --- Phase 4: Configuration ---

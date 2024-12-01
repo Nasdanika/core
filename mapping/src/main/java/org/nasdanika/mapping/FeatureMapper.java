@@ -67,7 +67,6 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 					S connectionTarget = getContentProvider().getConnectionTarget(source);
 					if (connectionTarget != null) {
 						for (T connectionTargetValue: select(connectionTarget, registry, progressMonitor)) {		
-							List<EStructuralFeature> connectionTargetValueFeatures = connectionTargetValue.eClass().getEAllStructuralFeatures();
 							
 							// Connection source features		
 							for (EStructuralFeature connectionSourceValueFeature: connectionSourceValueFeatures) {
@@ -83,6 +82,7 @@ public abstract class FeatureMapper<S, T extends EObject> implements Mapper<S,T>
 							}
 							
 							// Connection target features		
+							List<EStructuralFeature> connectionTargetValueFeatures = connectionTargetValue.eClass().getEAllStructuralFeatures();
 							for (EStructuralFeature connectionTargetValueFeature: connectionTargetValueFeatures) {
 								wireConnectionTargetFeature(
 										source,	

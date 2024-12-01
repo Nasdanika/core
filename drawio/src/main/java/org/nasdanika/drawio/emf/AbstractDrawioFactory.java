@@ -576,19 +576,6 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	protected URI getAppBase() {
 		return DEFAULT_APP_BASE;
 	}
-	
-	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 2)
-	public final void mapNoTargetModelElement(
-			org.nasdanika.drawio.ModelElement modelElement,
-			Map<Element, T> registry,
-			int pass,
-			ProgressMonitor progressMonitor) {
-						
-		Mapper<Element,T> mapper = getMapper(pass);
-		if (mapper != null) {
-			mapper.wire(modelElement, registry, progressMonitor);
-		}
-	}	
 		
 	@org.nasdanika.common.Transformer.Wire(phase = 2)
 	public final void mapModelElement(
