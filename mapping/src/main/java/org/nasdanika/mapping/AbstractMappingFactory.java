@@ -1315,6 +1315,8 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return OPERATIONS_PROPERTY;
 	}
 	
+	private enum OperationTarget { self, source, target }
+	
 	protected boolean mapOperations(
 			S obj,
 			T target,
@@ -1326,150 +1328,184 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		YamlSourceRecord operationMap = loadYamlSource(obj, getOperationsPropertyName());
 		if (operationMap != null) {
 			try {
-				Object opMapObj = operationMap.data();
-				if (opMapObj instanceof Map) {
-					Map<?,?> opMap = (Map<?,?>) opMapObj;
-					EClass eClass = target.eClass();
-					for (EOperation eOperation: eClass.getEAllOperations()) {
-						Object opSpec = opMap.get(eOperation.getName());
-						if (opSpec != null) {
-							if (opSpec instanceof Map) {
-								opSpec = Collections.singleton(opSpec); // Wrapping into a list to simplify further logic
+				Object opTargetObj = operationMap.data();
+				if (opTargetObj instanceof Map) {
+					Map<?,?> opTargetMap = (Map<?,?>) opTargetObj;
+					for (Entry<?, ?> targetEntry: opTargetMap.entrySet()) {
+						if (OperationTarget.source.name().equals(targetEntry.getKey())) {
+							S connectionSource = getContentProvider().getConnectionSource(obj);
+							if (connectionSource == null) {
+								throw new ConfigurationException("No connection source: " + obj, getContentProvider().asMarked(obj));																																																			
 							}
-							
-							if (opSpec instanceof Iterable) {
-								OSE: for (Object opSpecElement: (Iterable<?>) opSpec) {
-									if (opSpecElement instanceof Map) {
-										Map<?,?> opSpecElementMap = (Map<?,?>) opSpecElement;
-										org.nasdanika.persistence.Util.checkUnsupportedKeys(
-												opSpecElementMap, 
-												SELECTOR_KEY, 
-												ITERATOR_KEY, 
-												ARGUMENTS_KEY,
-												PASS_KEY);
-										
-										Object passObj = opSpecElementMap.get(PASS_KEY);
-										if (passObj instanceof Number) {
-											int passNum = ((Number) passObj).intValue();
-											if (passNum > pass) {
-												result = false; // This op shall be invoked later
-											} else if (passNum < pass) {
-												continue OSE; // Already invoked if matched
-											}
-										} else if (passObj != null) {
-											throw new ConfigurationException("Usupported operation pass type: " + passObj, getContentProvider().asMarked(obj));																																				
-										}
-										
-										Map<String,String> argMap = new HashMap<>(); 
-										Object arguments = opSpecElementMap.get(ARGUMENTS_KEY);
-										if (arguments instanceof Map) {
-											for (Entry<?, ?> ae: ((Map<?,?>) arguments).entrySet()) {
-												Object key = ae.getKey();
-												if (key instanceof String) {
-													boolean hasParameter = false;
-													for (EParameter prm: eOperation.getEParameters()) {
-														if (prm.getName().equals(key)) {
-															hasParameter = true;
-															break;
+							target = registry.get(connectionSource);
+							if (target == null) {
+								throw new ConfigurationException("Connection source is not mapped: " + connectionSource, getContentProvider().asMarked(obj));																																																											
+							}
+						} else if (OperationTarget.target.name().equals(targetEntry.getKey())) {
+							S connectionTarget = getContentProvider().getConnectionTarget(obj);
+							if (connectionTarget == null) {
+								throw new ConfigurationException("No connection target: " + obj, getContentProvider().asMarked(obj));																																																			
+							}
+							target = registry.get(connectionTarget);
+							if (target == null) {
+								throw new ConfigurationException("Connection target is not mapped: " + connectionTarget, getContentProvider().asMarked(obj));																																																											
+							}							
+						} else if (OperationTarget.self.name().equals(targetEntry.getKey())) {
+							if (target == null) {
+								throw new ConfigurationException("The element is not mapped (target is null)", getContentProvider().asMarked(obj));																																																											
+							}							
+						} else {
+							throw new ConfigurationException("Usupported operation target: " + targetEntry.getKey(), getContentProvider().asMarked(obj));																																																		
+						}
+
+						Object opMapObj = targetEntry.getValue();
+						if (opMapObj instanceof Map) {
+							Map<?,?> opMap = (Map<?,?>) opMapObj;
+							EClass eClass = target.eClass();
+							for (EOperation eOperation: eClass.getEAllOperations()) {
+								Object opSpec = opMap.get(eOperation.getName());
+								if (opSpec != null) {
+									if (opSpec instanceof Map) {
+										opSpec = Collections.singleton(opSpec); // Wrapping into a list to simplify further logic
+									}
+									
+									if (opSpec instanceof Iterable) {
+										OSE: for (Object opSpecElement: (Iterable<?>) opSpec) {
+											if (opSpecElement instanceof Map) {
+												Map<?,?> opSpecElementMap = (Map<?,?>) opSpecElement;
+												org.nasdanika.persistence.Util.checkUnsupportedKeys(
+														opSpecElementMap, 
+														SELECTOR_KEY, 
+														ITERATOR_KEY, 
+														ARGUMENTS_KEY,
+														PASS_KEY);
+												
+												Object passObj = opSpecElementMap.get(PASS_KEY);
+												if (passObj instanceof Number) {
+													int passNum = ((Number) passObj).intValue();
+													if (passNum > pass) {
+														result = false; // This op shall be invoked later
+													} else if (passNum < pass) {
+														continue OSE; // Already invoked if matched
+													}
+												} else if (passObj != null) {
+													throw new ConfigurationException("Usupported operation pass type: " + passObj, getContentProvider().asMarked(obj));																																				
+												}
+												
+												Map<String,String> argMap = new HashMap<>(); 
+												Object arguments = opSpecElementMap.get(ARGUMENTS_KEY);
+												if (arguments instanceof Map) {
+													for (Entry<?, ?> ae: ((Map<?,?>) arguments).entrySet()) {
+														Object key = ae.getKey();
+														if (key instanceof String) {
+															boolean hasParameter = false;
+															for (EParameter prm: eOperation.getEParameters()) {
+																if (prm.getName().equals(key)) {
+																	hasParameter = true;
+																	break;
+																}
+															}
+															
+															if (!hasParameter) {
+																continue OSE;
+															}
+															
+															Object val = ae.getValue();
+															if (val instanceof String) {
+																argMap.put((String) key, (String) val);
+															} else {
+																throw new ConfigurationException("Usupported operation argument expression type: " + val, getContentProvider().asMarked(obj));																																																													
+															}
+														} else {
+															throw new ConfigurationException("Usupported operation parameter name type: " + key, getContentProvider().asMarked(obj));																																																
 														}
 													}
-													
-													if (!hasParameter) {
-														continue OSE;
-													}
-													
-													Object val = ae.getValue();
-													if (val instanceof String) {
-														argMap.put((String) key, (String) val);
-													} else {
-														throw new ConfigurationException("Usupported operation argument expression type: " + val, getContentProvider().asMarked(obj));																																																													
-													}
 												} else {
-													throw new ConfigurationException("Usupported operation parameter name type: " + key, getContentProvider().asMarked(obj));																																																
-												}
-											}
-										} else {
-											throw new ConfigurationException("Usupported operation arguments type: " + arguments, getContentProvider().asMarked(obj));																																				
-										}																		
-										
-										Object selector = opSpecElementMap.get(SELECTOR_KEY);
-										if (selector instanceof String) {
-											if (!mapper.evaluatePredicate(eOperation, (String) selector, null, obj)) {
-												continue;
-											}
-										} else if (selector != null) {
-											throw new ConfigurationException("Usupported operation selector type: " + selector, getContentProvider().asMarked(obj));																										
-										}
-										
-										Iterator<?> it = Collections.singleton(obj).iterator();
-										
-										Object iterator = opSpecElementMap.get(ITERATOR_KEY);
-										if (iterator instanceof String) {										
-											Object itVal = mapper.evaluate(
-													obj, 
-													(String) iterator,												
-													Map.of(REGISTRY_VAR, registry),
-													Object.class,
-													obj);
-											
-											if (itVal instanceof Iterator) {
-												it = (Iterator<?>) itVal;
-											} else if (itVal instanceof Iterable) {
-												it = ((Iterable<?>) itVal).iterator();
-											} else if (itVal instanceof Stream) {
-												it = ((Stream<?>) itVal).iterator();
-											} else if (itVal == null) {
-												it = Collections.emptyIterator();
-											} else if (itVal.getClass().isArray()) {
-												Collection<Object> values = new ArrayList<>();
-												for (int i = 0; i < Array.getLength(itVal); ++i) {
-													values.add(Array.get(itVal, i));
-												}
-												it = values.iterator();
-											} else {
+													throw new ConfigurationException("Usupported operation arguments type: " + arguments, getContentProvider().asMarked(obj));																																				
+												}																		
 												
-												it = Collections.singleton(itVal).iterator();
-											} 
-										} else if (iterator != null) {
-											throw new ConfigurationException("Usupported operation iterator type: " + iterator, getContentProvider().asMarked(obj));																										
-										}
-										
-										if (it != null) {
-											while (it.hasNext()) {
-												Object next = it.next();
-												EList<Object> argList = ECollections.newBasicEList();
-												for (EParameter prm: eOperation.getEParameters()) {
-													String argExpr = argMap.get(prm.getName());
-													if (Util.isBlank(argExpr)) {
-														argList.add(null);
+												Object selector = opSpecElementMap.get(SELECTOR_KEY);
+												if (selector instanceof String) {
+													if (!mapper.evaluatePredicate(eOperation, (String) selector, null, obj)) {
+														continue;
+													}
+												} else if (selector != null) {
+													throw new ConfigurationException("Usupported operation selector type: " + selector, getContentProvider().asMarked(obj));																										
+												}
+												
+												Iterator<?> it = Collections.singleton(obj).iterator();
+												
+												Object iterator = opSpecElementMap.get(ITERATOR_KEY);
+												if (iterator instanceof String) {										
+													Object itVal = mapper.evaluate(
+															obj, 
+															(String) iterator,												
+															Map.of(REGISTRY_VAR, registry),
+															Object.class,
+															obj);
+													
+													if (itVal instanceof Iterator) {
+														it = (Iterator<?>) itVal;
+													} else if (itVal instanceof Iterable) {
+														it = ((Iterable<?>) itVal).iterator();
+													} else if (itVal instanceof Stream) {
+														it = ((Stream<?>) itVal).iterator();
+													} else if (itVal == null) {
+														it = Collections.emptyIterator();
+													} else if (itVal.getClass().isArray()) {
+														Collection<Object> values = new ArrayList<>();
+														for (int i = 0; i < Array.getLength(itVal); ++i) {
+															values.add(Array.get(itVal, i));
+														}
+														it = values.iterator();
 													} else {
-														Object arg = mapper.evaluate(
-																next, 
-																argExpr,												
-																Map.of(REGISTRY_VAR, registry),
-																Object.class,
-																obj);
-														argList.add(arg);
+														
+														it = Collections.singleton(itVal).iterator();
+													} 
+												} else if (iterator != null) {
+													throw new ConfigurationException("Usupported operation iterator type: " + iterator, getContentProvider().asMarked(obj));																										
+												}
+												
+												if (it != null) {
+													while (it.hasNext()) {
+														Object next = it.next();
+														EList<Object> argList = ECollections.newBasicEList();
+														for (EParameter prm: eOperation.getEParameters()) {
+															String argExpr = argMap.get(prm.getName());
+															if (Util.isBlank(argExpr)) {
+																argList.add(null);
+															} else {
+																Object arg = mapper.evaluate(
+																		next, 
+																		argExpr,												
+																		Map.of(REGISTRY_VAR, registry),
+																		Object.class,
+																		obj);
+																argList.add(arg);
+															}
+														}
+														try {
+															target.eInvoke(eOperation, argList);
+														} catch (InvocationTargetException e) {
+															throw new ConfigurationException("Error invoking eOperation " + eOperation, e, getContentProvider().asMarked(obj));																
+														}
 													}
 												}
-												try {
-													target.eInvoke(eOperation, argList);
-												} catch (InvocationTargetException e) {
-													throw new ConfigurationException("Error invoking eOperation " + eOperation, e, getContentProvider().asMarked(obj));																
-												}
-											}
+											} else {
+												throw new ConfigurationException("Usupported operation spec element type: " + opSpecElement, getContentProvider().asMarked(obj));																
+											}								
 										}
 									} else {
-										throw new ConfigurationException("Usupported operation spec element type: " + opSpecElement, getContentProvider().asMarked(obj));																
-									}								
+										throw new ConfigurationException("Usupported operation spec type: " + opSpec, getContentProvider().asMarked(obj));							
+									}	
 								}
-							} else {
-								throw new ConfigurationException("Usupported operation spec type: " + opSpec, getContentProvider().asMarked(obj));							
-							}	
+							}
+						} else {				
+							throw new ConfigurationException("Usupported operation map type: " + opMapObj, getContentProvider().asMarked(obj));
 						}
 					}
-				} else {				
-					throw new ConfigurationException("Usupported operation map type: " + opMapObj, getContentProvider().asMarked(obj));
+				} else {
+					throw new ConfigurationException("Usupported operation target type: " + opTargetObj, getContentProvider().asMarked(obj));					
 				}
 			} catch (YAMLException yamlException) {
 				throw new ConfigurationException("Error loading operation map: " + yamlException, yamlException, getContentProvider().asMarked(obj));

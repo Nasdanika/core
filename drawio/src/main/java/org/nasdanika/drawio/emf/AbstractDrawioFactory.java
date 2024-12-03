@@ -746,6 +746,25 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		return super.mapOperations(element, target, registry, pass, progressMonitor);
 	}
 	
+	/**
+	 * Invokes {@link EOperation}s of the semantic element. 	
+	 * @param diagramElement
+	 * @param semanticElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(phase = 5, targetType = Void.class)
+	public final boolean mapOperations(
+			Element element,
+			Map<Element,T> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		return super.mapOperations(element, null, registry, pass, progressMonitor);
+	}
+	
+	
 	// --- Phase 6: Invoke
 	
 	@org.nasdanika.common.Transformer.Wire(phase = 6, targetType = Void.class)
