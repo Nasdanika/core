@@ -36,7 +36,7 @@ public class DispatchingLoader implements ObjectLoader {
 	}
 
 	@Override
-	public Object create(
+	public <T> T create(
 			ObjectLoader loader, 
 			String type, 
 			Object config, 
@@ -72,7 +72,7 @@ public class DispatchingLoader implements ObjectLoader {
 	}
 
 	@Override
-	public Object create(ObjectLoader loader, String type) {
+	public <T> T create(ObjectLoader loader, String type) {
 		throw new UnsupportedOperationException();
 	}
 

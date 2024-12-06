@@ -38,8 +38,9 @@ public class ClassLoaderObjectLoader implements ObjectLoader {
 		this.chain = chain;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object create(
+	public <T> T create(
 			ObjectLoader loader, 
 			String type, 
 			Object config, 
@@ -68,14 +69,14 @@ public class ClassLoaderObjectLoader implements ObjectLoader {
 					Function.class,
 					Collection.class,
 					ProgressMonitor.class); 		
-			return constructor.newInstance(loader, config, base, resolver, markers, progressMonitor);
+			return (T) constructor.newInstance(loader, config, base, resolver, markers, progressMonitor);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new ExecutionException(e);
 		}
 	}
 
 	@Override
-	public Object create(ObjectLoader loader, String type) {
+	public <T> T create(ObjectLoader loader, String type) {
 		throw new UnsupportedOperationException();
 	}
 

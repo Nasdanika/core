@@ -55,7 +55,7 @@ public interface ObjectLoader {
 	 * @param progressMonitor Progress monitor
 	 * @return Configured object
 	 */
-	default Object create(
+	default  <T> T create(
 			ObjectLoader loader, 
 			String type, 
 			Object config, 
@@ -64,7 +64,7 @@ public interface ObjectLoader {
 			Collection<? extends Marker> markers,
 			ProgressMonitor progressMonitor) {
 		
-		Object obj = create(loader, type);
+		T obj = create(loader, type);
 		load(loader, config, obj, base, resolver, markers, progressMonitor);		
 		return obj;		
 	}
@@ -75,7 +75,7 @@ public interface ObjectLoader {
 	 * @param type
 	 * @return
 	 */
-	Object create(ObjectLoader loader,	String type); 	
+	 <T> T create(ObjectLoader loader,	String type); 	
 	
 	/**
 	 * Loads configuration into an existing object.
@@ -99,7 +99,7 @@ public interface ObjectLoader {
 	
 	
 	@SuppressWarnings("unchecked")
-	default Object load(
+	default  <T> T load(
 			Object spec, 
 			URI base,
 			BiConsumer<Object, BiConsumer<Object,ProgressMonitor>> resolver,
@@ -118,7 +118,7 @@ public interface ObjectLoader {
 			for (Entry<String, Object> e: map.entrySet()) {
 				ret.put(e.getKey(), load(e.getValue(), base, resolver, progressMonitor));
 			}
-			return ret;
+			return (T) ret;
 		}
 		
 		// list
@@ -127,14 +127,14 @@ public interface ObjectLoader {
 			for (Object e: (Collection<?>) spec) {
 				ret.add(load(e, base, resolver, progressMonitor));
 			}
-			return ret;
+			return (T) ret;
 		}
 		
 		// Scalar - return AS-IS
-		return spec;
+		return (T) spec;
 	}
 	
-	default Object loadYaml(
+	default <T> T loadYaml(
 			String yamlString, 
 			URI base,
 			BiConsumer<Object, BiConsumer<Object,ProgressMonitor>> resolver,			

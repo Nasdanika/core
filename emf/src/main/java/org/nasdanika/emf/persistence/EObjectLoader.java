@@ -343,7 +343,7 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param marker
 	 * @return
 	 */
-	public Object create(
+	public <T> T create(
 			ObjectLoader loader, 
 			String type, 
 			Object config, 
@@ -405,7 +405,7 @@ public class EObjectLoader extends DispatchingLoader {
 	}
 	
 	@Override
-	public Object create(
+	public  <T> T create(
 			ObjectLoader loader, 
 			String type, 
 			Object config, 
@@ -499,7 +499,8 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param eClassifier
 	 * @return
 	 */
-	public Object create(
+	@SuppressWarnings("unchecked")
+	public <T> T create(
 			ObjectLoader loader, 
 			EClass eClass, 
 			Object config, 
@@ -517,9 +518,15 @@ public class EObjectLoader extends DispatchingLoader {
 		}
 		
 		// Proxy
-		Object proxy = createProxy(eClass, config, base, markers, progressMonitor);
+		EObject proxy = createProxy(eClass, config, base, markers, progressMonitor);
 		if (proxy != null) {
-			return configure(proxy, loader, config, base, null, progressMonitor);
+			return (T) configure(
+					proxy, 
+					loader, 
+					config, 
+					base, 
+					null, 
+					progressMonitor);
 		}
 		
 		Class<?> instanceClass = eClass.getInstanceClass();
@@ -528,10 +535,10 @@ public class EObjectLoader extends DispatchingLoader {
 		if (Loadable.class.isAssignableFrom(instanceClass)) {
 			EObject eObject = factory.create(eClass);
 			((Loadable) eObject).load(loader, config, base, resolver, markers, progressMonitor);
-			return configure(eObject, loader, config, base, null, progressMonitor);
+			return (T) configure(eObject, loader, config, base, null, progressMonitor);
 		}
 		if (ContextLoadable.class.isAssignableFrom(instanceClass)) {
-			return new SupplierFactory<EObject>() {
+			return (T) new SupplierFactory<EObject>() {
 
 				@Override
 				public Supplier<EObject> create(Context context) {
@@ -578,7 +585,7 @@ public class EObjectLoader extends DispatchingLoader {
 			}
 			
 		};
-		return eObjectSupplierFactory.then(configureFactory);
+		return (T) eObjectSupplierFactory.then(configureFactory);
 	}
 	
 	/**
