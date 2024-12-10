@@ -12,6 +12,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -520,6 +522,13 @@ public class TestCommon {
 		Invocable spelInvocable = Invocable.ofExpression("#myVar + #this");
 		spelInvocable.bindByName("myVar", "Hello ");
 		System.out.println((Object) spelInvocable.invoke("World"));
+	}
+	
+	@Test
+	public void testLineageMap() {
+		Util.lineageMap(LinkedHashMap.class).forEach((c,d) -> System.out.println(c.getName() + ": " + d));
+		System.out.println("---");
+		Util.lineageMap(LinkedList.class).forEach((c,d) -> System.out.println(c.getName() + ": " + d));
 	}
 	
 }

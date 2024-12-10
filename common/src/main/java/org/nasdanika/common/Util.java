@@ -1334,6 +1334,36 @@ public class Util {
 	}	
 	
 	/**
+	 * Map of superclass/interface to the shortest distance from the argument class. 
+	 * E.g. for List argument Iterable would be mapped to 2 and Collection to 1
+	 * @param eClass
+	 * @return
+	 */
+	public static Map<Class<?>, Integer> lineageMap(Class<?> clazz) {
+		if (clazz == null) {
+			return Collections.emptyMap();
+		}		
+		Map<Class<?>, Integer> ret = new LinkedHashMap<>();
+		ret.put(clazz, 0);
+		for (Map.Entry<Class<?>, Integer> scLineageEntry: lineageMap(clazz.getSuperclass()).entrySet()) {
+			Integer eDist = ret.get(scLineageEntry.getKey());
+			if (eDist == null || eDist >= scLineageEntry.getValue()) {
+				ret.put(scLineageEntry.getKey(), scLineageEntry.getValue() + 1);
+			}
+		}
+		
+		for (Class<?> i: clazz.getInterfaces()) {
+			for (Map.Entry<Class<?>, Integer> scLineageEntry: lineageMap(i).entrySet()) {
+				Integer eDist = ret.get(scLineageEntry.getKey());
+				if (eDist == null || eDist >= scLineageEntry.getValue()) {
+					ret.put(scLineageEntry.getKey(), scLineageEntry.getValue() + 1);
+				}
+			}
+		}
+		return ret;
+	}
+	
+	/**
 	 * Flattened inheritance hierarchy from the argument class to all of its supertypes.
 	 * @param eClass
 	 * @return

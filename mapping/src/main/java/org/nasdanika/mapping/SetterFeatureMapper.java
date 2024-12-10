@@ -984,7 +984,7 @@ public abstract class SetterFeatureMapper<S, T extends EObject> extends FeatureM
 		return (featureName, context) -> {
 			EClass valueEClass = value.eClass();
 			if (valueEClass.getEStructuralFeature(featureName) == null) {
-				throw new ConfigurationException("Feature " + featureName + " not found in " + valueEClass.getName(), null, getContentProvider().asMarked(context));
+				throw new ConfigurationException("Feature " + featureName + " not found in " + valueEClass.getName() + " " + valueEClass.getEPackage().getNsURI(), null, getContentProvider().asMarked(context));
 			}
 		};
 	}
