@@ -378,6 +378,17 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		};
 	}
 	
+	/**
+	 * Combines with progress monitor
+	 * @param <T>
+	 * @param <U>
+	 * @param <R>
+	 */
+	interface Combiner<T,U,R> {
+		
+	    R combine(T t, U u, ProgressMonitor progressMonitor);		
+		
+	}	
 	
 	/**
 	 * @return Function which executes this supplier and returns the argument and the result combined by the combiner
@@ -425,6 +436,52 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		};
 	}
 	
+	
+	/**
+	 * @return Function which executes this supplier and returns the argument and the result combined by the combiner
+	 * This method can be used for embedding suppliers into function chains.
+	 */
+	default <V,R> Function<V,R> asFunction(Combiner<V,T,R> combiner) {
+		return new Function<V,R>() {
+			
+			@Override
+			public R execute(V arg, ProgressMonitor progressMonitor) {
+				T result = Supplier.this.execute(progressMonitor);
+				return combiner.combine(arg, result, progressMonitor);
+			}
+			
+			@Override
+			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+				return Supplier.this.diagnose(progressMonitor);
+			}
+			
+			@Override
+			public void close() {
+				Supplier.this.close();
+			}
+			
+			@Override
+			public void commit(ProgressMonitor progressMonitor) {
+				Supplier.this.commit(progressMonitor);
+			}
+			
+			@Override
+			public boolean rollback(ProgressMonitor progressMonitor) {
+				return Supplier.this.rollback(progressMonitor);
+			}
+			
+			@Override
+			public double size() {
+				return Supplier.this.size();
+			}
+			
+			@Override
+			public String name() {
+				return Supplier.this.name();
+			}
+			
+		};
+	}
 	
 	/**
 	 * Executes full supplier lifecycle - diagnose, execute, commit/rollback, close.
