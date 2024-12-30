@@ -33,7 +33,7 @@ public class PropertiesMixIn {
 			
 	@Option(			
 			names = {"-p", "--property"},
-			description = {	"Properties" })
+			description = {	"Property" })
     private Map<String, String> properties = new LinkedHashMap<>();
 	
 	@Option(			

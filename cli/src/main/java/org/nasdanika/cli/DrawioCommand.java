@@ -3,19 +3,31 @@ package org.nasdanika.cli;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.function.Function;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.emf.common.util.URI;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.Document;
 import org.xml.sax.SAXException;
+import org.yaml.snakeyaml.Yaml;
 
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Option;
@@ -55,6 +67,42 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 	@Mixin
 	PropertiesMixIn propertiesMixIn;
 	
+			
+	@Option(			
+			names = {"-u", "--uri"},
+			description = {	
+					"URI to URL mapping",
+					"Target URLs are resolved",
+					"relative to the document URL"})
+    private Map<String, String> uris = new LinkedHashMap<>();
+	
+	@Option(			
+			names = {"-U", "--uris"},
+			paramLabel = "URL of URI to URL mapping resource",
+			description = {
+					"URI map resource URL relative to the document file",
+					"YAML, JSON, or properties",
+					"Type is inferred from the content type header, if it is present, ",
+					"or extension"
+			})
+	private List<String> uriMapSources = new ArrayList<>();
+			
+	protected Map<String,Object> loadJson(InputStream in) throws IOException {
+		JSONObject jo = new JSONObject(new JSONTokener(in));
+		return jo.toMap();
+	}
+	
+	protected Map<Object,Object> loadYaml(InputStream in) throws IOException {
+		Yaml yaml = new Yaml();
+		return yaml.load(in);
+	}
+	
+	protected Properties loadProperties(InputStream in) throws IOException {
+		Properties props = new Properties();
+		props.load(in);
+		return props;
+	}
+	
 	@Override
 	public Document getDocument(ProgressMonitor progressMonitor) {		
 		File currentDir = new File(".");
@@ -64,7 +112,7 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		if (isFile) {
 			File documentFile = new File(document);
 			try {
-				return Document.load(documentFile, getUriHandler(progressMonitor), getPropertySource(progressMonitor));
+				return Document.load(documentFile, getUriHandler(URI.createFileURI(documentFile.toString()), progressMonitor), getPropertySource(progressMonitor));
 			} catch (IOException | ParserConfigurationException | SAXException e) {
 				throw new NasdanikaException("Error loading document from '" + documentFile.getAbsolutePath() + "': " + e, e);
 			}
@@ -73,17 +121,90 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		URI baseURI = URI.createFileURI(currentDir.getAbsolutePath()).appendSegment("");
 		URI documentURI = URI.createURI(document).resolve(baseURI);
 		try {
-			return Document.load(documentURI, getUriHandler(progressMonitor), getPropertySource(progressMonitor));
+			return Document.load(documentURI, getUriHandler(documentURI, progressMonitor), getPropertySource(progressMonitor));
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			throw new NasdanikaException("Error loading document from '" + documentURI.toString() + "': " + e, e);
 		}
 	}
 
-	protected Function<URI, InputStream> getUriHandler(ProgressMonitor progressMonitor) {
-		// TODO 
-		return null;
-	}
+	protected Function<URI, InputStream> getUriHandler(URI baseURI, ProgressMonitor progressMonitor) {
+		Map<Object, Object> data = new LinkedHashMap<>(uris);
+		File currentDir = new File(".");
+		for (String location: uriMapSources) {
+			try {
+				URL url = currentDir.toURI().resolve(location).toURL();
+				URLConnection connection = url.openConnection();
+				
+				if (location.endsWith(".json")) {
+					try (InputStream in = connection.getInputStream()) {
+						data.putAll(loadJson(in));
+					}
+				} else if (location.endsWith(".yml") || location.endsWith(".yaml")) {
+					try (InputStream in = connection.getInputStream()) {
+						data.putAll(loadYaml(in));
+					}			
+				} else if (location.endsWith(".properties")) {
+					try (InputStream in = connection.getInputStream()) {
+						data.putAll(loadProperties(in));
+					}			
+				} else {				
+					// Can't deduce content type from extension, attempting to use Content-Type header
+					if (connection instanceof HttpURLConnection && ((HttpURLConnection) connection).getResponseCode() == HttpURLConnection.HTTP_OK) {
+						String contentType = ((HttpURLConnection) connection).getHeaderField("Content-Type");
+						if ("application/json".equals(contentType)) {
+							try (InputStream in = connection.getInputStream()) {
+								data.putAll(loadJson(in));
+							}				 
+						} else if ("application/x-yaml".equals(contentType)) {
+							try (InputStream in = connection.getInputStream()) {
+								data.putAll(loadYaml(in));
+							}				
+						} else if ("text/x-java-properties".equals(contentType)) {
+							try (InputStream in = connection.getInputStream()) {
+								data.putAll(loadProperties(in));
+							}				
+						} else {
+							throw new CommandLine.ParameterException(spec.commandLine(), "Unsupported content type '" + contentType + "' for " + url); 													
+						}
+					} else {
+						throw new CommandLine.ParameterException(spec.commandLine(), "Unknown resource type " + url); 						
+					}
+				}
+			} catch (IOException e) {
+				throw new CommandLine.ParameterException(spec.commandLine(), "Cannot load properties from " + location + ": " + e, e); 
+			}		
+		}
 
+		if (data.isEmpty()) { 
+			return null;
+		}
+		
+		return uri -> {
+			for (Entry<Object, Object> dataEntry: data.entrySet()) {				
+				String keyStr = dataEntry.getKey().toString();
+				URI keyURI = URI.createURI(keyStr);
+				URI valueURI = URI.createURI(dataEntry.getValue().toString());
+				if (valueURI.isRelative() && baseURI != null) {
+					valueURI = valueURI.resolve(baseURI);
+				}
+				if (keyURI.equals(uri)) {
+					uri = valueURI;
+					break;
+				}
+				if (uri.toString().startsWith(keyStr)) {
+					URI relative = uri.deresolve(keyURI, true, true, true);
+					uri = relative.resolve(valueURI);
+					break;
+				}
+			}
+			
+			try {
+				return new URL(uri.toString()).openStream();
+			} catch (IOException e) {
+				throw new NasdanikaException("Error opening stream from " + uri + ": " + e, e);
+			}
+		};
+	}
 
 	protected Function<String, String> getPropertySource(ProgressMonitor progressMonitor) {
 		Map<Object, Object> properties = propertiesMixIn.getProperties();
