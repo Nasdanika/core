@@ -1291,7 +1291,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 					}
 				}
 				
-				documentation =  docFactory.createDocumentation(docRefURI[0], progressMonitor);
+				documentation =  docFactory.createDocumentation(obj, docRefURI[0], progressMonitor);
 				addDocumentation(target, documentation);				
 			}
 		}

@@ -1,5 +1,7 @@
 package org.nasdanika.common;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLConnection;
 import java.util.Collection;
 
@@ -35,8 +37,24 @@ public interface DocumentationFactory {
 		return canHandle(URLConnection.guessContentTypeFromName(lastSegment));
 	}
 	
-	Collection<EObject> createDocumentation(java.lang.String doc, URI baseUri, ProgressMonitor progressMonitor);
+	Collection<EObject> createDocumentation(
+			Object context, 
+			java.lang.String doc, 
+			URI baseUri, 
+			ProgressMonitor progressMonitor);
 	
-	Collection<EObject> createDocumentation(URI docRef, ProgressMonitor progressMonitor);	
+	default Collection<EObject> createDocumentation(
+			Object context, 
+			URI docRef, 
+			ProgressMonitor progressMonitor) {
+		
+		try (InputStream in = DefaultConverter.INSTANCE.toInputStream(docRef)) {
+			String doc = DefaultConverter.INSTANCE.toString(in);
+			return createDocumentation(context, doc, docRef, progressMonitor);
+		} catch (IOException e) {
+			throw new NasdanikaException("Error loading documentation from '" + docRef + "': " + e, e);
+		}
+		
+	};	
 
 }

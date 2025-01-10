@@ -10,6 +10,8 @@ import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.PropertySource;
+import org.nasdanika.common.Util;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.Text;
 
@@ -34,13 +36,12 @@ public class TextDocumentationFactory extends ServiceCapabilityFactory<Void, Doc
 				return "text".equalsIgnoreCase(contentType) || "text/plain".equalsIgnoreCase(contentType);
 			}
 			
+			@SuppressWarnings("unchecked")
 			@Override
-			public Collection<EObject> createDocumentation(URI docRef, ProgressMonitor progressMonitor) {
-				throw new UnsupportedOperationException();
-			}
-			
-			@Override
-			public Collection<EObject> createDocumentation(String doc, URI baseUri, ProgressMonitor progressMonitor) {
+			public Collection<EObject> createDocumentation(Object context, String doc, URI baseUri, ProgressMonitor progressMonitor) {
+				if (context instanceof PropertySource) {
+					doc = Util.interpolate(doc, ((PropertySource<String,String>) context)::getProperty);
+				}
 				Text text = ContentFactory.eINSTANCE.createText(); // Interpolate with element properties?
 				text.setContent("<PRE>" + System.lineSeparator() + doc + System.lineSeparator() + "</PRE>");
 				return Collections.singleton(text);
