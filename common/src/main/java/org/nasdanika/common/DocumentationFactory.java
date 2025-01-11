@@ -13,6 +13,8 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface DocumentationFactory {
 	
+	record Requirement(boolean inline) {}
+	
 	/**
 	 * @param Content type. E.g. text/markdown, text/html, text/plain
 	 * @return

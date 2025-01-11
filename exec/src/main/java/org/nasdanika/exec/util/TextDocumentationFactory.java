@@ -15,17 +15,17 @@ import org.nasdanika.common.Util;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.Text;
 
-public class TextDocumentationFactory extends ServiceCapabilityFactory<Void, DocumentationFactory> {
+public class TextDocumentationFactory extends ServiceCapabilityFactory<DocumentationFactory.Requirement, DocumentationFactory> {
 	
 	@Override
 	public boolean isFor(Class<?> type, Object requirement) {
-		return DocumentationFactory.class == type && requirement == null;
+		return DocumentationFactory.class == type && requirement instanceof DocumentationFactory.Requirement;
 	}
 
 	@Override
 	protected CompletionStage<Iterable<CapabilityProvider<DocumentationFactory>>> createService(
 			Class<DocumentationFactory> serviceType, 
-			Void serviceRequirement,
+			DocumentationFactory.Requirement serviceRequirement,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
 		

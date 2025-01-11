@@ -17,18 +17,19 @@ import org.nasdanika.exec.content.Interpolator;
 import org.nasdanika.exec.content.Markdown;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.content.Text;
+import org.nasdanika.ncore.NcoreFactory;
 
-public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Void, DocumentationFactory> {
+public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<DocumentationFactory.Requirement, DocumentationFactory> {
 	
 	@Override
 	public boolean isFor(Class<?> type, Object requirement) {
-		return DocumentationFactory.class == type && requirement == null;
+		return DocumentationFactory.class == type && requirement instanceof DocumentationFactory.Requirement;
 	}
 
 	@Override
 	protected CompletionStage<Iterable<CapabilityProvider<DocumentationFactory>>> createService(
 			Class<DocumentationFactory> serviceType, 
-			Void serviceRequirement,
+			DocumentationFactory.Requirement serviceRequirement,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
@@ -39,31 +40,49 @@ public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Void,
 				return "markdown".equalsIgnoreCase(contentType) || "text/markdown".equalsIgnoreCase(contentType);
 			}
 			
+			@Override
+			public Collection<EObject> createDocumentation(Object context, URI docRef, ProgressMonitor progressMonitor) {
+				if (serviceRequirement.inline()) {
+					return DocumentationFactory.super.createDocumentation(context, docRef, progressMonitor);
+				}
+				Resource resource = ContentFactory.eINSTANCE.createResource();
+				resource.setLocation(docRef.toString());
+				resource.setErrorMessage("Error loading documentation from '" + docRef.toString() + "' (${url}): ${exception}");				
+				return Collections.singleton(createMarkdown(resource));
+			}
+			
 			@SuppressWarnings("unchecked")
 			@Override
 			public Collection<EObject> createDocumentation(Object context, String doc, URI baseUri, ProgressMonitor progressMonitor) {
 				if (context instanceof PropertySource) {
 					doc = Util.interpolate(doc, ((PropertySource<String,String>) context)::getProperty);
 				}
-				Markdown ret = ContentFactory.eINSTANCE.createMarkdown();
-				Interpolator interpolator = ContentFactory.eINSTANCE.createInterpolator();
 				Text text = ContentFactory.eINSTANCE.createText(); 
 				text.setContent(doc);
-				interpolator.setSource(text);
-				ret.setSource(interpolator);
-				ret.setStyle(true);
 				
+				Markdown markdown = createMarkdown(text);
 				// Creating a marker with EObject resource location for resource resolution in Markdown
-//				if (location != null) {
-//					org.nasdanika.ncore.Marker marker = context.get(MarkerFactory.class, MarkerFactory.INSTANCE).createMarker(location.toString(), progressMonitor);
-//					ret.getMarkers().add(marker); 
-//				}
+				if (baseUri != null) {
+					org.nasdanika.ncore.Marker marker = NcoreFactory.eINSTANCE.createMarker();
+					marker.setLocation(baseUri.toString());
+					markdown.getMarkers().add(marker); 
+				}
 				
-				return Collections.singleton(ret);
+				return Collections.singleton(markdown);
 			}
 		};
 		
 		return wrap(markdownDocumentationFactory);
 	}
+	
+	protected Markdown createMarkdown(EObject source) {
+		Markdown ret = ContentFactory.eINSTANCE.createMarkdown();
+		Interpolator interpolator = ContentFactory.eINSTANCE.createInterpolator();
+		ret.setSource(interpolator);
+		ret.setStyle(true);
+		interpolator.setSource(source);
+		return ret;
+	}			
+	
 	
 }

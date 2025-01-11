@@ -1129,7 +1129,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		if (documentationFactories == null) {
 			documentationFactories = new ArrayList<>();
 			if (capabilityLoader != null) {
-				Requirement<Object, DocumentationFactory> requirement = ServiceCapabilityFactory.createRequirement(DocumentationFactory.class);
+				Requirement<Object, DocumentationFactory> requirement = ServiceCapabilityFactory.createRequirement(DocumentationFactory.class, null, new DocumentationFactory.Requirement(false)); // No inlining
 				Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
 				for (CapabilityProvider<Object> cp: cpi) {				
 					cp.getPublisher().subscribe(df -> documentationFactories.add((DocumentationFactory) df));

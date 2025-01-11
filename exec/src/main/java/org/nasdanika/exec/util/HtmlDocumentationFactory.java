@@ -16,17 +16,17 @@ import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.content.Text;
 
-public class HtmlDocumentationFactory extends ServiceCapabilityFactory<Void, DocumentationFactory> {
+public class HtmlDocumentationFactory extends ServiceCapabilityFactory<DocumentationFactory.Requirement, DocumentationFactory> {
 	
 	@Override
 	public boolean isFor(Class<?> type, Object requirement) {
-		return DocumentationFactory.class == type && requirement == null;
+		return DocumentationFactory.class == type && requirement instanceof DocumentationFactory.Requirement;
 	}
 
 	@Override
 	protected CompletionStage<Iterable<CapabilityProvider<DocumentationFactory>>> createService(
 			Class<DocumentationFactory> serviceType, 
-			Void serviceRequirement,
+			DocumentationFactory.Requirement serviceRequirement,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
@@ -36,6 +36,18 @@ public class HtmlDocumentationFactory extends ServiceCapabilityFactory<Void, Doc
 			public boolean canHandle(String contentType) {				
 				return "html".equalsIgnoreCase(contentType) || "text/html".equalsIgnoreCase(contentType);
 			}
+			
+			@Override
+			public Collection<EObject> createDocumentation(Object context, URI docRef, ProgressMonitor progressMonitor) {
+				if (serviceRequirement.inline()) {
+					return DocumentationFactory.super.createDocumentation(context, docRef, progressMonitor);
+				}
+				Resource ret = ContentFactory.eINSTANCE.createResource();
+				ret.setLocation(docRef.toString());
+				ret.setErrorMessage("Error loading documentation from '" + docRef.toString() + "' (${url}): ${exception}");
+				return Collections.singleton(ret);
+			}
+			
 			
 			@SuppressWarnings("unchecked")
 			@Override
