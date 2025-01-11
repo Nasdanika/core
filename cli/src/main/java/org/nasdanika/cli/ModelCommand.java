@@ -22,6 +22,7 @@ import picocli.CommandLine.Parameters;
 		mixinStandardHelpOptions = true,
 		name = "model")
 @ParentCommands(RootCommand.class)
+@Description(icon = "https://docs.nasdanika.org/images/model.svg")
 public class ModelCommand extends CommandGroup implements EObjectSupplier<EObject> {
 	
 	protected ModelCommand() {
