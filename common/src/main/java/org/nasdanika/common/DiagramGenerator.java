@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
  */
 public interface DiagramGenerator extends Composable<DiagramGenerator> {
 	
-	String JSDELIVR_DRAWIO_VIEWER = "https://cdn.jsdelivr.net/gh/jgraph/drawio@v24.7.5/src/main/webapp/js/viewer.min.js";
+	String JSDELIVR_DRAWIO_VIEWER = "https://cdn.jsdelivr.net/gh/jgraph/drawio@v26.0.4/src/main/webapp/js/viewer.min.js";
 	
 	public static String UML_DIALECT = "uml";
 	public static String SALT_DIALECT = "salt";

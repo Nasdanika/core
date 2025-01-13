@@ -65,8 +65,7 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 	private boolean isFile;
 	
 	@Mixin
-	PropertiesMixIn propertiesMixIn;
-	
+	PropertiesMixIn propertiesMixIn;	
 			
 	@Option(			
 			names = {"-u", "--uri"},
