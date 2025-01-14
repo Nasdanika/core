@@ -28,7 +28,7 @@ public interface Tree extends TreeItem {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Tree Items</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getTree_TreeItems()
-	 * @model containment="true"
+	 * @model containment="true" keys="name"
 	 * @generated
 	 */
 	EList<TreeItem> getTreeItems();

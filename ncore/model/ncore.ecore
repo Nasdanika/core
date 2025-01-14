@@ -571,7 +571,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Tree" eSuperTypes="#//TreeItem">
     <eStructuralFeatures xsi:type="ecore:EReference" name="treeItems" upperBound="-1"
-        eType="#//TreeItem" containment="true"/>
+        eType="#//TreeItem" containment="true" eKeys="#//TreeItem/name"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="File" eSuperTypes="#//TreeItem">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
