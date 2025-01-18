@@ -67,6 +67,15 @@ public interface Element {
 		return dispatch(Arrays.asList(targets));
 	}
 	
+	private static int compareHandlers(Handler a, Handler b) {
+		int ap = a.priority();
+		int bp = b.priority();
+		if (ap == bp) {
+			return b.value().length() - a.value().length();
+		}
+		return bp - ap;
+	}
+	
 	default Object dispatch(Collection<Object> targets) {
 		return accept((element, childResults) -> {
 			for (Object target: targets) {
@@ -77,7 +86,7 @@ public interface Element {
 					.filter(m -> m.getParameters()[0].getType().isInstance(element))
 					.filter(m -> m.getParameterCount() == 1 ? true : m.getParameters()[1].getType().isInstance(childResults))
 					.filter(m -> matchPredicate(element, m.getAnnotation(Handler.class).value()))
-					.sorted((a, b) -> b.getAnnotation(Handler.class).priority() - a.getAnnotation(Handler.class).priority())
+					.sorted((a, b) -> compareHandlers(a.getAnnotation(Handler.class), b.getAnnotation(Handler.class)))
 					.findFirst();
 				
 				if (!handlerOptional.isEmpty()) {

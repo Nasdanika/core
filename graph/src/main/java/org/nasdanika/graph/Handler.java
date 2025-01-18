@@ -19,6 +19,7 @@ public @interface Handler {
 	/**
 	 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
 	 * which is evaluated in the context of the element being visited. 
+	 * Methods with longer conditions are matched before methods with shorter (including empty) conditions.
 	 * @return
 	 */
 	String value() default "";

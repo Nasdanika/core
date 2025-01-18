@@ -9,7 +9,6 @@ import org.nasdanika.graph.Node;
 
 public interface NodeProcessorConfig<H,E> extends ProcessorConfig {
 	
-	
 	@Override
 	Node getElement();
 
