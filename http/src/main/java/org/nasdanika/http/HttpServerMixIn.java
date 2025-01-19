@@ -2,7 +2,6 @@ package org.nasdanika.http;
 
 import picocli.CommandLine.Option;
 import reactor.netty.http.server.HttpServer;
-import reactor.netty.http.server.HttpServerRoutes;
 
 /**
  * Mix-in or base class for commands which serve HTTP requests
@@ -32,18 +31,13 @@ public class HttpServerMixIn {
 	protected HttpServer createServer() {
 		HttpServer server = HttpServer.create();
 		if (httpPort != null) {
-			server.port(httpPort);
+			server = server.port(httpPort);
 		}
 		if (httpHost != null) {
-			server.host(httpHost);
+			server = server.host(httpHost);
 		}
-		server.route(this::buildRoutes);
 		
 		return server; // .bindNow(); .onDispose().block();
-	}
-	
-	protected void buildRoutes(HttpServerRoutes routes) {
-		
 	}
 
 }
