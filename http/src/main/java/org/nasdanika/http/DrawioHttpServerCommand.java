@@ -6,6 +6,10 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.cli.CommandBase;
 import org.nasdanika.cli.ParentCommands;
@@ -93,7 +97,6 @@ public class DrawioHttpServerCommand extends CommandBase {
 		try (ProgressMonitor progressMonitor = progressMonitorMixIn.createProgressMonitor(1)) {
 			Document document = documentSupplier.getDocument(progressMonitor);
 			
-			Map<org.nasdanika.graph.Element,AutoCloseable> toClose = new HashMap<>();
 			Map<org.nasdanika.graph.Element,Component> components = new HashMap<>();
 			
 			ElementProcessorFactory<Object> elementProcessorFactory = new ElementProcessorFactory<Object>(
@@ -113,9 +116,6 @@ public class DrawioHttpServerCommand extends CommandBase {
 						ProgressMonitor progressMonitor) {
 					
 					Object processor = super.doCreateProcessor(config, parallel, infoProvider, endpointWiringStageConsumer, progressMonitor);
-					if (processor instanceof AutoCloseable) {
-						toClose.put(config.getElement(), (AutoCloseable) processor);
-					}
 					if (processor instanceof Component) {
 						components.put(config.getElement(), (Component) processor);
 					}
@@ -140,28 +140,28 @@ public class DrawioHttpServerCommand extends CommandBase {
 				System.out.println("Litening on port: " + server.port());
 			}
 			
-//			Runtime.getRuntime().addShutdownHook(
-//					new Thread(() -> {
-//						System.out.println("Shutting down HTTP Server");
-//						server.disposeNow(Duration.ofSeconds(timeout));
-//						if (routeBuilders != null) {
-//							System.out.println("Closing routes");
-//							for (HttpServerRouteBuilder routeBuilder: routeBuilders) {
-//								if (routeBuilder instanceof AutoCloseable) {
-//									try {
-//										((AutoCloseable) routeBuilder).close();
-//									} catch (Exception e) {
-//										e.printStackTrace();
-//									}
-//								}
-//							}						
-//						}
-//					}, 
-//					"HTTP Server Shutdown hook"));
-			
-			server.onDispose().block();
-			
 			// Command line
+			// TODO - status commands
+	        try (Terminal terminal = TerminalBuilder.builder().system(true).build()) {
+	        	LineReader lineReader = LineReaderBuilder
+	        			.builder()
+	                    .terminal(terminal)
+	                    .build();
+	        	
+	        	String prompt = "http-server>";
+	            while (true) {
+	                String line = null;
+	                line = lineReader.readLine(prompt);
+	                if ("exit".equals(line)) {
+	                	break;
+	                } else {
+		                System.out.println("Type exit<Enter> to stop the server");	                	
+	                }
+	            }
+	        }
+	        
+	        server.dispose();			
+	        server.onDispose().block();
 			
 			// Stopping 
 			document.accept(e -> {
@@ -179,18 +179,6 @@ public class DrawioHttpServerCommand extends CommandBase {
 					component.close(progressMonitor);
 				}
 			});
-			
-			document.accept(e -> {
-				AutoCloseable tc = toClose.get(e);
-				if (tc != null) {
-					try {
-						tc.close();
-					} catch (Exception ex) {
-						ex.printStackTrace();
-					}
-				}
-			});			
-			
 		}
 		return 0;
 	}		

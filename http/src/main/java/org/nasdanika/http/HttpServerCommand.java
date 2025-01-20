@@ -3,6 +3,10 @@ package org.nasdanika.http;
 import java.time.Duration;
 import java.util.Collection;
 
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 import org.nasdanika.cli.CommandBase;
 
 import picocli.CommandLine.Command;
@@ -44,6 +48,8 @@ public class HttpServerCommand extends CommandBase {
 	
 	@Override
 	public Integer call() throws Exception {
+		// TODO - start route builders capability providers
+		
 		DisposableServer server = serverMixIn
 				.createServer()
 				.route(this::buildRoutes)
@@ -53,26 +59,29 @@ public class HttpServerCommand extends CommandBase {
 			System.out.println("Litening on port: " + server.port());
 		}
 		
-		Runtime.getRuntime().addShutdownHook(
-				new Thread(() -> {
-					System.out.println("Shutting down HTTP Server");
-					server.disposeNow(Duration.ofSeconds(timeout));
-					if (routeBuilders != null) {
-						System.out.println("Closing routes");
-						for (HttpServerRouteBuilder routeBuilder: routeBuilders) {
-							if (routeBuilder instanceof AutoCloseable) {
-								try {
-									((AutoCloseable) routeBuilder).close();
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						}						
-					}
-				}, 
-				"HTTP Server Shutdown hook"));
-		
-		server.onDispose().block();
+		// Command line
+		// TODO - status commands
+        try (Terminal terminal = TerminalBuilder.builder().system(true).build()) {
+        	LineReader lineReader = LineReaderBuilder
+        			.builder()
+                    .terminal(terminal)
+                    .build();
+        	
+        	String prompt = "http-server>";
+            while (true) {
+                String line = null;
+                line = lineReader.readLine(prompt);
+                if ("exit".equals(line)) {
+                	break;
+                } else {
+	                System.out.println("Type exit<Enter> to stop the server");	                	
+                }
+            }
+        }
+        
+        server.disposeNow(Duration.ofSeconds(timeout));
+        
+        // TODO - stop and close capability providers
 		return 0;
 	}
 

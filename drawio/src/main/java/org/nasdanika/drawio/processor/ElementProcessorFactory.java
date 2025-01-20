@@ -23,12 +23,17 @@ public class ElementProcessorFactory<P> extends PropertySourceProcessorFactory<P
 
 	protected org.nasdanika.drawio.Element element;
 
-	public ElementProcessorFactory(org.nasdanika.drawio.Element element, CapabilityLoader capabilityLoader, String processorProperty) {
+	public ElementProcessorFactory(
+			org.nasdanika.drawio.Element element, 
+			CapabilityLoader capabilityLoader, 
+			String processorProperty) {
 		super(capabilityLoader, processorProperty);
 		this.element = element;
 	}
 
-	public ElementProcessorFactory(org.nasdanika.drawio.Element element, String processorProperty) {
+	public ElementProcessorFactory(
+			org.nasdanika.drawio.Element element, 
+			String processorProperty) {
 		super(processorProperty);
 		this.element = element;
 	}

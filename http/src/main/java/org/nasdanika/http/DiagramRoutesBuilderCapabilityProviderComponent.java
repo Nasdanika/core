@@ -53,6 +53,7 @@ public class DiagramRoutesBuilderCapabilityProviderComponent extends CapabilityP
 	
 	public DiagramRoutesBuilderCapabilityProviderComponent(
 			URI documentURI,
+			Function<Document, org.nasdanika.drawio.Element> selector,
 			String processorProperty,
 			String routeProperty,
 			Loader loader,
@@ -69,8 +70,9 @@ public class DiagramRoutesBuilderCapabilityProviderComponent extends CapabilityP
 				uriHandler, 
 				propertySource);
 		
+		org.nasdanika.drawio.Element element = selector == null ? document : selector.apply(document);
 		ElementProcessorFactory<Object> elementProcessorFactory = new ElementProcessorFactory<Object>(
-				document, 
+				element , 
 				loader.getCapabilityLoader(), 
 				processorProperty) {
 

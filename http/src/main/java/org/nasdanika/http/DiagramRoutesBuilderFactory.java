@@ -14,6 +14,7 @@ import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.ConnectionBase;
+import org.nasdanika.drawio.Document;
 import org.nasdanika.graph.processor.EndpointFactory;
 import org.xml.sax.SAXException;
 
@@ -51,6 +52,7 @@ public abstract class DiagramRoutesBuilderFactory extends ServiceCapabilityFacto
 		try {
 			DiagramRoutesBuilderCapabilityProviderComponent capabilityProvider = new DiagramRoutesBuilderCapabilityProviderComponent(
 					documentURI, 
+					this::selectElement,
 					processorProperty, 
 					routeProperty, 
 					loader, 
@@ -79,6 +81,10 @@ public abstract class DiagramRoutesBuilderFactory extends ServiceCapabilityFacto
 		
 	protected EndpointFactory<Object,Object> getEndpointFactory(Loader loader, ProgressMonitor progressMonitor) {
 		return null;
+	}
+	
+	protected org.nasdanika.drawio.Element selectElement(Document document) {
+		return document;
 	}
 	
 }
