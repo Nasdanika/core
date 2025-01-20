@@ -77,7 +77,7 @@ public class DiagramRoutesBuilderCapabilityProviderComponent extends CapabilityP
 				processorProperty) {
 
 			/**
-			 * This override is needed to collect processors implementing {@link AutoCloseable}
+			 * This override is needed to collect processors implementing {@link Component}
 			 */
 			@Override
 			protected Object doCreateProcessor(
