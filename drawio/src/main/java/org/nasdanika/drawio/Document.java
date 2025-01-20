@@ -23,6 +23,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
@@ -268,8 +269,18 @@ public interface Document extends Element {
 			JSONObject payload = new JSONObject(new JSONTokener(uriStr));
 			return load(payload.getString("document"), payload.has("uri") ? URI.createURI(payload.getString("uri")) : null, uriHandler, propertySource);
 		}
+		
+		if (uriHandler == null) {
+			uriHandler = uri -> {
+				try {
+					return DefaultConverter.INSTANCE.toInputStream(uri);
+				} catch (IOException e) {
+					throw new NasdanikaException("Error opening input stream for '" + uri + "': " + e, e);
+				}				
+			};
+		}
 			
-		return uriHandler == null ? load(new URL(source.toString())) : load(uriHandler.apply(source), source, uriHandler, propertySource);
+		return load(uriHandler.apply(source), source, uriHandler, propertySource);
 	}
 	
 	/**

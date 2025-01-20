@@ -10,7 +10,7 @@ module org.nasdanika.http {
 	requires transitive reactor.netty.http;
 	requires transitive reactor.netty.core;
 //	requires static transitive io.netty.buffer; // To make Eclipse happy
-	requires transitive io.netty.codec.http; 
+	requires transitive io.netty.codec.http;
 	
 	opens org.nasdanika.http to info.picocli;
 	

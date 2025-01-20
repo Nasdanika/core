@@ -9,7 +9,6 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Option;
 import reactor.netty.DisposableServer;
-import reactor.netty.http.server.HttpServer;
 import reactor.netty.http.server.HttpServerRoutes;
 
 @Command(
@@ -45,9 +44,11 @@ public class HttpServerCommand extends CommandBase {
 	
 	@Override
 	public Integer call() throws Exception {
-		HttpServer httpServer = serverMixIn.createServer();
-		httpServer.route(this::buildRoutes);
-		DisposableServer server = httpServer.bindNow();
+		DisposableServer server = serverMixIn
+				.createServer()
+				.route(this::buildRoutes)
+				.bindNow();
+		
 		if (serverMixIn.getHttpPort() == null) {
 			System.out.println("Litening on port: " + server.port());
 		}
