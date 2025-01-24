@@ -11,6 +11,7 @@ module org.nasdanika.http {
 	requires transitive reactor.netty.core;
 //	requires static transitive io.netty.buffer; // To make Eclipse happy
 	requires transitive io.netty.codec.http;
+	requires org.apache.commons.lang3;
 	
 	opens org.nasdanika.http to info.picocli;
 	

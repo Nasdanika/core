@@ -6,12 +6,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
 import org.nasdanika.capability.CapabilityLoader;
-import org.nasdanika.cli.CommandBase;
 import org.nasdanika.cli.ParentCommands;
 import org.nasdanika.cli.ProgressMonitorMixIn;
 import org.nasdanika.common.Component;
@@ -29,7 +24,6 @@ import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
-import reactor.netty.DisposableServer;
 
 @Command(
 		description = "Routes HTTP requests to diagram element processor",
@@ -37,7 +31,7 @@ import reactor.netty.DisposableServer;
 		mixinStandardHelpOptions = true,
 		name = "http-server")
 @ParentCommands(Document.Supplier.class)
-public class DrawioHttpServerCommand extends CommandBase {
+public class DrawioHttpServerCommand extends AbstractHttpServerCommand {
 	
 	public DrawioHttpServerCommand() {
 		super();
@@ -46,9 +40,6 @@ public class DrawioHttpServerCommand extends CommandBase {
 	public DrawioHttpServerCommand(CapabilityLoader capabilityLoader) {
 		super(capabilityLoader);
 	}
-	
-	@Mixin
-	private HttpServerMixIn serverMixIn;	
 
 	@ParentCommand
 	private Document.Supplier documentSupplier;
@@ -130,38 +121,7 @@ public class DrawioHttpServerCommand extends CommandBase {
 			// Starting
 			start(document, components, progressMonitor);
 			
-			// Creating server
-			DisposableServer server = serverMixIn
-					.createServer()
-					.route(routes -> HttpServerRouteBuilder.buildRoutes(processors.values(), routeProperty, routes))
-					.bindNow();
-			
-			if (serverMixIn.getHttpPort() == null) {
-				System.out.println("Litening on port: " + server.port());
-			}
-			
-			// Command line
-			// TODO - status commands
-	        try (Terminal terminal = TerminalBuilder.builder().system(true).build()) {
-	        	LineReader lineReader = LineReaderBuilder
-	        			.builder()
-	                    .terminal(terminal)
-	                    .build();
-	        	
-	        	String prompt = "http-server>";
-	            while (true) {
-	                String line = null;
-	                line = lineReader.readLine(prompt);
-	                if ("exit".equals(line)) {
-	                	break;
-	                } else {
-		                System.out.println("Type exit<Enter> to stop the server");	                	
-	                }
-	            }
-	        }
-	        
-	        server.dispose();			
-	        server.onDispose().block();
+			startServer(routes -> HttpServerRouteBuilder.buildRoutes(processors.values(), routeProperty, routes));
 			
 			// Stopping 
 			document.accept(e -> {
@@ -179,8 +139,12 @@ public class DrawioHttpServerCommand extends CommandBase {
 					component.close(progressMonitor);
 				}
 			});
+			
+			return 0;
 		}
-		return 0;
-	}		
+	}
 
+//	.route()
+	
+	
 }

@@ -117,6 +117,7 @@ public class Reflector {
 			this.predicate = predicate;
 			this.target = target;
 			this.annotatedElement = annotatedElement;
+			this.factoryPath = factoryPath;
 			if (annotatedElement instanceof Method) {
 				declaringClass = ((Method) annotatedElement).getDeclaringClass();
 				baseURI = Util.createClassURI(declaringClass);				

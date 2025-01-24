@@ -23,7 +23,7 @@ public interface HttpServerRouteBuilder {
 	public static final String PATH_KEY = "path";
 	public static final String METHOD_KEY = "method";
 
-	void buildRoutes(HttpServerRoutes routes); // TODO - progress monitor?
+	void buildRoutes(HttpServerRoutes routes); 
 		
 	@SuppressWarnings("unchecked")
 	static <P> void buildRoutes(
