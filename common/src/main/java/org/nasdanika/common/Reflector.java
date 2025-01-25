@@ -17,7 +17,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -94,26 +93,28 @@ public class Reflector {
 
 	}	
 	
+	public static record FactoryRecord(Object target, AnnotatedElement annotatedElement, Object factory) { }
+		
 	/**
 	 * A record-like class of an {@link AnnotatedElement} - {@link Method} or {@link Field} - used for reflective operations.
 	 * Using class instead of a record to have access to the enclosing Reflector.
 	 * @author Pavel
 	 *
 	 */
-	public class AnnotatedElementRecord implements Predicate<Object>, Invocable {
+	public class AnnotatedElementRecord implements Predicate<Object>, Invocable {		
 		
 		private Predicate<Object> predicate;
 		private Object target;
 		private AnnotatedElement annotatedElement;
 		private URI baseURI;
 		private Class<?> declaringClass;
-		private List<Object> factoryPath;
+		private List<FactoryRecord> factoryPath;
 
 		AnnotatedElementRecord(
 				Predicate<Object> predicate, 
 				Object target, 
 				AnnotatedElement annotatedElement,
-				List<Object> factoryPath) {
+				List<FactoryRecord> factoryPath) {
 			this.predicate = predicate;
 			this.target = target;
 			this.annotatedElement = annotatedElement;
@@ -129,7 +130,7 @@ public class Reflector {
 			}
 		}
 		
-		public List<Object> getFactoryPath() {
+		public List<FactoryRecord> getFactoryPath() {
 			return factoryPath;
 		}
 		
@@ -219,7 +220,7 @@ public class Reflector {
 				return this;
 			}
 						
-			return new AnnotatedElementRecord(e -> test(e) && other.test(e), target, annotatedElement, Collections.emptyList());
+			return new AnnotatedElementRecord(e -> test(e) && other.test(e), target, annotatedElement, factoryPath);
 		}
 		
 		public AnnotatedElement getAnnotatedElement() {
@@ -241,7 +242,7 @@ public class Reflector {
 	 * @param target
 	 * @return
 	 */
-	public Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, List<Object> factoryPath) {
+	public Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, List<FactoryRecord> factoryPath) {
 		Predicate<Object> targetPredicate = getTargetPredicate(target);
 		return Util.getFieldsAndMethods(target.getClass()).flatMap(ae -> getAnnotatedElementRecords(target, ae, factoryPath)).map(aer -> aer.and(targetPredicate));
 	}
@@ -253,7 +254,7 @@ public class Reflector {
 		return null;
 	}
 	
-	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, AnnotatedElement annotatedElement, List<Object> factoryPath) {		
+	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, AnnotatedElement annotatedElement, List<FactoryRecord> factoryPath) {		
 		Factory factory = annotatedElement.getAnnotation(Factory.class);
 		if (factory == null) {			
 			Factories factories = annotatedElement.getAnnotation(Factories.class);
@@ -266,16 +267,20 @@ public class Reflector {
 			return factoriesTargets
 					.stream()
 					.flatMap(f -> {
-						List<Object> fPath = new ArrayList<>(factoryPath);
-						fPath.add(f);					
+						List<FactoryRecord> fPath = new ArrayList<>(factoryPath);
+						fPath.add(new FactoryRecord(target, annotatedElement, f));					
 						return getAnnotatedElementRecords(f, fPath);
 					})
 					.map(r -> r.and(factoriesPredicate));
 		}
 		Predicate<Object> factoryPredicate = e -> factory.type().isInstance(e) && matchPredicate(e, factory.value());
-		List<Object> fPath = new ArrayList<>(factoryPath);
-		fPath.add(factory);
-		return getAnnotatedElementRecords(get(target, annotatedElement), fPath).map(r -> r.and(factoryPredicate));
+		List<FactoryRecord> fPath = new ArrayList<>(factoryPath);
+		Object factoryResult = get(target, annotatedElement);
+		if (factoryResult != null) {
+			fPath.add(new FactoryRecord(target, annotatedElement, factoryResult));
+			return getAnnotatedElementRecords(factoryResult, fPath).map(r -> r.and(factoryPredicate));
+		}
+		return Stream.empty();
 	}
 
 	/**

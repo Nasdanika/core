@@ -35,7 +35,7 @@ public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
 
 	public EObjectNodeProcessorReflectiveFactory(Object... targets) {
 		for (Object target: targets) {
-			getAnnotatedElementRecords(target, Collections.singletonList(target)).forEach(annotatedElementRecords::add);
+			getAnnotatedElementRecords(target, Collections.emptyList()).forEach(annotatedElementRecords::add);
 		}
 	}
 	

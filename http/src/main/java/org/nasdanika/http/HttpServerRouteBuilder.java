@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.PropertySource;
 import org.nasdanika.common.Util;
 import org.nasdanika.graph.processor.ProcessorInfo;
@@ -26,52 +27,61 @@ public interface HttpServerRouteBuilder {
 	void buildRoutes(HttpServerRoutes routes); 
 		
 	@SuppressWarnings("unchecked")
-	static <P> void buildRoutes(
+	private static <P> void buildRoutes(
 			Collection<ProcessorInfo<P>> processorInfos,
 			Function<ProcessorInfo<P>, Route> routeProvider,
 			HttpServerRoutes routes) {
 				
 		for (ProcessorInfo<P> pInfo: processorInfos) {
-			Route route = routeProvider.apply(pInfo); 
-			if (route != null) {
-				String path = route.path();
-				
-				if (Util.isBlank(path)) {
-					throw new IllegalArgumentException("Blank path for: " + pInfo.getElement());					
-				}
-				P processor = pInfo.getProcessor();
-				if (processor instanceof BiFunction) {
-					BiFunction<? super HttpServerRequest, ? super HttpServerResponse, ? extends Publisher<Void>> handler = (BiFunction<? super HttpServerRequest, ? super HttpServerResponse, ? extends Publisher<Void>>) processor;
-					switch (route.method()) {
-					case DELETE:
-						routes.delete(path, handler);
-						break;
-					case GET:
-						routes.get(path, handler);
-						break;
-					case HEAD:
-						routes.head(path, handler);
-						break;
-					case OPTIONS:
-						routes.options(path, handler);
-						break;
-					case POST:
-						routes.post(path, handler);
-						break;
-					case PUT:
-						routes.put(path, handler);
-						break;
-					default:
-						throw new IllegalArgumentException("Unsupported HTTP method: " + route.method());
+			P processor = pInfo.getProcessor();
+			if (processor != null) {
+				HttpServerRouteBuilder httpServerRouteBuilder = Adaptable.adaptTo(processor, HttpServerRouteBuilder.class);
+				Route route = routeProvider.apply(pInfo); 
+				if (route == null) {
+					if (httpServerRouteBuilder != null) {
+						httpServerRouteBuilder.buildRoutes(routes);
 					}
-				} else {
-					throw new IllegalArgumentException("Route processor must implement BiFunction: " + processor);
+				} else {					
+					String path = route.path();					
+					if (Util.isBlank(path)) {
+						throw new IllegalArgumentException("Blank path for: " + pInfo.getElement());					
+					}
+					if (processor instanceof BiFunction) {
+						BiFunction<? super HttpServerRequest, ? super HttpServerResponse, ? extends Publisher<Void>> handler = (BiFunction<? super HttpServerRequest, ? super HttpServerResponse, ? extends Publisher<Void>>) processor;
+						switch (route.method()) {
+						case DELETE:
+							routes.delete(path, handler);
+							break;
+						case GET:
+							routes.get(path, handler);
+							break;
+						case HEAD:
+							routes.head(path, handler);
+							break;
+						case OPTIONS:
+							routes.options(path, handler);
+							break;
+						case POST:
+							routes.post(path, handler);
+							break;
+						case PUT:
+							routes.put(path, handler);
+							break;
+						default:
+							throw new IllegalArgumentException("Unsupported HTTP method: " + route.method());
+						}
+					} else if (httpServerRouteBuilder != null) {
+						httpServerRouteBuilder.buildRoutes(new PrefixedHttpServerRoutes(path, routes));						
+					} else {
+						throw new IllegalArgumentException("Route processor must implement BiFunction or be adaptable to HttpServerRouteBuilder: " + processor);
+					}
 				}
 			}
 		}
 	}
 
 	/**
+	 * Builds routes for processors with route property implementing {@link BiFunction} and for processors adaptable to {@link HttpServerRouteBuilder} 
 	 * @param <P>
 	 * @param processorInfos
 	 * @param routeProperty Shall be a string or a map. If a string, parsed as YAML. If the parse result is a string

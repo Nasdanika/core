@@ -1,5 +1,6 @@
 package org.nasdanika.http;
 
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -8,17 +9,19 @@ import java.lang.annotation.Annotation;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.nasdanika.common.Reflector;
 import org.nasdanika.common.Reflector.AnnotatedElementRecord;
+import org.nasdanika.common.Reflector.FactoryRecord;
 import org.nasdanika.common.Util;
 import org.reactivestreams.Publisher;
 
@@ -74,6 +77,33 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 
 	}
 	
+	/**
+	 * Field or method annotation. Field value shall be an instance of {@link HttpServerRouteBuilder}.
+	 * Methods shall have zero or one parameter. No parameters methods shall return an instance of <code>HttpServerRouteBuilder</code> or null.
+	 * For methods with one parameter the parameter type shall be assignable from {@link HttpServerRoutes}.   
+	 * 
+	 * @author Pavel
+	 *
+	 */
+	@Retention(RUNTIME)
+	@Target({ METHOD, FIELD })
+	public @interface RouteBuilder {
+		
+		/**
+		 * Route prefix.   
+		 * @return
+		 */
+		String value() default "";
+		
+		/**
+		 * Priority. Route builders with higher priorities are called.
+		 * Within the same priority route builders are sorted by the prefix length in segments.
+		 * @return
+		 */
+		int priority() default 0;
+
+	}	
+	
 	protected Map<String, Collection<Object>> targets = new HashMap<>();
 	
 	/**
@@ -122,54 +152,94 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 		return this;
 	}
 	
+	private static String getFactoryRecordPath(FactoryRecord factoryRecord) {
+		StringBuilder pathBuilder = new StringBuilder();
+		Route targetRoute = factoryRecord.target().getClass().getAnnotation(Route.class);
+		if (targetRoute != null) {
+			pathBuilder.append(targetRoute.value());
+		}
+		Route aeRoute = factoryRecord.annotatedElement().getAnnotation(Route.class);
+		if (aeRoute != null) {
+			pathBuilder.append(aeRoute.value());
+		}
+		return pathBuilder.toString();
+	}
+	
 	private static Route buildRoute(String prefix, AnnotatedElementRecord annotatedElementRecord) {
 		StringBuilder pathBuilder = new StringBuilder(prefix); 
 		
 		annotatedElementRecord
 			.getFactoryPath()
 			.stream()
-			.map(Object::getClass)
-			.map(c -> c.getAnnotation(Route.class)) 
-			.filter(Objects::nonNull)
-			.forEach(r -> pathBuilder.append(r.value()));
-
-		Method method = (Method) annotatedElementRecord.getAnnotatedElement();
-		Route classRoute = method.getDeclaringClass().getAnnotation(Route.class);
+			.map(ReflectiveHttpServerRouteBuilder::getFactoryRecordPath)
+			.forEach(pathBuilder::append);
+		
+		Route classRoute = ((Member) annotatedElementRecord.getAnnotatedElement()).getDeclaringClass().getAnnotation(Route.class);
 		if (classRoute != null) {
 			pathBuilder.append(classRoute.value());
 		}
-				
-		HttpMethod[] httpMethod = { HttpMethod.GET };
+		
 		Route route = annotatedElementRecord.getAnnotation(Route.class);
-		if (Util.isBlank(route.value())) {
-			StringBuilder methodPathBuilder = new StringBuilder();
-			String[] segments = StringUtils.splitByCharacterTypeCamelCase(method.getName());
-			for (int i = 0; i < segments.length; ++i) {
-				if (i == 0) {
-					boolean matched = false;
-					for (HttpMethod hm: HttpMethod.values()) {
-						if (hm.name().equalsIgnoreCase(segments[i])) {
-							matched = true;
-							httpMethod[0] = hm;
-							break;
+		if (route != null) {
+			Method method = (Method) annotatedElementRecord.getAnnotatedElement();					
+			HttpMethod[] httpMethod = { HttpMethod.GET };
+			
+			if (Util.isBlank(route.value())) {
+				StringBuilder methodPathBuilder = new StringBuilder();
+				String[] segments = StringUtils.splitByCharacterTypeCamelCase(method.getName());
+				for (int i = 0; i < segments.length; ++i) {
+					if (i == 0) {
+						boolean matched = false;
+						for (HttpMethod hm: HttpMethod.values()) {
+							if (hm.name().equalsIgnoreCase(segments[i])) {
+								matched = true;
+								httpMethod[0] = hm;
+								break;
+							}
 						}
+						if (!matched) {
+							methodPathBuilder.append(segments[i].toLowerCase());						
+						}
+					} else {
+						if (!methodPathBuilder.isEmpty()) {
+							methodPathBuilder.append("/");
+						}
+						methodPathBuilder.append(segments[i].toLowerCase());
 					}
-					if (!matched) {
-						methodPathBuilder.append(segments[i].toLowerCase());						
-					}
-				} else {
-					if (!methodPathBuilder.isEmpty()) {
-						methodPathBuilder.append("/");
-					}
-					methodPathBuilder.append(segments[i].toLowerCase());
 				}
+				pathBuilder.append(methodPathBuilder);			
+			} else {
+				pathBuilder.append(route.value());
 			}
-			pathBuilder.append(methodPathBuilder);			
-		} else {
-			pathBuilder.append(route.value());
+			return new Route() {
+	
+				@Override
+				public Class<? extends Annotation> annotationType() {
+					return Route.class;
+				}
+	
+				@Override
+				public String value() {
+					return pathBuilder.toString();
+				}
+				
+				@Override
+				public HttpMethod method() {
+					return httpMethod[0];
+				}
+	
+				@Override
+				public int priority() {
+					return route.priority();
+				}
+				
+			};
 		}
+		
+		RouteBuilder routeBuilder = annotatedElementRecord.getAnnotation(RouteBuilder.class);
+		pathBuilder.append(routeBuilder.value());
 		return new Route() {
-
+			
 			@Override
 			public Class<? extends Annotation> annotationType() {
 				return Route.class;
@@ -182,15 +252,17 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 			
 			@Override
 			public HttpMethod method() {
-				return httpMethod[0];
+				return null;
 			}
 
 			@Override
 			public int priority() {
-				return route.priority();
+				return routeBuilder.priority();
 			}
 			
-		};		
+		};
+		
+		
 	}	
 	
 	private record RouteRecord(
@@ -227,27 +299,46 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 		@Override
 		public void buildRoutes(HttpServerRoutes routes) {
 			String path = route().value();
-			switch (route().method()) {
-			case DELETE:
-				routes.delete(path, this::handle);
-				break;
-			case GET:
-				routes.get(path, this::handle);
-				break;
-			case HEAD:
-				routes.head(path, this::handle);
-				break;
-			case OPTIONS:
-				routes.options(path, this::handle);
-				break;
-			case POST:
-				routes.post(path, this::handle);
-				break;
-			case PUT:
-				routes.put(path, this::handle);
-				break;
-			default:
-				throw new IllegalArgumentException("Unsupported HTTP method: " + route.method());
+			HttpMethod routeMethod = route().method();
+			if (routeMethod == null) {
+				// Route builder
+				if (!Util.isBlank(path)) {
+					routes = new PrefixedHttpServerRoutes(path, routes);
+				}
+				AnnotatedElement annotatedElement = annotatedElementRecord().getAnnotatedElement();
+				if (annotatedElement instanceof Method) {
+					Method builderMethod = (Method) annotatedElement;
+					if (builderMethod.getParameterCount() == 1) {
+						annotatedElementRecord().invoke(routes);
+					} else {
+						((HttpServerRouteBuilder) annotatedElementRecord().get()).buildRoutes(routes);						
+					}
+				} else {
+					((HttpServerRouteBuilder) annotatedElementRecord().get()).buildRoutes(routes);
+				}				
+			} else {
+				switch (routeMethod) {
+				case DELETE:
+					routes.delete(path, this::handle);
+					break;
+				case GET:
+					routes.get(path, this::handle);
+					break;
+				case HEAD:
+					routes.head(path, this::handle);
+					break;
+				case OPTIONS:
+					routes.options(path, this::handle);
+					break;
+				case POST:
+					routes.post(path, this::handle);
+					break;
+				case PUT:
+					routes.put(path, this::handle);
+					break;
+				default:
+					throw new IllegalArgumentException("Unsupported HTTP method: " + route.method());
+				}
 			}
 		}
 		
@@ -259,7 +350,7 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 		for (Map.Entry<String, Collection<Object>> targetsEntry: targets.entrySet()) {
 			for (Object target: targetsEntry.getValue()) {			
 				reflector.getAnnotatedElementRecords(target, new ArrayList<>())
-				.filter(aer -> aer.getAnnotation(Route.class) != null)
+				.filter(aer -> aer.getAnnotation(Route.class) != null || aer.getAnnotation(RouteBuilder.class) != null)
 				.map(aer -> new RouteRecord(targetsEntry.getKey(), aer, buildRoute(targetsEntry.getKey(), aer)))
 				.sorted()
 				.forEach(routeRecord -> routeRecord.buildRoutes(routes));					

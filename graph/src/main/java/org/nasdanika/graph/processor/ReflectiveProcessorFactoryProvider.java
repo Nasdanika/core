@@ -32,7 +32,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 		
 	public ReflectiveProcessorFactoryProvider(Object... targets) {
 		for (Object target: targets) {
-			getAnnotatedElementRecords(target, Collections.singletonList(target)).forEach(annotatedElementRecords::add);
+			getAnnotatedElementRecords(target, Collections.emptyList()).forEach(annotatedElementRecords::add);
 		}
 	}
 	
@@ -65,7 +65,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 						bc.accept(registry.get(e), progressMonitor);
 					};
 					
-					List<AnnotatedElementRecord> registryTargetAnnotatedElementRecords = getAnnotatedElementRecords(registryTarget, Collections.singletonList(registryTarget)).toList();
+					List<AnnotatedElementRecord> registryTargetAnnotatedElementRecords = getAnnotatedElementRecords(registryTarget, Collections.emptyList()).toList();
 					wireRegistryEntry(
 							parallel ? registryTargetAnnotatedElementRecords.parallelStream() : registryTargetAnnotatedElementRecords.stream(), 
 							configs,

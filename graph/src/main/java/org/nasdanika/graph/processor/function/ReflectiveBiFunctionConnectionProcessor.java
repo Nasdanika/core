@@ -20,7 +20,7 @@ public class ReflectiveBiFunctionConnectionProcessor extends Reflector implement
 		
 	public ReflectiveBiFunctionConnectionProcessor(Collection<Object> targets) {
 		for (Object target: targets) {
-			getAnnotatedElementRecords(target, Collections.singletonList(target)).forEach(annotatedElementRecords::add);
+			getAnnotatedElementRecords(target, Collections.emptyList()).forEach(annotatedElementRecords::add);
 		}
 	}
 

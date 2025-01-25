@@ -128,7 +128,7 @@ public class Transformer<S,T> extends Reflector {
 	
 	public Transformer(Object... factories) {
 		for (Object factory: factories) {
-			getAnnotatedElementRecords(factory, Collections.singletonList(factory)).forEach(annotatedElementRecords::add);
+			getAnnotatedElementRecords(factory, Collections.emptyList()).forEach(annotatedElementRecords::add);
 		}
 	}
 	
