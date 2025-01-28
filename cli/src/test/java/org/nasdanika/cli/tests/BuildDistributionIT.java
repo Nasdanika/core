@@ -55,6 +55,7 @@ public class BuildDistributionIT {
 				"-b", "target/dist", 
 				"-M", "target/dist/modules", 
 				"-j", "#!/bin/bash\n\njava",
+				"--add-modules", "ALL-SYSTEM",
 				"-o", "nsd",
 //				"-r", "org.nasdanika.**",
 				"-p", ":",
@@ -65,6 +66,7 @@ public class BuildDistributionIT {
 				"-M", "target/dist/modules", 
 				"-o", "nsd-debug",
 				"-j", "#!/bin/bash\n\njava -Xdebug -Xrunjdwp:transport=dt_socket,address=8998,server=y",
+				"--add-modules", "ALL-SYSTEM",
 //				"-r", "org.nasdanika.**",
 				"-p", ":",
 				"-a", "$@");		

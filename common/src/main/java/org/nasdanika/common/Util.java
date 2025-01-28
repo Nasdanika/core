@@ -39,6 +39,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
@@ -1256,12 +1257,6 @@ public class Util {
 	
 	/**
 	 * Walks the directory passing files and their paths to the listener.
-	 * @param source
-	 * @param target
-	 * @param cleanTarget
-	 * @param cleanPredicate
-	 * @param listener
-	 * @throws IOException
 	 */
 	public static void walk(String path, BiConsumer<File,String> listener, File... files) {
 		if (files != null) {
@@ -1271,6 +1266,21 @@ public class Util {
 					walk(filePath, listener, file.listFiles());
 				} else if (file.isFile() && listener != null) {
 					listener.accept(file, filePath);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Walks the directory passing files and their paths to the visitor.
+	 * For directories visits children recursively if visitor returns true 
+	 */
+	public static void walk(String path, BiPredicate<File,String> visitor, File... files) {
+		if (files != null) {
+			for (File file: files) {
+				String filePath = path == null ? file.getName() : path + "/" + file.getName();
+				if (visitor.test(file, filePath) && file.isDirectory()) {
+					walk(filePath, visitor, file.listFiles());
 				}
 			}
 		}

@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -95,6 +96,15 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 					"Supports .* and .** patterns"					
 			})
 	private String rootModules;	
+		
+	@Option(
+			names = {"--add-modules"}, 
+			description = {
+					"Comma-separated list of modules to add to",
+					"Java command --add-modules",
+					"Computed if not specified"
+			})
+	private String addModules;	
 	
 	@Option(
 			names = {"-M", "--modules"}, 
@@ -366,6 +376,9 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 	}
 
 	protected void buildAddModules(Collection<String> modulesToAdd, StringBuilder builder) {
+		if (!Util.isBlank(addModules)) {
+			modulesToAdd = Collections.singleton(addModules);
+		}
 		if (!modulesToAdd.isEmpty()) {
 			boolean firstModuleEntry = true;
 			for (String m: modulesToAdd) {
