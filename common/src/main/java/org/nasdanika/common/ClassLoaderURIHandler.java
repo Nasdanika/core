@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
