@@ -195,7 +195,7 @@ In many cases reference values are either of the same type or their type can be 
 In this case explicitly specifying the type is unnecessary and may lead to configuration errors.
 For example, in the above code snippet ``releases`` reference can contain only instances of its reference type - [Release](../../../engineering/modules/model/Release.html).
 
-To specify that the type of refernce elements shall be derived from the reference type or annotations instead of being supplied explicitly set ``homogeneous`` Nasdanika annotation details key to ``true`` on the reference. 
+To specify that the type of reference elements shall be derived from the reference type or annotations instead of being supplied explicitly set ``homogeneous`` Nasdanika annotation details key to ``true`` on the reference. 
 
 In some situations the type of reference element can be derived from the type of its configuration - string, integer, map, list, boolean, date. In such cases add ``reference-type`` Nasdanika annotation key with a value containing a YAML map of configuration value types to element types.
 
