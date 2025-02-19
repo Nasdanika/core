@@ -65,7 +65,11 @@
 		<dependency>
 		    <groupId>info.picocli</groupId>
 		    <artifactId>picocli</artifactId>
-		    <version>4.7.6</version>
+		    <!-- 
+                Build a snapshot from https://github.com/Nasdanika/picocli
+                gradlew.bat publishToMavenLocal 
+		    -->
+		    <version>4.7.7-SNAPSHOT</version>  
 		</dependency>				
 		<dependency>
 		    <groupId>org.jline</groupId>

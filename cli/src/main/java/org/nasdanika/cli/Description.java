@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.nasdanika.common.DocumentationFactory;
+
 /**
  * Command description
  * The description is add to the documentation action after the usage information.
@@ -12,7 +14,7 @@ import java.lang.annotation.Target;
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 public @interface Description {
 
 	/**
@@ -22,7 +24,7 @@ public @interface Description {
 	String value() default "";
 	
 	/**
-	 * Description format - markdown, text, or html
+	 * Description format - one of available {@link DocumentationFactory} formats.
 	 * @return
 	 */
 	String format() default "markdown";
