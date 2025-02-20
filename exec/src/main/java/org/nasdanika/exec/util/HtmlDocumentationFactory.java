@@ -2,6 +2,7 @@ package org.nasdanika.exec.util;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletionStage;
 
 import org.eclipse.emf.common.util.URI;
@@ -30,7 +31,12 @@ public class HtmlDocumentationFactory extends ServiceCapabilityFactory<Documenta
 			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
-		DocumentationFactory markdownDocumentationFactory = new DocumentationFactory() {
+		DocumentationFactory htmlDocumentationFactory = new DocumentationFactory() {
+			
+			@Override
+			public Collection<String> getExtensions() {
+				return List.of("html", "htm");
+			}
 			
 			@Override
 			public boolean canHandle(String contentType) {				
@@ -51,7 +57,12 @@ public class HtmlDocumentationFactory extends ServiceCapabilityFactory<Documenta
 			
 			@SuppressWarnings("unchecked")
 			@Override
-			public Collection<EObject> createDocumentation(Object context, String doc, URI baseUri, ProgressMonitor progressMonitor) {
+			public Collection<EObject> createDocumentation(
+					Object context, 
+					String doc, 
+					String contentType, 
+					URI baseUri, 
+					ProgressMonitor progressMonitor) {
 				if (context instanceof PropertySource) {
 					doc = Util.interpolate(doc, ((PropertySource<String,String>) context)::getProperty);
 				}				
@@ -61,7 +72,7 @@ public class HtmlDocumentationFactory extends ServiceCapabilityFactory<Documenta
 			}
 		};
 		
-		return wrap(markdownDocumentationFactory);
+		return wrap(htmlDocumentationFactory);
 	}
 	
 }

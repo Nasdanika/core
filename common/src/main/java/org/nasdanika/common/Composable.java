@@ -1,5 +1,8 @@
 package org.nasdanika.common;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 /**
  * Something that can be composed to create an aggregate. E.g. {@link AccessController}s can be composed with AND operation,
  * {@link Context}s can be composed by chaining.
@@ -31,5 +34,17 @@ public interface Composable<T> {
 	 * @return
 	 */
 	T compose(T other);
+	
+	static <T, C extends Composable<C>> Optional<C> reduce(Stream<C> stream) {
+		return stream.reduce((a, b) -> {
+			if (a == null) {
+				return b;
+			}
+			if (b == null) {
+				return a;
+			}
+			return a.compose(b);
+		});
+	}
 	
 }

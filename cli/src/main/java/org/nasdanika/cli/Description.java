@@ -17,6 +17,8 @@ import org.nasdanika.common.DocumentationFactory;
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 public @interface Description {
 
+	public static final String MARKDOWN_FORMAT = "markdown";
+
 	/**
 	 * Command description. 
 	 * @return
@@ -27,7 +29,7 @@ public @interface Description {
 	 * Description format - one of available {@link DocumentationFactory} formats.
 	 * @return
 	 */
-	String format() default "markdown";
+	String format() default "";
 	
 	/**
 	 * Description resource used if the description is an empty string

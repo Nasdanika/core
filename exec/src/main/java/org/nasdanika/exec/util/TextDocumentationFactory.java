@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.CompletionStage;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.capability.CapabilityProvider;
@@ -29,7 +30,12 @@ public class TextDocumentationFactory extends ServiceCapabilityFactory<Documenta
 			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
-		DocumentationFactory markdownDocumentationFactory = new DocumentationFactory() {
+		DocumentationFactory textDocumentationFactory = new DocumentationFactory() {
+						
+			@Override
+			public Collection<String> getExtensions() {
+				return Collections.singleton("txt");
+			}			
 			
 			@Override
 			public boolean canHandle(String contentType) {				
@@ -38,17 +44,23 @@ public class TextDocumentationFactory extends ServiceCapabilityFactory<Documenta
 			
 			@SuppressWarnings("unchecked")
 			@Override
-			public Collection<EObject> createDocumentation(Object context, String doc, URI baseUri, ProgressMonitor progressMonitor) {
+			public Collection<EObject> createDocumentation(
+					Object context, 
+					String doc, 
+					String contentType, 
+					URI baseUri, 
+					ProgressMonitor progressMonitor) {
+				
 				if (context instanceof PropertySource) {
 					doc = Util.interpolate(doc, ((PropertySource<String,String>) context)::getProperty);
 				}
 				Text text = ContentFactory.eINSTANCE.createText(); // Interpolate with element properties?
-				text.setContent("<PRE>" + System.lineSeparator() + doc + System.lineSeparator() + "</PRE>");
+				text.setContent("<PRE>" + System.lineSeparator() + StringEscapeUtils.escapeHtml4(doc) + System.lineSeparator() + "</PRE>");
 				return Collections.singleton(text);
 			}
 		};
 		
-		return wrap(markdownDocumentationFactory);
+		return wrap(textDocumentationFactory);
 	}
 	
 }

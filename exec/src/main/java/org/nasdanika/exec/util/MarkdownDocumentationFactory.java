@@ -36,6 +36,11 @@ public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Docum
 		DocumentationFactory markdownDocumentationFactory = new DocumentationFactory() {
 			
 			@Override
+			public Collection<String> getExtensions() {
+				return Collections.singleton("md");
+			}
+			
+			@Override
 			public boolean canHandle(String contentType) {				
 				return "markdown".equalsIgnoreCase(contentType) || "text/markdown".equalsIgnoreCase(contentType);
 			}
@@ -53,7 +58,12 @@ public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Docum
 			
 			@SuppressWarnings("unchecked")
 			@Override
-			public Collection<EObject> createDocumentation(Object context, String doc, URI baseUri, ProgressMonitor progressMonitor) {
+			public Collection<EObject> createDocumentation(
+					Object context, 
+					String doc, 
+					String contentType, 
+					URI baseUri, 
+					ProgressMonitor progressMonitor) {
 				if (context instanceof PropertySource) {
 					doc = Util.interpolate(doc, ((PropertySource<String,String>) context)::getProperty);
 				}

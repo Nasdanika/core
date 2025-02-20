@@ -28,7 +28,7 @@ public class HttpServerMixIn {
 		return httpPort;
 	}
 	
-	protected HttpServer createServer() {
+	public HttpServer createServer() {
 		HttpServer server = HttpServer.create();
 		if (httpPort != null) {
 			server = server.port(httpPort);

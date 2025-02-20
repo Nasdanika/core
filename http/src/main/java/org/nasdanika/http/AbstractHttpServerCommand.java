@@ -41,10 +41,10 @@ public abstract class AbstractHttpServerCommand extends CommandBase {
 			names = "--console",
 			negatable = true,
 			description = {
-				"If true (default) starts console and waits for exit command, ",
+				"If true starts a console and waits for exit command, ",
 				"otherwise creates a shutdown hook disposing the server"
 			})
-	private boolean console = true;
+	private boolean console;
 
 	protected void startServer(Consumer<? super HttpServerRoutes> routesBuilder) throws Exception {
 		// TODO - start route builders capability providers

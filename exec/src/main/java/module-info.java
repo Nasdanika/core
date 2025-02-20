@@ -18,6 +18,7 @@ module org.nasdanika.exec {
 	exports org.nasdanika.exec.util;
 	
 	requires transitive org.nasdanika.emf;
+	requires org.apache.commons.text;
 		
 	provides CapabilityFactory with
 		ExecEPackageResourceSetCapabilityFactory,
