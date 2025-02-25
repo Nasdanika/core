@@ -1,11 +1,16 @@
 
 ### Examples
 
+* ``drawio test-data/jira/diagram.drawio html-app -r test-data/jira/root-action.yml --add-to-root site -r=-1 -F test-data/jira/page-template.yml test-data/jira/docs``
+    * Loads ``test-data/drawio-http/diagram.drawio`` diagram resource
+    * Executes [html-app](html-app/index.html) sub-command and its [site](html-app/site/index.html) sub-command to generate a documentation site
+* ``drawio test-data/drawio-http/diagram.drawio http-server --http-port=8080 processor route``
+    * Loads ``test-data/drawio-http/diagram.drawio`` diagram resource
+    * Executes [http-server](http-server/index.html) sub-command which serves diagram element routes at port ``8080``
 * ``drawio -p my-property="My property" test-data/invocable.drawio invoke 33 66``
     * Sets property ``my-property`` to ``My property``
     * Loads ``test-data/invocable.drawio`` diagram document
     * Executes [invoke](invoke/index.html) sub-command with ``33`` and ``66`` arguments 
-*  ``drawio test-data/jira/diagram.drawio html-app -r test-data/jira/root-action.yml --add-to-root site -r=-1 -F test-data/jira/page-template.yml test-data/jira/docs``
    
 ### URI Handlers
 
