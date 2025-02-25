@@ -24,7 +24,13 @@ import picocli.CommandLine.ParentCommand;
 		mixinStandardHelpOptions = true,
 		name = "invoke")
 @ParentCommands(Invocable.Invoker.class)
-@Description(icon = "https://docs.nasdanika.org/images/automation.svg")
+@Description(
+		icon = "https://docs.nasdanika.org/images/automation.svg",
+		value = 
+			"""
+			Loads an invocable from a URI as explained in [Loading Invocables from URIs](https://docs.nasdanika.org/core/capability/index.html#loading-invocables-from-uris)
+			and then invokes it with arguments obtained from parameters invocable URIs.	
+			""")
 public class InvokeCommand extends CommandBase {
 	
 	public InvokeCommand(CapabilityLoader capablityLoader) {

@@ -53,7 +53,6 @@ To contribute a sub-command:
 
 as shown in the code snippet below:
 
-
 ```java
 import org.nasdanika.cli.ParentCommands;
 import org.nasdanika.common.ProgressMonitor;
@@ -74,6 +73,51 @@ public class MyCommand {
         ...
     }       
 
+}
+```
+
+Below is a factory:
+
+```java
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+
+import org.nasdanika.common.ProgressMonitor;
+
+import picocli.CommandLine;
+
+public class MyCommanddFactory extends SubCommandCapabilityFactory<MyCommand> {
+
+    @Override
+    protected Class<MyCommand> getCommandType() {
+        return MyCommand.class;
+    }
+    
+    @Override
+    protected CompletionStage<MyCommand> doCreateCommand(
+            List<CommandLine> parentPath,
+            Loader loader,
+            ProgressMonitor progressMonitor) {
+        return CompletableFuture.completedStage(new MyCommand(loader.getCapabilityLoader()));
+    }
+
+}
+```
+
+The factory shall be registered as a [CapabilityFactory](https://javadoc.io/doc/org.nasdanika.core/capability/latest/org.nasdanika.capability/org/nasdanika/capability/CapabilityFactory.html) provider in ``module-info.java``:
+
+```java
+import org.nasdanika.capability.CapabilityFactory;
+
+module <module name> {
+
+    ...    
+    
+    opens <package with commands>; // For reflection and documentation resource loading
+    
+    provides CapabilityFactory with MyCommandFactory;
+    
 }
 ```
 
