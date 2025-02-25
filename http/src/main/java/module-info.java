@@ -13,7 +13,7 @@ module org.nasdanika.http {
 	requires transitive io.netty.codec.http;
 	requires org.apache.commons.lang3;
 	
-	opens org.nasdanika.http to info.picocli;
+	opens org.nasdanika.http;
 	
 	provides CapabilityFactory with 
 		HttpServerCommandFactory,

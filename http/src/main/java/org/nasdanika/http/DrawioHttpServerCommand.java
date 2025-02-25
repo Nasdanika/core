@@ -7,6 +7,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.nasdanika.capability.CapabilityLoader;
+import org.nasdanika.cli.Description;
 import org.nasdanika.cli.ParentCommands;
 import org.nasdanika.cli.ProgressMonitorMixIn;
 import org.nasdanika.common.Component;
@@ -26,11 +27,12 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
 @Command(
-		description = "Routes HTTP requests to diagram element processor",
+		description = "Routes HTTP requests to a diagram element processor",
 		versionProvider = ModuleVersionProvider.class,		
 		mixinStandardHelpOptions = true,
 		name = "http-server")
 @ParentCommands(Document.Supplier.class)
+@Description(icon = "https://docs.nasdanika.org/images/http.svg")
 public class DrawioHttpServerCommand extends AbstractHttpServerCommand {
 	
 	public DrawioHttpServerCommand() {

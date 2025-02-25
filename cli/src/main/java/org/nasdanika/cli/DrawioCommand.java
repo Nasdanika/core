@@ -17,12 +17,14 @@ import java.util.function.Function;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.URIHandler;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Document;
 import org.xml.sax.SAXException;
 import org.yaml.snakeyaml.Yaml;
@@ -42,12 +44,16 @@ import picocli.CommandLine.Parameters;
 @Description(icon = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3QgeT0iMiIgeD0iMiIgd2lkdGg9IjI4IiByeD0iMS4xMiIgaGVpZ2h0PSIyOCIgZmlsbD0iI2YwODcwNSIvPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI2RmNmMwYyIgZD0ibTE2Ljg2MSA5LjE2OCAzLjAyLTMuMTg3IDEwLjExOSAxMC4xMTN2MTIuNzg2YTEuMTE5IDEuMTE5IDAgMCAxIC0xLjEyIDEuMTJoLTE3LjU2NGwtNS4zODUtNS40MDd6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0ibTI1LjI0IDE3Ljk2aC0zLjI5NGwtMy4wNzEtNS4zMmguMmExLjExOSAxLjExOSAwIDAgMCAxLjEyLTEuMTJ2LTQuNzZhMS4xMTkgMS4xMTkgMCAwIDAgLTEuMTItMS4xMmgtNi4xNTVhMS4xMTkgMS4xMTkgMCAwIDAgLTEuMTIgMS4xMnY0Ljc2YTEuMTE5IDEuMTE5IDAgMCAwIDEuMTIgMS4xMmguMjA1bC0zLjA3MSA1LjMyaC0zLjI5NGExLjExOSAxLjExOSAwIDAgMCAtMS4xMiAxLjEydjQuNzZhMS4xMTkgMS4xMTkgMCAwIDAgMS4xMiAxLjEyaDYuMTZhMS4xMTkgMS4xMTkgMCAwIDAgMS4xMi0xLjEydi00Ljc2YTEuMTE5IDEuMTE5IDAgMCAwIC0xLjEyLTEuMTJoLS45MjdsMy4wNzItNS4zMmgxLjg3bDMuMDcxIDUuMzJoLS45MjZhMS4xMTkgMS4xMTkgMCAwIDAgLTEuMTIgMS4xMnY0Ljc2YTEuMTE5IDEuMTE5IDAgMCAwIDEuMTIgMS4xMmg2LjE2YTEuMTE5IDEuMTE5IDAgMCAwIDEuMTItMS4xMnYtNC43NmExLjExOSAxLjExOSAwIDAgMCAtMS4xMi0xLjEyeiIvPjwvc3ZnPg==")
 public class DrawioCommand extends CommandGroup implements Document.Supplier {
 	
-	protected DrawioCommand() {
+	private List<URIHandler> uriHandlers;
+
+	protected DrawioCommand(List<URIHandler> uriHandlers) {
 		super();
+		this.uriHandlers = uriHandlers;
 	}
 
-	protected DrawioCommand(CapabilityLoader capabilityLoader) {
+	protected DrawioCommand(CapabilityLoader capabilityLoader, List<URIHandler> uriHandlers) {
 		super(capabilityLoader);
+		this.uriHandlers = uriHandlers;
 	}
 
 	@Parameters(
@@ -70,10 +76,18 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 	@Option(			
 			names = {"-u", "--uri"},
 			description = {	
-					"URI to URL mapping",
-					"Target URLs are resolved",
-					"relative to the document URL"})
+					"URI mapping.",
+					"Target URIs are resolved",
+					"relative to the base URI"})
     private Map<String, String> uris = new LinkedHashMap<>();
+	
+	@Option(			
+		names = {"-b", "--base-url"},
+		description = {	
+				"Base URI for reolving document and target",
+				"URIs. Defaults to the current directory URI",
+				"Resolved relative to the current directory URI"})
+	private String baseUri;
 	
 	@Option(			
 			names = {"-U", "--uris"},
@@ -118,6 +132,9 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		} 		
 		
 		URI baseURI = URI.createFileURI(currentDir.getAbsolutePath()).appendSegment("");
+		if (!Util.isBlank(this.baseUri)) {
+			baseURI = URI.createURI(this.baseUri).resolve(baseURI);
+		}
 		URI documentURI = URI.createURI(document).resolve(baseURI);
 		try {
 			return Document.load(documentURI, getUriHandler(documentURI, progressMonitor), getPropertySource(progressMonitor));
@@ -128,10 +145,10 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 
 	protected Function<URI, InputStream> getUriHandler(URI baseURI, ProgressMonitor progressMonitor) {
 		Map<Object, Object> data = new LinkedHashMap<>(uris);
-		File currentDir = new File(".");
 		for (String location: uriMapSources) {
 			try {
-				URL url = currentDir.toURI().resolve(location).toURL();
+				URI locationURI = URI.createURI(location).resolve(baseURI);
+				URL url = new URL(locationURI.toString());
 				URLConnection connection = url.openConnection();
 				
 				if (location.endsWith(".json")) {
@@ -178,31 +195,52 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 			return null;
 		}
 		
-		return uri -> {
-			for (Entry<Object, Object> dataEntry: data.entrySet()) {				
-				String keyStr = dataEntry.getKey().toString();
-				URI keyURI = URI.createURI(keyStr);
-				URI valueURI = URI.createURI(dataEntry.getValue().toString());
-				if (valueURI.isRelative() && baseURI != null) {
-					valueURI = valueURI.resolve(baseURI);
-				}
-				if (keyURI.equals(uri)) {
-					uri = valueURI;
-					break;
-				}
-				if (uri.toString().startsWith(keyStr)) {
-					URI relative = uri.deresolve(keyURI, true, true, true);
-					uri = relative.resolve(valueURI);
-					break;
+		return uri -> createInputStream(uri, baseURI, data, null);		
+	}
+	
+	protected InputStream createInputStream(
+			final URI uri, 
+			URI baseURI, 
+			Map<Object, Object> mapping, 
+			Map<?, ?> options) {		
+		URI mappedUri = mapURI(uri, baseURI, mapping);
+		
+		if (uriHandlers != null) {
+			for (URIHandler uriHandler: uriHandlers) {
+				if (uriHandler.canHandle(mappedUri)) {
+					try {
+						return uriHandler.createInputStream(mappedUri, options);
+					} catch (IOException e) {
+						throw new NasdanikaException("Error opening stream from " + uri + ": " + e, e);
+					}
 				}
 			}
-			
-			try {
-				return new URL(uri.toString()).openStream();
-			} catch (IOException e) {
-				throw new NasdanikaException("Error opening stream from " + uri + ": " + e, e);
+		}
+		
+		try {
+			return new URL(uri.toString()).openStream();
+		} catch (IOException e) {
+			throw new NasdanikaException("Error opening stream from " + uri + ": " + e, e);
+		}		
+	}
+
+	protected URI mapURI(final URI uri, URI baseURI, Map<Object, Object> mapping) {
+		for (Entry<Object, Object> dataEntry: mapping.entrySet()) {				
+			String keyStr = dataEntry.getKey().toString();
+			URI keyURI = URI.createURI(keyStr);
+			URI valueURI = URI.createURI(dataEntry.getValue().toString());
+			if (valueURI.isRelative() && baseURI != null) {
+				valueURI = valueURI.resolve(baseURI);
 			}
-		};
+			if (keyURI.equals(uri)) {
+				return mapURI(valueURI, baseURI, mapping);
+			}
+			if (uri.toString().startsWith(keyStr)) {
+				URI relative = uri.deresolve(keyURI, true, true, true);
+				return mapURI(relative.resolve(valueURI), baseURI, mapping);
+			}
+		}
+		return uri;
 	}
 
 	protected Function<String, String> getPropertySource(ProgressMonitor progressMonitor) {

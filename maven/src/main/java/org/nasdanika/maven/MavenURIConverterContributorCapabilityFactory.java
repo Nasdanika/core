@@ -6,9 +6,9 @@ import org.nasdanika.capability.emf.URIConverterContributorCapabilityFactory;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
- * Contributes {@link URIHandler} loading from classpath schema
+ * Contributes {@link URIHandler} loading from Maven repositories
  */
-public class MavenURIHandlerCapabilityFactory extends URIConverterContributorCapabilityFactory {
+public class MavenURIConverterContributorCapabilityFactory extends URIConverterContributorCapabilityFactory {
 
 	@Override
 	protected void contribute(

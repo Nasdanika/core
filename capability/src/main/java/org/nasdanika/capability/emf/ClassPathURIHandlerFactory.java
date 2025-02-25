@@ -3,26 +3,32 @@ package org.nasdanika.capability.emf;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
+import org.nasdanika.capability.CapabilityProvider;
+import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 
-/**
- * Contributes {@link URIHandler} loading from classpath schema
- */
-public class ClassPathURIHandlerCapabilityFactory extends URIConverterContributorCapabilityFactory {
+public class ClassPathURIHandlerFactory extends ServiceCapabilityFactory<Void, URIHandler> {
+	
+	@Override
+	public boolean isFor(Class<?> type, Object requirement) {
+		return URIHandler.class == type && requirement == null;
+	}
 
 	@Override
-	protected void contribute(
-			URIConverter uriConverter, 
-			Loader loader,
-			ProgressMonitor progressMonitor) {	
-		uriConverter.getURIHandlers().add(0, new URIHandlerImpl() {
+	protected CompletionStage<Iterable<CapabilityProvider<URIHandler>>> createService(
+			Class<URIHandler> serviceType,
+			Void serviceRequirement, 
+			Loader loader, 
+			ProgressMonitor progressMonitor) {
+		
+		return wrap(new URIHandlerImpl() {
 
 			@Override
 			public boolean canHandle(URI uri) {
@@ -35,7 +41,6 @@ public class ClassPathURIHandlerCapabilityFactory extends URIConverterContributo
 			}
 			
 		});
-		
 	}
 	
 }

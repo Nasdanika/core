@@ -1,7 +1,8 @@
 import org.nasdanika.capability.CapabilityFactory;
 import org.nasdanika.maven.ClassLoaderCapabilityFactory;
 import org.nasdanika.maven.DependencyCapabilityFactory;
-import org.nasdanika.maven.MavenURIHandlerCapabilityFactory;
+import org.nasdanika.maven.MavenURIConverterContributorCapabilityFactory;
+import org.nasdanika.maven.MavenURIHandlerFactory;
 
 module org.nasdanika.maven {
 	requires transitive org.apache.maven.resolver.supplier;
@@ -16,6 +17,7 @@ module org.nasdanika.maven {
 	provides CapabilityFactory with 
 		DependencyCapabilityFactory,
 		ClassLoaderCapabilityFactory,
-		MavenURIHandlerCapabilityFactory;
+		MavenURIHandlerFactory,
+		MavenURIConverterContributorCapabilityFactory;
 	
 }

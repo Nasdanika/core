@@ -1,9 +1,10 @@
 package org.nasdanika.cli;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+import org.eclipse.emf.ecore.resource.URIHandler;
+import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.ProgressMonitor;
 
 import picocli.CommandLine;
@@ -20,7 +21,9 @@ public class DrawioCommandFactory extends SubCommandCapabilityFactory<DrawioComm
 			List<CommandLine> parentPath,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
-		return CompletableFuture.completedStage(new DrawioCommand(loader.getCapabilityLoader()));
+		
+		CompletionStage<List<URIHandler>> uriHandlersCS = loader.loadAll(ServiceCapabilityFactory.createRequirement(URIHandler.class), progressMonitor);
+		return uriHandlersCS.thenApply(uriHandlers -> new DrawioCommand(loader.getCapabilityLoader(), uriHandlers));
 	}
 
 }

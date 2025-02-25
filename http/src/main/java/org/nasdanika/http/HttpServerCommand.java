@@ -2,12 +2,15 @@ package org.nasdanika.http;
 
 import java.util.Collection;
 
+import org.nasdanika.cli.Description;
+
 import picocli.CommandLine.Command;
 import reactor.netty.http.server.HttpServerRoutes;
 
 @Command(
 		description = "Serves HTTP routes",
 		name = "http-server")
+@Description(icon = "https://docs.nasdanika.org/images/http.svg")
 public class HttpServerCommand extends AbstractHttpServerCommand {
 	
 	private Collection<HttpServerRouteBuilder> routeBuilders;

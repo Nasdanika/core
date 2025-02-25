@@ -7,7 +7,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.eclipse.emf.common.util.URI;
+import org.nasdanika.common.Identifiable;
 import org.nasdanika.persistence.Marked;
 
 /**
@@ -15,7 +15,7 @@ import org.nasdanika.persistence.Marked;
  * @author Pavel
  *
  */
-public interface Element extends org.nasdanika.graph.Element, Marked {
+public interface Element extends org.nasdanika.graph.Element, Marked, Identifiable {
 	
 	/**
 	 * @return The underlying XML element.
@@ -58,12 +58,6 @@ public interface Element extends org.nasdanika.graph.Element, Marked {
 		};
 		return accept(visitor, connectionBase);
 	}; 
-	
-	/**
-	 * 
-	 * @return Element URI for resolving relative references, e.g. links to documentation. 
-	 */
-	URI getURI();	
 		
 	default ModelElement getModelElementById(String modelElementId) {
 		if (org.nasdanika.common.Util.isBlank(modelElementId)) {

@@ -3,7 +3,7 @@ package org.nasdanika.common;
 /**
  * Something that can be started, stopped, and closed
  */
-public interface Component {
+public interface Component extends Closeable {
 	
 	/**
 	 * Starts component activities. E.g. listening on an HTTP port, start a timer.
@@ -18,10 +18,4 @@ public interface Component {
 	 */
 	void stop(ProgressMonitor progressMonitor);		
 	
-	/**
-	 * Releases resources. E.g. closes a database connection. Generally, a component is non-operational once it was closed. 
-	 * @param progressMonitor
-	 */
-	void close(ProgressMonitor progressMonitor);		
-
 }

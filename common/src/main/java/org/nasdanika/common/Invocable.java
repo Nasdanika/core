@@ -151,6 +151,16 @@ public interface Invocable {
 	<T> T invoke(Object... args);
 	
 	/**
+	 * Convenience method
+	 * @param <T>
+	 * @param args
+	 * @return
+	 */
+	default <T> T listInvoke(List<?> args) {		
+		return args == null ? invoke() : invoke(args.toArray());
+	}
+	
+	/**
 	 * Different name to avoid ambiguity 
 	 * @param argumentProvider
 	 * @return
@@ -248,7 +258,10 @@ public interface Invocable {
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public Object invoke(Object... args) {				
+			public Object invoke(Object... args) {		
+				if (args == null) {
+					args = new Object[0];
+				}
 				Object[] finalArgs = new Object[bindings.length + args.length];
 				System.arraycopy(args, 0, finalArgs, 0, offset);
 				System.arraycopy(bindings, 0, finalArgs, offset, bindings.length);
