@@ -9,5 +9,4 @@ public enum HttpMethod {
 	PATCH,
 	DELETE,
 	TRACE
-
 }

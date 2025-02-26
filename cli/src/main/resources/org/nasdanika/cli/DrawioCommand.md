@@ -1,5 +1,5 @@
 
-### Examples
+## Examples
 
 * ``drawio test-data/jira/diagram.drawio html-app -r test-data/jira/root-action.yml --add-to-root site -r=-1 -F test-data/jira/page-template.yml test-data/jira/docs``
     * Loads ``test-data/drawio-http/diagram.drawio`` diagram resource
@@ -12,7 +12,7 @@
     * Loads ``test-data/invocable.drawio`` diagram document
     * Executes [invoke](invoke/index.html) sub-command with ``33`` and ``66`` arguments 
    
-### URI Handlers
+## URI Handlers
 
 The command loads [URI Handlers](https://javadoc.io/doc/org.eclipse.emf/org.eclipse.emf.ecore/latest/org/eclipse/emf/ecore/resource/URIHandler.html) using the [capability framework](https://docs.nasdanika.org/core/capability/index.html). 
 You can load resources from Maven with the [Maven URI Handler](https://docs.nasdanika.org/core/maven/index.html#uri-handler).
@@ -43,7 +43,7 @@ public class MavenURIHandlerCapabilityFactory extends URIConverterContributorCap
 }
 ```
 
-### Contributing sub-commands
+## Contributing sub-commands
 
 To contribute a sub-command:
 
@@ -121,7 +121,7 @@ module <module name> {
 }
 ```
 
-#### Executable diagrams sub-commands
+### Executable diagrams sub-commands
 
 You can create sub-commands which execute diagrams by extending [AbstractElementInvocableCommand](https://javadoc.io/doc/org.nasdanika.core/cli/latest/org.nasdanika.cli/org/nasdanika/cli/AbstractElementInvocableCommand.html).
 [invoke](invoke/index.html) is an example of such a command. 

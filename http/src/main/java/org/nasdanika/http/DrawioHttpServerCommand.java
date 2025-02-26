@@ -52,6 +52,7 @@ public class DrawioHttpServerCommand extends AbstractHttpServerCommand {
 		description = {  
 			"Processor property"
 		})
+	@Description
 	private String processorProperty;
 		
 	@Parameters(
@@ -60,6 +61,7 @@ public class DrawioHttpServerCommand extends AbstractHttpServerCommand {
 		description = {  
 			"Route property"
 		})
+	@Description
 	private String routeProperty;
 		
 	@Mixin
