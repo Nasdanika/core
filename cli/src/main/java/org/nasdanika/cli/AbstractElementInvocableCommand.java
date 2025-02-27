@@ -29,7 +29,8 @@ public abstract class AbstractElementInvocableCommand<H,E,T> extends CommandBase
 	@Option(
 		names = {"-b", "--bind-property"},
 		description = {
-			"Bind property",
+			"Bind property providing dynamic",
+			"proxy method name",
 			"Defaults to ${DEFAULT-VALUE}"
 		},
 		defaultValue = "bind")
@@ -42,6 +43,7 @@ public abstract class AbstractElementInvocableCommand<H,E,T> extends CommandBase
 			"Defaults to ${DEFAULT-VALUE}"
 		},
 		defaultValue = "processor")
+	@Description
 	private String processorProperty;
 		
 	@Option(

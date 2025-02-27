@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 import org.nasdanika.common.DocumentationFactory;
 
 /**
- * Command description
+ * Command, option, or parameter description
  * The description is add to the documentation action after the usage information.
  * @author Pavel
  *
@@ -20,7 +20,7 @@ public @interface Description {
 	public static final String MARKDOWN_FORMAT = "markdown";
 
 	/**
-	 * Command description. 
+	 * Description text. 
 	 * @return
 	 */
 	String value() default "";
@@ -32,7 +32,7 @@ public @interface Description {
 	String format() default "";
 	
 	/**
-	 * Description resource used if the description is an empty string
+	 * Description resource used if the value is an empty string
 	 * @return
 	 */
 	String resource() default "";
