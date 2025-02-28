@@ -11,7 +11,6 @@ import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.PropertySource;
 import org.nasdanika.common.Util;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.Text;
@@ -42,17 +41,17 @@ public class TextDocumentationFactory extends ServiceCapabilityFactory<Documenta
 				return "text".equalsIgnoreCase(contentType) || "text/plain".equalsIgnoreCase(contentType);
 			}
 			
-			@SuppressWarnings("unchecked")
 			@Override
 			public Collection<EObject> createDocumentation(
 					Object context, 
 					String doc, 
 					String contentType, 
 					URI baseUri, 
+					java.util.function.Function<String, String> tokenSource,
 					ProgressMonitor progressMonitor) {
 				
-				if (context instanceof PropertySource) {
-					doc = Util.interpolate(doc, ((PropertySource<String,String>) context)::getProperty);
+				if (tokenSource != null) {
+					doc = Util.interpolate(doc, tokenSource);
 				}
 				Text text = ContentFactory.eINSTANCE.createText(); // Interpolate with element properties?
 				text.setContent("<PRE>" + System.lineSeparator() + StringEscapeUtils.escapeHtml4(doc) + System.lineSeparator() + "</PRE>");

@@ -41,13 +41,20 @@ import org.xml.sax.SAXException;
 public interface Document extends Element {
 
 	/**
-	 * Functional/service interface
+	 * Supplies a document
 	 */
 	interface Supplier {
 		
-		Document getDocument(ProgressMonitor progressMonitor);
+		default Document getDocument(ProgressMonitor progressMonitor) {
+			return getDocument(null, null, progressMonitor);
+		}
 		
-	}	
+		Document getDocument(
+				Function<URI,InputStream> uriHandler, 
+				Function<String,String> propertySource, 
+				ProgressMonitor progressMonitor);
+		
+	}
 	
 	/**
 	 * @return a list of pages. This list supports add() method to insert pages from other documents. The add() method creates a clone of the page passed as a parameter. 

@@ -117,15 +117,21 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 	}
 	
 	@Override
-	public Document getDocument(ProgressMonitor progressMonitor) {		
+	public Document getDocument(
+			Function<URI, InputStream> uriHandler, 
+			Function<String, String> propertySource,
+			ProgressMonitor progressMonitor) {
+		
 		File currentDir = new File(".");
 		
-		// TODO - URI handlers from capability. E.g. classpath
 		// TODO - property source from properties, YAML, JSON, context, ...
 		if (isFile) {
 			File documentFile = new File(document);
 			try {
-				return Document.load(documentFile, getUriHandler(URI.createFileURI(documentFile.toString()), progressMonitor), getPropertySource(progressMonitor));
+				return Document.load(documentFile, getUriHandler(
+						uriHandler,
+						URI.createFileURI(documentFile.toString()), progressMonitor), 
+						getPropertySource(propertySource, progressMonitor));
 			} catch (IOException | ParserConfigurationException | SAXException e) {
 				throw new NasdanikaException("Error loading document from '" + documentFile.getAbsolutePath() + "': " + e, e);
 			}
@@ -137,13 +143,19 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		}
 		URI documentURI = URI.createURI(document).resolve(baseURI);
 		try {
-			return Document.load(documentURI, getUriHandler(documentURI, progressMonitor), getPropertySource(progressMonitor));
+			return Document.load(
+					documentURI, 
+					getUriHandler(uriHandler, documentURI, progressMonitor), 
+					getPropertySource(propertySource, progressMonitor));
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			throw new NasdanikaException("Error loading document from '" + documentURI.toString() + "': " + e, e);
 		}
 	}
 
-	protected Function<URI, InputStream> getUriHandler(URI baseURI, ProgressMonitor progressMonitor) {
+	protected Function<URI, InputStream> getUriHandler(
+			Function<URI, InputStream> uriHandler,			
+			URI baseURI, 
+			ProgressMonitor progressMonitor) {
 		Map<Object, Object> data = new LinkedHashMap<>(uris);
 		for (String location: uriMapSources) {
 			try {
@@ -195,21 +207,29 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 			return null;
 		}
 		
-		return uri -> createInputStream(uri, baseURI, data, null);		
+		return uri -> createInputStream(uriHandler, uri, baseURI, data, null);		
 	}
 	
 	protected InputStream createInputStream(
+			Function<URI, InputStream> uriHandler,			
 			final URI uri, 
 			URI baseURI, 
 			Map<Object, Object> mapping, 
 			Map<?, ?> options) {		
 		URI mappedUri = mapURI(uri, baseURI, mapping);
 		
+		if (uriHandler != null) {
+			InputStream in = uriHandler.apply(mappedUri);
+			if (in != null) {
+				return in;
+			}
+		}
+		
 		if (uriHandlers != null) {
-			for (URIHandler uriHandler: uriHandlers) {
-				if (uriHandler.canHandle(mappedUri)) {
+			for (URIHandler handler: uriHandlers) {
+				if (handler.canHandle(mappedUri)) {
 					try {
-						return uriHandler.createInputStream(mappedUri, options);
+						return handler.createInputStream(mappedUri, options);
 					} catch (IOException e) {
 						throw new NasdanikaException("Error opening stream from " + uri + ": " + e, e);
 					}
@@ -243,9 +263,15 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		return uri;
 	}
 
-	protected Function<String, String> getPropertySource(ProgressMonitor progressMonitor) {
+	protected Function<String, String> getPropertySource(Function<String, String> propertySource, ProgressMonitor progressMonitor) {
 		Map<Object, Object> properties = propertiesMixIn.getProperties();
 		return key -> {
+			if (propertySource != null) {
+				String value = propertySource.apply(key);
+				if (!Util.isBlank(value)) {
+					return value;
+				}
+			}
 			if (properties.containsKey(key)) {
 				Object value = properties.get(key);
 				if (value instanceof String) {

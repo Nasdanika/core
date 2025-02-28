@@ -51,24 +51,41 @@ public interface DocumentationFactory extends Composable<DocumentationFactory> {
 	 * @param doc
 	 * @param contentType Content type for factories which support more than one
 	 * @param baseUri
+	 * @param tokenSource If not null, source documentation might be interpolated using provided tokens
 	 * @param progressMonitor
 	 * @return
 	 */
 	Collection<EObject> createDocumentation(
-			Object context, 
+			Object context, 			
 			java.lang.String doc, 
 			java.lang.String contentType,
 			URI baseUri, 
+			java.util.function.Function<String, String> tokenSource,
 			ProgressMonitor progressMonitor);
 	
+	/**
+	 * 
+	 * @param context
+	 * @param docRef
+	 * @param tokenSource If not null, source documentation text might be interpolated using provided tokens
+	 * @param progressMonitor
+	 * @return
+	 */
 	default Collection<EObject> createDocumentation(
 			Object context, 
 			URI docRef, 
+			java.util.function.Function<String, String> tokenSource,
 			ProgressMonitor progressMonitor) {
 		
 		try (InputStream in = DefaultConverter.INSTANCE.toInputStream(docRef)) {
 			String doc = DefaultConverter.INSTANCE.toString(in);
-			return createDocumentation(context, doc, null, docRef, progressMonitor);
+			return createDocumentation(
+					context, 
+					doc, 
+					null, 
+					docRef,
+					tokenSource,
+					progressMonitor);
 		} catch (IOException e) {
 			throw new NasdanikaException("Error loading documentation from '" + docRef + "': " + e, e);
 		}		
@@ -101,25 +118,47 @@ public interface DocumentationFactory extends Composable<DocumentationFactory> {
 					java.lang.String doc, 
 					java.lang.String contentType, 
 					URI baseUri,
+					java.util.function.Function<String, String> tokenSource,
 					ProgressMonitor progressMonitor) {
 				
 				if (DocumentationFactory.this.canHandle(contentType)) {
-					return DocumentationFactory.this.createDocumentation(context, doc, contentType, baseUri, progressMonitor);
+					return DocumentationFactory.this.createDocumentation(
+							context, 
+							doc, 
+							contentType, 
+							baseUri,
+							tokenSource,
+							progressMonitor);
 				}
 				
-				return other.createDocumentation(context, doc, contentType, baseUri, progressMonitor);
+				return other.createDocumentation(
+						context, 
+						doc, 
+						contentType, 
+						baseUri,
+						tokenSource,
+						progressMonitor);
 			}
 			
 			public Collection<EObject> createDocumentation(
 					Object context, 
 					URI docRef, 
+					java.util.function.Function<String, String> tokenSource,					
 					ProgressMonitor progressMonitor) {
 				
 				if (DocumentationFactory.this.canHandle(docRef)) {
-					return DocumentationFactory.this.createDocumentation(context, docRef, progressMonitor);
+					return DocumentationFactory.this.createDocumentation(
+							context, 
+							docRef,
+							tokenSource,
+							progressMonitor);
 				}
 				
-				return other.createDocumentation(context, docRef, progressMonitor);
+				return other.createDocumentation(
+						context, 
+						docRef,
+						tokenSource,
+						progressMonitor);
 			}				
 			
 		};

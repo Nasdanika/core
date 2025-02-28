@@ -10,7 +10,6 @@ import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.PropertySource;
 import org.nasdanika.common.Util;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.Interpolator;
@@ -46,9 +45,13 @@ public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Docum
 			}
 			
 			@Override
-			public Collection<EObject> createDocumentation(Object context, URI docRef, ProgressMonitor progressMonitor) {
+			public Collection<EObject> createDocumentation(
+					Object context, 
+					URI docRef,
+					java.util.function.Function<String, String> tokenSource,
+					ProgressMonitor progressMonitor) {
 				if (serviceRequirement.inline()) {
-					return DocumentationFactory.super.createDocumentation(context, docRef, progressMonitor);
+					return DocumentationFactory.super.createDocumentation(context, docRef, tokenSource, progressMonitor);
 				}
 				Resource resource = ContentFactory.eINSTANCE.createResource();
 				resource.setLocation(docRef.toString());
@@ -56,16 +59,16 @@ public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Docum
 				return Collections.singleton(createMarkdown(resource));
 			}
 			
-			@SuppressWarnings("unchecked")
 			@Override
 			public Collection<EObject> createDocumentation(
 					Object context, 
 					String doc, 
 					String contentType, 
 					URI baseUri, 
+					java.util.function.Function<String, String> tokenSource,
 					ProgressMonitor progressMonitor) {
-				if (context instanceof PropertySource) {
-					doc = Util.interpolate(doc, ((PropertySource<String,String>) context)::getProperty);
+				if (tokenSource != null) {
+					doc = Util.interpolate(doc, tokenSource);
 				}
 				Text text = ContentFactory.eINSTANCE.createText(); 
 				text.setContent(doc);

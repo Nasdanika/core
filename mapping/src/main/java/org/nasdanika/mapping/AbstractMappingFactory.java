@@ -1176,6 +1176,15 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		return ret;
 	}
 	
+	/**
+	 * Override to provide interpolation of documentation with tokens obtained from the source
+	 * @param source
+	 * @return
+	 */
+	protected java.util.function.Function<String, String> getTokenSource(S source) {
+		return null;
+	}
+	
 	protected void configureTarget(
 			S obj,
 			T target,
@@ -1238,7 +1247,11 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 					.findAny();
 				
 				if (dfo.isPresent()) {
-					documentation = dfo.get().createDocumentation((String) doc, baseUri, progressMonitor);
+					documentation = dfo.get().createDocumentation(
+							(String) doc, 
+							baseUri,
+							getTokenSource(obj),
+							progressMonitor);
 					addDocumentation(target, documentation);
 				} else {
 					throw new ConfigurationException("Unsupported documentation format: " + docFormatStr, obj instanceof Marked ? (Marked) obj : null);
@@ -1291,7 +1304,11 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 					}
 				}
 				
-				documentation =  docFactory.createDocumentation(obj, docRefURI[0], progressMonitor);
+				documentation =  docFactory.createDocumentation(
+						obj, 
+						docRefURI[0],
+						getTokenSource(obj),
+						progressMonitor);
 				addDocumentation(target, documentation);				
 			}
 		}
