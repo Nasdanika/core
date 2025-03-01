@@ -53,6 +53,16 @@
 	</build>
 	<dependencies>		
 		<dependency>
+			<groupId>info.picocli</groupId>
+			<artifactId>picocli</artifactId>
+			<!-- 
+	        	Use https://maven.nasdanika.org/snapshots repository or
+        	    build a snapshot from https://github.com/Nasdanika/picocli
+	            gradlew.bat publishToMavenLocal 
+		    -->
+			<version>4.7.7-SNAPSHOT</version>  
+		</dependency>		
+		<dependency>
 			<groupId>org.nasdanika.core</groupId>
 			<artifactId>capability</artifactId>
 			<version>${project.version}</version>
@@ -62,15 +72,6 @@
 			<artifactId>drawio</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-		    <groupId>info.picocli</groupId>
-		    <artifactId>picocli</artifactId>
-		    <!-- 
-                Build a snapshot from https://github.com/Nasdanika/picocli
-                gradlew.bat publishToMavenLocal 
-		    -->
-		    <version>4.7.7-SNAPSHOT</version>  
-		</dependency>				
 		<dependency>
 		    <groupId>org.jline</groupId>
 		    <artifactId>jline</artifactId>
