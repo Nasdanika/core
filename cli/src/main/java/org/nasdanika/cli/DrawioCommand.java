@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.Description;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;

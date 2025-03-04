@@ -8,6 +8,7 @@ import java.util.function.Function;
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.common.Description;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;

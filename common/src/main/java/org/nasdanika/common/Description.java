@@ -1,11 +1,9 @@
-package org.nasdanika.cli;
+package org.nasdanika.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.nasdanika.common.DocumentationFactory;
 
 /**
  * Command, option, or parameter description
@@ -14,7 +12,12 @@ import org.nasdanika.common.DocumentationFactory;
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
+@Target({
+	ElementType.TYPE, 
+	ElementType.METHOD, 
+	ElementType.FIELD, 
+	ElementType.PARAMETER,
+	ElementType.MODULE})
 public @interface Description {
 
 	public static final String MARKDOWN_FORMAT = "markdown";
@@ -48,5 +51,16 @@ public @interface Description {
 	 * @return
 	 */
 	String tooltip() default "";
+	
+	/**
+	 * Contributor classes. Use of contributors depends on where the annotation is used.
+	 * A typical scenario would be:
+	 * <UL>
+	 * <LI>Inspect class for implementing a specific interface or extending a specific base class</LI>
+	 * <LI>Instantiate contributors of interest with a default constructor or a constructor taking context such as, say, capability loader or progress monitor</LI>
+	 * <LI>Invoke interface methods</LI>
+	 * @return
+	 */
+	Class<?>[] contributors() default {};
 	
 }

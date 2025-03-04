@@ -9,6 +9,7 @@ import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
+import org.nasdanika.common.Description;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
 

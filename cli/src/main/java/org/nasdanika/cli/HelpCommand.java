@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.Description;
 import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.common.Util;
 

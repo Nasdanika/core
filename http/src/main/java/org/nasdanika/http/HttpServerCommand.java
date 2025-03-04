@@ -2,7 +2,7 @@ package org.nasdanika.http;
 
 import java.util.Collection;
 
-import org.nasdanika.cli.Description;
+import org.nasdanika.common.Description;
 
 import picocli.CommandLine.Command;
 import reactor.netty.http.server.HttpServerRoutes;

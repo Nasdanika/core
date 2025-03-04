@@ -7,10 +7,10 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.nasdanika.capability.CapabilityLoader;
-import org.nasdanika.cli.Description;
 import org.nasdanika.cli.ParentCommands;
 import org.nasdanika.cli.ProgressMonitorMixIn;
 import org.nasdanika.common.Component;
+import org.nasdanika.common.Description;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;

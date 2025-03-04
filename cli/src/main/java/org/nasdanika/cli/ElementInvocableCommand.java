@@ -1,6 +1,7 @@
 package org.nasdanika.cli;
 
 import org.nasdanika.capability.CapabilityLoader;
+import org.nasdanika.common.Description;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.Document;
