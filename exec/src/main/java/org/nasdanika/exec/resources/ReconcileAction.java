@@ -84,7 +84,29 @@ public enum ReconcileAction implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	OVERWRITE(5, "Overwrite", "Overwrite");
+	OVERWRITE(5, "Overwrite", "Overwrite"), /**
+	 * The '<em><b>Rename</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Renames existing resource. For containers the same as Append.
+	 * <!-- end-model-doc -->
+	 * @see #RENAME_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	RENAME(6, "Rename", "Rename"), /**
+	 * The '<em><b>Dedup</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Keeps the existing resource. Saves a new resource with a different name, e.g. adding a timestamps at the end.
+	 * <!-- end-model-doc -->
+	 * @see #DEDUP_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	DEDUP(7, "Dedup", "Dedup");
 
 	/**
 	 * The '<em><b>Append</b></em>' literal value.
@@ -157,6 +179,34 @@ public enum ReconcileAction implements Enumerator {
 	public static final int OVERWRITE_VALUE = 5;
 
 	/**
+	 * The '<em><b>Rename</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Renames existing resource. For containers the same as Append.
+	 * <!-- end-model-doc -->
+	 * @see #RENAME
+	 * @model name="Rename"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int RENAME_VALUE = 6;
+
+	/**
+	 * The '<em><b>Dedup</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Keeps the existing resource. Saves a new resource with a different name, e.g. adding a timestamps at the end.
+	 * <!-- end-model-doc -->
+	 * @see #DEDUP
+	 * @model name="Dedup"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int DEDUP_VALUE = 7;
+
+	/**
 	 * An array of all the '<em><b>Reconcile Action</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -169,6 +219,8 @@ public enum ReconcileAction implements Enumerator {
 			KEEP,
 			MERGE,
 			OVERWRITE,
+			RENAME,
+			DEDUP,
 		};
 
 	/**
@@ -230,6 +282,8 @@ public enum ReconcileAction implements Enumerator {
 			case KEEP_VALUE: return KEEP;
 			case MERGE_VALUE: return MERGE;
 			case OVERWRITE_VALUE: return OVERWRITE;
+			case RENAME_VALUE: return RENAME;
+			case DEDUP_VALUE: return DEDUP;
 		}
 		return null;
 	}

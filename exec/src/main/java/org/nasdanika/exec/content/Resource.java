@@ -79,7 +79,7 @@ public interface Resource extends ModelElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * If set, the message content is used as resource content if there is an error loading the resource content. The message is interpolated with uri and exception tokens.
+	 * If set, the message content is used as resource content if there is an error loading the resource content. The message is interpolated with url and exception tokens.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Error Message</em>' attribute.
 	 * @see #setErrorMessage(String)

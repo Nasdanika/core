@@ -350,6 +350,8 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 		addEEnumLiteral(reconcileActionEEnum, ReconcileAction.KEEP);
 		addEEnumLiteral(reconcileActionEEnum, ReconcileAction.MERGE);
 		addEEnumLiteral(reconcileActionEEnum, ReconcileAction.OVERWRITE);
+		addEEnumLiteral(reconcileActionEEnum, ReconcileAction.RENAME);
+		addEEnumLiteral(reconcileActionEEnum, ReconcileAction.DEDUP);
 
 		// Create annotations
 		// urn:org.nasdanika
@@ -459,6 +461,18 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 		   source,
 		   new String[] {
 			   "documentation", "Overwrites existing resource. For containers - deletes their contents."
+		   });
+		addAnnotation
+		  (reconcileActionEEnum.getELiterals().get(5),
+		   source,
+		   new String[] {
+			   "documentation", "Renames existing resource. For containers the same as Append."
+		   });
+		addAnnotation
+		  (reconcileActionEEnum.getELiterals().get(6),
+		   source,
+		   new String[] {
+			   "documentation", "Keeps the existing resource. Saves a new resource with a different name, e.g. adding a timestamps at the end."
 		   });
 	}
 

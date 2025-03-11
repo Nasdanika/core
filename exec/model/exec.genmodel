@@ -75,6 +75,8 @@
         <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Keep"/>
         <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Merge"/>
         <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Overwrite"/>
+        <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Rename"/>
+        <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Dedup"/>
       </genEnums>
       <genClasses ecoreClass="exec.ecore#//resources/Resource">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//resources/Resource/name"/>

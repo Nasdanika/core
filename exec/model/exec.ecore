@@ -323,6 +323,16 @@
           <details key="documentation" value="Overwrites existing resource. For containers - deletes their contents."/>
         </eAnnotations>
       </eLiterals>
+      <eLiterals name="Rename" value="6">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Renames existing resource. For containers the same as Append."/>
+        </eAnnotations>
+      </eLiterals>
+      <eLiterals name="Dedup" value="7">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Keeps the existing resource. Saves a new resource with a different name, e.g. adding a timestamps at the end."/>
+        </eAnnotations>
+      </eLiterals>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>

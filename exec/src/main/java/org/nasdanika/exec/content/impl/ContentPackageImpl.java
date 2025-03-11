@@ -507,7 +507,7 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		  (getResource_ErrorMessage(),
 		   source,
 		   new String[] {
-			   "documentation", "If set, the message content is used as resource content if there is an error loading the resource content. The message is interpolated with uri and exception tokens."
+			   "documentation", "If set, the message content is used as resource content if there is an error loading the resource content. The message is interpolated with url and exception tokens."
 		   });
 		addAnnotation
 		  (getText_Content(),
