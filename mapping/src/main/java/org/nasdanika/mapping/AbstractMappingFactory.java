@@ -1248,7 +1248,9 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 				
 				if (dfo.isPresent()) {
 					documentation = dfo.get().createDocumentation(
+							obj,
 							(String) doc, 
+							docFormatStr[0],
 							baseUri,
 							getTokenSource(obj),
 							progressMonitor);
