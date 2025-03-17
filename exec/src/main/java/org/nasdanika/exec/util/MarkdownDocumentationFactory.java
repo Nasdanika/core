@@ -17,6 +17,7 @@ import org.nasdanika.exec.content.Markdown;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.content.Text;
 import org.nasdanika.ncore.NcoreFactory;
+import org.nasdanika.common.Description;
 
 public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<DocumentationFactory.Requirement, DocumentationFactory> {
 	
@@ -41,7 +42,7 @@ public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Docum
 			
 			@Override
 			public boolean canHandle(String contentType) {				
-				return "markdown".equalsIgnoreCase(contentType) || "text/markdown".equalsIgnoreCase(contentType);
+				return Description.MARKDOWN_FORMAT.equalsIgnoreCase(contentType) || "text/markdown".equalsIgnoreCase(contentType);
 			}
 			
 			@Override

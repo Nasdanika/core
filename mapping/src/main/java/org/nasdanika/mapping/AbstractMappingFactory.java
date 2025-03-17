@@ -41,6 +41,7 @@ import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.Description;
 import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
@@ -1238,7 +1239,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 					docFormatStr[0] = (String) getContentProvider().getProperty(obj, docFormatProperty);
 				}
 				if (Util.isBlank(docFormatStr[0])) {
-					docFormatStr[0] = "markdown";
+					docFormatStr[0] = Description.MARKDOWN_FORMAT;
 				}
 				
 				Optional<DocumentationFactory> dfo = getDocumentationFactories(progressMonitor)
