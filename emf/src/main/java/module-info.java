@@ -3,6 +3,7 @@ import org.nasdanika.emf.ConfigurationLoadingDrawioResourceFactoryCapabilityFact
 import org.nasdanika.emf.ConfigurationLoadingDrawioResourceFactoryPngCapabilityFactory;
 import org.nasdanika.emf.persistence.EObjectCapabilityFactory;
 import org.nasdanika.emf.persistence.EObjectLoaderYamlResourceFactoryCapabilityFactory;
+import org.nasdanika.emf.ModelCommandFactory;
 
 module org.nasdanika.emf {
 	exports org.nasdanika.emf;
@@ -16,12 +17,13 @@ module org.nasdanika.emf {
 	requires org.eclipse.jgit;
 	requires transitive org.apache.poi.ooxml;
 	requires spring.core;
-	requires info.picocli;
+	requires org.nasdanika.cli;
 	
 	opens org.nasdanika.emf to info.picocli;
 	
 	provides CapabilityFactory with 
 		EObjectCapabilityFactory,
+		ModelCommandFactory,
 		ConfigurationLoadingDrawioResourceFactoryCapabilityFactory,
 		ConfigurationLoadingDrawioResourceFactoryPngCapabilityFactory,
 		EObjectLoaderYamlResourceFactoryCapabilityFactory;

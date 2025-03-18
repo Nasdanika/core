@@ -63,7 +63,12 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			String configRefProperty,
 			ConnectionBase connectionBase) {
 		
-		this(Collections.singleton(root), baseURIProperty, configProperty, configRefProperty, connectionBase);
+		this(
+				Collections.singleton(root), 
+				baseURIProperty, 
+				configProperty, 
+				configRefProperty, 
+				connectionBase);
 	}
 	
 	public DrawioContentProvider(Collection<Element> elements) {
@@ -170,7 +175,8 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 						DefaultConverter converter = DefaultConverter.INSTANCE;
 						Reader reader = converter.toReader(refURI);
 						String configStr = converter.toString(reader);
-						Object config = new Yaml().load(configStr);
+						String iConfigStr = org.nasdanika.common.Util.interpolate(configStr, modelElement::getProperty);
+						Object config = new Yaml().load(iConfigStr);
 						if (config instanceof Map) {
 							return ((Map<String,Object>) config)::get;
 						}

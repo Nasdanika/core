@@ -54,7 +54,7 @@ public class DiagnosticHelper {
 	public void addDiagnostic(int severity, String message, String messageKey, EStructuralFeature feature) {
 		if (diagnostics != null) {
 			if (feature != null && owner instanceof EObject && !((EObject) owner).eClass().getEAllStructuralFeatures().contains(feature)) {
-				throw new IllegalArgumentException("EStructuralFeature "+feature+" does not belong to owner's EClass "+ ((EObject) owner).eClass());
+				throw new IllegalArgumentException("EStructuralFeature " + feature + " does not belong to owner's EClass "+ ((EObject) owner).eClass());
 			}
 			List<Object> data = new ArrayList<>();
 			data.add(owner);

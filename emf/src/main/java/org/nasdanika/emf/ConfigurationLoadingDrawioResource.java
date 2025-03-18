@@ -191,7 +191,12 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 	}
 	
 	protected ContentProvider<Element> createContentProvider(Document document) {
-		return new DrawioContentProvider(document, Context.BASE_URI_PROPERTY, MAPPING_PROPERTY, MAPPING_REF_PROPERTY, connnectionBase);
+		return new DrawioContentProvider(
+				document, 
+				Context.BASE_URI_PROPERTY, 
+				MAPPING_PROPERTY, 
+				MAPPING_REF_PROPERTY, 
+				connnectionBase);
 	}
 				
 	protected org.nasdanika.ncore.Marker createTargetMarker(

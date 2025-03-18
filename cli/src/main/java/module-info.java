@@ -4,7 +4,6 @@ import org.nasdanika.cli.DrawioCommandFactory;
 import org.nasdanika.cli.ElementInvocableCommandFactory;
 import org.nasdanika.cli.HelpCommandFactory;
 import org.nasdanika.cli.InvokeCommandFactory;
-import org.nasdanika.cli.ModelCommandFactory;
 import org.nasdanika.cli.RootCommandFactory;
 import org.nasdanika.cli.SaveModelCommandFactory;
 
@@ -24,7 +23,6 @@ module org.nasdanika.cli {
 		RootCommandFactory,
 		HelpCommandFactory,
 		DrawioCommandFactory,
-		ModelCommandFactory,
 		SaveModelCommandFactory,
 		InvokeCommandFactory,
 //		CallableElementInvocableCommandFactory, Invocable factory below is more flexible.
