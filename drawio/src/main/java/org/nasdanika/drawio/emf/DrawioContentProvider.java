@@ -156,7 +156,9 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 					Yaml yaml = new Yaml();
 					Object config = yaml.load(configStr);
 					if (config instanceof Map) {
-						return ((Map<String,Object>) config)::get;
+						Context elementContext = Context.wrap(modelElement::getProperty);
+						Map<String, Object> configMap = elementContext.interpolate((Map<String,Object>) config);
+						return configMap::get;
 					}
 					throw new ConfigurationException("Usupported configuration type: " + configStr, null, asMarked(element));
 				}
@@ -175,10 +177,11 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 						DefaultConverter converter = DefaultConverter.INSTANCE;
 						Reader reader = converter.toReader(refURI);
 						String configStr = converter.toString(reader);
-						String iConfigStr = org.nasdanika.common.Util.interpolate(configStr, modelElement::getProperty);
-						Object config = new Yaml().load(iConfigStr);
+						Object config = new Yaml().load(configStr);
 						if (config instanceof Map) {
-							return ((Map<String,Object>) config)::get;
+							Context elementContext = Context.wrap(modelElement::getProperty);
+							Map<String, Object> configMap = elementContext.interpolate((Map<String,Object>) config);
+							return configMap::get;
 						}
 						throw new ConfigurationException("Usupported configuration type: " + configStr, null, asMarked(element));								
 					} catch (IOException e) {
