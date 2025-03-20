@@ -17,13 +17,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.nasdanika.common.Closeable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 
 /**
  * Loads capabilities from {@link CapabilityFactory}'s.
  */
-public class CapabilityLoader {
+public class CapabilityLoader implements Closeable {
 	
 	protected Collection<CapabilityFactory<Object,Object>> factories = new ArrayList<>();
 	
@@ -266,6 +267,16 @@ public class CapabilityLoader {
 			return ret;
 		};
 		return allOf.thenApply(collector);
+	}
+
+	@Override
+	public void close(ProgressMonitor progressMonitor) {
+		// Closing factories
+		for (CapabilityFactory<Object, Object> cf: getFactories()) {
+			if (cf instanceof Closeable) {
+				((Closeable) cf).close(progressMonitor.split("Closing capability factory", 1));
+			}
+		}
 	}
 
 }

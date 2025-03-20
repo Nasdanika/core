@@ -214,6 +214,7 @@
 		<module>cli</module>
 		<module>http</module>
 		<module>groovy</module>
+		<module>telemetry</module>
 	</modules>	
 
 	<distributionManagement>
