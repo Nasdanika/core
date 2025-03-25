@@ -13,6 +13,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -177,6 +178,17 @@ class ModelImpl extends ElementImpl implements Model {
 			@Override
 			public int size() {
 				return elements.size();
+			}
+			
+			@Override
+			public ModelElement remove(int index) {
+				if (index < 0 || index >= elements.size()) {
+					throw new IndexOutOfBoundsException("Index: " + index + ", size: " + elements.size());
+				}
+				
+				org.w3c.dom.Element toRemove = elements.remove(index);
+				toRemove.getParentNode().removeChild(toRemove);
+				return cache.remove(toRemove);
 			}
 			
 		};
