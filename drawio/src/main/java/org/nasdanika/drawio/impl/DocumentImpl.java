@@ -18,6 +18,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -307,6 +308,18 @@ public class DocumentImpl extends ElementImpl implements Document {
 			}
 		}
 		return ret;
+	}
+		
+	static List<org.w3c.dom.Element> getChildrenElements(
+			org.w3c.dom.Element parent, 
+			String name, 
+			Predicate<org.w3c.dom.Element> predicate) {
+		
+		List<org.w3c.dom.Element> childrenElements = getChildrenElements(parent, name);
+		if (predicate == null) {
+			return childrenElements;
+		}
+		return childrenElements.stream().filter(predicate).toList();
 	}
 
 	@Override

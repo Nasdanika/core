@@ -1,5 +1,6 @@
 package org.nasdanika.drawio.impl;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -30,40 +31,96 @@ class NodeImpl extends LayerImpl implements Node {
 
 	@Override
 	public List<Connection> getIncomingConnections() {
-		Predicate<org.w3c.dom.Element> predicate = me -> element.hasAttribute(ATTRIBUTE_ID) 
+		List<Connection> incomingConnections = new ArrayList<>();
+
+		Predicate<org.w3c.dom.Element> predicate = 
+				me -> element.hasAttribute(ATTRIBUTE_ID) 
 				&& getCellElement(me).hasAttribute(ATTRIBUTE_TARGET) 
 				&& getCellElement(me).getAttribute(ATTRIBUTE_TARGET).equals(element.getAttribute(ATTRIBUTE_ID));
 		
-		return model.collect(predicate).stream().filter(Connection.class::isInstance).map(Connection.class::cast).toList();
+		model
+			.collect(predicate)
+			.stream()
+			.filter(Connection.class::isInstance)
+			.map(Connection.class::cast)
+			.forEach(incomingConnections::add);
+		
+		return new AbstractList<Connection>() {
+
+			@Override
+			public Connection get(int index) {
+				return incomingConnections.get(index);
+			}
+
+			@Override
+			public int size() {
+				return incomingConnections.size();
+			}
+			
+			@Override
+			public Connection remove(int index) {
+				Connection removed = incomingConnections.remove(index);
+				if (removed != null) {
+					Rectangle geometry = NodeImpl.this.getGeometry();
+					if (geometry != null) {
+						removed.setTargetPoint(
+								geometry.getX() + geometry.getWidth()/2, 
+								geometry.getY() + geometry.getHeight()/2);
+					}					
+					removed.setTarget(null);					
+				}
+				return removed;
+			}
+			
+		};		
+		
 	}
 
 	@Override
 	public List<Connection> getOutgoingConnections() {
+		List<Connection> outgoingConnections = new ArrayList<>();
+
 		Predicate<org.w3c.dom.Element> predicate = 
 				me -> element.hasAttribute(ATTRIBUTE_ID) 
 				&& getCellElement(me).hasAttribute(ATTRIBUTE_SOURCE) 
 				&& getCellElement(me).getAttribute(ATTRIBUTE_SOURCE).equals(element.getAttribute(ATTRIBUTE_ID));
 				
-		return model.collect(predicate).stream().filter(Connection.class::isInstance).map(Connection.class::cast).toList();
-	}
-	
-	private Element getGeometryElement(boolean create) {
-		Element cellElement = getCellElement();
-		List<org.w3c.dom.Element> geometryElements = DocumentImpl.getChildrenElements(cellElement, "mxGeometry");
-		if (geometryElements.isEmpty()) {
-			if (create) {
-				Element ret = element.getOwnerDocument().createElement("mxGeometry");
-				ret.setAttribute("as", "geometry");
-				cellElement.appendChild(ret);
-				return ret;
+		model
+			.collect(predicate)
+			.stream()
+			.filter(Connection.class::isInstance)
+			.map(Connection.class::cast)
+			.forEach(outgoingConnections::add);
+		
+		return new AbstractList<Connection>() {
+
+			@Override
+			public Connection get(int index) {
+				return outgoingConnections.get(index);
 			}
-		} 
+
+			@Override
+			public int size() {
+				return outgoingConnections.size();
+			}
+			
+			@Override
+			public Connection remove(int index) {
+				Connection removed = outgoingConnections.remove(index);
+				if (removed != null) {
+					Rectangle geometry = NodeImpl.this.getGeometry();
+					if (geometry != null) {
+						removed.setSourcePoint(
+								geometry.getX() + geometry.getWidth()/2, 
+								geometry.getY() + geometry.getHeight()/2);
+					}
+					removed.setSource(null);
+				}
+				return removed;
+			}
+			
+		};		
 		
-		if (geometryElements.size() == 1) {
-			return geometryElements.get(0);
-		} 
-		
-		throw new IllegalArgumentException("Expected one geometry element, got " + geometryElements.size());
 	}
 
 	@Override
@@ -102,6 +159,13 @@ class NodeImpl extends LayerImpl implements Node {
 			mNode.setGeometry(mGeometry);
 		}
 		return mNode;
+	}
+	
+	@Override
+	protected void onRemove() {
+		getIncomingConnections().clear();
+		getOutgoingConnections().clear();
+		super.onRemove();
 	}
 
 }

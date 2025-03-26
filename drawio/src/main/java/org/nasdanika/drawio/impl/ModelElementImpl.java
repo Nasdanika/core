@@ -40,6 +40,10 @@ import org.xml.sax.SAXException;
 
 class ModelElementImpl extends ElementImpl implements ModelElement {
 	
+	private static final String GEOMETRY_ROLE = "geometry";
+	static final String AS_ATTRIBUTE = "as";
+	static final String MX_GEOMETRY_ATTRIBUTE = "mxGeometry";
+
 	private static final String MX_CELL_TAG_NAME = "mxCell";
 	
 	private static final String ID_PREFIX = "id,";
@@ -553,5 +557,28 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		
 		return mElement;
 	}
+	
+	protected void onRemove() {
+		
+	}
+	
+	protected org.w3c.dom.Element getGeometryElement(boolean create) {
+		org.w3c.dom.Element cellElement = getCellElement();
+		List<org.w3c.dom.Element> geometryElements = DocumentImpl.getChildrenElements(cellElement, MX_GEOMETRY_ATTRIBUTE);
+		if (geometryElements.isEmpty()) {
+			if (create) {
+				org.w3c.dom.Element ret = element.getOwnerDocument().createElement(MX_GEOMETRY_ATTRIBUTE);
+				ret.setAttribute(AS_ATTRIBUTE, GEOMETRY_ROLE);
+				cellElement.appendChild(ret);
+				return ret;
+			}
+		} 
+		
+		if (geometryElements.size() == 1) {
+			return geometryElements.get(0);
+		} 
+		
+		throw new IllegalArgumentException("Expected one geometry element, got " + geometryElements.size());
+	}	
 	
 }

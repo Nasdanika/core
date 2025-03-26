@@ -873,12 +873,7 @@ public class TestDrawio {
 	}
 	
 	// Element deletion tests
-	
-	
-	/**
-	 * Does not create processor instances - wires endpoints and handlers in code.
-	 * @throws Exception
-	 */
+		
 	@Test 
 	public void testDeleteAliceFromLayer() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
@@ -893,6 +888,22 @@ public class TestDrawio {
 			}
 		}
 		Files.writeString(new File("target/no-alice.drawio").toPath(), document.save(null));
+	}	
+	
+	@Test 
+	public void testDeleteBob() throws Exception {
+		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
+		for (Page page: document.getPages()) {
+			for (Layer layer: page.getModel().getRoot().getLayers()) {
+				for (LayerElement layerElement: layer.getElements()) {
+					if ("bobs-house".equals(layerElement.getId())) {
+						layerElement.getChildren().clear();
+						break;
+					}
+				}
+			}
+		}
+		Files.writeString(new File("target/no-bob.drawio").toPath(), document.save(null));
 	}	
 	
 }
