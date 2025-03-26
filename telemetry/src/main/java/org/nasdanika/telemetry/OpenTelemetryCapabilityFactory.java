@@ -26,9 +26,12 @@ public class OpenTelemetryCapabilityFactory extends ServiceCapabilityFactory<Voi
 	OpenTelemetrySdk openTelemetrySdk;
 	
 	public OpenTelemetryCapabilityFactory() {
-		openTelemetrySdk = AutoConfiguredOpenTelemetrySdk
-				.initialize()
-				.getOpenTelemetrySdk();
+		boolean sdkEnabled = !"true".equals(System.getProperty("otel.sdk.disabled", "false"));		
+		if (sdkEnabled) {
+			openTelemetrySdk = AutoConfiguredOpenTelemetrySdk
+					.initialize()
+					.getOpenTelemetrySdk();
+		}
 	}
 
 	@Override
@@ -38,7 +41,7 @@ public class OpenTelemetryCapabilityFactory extends ServiceCapabilityFactory<Voi
 			Loader loader, 
 			ProgressMonitor progressMonitor) {
 		
-		return wrap(openTelemetrySdk);
+		return wrap(openTelemetrySdk == null ? OpenTelemetry.noop() : openTelemetrySdk);
 	}
 
 	@Override
