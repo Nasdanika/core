@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2025.2.0</version>
+	    <version>2025.3.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>groovy</artifactId>
@@ -21,7 +21,7 @@
 		<dependency>
 		    <groupId>org.apache.groovy</groupId>
 		    <artifactId>groovy-groovysh</artifactId>
-		    <version>4.0.24</version>
+		    <version>4.0.26</version>
 		</dependency>
 	</dependencies>
 </project>
