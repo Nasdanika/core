@@ -20,7 +20,7 @@ public class SaveModelCommandFactory extends SubCommandCapabilityFactory<SaveMod
 			List<CommandLine> parentPath,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
-		return CompletableFuture.completedStage(new SaveModelCommand());
+		return CompletableFuture.completedStage(new SaveModelCommand(loader.getCapabilityLoader()));
 	}
 
 }

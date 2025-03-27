@@ -1,8 +1,6 @@
 package org.nasdanika.cli;
 
-import java.lang.module.ModuleDescriptor.Version;
 import java.net.InetAddress;
-import java.util.Optional;
 
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.Util;
@@ -16,6 +14,9 @@ import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
 import picocli.CommandLine.Model.CommandSpec;
+
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 
 /**
  * Wraps command execution into a {@link Span}.
@@ -46,7 +47,7 @@ public abstract class TelemetryCommand extends CommandBase {
 		return getClass().getName();
 	}
 	
-	protected String getVersion() {
+	protected String getInstrumentationScopeVersion() {
 		String[] version = spec.version();
 		if (version == null) {
 			return null;
@@ -59,19 +60,17 @@ public abstract class TelemetryCommand extends CommandBase {
 	}
 	
 	protected void buildSpan(SpanBuilder builder) {
-		builder.setAttribute("command_path", getCommandPath());
 		String username = System.getProperty("user.name");
 		if (!Util.isBlank(username)) {
 			builder.setAttribute("user.name", username);
 		}
-		String vmName = System.getProperty("java.vm.name");
-		if (!Util.isBlank(vmName)) {
-			builder.setAttribute("java.vm.name", vmName);
-		}
-		String version = getVersion();
-		if (!Util.isBlank(version)) {
-			builder.setAttribute("version", version);
-		}
+		
+        RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+        builder.setAttribute("java.vm.name", runtimeMXBean.getVmName());
+        builder.setAttribute("java.vm.vendor", runtimeMXBean.getVmVendor());
+        builder.setAttribute("java.vm.version", runtimeMXBean.getVmVersion());
+        builder.setAttribute("java.vm.pid", runtimeMXBean.getPid());
+		
 		try {
 			InetAddress localHost = InetAddress.getLocalHost();
 			String hostName = localHost.getHostName();
@@ -93,7 +92,7 @@ public abstract class TelemetryCommand extends CommandBase {
 			return execute();
 		}
 		
-		Tracer tracer = openTelemetry.getTracer(getInstrumentationScopeName());
+		Tracer tracer = openTelemetry.getTracer(getInstrumentationScopeName(), getInstrumentationScopeVersion());
 		SpanBuilder builder = tracer.spanBuilder(getSpanName());
 		buildSpan(builder);
 		

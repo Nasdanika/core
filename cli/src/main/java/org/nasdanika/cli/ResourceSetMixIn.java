@@ -15,7 +15,9 @@ import org.nasdanika.capability.emf.ResourceSetRequirement;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 
+import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.Spec;
 
 /**
  * Mixes in a {@link ResourceSet} loaded by {@link CapabilityLoader}.
@@ -23,6 +25,8 @@ import picocli.CommandLine.Option;
  *
  */
 public class ResourceSetMixIn {
+	
+	@Spec(Spec.Target.MIXEE) CommandSpec mixee;	
 	
 	@Option(
 			names = "--extension-resource-factory",
@@ -90,6 +94,15 @@ public class ResourceSetMixIn {
 	}
 
 	protected CapabilityLoader getCapabilityLoader() {
+		if (mixee != null) {
+			Object uo = mixee.userObject();
+			if (uo instanceof CommandBase) {
+				CapabilityLoader capabilityLoader = ((CommandBase) uo).getCapabilityLoader();
+				if (capabilityLoader != null) {
+					return capabilityLoader;
+				}
+			}
+		}
 		return new CapabilityLoader();
 	}	
 	
