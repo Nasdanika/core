@@ -120,8 +120,9 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 	@Option(
 			names = {"-j", "--java"}, 
 			description = {
-					"Java command,",
-					"defaults to ${DEFAULT-VALUE}"
+					"Java command, defaults to ${DEFAULT-VALUE}",
+					"Can be used to add extra options",
+					"such as system properties"
 				}, 
 			defaultValue = "java")
 	private String javaCommand;

@@ -11,11 +11,13 @@ module org.nasdanika.cli {
 	
 	exports org.nasdanika.cli;
 	
-	requires transitive org.nasdanika.capability;
+	requires transitive org.nasdanika.telemetry;
 	requires transitive org.nasdanika.drawio;
 	requires transitive info.picocli;
 	requires org.apache.commons.text;
 	requires transitive org.jline;
+	requires io.opentelemetry.context;
+	requires org.slf4j;
 	
 	opens org.nasdanika.cli;
 	

@@ -64,7 +64,7 @@
 		</dependency>		
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
-			<artifactId>capability</artifactId>
+			<artifactId>telemetry</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -76,6 +76,11 @@
 		    <groupId>org.jline</groupId>
 		    <artifactId>jline</artifactId>
 		    <version>3.28.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.nasdanika.demos</groupId>
+			<artifactId>concurrent-executable-diagrams</artifactId>
+			<version>2025.2.0</version>
 		</dependency>
 	</dependencies>
 </project>

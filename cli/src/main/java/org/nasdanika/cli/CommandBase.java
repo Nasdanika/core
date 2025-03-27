@@ -30,11 +30,11 @@ public abstract class CommandBase implements Callable<Integer>, Closeable {
 		return capabilityLoader;
 	}
 
-	public CommandBase() {
+	protected CommandBase() {
 		
 	}
 	
-	public CommandBase(CapabilityLoader capabilityLoader) {
+	protected CommandBase(CapabilityLoader capabilityLoader) {
 		this.capabilityLoader = capabilityLoader;
 	}
 	
