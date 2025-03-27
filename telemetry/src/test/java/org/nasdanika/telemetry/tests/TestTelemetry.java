@@ -6,13 +6,15 @@ import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.logs.Logger;
-import io.opentelemetry.api.logs.Severity;
 import io.opentelemetry.api.metrics.Meter;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Context;
+import io.opentelemetry.context.Scope;
 
 public class TestTelemetry {
 	
@@ -32,30 +34,37 @@ public class TestTelemetry {
 				.build()
 				.add(25);
 			
-			Tracer tracer = openTelemetry.getTracer(getClass().getModule().getName());
-			Span span = tracer
-				.spanBuilder("something important")
-				.setAttribute("importance", 33)
-				.setAttribute("service_name", "telemetry-test")
-				.startSpan();
-			
-			try {
-				Thread.sleep(500);
-			} finally {
-				span.end();
-			}
-			
-			Logger logger = openTelemetry.getLogsBridge().get("my-logger");
-			
-			logger			
-				.logRecordBuilder()
-				.setSeverity(Severity.ERROR)
-				.setBody("My log message")
-				.setAttribute("my-attribute", 88)
-				.emit();
-			
-			
-			Thread.sleep(5000);
+	        Tracer tracer = openTelemetry.getTracer("test-telemetry");        
+	        Span parentSpan = tracer
+	        	.spanBuilder("parent")
+	        	.startSpan();
+	        
+	        try (Scope parentScope = parentSpan.makeCurrent()) {
+				Thread.sleep(200);
+		        Logger logger = LoggerFactory.getLogger(TestTelemetry.class);
+		        logger
+		        	.atInfo()
+		        	.setMessage("My test telemetry message")
+		        	.addKeyValue("someKey", "someValue")
+		        	.log();
+		        
+		        Context context = Context.current();
+		        		        
+		        Span childSpan = tracer
+			        	.spanBuilder("child")
+			        	.setParent(context)
+			        	.startSpan();
+		        
+		        try (Scope childScope = childSpan.makeCurrent()) {
+					Thread.sleep(300);
+		        } finally {
+		        	childSpan.end();
+		        }
+		        		        
+				Thread.sleep(100);		        
+	        } finally {
+	        	parentSpan.end();
+	        }
 		} finally {				
 			capabilityLoader.close(progressMonitor);
 		}

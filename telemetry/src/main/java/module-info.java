@@ -11,6 +11,7 @@ module org.nasdanika.telemetry {
 	requires io.opentelemetry.sdk.autoconfigure;
 	requires io.opentelemetry.exporter.otlp;
 	requires io.opentelemetry.exporter.logging;
+	requires io.opentelemetry.context;
 	
 	provides CapabilityFactory with OpenTelemetryCapabilityFactory; 
 	

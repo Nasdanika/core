@@ -13,7 +13,7 @@
 	<description>An API for defining diagram in rendering engine independent way and then generating diagram specs for different targets, e.g. PlantUML</description>
 	<dependencies>		
 		<dependency>
-			<groupId>org.nasdanika.core</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>graph</artifactId>
 			<version>${project.version}</version>
 		</dependency>
