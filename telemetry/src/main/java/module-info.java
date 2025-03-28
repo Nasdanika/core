@@ -1,5 +1,5 @@
 import org.nasdanika.capability.CapabilityFactory;
-import org.nasdanika.telemetry.OpenTelemetryCapabilityFactory;
+import org.nasdanika.telemetry.GlobalOpenTelemetryCapabilityFactory;
 
 module org.nasdanika.telemetry {
 	
@@ -13,6 +13,6 @@ module org.nasdanika.telemetry {
 	requires io.opentelemetry.exporter.logging;
 	requires io.opentelemetry.context;
 	
-	provides CapabilityFactory with OpenTelemetryCapabilityFactory; 
+	provides CapabilityFactory with GlobalOpenTelemetryCapabilityFactory; 
 	
 }
