@@ -265,9 +265,22 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 	    // Adding non-automatic and required modules to the module path and other dependencies to the classpath
 	    ModuleFinder repoFinder = ModuleFinder.of(moduleMap.values().stream().map(File::toPath).toArray(size -> new Path[size]));
 
+		Map<String,File> nonModuleMap = new LinkedHashMap<>(moduleMap); // repository entries which module finder doesn't find
 		Map<String, ModuleReference> repoModules = new TreeMap<>();
 		for (ModuleReference ref : repoFinder.findAll()) {
 			repoModules.putIfAbsent(ref.descriptor().name(), ref);
+			
+			Optional<URI> locationOpt = ref.location();
+			if (locationOpt.isPresent()) {
+				URI location = locationOpt.get();
+				Iterator<File> nmfit = nonModuleMap.values().iterator();
+				while (nmfit.hasNext()) {
+					File nmf = nmfit.next();
+					if (nmf.toURI().equals(location)) {
+						nmfit.remove();
+					}					
+				}
+			}
 		}
 
 		if (verbose) {
@@ -305,7 +318,12 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 	
 			buildModulePath(builder, moduleMap, modulePath);
 			buildAddModules(modulesToAdd, builder);			
-			buildClasspath(moduleMap, repoModules, modulePath, builder);
+			buildClasspath(
+					moduleMap,
+					nonModuleMap,
+					repoModules, 
+					modulePath, 
+					builder);
 		} else {
 			// Layer modules are known, adding them either to module path or add module. 
 			// The rest is added to the classpath
@@ -327,7 +345,12 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 				}
 			}
 			buildAddModules(modules, builder);			
-			buildClasspath(moduleMap, repoModules, modulePath, builder);			
+			buildClasspath(
+					moduleMap, 
+					nonModuleMap,
+					repoModules, 
+					modulePath, 
+					builder);			
 		}
 		
 		builder
@@ -339,8 +362,12 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 		return builder.toString();
 	}
 
-	protected void buildClasspath(Map<String, File> moduleMap, Map<String, ModuleReference> repoModules,
-			Map<String, ModuleReference> modulePath, StringBuilder builder) throws IOException {
+	protected void buildClasspath(
+			Map<String, File> moduleMap, 
+			Map<String,File> nonModuleMap,			
+			Map<String, ModuleReference> repoModules,
+			Map<String, ModuleReference> modulePath, 
+			StringBuilder builder) throws IOException {
 		// Modules which did not make it to the module path are in the classpath		
 		List<ModuleReference> classPath = new ArrayList<>(); 		
 		repoModules.values().stream().filter(k -> !modulePath.containsKey(k.descriptor().name())).forEach(classPath::add);
@@ -354,7 +381,7 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 			}
 		}		
 
-		if (!classPath.isEmpty()) {
+		if (!classPath.isEmpty() || !nonModuleMap.isEmpty()) {
 			boolean firstEntry = true;
 			for (ModuleReference e: classPath) {
 				if (firstEntry) {
@@ -369,6 +396,22 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 				String mp = modulePath(e, moduleMap);
 				if (verbose) {
 					System.out.println(e.descriptor().name() + " " + mp);
+				}
+				builder.append(mp);
+			}
+			for (Entry<String, File> nonModuleEntry: nonModuleMap.entrySet()) {
+				if (firstEntry) {
+					builder.append(" -classpath \"");
+					if (verbose) {
+						System.out.println("--- Class path ---");
+					}
+					firstEntry = false;
+				} else {
+					builder.append(pathSeparator == null ? File.pathSeparatorChar : pathSeparator);
+				}
+				String mp = nonModulePath(nonModuleEntry);
+				if (verbose) {
+					System.out.println("(no module) " + mp);
 				}
 				builder.append(mp);
 			}
@@ -475,6 +518,18 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 			}
 		}		
 		return null;
+	}	
+
+	/**
+	 * 
+	 * @param ref
+	 * @param moduleMap
+	 * @return
+	 * @throws IOException
+	 */
+	private String nonModulePath(Map.Entry<String,File> nonModuleEntry) throws IOException {
+		String path = absolute ? nonModuleEntry.getValue().getCanonicalFile().getAbsolutePath().replace(File.separatorChar, '/') : nonModuleEntry.getKey();					
+		return prefix == null ? path : prefix + path;
 	}	
 
 }

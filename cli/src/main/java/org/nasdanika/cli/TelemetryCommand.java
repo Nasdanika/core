@@ -59,7 +59,7 @@ public abstract class TelemetryCommand extends CommandBase {
 		return getCommandPath();
 	}
 	
-	protected void buildSpan(SpanBuilder builder) {
+	protected SpanBuilder buildSpan(SpanBuilder builder) {
 		String username = System.getProperty("user.name");
 		if (!Util.isBlank(username)) {
 			builder.setAttribute("user.name", username);
@@ -84,6 +84,7 @@ public abstract class TelemetryCommand extends CommandBase {
 		} catch (Exception e) {
 			logger.warn("Unable to obtain host name: " + e, e); 
 		}
+		return builder;
 	}
 
 	@Override
@@ -93,10 +94,8 @@ public abstract class TelemetryCommand extends CommandBase {
 		}
 		
 		Tracer tracer = openTelemetry.getTracer(getInstrumentationScopeName(), getInstrumentationScopeVersion());
-		SpanBuilder builder = tracer.spanBuilder(getSpanName());
-		buildSpan(builder);
 		
-		Span commandSpan = builder.startSpan();
+		Span commandSpan = buildSpan(tracer.spanBuilder(getSpanName())).startSpan();
 		try (Scope scope = commandSpan.makeCurrent()) {
 			Integer result = execute();
 	        commandSpan.setStatus(StatusCode.OK);
