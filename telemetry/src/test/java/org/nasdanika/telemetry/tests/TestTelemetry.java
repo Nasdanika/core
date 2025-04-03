@@ -1,5 +1,7 @@
 package org.nasdanika.telemetry.tests;
 
+import java.io.PrintStream;
+
 import org.junit.jupiter.api.Test;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.ServiceCapabilityFactory;
@@ -15,6 +17,8 @@ import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
+import io.opentelemetry.context.propagation.TextMapPropagator;
+import io.opentelemetry.context.propagation.TextMapSetter;
 
 public class TestTelemetry {
 	
@@ -25,6 +29,8 @@ public class TestTelemetry {
 		try {
 			Requirement<Object, OpenTelemetry> requirement = ServiceCapabilityFactory.createRequirement(OpenTelemetry.class);
 			OpenTelemetry openTelemetry = capabilityLoader.loadOne(requirement, progressMonitor);
+			
+			TextMapPropagator propagator = openTelemetry.getPropagators().getTextMapPropagator();
 			
 			Meter meter = openTelemetry.getMeter(getClass().getModule().getName());
 			meter
@@ -49,6 +55,9 @@ public class TestTelemetry {
 		        	.log();
 		        
 		        Context context = Context.current();
+		        
+		        TextMapSetter<PrintStream> setter = (out, k, v) -> out.println("Propagaging " + k + ": " + v);
+				propagator.inject(context, System.out, setter);
 		        		        
 		        Span childSpan = tracer
 			        	.spanBuilder("child")
