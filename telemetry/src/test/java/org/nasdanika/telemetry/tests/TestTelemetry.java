@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.metrics.DoubleGauge;
+import io.opentelemetry.api.metrics.LongCounter;
 import io.opentelemetry.api.metrics.Meter;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
@@ -33,12 +35,38 @@ public class TestTelemetry {
 			TextMapPropagator propagator = openTelemetry.getPropagators().getTextMapPropagator();
 			
 			Meter meter = openTelemetry.getMeter(getClass().getModule().getName());
-			meter
+			
+			LongCounter counter = meter
 				.counterBuilder("my-counter")
 				.setDescription("My test counter")
 				.setUnit("my-unit")
-				.build()
-				.add(25);
+				.build();			
+			
+			counter.add(25);
+			
+			DoubleGauge gauge = meter
+				.gaugeBuilder("my-gauge")
+				.setDescription("My test gauge")
+				.setUnit("my-unit")
+				.build();			
+			
+			gauge.set(25);
+			
+			DoubleGauge histogram = meter
+				.gaugeBuilder("my-histogram")
+				.setDescription("My test histogram")
+				.setUnit("my-unit")
+				.build();			
+			
+			histogram.set(25);
+			
+			LongCounter upDownCounter = meter
+				.counterBuilder("my-up-downcounter")
+				.setDescription("My test up/down counter")
+				.setUnit("my-unit")
+				.build();			
+			
+			upDownCounter.add(25);
 			
 	        Tracer tracer = openTelemetry.getTracer("test-telemetry");        
 	        Span parentSpan = tracer
