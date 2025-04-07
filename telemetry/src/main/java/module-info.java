@@ -12,6 +12,7 @@ module org.nasdanika.telemetry {
 	requires io.opentelemetry.exporter.otlp;
 	requires io.opentelemetry.exporter.logging;
 	requires io.opentelemetry.context;
+	requires java.management;	
 	
 	provides CapabilityFactory with GlobalOpenTelemetryCapabilityFactory; 
 	

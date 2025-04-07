@@ -1,9 +1,7 @@
 package org.nasdanika.cli;
 
-import java.net.InetAddress;
-
 import org.nasdanika.capability.CapabilityLoader;
-import org.nasdanika.common.Util;
+import org.nasdanika.telemetry.TelemetryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,9 +12,6 @@ import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
 import picocli.CommandLine.Model.CommandSpec;
-
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 
 /**
  * Wraps command execution into a {@link Span}.
@@ -60,31 +55,7 @@ public abstract class TelemetryCommand extends CommandBase {
 	}
 	
 	protected SpanBuilder buildSpan(SpanBuilder builder) {
-		String username = System.getProperty("user.name");
-		if (!Util.isBlank(username)) {
-			builder.setAttribute("user.name", username);
-		}
-		
-        RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
-        builder.setAttribute("java.vm.name", runtimeMXBean.getVmName());
-        builder.setAttribute("java.vm.vendor", runtimeMXBean.getVmVendor());
-        builder.setAttribute("java.vm.version", runtimeMXBean.getVmVersion());
-        builder.setAttribute("java.vm.pid", runtimeMXBean.getPid());
-		
-		try {
-			InetAddress localHost = InetAddress.getLocalHost();
-			String hostName = localHost.getHostName();
-			if (!Util.isBlank(hostName)) {
-				builder.setAttribute("host.name", hostName);				
-			}
-			String hostAddress = localHost.getHostAddress();
-			if (!Util.isBlank(hostAddress)) {
-				builder.setAttribute("host.address", hostAddress);				
-			}			
-		} catch (Exception e) {
-			logger.warn("Unable to obtain host name: " + e, e); 
-		}
-		return builder;
+		return TelemetryUtil.buildSpan(builder);
 	}
 
 	@Override
