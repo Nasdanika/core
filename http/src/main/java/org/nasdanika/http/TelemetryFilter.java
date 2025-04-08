@@ -6,6 +6,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.stream.StreamSupport;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.nasdanika.telemetry.TelemetryUtil;
 import org.reactivestreams.Publisher;
 
@@ -88,6 +90,27 @@ public class TelemetryFilter {
 		return builder;
 	}
 	
+	public BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> wrapByteArrayHandler(BiFunction<HttpServerRequest, HttpServerResponse, byte[]> byteArrayHandler) {
+		return (request, response) -> {
+			Span span = buildSpan(request).startSpan();
+			long start = System.currentTimeMillis();
+			try (Scope scope = span.makeCurrent()) {
+				byte[] result = byteArrayHandler.apply(request, response);
+				if (durationConsumer != null) {
+					durationConsumer.accept(request.method().name() + " " + request.uri(), System.currentTimeMillis() - start);
+				}
+				span.setStatus(StatusCode.OK);
+				return response.sendByteArray(Mono.just(result));
+			} catch (Exception e) {
+				span.recordException(e);
+				span.setStatus(StatusCode.ERROR);
+				return response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR).send();				
+			} finally {
+				span.end();
+			}			
+		};				
+	}	
+	
 	public BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> wrapStringHandler(BiFunction<HttpServerRequest, HttpServerResponse, String> stringHandler) {
 		return (request, response) -> {
 			Span span = buildSpan(request).startSpan();
@@ -99,6 +122,48 @@ public class TelemetryFilter {
 				}
 				span.setStatus(StatusCode.OK);
 				return response.sendString(Mono.just(result));
+			} catch (Exception e) {
+				span.recordException(e);
+				span.setStatus(StatusCode.ERROR);
+				return response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR).send();				
+			} finally {
+				span.end();
+			}			
+		};				
+	}	
+	
+	public BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> wrapJSONObjectHandler(BiFunction<HttpServerRequest, HttpServerResponse, JSONObject> jsonObjectHandler) {
+		return (request, response) -> {
+			Span span = buildSpan(request).startSpan();
+			long start = System.currentTimeMillis();
+			try (Scope scope = span.makeCurrent()) {
+				JSONObject result = jsonObjectHandler.apply(request, response);
+				if (durationConsumer != null) {
+					durationConsumer.accept(request.method().name() + " " + request.uri(), System.currentTimeMillis() - start);
+				}
+				span.setStatus(StatusCode.OK);
+				return response.sendString(Mono.just(result.toString(2)));
+			} catch (Exception e) {
+				span.recordException(e);
+				span.setStatus(StatusCode.ERROR);
+				return response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR).send();				
+			} finally {
+				span.end();
+			}			
+		};				
+	}	
+	
+	public BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> wrapJSONArrayHandler(BiFunction<HttpServerRequest, HttpServerResponse, JSONArray> jsonArrayHandler) {
+		return (request, response) -> {
+			Span span = buildSpan(request).startSpan();
+			long start = System.currentTimeMillis();
+			try (Scope scope = span.makeCurrent()) {
+				JSONArray result = jsonArrayHandler.apply(request, response);
+				if (durationConsumer != null) {
+					durationConsumer.accept(request.method().name() + " " + request.uri(), System.currentTimeMillis() - start);
+				}
+				span.setStatus(StatusCode.OK);
+				return response.sendString(Mono.just(result.toString(2)));
 			} catch (Exception e) {
 				span.recordException(e);
 				span.setStatus(StatusCode.ERROR);
