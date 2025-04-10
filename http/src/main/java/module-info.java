@@ -12,7 +12,8 @@ module org.nasdanika.http {
 	requires transitive io.netty.codec.http;
 	requires org.apache.commons.lang3;
 	requires io.netty.buffer;
-	requires transitive io.opentelemetry.context; // For testing
+	requires transitive io.opentelemetry.context;
+	requires org.reactivestreams; // For testing
 	
 	opens org.nasdanika.http;
 	

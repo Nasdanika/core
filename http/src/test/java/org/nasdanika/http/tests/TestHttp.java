@@ -1,11 +1,19 @@
 package org.nasdanika.http.tests;
 
 
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
+import java.time.Duration;
+import java.util.function.BiFunction;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.nasdanika.http.TelemetryFilter;
 import org.nasdanika.telemetry.TelemetryUtil;
+import org.reactivestreams.Publisher;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Span;
@@ -15,10 +23,13 @@ import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.context.propagation.TextMapPropagator;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.DisposableServer;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.http.server.HttpServer;
+import reactor.netty.http.server.HttpServerRequest;
+import reactor.netty.http.server.HttpServerResponse;
 import reactor.netty.http.server.HttpServerRoutes;
 
 public class TestHttp {
@@ -45,9 +56,77 @@ public class TestHttp {
 	protected void createRoutes(HttpServerRoutes routes, TelemetryFilter telemetryFilter) {
 		routes.get("/hello", telemetryFilter.wrapStringHandler((request, response) -> "Hello World!"));	
 		routes.get("/privet", (request, response) -> response.sendString(telemetryFilter.filter(request, Mono.fromSupplier(() -> "Hello World!"))));	
-		
 	}
 	
+	@Test
+	@Disabled
+	public void testSse() {
+		DisposableServer server =
+				HttpServer.create()
+					.port(8080)
+					.route(routes -> routes
+						.get("/index.html", (request, response) -> response.sendString(Mono.just(INDEX)))
+						.get("/sse", serveSse()))
+				    .bindNow();
+
+		server.onDispose().block();
+	}	
+	
+	private static final String INDEX = """
+			<!DOCTYPE html>
+			<html>
+				<body>
+				
+				<h1>Getting Server Updates</h1>
+				
+				<div id="result"></div>
+				
+				<script>
+				const x = document.getElementById("result");
+				if(typeof(EventSource) !== "undefined") {
+				  var source = new EventSource("sse");
+				  source.onmessage = function(event) {
+				    x.innerHTML += event.data + "<br>";
+				  };
+				} else {
+				  x.innerHTML = "Sorry, no support for server-sent events.";
+				}
+				</script>
+				
+				</body>
+			</html>						
+			""";
+	
+	/**
+	 * Prepares SSE response.
+	 * The "Content-Type" is "text/event-stream".
+	 * The flushing strategy is "flush after every element" emitted by the provided Publisher.
+	 */
+	private static BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> serveSse() {
+		Flux<Long> flux = Flux.interval(Duration.ofSeconds(10));
+		return (request, response) ->
+		        response.sse()
+		                .send(flux.map(TestHttp::toByteBuf), b -> true);
+	}
+
+	/**
+	 * Transforms the Object to ByteBuf following the expected SSE format.
+	 */
+	private static ByteBuf toByteBuf(Object any) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			out.write("data: ".getBytes(Charset.defaultCharset()));
+			out.write(any.toString().getBytes());
+			out.write("\n\n".getBytes(Charset.defaultCharset()));
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return ByteBufAllocator.DEFAULT
+		                       .buffer()
+		                       .writeBytes(out.toByteArray());
+	}
+		
 	@Test
 	@Disabled
 	public void testClientWithTelemetry() {
