@@ -190,6 +190,7 @@ public class TelemetryFilter {
 	        	requestSpan.setStatus(StatusCode.ERROR);
 				return error;
 			})
+    		.contextWrite(reactor.util.context.Context.of(Context.class, Context.current().with(requestSpan)))
 			.doFinally(signal -> requestSpan.end());				
 	}
 		
@@ -205,6 +206,7 @@ public class TelemetryFilter {
 	        	requestSpan.setStatus(StatusCode.ERROR);
 				return error;
 			})
+    		.contextWrite(reactor.util.context.Context.of(Context.class, Context.current().with(requestSpan)))
 			.doFinally(signal -> requestSpan.end());				
 	}	
 
