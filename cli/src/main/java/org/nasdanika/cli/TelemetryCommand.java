@@ -2,8 +2,6 @@ package org.nasdanika.cli;
 
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.telemetry.TelemetryUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Span;
@@ -19,7 +17,6 @@ import picocli.CommandLine.Model.CommandSpec;
 public abstract class TelemetryCommand extends CommandBase {
 
 	protected OpenTelemetry openTelemetry;
-    protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected TelemetryCommand(OpenTelemetry openTelemetry, CapabilityLoader capabilityLoader) {
 		super(capabilityLoader);
@@ -72,7 +69,7 @@ public abstract class TelemetryCommand extends CommandBase {
 	        commandSpan.setStatus(StatusCode.OK);
 	        return result;
 		} catch (Exception e) {
-	        logger.error("Error: " + e , e);
+			commandSpan.recordException(e);
 	        commandSpan.setStatus(StatusCode.ERROR);
 			throw e;
 		} finally {			
