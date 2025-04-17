@@ -41,8 +41,9 @@ public abstract class AbstractHttpServerCommand extends CommandBase {
 			names = "--console",
 			negatable = true,
 			description = {
-				"If true starts a console and waits for exit command, ",
-				"otherwise creates a shutdown hook disposing the server"
+				"If true, starts a console and waits for the exit",
+				"command, otherwise creates a shutdown hook",
+				"disposing the server"
 			})
 	private boolean console;
 
