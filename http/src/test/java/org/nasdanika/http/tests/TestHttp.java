@@ -35,7 +35,7 @@ import reactor.netty.http.server.HttpServerRoutes;
 public class TestHttp {
 	
 	@Test
-	@Disabled
+//	@Disabled
 	public void testServerWithTelemetry() {
 		OpenTelemetry openTelemetry = GlobalOpenTelemetry.get();
 		Tracer tracer = openTelemetry.getTracer(TestHttp.class.getName() + ".testServerWithTelemetry");
@@ -47,16 +47,18 @@ public class TestHttp {
 		DisposableServer server = HttpServer
 				.create()
 				.port(8080)
-				.route(routes -> createRoutes(routes, telemetryFilter))
+				.route(routes -> {
+					routes.get("/hello", telemetryFilter.wrapStringHandler((request, response) -> "Hello World!"));
+				})
 				.bindNow();
 		
 		server.onDispose().block();
 	}
 	
-	protected void createRoutes(HttpServerRoutes routes, TelemetryFilter telemetryFilter) {
-		routes.get("/hello", telemetryFilter.wrapStringHandler((request, response) -> "Hello World!"));	
-		routes.get("/privet", (request, response) -> response.sendString(telemetryFilter.filter(request, Mono.fromSupplier(() -> "Hello World!"))));	
-	}
+//	protected void createRoutes(HttpServerRoutes routes, TelemetryFilter telemetryFilter) {
+//		routes.get("/hello", telemetryFilter.wrapStringHandler((request, response) -> "Hello World!"));	
+//		routes.get("/privet", (request, response) -> response.sendString(telemetryFilter.filter(request, Mono.fromSupplier(() -> "Hello World!"))));	
+//	}
 	
 	@Test
 	@Disabled
