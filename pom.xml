@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nasdanika.core</groupId>
-	<version>2025.3.0</version>
+	<version>2025.4.0</version>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Nasdanika Core Parent</name>
@@ -223,6 +223,12 @@
 			<url>scp://docs.nasdanika.org/core/maven-site</url>
 		</site>
 	</distributionManagement>	
+    <repositories>
+        <repository>
+            <id>nasdanika-snapshots</id>
+            <url>https://maven.nasdanika.org/snapshots</url>
+        </repository>
+    </repositories> 
 
 	 <profiles>
 		<profile>

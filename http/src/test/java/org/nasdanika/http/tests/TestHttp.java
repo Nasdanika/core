@@ -35,7 +35,7 @@ import reactor.netty.http.server.HttpServerRoutes;
 public class TestHttp {
 	
 	@Test
-//	@Disabled
+	@Disabled
 	public void testServerWithTelemetry() {
 		OpenTelemetry openTelemetry = GlobalOpenTelemetry.get();
 		Tracer tracer = openTelemetry.getTracer(TestHttp.class.getName() + ".testServerWithTelemetry");

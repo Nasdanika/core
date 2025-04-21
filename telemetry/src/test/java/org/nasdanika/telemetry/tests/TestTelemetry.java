@@ -11,7 +11,9 @@ import org.nasdanika.common.ProgressMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.metrics.DoubleGauge;
 import io.opentelemetry.api.metrics.LongCounter;
 import io.opentelemetry.api.metrics.Meter;
@@ -21,8 +23,35 @@ import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.context.propagation.TextMapSetter;
+import reactor.core.publisher.Mono;
 
 public class TestTelemetry {
+	@Test
+	public void testReactorTelemetry() throws InterruptedException {
+		OpenTelemetry openTelemetry = GlobalOpenTelemetry.get();
+		Tracer tracer = openTelemetry.getTracer("reactor.tracer");
+		Span span = tracer.spanBuilder("reactor.span").startSpan();
+		
+		Mono<String> mono = Mono.deferContextual(contextView -> {
+			return Mono.just("Hello world!");
+		}).doOnEach(signal -> {
+			Context ctx = signal.getContextView().getOrDefault(Context.class, Context.current());
+			System.out.println(signal);
+			Span signalSpan = Span.fromContext(ctx);
+			Attributes attributes = Attributes.builder()
+					.put("thread", Thread.currentThread().getName())
+					.put("signal", signal.toString())
+					.build();
+			
+			signalSpan.recordException(
+					new RuntimeException(), 
+					attributes);
+		}).doFinally(signal -> {
+			span.end();
+		}).contextWrite(reactor.util.context.Context.of(Context.class, Context.current().with(span)));
+		
+		System.out.println(mono.block());
+	}
 	
 	@Test
 	public void testTelemetry() throws InterruptedException {
