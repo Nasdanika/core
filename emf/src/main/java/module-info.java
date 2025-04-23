@@ -18,6 +18,7 @@ module org.nasdanika.emf {
 	requires transitive org.apache.poi.ooxml;
 	requires spring.core;
 	requires org.nasdanika.cli;
+	requires org.apache.commons.lang3;
 	
 	opens org.nasdanika.emf to info.picocli;
 	

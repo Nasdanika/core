@@ -20,6 +20,14 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.jgrapht.alg.drawing.FRLayoutAlgorithm2D;
+import org.jgrapht.alg.drawing.LayoutAlgorithm2D;
+import org.jgrapht.alg.drawing.model.Box2D;
+import org.jgrapht.alg.drawing.model.LayoutModel2D;
+import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
+import org.jgrapht.alg.drawing.model.Point2D;
+import org.jgrapht.graph.DefaultUndirectedGraph;
+
 public final class Util {
 	
 	private Util() {}
@@ -529,5 +537,57 @@ public final class Util {
 			
 		};
 	}
+	
+	/**
+	 * Lays out using JGraphT algorithms
+	 * @param elements
+	 * @return
+	 */
+	public static void layout(
+			Collection<Node> nodes, 
+			LayoutAlgorithm2D<Node, Connection> layout,
+			LayoutModel2D<Node> layoutModel) {
+		// Using JGraphT for force layout
+		DefaultUndirectedGraph<Node, Connection> dGraph = new DefaultUndirectedGraph<>(Connection.class);
+		
+		// Populating
+		for (Node node: nodes) {
+			dGraph.addVertex(node);
+		}	
+		
+		for (Node node: nodes) {
+			for (Connection connection: node.getOutgoingConnections()) {
+				if (dGraph.getEdge(connection.getTarget(), node) == null) { // Not yet connected, connect
+					dGraph.addEdge(node, connection.getTarget(), connection);
+				}
+			}
+		}		
+		
+		layout.layout(dGraph, layoutModel);
+		layoutModel.forEach(ne -> {
+			Node node = ne.getKey();
+			Point2D point = ne.getValue();
+			org.nasdanika.drawio.Rectangle geometry = node.getGeometry();
+			geometry.setX(point.getX());
+			geometry.setY(point.getY());
+		});
+		
+	}	
+	
+	/**
+	 * Uses JGraphT {@link FRLayoutAlgorithm2D} to force layout the graph.
+	 * @param graph
+	 */
+	public static void forceLayout(
+			Root root, 
+			double layoutWidth, 
+			double layoutHeight) {
+		
+		List<Node> topLevelNodes = root.getLayers().stream().flatMap(layer -> layer.getElements().stream()).filter(Node.class::isInstance).map(Node.class::cast).toList();
+		
+		FRLayoutAlgorithm2D<Node, Connection> forceLayout = new FRLayoutAlgorithm2D<>();
+		MapLayoutModel2D<Node> model = new MapLayoutModel2D<Node>(new Box2D(layoutWidth, layoutHeight));
+		layout(topLevelNodes, forceLayout, model);
+	}		
 
 }

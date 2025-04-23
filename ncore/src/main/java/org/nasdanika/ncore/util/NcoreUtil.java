@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -82,6 +83,22 @@ public final class NcoreUtil {
 			return defaultValue;
 		}
 		return na.getDetails().get(key);
+	}
+	
+	public static void setNasdanikaAnnotationDetail(EModelElement modelElement, String key, String value) {
+		EAnnotation na = getNasdanikaAnnotation(modelElement);		
+		if (value == null) {
+			if (na != null) {
+				na.getDetails().removeKey(key);
+			}			
+		} else {
+			if (na == null) {
+				na = EcoreFactory.eINSTANCE.createEAnnotation();
+				na.setSource(NASDANIKA_ANNOTATION_SOURCE);
+				modelElement.getEAnnotations().add(na);
+			}
+			na.getDetails().put(key, value);
+		}
 	}
 
 	/**
