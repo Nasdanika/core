@@ -106,6 +106,11 @@ public abstract class AbstractSplitJoinMap<S,C,K,V> extends AbstractMap<K, V> {
 					return prevValue;
 				}
 				
+				@Override
+				public String toString() {
+			        return getKey() + "=" + getValue();
+				}
+				
 			};
 		}
 
