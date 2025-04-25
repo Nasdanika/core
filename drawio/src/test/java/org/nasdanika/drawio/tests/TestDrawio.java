@@ -904,6 +904,13 @@ public class TestDrawio {
 			}
 		}
 		Files.writeString(new File("target/no-bob.drawio").toPath(), document.save(null));
-	}	
+	}
+	
+	@Test
+	public void testLoadStyle() {
+		String styleStr = "rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;gradientColor=#b3b3b3;";
+		Map<String, String> styleMap = org.nasdanika.drawio.Util.loadStyle(styleStr);
+		styleMap.entrySet().forEach(System.out::println);
+	}
 	
 }

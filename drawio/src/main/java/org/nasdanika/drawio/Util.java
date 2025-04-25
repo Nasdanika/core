@@ -27,6 +27,7 @@ import org.jgrapht.alg.drawing.model.LayoutModel2D;
 import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
 import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.graph.DefaultUndirectedGraph;
+import org.nasdanika.common.DelimitedStringMap;
 
 public final class Util {
 	
@@ -588,6 +589,27 @@ public final class Util {
 		FRLayoutAlgorithm2D<Node, Connection> forceLayout = new FRLayoutAlgorithm2D<>();
 		MapLayoutModel2D<Node> model = new MapLayoutModel2D<Node>(new Box2D(layoutWidth, layoutHeight));
 		layout(topLevelNodes, forceLayout, model);
-	}		
+	}
+	
+	/**
+	 * Loads style map from a string
+	 * @return
+	 */
+	public static Map<String, String> loadStyle(String styleStr) {
+		DelimitedStringMap styleMap = new DelimitedStringMap(";", "=") {
+
+			@Override
+			protected String getState() {
+				return styleStr;
+			}
+
+			@Override
+			protected void setState(String state) {
+				throw new UnsupportedOperationException();
+			}
+			
+		};
+		return Collections.unmodifiableMap(styleMap);
+	}
 
 }
