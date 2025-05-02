@@ -17,10 +17,12 @@ import picocli.CommandLine.Model.CommandSpec;
 public abstract class TelemetryCommand extends CommandBase {
 
 	protected OpenTelemetry openTelemetry;
+	protected Tracer tracer; 
 
 	protected TelemetryCommand(OpenTelemetry openTelemetry, CapabilityLoader capabilityLoader) {
 		super(capabilityLoader);
 		this.openTelemetry = openTelemetry;
+		tracer = openTelemetry.getTracer(getInstrumentationScopeName(), getInstrumentationScopeVersion());
 	}
 	
 	protected String getCommandPath() {
@@ -58,14 +60,12 @@ public abstract class TelemetryCommand extends CommandBase {
 	@Override
 	public final Integer call() throws Exception {
 		if (openTelemetry == null) {
-			return execute();
+			return execute(Span.current());
 		}
-		
-		Tracer tracer = openTelemetry.getTracer(getInstrumentationScopeName(), getInstrumentationScopeVersion());
 		
 		Span commandSpan = buildSpan(tracer.spanBuilder(getSpanName())).startSpan();
 		try (Scope scope = commandSpan.makeCurrent()) {
-			Integer result = execute();
+			Integer result = execute(commandSpan);
 	        commandSpan.setStatus(StatusCode.OK);
 	        return result;
 		} catch (Exception e) {
@@ -77,6 +77,6 @@ public abstract class TelemetryCommand extends CommandBase {
 		}				
 	}
 	
-	protected abstract Integer execute() throws Exception;
+	protected abstract Integer execute(Span commandSpan) throws Exception;
 
 }
