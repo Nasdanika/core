@@ -26,6 +26,7 @@ import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.alg.drawing.model.LayoutModel2D;
 import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
 import org.jgrapht.alg.drawing.model.Point2D;
+import org.jgrapht.alg.drawing.model.Points;
 import org.jgrapht.graph.DefaultUndirectedGraph;
 import org.nasdanika.common.DelimitedStringMap;
 
@@ -586,10 +587,83 @@ public final class Util {
 		
 		List<Node> topLevelNodes = root.getLayers().stream().flatMap(layer -> layer.getElements().stream()).filter(Node.class::isInstance).map(Node.class::cast).toList();
 		
-		FRLayoutAlgorithm2D<Node, Connection> forceLayout = new FRLayoutAlgorithm2D<>();
+		FRLayoutAlgorithm2D<Node, Connection> forceLayout = new FRLayoutAlgorithm2D<>() {
+			
+			@Override
+			protected java.util.Map<Node,Point2D> calculateRepulsiveForces(org.jgrapht.Graph<Node, Connection> graph, org.jgrapht.alg.drawing.model.LayoutModel2D<Node> model) {
+		        Point2D drawableArea = Point2D.of(
+		        		model.getDrawableArea().getWidth(), 
+		        		model.getDrawableArea().getHeight());
+		        
+		        double daLen = Points.length(drawableArea);
+			
+				Map<Node, Point2D> disp = super.calculateRepulsiveForces(graph, model);
+				for (Node v : graph.vertexSet()) {
+					Point2D vPos = model.get(v);
+		            Point2D vDisp = Point2D.of(0d, 0d);
+		            
+		            int intersections = 0;
+					for (Node u : graph.vertexSet()) {
+						if (v.equals(u)) {
+							continue;
+						}
+						Point2D uPos = model.get(u);
+						if (intersects(v, vPos, u, uPos)) {
+							++intersections;
+							Point2D delta = Points.subtract(vPos, uPos);
+							if (comparator.compare(vPos.getX(), uPos.getX()) == 0 && comparator.compare(vPos.getY(), uPos.getY()) == 0) {
+								// At the same position - using hash code to position one of them under another
+								delta = Point2D.of(0, v.hashCode() > u.hashCode() ? 10 : -10);
+							}
+							double deltaLength = Points.length(delta);	
+							Point2D dispContribution = Points.scalarMultiply(delta, 1.0 / deltaLength); // Normalization
+							vDisp = Points.add(vDisp, dispContribution);	
+						}
+					}
+	
+					if (intersections > 0) {						
+						if (comparator.compare(vDisp.getX(), 0.0) == 0 && comparator.compare(vDisp.getY(), 0.0) == 0) {
+							// Sum of the intersection forces is zero - do nothing.
+							continue;
+						}
+						
+						vDisp = Points.scalarMultiply(vDisp, daLen / Points.length(vDisp)); // Shall beat any attractive force
+						disp.put(v, Points.add(vDisp, disp.get(v)));
+					}
+				}
+				return disp;
+			};
+			
+		};
 		MapLayoutModel2D<Node> model = new MapLayoutModel2D<Node>(new Box2D(layoutWidth, layoutHeight));
 		layout(topLevelNodes, forceLayout, model);
 	}
+	
+	private static boolean intersects(Node v, Point2D vPos, Node u, Point2D uPos) {
+		double gutter = 30.0;
+		// Adapted from awt rectangle
+        org.nasdanika.drawio.Rectangle vGeometry = v.getGeometry();
+		double vw = vGeometry.getWidth() + gutter;
+        double vh = vGeometry.getHeight() + gutter;
+        org.nasdanika.drawio.Rectangle uGeometry = u.getGeometry();
+		double uw = uGeometry.getWidth() + gutter;
+        double uh = uGeometry.getHeight() + gutter;
+        if (uw <= 0 || uh <= 0 || vw <= 0 || vh <= 0) {
+            return false;
+        }
+        double vx = vPos.getX();
+        double vy = vPos.getY();
+        double ux = uPos.getX();
+        double uy = uPos.getY();
+        uw += ux;
+        uh += uy;
+        vw += vx;
+        vh += vy;
+        return ((uw < ux || uw > vx) &&
+                (uh < uy || uh > vy) &&
+                (vw < vx || vw > ux) &&
+                (vh < vy || vh > uy));
+    }	
 	
 	/**
 	 * Loads style map from a string
