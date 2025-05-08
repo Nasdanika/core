@@ -6,13 +6,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Writer;
+import java.util.logging.Logger;
 
-import org.nasdanika.common.NullProgressMonitor;
+import org.nasdanika.common.LoggerProgressMonitor;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.ProgressRecorder;
+import org.nasdanika.common.Util;
 
+import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.Spec;
+import picocli.CommandLine.Spec.Target;;
 
 /**
  * Mixes in progress monitor.
@@ -20,6 +25,12 @@ import picocli.CommandLine.Option;
  *
  */
 public class ProgressMonitorMixIn {
+	
+	@Spec(Target.MIXEE)
+	private CommandSpec mixee;
+	
+	@Option(names = "--progress-logger", description = "Output logger for progress monitor")
+	private String progressLogger;
 	
 	@Option(names = "--progress-output", description = "Output file for progress monitor")
 	private File progressOutput;
@@ -50,7 +61,20 @@ public class ProgressMonitorMixIn {
 				return new PrintStreamProgressMonitor(System.out, 0, 4, false, data);
 			}
 			
-			return new NullProgressMonitor();
+			String loggerName = progressLogger;
+			if (Util.isBlank(loggerName)) {			
+				if (mixee != null) {
+					Object uo = mixee.userObject();
+					if (uo != null) {
+						loggerName = uo.getClass().getName();	
+					}
+				}
+				if (Util.isBlank(loggerName)) {
+					loggerName = getClass().getName();
+				}
+			}
+			
+			return new LoggerProgressMonitor(Logger.getLogger(loggerName));
 		}
 		
 		if (jsonProgress) {

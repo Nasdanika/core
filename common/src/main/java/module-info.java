@@ -21,6 +21,7 @@ module org.nasdanika.common {
 	requires java.desktop;
 	requires net.sourceforge.plantuml;
 	requires spring.core;
+	requires transitive java.logging;
 	
 	exports org.nasdanika.common;
 	exports org.nasdanika.common.descriptors;
