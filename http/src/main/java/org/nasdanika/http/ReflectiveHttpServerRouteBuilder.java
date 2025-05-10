@@ -5,6 +5,8 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -19,12 +21,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Reflector;
 import org.nasdanika.common.Reflector.AnnotatedElementRecord;
 import org.nasdanika.common.Reflector.FactoryRecord;
 import org.nasdanika.common.Util;
 import org.reactivestreams.Publisher;
 
+import reactor.core.publisher.Mono;
 import reactor.netty.http.server.HttpServerRequest;
 import reactor.netty.http.server.HttpServerResponse;
 import reactor.netty.http.server.HttpServerRoutes;
@@ -102,7 +109,17 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 		 */
 		int priority() default 0;
 
-	}	
+	}
+
+	private TelemetryFilter telemetryFilter;	
+	
+	public ReflectiveHttpServerRouteBuilder() {
+		this(null);
+	}
+	
+	public ReflectiveHttpServerRouteBuilder(TelemetryFilter telemetryFilter) {
+		this.telemetryFilter = telemetryFilter;
+	}
 	
 	protected Map<String, Collection<Object>> targets = new HashMap<>();
 	
@@ -268,8 +285,13 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 	private record RouteRecord(
 			String prefix, 
 			AnnotatedElementRecord annotatedElementRecord,
-			Route route) implements Comparable<RouteRecord>, HttpServerRouteBuilder {
+			Route route, 
+			TelemetryFilter telemetryFilter) implements Comparable<RouteRecord>, HttpServerRouteBuilder {
 		
+		private static final String CONTENT_TYPE_HEADER = "Content-Type";
+
+		private static final String APPLICATION_JSON_CONTENT_TYPE = "application/json";
+
 		@Override
 		public int compareTo(RouteRecord o) {
 			if (o == this) {
@@ -292,8 +314,50 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 		}
 		
 		@SuppressWarnings("unchecked")
-		private Publisher<Void> handle(HttpServerRequest request, HttpServerResponse response) {
-			return (Publisher<Void>) annotatedElementRecord().invoke(request, response);
+		private Publisher<Void> handle(HttpServerRequest request, HttpServerResponse response) {						
+			Object result = annotatedElementRecord().invoke(request, response);
+			
+			if (result instanceof JSONObject) {
+				Mono<String> strMono = Mono.just(((JSONObject) result).toString());
+				if (telemetryFilter() != null) {
+					strMono = telemetryFilter().filter(request, strMono);
+				}
+				return response.header(CONTENT_TYPE_HEADER, APPLICATION_JSON_CONTENT_TYPE).sendString(strMono);
+			} 			
+			
+			if (result instanceof JSONArray) {
+				Mono<String> strMono = Mono.just(((JSONArray) result).toString());
+				if (telemetryFilter() != null) {
+					strMono = telemetryFilter().filter(request, strMono);
+				}
+				return response.header(CONTENT_TYPE_HEADER, APPLICATION_JSON_CONTENT_TYPE).sendString(strMono);
+			} 						
+			
+			if (result instanceof String) {
+				Mono<String> strMono = Mono.just((String) result);
+				if (telemetryFilter() != null) {
+					strMono = telemetryFilter().filter(request, strMono);
+				}
+				return response.sendString(strMono);
+			} 
+			
+			if (result instanceof InputStream) {
+				try {
+					result = DefaultConverter.INSTANCE.toByteArray((InputStream) result);
+				} catch (IOException e) {
+					throw new NasdanikaException(e);
+				}
+			}
+			
+			if (result instanceof byte[]) {
+				Mono<byte[]> byteArrayMono = Mono.just((byte[]) result);
+				if (telemetryFilter() != null) {
+					byteArrayMono = telemetryFilter().filter(request, byteArrayMono);
+				}
+				return response.sendByteArray(byteArrayMono);
+			}
+			
+			return (Publisher<Void>) result;
 		}
 
 		@Override
@@ -351,7 +415,7 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 			for (Object target: targetsEntry.getValue()) {			
 				reflector.getAnnotatedElementRecords(target, new ArrayList<>())
 				.filter(aer -> aer.getAnnotation(Route.class) != null || aer.getAnnotation(RouteBuilder.class) != null)
-				.map(aer -> new RouteRecord(targetsEntry.getKey(), aer, buildRoute(targetsEntry.getKey(), aer)))
+				.map(aer -> new RouteRecord(targetsEntry.getKey(), aer, buildRoute(targetsEntry.getKey(), aer), telemetryFilter))
 				.sorted()
 				.forEach(routeRecord -> routeRecord.buildRoutes(routes));					
 			}		
