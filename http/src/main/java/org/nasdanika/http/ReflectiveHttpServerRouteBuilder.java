@@ -31,6 +31,7 @@ import org.nasdanika.common.Reflector.FactoryRecord;
 import org.nasdanika.common.Util;
 import org.reactivestreams.Publisher;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.server.HttpServerRequest;
 import reactor.netty.http.server.HttpServerResponse;
@@ -41,12 +42,12 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 	/**
 	 * On a type this annotation is used to provide path prefix (namespace) for sub-factories and methods.
 	 * 
-	 * For methods this annotation indicates that a method is a routing method. The method much have two parameters compatible with
+	 * For methods this annotation indicates that a method is a routing method. The method must have two parameters compatible with
 	 * {@link HttpServerRequest} and {@link HttpServerResponse} and return an instance of {@link Publisher}&lt;Void&gt;.
 	 * 
 	 * If on a method this annotation value is blank then method name is used to infer HTTP method and path by breaking the method name by camel case
-	 *  and then using the first element as HTTP method name, if it matches one of method names, and the rest, converted to lower case, as path segments.
-	 *  If the first element does not match any HTTP verbs then it is used as the first path segment.
+	 * and then using the first element as HTTP method name, if it matches one of method names, and the rest, converted to lower case, as path segments.
+	 * If the first element does not match any HTTP verbs then it is used as the first path segment.
 	 *  
 	 *  Examples: 
 	 *  <ul>
@@ -81,6 +82,14 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 		 * @return
 		 */
 		int priority() default 0;
+		
+		/**
+		 * For methods which return {@link Mono} or {@link Flux} if this attribute is <code>false</code> 
+		 * <code>Mono/Flux&lt;String&gt;</code> is assumed and <code>response.sendString()</code> is used with telemetry filtering.
+		 * <code>Mono/Flux&lt;byte[]&gt;</code> and <code>response.sendByteArray()</code> otherwise (if <code>true</code>).
+		 * @return
+		 */
+		boolean binary() default false;
 
 	}
 	
@@ -249,6 +258,11 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 				public int priority() {
 					return route.priority();
 				}
+
+				@Override
+				public boolean binary() {
+					return route.binary();
+				}
 				
 			};
 		}
@@ -275,6 +289,11 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 			@Override
 			public int priority() {
 				return routeBuilder.priority();
+			}
+
+			@Override
+			public boolean binary() {
+				return false;
 			}
 			
 		};
@@ -316,6 +335,36 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 		@SuppressWarnings("unchecked")
 		private Publisher<Void> handle(HttpServerRequest request, HttpServerResponse response) {						
 			Object result = annotatedElementRecord().invoke(request, response);
+			
+			if (result instanceof Mono) {
+				if (route().binary()) {
+					Mono<byte[]> byteArrayMono = (Mono<byte[]>) result;
+					if (telemetryFilter() != null) {
+						byteArrayMono = telemetryFilter().filter(request, byteArrayMono);
+					}
+					return response.sendByteArray(byteArrayMono);
+				}
+				Mono<String> strMono = (Mono<String>) result;
+				if (telemetryFilter() != null) {
+					strMono = telemetryFilter().filter(request, strMono);
+				}
+				return response.sendString(strMono);
+			} 			
+			
+			if (result instanceof Flux) {
+				if (route().binary()) {
+					Flux<byte[]> byteArrayFlux = (Flux<byte[]>) result;
+					if (telemetryFilter() != null) {
+						byteArrayFlux = telemetryFilter().filter(request, byteArrayFlux);
+					}
+					return response.sendByteArray(byteArrayFlux);
+				}
+				Flux<String> strFlux = (Flux<String>) result;
+				if (telemetryFilter() != null) {
+					strFlux = telemetryFilter().filter(request, strFlux);
+				}
+				return response.sendString(strFlux);
+			} 						
 			
 			if (result instanceof JSONObject) {
 				Mono<String> strMono = Mono.just(((JSONObject) result).toString());
