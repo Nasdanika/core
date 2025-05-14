@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Reflector;
@@ -305,7 +306,8 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 			String prefix, 
 			AnnotatedElementRecord annotatedElementRecord,
 			Route route, 
-			TelemetryFilter telemetryFilter) implements Comparable<RouteRecord>, HttpServerRouteBuilder {
+			TelemetryFilter telemetryFilter,
+			ReflectiveHttpServerRouteBuilder routeBuilder) implements Comparable<RouteRecord>, HttpServerRouteBuilder {
 		
 		private static final String CONTENT_TYPE_HEADER = "Content-Type";
 
@@ -338,13 +340,13 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 			
 			if (result instanceof Mono) {
 				if (route().binary()) {
-					Mono<byte[]> byteArrayMono = (Mono<byte[]>) result;
+					Mono<byte[]> byteArrayMono = ((Mono<?>) result).map(routeBuilder::toByteArray);
 					if (telemetryFilter() != null) {
 						byteArrayMono = telemetryFilter().filter(request, byteArrayMono);
 					}
 					return response.sendByteArray(byteArrayMono);
 				}
-				Mono<String> strMono = (Mono<String>) result;
+				Mono<String> strMono = ((Mono<?>) result).map(routeBuilder::toString);
 				if (telemetryFilter() != null) {
 					strMono = telemetryFilter().filter(request, strMono);
 				}
@@ -353,18 +355,22 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 			
 			if (result instanceof Flux) {
 				if (route().binary()) {
-					Flux<byte[]> byteArrayFlux = (Flux<byte[]>) result;
+					Flux<byte[]> byteArrayFlux = ((Flux<?>) result).map(routeBuilder::toByteArray);
 					if (telemetryFilter() != null) {
 						byteArrayFlux = telemetryFilter().filter(request, byteArrayFlux);
 					}
 					return response.sendByteArray(byteArrayFlux);
 				}
-				Flux<String> strFlux = (Flux<String>) result;
+				Flux<String> strFlux = ((Flux<?>) result).map(routeBuilder::toString);
 				if (telemetryFilter() != null) {
 					strFlux = telemetryFilter().filter(request, strFlux);
 				}
 				return response.sendString(strFlux);
-			} 						
+			}
+						
+			if (result instanceof Publisher) {			
+				return (Publisher<Void>) result;
+			}			
 			
 			if (result instanceof JSONObject) {
 				Mono<String> strMono = Mono.just(((JSONObject) result).toString());
@@ -406,7 +412,19 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 				return response.sendByteArray(byteArrayMono);
 			}
 			
-			return (Publisher<Void>) result;
+			if (route.binary()) {
+				Mono<byte[]> byteArrayMono = Mono.just(routeBuilder.toByteArray(result));
+				if (telemetryFilter() != null) {
+					byteArrayMono = telemetryFilter().filter(request, byteArrayMono);
+				}
+				return response.sendByteArray(byteArrayMono);				
+			}
+			
+			Mono<String> strMono = Mono.just(routeBuilder.toString(result));
+			if (telemetryFilter() != null) {
+				strMono = telemetryFilter().filter(request, strMono);
+			}
+			return response.sendString(strMono);
 		}
 
 		@Override
@@ -464,11 +482,36 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 			for (Object target: targetsEntry.getValue()) {			
 				reflector.getAnnotatedElementRecords(target, new ArrayList<>())
 				.filter(aer -> aer.getAnnotation(Route.class) != null || aer.getAnnotation(RouteBuilder.class) != null)
-				.map(aer -> new RouteRecord(targetsEntry.getKey(), aer, buildRoute(targetsEntry.getKey(), aer), telemetryFilter))
+				.map(aer -> new RouteRecord(targetsEntry.getKey(), aer, buildRoute(targetsEntry.getKey(), aer), telemetryFilter, this))
 				.sorted()
 				.forEach(routeRecord -> routeRecord.buildRoutes(routes));					
 			}		
 		}				
 	}	
+	
+	/**
+	 * @return Converter to be used by <code>toString(Object)</code> and <code>toByteArray(Object)</code>
+	 */
+	protected Converter getConverter() {
+		return DefaultConverter.INSTANCE;
+	}
+	
+	/**
+	 * Converts method or Mono/Flex result to String to pass to response.sendString() 
+	 * @param obj
+	 * @return
+	 */
+	protected String toString(Object obj) {
+		return getConverter().convert(obj, String.class);
+	}
+
+	/**
+	 * Converts method or Mono/Flex result to String to pass to response.sendString() 
+	 * @param obj
+	 * @return
+	 */
+	protected byte[] toByteArray(Object obj) {
+		return getConverter().convert(obj, byte[].class);		
+	}
 
 }
