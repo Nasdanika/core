@@ -209,7 +209,7 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 		Route route = annotatedElementRecord.getAnnotation(Route.class);
 		if (route != null) {
 			Method method = (Method) annotatedElementRecord.getAnnotatedElement();					
-			HttpMethod[] httpMethod = { HttpMethod.GET };
+			HttpMethod[] httpMethod = { route.method() };
 			
 			if (Util.isBlank(route.value())) {
 				StringBuilder methodPathBuilder = new StringBuilder();
@@ -346,7 +346,12 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 					}
 					return response.sendByteArray(byteArrayMono);
 				}
-				Mono<String> strMono = ((Mono<?>) result).map(routeBuilder::toString);
+				Mono<String> strMono = ((Mono<?>) result).map(obj -> {
+					if (obj instanceof JSONObject || obj instanceof JSONArray) {
+						response.header(CONTENT_TYPE_HEADER, APPLICATION_JSON_CONTENT_TYPE);						
+					}
+					return routeBuilder.toString(obj);
+				});
 				if (telemetryFilter() != null) {
 					strMono = telemetryFilter().filter(request, strMono);
 				}
