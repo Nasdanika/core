@@ -1,5 +1,6 @@
 package org.nasdanika.capability.emf;
 
+import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -43,7 +44,7 @@ public class ResourceSetCapabilityFactory extends ServiceCapabilityFactory<Resou
 		
 		ResourceSet resourceSet = createResourceSet(requirement);
 		for (CapabilityProvider<Object> cp: contributorProviders) {
-			cp.getPublisher().subscribe(contributor -> ((ResourceSetContributor) contributor).contribute(resourceSet, progressMonitor));
+			cp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(contributor -> ((ResourceSetContributor) contributor).contribute(resourceSet, progressMonitor));
 		}
 
 		if (requirement != null) {

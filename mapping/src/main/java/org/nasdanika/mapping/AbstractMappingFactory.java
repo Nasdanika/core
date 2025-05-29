@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
@@ -46,6 +47,7 @@ import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
+import org.nasdanika.mapping.AbstractMappingFactory.Contributor;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NcoreFactory;
@@ -173,7 +175,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			Requirement<? extends AbstractMappingFactory<S,T>, Contributor<S,T>> requirement = createContributorRequirement();
 			Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
 			for (CapabilityProvider<Object> cp: cpi) {
-				cp.getPublisher().subscribe(obj -> contributors.add((Contributor<S,T>) obj));
+				cp.getPublisher().filter(Objects::nonNull).subscribe(obj -> contributors.add((Contributor<S,T>) obj));
 			}
 		}				
 		
@@ -1133,7 +1135,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 				Requirement<Object, DocumentationFactory> requirement = ServiceCapabilityFactory.createRequirement(DocumentationFactory.class, null, new DocumentationFactory.Requirement(false)); // No inlining
 				Iterable<CapabilityProvider<Object>> cpi = capabilityLoader.load(requirement, progressMonitor);
 				for (CapabilityProvider<Object> cp: cpi) {				
-					cp.getPublisher().subscribe(df -> documentationFactories.add((DocumentationFactory) df));
+					cp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(df -> documentationFactories.add((DocumentationFactory) df));
 				}
 			}
 		}

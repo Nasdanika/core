@@ -49,13 +49,13 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 				CompletionStage<CommandLineAndPath> commandLineAndPathCS = commandCS.thenApply(command -> createCommandLine(command, serviceRequirement, progressMonitor));
 				CompletionStage<Iterable<CapabilityProvider<CommandLine>>> subCommandsCS = commandLineAndPathCS.thenCompose(
 						commandLineAndPath -> createSubCommands(
-								commandLineAndPath.path(),
+								commandLineAndPath == null ? null : commandLineAndPath.path(),
 								loader,
 								progressMonitor));
 				
 				CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> mixInsCS = commandLineAndPathCS.thenCompose(
 						commandLineAndPath -> createMixIns(
-								commandLineAndPath.path(),
+								commandLineAndPath == null ? null : commandLineAndPath.path(),
 								loader,
 								progressMonitor));
 				
@@ -72,6 +72,9 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 			T command, 
 			SubCommandRequirement serviceRequirement,
 			ProgressMonitor progressMonitor) {
+		if (command == null) {
+			return null;
+		}
 		List<CommandLine> parentPath = serviceRequirement.parentPath();
 		CommandLine commandLine = new CommandLine(command);
 		List<CommandLine> path = new ArrayList<CommandLine>();
@@ -86,7 +89,11 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	protected CompletionStage<Iterable<CapabilityProvider<CommandLine>>> createSubCommands(
 				List<CommandLine> path,
 				Loader loader,
-				ProgressMonitor progressMonitor) {
+				ProgressMonitor progressMonitor) {		
+
+		if (path == null) {
+			return CompletableFuture.completedStage(null);
+		}
 		
 		Requirement<SubCommandRequirement, CommandLine> subCommandRequirement = ServiceCapabilityFactory.createRequirement(CommandLine.class, null, new SubCommandRequirement(path));
 		@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -97,9 +104,14 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	private CommandLine combineSubCommands(
 			CommandLineAndPath commandLineAndPath,
 			Iterable<CapabilityProvider<CommandLine>> subCommandsProviders) {
+		
+		if (commandLineAndPath == null) {
+			return null;
+		}
+		
 		CommandLine commandLine = commandLineAndPath.commandLine();
 		List<CommandLine> subCommands = new ArrayList<>();
-		subCommandsProviders.forEach(scp -> scp.getPublisher().subscribe(subCommands::add));
+		subCommandsProviders.forEach(scp -> scp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(subCommands::add));
 		subCommands.sort((a,b) -> a.getCommandName().compareTo(b.getCommandName()));
 		for (Entry<String, List<CommandLine>> commandGroup: Util.groupBy(subCommands, CommandLine::getCommandName).entrySet()) {
 			if (commandGroup.getValue().size() == 1) {
@@ -159,6 +171,10 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 			Loader loader,
 			ProgressMonitor progressMonitor) {
 	
+		if (path == null) {
+			return CompletableFuture.completedStage(null);
+		}
+		
 		Requirement<MixInRequirement, MixInRecord> mixInRequirement = ServiceCapabilityFactory.createRequirement(MixInRecord.class, null,  new MixInRequirement(path));
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> mixInsCS = (CompletionStage) loader.load(mixInRequirement, progressMonitor);
@@ -168,9 +184,13 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	private CommandLine combineMixIns(
 			CommandLine commandLine,
 			Iterable<CapabilityProvider<MixInRecord>> mixInProviders) {
+		
+		if (commandLine == null) {
+			return null;
+		}
 
 		List<MixInRecord> mixIns = new ArrayList<>();
-		mixInProviders.forEach(mcp -> mcp.getPublisher().subscribe(mixIns::add));		
+		mixInProviders.forEach(mcp -> mcp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(mixIns::add));		
 		
 		for (Entry<String, List<MixInRecord>> mixInGroup: Util.groupBy(mixIns, MixInRecord::name).entrySet()) {
 			if (mixInGroup.getValue().size() == 1) {

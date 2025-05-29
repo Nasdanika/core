@@ -3,6 +3,7 @@ package org.nasdanika.graph.processor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 
 import org.nasdanika.capability.CapabilityProvider;
@@ -57,7 +58,7 @@ public class ReflectiveProcessorServiceFactory<R,P> extends ServiceCapabilityFac
 		Collection<Object> targets = new ArrayList<>();
 		
 		for (CapabilityProvider<Object> tcp: targetCapabilityProviders) {
-			tcp.getPublisher().subscribe(targets::add);
+			tcp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(targets::add);
 		}
 		
 		ReflectiveProcessorFactoryProvider<P, ?, ?> rpfp = new ReflectiveProcessorFactoryProvider<>(targets.toArray()) {

@@ -1,5 +1,7 @@
 package org.nasdanika.capability;
 
+import java.util.Objects;
+
 import reactor.core.publisher.Flux;
 
 /**
@@ -26,7 +28,7 @@ public interface CapabilityProvider<T> {
 
 			@Override
 			public Flux<T> getPublisher() {
-				return Flux.just(capabilities);
+				return Flux.just(capabilities).filter(Objects::nonNull);
 			}
 		};
 	}

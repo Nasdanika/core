@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -79,7 +80,7 @@ public class ModelMixIn {
 		Iterable<CapabilityProvider<Object>> providers = capabilityLoader.load(ServiceCapabilityFactory.createRequirement(EObject.class, null, requirement), progressMonitor);
 		Collection<EObject> results = Collections.synchronizedCollection(new ArrayList<>());
 		for (CapabilityProvider<Object> provider: providers) {
-			provider.getPublisher().subscribe(r -> results.add((EObject) r), error -> error.printStackTrace());
+			provider.getPublisher().filter(Objects::nonNull).subscribe(r -> results.add((EObject) r), error -> error.printStackTrace());
 		}
 		for (EObject result: results) {
 			return result;

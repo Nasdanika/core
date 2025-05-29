@@ -3,6 +3,7 @@ package org.nasdanika.capability;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.concurrent.CompletionStage;
 
@@ -29,7 +30,7 @@ public interface CapabilityFactory<R,C> {
 			return cpcs.thenApply(capabilityProviders -> {
 				List<T> ret = Collections.synchronizedList(new ArrayList<>());
 				for (CapabilityProvider<T> cp: capabilityProviders) {
-					cp.getPublisher().subscribe(ret::add);
+					cp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(ret::add);
 				}
 				
 				return ret;						

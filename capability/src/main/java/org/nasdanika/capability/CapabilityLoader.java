@@ -135,7 +135,7 @@ public class CapabilityLoader implements Closeable {
 		List<T> ret = Collections.synchronizedList(new ArrayList<>());
 		Iterable<CapabilityProvider<T>> capabilityProviders = load(requirement, progressMonitor);
 		for (CapabilityProvider<T> cp: capabilityProviders) {
-			cp.getPublisher().subscribe(ret::add);
+			cp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(ret::add);
 		}
 		
 		return ret;		
@@ -169,7 +169,7 @@ public class CapabilityLoader implements Closeable {
 	
 		List<S> ret = Collections.synchronizedList(new ArrayList<>());
 		for (CapabilityProvider<S> cp: loadServices(serviceType, factoryPredicate, serviceRequirement, progressMonitor)) {
-			cp.getPublisher().subscribe(ret::add);
+			cp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(ret::add);
 		}
 		
 		return ret;		
