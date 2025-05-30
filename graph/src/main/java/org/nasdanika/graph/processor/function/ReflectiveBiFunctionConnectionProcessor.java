@@ -35,9 +35,9 @@ public class ReflectiveBiFunctionConnectionProcessor extends Reflector implement
 
 	@Override
 	public Object targetApply(
-			InvocationRequest input, 
-			ProgressMonitor progressMonitor,
-			BiFunction<InvocationRequest, ProgressMonitor, Object> sourceEndpoint) {
+			InvocationRequest input,
+			BiFunction<InvocationRequest, ProgressMonitor, Object> sourceEndpoint, 
+			ProgressMonitor progressMonitor) {
 		Object[] args = new Object[input.args().length + 3];
 		args[0] = InvocationType.TARGET;
 		args[1] = sourceEndpoint;
@@ -48,9 +48,9 @@ public class ReflectiveBiFunctionConnectionProcessor extends Reflector implement
 
 	@Override
 	public Object sourceApply(
-			InvocationRequest input, 
-			ProgressMonitor progressMonitor,
-			BiFunction<InvocationRequest, ProgressMonitor, Object> targetEndpoint) {
+			InvocationRequest input,
+			BiFunction<InvocationRequest, ProgressMonitor, Object> targetEndpoint, 
+			ProgressMonitor progressMonitor) {
 		Object[] args = new Object[input.args().length + 3];
 		args[0] = InvocationType.SOURCE;
 		args[1] = targetEndpoint;

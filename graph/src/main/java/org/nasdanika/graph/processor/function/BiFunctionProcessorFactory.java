@@ -47,8 +47,8 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 		 */
 		U targetApply(
 				T input,
-				ProgressMonitor progressMonitor,
-				BiFunction<V,ProgressMonitor,W> sourceEndpoint);
+				BiFunction<V,ProgressMonitor,W> sourceEndpoint,
+				ProgressMonitor progressMonitor);
 		
 		/**
 		 * Processes invocation from connection's source outgoing endpoint.
@@ -59,8 +59,8 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 		 */
 		U sourceApply(
 				T input,
-				ProgressMonitor progressMonitor,
-				BiFunction<V,ProgressMonitor,W> targetEndpoint);
+				BiFunction<V,ProgressMonitor,W> targetEndpoint,
+				ProgressMonitor progressMonitor);
 		
 	}
 
@@ -107,13 +107,13 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 			endpointWiringStageConsumer.accept(connectionProcessorConfig
 				.getSourceEndpoint()
 				.thenAccept(endpoint -> {										
-					connectionProcessorConfig.setTargetHandler((t,pm) -> connectionProcessor.targetApply(t, pm, endpoint));
+					connectionProcessorConfig.setTargetHandler((t,pm) -> connectionProcessor.targetApply(t, endpoint, pm));
 				}));
 			
 			endpointWiringStageConsumer.accept(connectionProcessorConfig
 				.getTargetEndpoint()
 				.thenAccept(endpoint -> {										
-					connectionProcessorConfig.setSourceHandler((t,pm) -> connectionProcessor.sourceApply(t, pm, endpoint));
+					connectionProcessorConfig.setSourceHandler((t,pm) -> connectionProcessor.sourceApply(t, endpoint, pm));
 				}));
 			
 			return ProcessorInfo.of(connectionProcessorConfig, connectionProcessor);			

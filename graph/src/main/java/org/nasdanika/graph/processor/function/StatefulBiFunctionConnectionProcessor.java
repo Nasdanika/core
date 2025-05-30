@@ -26,7 +26,10 @@ public interface StatefulBiFunctionConnectionProcessor<T,U,V,W,S> extends BiFunc
 	List<S> getHistory(ProgressMonitor progressMonitor);
 	
 	@Override
-	default U sourceApply(T input, ProgressMonitor progressMonitor, BiFunction<V, ProgressMonitor, W> targetEndpoint) {
+	default U sourceApply(
+			T input, 
+			BiFunction<V, ProgressMonitor, W> targetEndpoint, 
+			ProgressMonitor progressMonitor) {
 		U result = sourceApply(input, targetEndpoint, getHistory(progressMonitor), progressMonitor);
 		recordSourceState(input, result, progressMonitor);		
 		return result;
@@ -45,8 +48,8 @@ public interface StatefulBiFunctionConnectionProcessor<T,U,V,W,S> extends BiFunc
 	@Override
 	default U targetApply(
 			T input, 
-			ProgressMonitor progressMonitor, 
-			BiFunction<V, ProgressMonitor, W> sourceEndpoint) {
+			BiFunction<V, ProgressMonitor, W> sourceEndpoint, 
+			ProgressMonitor progressMonitor) {
 		U result = targetApply(input, sourceEndpoint, getHistory(progressMonitor), progressMonitor);
 		recordTargetState(input, result, progressMonitor);		
 		return result;

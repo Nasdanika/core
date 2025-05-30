@@ -31,6 +31,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Transformer;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
+import org.nasdanika.graph.Node;
 import org.nasdanika.graph.emf.EClassConnection;
 import org.nasdanika.graph.emf.EContainerConnection;
 import org.nasdanika.graph.emf.EObjectConnection;
@@ -46,6 +47,9 @@ import org.nasdanika.graph.processor.ProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
+import org.nasdanika.graph.processor.message.Message;
+import org.nasdanika.graph.processor.message.MessageHandler;
+import org.nasdanika.graph.processor.message.MessageHandlerProcessorFactory;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -444,7 +448,122 @@ public class TestEObjectGraph {
 	public void testReflectiveProcessorFactorySequential() {
 		testReflectiveProcessorFactory(false, 1, true);
 		testReflectiveProcessorFactory(false, 1, false);
+	}
+	
+	public class TestMessage implements Message {
+
+		@Override
+		public Message getParent() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Element getSender() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Element getRecipient() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void prune() {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}	
+	
+	private void testMessageProcessorFactory(boolean parallel, int passes, boolean passThrough) {
+		List<EPackage> ePackages = Arrays.asList(
+				EcorePackage.eINSTANCE, 
+				NcorePackage.eINSTANCE);
+		
+		for (int i = 0; i < passes; ++i) {
+			System.out.println("*** Pass " + i);
+			ProgressMonitor progressMonitor = new NullProgressMonitor(); // new PrintStreamProgressMonitor();
+			ConfigResult configs = createConfigs(parallel, passThrough, ePackages, progressMonitor);
+			
+			MessageHandlerProcessorFactory<TestMessage> processorFactory = new MessageHandlerProcessorFactory<TestMessage>() {
+
+				@Override
+				protected TestMessage createSourceToTargetMessage(Connection connection, TestMessage message, ProgressMonitor progressMonitor) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+
+				@Override
+				protected TestMessage createTargetToSourceMessage(Connection connection, TestMessage message, ProgressMonitor progressMonitor) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+
+				@Override
+				protected TestMessage createConnectionMessage(
+						Node node, 
+						Connection source, 
+						boolean isSourceOutgoing,
+						Connection target, 
+						boolean isTargetOutgoing, 
+						TestMessage message,
+						ProgressMonitor progressMonitor) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+
+				@Override
+				protected TestMessage createChildMessage(
+						Node node, 
+						Connection source, 
+						boolean isSourceOutgoing,
+						Element child, 
+						TestMessage message, 
+						ProgressMonitor progressMonitor) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+			};
+			
+			Map<Element, ProcessorInfo<MessageHandler<TestMessage>>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
+			assertEquals(configs.configs().size(), processors.size());
+			
+			Stream<MessageHandler<TestMessage>> ps = processors
+					.values()
+					.stream()
+					.filter(pr -> {
+						return pr.getProcessor() instanceof BiFunctionNodeProcessor;
+					})
+					.map(pr -> (MessageHandler<TestMessage>) pr.getProcessor());
+			
+			if (parallel) {
+				ps = ps.parallel();
+			}
+			
+			int calls = ps.mapToInt(p -> {
+				return (Integer) ((MessageHandler<TestMessage>) p).apply(33, progressMonitor);
+			}).sum();
+			System.out.println("Calls: " + calls);
+			assertEquals(configs.graphResult().connections() * 2, calls);
+		}	
+	}
+	
+	@Test
+	public void testMessageProcessorFactoryParallel() {
+		testMessageProcessorFactory(true, 10, true);
+		testMessageProcessorFactory(true, 10, false);
+	}	
+	
+	@Test
+	public void testMessageProcessorFactorySequential() {
+		testMessageProcessorFactory(false, 1, true);
+		testMessageProcessorFactory(false, 1, false);
 	}			
+	
 	
 	// BiFunction reflective test also requires opening the test package
 }

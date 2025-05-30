@@ -34,9 +34,9 @@ public class BiFunctionConnectionProcessorImpl implements ConnectionProcessor<Ob
 
 	@Override
 	public Object targetApply(
-			Object input, 
-			ProgressMonitor progressMonitor,
-			BiFunction<Object, ProgressMonitor, Object> sourceEndpoint) {
+			Object input,
+			BiFunction<Object, ProgressMonitor, Object> sourceEndpoint, 
+			ProgressMonitor progressMonitor) {
 		
 		assertEquals(config.getElement().getTarget() , input);
 		assertNotNull(sourceEndpoint);
@@ -47,9 +47,9 @@ public class BiFunctionConnectionProcessorImpl implements ConnectionProcessor<Ob
 
 	@Override
 	public Object sourceApply(
-			Object input, 
-			ProgressMonitor progressMonitor,
-			BiFunction<Object, ProgressMonitor, Object> targetEndpoint) {
+			Object input,
+			BiFunction<Object, ProgressMonitor, Object> targetEndpoint, 
+			ProgressMonitor progressMonitor) {
 		
 		assertEquals(config.getElement().getSource() , input);
 		assertNotNull(targetEndpoint);
