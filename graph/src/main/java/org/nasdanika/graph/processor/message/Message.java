@@ -3,7 +3,6 @@ package org.nasdanika.graph.processor.message;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 
 import org.nasdanika.graph.Element;
 
@@ -11,7 +10,7 @@ import org.nasdanika.graph.Element;
  * A message from one element to another.
  * 
  */
-public interface Message extends Element, Predicate<Element> {
+public interface Message extends Element {
 	
 	/**
 	 * Message type
@@ -72,29 +71,11 @@ public interface Message extends Element, Predicate<Element> {
 	Message getParent();
 	
 	/**
-	 * An element which sent the message
+	 * An element which sent the message. 
+	 * Can be null for messages sent by the client code via handlers.
 	 * @return
 	 */
 	Element getSender();
-
-	/**
-	 * Call to this method indicates that there should be no further message processing like sending child messages.
-	 */
-	void prune();
-	
-	/**
-	 * Invoked before passing this message to its processor. 
-	 * This method returns true if the message is not pruned.
-	 */
-	@Override
-	default boolean test(Element element) {
-		return !isPruned();
-	}
-	
-	default boolean isPruned() {
-		Message parent = getParent();
-		return parent != null && parent.isPruned();
-	}	
 	
 	default List<Message> getPath() {
 		Message parent = getParent();

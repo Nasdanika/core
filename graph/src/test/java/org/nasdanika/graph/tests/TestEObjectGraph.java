@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,6 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Transformer;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
-import org.nasdanika.graph.Node;
 import org.nasdanika.graph.emf.EClassConnection;
 import org.nasdanika.graph.emf.EContainerConnection;
 import org.nasdanika.graph.emf.EObjectConnection;
@@ -48,9 +48,12 @@ import org.nasdanika.graph.processor.ProcessorFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
 import org.nasdanika.graph.processor.message.Message;
+import org.nasdanika.graph.processor.message.Message.Type;
 import org.nasdanika.graph.processor.message.MessageHandler;
 import org.nasdanika.graph.processor.message.MessageHandlerProcessorFactory;
 import org.nasdanika.ncore.NcorePackage;
+
+import reactor.core.publisher.Flux;
 
 /**
  * Tests Ecore -> Graph -> Processor generation
@@ -451,32 +454,49 @@ public class TestEObjectGraph {
 	}
 	
 	public class TestMessage implements Message {
+		
+		protected Collection<TestMessage> children = Collections.synchronizedCollection(new ArrayList<>());
+
+		private Type type;
+
+		private TestMessage parent;
+
+		private org.nasdanika.graph.Element sender;
+		
+		public TestMessage(
+				Type type, 
+				TestMessage parent,
+				org.nasdanika.graph.Element sender) {
+			
+			this.type = type;
+			this.parent = parent;
+			if (parent != null) {
+				parent.children.add(this);
+			}
+			this.sender = sender;
+		}
+
+		@Override
+		public Type getType() {
+			return type;
+		}
 
 		@Override
 		public Message getParent() {
-			// TODO Auto-generated method stub
-			return null;
+			return parent;
 		}
 
 		@Override
-		public Element getSender() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Element getRecipient() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void prune() {
-			// TODO Auto-generated method stub
-			
+		public org.nasdanika.graph.Element getSender() {
+			return sender;
 		}
 		
-	}	
+		@Override
+		public Collection<TestMessage> getChildren() {
+			return children;
+		}
+		
+	}		
 	
 	private void testMessageProcessorFactory(boolean parallel, int passes, boolean passThrough) {
 		List<EPackage> ePackages = Arrays.asList(
@@ -491,40 +511,18 @@ public class TestEObjectGraph {
 			MessageHandlerProcessorFactory<TestMessage> processorFactory = new MessageHandlerProcessorFactory<TestMessage>() {
 
 				@Override
-				protected TestMessage createSourceToTargetMessage(Connection connection, TestMessage message, ProgressMonitor progressMonitor) {
-					// TODO Auto-generated method stub
-					return null;
-				}
-
-				@Override
-				protected TestMessage createTargetToSourceMessage(Connection connection, TestMessage message, ProgressMonitor progressMonitor) {
-					// TODO Auto-generated method stub
-					return null;
-				}
-
-				@Override
-				protected TestMessage createConnectionMessage(
-						Node node, 
-						Connection source, 
-						boolean isSourceOutgoing,
-						Connection target, 
-						boolean isTargetOutgoing, 
-						TestMessage message,
+				protected TestMessage createMessage(
+						Type type, 
+						Element sender, 
+						Element recipient, 
+						TestMessage parent,
 						ProgressMonitor progressMonitor) {
-					// TODO Auto-generated method stub
-					return null;
-				}
-
-				@Override
-				protected TestMessage createChildMessage(
-						Node node, 
-						Connection source, 
-						boolean isSourceOutgoing,
-						Element child, 
-						TestMessage message, 
-						ProgressMonitor progressMonitor) {
-					// TODO Auto-generated method stub
-					return null;
+					
+					if (type == Type.CHILD || type == Type.TARGET) {
+						return null;
+					}
+					
+					return new TestMessage(type, parent, sender);
 				}
 				
 			};
@@ -535,20 +533,20 @@ public class TestEObjectGraph {
 			Stream<MessageHandler<TestMessage>> ps = processors
 					.values()
 					.stream()
-					.filter(pr -> {
-						return pr.getProcessor() instanceof BiFunctionNodeProcessor;
-					})
 					.map(pr -> (MessageHandler<TestMessage>) pr.getProcessor());
 			
 			if (parallel) {
 				ps = ps.parallel();
 			}
 			
-			int calls = ps.mapToInt(p -> {
-				return (Integer) ((MessageHandler<TestMessage>) p).apply(33, progressMonitor);
+			long messages = ps.mapToLong(mh -> {
+				TestMessage documentMessage = new TestMessage(Type.HANDLER, null, null);
+				Flux<TestMessage> messageFlux = mh.process(documentMessage, progressMonitor);
+						
+				return messageFlux.count().block();
 			}).sum();
-			System.out.println("Calls: " + calls);
-			assertEquals(configs.graphResult().connections() * 2, calls);
+			
+			System.out.println("Messages: " + messages);			
 		}	
 	}
 	

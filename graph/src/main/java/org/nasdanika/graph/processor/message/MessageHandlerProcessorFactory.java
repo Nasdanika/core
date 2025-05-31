@@ -79,11 +79,11 @@ public abstract class MessageHandlerProcessorFactory<M extends Message> extends 
 			NodeProcessor<M> nodeProcessor = createNodeProcessor(nodeProcessorConfig, parallel, infoProvider, endpointWiringStageConsumer, incomingEndpoints, outgoingEndpoints, progressMonitor);			
 			
 			for (Entry<Connection, Consumer<MessageHandler<M>>> incomingHandlerConsumerEntry: nodeProcessorConfig.getIncomingHandlerConsumers().entrySet()) {
-				incomingHandlerConsumerEntry.getValue().accept((t,pm) -> t.test(nodeProcessorConfig.getElement()) || pm.isCancelled() ? Flux.empty() : nodeProcessor.processIncoming(incomingHandlerConsumerEntry.getKey(), t, pm));
+				incomingHandlerConsumerEntry.getValue().accept((t,pm) -> pm.isCancelled() ? Flux.empty() : nodeProcessor.processIncoming(incomingHandlerConsumerEntry.getKey(), t, pm));
 			}
 			
 			for (Entry<Connection, Consumer<MessageHandler<M>>> outgoingHandlerConsumerEntry: nodeProcessorConfig.getOutgoingHandlerConsumers().entrySet()) {
-				outgoingHandlerConsumerEntry.getValue().accept((t,pm) -> t.test(nodeProcessorConfig.getElement()) || pm.isCancelled() ? Flux.empty() : nodeProcessor.processOutgoing(outgoingHandlerConsumerEntry.getKey(), t, pm));
+				outgoingHandlerConsumerEntry.getValue().accept((t,pm) -> pm.isCancelled() ? Flux.empty() : nodeProcessor.processOutgoing(outgoingHandlerConsumerEntry.getKey(), t, pm));
 			}
 			
 			return ProcessorInfo.of(nodeProcessorConfig, nodeProcessor);						
@@ -97,19 +97,20 @@ public abstract class MessageHandlerProcessorFactory<M extends Message> extends 
 			endpointWiringStageConsumer.accept(connectionProcessorConfig
 				.getSourceEndpoint()
 				.thenAccept(endpoint -> {										
-					connectionProcessorConfig.setTargetHandler((t,pm) -> t.test(connectionProcessorConfig.getElement()) || pm.isCancelled() ? Flux.empty() : connectionProcessor.targetProcess(t, endpoint, pm));
+					connectionProcessorConfig.setTargetHandler((t,pm) -> pm.isCancelled() ? Flux.empty() : connectionProcessor.targetProcess(t, endpoint, pm));
 				}));
 			
 			endpointWiringStageConsumer.accept(connectionProcessorConfig
 				.getTargetEndpoint()
 				.thenAccept(endpoint -> {										
-					connectionProcessorConfig.setSourceHandler((t,pm) -> t.test(connectionProcessorConfig.getElement()) || pm.isCancelled() ? Flux.empty() : connectionProcessor.sourceProcess(t, endpoint, pm));
+					connectionProcessorConfig.setSourceHandler((t,pm) -> pm.isCancelled() ? Flux.empty() : connectionProcessor.sourceProcess(t, endpoint, pm));
 				}));
 			
 			return ProcessorInfo.of(connectionProcessorConfig, connectionProcessor);			
 		}
 		
-		return super.createProcessor(config, parallel, infoProvider, endpointWiringStageConsumer, progressMonitor);
+		
+		return ProcessorInfo.of(config, createMessageHandler(config, parallel, infoProvider, endpointWiringStageConsumer, progressMonitor));
 	}
 	
 	protected ConnectionProcessor<M> createConnectionProcessor(
@@ -130,10 +131,6 @@ public abstract class MessageHandlerProcessorFactory<M extends Message> extends 
 
 			@Override
 			public Flux<M> targetProcess(M message, MessageHandler<M> sourceEndpoint, ProgressMonitor progressMonitor) {				
-				if (message.isPruned()) {
-					return Flux.empty();
-				}
-				
 				Mono<M> sourceMessageMono = Mono.fromSupplier(
 						() -> createMessage(
 							Message.Type.OUTGOING, 
@@ -150,10 +147,6 @@ public abstract class MessageHandlerProcessorFactory<M extends Message> extends 
 
 			@Override
 			public Flux<M> sourceProcess(M message, MessageHandler<M> targetEndpoint, ProgressMonitor progressMonitor) {
-				if (message.isPruned()) {
-					return Flux.empty();
-				}
-				
 				Mono<M> targetMessageMono = Mono.fromSupplier(
 						() -> createMessage(
 							Message.Type.INCOMING, 
@@ -185,10 +178,6 @@ public abstract class MessageHandlerProcessorFactory<M extends Message> extends 
 
 			@Override
 			public Flux<M> process(M message, ProgressMonitor progressMonitor) {
-				if (message.isPruned()) {
-					return Flux.empty();
-				}
-								
 				return sendMessages(null, false, message, progressMonitor);
 			}
 
@@ -211,85 +200,85 @@ public abstract class MessageHandlerProcessorFactory<M extends Message> extends 
 				Node node = nodeProcessorConfig.getElement(); 
 				Collection<Flux<M>> results = new ArrayList<>();
 
-				if (!message.isPruned()) {
-					// Parent
-					Element parent = nodeProcessorConfig.getParentProcessorConfig().getElement();
-					if (parent != null) {
-						infoProvider.accept(parent, (pi, pm) -> {
-							MessageHandler<M> parentProcessor = pi.getProcessor();
-							if (parentProcessor != null) {
-								Mono<M> parentMessageMono = Mono.fromSupplier(
-										() -> createMessage(
-											Message.Type.CHILD, 
-											node, 
-											parent,
-											message, 
-											progressMonitor));
-								
-								results.add(parentMessageMono.flatMapMany(parentMessage -> {
-									Flux<M> parentFlux = parentProcessor.process(parentMessage, progressMonitor);
-									return Flux.just(parentMessage).concatWith(parentFlux);					
-								}));
-							}
-						});
-					}					
-					
-					// Children
-					for (Element child: node.getChildren()) {
-						infoProvider.accept(child, (pi, pm) -> {
-							MessageHandler<M> childProcessor = pi.getProcessor();
-							if (childProcessor != null) {
-								Mono<M> childMessageMono = Mono.fromSupplier(
-										() -> createMessage(
-											Message.Type.PARENT, 
-											node, 
-											child,
-											message, 
-											progressMonitor));
-								
-								results.add(childMessageMono.flatMapMany(childMessage -> {
-									Flux<M> childFlux = childProcessor.process(childMessage, progressMonitor);
-									return Flux.just(childMessage).concatWith(childFlux);					
-								}));
-							}
-						});					
-					}
-					
-					// Incoming
-					for (Entry<Connection, MessageHandler<M>> ie: incomingEndpoints.entrySet()) {
-						MessageHandler<M> handler = ie.getValue();
-						if (handler != null) {
-							Mono<M> incomingMessageMono = Mono.fromSupplier(
+				// Parent
+				ProcessorConfig parentProcessorConfig = nodeProcessorConfig.getParentProcessorConfig();
+				if (parentProcessorConfig != null) {
+					Element parent = parentProcessorConfig.getElement();
+					infoProvider.accept(parent, (pi, pm) -> {
+						MessageHandler<M> parentProcessor = pi.getProcessor();
+						if (parentProcessor != null) {
+							Mono<M> parentMessageMono = Mono.fromSupplier(
 									() -> createMessage(
-										Message.Type.TARGET, 
-										node,
-										ie.getKey(),
-										message, 
-										progressMonitor));
-							
-							results.add(incomingMessageMono.flatMapMany(incomingMessage -> {
-								Flux<M> incomingFlux = handler.process(incomingMessage, progressMonitor);
-								return Flux.just(incomingMessage).concatWith(incomingFlux);					
-							}));
-						}
-					}
-					
-					// Outgoing				
-					for (Entry<Connection, MessageHandler<M>> oe: outgoingEndpoints.entrySet()) {
-						MessageHandler<M> handler = oe.getValue();
-						if (handler != null) {
-							Mono<M> outgoingMessageMono = Mono.fromSupplier(
-									() -> createMessage(
+										Message.Type.CHILD, 
 										node, 
-										Message.Type.SOURCE, 
+										parent,
 										message, 
 										progressMonitor));
 							
-							results.add(incomingMessageMono.flatMapMany(incomingMessage -> {
-								Flux<M> incomingFlux = handler.process(incomingMessage, progressMonitor);
-								return Flux.just(incomingMessage).concatWith(incomingFlux);					
+							results.add(parentMessageMono.flatMapMany(parentMessage -> {
+								Flux<M> parentFlux = parentProcessor.process(parentMessage, progressMonitor);
+								return Flux.just(parentMessage).concatWith(parentFlux);					
 							}));
 						}
+					});
+				}					
+				
+				// Children
+				for (Element child: node.getChildren()) {
+					infoProvider.accept(child, (pi, pm) -> {
+						MessageHandler<M> childProcessor = pi.getProcessor();
+						if (childProcessor != null) {
+							Mono<M> childMessageMono = Mono.fromSupplier(
+									() -> createMessage(
+										Message.Type.PARENT, 
+										node, 
+										child,
+										message, 
+										progressMonitor));
+							
+							results.add(childMessageMono.flatMapMany(childMessage -> {
+								Flux<M> childFlux = childProcessor.process(childMessage, progressMonitor);
+								return Flux.just(childMessage).concatWith(childFlux);					
+							}));
+						}
+					});					
+				}
+				
+				// Incoming
+				for (Entry<Connection, MessageHandler<M>> ie: incomingEndpoints.entrySet()) {
+					MessageHandler<M> handler = ie.getValue();
+					if (handler != null) {
+						Mono<M> incomingMessageMono = Mono.fromSupplier(
+								() -> createMessage(
+									Message.Type.TARGET, 
+									node,
+									ie.getKey(),
+									message, 
+									progressMonitor));
+						
+						results.add(incomingMessageMono.flatMapMany(incomingMessage -> {
+							Flux<M> incomingFlux = handler.process(incomingMessage, progressMonitor);
+							return Flux.just(incomingMessage).concatWith(incomingFlux);					
+						}));
+					}
+				}
+				
+				// Outgoing				
+				for (Entry<Connection, MessageHandler<M>> oe: outgoingEndpoints.entrySet()) {
+					MessageHandler<M> handler = oe.getValue();
+					if (handler != null) {
+						Mono<M> outgoingMessageMono = Mono.fromSupplier(
+								() -> createMessage(
+									Message.Type.SOURCE, 
+									node,
+									oe.getKey(),
+									message, 
+									progressMonitor));
+						
+						results.add(outgoingMessageMono.flatMapMany(outgoingMessage -> {
+							Flux<M> outgoingFlux = handler.process(outgoingMessage, progressMonitor);
+							return Flux.just(outgoingMessage).concatWith(outgoingFlux);					
+						}));
 					}
 				}
 				
@@ -299,6 +288,71 @@ public abstract class MessageHandlerProcessorFactory<M extends Message> extends 
 		};
 		
 	}
+	
+	protected MessageHandler<M> createMessageHandler(
+			ProcessorConfig processorConfig,
+			boolean parallel,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<MessageHandler<M>>,ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 			
+			ProgressMonitor progressMonitor) {
+		
+		return new MessageHandler<M>() {
+
+			@Override
+			public Flux<M> process(M message, ProgressMonitor progressMonitor) {
+				Element element = processorConfig.getElement(); 
+				Collection<Flux<M>> results = new ArrayList<>();
+
+				// Parent
+				ProcessorConfig parentProcessorConfig = processorConfig.getParentProcessorConfig();
+				if (parentProcessorConfig != null) {
+					Element parent = parentProcessorConfig.getElement();
+					infoProvider.accept(parent, (pi, pm) -> {
+						MessageHandler<M> parentProcessor = pi.getProcessor();
+						if (parentProcessor != null) {
+							Mono<M> parentMessageMono = Mono.fromSupplier(
+									() -> createMessage(
+										Message.Type.CHILD, 
+										element, 
+										parent,
+										message, 
+										progressMonitor));
+							
+							results.add(parentMessageMono.flatMapMany(parentMessage -> {
+								Flux<M> parentFlux = parentProcessor.process(parentMessage, progressMonitor);
+								return Flux.just(parentMessage).concatWith(parentFlux);					
+							}));
+						}
+					});
+				}					
+				
+				// Children
+				for (Element child: element.getChildren()) {
+					infoProvider.accept(child, (pi, pm) -> {
+						MessageHandler<M> childProcessor = pi.getProcessor();
+						if (childProcessor != null) {
+							Mono<M> childMessageMono = Mono.fromSupplier(
+									() -> createMessage(
+										Message.Type.PARENT, 
+										element, 
+										child,
+										message, 
+										progressMonitor));
+							
+							results.add(childMessageMono.flatMapMany(childMessage -> {
+								Flux<M> childFlux = childProcessor.process(childMessage, progressMonitor);
+								return Flux.just(childMessage).concatWith(childFlux);					
+							}));
+						}
+					});					
+				}
+				
+				return Flux.merge(results);
+			}			
+			
+		};
+		
+	}	
 	
 	protected abstract M createMessage(
 			Message.Type type,

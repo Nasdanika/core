@@ -10,6 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -59,6 +60,12 @@ import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory;
 import org.nasdanika.graph.processor.function.ReflectiveBiFunctionProcessorFactoryProvider;
+import org.nasdanika.graph.processor.message.Message;
+import org.nasdanika.graph.processor.message.Message.Type;
+import org.nasdanika.graph.processor.message.MessageHandler;
+import org.nasdanika.graph.processor.message.MessageHandlerProcessorFactory;
+
+import reactor.core.publisher.Flux;
 
 public class TestDrawio {
 
@@ -912,5 +919,120 @@ public class TestDrawio {
 		Map<String, String> styleMap = org.nasdanika.drawio.Util.loadStyle(styleStr);
 		styleMap.entrySet().forEach(System.out::println);
 	}
+		
+	public class TestMessage implements Message {
+		
+		String value;
+		
+		protected Collection<TestMessage> children = Collections.synchronizedCollection(new ArrayList<>());
+
+		private Type type;
+
+		private TestMessage parent;
+
+		private org.nasdanika.graph.Element sender;
+		
+		public TestMessage(
+				Type type, 
+				TestMessage parent,
+				org.nasdanika.graph.Element sender,
+				String value) {
+			
+			System.out.println("[" + Thread.currentThread().getName() + "] Created a message: " + type + " " + sender + " " + value);
+			this.type = type;
+			this.parent = parent;
+			if (parent != null) {
+				parent.children.add(this);
+			}
+			this.sender = sender;
+			this.value = value;			
+		}
+
+		@Override
+		public Type getType() {
+			return type;
+		}
+
+		@Override
+		public Message getParent() {
+			return parent;
+		}
+
+		@Override
+		public org.nasdanika.graph.Element getSender() {
+			return sender;
+		}
+		
+		@Override
+		public Collection<TestMessage> getChildren() {
+			return children;
+		}
+		
+		public String getValue() {
+			return value;
+		}
+		
+	}		
+
+	/**
+	 * Tests message sending between diagram elements
+	 * @throws Exception
+	 */
+	@Test 
+	public void testMessaging() throws Exception {
+		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
+		
+		NopEndpointProcessorConfigFactory<Function<String,String>> processorConfigFactory = new NopEndpointProcessorConfigFactory<>() {
+		
+			@Override
+			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
+				return false;
+			}
+			
+		};
+		
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		
+		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
+		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
+		
+		
+		MessageHandlerProcessorFactory<TestMessage> processorFactory = new MessageHandlerProcessorFactory<TestMessage>() {
+
+			@Override
+			protected TestMessage createMessage(
+					Type type, 
+					org.nasdanika.graph.Element sender, 
+					org.nasdanika.graph.Element recipient, 
+					TestMessage parent,
+					ProgressMonitor progressMonitor) {
+				
+				if (type == Type.CHILD || type == Type.TARGET) {
+					System.out.println("~~~~");
+					return null;
+				}
+				System.out.println("=====");
+				System.out.println("[" + Thread.currentThread().getName() + "] Creating a message: " + type + " from " + sender + " to " + recipient);
+				return new TestMessage(type, parent, sender, "To " + recipient);
+			}
+			
+		};
+		
+		Map<org.nasdanika.graph.Element, ProcessorInfo<MessageHandler<TestMessage>>> processors = processorFactory.createProcessors(
+				configs
+					.values()
+					.stream()
+					.filter(Objects::nonNull)
+					.toList(), 
+				false, 
+				progressMonitor);
+		
+		TestMessage documentMessage = new TestMessage(Type.HANDLER, null, null, "Message to the document");
+		Flux<TestMessage> messageFlux = processors.get(document).getProcessor().process(documentMessage, progressMonitor);
+				
+		messageFlux.subscribe(message -> {
+			System.out.println("[" + Thread.currentThread().getName() + "] Received a message: " +  message.getSender() + " " + message.getValue());			
+		});
+	}	
 	
 }
