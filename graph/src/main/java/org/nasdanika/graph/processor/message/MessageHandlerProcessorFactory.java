@@ -20,12 +20,18 @@ import org.nasdanika.graph.processor.ProcessorFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * A processor factory with {@link MessageHander} handler and endpoint
  */
 public abstract class MessageHandlerProcessorFactory<M extends Message> extends ProcessorFactory<MessageHandler<M>> {
 		
+	/**
+	 * Processes messages sent to a node. 
+	 * process() processes handler, parent, and child messages.
+	 * @param <M>
+	 */
 	public interface NodeProcessor<M extends Message> extends MessageHandler<M> {
 		
 		Flux<M> processIncoming(Connection connection, M message, ProgressMonitor progressMonitor);
@@ -34,6 +40,11 @@ public abstract class MessageHandlerProcessorFactory<M extends Message> extends 
 		
 	}
 	
+	/**
+	 * Processes messages sent to a connection. 
+	 * process() processes handler, parent, and child messages.
+	 * @param <M>
+	 */
 	public interface ConnectionProcessor<M extends Message> extends MessageHandler<M> {
 		
 		Flux<M> targetProcess(M message, MessageHandler<M> sourceEndpoint, ProgressMonitor progressMonitor);
@@ -112,47 +123,54 @@ public abstract class MessageHandlerProcessorFactory<M extends Message> extends 
 
 			@Override
 			public Flux<M> process(M message, ProgressMonitor progressMonitor) {
+				// Connections only pass messages between source and target.
+				// Parent/child and handler messaging is not supported.
+				return Flux.empty();
+			}
+
+			@Override
+			public Flux<M> targetProcess(M message, MessageHandler<M> sourceEndpoint, ProgressMonitor progressMonitor) {				
 				if (message.isPruned()) {
 					return Flux.empty();
 				}
 				
-				throw new UnsupportedOperationException("Sending messages to connections is not yet supported");
+				Mono<M> sourceMessageMono = Mono.fromSupplier(
+						() -> createMessage(
+							Message.Type.OUTGOING, 
+							connectionProcessorConfig.getElement(), 
+							connectionProcessorConfig.getElement().getSource(),
+							message, 
+							progressMonitor));
 				
-			}
-
-			@Override
-			public Flux<M> targetProcess(M message, MessageHandler<M> sourceEndpoint, ProgressMonitor progressMonitor) {
-				M sourceMessage = createTargetToSourceMessage(connectionProcessorConfig.getElement(), message, progressMonitor);
-				if (sourceMessage == null) {
-					return Flux.empty();
-				}
-				Flux<M> sourceFlux = sourceEndpoint.process(sourceMessage, progressMonitor);
-				return Flux.just(sourceMessage).concatWith(sourceFlux);
+				return sourceMessageMono.flatMapMany(sourceMessage -> {
+					Flux<M> sourceFlux = sourceEndpoint.process(sourceMessage, progressMonitor);
+					return Flux.just(sourceMessage).concatWith(sourceFlux);					
+				});
 			}
 
 			@Override
 			public Flux<M> sourceProcess(M message, MessageHandler<M> targetEndpoint, ProgressMonitor progressMonitor) {
-				M targetMessage = createSourceToTargetMessage(connectionProcessorConfig.getElement(), message, progressMonitor);
-				if (targetMessage == null) {
+				if (message.isPruned()) {
 					return Flux.empty();
 				}
-				Flux<M> targetFlux = targetEndpoint.process(targetMessage, progressMonitor);
-				return Flux.just(targetMessage).concatWith(targetFlux);
+				
+				Mono<M> targetMessageMono = Mono.fromSupplier(
+						() -> createMessage(
+							Message.Type.INCOMING, 
+							connectionProcessorConfig.getElement(), 
+							connectionProcessorConfig.getElement().getTarget(), 							
+							message, 
+							progressMonitor));
+				
+				return targetMessageMono.flatMapMany(targetMessage -> {
+					Flux<M> targetFlux = targetEndpoint.process(targetMessage, progressMonitor);
+					return Flux.just(targetMessage).concatWith(targetFlux);					
+				});
 			}
 			
 		};		
 		
 	}
-	
-	protected abstract M createSourceToTargetMessage(
-			Connection connection,
-			M message, 
-			ProgressMonitor progressMonitor);	
-	
-	protected abstract M createTargetToSourceMessage(
-			Connection connection,
-			M message, 
-			ProgressMonitor progressMonitor);	
 
 	protected NodeProcessor<M> createNodeProcessor(
 			NodeProcessorConfig<MessageHandler<M>, MessageHandler<M>> nodeProcessorConfig,
@@ -192,55 +210,86 @@ public abstract class MessageHandlerProcessorFactory<M extends Message> extends 
 								
 				Node node = nodeProcessorConfig.getElement(); 
 				Collection<Flux<M>> results = new ArrayList<>();
-												
-				// Children
-				for (Element child: node.getChildren()) {
-					infoProvider.accept(child, (pi, pm) -> {
-						MessageHandler<M> childProcessor = pi.getProcessor();
-						if (childProcessor != null) {
-							M childMessage = createChildMessage(node, null, false, child, message, progressMonitor);
-							if (childMessage != null) {
-								results.add(Flux.just(childMessage).concatWith(childProcessor.process(childMessage, progressMonitor)));
-							}							
-						}
-					});					
-				}
-				
-				// Incoming
-				for (Entry<Connection, MessageHandler<M>> ie: incomingEndpoints.entrySet()) {
-					MessageHandler<M> handler = ie.getValue();
-					if (handler != null) {
-						M connectionMessage = createConnectionMessage(
-								node, 
-								source, 
-								isSourceOutgoing, 
-								ie.getKey(), 
-								false, 
-								message, 
-								progressMonitor);
-						
-						if (connectionMessage != null) {
-							results.add(Flux.just(connectionMessage).concatWith(handler.process(connectionMessage, progressMonitor)));
-						}						
+
+				if (!message.isPruned()) {
+					// Parent
+					Element parent = nodeProcessorConfig.getParentProcessorConfig().getElement();
+					if (parent != null) {
+						infoProvider.accept(parent, (pi, pm) -> {
+							MessageHandler<M> parentProcessor = pi.getProcessor();
+							if (parentProcessor != null) {
+								Mono<M> parentMessageMono = Mono.fromSupplier(
+										() -> createMessage(
+											Message.Type.CHILD, 
+											node, 
+											parent,
+											message, 
+											progressMonitor));
+								
+								results.add(parentMessageMono.flatMapMany(parentMessage -> {
+									Flux<M> parentFlux = parentProcessor.process(parentMessage, progressMonitor);
+									return Flux.just(parentMessage).concatWith(parentFlux);					
+								}));
+							}
+						});
+					}					
+					
+					// Children
+					for (Element child: node.getChildren()) {
+						infoProvider.accept(child, (pi, pm) -> {
+							MessageHandler<M> childProcessor = pi.getProcessor();
+							if (childProcessor != null) {
+								Mono<M> childMessageMono = Mono.fromSupplier(
+										() -> createMessage(
+											Message.Type.PARENT, 
+											node, 
+											child,
+											message, 
+											progressMonitor));
+								
+								results.add(childMessageMono.flatMapMany(childMessage -> {
+									Flux<M> childFlux = childProcessor.process(childMessage, progressMonitor);
+									return Flux.just(childMessage).concatWith(childFlux);					
+								}));
+							}
+						});					
 					}
-				}
-				
-				// Outgoing				
-				for (Entry<Connection, MessageHandler<M>> oe: outgoingEndpoints.entrySet()) {
-					MessageHandler<M> handler = oe.getValue();
-					if (handler != null) {
-						M connectionMessage = createConnectionMessage(
-								node, 
-								source, 
-								isSourceOutgoing, 
-								oe.getKey(), 
-								true, 
-								message, 
-								progressMonitor);
-						
-						if (connectionMessage != null) {
-							results.add(Flux.just(connectionMessage).concatWith(handler.process(connectionMessage, progressMonitor)));
-						}						
+					
+					// Incoming
+					for (Entry<Connection, MessageHandler<M>> ie: incomingEndpoints.entrySet()) {
+						MessageHandler<M> handler = ie.getValue();
+						if (handler != null) {
+							Mono<M> incomingMessageMono = Mono.fromSupplier(
+									() -> createMessage(
+										Message.Type.TARGET, 
+										node,
+										ie.getKey(),
+										message, 
+										progressMonitor));
+							
+							results.add(incomingMessageMono.flatMapMany(incomingMessage -> {
+								Flux<M> incomingFlux = handler.process(incomingMessage, progressMonitor);
+								return Flux.just(incomingMessage).concatWith(incomingFlux);					
+							}));
+						}
+					}
+					
+					// Outgoing				
+					for (Entry<Connection, MessageHandler<M>> oe: outgoingEndpoints.entrySet()) {
+						MessageHandler<M> handler = oe.getValue();
+						if (handler != null) {
+							Mono<M> outgoingMessageMono = Mono.fromSupplier(
+									() -> createMessage(
+										node, 
+										Message.Type.SOURCE, 
+										message, 
+										progressMonitor));
+							
+							results.add(incomingMessageMono.flatMapMany(incomingMessage -> {
+								Flux<M> incomingFlux = handler.process(incomingMessage, progressMonitor);
+								return Flux.just(incomingMessage).concatWith(incomingFlux);					
+							}));
+						}
 					}
 				}
 				
@@ -250,41 +299,12 @@ public abstract class MessageHandlerProcessorFactory<M extends Message> extends 
 		};
 		
 	}
-
-	/**
-	 * Creates a message to send to a connection (incoming or outgoing) 
-	 * @param source Connection from which the argument message came from. Can be null if activated by the client code through the processor or by the parent.
-	 * @param isSourceOutgoing true if the source connection is outgoing, so the message arrived from its start
-	 * @param target Connection to which to send the returned message if it is not null
-	 * @param isTargetOutgoing true if the target is outgoing, so the message will be send to its start
-	 * @param message Source message
-	 * @param progressMonitor
-	 * @return
-	 */
-	protected abstract M createConnectionMessage(
-			Node node,
-			Connection source,
-			boolean isSourceOutgoing,
-			Connection target,
-			boolean isTargetOutgoing,
-			M message, 
-			ProgressMonitor progressMonitor);
 	
-	/**
-	 * Creates a message to send to a child
-	 * @param source Connection from which the argument message came from. Can be null if activated by the client code through the processor or by the parent.
-	 * @param isSourceOutgoing true if the source connection is outgoing, so the message arrived from its start
-	 * @param child Child to send the returned message to if it is not null
-	 * @param message Source message
-	 * @param progressMonitor
-	 * @return
-	 */
-	protected abstract M createChildMessage(
-			Node node,
-			Connection source,
-			boolean isSourceOutgoing,
-			Element child,
-			M message, 
-			ProgressMonitor progressMonitor);		
+	protected abstract M createMessage(
+			Message.Type type,
+			Element sender,
+			Element recipient,
+			M parent, 
+			ProgressMonitor progressMonitor);	
 	
 }
