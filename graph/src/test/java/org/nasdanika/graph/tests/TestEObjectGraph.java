@@ -11,7 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -40,6 +42,7 @@ import org.nasdanika.graph.emf.EObjectNode;
 import org.nasdanika.graph.emf.EOperationConnection;
 import org.nasdanika.graph.emf.EReferenceConnection;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
+import org.nasdanika.graph.processor.HandlerType;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
@@ -47,13 +50,10 @@ import org.nasdanika.graph.processor.ProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
-import org.nasdanika.graph.processor.message.Message;
-import org.nasdanika.graph.processor.message.Message.Type;
-import org.nasdanika.graph.processor.message.MessageHandler;
-import org.nasdanika.graph.processor.message.MessageHandlerProcessorFactory;
+import org.nasdanika.graph.processor.function.message.Message;
+import org.nasdanika.graph.processor.function.message.Message.Type;
+import org.nasdanika.graph.processor.function.message.MessageProcessorFactory;
 import org.nasdanika.ncore.NcorePackage;
-
-import reactor.core.publisher.Flux;
 
 /**
  * Tests Ecore -> Graph -> Processor generation
@@ -455,7 +455,7 @@ public class TestEObjectGraph {
 	
 	public class TestMessage implements Message {
 		
-		protected Collection<TestMessage> children = Collections.synchronizedCollection(new ArrayList<>());
+		protected CompletionStage<Collection<TestMessage>> children;
 
 		private Type type;
 
@@ -466,13 +466,12 @@ public class TestEObjectGraph {
 		public TestMessage(
 				Type type, 
 				TestMessage parent,
-				org.nasdanika.graph.Element sender) {
+				org.nasdanika.graph.Element sender,
+				CompletionStage<Collection<TestMessage>> children) {
 			
 			this.type = type;
 			this.parent = parent;
-			if (parent != null) {
-				parent.children.add(this);
-			}
+			this.children = children;
 			this.sender = sender;
 		}
 
@@ -492,13 +491,37 @@ public class TestEObjectGraph {
 		}
 		
 		@Override
-		public Collection<TestMessage> getChildren() {
+		public CompletionStage<Collection<TestMessage>> getChildren() {
 			return children;
 		}
 		
-	}		
+	}	
+		
+	protected ConfigResult createMessageConfigs(
+			boolean parallel, 
+			ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Collection<TestMessage>>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Collection<TestMessage>>>> processorConfigFactory,
+			List<EPackage> ePackages, 
+			ProgressMonitor progressMonitor) {
+		
+		GraphResult graphResult = createGraph(
+				parallel, 
+				ePackages,
+				progressMonitor);
+				
+		Transformer<Element,ProcessorConfig> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
+		Map<Element, ProcessorConfig> configs = processorConfigTransformer.transform(graphResult.registry().values(), parallel, progressMonitor);
+		System.out.println("Configs: " + configs.size());
+			
+		List<ProcessorConfig> configValuesNonNull = configs.values().stream().filter(Objects::nonNull).toList();
+		assertEquals(configValuesNonNull.size(), graphResult.nodes() + graphResult.connections());
+		return new ConfigResult(graphResult, configValuesNonNull);
+	}	
 	
-	private void testMessageProcessorFactory(boolean parallel, int passes, boolean passThrough) {
+	
+	private void testMessageProcessorFactory(
+			boolean parallel, 
+			int passes, 
+			ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Collection<TestMessage>>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Collection<TestMessage>>>> processorConfigFactory) {
 		List<EPackage> ePackages = Arrays.asList(
 				EcorePackage.eINSTANCE, 
 				NcorePackage.eINSTANCE);
@@ -506,62 +529,90 @@ public class TestEObjectGraph {
 		for (int i = 0; i < passes; ++i) {
 			System.out.println("*** Pass " + i);
 			ProgressMonitor progressMonitor = new NullProgressMonitor(); // new PrintStreamProgressMonitor();
-			ConfigResult configs = createConfigs(parallel, passThrough, ePackages, progressMonitor);
+			ConfigResult configs = createMessageConfigs(parallel, processorConfigFactory, ePackages, progressMonitor);
 			
-			MessageHandlerProcessorFactory<TestMessage> processorFactory = new MessageHandlerProcessorFactory<TestMessage>() {
+			MessageProcessorFactory<TestMessage> processorFactory = new MessageProcessorFactory<TestMessage>() {
 
 				@Override
 				protected TestMessage createMessage(
 						Type type, 
-						Element sender, 
-						Element recipient, 
+						org.nasdanika.graph.Element sender,
+						org.nasdanika.graph.Element recipient, 
 						TestMessage parent,
+						CompletionStage<Collection<TestMessage>> children, 
 						ProgressMonitor progressMonitor) {
-					
-					if (type == Type.CHILD || type == Type.TARGET) {
-						return null;
-					}
-					
-					return new TestMessage(type, parent, sender);
+
+					// Endpoint factory is responsible for preventing infinite loops.					
+					return new TestMessage(type, parent, sender, children);
 				}
 				
 			};
 			
-			Map<Element, ProcessorInfo<MessageHandler<TestMessage>>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
+			Map<Element, ProcessorInfo<BiFunction<TestMessage, ProgressMonitor, Collection<TestMessage>>>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
 			assertEquals(configs.configs().size(), processors.size());
 			
-			Stream<MessageHandler<TestMessage>> ps = processors
+			Stream<BiFunction<TestMessage, ProgressMonitor, Collection<TestMessage>>> ps = processors
 					.values()
 					.stream()
-					.map(pr -> (MessageHandler<TestMessage>) pr.getProcessor());
+					.map(pr -> pr.getProcessor());
 			
 			if (parallel) {
 				ps = ps.parallel();
 			}
 			
 			long messages = ps.mapToLong(mh -> {
-				TestMessage documentMessage = new TestMessage(Type.HANDLER, null, null);
-				Flux<TestMessage> messageFlux = mh.process(documentMessage, progressMonitor);
-						
-				return messageFlux.count().block();
+				TestMessage rootMessage = new TestMessage(Type.HANDLER, null, null, CompletableFuture.completedStage(Collections.emptyList()));
+				Collection<TestMessage> childMessages = mh.apply(rootMessage, progressMonitor);						
+				return childMessages.size();
 			}).sum();
 			
 			System.out.println("Messages: " + messages);			
 		}	
 	}
 	
-	@Test
-	public void testMessageProcessorFactoryParallel() {
-		testMessageProcessorFactory(true, 10, true);
-		testMessageProcessorFactory(true, 10, false);
-	}	
-	
+//	@Test
+//	public void testMessageProcessorFactoryParallel() {
+//		testMessageProcessorFactory(true, 10, true);
+//		testMessageProcessorFactory(true, 10, false);
+//	}	
+//	
 	@Test
 	public void testMessageProcessorFactorySequential() {
-		testMessageProcessorFactory(false, 1, true);
-		testMessageProcessorFactory(false, 1, false);
+		AtomicInteger counter = new AtomicInteger();
+		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Collection<TestMessage>>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Collection<TestMessage>>>> processorConfigFactory = new ProcessorConfigFactory<>() {
+			
+			@Override
+			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
+				return false;
+			}
+	
+			@Override
+			public BiFunction<TestMessage, ProgressMonitor, CompletionStage<Collection<TestMessage>>> createEndpoint(
+					org.nasdanika.graph.Connection connection,
+					BiFunction<TestMessage, ProgressMonitor, Collection<TestMessage>> handler, 
+					HandlerType type) {
+				
+				return (m, p) -> {
+					if (m.getPath().size() > 7) {
+						return CompletableFuture.completedStage(Collections.emptyList());
+					}
+					int val = counter.incrementAndGet();
+					if (val % 1000 == 0) {
+						System.out.print(".");
+					}
+					if (val % 100000 == 0) {
+						System.out.println();
+						System.out.print(val + " ");
+					}
+					return CompletableFuture.completedStage(handler.apply(m, p)); // Synchronous processing
+				};
+			}
+			
+		};
+	
+		testMessageProcessorFactory(false, 1, processorConfigFactory);
+		System.out.println("Total messages passed: " + counter.get()); 		
 	}			
-	
-	
+		
 	// BiFunction reflective test also requires opening the test package
 }

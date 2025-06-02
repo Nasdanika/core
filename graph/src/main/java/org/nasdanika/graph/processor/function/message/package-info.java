@@ -3,4 +3,4 @@
  * to each other over connections. 
  * One application is computing node distance/similarity.  
  */
-package org.nasdanika.graph.processor.message;
+package org.nasdanika.graph.processor.function.message;

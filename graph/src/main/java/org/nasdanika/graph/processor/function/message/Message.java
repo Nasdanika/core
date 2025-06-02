@@ -1,8 +1,10 @@
-package org.nasdanika.graph.processor.message;
+package org.nasdanika.graph.processor.function.message;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletionStage;
 
 import org.nasdanika.graph.Element;
 
@@ -10,7 +12,7 @@ import org.nasdanika.graph.Element;
  * A message from one element to another.
  * 
  */
-public interface Message extends Element {
+public interface Message {
 	
 	/**
 	 * Message type
@@ -22,18 +24,6 @@ public interface Message extends Element {
 		 * In this case the parent message can be null.
 		 */
 		HANDLER,
-		
-		/**
-		 * Parent element sent a message to its child.
-		 * Sender is the recipient's parent. 
-		 */
-		PARENT,
-		
-		/**
-		 * Child element sent a message to its parent.
-		 * Sender is a recipient's child. 
-		 */
-		CHILD,
 		
 		/**
 		 * Incoming connection sent a message from its end to this node, which is the connection's target.
@@ -86,5 +76,7 @@ public interface Message extends Element {
 		path.add(this);
 		return Collections.unmodifiableList(path);
 	}
+	
+	CompletionStage<? extends Collection<? extends Message>> getChildren();
 	
 }

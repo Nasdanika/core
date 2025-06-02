@@ -19,7 +19,6 @@ import org.nasdanika.graph.processor.ProcessorInfo;
 
 /**
  * A processor factory with {@link BiFunction} handler and endpoint
- * @param <P> Processor type
  * @param <T> Handler parameter type
  * @param <U> Handler return type
  * @param <V> Endpoint parameter type
