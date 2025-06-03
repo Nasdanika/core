@@ -12,9 +12,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.RunnableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -690,6 +697,101 @@ public class TestEObjectGraph {
 		testMessageProcessorFactory(false, 1, processorConfigFactory);		
 		Thread.sleep(30000);
 		System.out.println("Total messages passed: " + counter.get()); 		
+	}			
+	
+	/**
+	 * Using CompletableFuture async
+	 * @throws InterruptedException 
+	 */
+	@Test
+	public void testMessageProcessorFactoryThreadPool() throws Exception {				
+		AtomicInteger counter = new AtomicInteger();
+		
+		BlockingQueue<Runnable> processingQueue = new PriorityBlockingQueue<>();		
+		ExecutorService executorService = new ThreadPoolExecutor(5, 20, 60L, TimeUnit.SECONDS, processingQueue) {
+			
+			AtomicInteger taskCounter = new AtomicInteger();
+			
+			class ComparableFutureTask<V> extends FutureTask<V> implements Comparable<ComparableFutureTask<V>> {
+				
+				int id = taskCounter.incrementAndGet();
+
+				@Override
+				public int compareTo(ComparableFutureTask<V> o) {
+					return o.id - id; // tasks which were submitted later shall execute first - depth first
+				}
+
+				protected ComparableFutureTask(Callable<V> callable) {
+					super(callable);
+				}
+
+				protected ComparableFutureTask(Runnable runnable, V result) {
+					super(runnable, result);
+				}
+				
+			}				
+						
+			@Override
+			protected <T> RunnableFuture<T> newTaskFor(Runnable runnable, T value) {								
+				return new ComparableFutureTask<T>(runnable, value);
+			}
+			
+			@Override
+			protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
+				return new ComparableFutureTask<T>(callable);
+			}
+			
+		};						
+		
+		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> processorConfigFactory = new ProcessorConfigFactory<>() {
+			
+			@Override
+			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
+				return false;
+			}
+	
+			@Override
+			public BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>> createEndpoint(
+					Connection connection, 
+					BiFunction<TestMessage, ProgressMonitor, Integer> handler,
+					HandlerType type) {
+				
+				return (m, p) -> {
+					if (m.getHops() > 5) {
+						return CompletableFuture.completedStage(0);
+					}
+					int val = counter.incrementAndGet();
+					if (val % 1000 == 0) {
+						System.out.print(".");
+					}
+					if (val % 100000 == 0) {
+						System.out.println();
+						System.out.print(val + " " + processingQueue.size() + " ");
+					}
+					
+					CompletableFuture<Integer> result = new CompletableFuture<>();
+					executorService.submit(() -> {
+						Integer handlerResult = handler.apply(m, p);
+						result.complete(handlerResult);
+					});
+					return result;
+				};
+			}
+
+		};	
+		
+		int mainProcessedCounter = 0;
+		testMessageProcessorFactory(false, 1, processorConfigFactory);		
+		// Processing the queue in this thread to "help" the thread pool. Executing a work item may create more work items. Processing until there are not more items
+		Runnable workItem;
+		while ((workItem = processingQueue.poll()) != null) {
+			workItem.run();
+			++mainProcessedCounter;
+		}				
+		
+		executorService.shutdown();
+		System.out.println("Total messages passed: " + counter.get()); 		
+		System.out.println("Main messages passed: " + mainProcessedCounter); 		
 	}			
 		
 	// BiFunction reflective test also requires opening the test package
