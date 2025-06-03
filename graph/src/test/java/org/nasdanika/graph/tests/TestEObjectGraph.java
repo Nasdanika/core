@@ -491,8 +491,7 @@ public class TestEObjectGraph {
 	private void testMessageProcessorFactory(
 			boolean parallel, 
 			int passes, 
-			ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> processorConfigFactory,
-			Queue<Runnable> processingQueue) {
+			ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> processorConfigFactory) {
 		List<EPackage> ePackages = Arrays.asList(
 				EcorePackage.eINSTANCE, 
 				NcorePackage.eINSTANCE);
@@ -567,11 +566,6 @@ public class TestEObjectGraph {
 			
 			ps.forEach(mh -> {
 				mh.apply(new TestMessage(0), progressMonitor);
-				// Processing the queue. Executing a work item may create more work items. Processing until there are not more items
-				Runnable workItem;
-				while ((workItem = processingQueue.poll()) != null) {
-					workItem.run();
-				}				
 			});						
 		}	
 	}
@@ -612,7 +606,8 @@ public class TestEObjectGraph {
 	
 			@Override
 			public BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>> createEndpoint(
-					Connection connection, BiFunction<TestMessage, ProgressMonitor, Integer> handler,
+					Connection connection, 
+					BiFunction<TestMessage, ProgressMonitor, Integer> handler,
 					HandlerType type) {
 				
 				return (m, p) -> {
@@ -643,7 +638,57 @@ public class TestEObjectGraph {
 			}
 
 		};	
-		testMessageProcessorFactory(false, 1, processorConfigFactory, processingQueue);		
+		testMessageProcessorFactory(false, 1, processorConfigFactory);		
+		// Processing the queue. Executing a work item may create more work items. Processing until there are not more items
+		Runnable workItem;
+		while ((workItem = processingQueue.poll()) != null) {
+			workItem.run();
+		}				
+		
+		System.out.println("Total messages passed: " + counter.get()); 		
+	}
+	
+	/**
+	 * Using CompletableFuture async
+	 * @throws InterruptedException 
+	 */
+	@Test
+	public void testMessageProcessorFactoryAsync() throws InterruptedException {				
+		AtomicInteger counter = new AtomicInteger();
+		
+		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> processorConfigFactory = new ProcessorConfigFactory<>() {
+			
+			@Override
+			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
+				return false;
+			}
+	
+			@Override
+			public BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>> createEndpoint(
+					Connection connection, 
+					BiFunction<TestMessage, ProgressMonitor, Integer> handler,
+					HandlerType type) {
+				
+				return (m, p) -> {
+					if (m.getHops() > 5) {
+						return CompletableFuture.completedStage(0);
+					}
+					int val = counter.incrementAndGet();
+					if (val % 1000 == 0) {
+						System.out.print(".");
+					}
+					if (val % 100000 == 0) {
+						System.out.println();
+						System.out.print(val);
+					}
+					
+					return CompletableFuture.supplyAsync(() -> handler.apply(m, p));
+				};
+			}
+
+		};	
+		testMessageProcessorFactory(false, 1, processorConfigFactory);		
+		Thread.sleep(30000);
 		System.out.println("Total messages passed: " + counter.get()); 		
 	}			
 		
