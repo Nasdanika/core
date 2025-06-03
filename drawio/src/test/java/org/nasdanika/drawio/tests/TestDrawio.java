@@ -19,7 +19,6 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -61,10 +60,8 @@ import org.nasdanika.graph.processor.ProcessorFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory;
+import org.nasdanika.graph.processor.function.MessageProcessorFactory;
 import org.nasdanika.graph.processor.function.ReflectiveBiFunctionProcessorFactoryProvider;
-import org.nasdanika.graph.processor.function.message.Message;
-import org.nasdanika.graph.processor.function.message.MessageProcessorFactory;
-import org.nasdanika.graph.processor.function.message.Message.Type;
 
 public class TestDrawio {
 
@@ -919,55 +916,47 @@ public class TestDrawio {
 		styleMap.entrySet().forEach(System.out::println);
 	}
 		
-	public class TestMessage implements Message {
+	public class TestMessage {
 		
 		String value;
 		
-		protected CompletionStage<Collection<TestMessage>> children;
-
-		private Type type;
-
 		private TestMessage parent;
 
 		private org.nasdanika.graph.Element sender;
+
+		private int hops;
 		
 		public TestMessage(
-				Type type, 
-				TestMessage parent,
-				org.nasdanika.graph.Element sender,
-				CompletionStage<Collection<TestMessage>> children,
-				String value) {
+			TestMessage parent,
+			org.nasdanika.graph.Element sender,
+			String value) {
 			
-			System.out.println("[" + Thread.currentThread().getName() + "] Created a message: " + type + " " + sender + " " + value);
-			this.type = type;
+			this.hops = parent == null ? 0 : parent.getHops() + 1;
 			this.parent = parent;
-			this.children = children;
 			this.sender = sender;
 			this.value = value;			
+			System.out.println("[" + Thread.currentThread().getName() + "] Created a message: " + hops + " " + sender + " " + value);
 		}
-
-		@Override
-		public Type getType() {
-			return type;
+		
+		public int getHops() {
+			return hops;
 		}
-
-		@Override
-		public Message getParent() {
+		
+		public String getValue() {
+			return value;
+		}
+		
+		public TestMessage getParent() {
 			return parent;
 		}
-
-		@Override
+		
 		public org.nasdanika.graph.Element getSender() {
 			return sender;
 		}
 		
 		@Override
-		public CompletionStage<Collection<TestMessage>> getChildren() {
-			return children;
-		}
-		
-		public String getValue() {
-			return value;
+		public String toString() {
+			return "[" + hops + "] " + value + " (" + sender + ")";
 		}
 		
 	}		
@@ -980,7 +969,7 @@ public class TestDrawio {
 	public void testMessaging() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 		
-		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Collection<TestMessage>>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Collection<TestMessage>>>> processorConfigFactory = new ProcessorConfigFactory<>() {
+		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Void>, BiFunction<TestMessage, ProgressMonitor, Void>> processorConfigFactory = new ProcessorConfigFactory<>() {
 		
 			@Override
 			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
@@ -988,14 +977,14 @@ public class TestDrawio {
 			}
 
 			@Override
-			public BiFunction<TestMessage, ProgressMonitor, CompletionStage<Collection<TestMessage>>> createEndpoint(
-					org.nasdanika.graph.Connection connection,
-					BiFunction<TestMessage, ProgressMonitor, Collection<TestMessage>> handler, 
+			public BiFunction<TestMessage, ProgressMonitor, Void> createEndpoint(
+					org.nasdanika.graph.Connection connection, 
+					BiFunction<TestMessage, ProgressMonitor, Void> handler,
 					HandlerType type) {
-				
 				return (m, p) -> {
 					System.out.println("Passing message through " + connection + ", handler type: " + type);					
-					return CompletableFuture.completedStage(handler.apply(m, p)); // Synchronous processing
+					handler.apply(m, p);
+					return null;
 				};
 			}
 			
@@ -1006,29 +995,59 @@ public class TestDrawio {
 		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
 		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
 				
-		MessageProcessorFactory<TestMessage> processorFactory = new MessageProcessorFactory<TestMessage>() {
+		MessageProcessorFactory<TestMessage,Void,TestMessage,Void> processorFactory = new MessageProcessorFactory<TestMessage,Void,TestMessage,Void>() {
 
 			@Override
-			protected TestMessage createMessage(
-					Type type, 
-					org.nasdanika.graph.Element sender,
-					org.nasdanika.graph.Element recipient, 
+			protected TestMessage createSourceMessage(
+					org.nasdanika.graph.Connection sender, 
 					TestMessage parent,
-					CompletionStage<Collection<TestMessage>> children, 
+					CompletionStage<Void> result, 
+					ProgressMonitor progressMonitor) {
+				return null;
+			}
+
+			@Override
+			protected TestMessage createTargetMessage(
+					org.nasdanika.graph.Connection sender, 
+					TestMessage parent,
+					CompletionStage<Void> result, 
+					ProgressMonitor progressMonitor) {
+				return new TestMessage(parent, sender, "Target message");
+			}
+
+			@Override
+			protected TestMessage toEndpointArgument(TestMessage message) {
+				return message;
+			}
+
+			@Override
+			protected Void createConnectionResult(Void endpointResult) {
+				return endpointResult;
+			}
+
+			@Override
+			protected TestMessage createConnectionMessage(
+					org.nasdanika.graph.Connection activator,
+					boolean incomingActivator, 
+					org.nasdanika.graph.Node sender,
+					org.nasdanika.graph.Connection recipient, 
+					boolean incomingRrecipient, TestMessage parent,
+					CompletionStage<Void> result, 
 					ProgressMonitor progressMonitor) {
 				
-				if (type == Type.TARGET && parent.getPath().size() > 5) {
-					System.out.println("~~~~");
-					return null;
-				}
-				System.out.println("---");
-				System.out.println("[" + Thread.currentThread().getName() + "] Creating a message: " + type + " from " + sender + " to " + recipient);
-				return new TestMessage(type, parent, sender, children, "To " + recipient);
+				return new TestMessage(parent, sender, "Node message to " + recipient);
+			}
+
+			@Override
+			protected Void createNodeResult(
+				Map<org.nasdanika.graph.Connection, Void> incomingResults,
+				Map<org.nasdanika.graph.Connection, Void> outgoingResults) {
+				return null;
 			}
 			
 		};
 		
-		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<TestMessage, ProgressMonitor, Collection<TestMessage>>>> processors = processorFactory.createProcessors(
+		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<TestMessage, ProgressMonitor, Void>>> processors = processorFactory.createProcessors(
 				configs					
 					.values()
 					.stream()
@@ -1037,15 +1056,11 @@ public class TestDrawio {
 				false, 
 				progressMonitor);
 		
-		for (Entry<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<TestMessage, ProgressMonitor, Collection<TestMessage>>>> pe: processors.entrySet()) {
+		for (Entry<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<TestMessage, ProgressMonitor, Void>>> pe: processors.entrySet()) {
 			if (pe.getKey() instanceof Node) {
 				System.out.println("===");
-				TestMessage nodeMessage = new TestMessage(Type.HANDLER, null, null, CompletableFuture.completedStage(Collections.emptyList()), "Root message to " + pe.getKey());
-				Collection<TestMessage> messages = processors.get(pe.getKey()).getProcessor().apply(nodeMessage, progressMonitor);
-						
-				messages.forEach(message -> {
-					System.out.println("[" + Thread.currentThread().getName() + "] Received a message: " +  message.getSender() + " " + message.getValue());			
-				});
+				TestMessage nodeMessage = new TestMessage(null, null, "Root message to " + pe.getKey());
+				processors.get(pe.getKey()).getProcessor().apply(nodeMessage, progressMonitor);
 			}
 		}
 	}	
