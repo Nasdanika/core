@@ -25,8 +25,6 @@ import org.nasdanika.graph.processor.ProcessorInfo;
  * @param <W> Endpoint return type
  */
 public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcessorFactory<T,U,V,W> {
-	
-//	protected record ResultRecord<W>(Element element, MessageType type, CompletionStage<W> result) {}
 
 	/**
 	 * Creates a message to be sent to the connection source
@@ -225,21 +223,36 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 			
 			@Override
 			public U apply(T input, ProgressMonitor progressMonitor) {
+				onApply(nodeProcessorConfig.getElement(), input, progressMonitor);
 				return sendMessage(null, false, input, progressMonitor);
 			}				
 
 			@Override
 			public U applyIncoming(Connection connection, T input, ProgressMonitor progressMonitor) {
+				onApplyIncoming(nodeProcessorConfig.getElement(), connection, input, progressMonitor);
 				return sendMessage(connection, true, input, progressMonitor);
 			}
 
 			@Override
 			public U applyOutgoing(Connection connection, T input, ProgressMonitor progressMonitor) {
+				onApplyOutgoing(nodeProcessorConfig.getElement(), connection, input, progressMonitor);
 				return sendMessage(connection, false, input, progressMonitor);
 			}
 			
 		};
 	}
+	
+	protected void onApply(Node node, T input, ProgressMonitor progressMonitor) {
+		
+	}				
+
+	protected void onApplyIncoming(Node node, Connection connection, T input, ProgressMonitor progressMonitor) {
+		
+	}
+
+	protected void onApplyOutgoing(Node node, Connection connection, T input, ProgressMonitor progressMonitor) {
+		
+	}	
 		
 	protected abstract U createNodeResult(Map<Connection, W> incomingResults, Map<Connection, W> outgoingResults);	
 	

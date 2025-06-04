@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Command, option, or parameter description
- * The description is add to the documentation action after the usage information.
+ * The description is to add to the documentation action after the usage information.
  * @author Pavel
  *
  */
