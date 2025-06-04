@@ -131,7 +131,7 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 	 * @param incomingActivator true if the connection is incoming
 	 * @param sender sender node
 	 * @param recipient recipient connection
-	 * @param incomingRrecipient true for incoming connections 
+	 * @param incomingRecipient true for incoming connections 
 	 * @param parent parent message
 	 * @param result
 	 * @param progressMonitor
@@ -142,7 +142,7 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 			boolean incomingActivator,
 			Node sender,
 			Connection recipient,
-			boolean incomingRrecipient,
+			boolean incomingRecipient,
 			T parent, 
 			CompletionStage<W> result,
 			ProgressMonitor progressMonitor);	
