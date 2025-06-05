@@ -995,10 +995,11 @@ public class TestDrawio {
 		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
 		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
 				
-		MessageProcessorFactory<TestMessage,Void,TestMessage,Void> processorFactory = new MessageProcessorFactory<TestMessage,Void,TestMessage,Void>() {
+		MessageProcessorFactory<TestMessage,Void,TestMessage,Void,Void,Void> processorFactory = new MessageProcessorFactory<TestMessage,Void,TestMessage,Void,Void,Void>() {
 
 			@Override
 			protected TestMessage createSourceMessage(
+					Void state,
 					org.nasdanika.graph.Connection sender, 
 					TestMessage parent,
 					CompletionStage<Void> result, 
@@ -1008,6 +1009,7 @@ public class TestDrawio {
 
 			@Override
 			protected TestMessage createTargetMessage(
+					Void state,
 					org.nasdanika.graph.Connection sender, 
 					TestMessage parent,
 					CompletionStage<Void> result, 
@@ -1027,6 +1029,7 @@ public class TestDrawio {
 
 			@Override
 			protected TestMessage createConnectionMessage(
+					Void state,
 					org.nasdanika.graph.Connection activator,
 					boolean incomingActivator, 
 					org.nasdanika.graph.Node sender,

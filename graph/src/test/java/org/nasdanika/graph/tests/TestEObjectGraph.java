@@ -508,11 +508,13 @@ public class TestEObjectGraph {
 			ProgressMonitor progressMonitor = new NullProgressMonitor(); // new PrintStreamProgressMonitor();
 			ConfigResult configs = createMessageConfigs(parallel, processorConfigFactory, ePackages, progressMonitor);
 			
-			MessageProcessorFactory<TestMessage,Integer,TestMessage,CompletionStage<Integer>> processorFactory = new MessageProcessorFactory<TestMessage,Integer,TestMessage,CompletionStage<Integer>>() {
+			MessageProcessorFactory<TestMessage,Integer,TestMessage,CompletionStage<Integer>,Void,Void> processorFactory = new MessageProcessorFactory<TestMessage,Integer,TestMessage,CompletionStage<Integer>,Void,Void>() {
 
 				@Override
 				protected TestMessage createSourceMessage(
-						Connection sender, TestMessage parent,
+						Void state,
+						Connection sender,
+						TestMessage parent,
 						CompletionStage<CompletionStage<Integer>> result, 
 						ProgressMonitor progressMonitor) {
 					return null;
@@ -520,6 +522,7 @@ public class TestEObjectGraph {
 
 				@Override
 				protected TestMessage createTargetMessage(
+						Void state,
 						Connection sender, 
 						TestMessage parent,
 						CompletionStage<CompletionStage<Integer>> result, 
@@ -539,6 +542,7 @@ public class TestEObjectGraph {
 
 				@Override
 				protected TestMessage createConnectionMessage(
+						Void state,
 						Connection activator, 
 						boolean incomingActivator,
 						Node sender, 

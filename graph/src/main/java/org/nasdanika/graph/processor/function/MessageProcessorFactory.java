@@ -24,7 +24,7 @@ import org.nasdanika.graph.processor.ProcessorInfo;
  * @param <V> First endpoint argument type 
  * @param <W> Endpoint return type
  */
-public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcessorFactory<T,U,V,W> {
+public abstract class MessageProcessorFactory<T,U,V,W,NS,CS> extends BiFunctionProcessorFactory<T,U,V,W> {
 
 	/**
 	 * Creates a message to be sent to the connection source
@@ -35,6 +35,7 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 	 * @return
 	 */
 	protected abstract T createSourceMessage(
+			CS processorState,
 			Connection sender,
 			T parent, 
 			CompletionStage<W> result,
@@ -49,10 +50,21 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 	 * @return
 	 */
 	protected abstract T createTargetMessage(
+			CS processorState,
 			Connection sender,
 			T parent, 
 			CompletionStage<W> result,
 			ProgressMonitor progressMonitor);
+	
+	protected CS createConnectionProcessorState(
+			ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> connectionProcessorConfig,
+			boolean parallel,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
+			ProgressMonitor progressMonitor) {
+		
+		return null;
+	}	
 	
 	@Override
 	protected ConnectionProcessor<T, U, V, W> createConnectionProcessor(
@@ -61,12 +73,19 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor) {
+	
+		CS state = createConnectionProcessorState(
+				connectionProcessorConfig, 
+				parallel, 
+				infoProvider, 
+				endpointWiringStageConsumer, 
+				progressMonitor);
 		
 		return new ConnectionProcessor<T,U,V,W>() {
 
 			@Override
 			public U apply(T message, ProgressMonitor progressMonitor) {
-				// Connections only pass messages beween source and target
+				// Connections only pass messages between source and target
 				return createEmptyResult();
 			}
 
@@ -79,6 +98,7 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 				CompletableFuture<W> resultCF = new CompletableFuture<>();
 				// Sending a message to the source node
 				T sourceMessage = createSourceMessage(
+						state,
 					connectionProcessorConfig.getElement(), 
 					input, 
 					resultCF,
@@ -101,6 +121,7 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 				CompletableFuture<W> resultCF = new CompletableFuture<>();
 				// Sending a message to the target node
 				T targetMessage = createTargetMessage(
+						state,
 					connectionProcessorConfig.getElement(), 
 					input, 
 					resultCF,
@@ -138,6 +159,7 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 	 * @return
 	 */
 	protected abstract T createConnectionMessage(
+			NS processorState,
 			Connection activator,
 			boolean incomingActivator,
 			Node sender,
@@ -145,7 +167,19 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 			boolean incomingRecipient,
 			T parent, 
 			CompletionStage<W> result,
-			ProgressMonitor progressMonitor);	
+			ProgressMonitor progressMonitor);
+	
+	protected NS createNodeProcessorState(
+			NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> nodeProcessorConfig,
+			boolean parallel,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
+			Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
+			Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,
+			ProgressMonitor progressMonitor) {
+		
+		return null;
+	}
 	
 	@Override
 	protected NodeProcessor<T, U, V, W> createNodeProcessor(
@@ -156,6 +190,15 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,
 			ProgressMonitor progressMonitor) {
+		
+		NS state = createNodeProcessorState(
+				nodeProcessorConfig, 
+				parallel, 
+				infoProvider, 
+				endpointWiringStageConsumer, 
+				incomingEndpoints, 
+				outgoingEndpoints, 
+				progressMonitor);
 	
 		return new NodeProcessor<T,U,V,W>() {
 
@@ -168,31 +211,6 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 				Map<Connection, W> incomingResults = new HashMap<>();
 				Map<Connection, W> outgoingResults = new HashMap<>();
 				
-				// Incoming
-				for (Entry<Connection, BiFunction<V, ProgressMonitor, W>> ie: incomingEndpoints.entrySet()) {
-					BiFunction<V, ProgressMonitor, W> handler = ie.getValue();
-					if (handler != null) {													
-						CompletableFuture<W> resultCF = new CompletableFuture<>();
-						// Sending a message to the target node
-						T message = createConnectionMessage(
-							activator,
-							incomingActivator,
-							node,
-							ie.getKey(),
-							true,
-							input, 
-							resultCF,
-							progressMonitor);
-			
-						if (message == null) {
-							return createEmptyResult();
-						}
-						W result = handler.apply(toEndpointArgument(message), progressMonitor);
-						resultCF.complete(result);
-						incomingResults.put(ie.getKey(), result);
-					}
-				}
-				
 				// Outgoing				
 				for (Entry<Connection, BiFunction<V, ProgressMonitor, W>> oe: outgoingEndpoints.entrySet()) {
 					BiFunction<V, ProgressMonitor, W> handler = oe.getValue();
@@ -200,6 +218,7 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 						CompletableFuture<W> resultCF = new CompletableFuture<>();
 						// Sending a message to the target node
 						T message = createConnectionMessage(
+							state,
 							activator,
 							incomingActivator,
 							node,
@@ -209,12 +228,36 @@ public abstract class MessageProcessorFactory<T,U,V,W> extends BiFunctionProcess
 							resultCF,
 							progressMonitor);
 			
-						if (message == null) {
-							return createEmptyResult();
+						if (message != null) {
+							W result = handler.apply(toEndpointArgument(message), progressMonitor);
+							resultCF.complete(result);
+							incomingResults.put(oe.getKey(), result);
 						}
-						W result = handler.apply(toEndpointArgument(message), progressMonitor);
-						resultCF.complete(result);
-						incomingResults.put(oe.getKey(), result);
+					}
+				}
+				
+				// Incoming
+				for (Entry<Connection, BiFunction<V, ProgressMonitor, W>> ie: incomingEndpoints.entrySet()) {
+					BiFunction<V, ProgressMonitor, W> handler = ie.getValue();
+					if (handler != null) {													
+						CompletableFuture<W> resultCF = new CompletableFuture<>();
+						// Sending a message to the target node
+						T message = createConnectionMessage(
+							state,	
+							activator,
+							incomingActivator,
+							node,
+							ie.getKey(),
+							true,
+							input, 
+							resultCF,
+							progressMonitor);
+			
+						if (message != null) {
+							W result = handler.apply(toEndpointArgument(message), progressMonitor);
+							resultCF.complete(result);
+							incomingResults.put(ie.getKey(), result);
+						}
 					}
 				}
 				
