@@ -607,6 +607,7 @@ public class TestEObjectGraph {
 		}
 
 		Queue<Runnable> processingQueue = new PriorityQueue<>(); //				
+		long start = System.currentTimeMillis();		
 		
 		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> processorConfigFactory = new ProcessorConfigFactory<>() {
 			
@@ -622,17 +623,10 @@ public class TestEObjectGraph {
 					HandlerType type) {
 				
 				return (m, p) -> {
-					if (m.getHops() > 5) {
+					if (m.getHops() > 10 || System.currentTimeMillis() - start > 10000) {
 						return CompletableFuture.completedStage(0);
 					}
 					int val = counter.incrementAndGet();
-					if (val % 1000 == 0) {
-						System.out.print(".");
-					}
-					if (val % 100000 == 0) {
-						System.out.println();
-						System.out.print(val + " " + processingQueue.size() + " ");
-					}
 					
 					CompletableFuture<Integer> result = new CompletableFuture<>();
 					processingQueue.add(new Task(val) {
@@ -745,7 +739,9 @@ public class TestEObjectGraph {
 				return new ComparableFutureTask<T>(callable);
 			}
 			
-		};						
+		};				
+		
+		long start = System.currentTimeMillis();
 		
 		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> processorConfigFactory = new ProcessorConfigFactory<>() {
 			
@@ -761,17 +757,10 @@ public class TestEObjectGraph {
 					HandlerType type) {
 				
 				return (m, p) -> {
-					if (m.getHops() > 5) {
+					if (m.getHops() > 10 || System.currentTimeMillis() - start > 10000) {
 						return CompletableFuture.completedStage(0);
 					}
-					int val = counter.incrementAndGet();
-					if (val % 1000 == 0) {
-						System.out.print(".");
-					}
-					if (val % 100000 == 0) {
-						System.out.println();
-						System.out.print(val + " " + processingQueue.size() + " ");
-					}
+					counter.incrementAndGet();
 					
 					CompletableFuture<Integer> result = new CompletableFuture<>();
 					executorService.submit(() -> {
