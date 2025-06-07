@@ -103,9 +103,11 @@ public class EObjectGraphFactory {
 	public void createEContainerConnection(
 			EObjectNode source, 
 			EObjectNode target, 
+			EReference containmentReference,
+			int index,
 			ProgressMonitor progressMonitor) {
 		
-		new EContainerConnection(source, target);
+		new EContainerConnection(source, target, containmentReference, index);
 	}	
 	
 	/**

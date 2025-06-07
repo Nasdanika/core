@@ -1,6 +1,7 @@
 package org.nasdanika.graph.emf;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -66,7 +67,19 @@ public class EObjectNode extends ObjectNode<EObject> implements PropertySource<S
 		
 		EObject eContainer = value.eContainer();
 		if (eContainer != null) {
-			elementProvider.accept(eContainer, (targetNode, pm) -> factory.createEContainerConnection(this, (EObjectNode) targetNode, pm));
+			EReference containmentReference = value.eContainmentFeature();
+			int idx;
+			if (containmentReference.isMany()) {
+				Object refVal = eContainer.eGet(containmentReference);
+				if (refVal instanceof List) {
+					idx = ((List<?>) refVal).indexOf(value);
+				} else {
+					idx = -1;
+				}
+			} else {
+				idx = -1;
+			}
+			elementProvider.accept(eContainer, (targetNode, pm) -> factory.createEContainerConnection(this, (EObjectNode) targetNode, containmentReference, idx, pm));
 		}
 
 	}
