@@ -531,4 +531,19 @@ public class TestCommon {
 		Util.lineageMap(LinkedList.class).forEach((c,d) -> System.out.println(c.getName() + ": " + d));
 	}
 	
+	@Test
+	public void testGetCallerClass() {
+		assertEquals(this.getClass().getName(), getCallerClassName(null));
+	}
+	
+    public String getCallerClassName(String message) {
+        StackTraceElement ste = Thread.currentThread().getStackTrace()[2];
+        String callerClass = ste.getClassName();
+        System.out.println(ste.getModuleName());
+        String callerMethod = ste.getMethodName();
+        System.out.printf("[%s, %s]: %s%n", callerClass, callerMethod, message);
+        return callerClass;
+    }
+	
+	
 }
