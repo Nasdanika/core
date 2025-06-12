@@ -6,17 +6,16 @@ import org.nasdanika.graph.ObjectConnection;
  * A binding of {@link ObjectConnection} source and target to {@link EObjectNode}. Path for computing URI's.
  * @param <T>
  */
-public class QualifiedConnection<T> extends ObjectConnection<T> implements EObjectConnection {
+public class QualifiedConnection<T> extends EObjectValueConnection<T> {
 	
 	private String path;
 
-	/**
-	 * @param source
-	 * @param target
-	 * @param eReference
-	 * @param index -1 for single references.
-	 */
-	public QualifiedConnection(EObjectNode source, EObjectNode target, boolean visitTargetNode, T qualifier, String path) {
+	public QualifiedConnection(
+			EObjectNode source, 
+			EObjectNode target, 
+			boolean visitTargetNode, 
+			T qualifier, 
+			String path) {
 		super(source, target, visitTargetNode, qualifier);
 		this.path = path;
 	}
@@ -27,16 +26,6 @@ public class QualifiedConnection<T> extends ObjectConnection<T> implements EObje
 	 */
 	public String getPath() {
 		return path;
-	}
-	
-	@Override
-	public EObjectNode getTarget() {
-		return (EObjectNode) super.getTarget();
-	}
-	
-	@Override
-	public EObjectNode getSource() {
-		return (EObjectNode) super.getSource();
 	}
 	
 }
