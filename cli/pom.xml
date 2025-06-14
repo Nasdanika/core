@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2025.5.0</version>
+	    <version>2025.6.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>cli</artifactId>
@@ -39,7 +39,7 @@
 	        <plugin>
 	            <groupId>org.apache.maven.plugins</groupId>
 	            <artifactId>maven-failsafe-plugin</artifactId>
-	            <version>3.5.2</version>
+	            <version>3.5.3</version>
 			    <executions>
 			        <execution>
 			            <goals>
@@ -75,7 +75,7 @@
 		<dependency>
 		    <groupId>org.jline</groupId>
 		    <artifactId>jline</artifactId>
-		    <version>3.29.0</version>
+		    <version>3.30.4</version>
 		</dependency>
 	</dependencies>
 </project>
