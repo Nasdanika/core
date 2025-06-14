@@ -1,5 +1,7 @@
 package org.nasdanika.http;
 
+import java.awt.Desktop;
+import java.net.URI;
 import java.time.Duration;
 import java.util.function.Consumer;
 
@@ -9,6 +11,7 @@ import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.cli.CommandBase;
+import org.nasdanika.common.Util;
 
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Option;
@@ -46,6 +49,15 @@ public abstract class AbstractHttpServerCommand extends CommandBase {
 				"disposing the server"
 			})
 	private boolean console;
+	
+	@Option(
+			names = "--open",
+			description = {
+				"Opens provided URI in the system browser",
+				"the URI is resolved relative to",
+				"http://localhost:<port>/"
+			})
+	private String uriToOpen;	
 
 	protected void startServer(Consumer<? super HttpServerRoutes> routesBuilder) throws Exception {
 		// TODO - start route builders capability providers
@@ -58,6 +70,13 @@ public abstract class AbstractHttpServerCommand extends CommandBase {
 		if (serverMixIn.getHttpPort() == null) {
 			System.out.println("Litening on port: " + server.port());
 		}		
+		
+		if (!Util.isBlank(uriToOpen) 
+				&& Desktop.isDesktopSupported() 
+				&& Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			
+		    Desktop.getDesktop().browse(new URI("http://localhost:<" + server.port() + ">").resolve(uriToOpen));
+		}
 		
 		if (console) {
 			// Command line
