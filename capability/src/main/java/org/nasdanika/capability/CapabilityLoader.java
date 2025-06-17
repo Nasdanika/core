@@ -67,7 +67,7 @@ public class CapabilityLoader implements Closeable {
 		}
 		CompletableFuture<Iterable<CapabilityProvider<Object>>> ret  = new CompletableFuture<>();
 		registry.put(requirement, ret);
-		progressMonitor.worked(1, "Created a registry entry", requirement);
+		progressMonitor.worked(1, "Created a registry entry for requirement", requirement);
 		
 		CapabilityFactory.Loader subLoader = new CapabilityFactory.Loader() {
 

@@ -18,6 +18,25 @@ import io.opentelemetry.api.OpenTelemetry;
 public class GlobalOpenTelemetryCapabilityFactory extends ServiceCapabilityFactory<Void, OpenTelemetry> {
 	
 	private static AtomicBoolean isInstalled = new AtomicBoolean();
+	
+	/**
+	 * Gets the global {@link OpenTelemetry} with installed logback appender 
+	 * @return
+	 */
+	public static OpenTelemetry getGlobalOpenTelemetry() {
+		OpenTelemetry openTelemetry = GlobalOpenTelemetry.get();
+		if (!isInstalled.getAndSet(true)) { // Installing once
+			try {
+				// Resorting to reflection due to a problem with automatic module name
+				Class<?> openTelemetryAppenderClass = GlobalOpenTelemetryCapabilityFactory.class.getClassLoader().loadClass("io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender");
+				Method installMethod = openTelemetryAppenderClass.getMethod("install", OpenTelemetry.class);
+				installMethod.invoke(null, openTelemetry);				
+			} catch (Exception e) {
+				throw new NasdanikaException("Failed to install open telemetry appender: " + e, e);
+			}
+		}
+		return openTelemetry;
+	}
 
 	@Override
 	public boolean isFor(Class<?> type, Object requirement) {
@@ -31,17 +50,7 @@ public class GlobalOpenTelemetryCapabilityFactory extends ServiceCapabilityFacto
 			Loader loader, 
 			ProgressMonitor progressMonitor) {
 						
-		OpenTelemetry openTelemetry = GlobalOpenTelemetry.get();
-		if (!isInstalled.getAndSet(true)) { // Installing once
-			try {
-				// Resorting to reflection due to a problem with automatic module name
-				Class<?> openTelemetryAppenderClass = getClass().getClassLoader().loadClass("io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender");
-				Method installMethod = openTelemetryAppenderClass.getMethod("install", OpenTelemetry.class);
-				installMethod.invoke(null, openTelemetry);				
-			} catch (Exception e) {
-				throw new NasdanikaException("Failed to install open telemetry appender: " + e, e);
-			}
-		}
+		OpenTelemetry openTelemetry = getGlobalOpenTelemetry();
 		
 		return wrap(openTelemetry);
 	}

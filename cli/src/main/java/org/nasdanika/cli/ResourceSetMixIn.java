@@ -3,6 +3,7 @@ package org.nasdanika.cli;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -42,10 +43,23 @@ public class ResourceSetMixIn {
 			names = "--content-type-resource-factory",
 			description = "Maps content type to resource factory class")
     Map<String, Class<?>> contentTypeResourceFactories;
-		
+	
+	
 	public ResourceSet createResourceSet(ProgressMonitor progressMonitor) {
+		return createResourceSet(null, progressMonitor);
+	}
+		
+	public ResourceSet createResourceSet(Consumer<ResourceSet> configurator, ProgressMonitor progressMonitor) {
 		CapabilityLoader capabilityLoader = getCapabilityLoader();
-		ResourceSetRequirement serviceRequirement = new ResourceSetRequirement(createRequirementResourceSet(), this::configureResourceSet, this::testContributor);		
+		ResourceSetRequirement serviceRequirement = new ResourceSetRequirement(
+				createRequirementResourceSet(), 
+				rs -> {
+					configureResourceSet(rs);
+					if (configurator != null) {
+						configurator.accept(rs);
+					}
+				}, 
+				this::testContributor);		
 		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class, this::testFactory, serviceRequirement);		
 		for (CapabilityProvider<?> cp: capabilityLoader.load(requirement, progressMonitor)) {
 			return (ResourceSet) cp.getPublisher().blockFirst();

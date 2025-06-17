@@ -3,8 +3,8 @@ package org.nasdanika.cli;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -13,14 +13,19 @@ import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import picocli.CommandLine;
+import picocli.CommandLine.Model.CommandSpec;
 
 /**
  * Base class for sub-command factories.
  * Creates {@link CommandLine} from the command object, adds sub-commands and mix-ins
  */
 public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFactory<SubCommandRequirement, CommandLine> {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(SubCommandCapabilityFactory.class);
 
 	@Override
 	public boolean isFor(Class<?> type, Object requirement) {
@@ -61,13 +66,28 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 				
 				CompletionStage<CommandLine> commandLineWithSubCommandsCS = commandLineAndPathCS.thenCombine(subCommandsCS, this::combineSubCommands);
 				CompletionStage<CommandLine> commandLineWithSubCommandsAndMixInsCS = commandLineWithSubCommandsCS.thenCombine(mixInsCS, this::combineMixIns);
-				return wrapCompletionStage(commandLineWithSubCommandsAndMixInsCS);
+				CompletionStage<CommandLine> loggingCS = commandLineWithSubCommandsAndMixInsCS.thenApply(cl -> {
+					if (parentPath.isEmpty()) {
+						LOGGER.info("Created command line {}", cl.getCommandName());						
+					} else {
+						StringBuilder commandPath = new StringBuilder();
+						for (CommandLine pathElement: parentPath) {
+							if (commandPath.length() > 0) {
+								commandPath.append(" ");
+							}
+							commandPath.append(pathElement.getCommandName());
+						}
+						LOGGER.info("Created command line {}, parent path {}", cl.getCommandName(), commandPath.toString());						
+					}
+					return cl;
+				});
+				return wrapCompletionStage(loggingCS);
 			}
 		}
 		
 		return CompletableFuture.completedStage(Collections.emptyList());
 	}
-	
+			
 	protected CommandLineAndPath createCommandLine(
 			T command, 
 			SubCommandRequirement serviceRequirement,
@@ -270,19 +290,6 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 		}
 		return false;
 	}
-	
-//	/**
-//	 * Creates a list of  command instances (user objects) to be wrapped into {@link CommandLine}
-//	 * @param progressMonitor
-//	 * @return
-//	 */
-//	protected List<CompletionStage<T>> createCommands(
-//			List<CommandLine> parentPath, 
-//			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
-//			ProgressMonitor progressMonitor) {
-//		CompletionStage<T> command = createCommand(parentPath, resolver, progressMonitor);
-//		return command == null ? Collections.emptyList() : Collections.singletonList(command);
-//	}
 	
 	/**
 	 * Calls doCreateCommand if match returns true

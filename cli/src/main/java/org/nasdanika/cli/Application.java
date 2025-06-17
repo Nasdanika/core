@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
@@ -13,6 +12,7 @@ import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.common.Closeable;
 import org.nasdanika.common.LoggerProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
+import org.slf4j.LoggerFactory;
 
 import picocli.CommandLine;
 
@@ -28,7 +28,7 @@ public class Application {
 	
 	public static void execute(ModuleLayer moduleLayer, String[] args) {
 		CapabilityLoader capabilityLoader = new CapabilityLoader(moduleLayer);
-		ProgressMonitor progressMonitor = new LoggerProgressMonitor(Logger.getLogger(Application.class.getName())); 
+		ProgressMonitor progressMonitor = new LoggerProgressMonitor(LoggerFactory.getLogger(Application.class)); 
 
 		// Sub-commands, sorting alphabetically
 		List<CommandLine> rootCommands = new ArrayList<>();		

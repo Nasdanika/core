@@ -16,8 +16,7 @@ module org.nasdanika.cli {
 	requires transitive info.picocli;
 	requires org.apache.commons.text;
 	requires transitive org.jline;
-	requires io.opentelemetry.context;
-	requires org.slf4j;
+	requires transitive io.opentelemetry.context;
 	
 	opens org.nasdanika.cli;
 	

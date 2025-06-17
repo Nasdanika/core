@@ -1,3 +1,4 @@
 /target
 .polyglot.build.properties
 /.polyglot..META-INF_MANIFEST.MF
+/nsd.log

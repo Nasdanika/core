@@ -1,8 +1,7 @@
 package org.nasdanika.common;
 
 import java.util.concurrent.CancellationException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
 
 /**
  * Progress monitor reporting to a {@link Logger},
@@ -19,7 +18,7 @@ public class LoggerProgressMonitor implements ProgressMonitor {
 	private boolean withData;
 	
 	/**
-	 * Constructs a progress monitor for a given print stream.
+	 * Constructs a progress monitor for a given logger.
 	 * @param out
 	 * @param indent Indent in spaces for this monitor.
 	 * @param indentIncrement Increment to add to the indent of this monitor when constructing a sub-monitor.
@@ -65,7 +64,7 @@ public class LoggerProgressMonitor implements ProgressMonitor {
 		}
 		String msg = indent + "  " + taskName + " (" + size + ")";
 		if (withData) {
-			logger.log(Level.INFO, msg, data);
+			logger.info(msg, data);
 		} else {
 			logger.info(msg);
 		}
@@ -91,21 +90,31 @@ public class LoggerProgressMonitor implements ProgressMonitor {
 
 	@Override
 	public void worked(Status status, double work, String progressMessage, Object... data) {
-		Level level = switch (status) {
-			case CANCEL -> Level.INFO;
-			case ERROR -> Level.SEVERE;
-			case FAIL -> Level.SEVERE;
-			case INFO -> Level.INFO;
-			case SUCCESS -> Level.INFO;
-			case WARNING -> Level.WARNING;
-			default -> Level.INFO;
-		};
 		String msg = indent + "  [" + status + " " + work + "] " + progressMessage;
-		if (withData) {
-			logger.log(level, msg, data);
-		} else {
-			logger.log(level, msg);
-		}
+		switch (status) {
+			case ERROR:
+			case FAIL: 
+				if (withData) {
+					logger.error(msg, data);
+				} else {
+					logger.error(msg);
+				}
+				break;
+			case WARNING:
+				if (withData) {
+					logger.warn(msg, data);
+				} else {
+					logger.warn(msg);
+				}
+				break;			
+			default:
+				if (withData) {
+					logger.info(msg, data);
+				} else {
+					logger.info(msg);
+				}
+				break;				
+		};
 		if (status == Status.CANCEL) {
 			cancelled = true;
 		}

@@ -6,18 +6,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Writer;
-import java.util.logging.Logger;
 
 import org.nasdanika.common.LoggerProgressMonitor;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.ProgressRecorder;
 import org.nasdanika.common.Util;
+import org.slf4j.LoggerFactory;
 
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
-import picocli.CommandLine.Spec.Target;;
+import picocli.CommandLine.Spec.Target;
 
 /**
  * Mixes in progress monitor.
@@ -74,7 +74,7 @@ public class ProgressMonitorMixIn {
 				}
 			}
 			
-			return new LoggerProgressMonitor(Logger.getLogger(loggerName));
+			return new LoggerProgressMonitor(LoggerFactory.getLogger(loggerName));
 		}
 		
 		if (jsonProgress) {

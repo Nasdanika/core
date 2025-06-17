@@ -44,6 +44,8 @@ import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.SourceRecord;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -544,6 +546,11 @@ public class TestCommon {
         System.out.printf("[%s, %s]: %s%n", callerClass, callerMethod, message);
         return callerClass;
     }
-	
+
+    @Test
+    public void testLogback() {
+        Logger logger = LoggerFactory.getLogger(TestCommon.class);
+        logger.info("Hello from Logback");
+    }
 	
 }
