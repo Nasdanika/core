@@ -67,17 +67,19 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 				CompletionStage<CommandLine> commandLineWithSubCommandsCS = commandLineAndPathCS.thenCombine(subCommandsCS, this::combineSubCommands);
 				CompletionStage<CommandLine> commandLineWithSubCommandsAndMixInsCS = commandLineWithSubCommandsCS.thenCombine(mixInsCS, this::combineMixIns);
 				CompletionStage<CommandLine> loggingCS = commandLineWithSubCommandsAndMixInsCS.thenApply(cl -> {
-					if (parentPath.isEmpty()) {
-						LOGGER.info("Created command line {}", cl.getCommandName());						
-					} else {
-						StringBuilder commandPath = new StringBuilder();
-						for (CommandLine pathElement: parentPath) {
-							if (commandPath.length() > 0) {
-								commandPath.append(" ");
+					if (cl != null) {
+						if (parentPath.isEmpty()) {
+							LOGGER.info("Created command line {}", cl.getCommandName());						
+						} else {
+							StringBuilder commandPath = new StringBuilder();
+							for (CommandLine pathElement: parentPath) {
+								if (commandPath.length() > 0) {
+									commandPath.append(" ");
+								}
+								commandPath.append(pathElement.getCommandName());
 							}
-							commandPath.append(pathElement.getCommandName());
+							LOGGER.info("Created command line {}, parent path {}", cl.getCommandName(), commandPath.toString());						
 						}
-						LOGGER.info("Created command line {}, parent path {}", cl.getCommandName(), commandPath.toString());						
 					}
 					return cl;
 				});

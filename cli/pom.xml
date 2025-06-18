@@ -65,12 +65,12 @@
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
 			<artifactId>telemetry</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
 			<artifactId>drawio</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.jline</groupId>
