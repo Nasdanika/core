@@ -12,6 +12,8 @@ import org.jline.terminal.TerminalBuilder;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.cli.CommandBase;
 import org.nasdanika.common.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Option;
@@ -19,6 +21,8 @@ import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServerRoutes;
 
 public abstract class AbstractHttpServerCommand extends CommandBase {
+		
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractHttpServerCommand.class);		
 
 	protected AbstractHttpServerCommand() {
 		super();
@@ -67,15 +71,16 @@ public abstract class AbstractHttpServerCommand extends CommandBase {
 				.route(routesBuilder)
 				.bindNow();
 		
-		if (serverMixIn.getHttpPort() == null) {
-			System.out.println("Litening on port: " + server.port());
-		}		
+		System.out.println("Litening on port: " + server.port());
+		LOGGER.info("Listening on port {}", server.port());
 		
 		if (!Util.isBlank(uriToOpen) 
 				&& Desktop.isDesktopSupported() 
 				&& Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 			
-		    Desktop.getDesktop().browse(new URI("http://localhost:<" + server.port() + ">").resolve(uriToOpen));
+		    URI resolvedUri = new URI("http://localhost:" + server.port() + "/").resolve(uriToOpen);			
+			LOGGER.info("Opening {} in the browser", resolvedUri);
+			Desktop.getDesktop().browse(resolvedUri);
 		}
 		
 		if (console) {
@@ -103,7 +108,7 @@ public abstract class AbstractHttpServerCommand extends CommandBase {
 		} else {        
 			Runtime.getRuntime().addShutdownHook(
 					new Thread(() -> {
-						System.out.println("Shutting down HTTP Server");
+						System.out.println("Shutting down HTTP Server");						
 						server.disposeNow(Duration.ofSeconds(timeout));
 					}, 
 					"HTTP Server Shutdown hook"));

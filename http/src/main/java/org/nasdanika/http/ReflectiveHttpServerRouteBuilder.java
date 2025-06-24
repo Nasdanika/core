@@ -16,9 +16,12 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -31,6 +34,8 @@ import org.nasdanika.common.Reflector.AnnotatedElementRecord;
 import org.nasdanika.common.Reflector.FactoryRecord;
 import org.nasdanika.common.Util;
 import org.reactivestreams.Publisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -39,6 +44,103 @@ import reactor.netty.http.server.HttpServerResponse;
 import reactor.netty.http.server.HttpServerRoutes;
 
 public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(ReflectiveHttpServerRouteBuilder.class); 
+	
+	/**
+	 * Transforms handler method result. Transformers are chained until they transform the 
+	 * result to {@link Publisher} which is not {@link Mono} or {@link Flux}.
+	 * If no such transformation is available the result is converted to {@link String}, null is converted to an empty string.
+	 * In the transformation chain each transformer is invoked only once.
+	 */
+	public interface ResultTransformer extends Comparable<ResultTransformer> {
+		
+		boolean canHandle(Object result);
+		
+		Object transform(Object result);		
+		
+		/**
+		 * Transformer priority to use in comparison. Higher priority transformers take precedence over lower level priority ones.
+		 * @return
+		 */
+		default int priority() {
+			return 0;		
+		}
+		
+		@Override
+		default int compareTo(ResultTransformer o) {
+			if (o == this) {
+				return 0;
+			}
+			if (o == null) {
+				return -1;
+			}
+			return o.priority() - this.priority();
+		}
+								
+	}
+	
+	public interface TypedResultTransformer<T> extends ResultTransformer {
+		
+		Class<T> getType();
+		
+		@Override
+		default boolean canHandle(Object result) {
+			return getType().isInstance(result);
+		}
+						
+		@Override
+		default int compareTo(ResultTransformer o) {
+			int result = ResultTransformer.super.compareTo(o);
+			if (result != 0) {
+				return result;
+			}
+			
+			if (o instanceof TypedResultTransformer) {
+				TypedResultTransformer<?> ot = (TypedResultTransformer<?>) o;
+				if (getType() == ot.getType()) {
+					return result;
+				}
+				if (getType().isAssignableFrom(ot.getType())) {
+					return 1; // less specific
+				}
+				if (ot.getType().isAssignableFrom(getType())) {
+					return -11; // More specific
+				}
+				return 0;
+			}
+			
+			// this is "larger" that the other because it considers only type, not instance.
+			return 1;					
+		}		
+		
+		/**
+		 * Creates a transformer matching results by their type. Typed transformers are "larger" than other transformers 
+		 * within the same priority.
+		 */
+		static <T> TypedResultTransformer<T> from(Class<T> type, Function<T, ?> transformer) {
+			return new TypedResultTransformer<T>() {
+				
+				@Override
+				public boolean canHandle(Object result) {
+					return type.isInstance(result);
+				}
+				
+				@Override
+				public Class<T> getType() {
+					return type;
+				}
+				
+				@SuppressWarnings("unchecked")
+				@Override
+				public Object transform(Object result) {
+					return transformer.apply((T) result);
+				}
+								
+			};
+		}		
+		
+	}
 	
 	/**
 	 * On a type this annotation is used to provide path prefix (namespace) for sub-factories and methods.
@@ -132,7 +234,7 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 	}
 	
 	protected Map<String, Collection<Object>> targets = new HashMap<>();
-	
+			
 	/**
 	 * Adds targets without a prefix
 	 * @param targets
@@ -299,8 +401,103 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 			
 		};
 		
-		
 	}	
+	
+	/**
+	 * @return A modifiable unsorted list of {@link ResultTransformer}s.
+	 * The list is sorted 
+	 */
+	protected List<ResultTransformer> createResultTransformers(Route route, HttpServerRequest request, HttpServerResponse response) {
+		List<ResultTransformer> resultTransformers = new ArrayList<>();
+		resultTransformers.add(TypedResultTransformer.from(Mono.class, result -> transformMono(result, route, request, response)));
+		resultTransformers.add(TypedResultTransformer.from(Flux.class, result -> transformFlux(result, route, request, response)));
+		resultTransformers.add(TypedResultTransformer.from(JSONObject.class, result -> transformJSONObject(result, route, request, response)));
+		resultTransformers.add(TypedResultTransformer.from(JSONArray.class, result -> transformJSONArray(result, route, request, response)));
+		resultTransformers.add(TypedResultTransformer.from(String.class, result -> transformString(result, route, request, response)));
+		resultTransformers.add(TypedResultTransformer.from(InputStream.class, result -> transformInputStream(result, route, request, response)));
+		resultTransformers.add(TypedResultTransformer.from(byte[].class, result -> transformByteArray(result, route, request, response)));
+		
+		return resultTransformers;
+	}
+		
+	private static final String CONTENT_TYPE_HEADER = "Content-Type";
+
+	private static final String APPLICATION_JSON_CONTENT_TYPE = "application/json";	
+	
+	protected Publisher<Void> transformMono(Mono<?> result, Route route, HttpServerRequest request, HttpServerResponse response) {
+		if (route.binary()) {
+			Mono<byte[]> byteArrayMono = ((Mono<?>) result).map(this::toByteArray);
+			if (telemetryFilter != null) {
+				byteArrayMono = telemetryFilter.filter(request, byteArrayMono);
+			}
+			return response.sendByteArray(byteArrayMono);
+		}
+		Mono<String> strMono = ((Mono<?>) result).map(obj -> {
+			if (obj instanceof JSONObject || obj instanceof JSONArray) {
+				response.header(CONTENT_TYPE_HEADER, APPLICATION_JSON_CONTENT_TYPE);						
+			}
+			return toString(obj);
+		});
+		if (telemetryFilter != null) {
+			strMono = telemetryFilter.filter(request, strMono);
+		}
+		return response.sendString(strMono);		
+	}
+	
+	protected Publisher<Void> transformFlux(Flux<?> result, Route route, HttpServerRequest request, HttpServerResponse response) {
+		if (route.binary()) {
+			Flux<byte[]> byteArrayFlux = ((Flux<?>) result).map(this::toByteArray);
+			if (telemetryFilter != null) {
+				byteArrayFlux = telemetryFilter.filter(request, byteArrayFlux);
+			}
+			return response.sendByteArray(byteArrayFlux);
+		}
+		Flux<String> strFlux = ((Flux<?>) result).map(this::toString);
+		if (telemetryFilter != null) {
+			strFlux = telemetryFilter.filter(request, strFlux);
+		}
+		return response.sendString(strFlux);
+	}
+	
+	protected Publisher<Void> transformJSONObject(JSONObject result, Route route, HttpServerRequest request, HttpServerResponse response) {
+		Mono<String> strMono = Mono.just(((JSONObject) result).toString());
+		if (telemetryFilter != null) {
+			strMono = telemetryFilter.filter(request, strMono);
+		}
+		return response.header(CONTENT_TYPE_HEADER, APPLICATION_JSON_CONTENT_TYPE).sendString(strMono);
+	}
+	
+	protected Publisher<Void> transformJSONArray(JSONArray result, Route route, HttpServerRequest request, HttpServerResponse response) {
+		Mono<String> strMono = Mono.just(((JSONArray) result).toString());
+		if (telemetryFilter != null) {
+			strMono = telemetryFilter.filter(request, strMono);
+		}
+		return response.header(CONTENT_TYPE_HEADER, APPLICATION_JSON_CONTENT_TYPE).sendString(strMono);
+	}
+	
+	protected Publisher<Void> transformString(String result, Route route, HttpServerRequest request, HttpServerResponse response) {
+		Mono<String> strMono = Mono.just((String) result);
+		if (telemetryFilter != null) {
+			strMono = telemetryFilter.filter(request, strMono);
+		}
+		return response.sendString(strMono);
+	}
+	
+	protected byte[] transformInputStream(InputStream result, Route route, HttpServerRequest request, HttpServerResponse response) {
+		try {
+			return DefaultConverter.INSTANCE.toByteArray((InputStream) result);
+		} catch (IOException e) {
+			throw new NasdanikaException(e);
+		}
+	}
+	
+	protected Publisher<Void> transformByteArray(byte[] result, Route route, HttpServerRequest request, HttpServerResponse response) {
+		Mono<byte[]> byteArrayMono = Mono.just((byte[]) result);
+		if (telemetryFilter != null) {
+			byteArrayMono = telemetryFilter.filter(request, byteArrayMono);
+		}
+		return response.sendByteArray(byteArrayMono);
+	}
 	
 	private record RouteRecord(
 			String prefix, 
@@ -308,10 +505,6 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 			Route route, 
 			TelemetryFilter telemetryFilter,
 			ReflectiveHttpServerRouteBuilder routeBuilder) implements Comparable<RouteRecord>, HttpServerRouteBuilder {
-		
-		private static final String CONTENT_TYPE_HEADER = "Content-Type";
-
-		private static final String APPLICATION_JSON_CONTENT_TYPE = "application/json";
 
 		@Override
 		public int compareTo(RouteRecord o) {
@@ -335,86 +528,41 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 		}
 		
 		@SuppressWarnings("unchecked")
-		private Publisher<Void> handle(HttpServerRequest request, HttpServerResponse response) {						
+		private Publisher<Void> handle(HttpServerRequest request, HttpServerResponse response) {			
+			LOGGER.info(
+					"Processing {} {} by invoking {}", 
+					request.method().name(), 
+					request.uri(), annotatedElementRecord().getAnnotatedElement());
+			
 			Object result = annotatedElementRecord().invoke(request, response);
-			
-			if (result instanceof Mono) {
-				if (route().binary()) {
-					Mono<byte[]> byteArrayMono = ((Mono<?>) result).map(routeBuilder::toByteArray);
-					if (telemetryFilter() != null) {
-						byteArrayMono = telemetryFilter().filter(request, byteArrayMono);
-					}
-					return response.sendByteArray(byteArrayMono);
-				}
-				Mono<String> strMono = ((Mono<?>) result).map(obj -> {
-					if (obj instanceof JSONObject || obj instanceof JSONArray) {
-						response.header(CONTENT_TYPE_HEADER, APPLICATION_JSON_CONTENT_TYPE);						
-					}
-					return routeBuilder.toString(obj);
-				});
-				if (telemetryFilter() != null) {
-					strMono = telemetryFilter().filter(request, strMono);
-				}
-				return response.sendString(strMono);
-			} 			
-			
-			if (result instanceof Flux) {
-				if (route().binary()) {
-					Flux<byte[]> byteArrayFlux = ((Flux<?>) result).map(routeBuilder::toByteArray);
-					if (telemetryFilter() != null) {
-						byteArrayFlux = telemetryFilter().filter(request, byteArrayFlux);
-					}
-					return response.sendByteArray(byteArrayFlux);
-				}
-				Flux<String> strFlux = ((Flux<?>) result).map(routeBuilder::toString);
-				if (telemetryFilter() != null) {
-					strFlux = telemetryFilter().filter(request, strFlux);
-				}
-				return response.sendString(strFlux);
+			if (result == null) {
+				return response.send();
 			}
 						
+			List<ResultTransformer> resultTransformers = routeBuilder().createResultTransformers(route, request, response);
+			Collections.sort(resultTransformers);
+
+			// Transforming result
+			boolean transformed;
+			do {
+				transformed = false;
+				Iterator<ResultTransformer> rtit = resultTransformers.iterator();
+				while (rtit.hasNext()) {
+					ResultTransformer rt = rtit.next();
+					if (rt.canHandle(result)) {
+						result = rt.transform(result);
+						if (result == null) {
+							return response.send();
+						}
+						rtit.remove();
+						transformed = true;
+						break;
+					}
+				}
+			} while (transformed);
+			
 			if (result instanceof Publisher) {			
 				return (Publisher<Void>) result;
-			}			
-			
-			if (result instanceof JSONObject) {
-				Mono<String> strMono = Mono.just(((JSONObject) result).toString());
-				if (telemetryFilter() != null) {
-					strMono = telemetryFilter().filter(request, strMono);
-				}
-				return response.header(CONTENT_TYPE_HEADER, APPLICATION_JSON_CONTENT_TYPE).sendString(strMono);
-			} 			
-			
-			if (result instanceof JSONArray) {
-				Mono<String> strMono = Mono.just(((JSONArray) result).toString());
-				if (telemetryFilter() != null) {
-					strMono = telemetryFilter().filter(request, strMono);
-				}
-				return response.header(CONTENT_TYPE_HEADER, APPLICATION_JSON_CONTENT_TYPE).sendString(strMono);
-			} 						
-			
-			if (result instanceof String) {
-				Mono<String> strMono = Mono.just((String) result);
-				if (telemetryFilter() != null) {
-					strMono = telemetryFilter().filter(request, strMono);
-				}
-				return response.sendString(strMono);
-			} 
-			
-			if (result instanceof InputStream) {
-				try {
-					result = DefaultConverter.INSTANCE.toByteArray((InputStream) result);
-				} catch (IOException e) {
-					throw new NasdanikaException(e);
-				}
-			}
-			
-			if (result instanceof byte[]) {
-				Mono<byte[]> byteArrayMono = Mono.just((byte[]) result);
-				if (telemetryFilter() != null) {
-					byteArrayMono = telemetryFilter().filter(request, byteArrayMono);
-				}
-				return response.sendByteArray(byteArrayMono);
 			}
 			
 			if (route.binary()) {
@@ -434,7 +582,7 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 
 		@Override
 		public void buildRoutes(HttpServerRoutes routes) {
-			String path = route().value();
+			String path = route().value();			
 			HttpMethod routeMethod = route().method();
 			if (routeMethod == null) {
 				// Route builder
@@ -444,6 +592,7 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 				AnnotatedElement annotatedElement = annotatedElementRecord().getAnnotatedElement();
 				if (annotatedElement instanceof Method) {
 					Method builderMethod = (Method) annotatedElement;
+					LOGGER.info("Route builder method {} for path '{}'", builderMethod, path);
 					if (builderMethod.getParameterCount() == 1) {
 						annotatedElementRecord().invoke(routes);
 					} else {
@@ -456,21 +605,27 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 				switch (routeMethod) {
 				case DELETE:
 					routes.delete(path, this::handle);
+					LOGGER.info("DELETE {} -> {}", path, annotatedElementRecord().getAnnotatedElement());
 					break;
 				case GET:
 					routes.get(path, this::handle);
+					LOGGER.info("GET {} -> {}", path, annotatedElementRecord().getAnnotatedElement());
 					break;
 				case HEAD:
 					routes.head(path, this::handle);
+					LOGGER.info("HEAD {} -> {}", path, annotatedElementRecord().getAnnotatedElement());
 					break;
 				case OPTIONS:
 					routes.options(path, this::handle);
+					LOGGER.info("OPTIONS {} -> {}", path, annotatedElementRecord().getAnnotatedElement());
 					break;
 				case POST:
 					routes.post(path, this::handle);
+					LOGGER.info("POST {} -> {}", path, annotatedElementRecord().getAnnotatedElement());
 					break;
 				case PUT:
 					routes.put(path, this::handle);
+					LOGGER.info("PUT {} -> {}", path, annotatedElementRecord().getAnnotatedElement());
 					break;
 				default:
 					throw new IllegalArgumentException("Unsupported HTTP method: " + route.method());

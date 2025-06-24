@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.nasdanika.telemetry.TelemetryUtil;
 import org.reactivestreams.Publisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -27,7 +29,10 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.server.HttpServerRequest;
 import reactor.netty.http.server.HttpServerResponse;
 
+
 public class TelemetryFilter {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(TelemetryFilter.class);	
 	
 	protected Tracer tracer;
 	protected TextMapPropagator propagator;
@@ -92,6 +97,7 @@ public class TelemetryFilter {
 	
 	public BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> wrapByteArrayHandler(BiFunction<HttpServerRequest, HttpServerResponse, byte[]> byteArrayHandler) {
 		return (request, response) -> {
+			LOGGER.info("Processing byte array request [{}] {}", request.method().name(), request.uri());
 			Span span = buildSpan(request).startSpan();
 			long start = System.currentTimeMillis();
 			try (Scope scope = span.makeCurrent()) {
@@ -104,6 +110,7 @@ public class TelemetryFilter {
 			} catch (Exception e) {
 				span.recordException(e);
 				span.setStatus(StatusCode.ERROR);
+				LOGGER.error("Error processing byte array request [" + request.method().name() + "] " + request.uri() + ": " + e, e);
 				return response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR).send();				
 			} finally {
 				span.end();
@@ -113,6 +120,7 @@ public class TelemetryFilter {
 	
 	public BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> wrapStringHandler(BiFunction<HttpServerRequest, HttpServerResponse, String> stringHandler) {
 		return (request, response) -> {
+			LOGGER.info("Processing string request [{}] {}", request.method().name(), request.uri());
 			Span span = buildSpan(request).startSpan();
 			long start = System.currentTimeMillis();
 			try (Scope scope = span.makeCurrent()) {
@@ -125,6 +133,7 @@ public class TelemetryFilter {
 			} catch (Exception e) {
 				span.recordException(e);
 				span.setStatus(StatusCode.ERROR);
+				LOGGER.error("Error processing string request [" + request.method().name() + "] " + request.uri() + ": " + e, e);
 				return response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR).send();				
 			} finally {
 				span.end();
@@ -134,6 +143,7 @@ public class TelemetryFilter {
 	
 	public BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> wrapJSONObjectHandler(BiFunction<HttpServerRequest, HttpServerResponse, JSONObject> jsonObjectHandler) {
 		return (request, response) -> {
+			LOGGER.info("Processing JSON object request [{}] {}", request.method().name(), request.uri());
 			Span span = buildSpan(request).startSpan();
 			long start = System.currentTimeMillis();
 			try (Scope scope = span.makeCurrent()) {
@@ -146,6 +156,7 @@ public class TelemetryFilter {
 			} catch (Exception e) {
 				span.recordException(e);
 				span.setStatus(StatusCode.ERROR);
+				LOGGER.error("Error processing JSON object request [" + request.method().name() + "] " + request.uri() + ": " + e, e);
 				return response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR).send();				
 			} finally {
 				span.end();
@@ -155,6 +166,7 @@ public class TelemetryFilter {
 	
 	public BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> wrapJSONArrayHandler(BiFunction<HttpServerRequest, HttpServerResponse, JSONArray> jsonArrayHandler) {
 		return (request, response) -> {
+			LOGGER.info("Processing JSON array request [{}] {}", request.method().name(), request.uri());
 			Span span = buildSpan(request).startSpan();
 			long start = System.currentTimeMillis();
 			try (Scope scope = span.makeCurrent()) {
@@ -167,6 +179,7 @@ public class TelemetryFilter {
 			} catch (Exception e) {
 				span.recordException(e);
 				span.setStatus(StatusCode.ERROR);
+				LOGGER.error("Error processing JSON array request [" + request.method().name() + "] " + request.uri() + ": " + e, e);
 				return response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR).send();				
 			} finally {
 				span.end();
@@ -183,9 +196,11 @@ public class TelemetryFilter {
 					durationConsumer.accept(request.method().name() + " " + request.uri(), System.currentTimeMillis() - start);
 	        	}
 	        	requestSpan.setStatus(StatusCode.OK);
+				LOGGER.info("[{}] {}", request.method().name(), request.uri());
 				return result;
 			})
 			.onErrorMap(error -> {
+				LOGGER.error("Error processing [" + request.method().name() + "] " + request.uri() + ": " + error, error);
 	        	requestSpan.recordException(error);
 	        	requestSpan.setStatus(StatusCode.ERROR);
 				return error;
@@ -199,9 +214,11 @@ public class TelemetryFilter {
 		return publisher
 			.map(result -> {
 	        	requestSpan.setStatus(StatusCode.OK);
+				LOGGER.info("[{}] {}", request.method().name(), request.uri());
 				return result;
 			})
 			.onErrorMap(error -> {
+				LOGGER.error("Error processing [" + request.method().name() + "] " + request.uri() + ": " + error, error);
 	        	requestSpan.recordException(error);
 	        	requestSpan.setStatus(StatusCode.ERROR);
 				return error;

@@ -2,7 +2,6 @@ package org.nasdanika.exec.gen;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
