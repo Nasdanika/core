@@ -21,9 +21,13 @@ import org.nasdanika.capability.emf.ResourceSetRequirement;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 public class ConfigurationCapabilityFactory extends AbstractCapabilityFactory<ConfigurationRequirement, Object> {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(ConfigurationCapabilityFactory.class);
 
 	@Override
 	public boolean canHandle(Object requirement) {
@@ -47,6 +51,37 @@ public class ConfigurationCapabilityFactory extends AbstractCapabilityFactory<Co
 	private Object loadConfig(ConfigurationRequirement requirement, ResourceSet resourceSet) {		
 		String moduleName = requirement.moduleName();		
 		String reqName = requirement.name();
+
+		if (Util.isBlank(requirement.moduleName())) {
+			if (requirement.type() == null) {
+				if (Util.isBlank(reqName)) {
+					LOGGER.info("Loading global configuration");
+				} else { 
+					LOGGER.info("Loading global '{}' configuration", reqName);			
+				}
+			} else {
+				if (Util.isBlank(reqName)) {
+					LOGGER.info("Loading global configuration of type {}", requirement.type());
+				} else { 
+					LOGGER.info("Loading global '{}' configuration of type {}", reqName, requirement.type());			
+				}			
+			}			
+		} else {
+			if (requirement.type() == null) {
+				if (Util.isBlank(reqName)) {
+					LOGGER.info("Loading configuration for module {}", moduleName);
+				} else { 
+					LOGGER.info("Loading '{}' configuration for module {}", reqName, moduleName);			
+				}
+			} else {
+				if (Util.isBlank(reqName)) {
+					LOGGER.info("Loading configuration of type {} for module {}", requirement.type(), moduleName);
+				} else { 
+					LOGGER.info("Loading '{}' configuration of type {} for module {}", reqName, requirement.type(), moduleName);			
+				}			
+			}
+		}
+		
 		for (String extension: EXTENSIONS) {
 			String configName = System.getProperty("org.nasdanika.config.base", "config");
 			if (!Util.isBlank(moduleName)) {
@@ -57,9 +92,11 @@ public class ConfigurationCapabilityFactory extends AbstractCapabilityFactory<Co
 				configName += "/" + reqName;
 			}
 			configName += "." + extension;
+			URI configURI = null;
 			try {
 				URI baseURI = URI.createFileURI(new File(".").getCanonicalPath()).appendSegment("");
-				URI configURI = URI.createURI(configName).resolve(baseURI);
+				configURI = URI.createURI(configName).resolve(baseURI);
+				LOGGER.info("Loading configuration from {}", configURI);				
 				try (InputStream in = resourceSet.getURIConverter().createInputStream(configURI)) {
 					switch (extension) {
 					case "yml":
@@ -79,7 +116,7 @@ public class ConfigurationCapabilityFactory extends AbstractCapabilityFactory<Co
 					}
 				}
 			} catch (IOException e) {
-				// NOP - expected if the resource does not exist.
+				LOGGER.info("Configuration resource not found: {}", configURI == null ? configName : configURI);				
 			}
 		}
 		
