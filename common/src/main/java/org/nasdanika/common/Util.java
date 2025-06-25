@@ -71,6 +71,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import reactor.core.publisher.Mono;
+
 public class Util {
 
 	private static final String WIDTH_ATTRIBUTE = "width";
@@ -1618,6 +1620,30 @@ public class Util {
 		}
 		output.append(input.substring(i, input.length()));
 		return output.toString();
+	}
+	
+	/**
+	 * Zips a map of keys to {@link Mono}s to a Mono of a map of keys to values emitted by the monos
+	 * @param <K>
+	 * @param <V>
+	 * @param monoMap
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <K,V> Mono<Map<K,V>> zip(Map<K,Mono<V>> monoMap) {
+		if (monoMap == null || monoMap.isEmpty()) {
+			return Mono.just(Collections.emptyMap());
+		}
+		
+		List<Map.Entry<K, Mono<V>>> entryList = new ArrayList<>(monoMap.entrySet());
+		
+		return Mono.zip(entryList.stream().map(Map.Entry::getValue).toList(), results -> {
+			Map<K,V> ret = new LinkedHashMap<>();
+			for (int i = 0; i < results.length; ++i) {
+				ret.put(entryList.get(i).getKey(), (V) results[i]);
+			}
+			return ret;
+		});		
 	}
 
 }

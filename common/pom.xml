@@ -13,6 +13,12 @@
 	<url>https://docs.nasdanika.org/modules/core/modules/common/index.html</url>
 
 	<dependencies>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <version>3.7.6</version>
+        </dependency>
+	
 		<dependency>
 		    <groupId>org.eclipse.emf</groupId>
 		    <artifactId>org.eclipse.emf.ecore</artifactId>

@@ -12,8 +12,6 @@ import org.nasdanika.capability.factories.URIInvocableCapabilityFactory;
 module org.nasdanika.capability {
 	
 	requires transitive org.nasdanika.common;
-	requires transitive reactor.core;
-	requires transitive org.reactivestreams;
 	requires org.eclipse.emf.ecore.xmi;
 	requires java.scripting;
 	

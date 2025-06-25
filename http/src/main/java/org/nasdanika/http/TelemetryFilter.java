@@ -106,7 +106,7 @@ public class TelemetryFilter {
 					durationConsumer.accept(request.method().name() + " " + request.uri(), System.currentTimeMillis() - start);
 				}
 				span.setStatus(StatusCode.OK);
-				return response.sendByteArray(Mono.just(result));
+				return result == null ? response.send() : response.sendByteArray(Mono.just(result));
 			} catch (Exception e) {
 				span.recordException(e);
 				span.setStatus(StatusCode.ERROR);
@@ -129,7 +129,7 @@ public class TelemetryFilter {
 					durationConsumer.accept(request.method().name() + " " + request.uri(), System.currentTimeMillis() - start);
 				}
 				span.setStatus(StatusCode.OK);
-				return response.sendString(Mono.just(result));
+				return result == null ? response.send() : response.sendString(Mono.just(result));
 			} catch (Exception e) {
 				span.recordException(e);
 				span.setStatus(StatusCode.ERROR);
@@ -152,7 +152,7 @@ public class TelemetryFilter {
 					durationConsumer.accept(request.method().name() + " " + request.uri(), System.currentTimeMillis() - start);
 				}
 				span.setStatus(StatusCode.OK);
-				return response.sendString(Mono.just(result.toString(2)));
+				return result == null ? response.send() : response.sendString(Mono.just(result.toString(2)));
 			} catch (Exception e) {
 				span.recordException(e);
 				span.setStatus(StatusCode.ERROR);
@@ -175,7 +175,7 @@ public class TelemetryFilter {
 					durationConsumer.accept(request.method().name() + " " + request.uri(), System.currentTimeMillis() - start);
 				}
 				span.setStatus(StatusCode.OK);
-				return response.sendString(Mono.just(result.toString(2)));
+				return result == null ? response.send() : response.sendString(Mono.just(result.toString(2)));
 			} catch (Exception e) {
 				span.recordException(e);
 				span.setStatus(StatusCode.ERROR);

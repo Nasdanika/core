@@ -75,7 +75,14 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 			if (o == null) {
 				return -1;
 			}
-			return o.priority() - this.priority();
+									
+			int result = o.priority() - this.priority();
+			
+			if (result == 0 && o instanceof TypedResultTransformer) {
+				return -1; // This one is "smaller"
+			}
+			
+			return result;
 		}
 								
 	}
@@ -432,7 +439,7 @@ public class ReflectiveHttpServerRouteBuilder implements HttpServerRouteBuilder 
 			}
 			return response.sendByteArray(byteArrayMono);
 		}
-		Mono<String> strMono = ((Mono<?>) result).map(obj -> {
+		Mono<String> strMono = result.map(obj -> {
 			if (obj instanceof JSONObject || obj instanceof JSONArray) {
 				response.header(CONTENT_TYPE_HEADER, APPLICATION_JSON_CONTENT_TYPE);						
 			}

@@ -419,6 +419,18 @@ public class Transformer<S,T> extends Reflector {
 	}
 	
 	/**
+	 * 
+	 * @param element
+	 * @return true if there is a method for transforming the source element
+	 */
+	public boolean canHandle(S element) {
+		return annotatedElementRecords.stream()
+					.filter(aer -> aer.test(element) && aer.getAnnotatedElement() instanceof Method && matchFactoryMethod(element, (Method) aer.getAnnotatedElement()))
+					.findAny()
+					.isPresent();
+	}
+		
+	/**
 	 * If this method returns true then all matched create methods are invoked and results are collected into a list. 
 	 * This can be used, for example, for inspection/diagnostic where multiple methods diagnose different aspects of the source object.
 	 * When true, <code>T</code> must be assignable from List.
