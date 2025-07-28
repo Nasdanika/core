@@ -1,1 +1,1 @@
-mvn clean deploy -P ossrh 
+mvn clean deploy -P central 
