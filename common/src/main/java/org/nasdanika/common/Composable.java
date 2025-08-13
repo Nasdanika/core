@@ -17,7 +17,7 @@ public interface Composable<T> {
 	 * @return Composing operator which can be use in reducing streams of {@link Composable}s to a single composeable.
 	 */
 	@SuppressWarnings("unchecked")
-	static <T> T composer(T a, T b) {	
+	static <T> T compose(T a, T b) {	
 		if (a == null) {
 			return b;
 		}
@@ -36,15 +36,7 @@ public interface Composable<T> {
 	T compose(T other);
 	
 	static <T, C extends Composable<C>> Optional<C> reduce(Stream<C> stream) {
-		return stream.reduce((a, b) -> {
-			if (a == null) {
-				return b;
-			}
-			if (b == null) {
-				return a;
-			}
-			return a.compose(b);
-		});
+		return stream.reduce((a, b) -> compose(a,b));
 	}
 	
 }

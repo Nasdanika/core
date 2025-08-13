@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * A simple context context implementation.
@@ -120,7 +119,7 @@ public class SimpleMutableContext implements MutableContext {
 			if (chained!=null) {
 				svcs.add(chained);
 			}
-			return svcs.stream().reduce(Composable::composer).orElse(null);
+			return svcs.stream().reduce(Composable::compose).orElse(null);
 		}
 		
 		List<T> svcs = getServices(type);
@@ -157,7 +156,7 @@ public class SimpleMutableContext implements MutableContext {
 			if (chained!=null) {
 				svcs.add(chained);
 			}
-			return svcs.stream().reduce(Composable::composer).orElse(null);
+			return svcs.stream().reduce(Composable::compose).orElse(null);
 		}
 		
 		return getServices(type).stream().filter(predicate).findFirst().orElse(chain.get(type, predicate));

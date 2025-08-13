@@ -52,6 +52,8 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.yaml.snakeyaml.Yaml;
 
+import reactor.core.publisher.Mono;
+
 
 public class TestCommon {
 		
@@ -551,6 +553,20 @@ public class TestCommon {
     public void testLogback() {
         Logger logger = LoggerFactory.getLogger(TestCommon.class);
         logger.info("Hello from Logback");
+    }
+    
+    @Test
+    public void testEmptyMonos() {
+        Mono<String> monoA = Mono.just("A"); Mono.empty(); // or Mono.just("A")
+        Mono<String> monoB = Mono.just("B");
+
+        Mono<String> result = monoA.filter(s -> !s.isEmpty()) // Filter out empty strings if needed
+        		.flatMap(valA -> monoB.map(valB -> valA + valB).defaultIfEmpty(valA))
+                                   .switchIfEmpty(monoB) // If monoA is empty, switch to monoB
+                                   ; // Combine if both have values
+        System.out.println(result.block());
+        
+        // If monoA is empty, result will be "B". If monoA is "A", result will be "AB".    	
     }
     	
 }
