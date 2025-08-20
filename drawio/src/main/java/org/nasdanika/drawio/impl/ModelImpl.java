@@ -36,6 +36,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
@@ -52,7 +53,13 @@ import org.xml.sax.SAXException;
 class ModelImpl extends ElementImpl implements Model {
 	
 	static final String ATTRIBUTE_VERTEX = "vertex";
-	static final String ATTRIBUTE_EDGE = "edge";
+	static final String ATTRIBUTE_EDGE = "edge";	
+	static final String ATTRIBUTE_GRID = "grid";
+	static final String ATTRIBUTE_GRID_SIZE = "gridSize";
+	static final String ATTRIBUTE_PAGE = "page";
+	static final String ATTRIBUTE_BACKGROUND = "background";
+	static final String ATTRIBUTE_BACKGROUND_IMAGE = "backgroundImage";
+	static final String ATTRIBUTE_SHADOW = "shadow";
 	
 	private Map<org.w3c.dom.Element, ModelElement> cache = new IdentityHashMap<>();
 	private Page page;		
@@ -258,6 +265,79 @@ class ModelImpl extends ElementImpl implements Model {
 			mModel.getMarkers().add(markerFactory.apply(marker));
 		}
 		return mModel;
+	}
+	
+	private void setAttribute(String name, String value) {
+		if (Util.isBlank(value)) {
+			getElement().removeAttribute(name);			
+		} else {
+			getElement().setAttribute(name, value);
+		}
+	}	
+
+	@Override
+	public Map<String, Object> getBackgroundImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isGrid() {
+		return "1".equals(getElement().getAttribute(ATTRIBUTE_GRID));
+	}
+
+	@Override
+	public Model setGrid(boolean grid) {
+		setAttribute(ATTRIBUTE_GRID, grid ? "1" : "0");
+		return this;
+	}
+
+	@Override
+	public int getGridSize() {
+		String gridSizeStr = getElement().getAttribute(ATTRIBUTE_GRID_SIZE);
+		if (Util.isBlank(gridSizeStr)) {
+			return -1;
+		}
+		return Integer.parseInt(gridSizeStr);
+	}
+
+	@Override
+	public Model setGridSize(int gridSize) {
+		setAttribute(ATTRIBUTE_GRID_SIZE, gridSize > 0 ? String.valueOf(gridSize) : null);
+		return this;
+	}
+
+	@Override
+	public String getBackgrounColor() {
+		return getElement().getAttribute(ATTRIBUTE_BACKGROUND);
+	}
+
+	@Override
+	public Model setBackgroundColor(String color) {
+		setAttribute(ATTRIBUTE_BACKGROUND, color);
+		return this;
+	}
+
+	@Override
+	public boolean isShadow() {
+		return "1".equals(getElement().getAttribute(ATTRIBUTE_SHADOW));
+	}
+
+	@Override
+	public Model setShadow(boolean shadow) {
+		setAttribute(ATTRIBUTE_SHADOW, shadow ? "1" : "0");
+		return this;
+	}
+
+	@Override
+	public boolean isPageView() {
+		return "1".equals(getElement().getAttribute(ATTRIBUTE_PAGE));
+	}
+
+	@Override
+	public Model setPageView(boolean pageView) {
+		setAttribute(ATTRIBUTE_PAGE, pageView ? "1" : "0");
+		return this;
 	}
 	
 }
