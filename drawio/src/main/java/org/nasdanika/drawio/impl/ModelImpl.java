@@ -36,6 +36,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.json.JSONObject;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
@@ -277,8 +278,22 @@ class ModelImpl extends ElementImpl implements Model {
 
 	@Override
 	public Map<String, Object> getBackgroundImage() {
-		// TODO Auto-generated method stub
-		return null;
+		String imageStr = getElement().getAttribute(ATTRIBUTE_BACKGROUND_IMAGE);
+		if (Util.isBlank(imageStr)) {
+			return null;
+		}
+		JSONObject jImage = new JSONObject(imageStr);						
+		return Collections.unmodifiableMap(jImage.toMap());
+	}
+	
+	@Override
+	public Model setBackgroundImage(Map<String, Object> image) {
+		if (image == null || image.isEmpty()) {
+			setAttribute(ATTRIBUTE_BACKGROUND_IMAGE, null);
+		}
+		JSONObject jImage = new JSONObject(image);
+		setAttribute(ATTRIBUTE_BACKGROUND_IMAGE, jImage.toString());
+		return this;
 	}
 
 	@Override

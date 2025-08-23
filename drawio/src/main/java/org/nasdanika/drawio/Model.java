@@ -24,7 +24,12 @@ public interface Model extends Element {
 	@Override
 	List<Root> getChildren();
 	
+	/**
+	 * @return Unmodifiable map or null if there is no image
+	 */
 	Map<String,Object> getBackgroundImage();
+	
+	Model setBackgroundImage(Map<String,Object> image);		
 	
 	boolean isGrid();
 	
