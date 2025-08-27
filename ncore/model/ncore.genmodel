@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.nasdanika.ncore/src/main/java" creationIcons="false"
     editorDirectory="" modelPluginID="org.nasdanika.ncore" modelName="Ncore" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     importerID="org.eclipse.emf.importer.ecore" bundleManifest="false" featureDelegation="Dynamic"
-    complianceLevel="17.0" suppressGenModelAnnotations="false" copyrightFields="false"
+    complianceLevel="21.0" suppressGenModelAnnotations="false" copyrightFields="false"
     operationReflection="true" importOrganizing="true">
   <foreignModel>ncore.ecore</foreignModel>
   <genPackages prefix="Ncore" basePackage="org.nasdanika" disposableProviderFactory="true"
