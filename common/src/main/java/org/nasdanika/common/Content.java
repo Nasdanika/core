@@ -7,6 +7,13 @@ import org.jsoup.Jsoup;
  */
 public class Content {
 	
+	public static final String TEXT_PLAIN = "text/plain";
+	public static final String TEXT = "text";
+	public static final String TEXT_HTML = "text/html";
+	public static final String HTML = "html";
+	public static final String TEXT_MARKDOWN = "text/markdown";
+	public static final String MARKDOWN = "markdown";
+	
 	private String content;
 	private String contentType;
 	
@@ -36,16 +43,16 @@ public class Content {
 	}
 	
 	public boolean isMarkdown() {
-		return "markdown".equalsIgnoreCase(getContentType()) || "text/markdown".equalsIgnoreCase(getContentType());
+		return MARKDOWN.equalsIgnoreCase(getContentType()) || TEXT_MARKDOWN.equalsIgnoreCase(getContentType());
 	}
 	
 	
 	public boolean isHtml() {
-		return "html".equalsIgnoreCase(getContentType()) || "text/html".equalsIgnoreCase(getContentType());				
+		return HTML.equalsIgnoreCase(getContentType()) || TEXT_HTML.equalsIgnoreCase(getContentType());				
 	}
 	
 	public boolean isText() {
-		return "text".equalsIgnoreCase(getContentType()) || "text/plain".equalsIgnoreCase(getContentType());		
+		return TEXT.equalsIgnoreCase(getContentType()) || TEXT_PLAIN.equalsIgnoreCase(getContentType());		
 	}
 	
 	public String toMarkdown() {
@@ -97,9 +104,9 @@ public class Content {
 	
 	public String toString(String format) {
 		return switch (format.toLowerCase()) {
-			case "markdown", "text/markdown" -> toMarkdown();
-			case "html", "text/html" -> toHtml();
-			case "text", "text/plain" -> toText();
+			case MARKDOWN, TEXT_MARKDOWN -> toMarkdown();
+			case HTML, TEXT_HTML -> toHtml();
+			case TEXT, TEXT_PLAIN -> toText();
 			default -> throw new IllegalArgumentException("Unsupported format: " + format);
 		};
 	}

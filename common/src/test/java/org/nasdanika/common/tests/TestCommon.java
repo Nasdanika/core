@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import org.json.JSONString;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.nasdanika.common.Content;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
@@ -39,6 +40,7 @@ import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressEntry;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertyComputer;
+import org.nasdanika.common.Section;
 import org.nasdanika.common.ServiceComputer;
 import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.SourceRecord;
@@ -567,6 +569,22 @@ public class TestCommon {
         System.out.println(result.block());
         
         // If monoA is empty, result will be "B". If monoA is "A", result will be "AB".    	
+    }
+    
+    @Test
+    public void testSection() {
+    	Section parent = new Section("Parent", "parent");
+    	Content content = new Content("Hello _world_!", Content.MARKDOWN);
+    	parent.getContents().add(content);
+    	
+    	
+    	
+    	
+    	System.out.println(parent.toHtml(1));
+    	System.out.println("~~~~~");
+    	System.out.println(parent.toMarkdown(1));
+    	System.out.println("~~~~~");
+    	System.out.println(parent.toText(1));
     }
     	
 }

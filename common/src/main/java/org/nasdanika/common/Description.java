@@ -20,8 +20,6 @@ import java.lang.annotation.Target;
 	ElementType.MODULE})
 public @interface Description {
 
-	public static final String MARKDOWN_FORMAT = "markdown";
-
 	/**
 	 * Description text. 
 	 * @return

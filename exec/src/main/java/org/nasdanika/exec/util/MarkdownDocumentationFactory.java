@@ -8,6 +8,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.common.Content;
 import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
@@ -17,7 +18,6 @@ import org.nasdanika.exec.content.Markdown;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.content.Text;
 import org.nasdanika.ncore.NcoreFactory;
-import org.nasdanika.common.Description;
 
 public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<DocumentationFactory.Requirement, DocumentationFactory> {
 	
@@ -42,7 +42,7 @@ public class MarkdownDocumentationFactory extends ServiceCapabilityFactory<Docum
 			
 			@Override
 			public boolean canHandle(String contentType) {				
-				return Description.MARKDOWN_FORMAT.equalsIgnoreCase(contentType) || "text/markdown".equalsIgnoreCase(contentType);
+				return Content.MARKDOWN.equalsIgnoreCase(contentType) || "text/markdown".equalsIgnoreCase(contentType);
 			}
 			
 			@Override
