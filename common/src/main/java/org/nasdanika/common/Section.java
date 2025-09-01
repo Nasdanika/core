@@ -3,6 +3,7 @@ package org.nasdanika.common;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A section of structured narration
@@ -217,6 +218,14 @@ public class Section extends SectionReference {
 			case Content.TEXT, Content.TEXT_PLAIN -> toText(1);
 			default -> throw new IllegalArgumentException("Unsupported format: " + format);
 		};
+	}
+	
+	public boolean isEmpty() {
+		Optional<Section> nec = getChildren().stream().filter(s -> !s.isEmpty()).findAny();
+		if (nec.isPresent()) {
+			return false;
+		}
+		return getContents().stream().filter(c -> !c.isEmpty()).findAny().isEmpty();
 	}
 
 }

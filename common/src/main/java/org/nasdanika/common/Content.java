@@ -110,5 +110,9 @@ public class Content {
 			default -> throw new IllegalArgumentException("Unsupported format: " + format);
 		};
 	}
+	
+	public boolean isEmpty() {
+		return Util.isBlank(getContent());
+	}
 
 }

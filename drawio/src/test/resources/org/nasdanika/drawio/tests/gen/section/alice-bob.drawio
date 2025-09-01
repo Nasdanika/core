@@ -1,0 +1,37 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6">
+  <diagram id="alice-bob" name="Alice-Bob">
+    <mxGraphModel dx="1494" dy="1382" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="light-dark(#F7F7F7,#121212)" math="0" shadow="0">
+      <root>
+        <object label="" documentation="The Alice and Bob characters were created by [Ron Rivest](https://en.wikipedia.org/wiki/Ron_Rivest), [Adi Shamir](https://en.wikipedia.org/wiki/Adi_Shamir), and [Leonard Adleman](https://en.wikipedia.org/wiki/Leonard_Adleman) in their 1978 paper &quot;A Method for Obtaining Digital Signatures and Public-key Cryptosystems&quot;" id="0">
+          <mxCell />
+        </object>
+        <mxCell id="1" parent="0" />
+        <UserObject label="" tooltip="Alice sends a message to Bob" id="Xj581JkAq2ArbWqXRZmT-3">
+          <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="alice" target="bob" edge="1">
+            <mxGeometry relative="1" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <object label="Alice" documentation="Alice is a fictional character who wants to exchange messages with Bob." id="alice">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+            <mxGeometry x="360" y="650" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Bob&#39;s House" tooltip="Bob&#39;s beautiful house" id="bobs-house">
+          <mxCell style="swimlane;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+            <mxGeometry x="540" y="600" width="200" height="130" as="geometry" />
+          </mxCell>
+        </object>
+        <UserObject label="Bob" tooltip="Bob is a fictional character who receives&#xa;messages from Alice" id="bob">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="bobs-house" vertex="1">
+            <mxGeometry x="40" y="50" width="120" height="60" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <object label="Library" id="library">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+            <mxGeometry x="460" y="790" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
