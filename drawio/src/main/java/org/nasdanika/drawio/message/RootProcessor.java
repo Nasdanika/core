@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.gen.section;
+package org.nasdanika.drawio.message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class RootProcessor extends BaseProcessor<Root> {
 	@RegistryEntry("#element.model.page == #this")
 	public PageProcessor pageProcessor;
 	
-	public RootProcessor(SectionProcessorFactory factory) {
+	public RootProcessor(MessageProcessorFactory factory) {
 		super(factory);
 	}
 

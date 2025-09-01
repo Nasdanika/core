@@ -51,7 +51,7 @@ public class DrawioSectionGenerator extends Configuration {
 		document.accept(consumer, null);
 		Map<Element, ProcessorConfig> configs = processorConfigTransformer.transform(elements, false, progressMonitor);
 		
-		DrawioProcessorFactory processorFactory = createProcessorFactory(progressMonitor);
+		SectionProcessorFactory processorFactory = createProcessorFactory(progressMonitor);
 		ReflectiveProcessorFactoryProvider<BaseProcessor<?>, BaseProcessor<?>, BaseProcessor<?>> rpfp = new ReflectiveProcessorFactoryProvider<>(processorFactory);
 		Map<Element, ProcessorInfo<BaseProcessor<?>>> processors = rpfp.getFactory().createProcessors(configs.values(), false, progressMonitor);
 		
@@ -90,8 +90,8 @@ public class DrawioSectionGenerator extends Configuration {
 		return null; // TODO
 	}
 
-	protected DrawioProcessorFactory createProcessorFactory(ProgressMonitor progressMonitor) {
-		return new DrawioProcessorFactory() {
+	protected SectionProcessorFactory createProcessorFactory(ProgressMonitor progressMonitor) {
+		return new SectionProcessorFactory() {
 			
 		};
 	}

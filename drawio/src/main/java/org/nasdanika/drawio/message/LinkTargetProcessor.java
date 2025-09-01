@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.gen.section;
+package org.nasdanika.drawio.message;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +21,7 @@ public abstract class LinkTargetProcessor<T extends LinkTarget> extends BaseProc
 		}
 	}	
 	
-	public LinkTargetProcessor(SectionProcessorFactory factory) {
+	public LinkTargetProcessor(MessageProcessorFactory factory) {
 		super(factory);
 	}
 	

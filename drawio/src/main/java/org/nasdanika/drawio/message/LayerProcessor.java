@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.gen.section;
+package org.nasdanika.drawio.message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class LayerProcessor extends BaseProcessor<Layer> {
 	
 	// TODO - if background (no title) then merge with the root/page/model
 	
-	public LayerProcessor(SectionProcessorFactory factory) {
+	public LayerProcessor(MessageProcessorFactory factory) {
 		super(factory);
 	}
 	

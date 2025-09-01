@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.gen.section;
+package org.nasdanika.drawio.message;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -13,9 +13,17 @@ import org.nasdanika.graph.processor.Processor;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
-public class DrawioProcessorFactory extends Configuration {
+public class MessageProcessorFactory<C> {
 	
-	protected CapabilityLoader capabilityLoader;
+	private C configuration;
+	
+	public MessageProcessorFactory(C configuration) {
+		this.configuration = configuration;
+	}
+	
+	public C getConfiguration() {
+		return configuration;
+	}
 				
 	@Processor(type = org.nasdanika.drawio.Document.class)
 	public DocumentProcessor createDocumentProcessor(

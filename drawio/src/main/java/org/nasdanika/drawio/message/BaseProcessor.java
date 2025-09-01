@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.gen.section;
+package org.nasdanika.drawio.message;
 
 import java.io.InputStream;
 import java.util.List;
@@ -34,7 +34,7 @@ public abstract class BaseProcessor<T extends Element> {
 
 	protected Configuration configuration;
 	
-	public BaseProcessor(SectionProcessorFactory configuration) {
+	public BaseProcessor(MessageProcessorFactory configuration) {
 		this.configuration = configuration;
 	}
 		

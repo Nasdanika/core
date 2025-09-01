@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.gen.section;
+package org.nasdanika.drawio.message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public abstract class LayerElementProcessor<T extends LayerElement> extends Link
 		}
 	}
 	
-	public LayerElementProcessor(SectionProcessorFactory factory) {
+	public LayerElementProcessor(MessageProcessorFactory factory) {
 		super(factory);
 	}
 		

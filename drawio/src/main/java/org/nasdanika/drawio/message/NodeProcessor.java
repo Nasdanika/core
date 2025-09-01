@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.gen.section;
+package org.nasdanika.drawio.message;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +29,7 @@ public class NodeProcessor extends LayerElementProcessor<Node> {
 	private static final String DATA_URI_PNG_PREFIX_NO_BASE_64 = "data:image/png,";
 	private static final String DATA_URI_JPEG_PREFIX_NO_BASE_64 = "data:image/jpeg,";	
 	
-	public NodeProcessor(SectionProcessorFactory factory) {
+	public NodeProcessor(MessageProcessorFactory factory) {
 		super(factory);
 	}
 	

@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.gen.section;
+package org.nasdanika.drawio.message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import org.nasdanika.graph.processor.ProcessorInfo;
 
 public class DocumentProcessor extends BaseProcessor<Document> {
 	
-	public DocumentProcessor(SectionProcessorFactory factory) {
+	public DocumentProcessor(MessageProcessorFactory factory) {
 		super(factory);
 	}
 	

@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.gen.section;
+package org.nasdanika.drawio.message;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import org.nasdanika.graph.processor.SourceHandler;
 
 public class ConnectionProcessor extends LayerElementProcessor<Connection> {
 
-	public ConnectionProcessor(SectionProcessorFactory factory) {
+	public ConnectionProcessor(MessageProcessorFactory factory) {
 		super(factory);
 	}
 	
