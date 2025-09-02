@@ -1,4 +1,4 @@
-package org.nasdanika.common;
+package org.nasdanika.common.message;
 
 public class DoubleMessage<T> extends Message<T,Double> {
 

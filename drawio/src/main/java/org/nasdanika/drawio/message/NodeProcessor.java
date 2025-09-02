@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-import org.nasdanika.common.Message;
 import org.nasdanika.common.Section;
+import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
@@ -24,7 +24,7 @@ import org.nasdanika.graph.processor.RegistryEntry;
 
 import reactor.core.publisher.Mono;
 
-public class NodeProcessor extends LayerElementProcessor<Node> {
+public class NodeProcessor<V> extends LayerElementProcessor<Node,V> {
 		
 	private static final String DATA_URI_PNG_PREFIX_NO_BASE_64 = "data:image/png,";
 	private static final String DATA_URI_JPEG_PREFIX_NO_BASE_64 = "data:image/jpeg,";	

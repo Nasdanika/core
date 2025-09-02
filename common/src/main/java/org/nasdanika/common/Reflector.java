@@ -165,7 +165,17 @@ public class Reflector {
 		}
 		
 		public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
-			return annotatedElement.getAnnotation(annotationClass);
+			A ret = annotatedElement.getAnnotation(annotationClass);
+			if (ret == null && annotatedElement instanceof Method) {
+				// Looking for an annotation in overridden methods
+				for (Method om: Util.getOverriddenMethods((Method) annotatedElement)) {
+					ret = om.getAnnotation(annotationClass);
+					if (ret != null) {
+						break;
+					}
+				}
+			}
+			return ret;
 		}
 		
 		public Object get() {

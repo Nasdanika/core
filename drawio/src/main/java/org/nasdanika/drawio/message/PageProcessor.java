@@ -3,8 +3,8 @@ package org.nasdanika.drawio.message;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.nasdanika.common.Message;
 import org.nasdanika.common.SectionReference;
+import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.message.ChildMessage;
 import org.nasdanika.drawio.message.ReferrerMessage;
@@ -16,11 +16,7 @@ import org.nasdanika.graph.processor.RegistryEntry;
  * For linked pages passes through child labels to be used by the linking element. 
  * Also generates diagram embedding widget to add to the linking element page. 
  */
-public class PageProcessor extends LinkTargetProcessor<Page> {
-	
-	public PageProcessor(MessageProcessorFactory factory) {
-		super(factory);
-	}
+public class PageProcessor<V> extends LinkTargetProcessor<Page,V> {
 	
 	@ProcessorElement
 	@Override

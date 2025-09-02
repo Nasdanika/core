@@ -1,6 +1,6 @@
 package org.nasdanika.drawio.message.number;
 
-import org.nasdanika.common.Message;
+import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.LinkTarget;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.message.LinkTargetMessage;

@@ -1,4 +1,4 @@
-package org.nasdanika.common;
+package org.nasdanika.common.message;
 
 import java.util.ArrayList;
 import java.util.Collections;

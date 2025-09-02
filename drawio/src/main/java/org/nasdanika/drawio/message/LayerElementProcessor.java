@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.nasdanika.common.Message;
+import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.LayerElement;
@@ -19,7 +19,7 @@ import org.nasdanika.graph.processor.NodeProcessorInfo;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.RegistryEntry;
 
-public abstract class LayerElementProcessor<T extends LayerElement> extends LinkTargetProcessor<T> {
+public abstract class LayerElementProcessor<T extends LayerElement,V> extends LinkTargetProcessor<T,V> {
 	
 	protected Map<ModelElement, ProcessorInfo<BaseProcessor<?>>> childInfos = new ConcurrentHashMap<>();
 	
@@ -49,10 +49,6 @@ public abstract class LayerElementProcessor<T extends LayerElement> extends Link
 			NodeProcessorInfo<BaseProcessor<?>, BaseProcessor<?>, BaseProcessor<?>> npi = (NodeProcessorInfo<BaseProcessor<?>, BaseProcessor<?>, BaseProcessor<?>>) referrerInfo;
 			outgoingEndpoints.putAll((Map) npi.getOutgoingEndpoints());			
 		}
-	}
-	
-	public LayerElementProcessor(MessageProcessorFactory factory) {
-		super(factory);
 	}
 		
 	@Override

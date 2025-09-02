@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.nasdanika.common.Message;
 import org.nasdanika.common.Section;
+import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.drawio.message.ChildMessage;
@@ -14,16 +14,12 @@ import org.nasdanika.graph.processor.ChildProcessors;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.RegistryEntry;
 
-public class RootProcessor extends BaseProcessor<Root> {
+public class RootProcessor<V> extends BaseProcessor<Root,V> {
 	
 	// TODO - background color and background image from the model
 		
 	@RegistryEntry("#element.model.page == #this")
 	public PageProcessor pageProcessor;
-	
-	public RootProcessor(MessageProcessorFactory factory) {
-		super(factory);
-	}
 
 	@ChildProcessors
 	public Map<Layer, ProcessorInfo<LayerProcessor>> layerProcessorInfos;

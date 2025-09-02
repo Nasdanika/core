@@ -8,9 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -577,14 +579,19 @@ public class TestCommon {
     	Content content = new Content("Hello _world_!", Content.MARKDOWN);
     	parent.getContents().add(content);
     	
-    	
-    	
-    	
     	System.out.println(parent.toHtml(1));
     	System.out.println("~~~~~");
     	System.out.println(parent.toMarkdown(1));
     	System.out.println("~~~~~");
     	System.out.println(parent.toText(1));
+    }
+    
+    @Test
+    public void testGetOverridenMethods() throws Exception {
+    	Method m = ArrayList.class.getMethod("add", Object.class);
+    	for (Method om: Util.getOverriddenMethods(m)) {
+    		System.out.println(om);
+    	}
     }
     	
 }

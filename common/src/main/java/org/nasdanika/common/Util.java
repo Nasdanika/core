@@ -1393,6 +1393,22 @@ public class Util {
 		return ret.stream().distinct().toList();
 	}
 	
+	public static List<Method> getOverriddenMethods(Method method) {
+	    String name = method.getName();
+	    Class<?>[] params = method.getParameterTypes();
+	    
+	    List<Method> overridden = new ArrayList<>();
+	    for (Class<?> sc: lineage(method.getDeclaringClass())) {
+	        try {
+	            overridden.add(sc.getDeclaredMethod(name, params));
+	        } catch (NoSuchMethodException ignored) {
+	        	// Ignoring
+	        }	    	
+	    }
+	    overridden.remove(0); // Method itself
+	    return overridden;
+	}
+	
 	// --- For reflection ---
 	
 	/**
@@ -1645,5 +1661,7 @@ public class Util {
 			return ret;
 		});		
 	}
+	
+	
 
 }

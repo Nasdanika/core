@@ -10,7 +10,7 @@ import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.graph.processor.RegistryEntry;
 
-public abstract class LinkTargetProcessor<T extends LinkTarget> extends BaseProcessor<T> {
+public abstract class LinkTargetProcessor<T extends LinkTarget,V> extends BaseProcessor<T,V> {
 
 	protected Collection<BaseProcessor<?>> referrerProcessors = Collections.synchronizedList(new ArrayList<>());	
 		
@@ -20,10 +20,6 @@ public abstract class LinkTargetProcessor<T extends LinkTarget> extends BaseProc
 			referrerProcessors.add(referrerProcessor);
 		}
 	}	
-	
-	public LinkTargetProcessor(MessageProcessorFactory factory) {
-		super(factory);
-	}
 	
 	public void addReferrer(ModelElement referrer) {
 		referrers.add(referrer);

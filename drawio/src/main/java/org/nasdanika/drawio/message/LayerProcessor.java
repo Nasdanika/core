@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.nasdanika.common.Message;
+import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.LayerElement;
@@ -16,13 +16,7 @@ import org.nasdanika.graph.processor.ProcessorElement;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.RegistryEntry;
 
-public class LayerProcessor extends BaseProcessor<Layer> {
-	
-	// TODO - if background (no title) then merge with the root/page/model
-	
-	public LayerProcessor(MessageProcessorFactory factory) {
-		super(factory);
-	}
+public class LayerProcessor<V> extends BaseProcessor<Layer,V> {
 	
 	@RegistryEntry("#element.root == #this")
 	public RootProcessor rootProcessor;

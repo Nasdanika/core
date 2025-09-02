@@ -2,8 +2,8 @@ package org.nasdanika.drawio.gen.section;
 
 import java.util.List;
 
-import org.nasdanika.common.Message;
 import org.nasdanika.common.Section;
+import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.message.SourceMessage;
 import org.nasdanika.drawio.message.TargetMessage;

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.nasdanika.common.Message;
 import org.nasdanika.common.Section;
+import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.drawio.message.ChildMessage;
