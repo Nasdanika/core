@@ -29,6 +29,6 @@ public abstract class DocumentProcessor<V> extends BaseProcessor<Document,V> {
 		return ret;
 	}
 
-	protected abstract V pageValue(V value, Page page);
+	protected abstract V pageValue(V messageValue, Page page);
 
 }

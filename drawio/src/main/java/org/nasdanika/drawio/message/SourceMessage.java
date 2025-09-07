@@ -8,7 +8,7 @@ import org.nasdanika.drawio.Node;
  */
 public class SourceMessage<V> extends ElementMessage<Node,V,NodeProcessor<V>> {
 
-	public SourceMessage(IncomingMessage<V> parent, Node target, V value, NodeProcessor<V> processor) {
+	public SourceMessage(IncomingConnectionMessage<V> parent, Node target, V value, NodeProcessor<V> processor) {
 		super(parent, target, value, processor);
 	}
 

@@ -1,14 +1,10 @@
 package org.nasdanika.drawio.message;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.nasdanika.common.SectionReference;
-import org.nasdanika.common.message.Message;
+import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Page;
-import org.nasdanika.drawio.message.ChildMessage;
-import org.nasdanika.drawio.message.ReferrerMessage;
-import org.nasdanika.graph.processor.ProcessorElement;
+import org.nasdanika.drawio.Root;
 import org.nasdanika.graph.processor.RegistryEntry;
 
 /**
@@ -16,46 +12,43 @@ import org.nasdanika.graph.processor.RegistryEntry;
  * For linked pages passes through child labels to be used by the linking element. 
  * Also generates diagram embedding widget to add to the linking element page. 
  */
-public class PageProcessor<V> extends LinkTargetProcessor<Page,V> {
+public abstract class PageProcessor<V> extends LinkTargetProcessor<Page,V> {
 	
-	@ProcessorElement
-	@Override
-	public void setElement(Page element) {
-		super.setElement(element);
-		setId(element.getId());
-	}
+	@RegistryEntry("#element.model.root == #this")
+	public RootProcessor<V> rootProcessor;
+	
+	@RegistryEntry("#element.model.document == #this")
+	public DocumentProcessor<V> documentProcessor;	
 	
 	@Override
-	public List<Message<?>> processMessage(Message<?> message) {
-		List<Message<?>> ret = new ArrayList<>();
-		if (rootProcessor != null && !message.hasSeen(rootProcessor)) {
-			ret.add(new ChildMessage(message, rootProcessor));			
-		}
+	public List<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
+		List<ElementMessage<?, V, ?>> ret = super.processMessage(message);
 		
-		for (BaseProcessor<?> rp: referrerProcessors) {
-			if (!message.hasSeen(rp)) {
-				ret.add(new ReferrerMessage(message, rp));
+		Root root = rootProcessor.getElement();
+		if (!message.hasSeen(root)) {
+			V rootValue = rootValue(message.getValue(), root);
+			if (rootValue != null) {
+				ret.add(new ChildMessage<Root,V,RootProcessor<V>>(message, root, rootValue, rootProcessor));
 			}
 		}
 		
+		Document document = documentProcessor.getElement();
+		if (!message.hasSeen(document)) {
+			V documentValue = documentValue(message.getValue(), root);
+			if (documentValue != null) {
+				ret.add(new ParentMessage<Document,V,DocumentProcessor<V>>(message, document, documentValue, documentProcessor));
+			}
+		}
+				
 		return ret;
 	}
 	
-	@Override
-	public SectionReference createSectionReference() {
-		SectionReference sectionReference = super.createSectionReference();
-		sectionReference.setTitle(element.getName());
-		return sectionReference;
+	protected V rootValue(V messageValue, Root root) {
+		return messageValue;
 	}
 	
-	/**
-	 * Forcing top-level page
-	 */
-	public boolean isTopLevelPage;
-	
-	@RegistryEntry("#element.model.root == #this")
-	public RootProcessor rootProcessor;
-	
+	protected abstract V documentValue(V messageValue, Root root);
+		
 }
 
 

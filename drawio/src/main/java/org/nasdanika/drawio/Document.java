@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -88,9 +89,9 @@ public interface Document extends Element {
 			}
 			
 			private Document load(URI source) {
-				try (InputStream in = uriHandler == null ? new URL(source.toString()).openStream() : uriHandler.apply(source)) {					
+				try (InputStream in = uriHandler == null ? new java.net.URI(source.toString()).toURL().openStream() : uriHandler.apply(source)) {					
 					return new DocumentImpl(in, source, this, propertySource);
-				} catch (IOException | ParserConfigurationException | SAXException e) {
+				} catch (IOException | ParserConfigurationException | SAXException | URISyntaxException e) {
 					throw new NasdanikaException("Error loading document from " + source + ": " + e, e);
 				}
 			}

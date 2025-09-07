@@ -4,48 +4,51 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.nasdanika.common.Section;
-import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Layer;
+import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Root;
-import org.nasdanika.drawio.message.ChildMessage;
-import org.nasdanika.drawio.message.ParentMessage;
 import org.nasdanika.graph.processor.ChildProcessors;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.RegistryEntry;
 
-public class RootProcessor<V> extends BaseProcessor<Root,V> {
-	
-	// TODO - background color and background image from the model
+public abstract class RootProcessor<V> extends BaseProcessor<Root,V> {
 		
 	@RegistryEntry("#element.model.page == #this")
-	public PageProcessor pageProcessor;
+	public PageProcessor<V> pageProcessor;
 
 	@ChildProcessors
-	public Map<Layer, ProcessorInfo<LayerProcessor>> layerProcessorInfos;
+	public Map<Layer, ProcessorInfo<LayerProcessor<V>>> layerProcessorInfos;
 	
 	@Override
-	public void configureSection(Section section) {
-		super.configureSection(section);
-		section.setTitle(element.getModel().getPage().getName());
-		// TODO - layer list if more than one. number of elements?
-		// TODO - logically merge with the background layer if it doesn't have a name
-	}
+	public List<ElementMessage<?, V, ?>> processMessage(ElementMessage<?,V,?> message) {
+		List<ElementMessage<?, V, ?>> ret = new ArrayList<>();
 		
-	@Override
-	public List<Message<?>> processMessage(Message<?> message) {
-		List<Message<?>> ret = new ArrayList<>();
-		if (pageProcessor != null && !message.hasSeen(pageProcessor)) {
-			ret.add(new ParentMessage(message, pageProcessor));			
+		Page page = pageProcessor.getElement();
+		if (!message.hasSeen(page)) {
+			V pageValue = pageValue(message.getValue(), page);
+			if (pageValue != null) {
+				ret.add(new ParentMessage<Page,V,PageProcessor<V>>(message, page, pageValue, pageProcessor));
+			}
+		}
+				
+		for (ProcessorInfo<LayerProcessor<V>> lpi: layerProcessorInfos.values()) {
+			LayerProcessor<V> layerProcessor = lpi.getProcessor();
+			if (layerProcessor != null) {
+				Layer layer = layerProcessor.getElement();
+				if (!message.hasSeen(layer)) {
+					V layerValue = layerValue(message.getValue(), layer);
+					if (layerValue != null) {
+						ret.add(new ChildMessage<Layer,V,LayerProcessor<V>>(message, layer, layerValue, layerProcessor));
+					}
+				}
+			}
 		}
 		
-		for (ProcessorInfo<LayerProcessor> lpi: layerProcessorInfos.values()) {
-			LayerProcessor lp = lpi.getProcessor();
-			if (lp != null && !message.hasSeen(lp)) {
-				ret.add(new ChildMessage(message, lp));
-			}
-		}		
 		return ret;
 	}
+
+	protected abstract V pageValue(V messageValue, Page page);
+
+	protected abstract V layerValue(V messageValue, Layer layer);
 	
 }

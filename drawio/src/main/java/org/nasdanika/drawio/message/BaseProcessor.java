@@ -13,6 +13,7 @@ import org.nasdanika.graph.processor.Registry;
 /**
  * Base class for message processors.
  * Sends a root message and stores it.
+ * @param <T> processor element type
  */
 public abstract class BaseProcessor<T extends Element,V> {
 		
@@ -21,6 +22,10 @@ public abstract class BaseProcessor<T extends Element,V> {
 	@ProcessorElement	
 	public void setElement(T element) {
 		this.element = element;
+	}
+	
+	public T getElement() {
+		return element;
 	}
 	
 	@Registry 

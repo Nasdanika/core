@@ -6,8 +6,8 @@ import java.util.List;
 
 /**
  * A message sent to a target of type T and value of type V
- * @param <T>
- * @param <V>
+ * @param <T> Message target type
+ * @param <V> Message value type
  */
 public class Message<T,V> {
 	

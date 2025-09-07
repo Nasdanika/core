@@ -9,7 +9,7 @@ import org.nasdanika.drawio.message.SourceMessage;
  */
 public class DoubleSourceMessage extends SourceMessage<Double> {
 
-	public DoubleSourceMessage(DoubleIncomingMessage parent, Node target, Double value) {
+	public DoubleSourceMessage(DoubleIncomingConnectionMessage parent, Node target, Double value) {
 		super(parent, target, value);
 	}
 

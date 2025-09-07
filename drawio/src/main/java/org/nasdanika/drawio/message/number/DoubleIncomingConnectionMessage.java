@@ -3,14 +3,14 @@ package org.nasdanika.drawio.message.number;
 import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Node;
-import org.nasdanika.drawio.message.IncomingMessage;
+import org.nasdanika.drawio.message.IncomingConnectionMessage;
 
 /**
  * A message sent to {@link Connection} from its target
  */
-public class DoubleIncomingMessage extends IncomingMessage<Double> {
+public class DoubleIncomingConnectionMessage extends IncomingConnectionMessage<Double> {
 
-	public DoubleIncomingMessage(Message<Node,Double> parent, Connection target, Double value) {
+	public DoubleIncomingConnectionMessage(Message<Node,Double> parent, Connection target, Double value) {
 		super(parent, target, value);
 	}
 

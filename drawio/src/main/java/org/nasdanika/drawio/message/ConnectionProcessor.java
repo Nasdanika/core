@@ -2,62 +2,48 @@ package org.nasdanika.drawio.message;
 
 import java.util.List;
 
-import org.nasdanika.common.Section;
-import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Connection;
-import org.nasdanika.drawio.message.SourceMessage;
-import org.nasdanika.drawio.message.TargetMessage;
-import org.nasdanika.graph.processor.ProcessorElement;
+import org.nasdanika.drawio.Node;
 import org.nasdanika.graph.processor.RegistryEntry;
-import org.nasdanika.graph.processor.SourceHandler;
 
-public class ConnectionProcessor<V> extends LayerElementProcessor<Connection,V> {
-
-	public ConnectionProcessor(MessageProcessorFactory factory) {
-		super(factory);
-	}
-	
-	
-	@Override
-	protected Section doCreateSection() {
-		Section section = super.doCreateSection();
-		
-		// TODO - style, geometry (direction), start and end decorations
-		
-		return section;
-	}
-	
-	// icon?
-	
-
-	@ProcessorElement
-	@Override
-	public void setElement(Connection element) {
-		super.setElement(element);
-	}
-		
-	@SourceHandler
-	public ConnectionProcessor getSourceHandler() {
-		return this;
-	}
+public abstract class ConnectionProcessor<V> extends LayerElementProcessor<Connection,V> {
 		
 	@RegistryEntry("#element.target == #this")
-	public NodeProcessor targetProcessor;	
+	public NodeProcessor<V> targetProcessor;	
 		
 	@RegistryEntry("#element.source == #this")
-	public NodeProcessor sourceProcessor;	
-	
+	public NodeProcessor<V> sourceProcessor;
+		
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Message<?>> processMessage(Message<?> message) {
-		List<Message<?>> ret = super.processMessage(message);
-		if (sourceProcessor != null && !message.hasSeen(sourceProcessor)) {
-			ret.add(new SourceMessage(message, sourceProcessor));			
+	public List<ElementMessage<?, V, ?>> processMessage(ElementMessage<?,V,?> message) {
+		List<ElementMessage<?, V, ?>> ret = super.processMessage(message);
+		
+		if (message instanceof IncomingConnectionMessage && sourceProcessor != null) {
+			Node source = sourceProcessor.getElement();
+			if (!message.hasSeen(source)) {
+				V sourceValue = sourceValue(message.getValue(), source);
+				if (source != null) {
+					ret.add(new SourceMessage<V>((IncomingConnectionMessage<V>) message, source, sourceValue, sourceProcessor));
+				}
+			}
 		}
-		if (targetProcessor != null && !message.hasSeen(targetProcessor)) {
-			ret.add(new TargetMessage(message, targetProcessor));			
+		
+		if (message instanceof OutgoingConnectionMessage && targetProcessor != null) {
+			Node target = sourceProcessor.getElement();
+			if (!message.hasSeen(target)) {
+				V targetValue = targetValue(message.getValue(), target);
+				if (target != null) {
+					ret.add(new TargetMessage<V>((OutgoingConnectionMessage<V>) message, target, targetValue, sourceProcessor));
+				}
+			}
 		}
 		
 		return ret;
 	}
+	
+	protected abstract V sourceValue(V messageValue, Node source);
+	
+	protected abstract V targetValue(V messageValue, Node target);
 	
 }

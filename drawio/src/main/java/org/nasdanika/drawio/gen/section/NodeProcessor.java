@@ -12,8 +12,8 @@ import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
-import org.nasdanika.drawio.message.IncomingMessage;
-import org.nasdanika.drawio.message.OutgoingMessage;
+import org.nasdanika.drawio.message.IncomingConnectionMessage;
+import org.nasdanika.drawio.message.OutgoingConnectionMessage;
 import org.nasdanika.drawio.message.SourceMessage;
 import org.nasdanika.drawio.message.TargetMessage;
 import org.nasdanika.graph.processor.ChildProcessor;
@@ -87,12 +87,12 @@ public class NodeProcessor extends LayerElementProcessor<Node> {
 		List<Message<?>> ret = super.processMessage(message);
 		for (ConnectionProcessor op: outgoingProcessors) {			
 			if (op != null & !message.hasSeen(op)) {
-				ret.add(new OutgoingMessage(message, op));							
+				ret.add(new OutgoingConnectionMessage(message, op));							
 			}
 		}
 		for (ConnectionProcessor ip: incomingProcessors) {			
 			if (ip != null & !message.hasSeen(ip)) {
-				ret.add(new IncomingMessage(message, ip));							
+				ret.add(new IncomingConnectionMessage(message, ip));							
 			}
 		}						
 		

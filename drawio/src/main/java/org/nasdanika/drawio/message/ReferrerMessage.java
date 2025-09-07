@@ -7,9 +7,9 @@ import org.nasdanika.drawio.Page;
  * Message sent from a link target to the referrer. 
  * For example, from a {@link Page} to a {@link ModelElement} linking to this page.
  */
-public class ReferrerMessage<T extends ModelElement,V,P extends BaseProcessor<T,V>> extends ElementMessage<T,V,P> {
+public class ReferrerMessage<V> extends ElementMessage<ModelElement,V,BaseProcessor<ModelElement,V>> {
 
-	public ReferrerMessage(ElementMessage<?,V,?> parent, T target, V value, P processor) {
+	public ReferrerMessage(ElementMessage<?,V,?> parent, ModelElement target, V value, BaseProcessor<ModelElement,V> processor) {
 		super(parent, target, value, processor);
 	}
 
