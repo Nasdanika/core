@@ -1,19 +1,19 @@
 package org.nasdanika.drawio.message.number;
 
-import org.nasdanika.common.message.Message;
-import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.drawio.message.BaseProcessor;
+import org.nasdanika.drawio.message.ElementMessage;
 import org.nasdanika.drawio.message.ReferrerMessage;
 
 /**
  * Message sent from a link target to the referrer. 
  * For example, from a {@link Page} to a {@link ModelElement} linking to this page.
  */
-public class DoubleReferrerMessage<T extends ModelElement> extends ReferrerMessage<T,Double> {
+public class DoubleReferrerMessage extends ReferrerMessage<Double> {
 
-	public DoubleReferrerMessage(Message<? extends Element,Double> parent, T target, Double value) {
-		super(parent, target, value);
+	public DoubleReferrerMessage(ElementMessage<?,Double,?> parent, ModelElement target, Double value, BaseProcessor<ModelElement,Double> processor) {
+		super(parent, target, value, processor);
 	}
 
 }

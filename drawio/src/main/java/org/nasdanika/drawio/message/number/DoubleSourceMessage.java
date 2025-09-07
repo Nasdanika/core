@@ -2,6 +2,7 @@ package org.nasdanika.drawio.message.number;
 
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Node;
+import org.nasdanika.drawio.message.NodeProcessor;
 import org.nasdanika.drawio.message.SourceMessage;
 
 /**
@@ -9,8 +10,8 @@ import org.nasdanika.drawio.message.SourceMessage;
  */
 public class DoubleSourceMessage extends SourceMessage<Double> {
 
-	public DoubleSourceMessage(DoubleIncomingConnectionMessage parent, Node target, Double value) {
-		super(parent, target, value);
+	public DoubleSourceMessage(DoubleIncomingConnectionMessage parent, Node target, Double value, NodeProcessor<Double> processor) {
+		super(parent, target, value, processor);
 	}
 
 }

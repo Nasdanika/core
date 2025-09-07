@@ -11,7 +11,7 @@ import org.nasdanika.drawio.Page;
  * For example, from a {@link Node} to its containing {@link Layer}
  * or from a {@link Page} to {@link Document}
  */
-public class ParentMessage<T extends Element,V, P extends BaseProcessor<T,V>> extends ElementMessage<T,V,P> {
+public class ParentMessage<T extends Element,V,P extends BaseProcessor<T,V>> extends ElementMessage<T,V,P> {
 
 	public ParentMessage(ElementMessage<?,V,?> parent, T target, V value, P processor) {
 		super(parent, target, value, processor);

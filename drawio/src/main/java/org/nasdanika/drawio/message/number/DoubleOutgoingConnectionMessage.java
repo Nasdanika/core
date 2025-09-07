@@ -1,8 +1,8 @@
 package org.nasdanika.drawio.message.number;
 
-import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Connection;
-import org.nasdanika.drawio.Node;
+import org.nasdanika.drawio.message.ConnectionProcessor;
+import org.nasdanika.drawio.message.ElementMessage;
 import org.nasdanika.drawio.message.OutgoingConnectionMessage;
 
 /**
@@ -10,8 +10,8 @@ import org.nasdanika.drawio.message.OutgoingConnectionMessage;
  */
 public class DoubleOutgoingConnectionMessage extends OutgoingConnectionMessage<Double> {
 
-	public DoubleOutgoingConnectionMessage(Message<Node,Double> parent, Connection target, Double value) {
-		super(parent, target, value);
+	public DoubleOutgoingConnectionMessage(ElementMessage<?,Double,?> parent, Connection target, Double value, ConnectionProcessor<Double> processor) {
+		super(parent, target, value, processor);
 	}
 
 }
