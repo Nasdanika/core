@@ -1,6 +1,7 @@
 package org.nasdanika.drawio.message;
 
 import org.nasdanika.drawio.LinkTarget;
+import org.nasdanika.graph.message.ElementMessage;
 
 /**
  * A message to a link target element from its source.

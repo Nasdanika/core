@@ -6,6 +6,8 @@ import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.LinkTarget;
+import org.nasdanika.graph.message.ElementMessage;
+import org.nasdanika.graph.message.ParentMessage;
 import org.nasdanika.graph.processor.RegistryEntry;
 
 public abstract class LayerElementProcessor<T extends LayerElement,V> extends LinkTargetProcessor<T,V> {

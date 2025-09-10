@@ -1,15 +1,17 @@
-package org.nasdanika.common.message;
+package org.nasdanika.graph.message;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.nasdanika.graph.Element;
 
 /**
  * A message sent to a target of type T and value of type V
  * @param <T> Message target type
  * @param <V> Message value type
  */
-public class Message<T,V> {
+public class Message<T,V> implements Element {
 	
 	private T target;
 	private V value;
@@ -22,7 +24,9 @@ public class Message<T,V> {
 
 	public Message(Message<?,V> parent, T target, V value) {
 		this.parent = parent;
-		parent.children.add(this);
+		if (parent != null) {
+			parent.children.add(this);
+		}
 		this.target = target;
 		this.value = value;
 	}

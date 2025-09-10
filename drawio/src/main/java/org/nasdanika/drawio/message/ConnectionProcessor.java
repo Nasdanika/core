@@ -4,6 +4,11 @@ import java.util.List;
 
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Node;
+import org.nasdanika.graph.message.ElementMessage;
+import org.nasdanika.graph.message.IncomingConnectionMessage;
+import org.nasdanika.graph.message.OutgoingConnectionMessage;
+import org.nasdanika.graph.message.SourceMessage;
+import org.nasdanika.graph.message.TargetMessage;
 import org.nasdanika.graph.processor.RegistryEntry;
 
 public abstract class ConnectionProcessor<V> extends LayerElementProcessor<Connection,V> {

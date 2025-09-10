@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.nasdanika.common.Section;
-import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.Root;
-import org.nasdanika.drawio.message.ChildMessage;
-import org.nasdanika.drawio.message.ParentMessage;
+import org.nasdanika.graph.message.ChildMessage;
+import org.nasdanika.graph.message.Message;
+import org.nasdanika.graph.message.ParentMessage;
 import org.nasdanika.graph.processor.ChildProcessors;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.RegistryEntry;

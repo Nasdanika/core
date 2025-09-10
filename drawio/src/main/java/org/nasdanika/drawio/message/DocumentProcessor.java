@@ -6,6 +6,8 @@ import java.util.List;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.graph.message.ChildMessage;
+import org.nasdanika.graph.message.ElementMessage;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
 public abstract class DocumentProcessor<V> extends BaseProcessor<Document,V> {

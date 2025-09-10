@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.nasdanika.common.SectionReference;
-import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Page;
-import org.nasdanika.drawio.message.ChildMessage;
 import org.nasdanika.drawio.message.ReferrerMessage;
+import org.nasdanika.graph.message.ChildMessage;
+import org.nasdanika.graph.message.Message;
 import org.nasdanika.graph.processor.ProcessorElement;
 import org.nasdanika.graph.processor.RegistryEntry;
 

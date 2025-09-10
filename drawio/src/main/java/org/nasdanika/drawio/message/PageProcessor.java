@@ -5,6 +5,9 @@ import java.util.List;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Root;
+import org.nasdanika.graph.message.ChildMessage;
+import org.nasdanika.graph.message.ElementMessage;
+import org.nasdanika.graph.message.ParentMessage;
 import org.nasdanika.graph.processor.RegistryEntry;
 
 /**

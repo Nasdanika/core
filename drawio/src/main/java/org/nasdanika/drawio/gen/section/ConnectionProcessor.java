@@ -3,10 +3,10 @@ package org.nasdanika.drawio.gen.section;
 import java.util.List;
 
 import org.nasdanika.common.Section;
-import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Connection;
-import org.nasdanika.drawio.message.SourceMessage;
-import org.nasdanika.drawio.message.TargetMessage;
+import org.nasdanika.graph.message.Message;
+import org.nasdanika.graph.message.SourceMessage;
+import org.nasdanika.graph.message.TargetMessage;
 import org.nasdanika.graph.processor.ProcessorElement;
 import org.nasdanika.graph.processor.RegistryEntry;
 import org.nasdanika.graph.processor.SourceHandler;

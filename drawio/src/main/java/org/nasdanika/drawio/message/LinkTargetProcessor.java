@@ -8,6 +8,7 @@ import java.util.List;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.LinkTarget;
 import org.nasdanika.drawio.ModelElement;
+import org.nasdanika.graph.message.ElementMessage;
 import org.nasdanika.graph.processor.RegistryEntry;
 
 public abstract class LinkTargetProcessor<T extends LinkTarget,V> extends BaseProcessor<T,V> {

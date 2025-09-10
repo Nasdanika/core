@@ -6,15 +6,15 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.nasdanika.common.message.Message;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.ModelElement;
-import org.nasdanika.drawio.message.ChildMessage;
 import org.nasdanika.drawio.message.LinkTargetMessage;
-import org.nasdanika.drawio.message.ParentMessage;
 import org.nasdanika.drawio.message.ReferrerMessage;
+import org.nasdanika.graph.message.ChildMessage;
+import org.nasdanika.graph.message.Message;
+import org.nasdanika.graph.message.ParentMessage;
 import org.nasdanika.graph.processor.NodeProcessorInfo;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.RegistryEntry;

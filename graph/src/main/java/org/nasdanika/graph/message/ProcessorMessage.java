@@ -1,4 +1,4 @@
-package org.nasdanika.common.message;
+package org.nasdanika.graph.message;
 
 import java.util.List;
 

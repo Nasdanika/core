@@ -2,6 +2,7 @@ package org.nasdanika.drawio.message;
 
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.graph.message.ElementMessage;
 
 /**
  * Message sent from a link target to the referrer. 

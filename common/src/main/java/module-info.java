@@ -27,6 +27,5 @@ module org.nasdanika.common {
 	
 	exports org.nasdanika.common;
 	exports org.nasdanika.common.descriptors;
-	exports org.nasdanika.common.message;
 	
 }

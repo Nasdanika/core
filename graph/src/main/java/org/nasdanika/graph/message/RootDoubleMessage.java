@@ -1,4 +1,4 @@
-package org.nasdanika.common.message;
+package org.nasdanika.graph.message;
 
 /**
  * Root message without a parent.

@@ -3,8 +3,8 @@ package org.nasdanika.drawio.message.number;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.message.BaseProcessor;
-import org.nasdanika.drawio.message.ElementMessage;
 import org.nasdanika.drawio.message.ReferrerMessage;
+import org.nasdanika.graph.message.ElementMessage;
 
 /**
  * Message sent from a link target to the referrer. 

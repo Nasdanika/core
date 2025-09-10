@@ -3,7 +3,7 @@ package org.nasdanika.drawio.message.number;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.message.NodeProcessor;
-import org.nasdanika.drawio.message.SourceMessage;
+import org.nasdanika.graph.message.SourceMessage;
 
 /**
  * A message sent from a {@link Connection} to the source {@link Node}.

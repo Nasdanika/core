@@ -6,8 +6,8 @@ import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.message.BaseProcessor;
-import org.nasdanika.drawio.message.ChildMessage;
-import org.nasdanika.drawio.message.ElementMessage;
+import org.nasdanika.graph.message.ChildMessage;
+import org.nasdanika.graph.message.ElementMessage;
 
 /**
  * Message sent from a parent (container) to it child. For example from {@link Document} to {@link Page}

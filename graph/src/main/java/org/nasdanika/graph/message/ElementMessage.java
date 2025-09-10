@@ -1,10 +1,8 @@
-package org.nasdanika.drawio.message;
+package org.nasdanika.graph.message;
 
 import java.util.List;
 
-import org.nasdanika.common.message.Message;
-import org.nasdanika.common.message.ProcessorMessage;
-import org.nasdanika.drawio.Element;
+import org.nasdanika.graph.Element;
 
 /**
  * 
@@ -12,7 +10,7 @@ import org.nasdanika.drawio.Element;
  * @param <V> Message value type
  * @param <P> Message processor type
  */
-public class ElementMessage<T extends Element,V,P extends BaseProcessor<T,V>> extends Message<T,V> implements ProcessorMessage<ElementMessage<?,V,?>> {
+public class ElementMessage<T extends Element,V,P extends ElementProcessor<T,V>> extends Message<T,V> implements ProcessorMessage<ElementMessage<?,V,?>> {
 
 	protected P processor;
 
