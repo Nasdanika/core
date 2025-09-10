@@ -24,7 +24,6 @@ module org.nasdanika.drawio {
 	exports org.nasdanika.drawio.processor;
 	exports org.nasdanika.drawio.gen.section;
 	exports org.nasdanika.drawio.message;
-	exports org.nasdanika.drawio.message.number;
 	
 	provides CapabilityFactory with DiagramCapabilityFactory;
 		
