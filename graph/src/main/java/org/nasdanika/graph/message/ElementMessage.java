@@ -1,6 +1,6 @@
 package org.nasdanika.graph.message;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.nasdanika.graph.Element;
 
@@ -24,7 +24,7 @@ public class ElementMessage<T extends Element,V,P extends ElementProcessor<T,V>>
 		this.processor = processor;
 	}
 
-	public List<ElementMessage<?, V, ?>> process() {
+	public Collection<ElementMessage<?, V, ?>> process() {
 		return processor.processMessage(this);
 	}
 	

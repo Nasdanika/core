@@ -1,6 +1,6 @@
 package org.nasdanika.graph.message;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.function.Function;
 
 import org.nasdanika.graph.Connection;
@@ -56,8 +56,8 @@ public abstract class ConnectionProcessor<T extends Connection, V> extends Eleme
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
-		List<ElementMessage<?, V, ?>> messages = super.processMessage(message);
+	public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
+		Collection<ElementMessage<?, V, ?>> messages = super.processMessage(message);
 		if (sourceEndpoint != null && message instanceof IncomingConnectionMessage) {
 			SourceMessage<T,?,V> sm = sourceEndpoint.apply((IncomingConnectionMessage<T, V>) message);
 			if (sm != null) {

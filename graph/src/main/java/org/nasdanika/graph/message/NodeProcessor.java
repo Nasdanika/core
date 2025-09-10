@@ -3,7 +3,6 @@ package org.nasdanika.graph.message;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Function;
 
 import org.nasdanika.graph.Connection;
@@ -67,8 +66,8 @@ public abstract class NodeProcessor<T extends Node, V> extends ElementProcessor<
 	}	
 	
 	@Override
-	public List<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
-		List<ElementMessage<?, V, ?>> messages = super.processMessage(message);
+	public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
+		Collection<ElementMessage<?, V, ?>> messages = super.processMessage(message);
 		for (Function<ElementMessage<?, V, ?>, OutgoingConnectionMessage<?, V>> oe: outgoingEndpoints) {
 			OutgoingConnectionMessage<?, V> om = oe.apply(message);
 			if (om != null) {

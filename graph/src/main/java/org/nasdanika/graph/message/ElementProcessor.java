@@ -1,6 +1,7 @@
 package org.nasdanika.graph.message;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -41,7 +42,7 @@ public abstract class ElementProcessor<T extends Element,V> {
 	 * @param message
 	 * @return
 	 */
-	public List<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
+	public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
 		List<ElementMessage<?, V, ?>> ret = new ArrayList<>();
 		for (ProcessorInfo<ElementProcessor<Element, V>> childProcessorInfo: children.values()) {
 			Element child = childProcessorInfo.getElement();

@@ -1,6 +1,7 @@
 package org.nasdanika.graph.message;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -20,7 +21,17 @@ import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
  * Basic message processor factory
  * @param <V>
  */
-public abstract class MessageProcessorFactory<V> implements MessageValueProvider<V> {
+public abstract class MessageProcessorFactory<V>  {
+	
+	protected abstract V childValue(V messageValue, Element parent, Element child);
+
+	protected abstract V sourceValue(V messageValue, Node node, Connection outgoingConnection);
+
+	protected abstract V targetValue(V messageValue, Node node, Connection incomingConnection);
+	
+	protected abstract V incomingValue(V messageValue, Connection connection);
+
+	protected abstract V outgoingValue(V messageValue, Connection connection);	
 					
 	@Processor(type = Element.class)
 	public ElementProcessor<Element,V> createElementProcessor(
@@ -35,6 +46,13 @@ public abstract class MessageProcessorFactory<V> implements MessageValueProvider
 			@Override
 			protected V childValue(V messageValue, Element child) {
 				return MessageProcessorFactory.this.childValue(messageValue, getElement(), child);
+			}
+			
+			@Override
+			public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
+				Collection<ElementMessage<?, V, ?>> messages = super.processMessage(message);
+				messages.addAll(MessageProcessorFactory.this.processMessage(this, message));
+				return messages;
 			}
 			
 		};
@@ -65,6 +83,13 @@ public abstract class MessageProcessorFactory<V> implements MessageValueProvider
 				return MessageProcessorFactory.this.targetValue(messageValue, getElement(), incomingConnection);
 			}
 			
+			@Override
+			public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
+				Collection<ElementMessage<?, V, ?>> messages = super.processMessage(message);
+				messages.addAll(MessageProcessorFactory.this.processMessage(this, message));
+				return messages;
+			}
+			
 		};
 	}
 					
@@ -93,13 +118,27 @@ public abstract class MessageProcessorFactory<V> implements MessageValueProvider
 				return MessageProcessorFactory.this.outgoingValue(messageValue, getElement());
 			}
 			
+			@Override
+			public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
+				Collection<ElementMessage<?, V, ?>> messages = super.processMessage(message);
+				messages.addAll(MessageProcessorFactory.this.processMessage(this, message));
+				return messages;
+			}
+			
 		};
 	}
 	
-	public static <V> Map<Element, ProcessorInfo<ElementProcessor<?,V>>> creatProcessors(
-			Collection<Element> elements, 
-			MessageValueProvider<V> messageValueProvider, 
-			ProgressMonitor progressMonitor) {
+	/**
+	 * Override to create additional messages if needed.
+	 * @param processor
+	 * @param message
+	 * @return
+	 */
+	protected Collection<ElementMessage<?, V, ?>> processMessage(ElementProcessor<?,V> processor, ElementMessage<?, V, ?> message) {
+		return Collections.emptyList();
+	}
+	
+	public Map<Element, ProcessorInfo<ElementProcessor<?,V>>> creatProcessors(Collection<Element> elements, ProgressMonitor progressMonitor) {
 		
 		NopEndpointProcessorConfigFactory<ElementProcessor<?,V>> processorConfigFactory = new NopEndpointProcessorConfigFactory<ElementProcessor<?,V>>() {
 			
@@ -112,38 +151,9 @@ public abstract class MessageProcessorFactory<V> implements MessageValueProvider
 		
 		Transformer<Element,ProcessorConfig> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
 		Map<Element, ProcessorConfig> configs = processorConfigTransformer.transform(elements, false, progressMonitor);
-		
-		MessageProcessorFactory<V> processorFactory = new MessageProcessorFactory<V>() {
-
-			@Override
-			public V childValue(V messageValue, Element parent, Element child) {
-				return messageValueProvider.childValue(messageValue, parent, child);
-			}
-
-			@Override
-			public V sourceValue(V messageValue, Node node, Connection outgoingConnection) {
-				return messageValueProvider.sourceValue(messageValue, node, outgoingConnection);
-			}
-
-			@Override
-			public V targetValue(V messageValue, Node node, Connection incomingConnection) {
-				return messageValueProvider.targetValue(messageValue, node, incomingConnection);
-			}
-
-			@Override
-			public V incomingValue(V messageValue, Connection connection) {
-				return messageValueProvider.incomingValue(messageValue, connection);
-			}
-
-			@Override
-			public V outgoingValue(V messageValue, Connection connection) {
-				return messageValueProvider.outgoingValue(messageValue, connection);
-			}
-		};
-		
-		ReflectiveProcessorFactoryProvider<ElementProcessor<?,V>, Function<ElementMessage<?,V,?>, ElementMessage<?,V,?>>, Function<ElementMessage<?,V,?>, ElementMessage<?,V,?>>> rpfp = new ReflectiveProcessorFactoryProvider<>(processorFactory);
+				
+		ReflectiveProcessorFactoryProvider<ElementProcessor<?,V>, Function<ElementMessage<?,V,?>, ElementMessage<?,V,?>>, Function<ElementMessage<?,V,?>, ElementMessage<?,V,?>>> rpfp = new ReflectiveProcessorFactoryProvider<>(this);
 		return rpfp.getFactory().createProcessors(configs.values(), false, progressMonitor);
-	}
-	
+	}	
 	
 }

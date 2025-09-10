@@ -15,47 +15,53 @@ import org.nasdanika.graph.Node;
 import org.nasdanika.graph.ObjectConnection;
 import org.nasdanika.graph.ObjectNode;
 import org.nasdanika.graph.SimpleNode;
+import org.nasdanika.graph.message.ElementMessage;
 import org.nasdanika.graph.message.ElementProcessor;
 import org.nasdanika.graph.message.MessageProcessorFactory;
-import org.nasdanika.graph.message.MessageValueProvider;
 import org.nasdanika.graph.message.RootElementMessage;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
 public class TestMessages {
 	
-	MessageValueProvider<String> stringMessageValueProvider = new MessageValueProvider<String>() {
+	private MessageProcessorFactory<String> messageProcessorFactory = new MessageProcessorFactory<String>() {
 		
 		@Override
-		public String targetValue(String messageValue, Node node, Connection incomingConnection) {
+		protected String targetValue(String messageValue, Node node, Connection incomingConnection) {
 			return messageValue + ".T";
 		}
 		
 		@Override
-		public String sourceValue(String messageValue, Node node, Connection outgoingConnection) {
+		protected String sourceValue(String messageValue, Node node, Connection outgoingConnection) {
 			return messageValue + ".S";
 		}
 		
 		@Override
-		public String outgoingValue(String messageValue, Connection connection) {
+		protected String outgoingValue(String messageValue, Connection connection) {
 			return messageValue + ".O";
 		}
 		
 		@Override
-		public String incomingValue(String messageValue, Connection connection) {
+		protected String incomingValue(String messageValue, Connection connection) {
 			return messageValue + ".I";
 		}
 		
 		@Override
-		public String childValue(String messageValue, Element parent, Element child) {
+		protected String childValue(String messageValue, Element parent, Element child) {
 			return messageValue + ".C";
 		}
+		
+		@Override
+		protected Collection<ElementMessage<?,String,?>> processMessage(ElementProcessor<?,String> processor, ElementMessage<?,String,?> message) {
+			System.out.println(processor + " " + message);
+			return super.processMessage(processor, message);
+		};
 	};
 	
 	@Test
 	public void testSingleElement() {
 		SimpleNode node = new SimpleNode();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = MessageProcessorFactory.creatProcessors(Collections.singleton(node), stringMessageValueProvider, progressMonitor);
+		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = messageProcessorFactory.creatProcessors(Collections.singleton(node), progressMonitor);
 		ProcessorInfo<ElementProcessor<?, String>> processorInfo = processors.get(node);
 		ElementProcessor<?, String> processor = processorInfo.getProcessor();
 		RootElementMessage<?, String, ?> rootMessage = processor.sendMessages("Hello");
@@ -75,7 +81,7 @@ public class TestMessages {
 		};
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = MessageProcessorFactory.creatProcessors(Collections.singleton(parent), stringMessageValueProvider, progressMonitor);
+		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = messageProcessorFactory.creatProcessors(Collections.singleton(parent), progressMonitor);
 		ProcessorInfo<ElementProcessor<?, String>> processorInfo = processors.get(parent);
 		ElementProcessor<?, String> processor = processorInfo.getProcessor();
 		RootElementMessage<?, String, ?> rootMessage = processor.sendMessages("Hello");
@@ -88,7 +94,7 @@ public class TestMessages {
 		ObjectConnection<String> outgoingConnection = new ObjectConnection<>(source, null, false, "Outgoing connection");
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = MessageProcessorFactory.creatProcessors(Collections.singleton(source), stringMessageValueProvider, progressMonitor);
+		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = messageProcessorFactory.creatProcessors(Collections.singleton(source), progressMonitor);
 		ProcessorInfo<ElementProcessor<?, String>> processorInfo = processors.get(source);
 		ElementProcessor<?, String> processor = processorInfo.getProcessor();
 		RootElementMessage<?, String, ?> rootMessage = processor.sendMessages("Hello");
@@ -101,7 +107,7 @@ public class TestMessages {
 		ObjectConnection<String> incomingConnection = new ObjectConnection<>(null, target, false, "Incoming connection");
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = MessageProcessorFactory.creatProcessors(Collections.singleton(target), stringMessageValueProvider, progressMonitor);
+		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = messageProcessorFactory.creatProcessors(Collections.singleton(target), progressMonitor);
 		ProcessorInfo<ElementProcessor<?, String>> processorInfo = processors.get(target);
 		ElementProcessor<?, String> processor = processorInfo.getProcessor();
 		RootElementMessage<?, String, ?> rootMessage = processor.sendMessages("Hello");
@@ -115,7 +121,7 @@ public class TestMessages {
 		ObjectConnection<String> connection = new ObjectConnection<>(source, target, false, "Connection");
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = MessageProcessorFactory.creatProcessors(List.of(source, target), stringMessageValueProvider, progressMonitor);
+		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = messageProcessorFactory.creatProcessors(List.of(source, target), progressMonitor);
 		
 		ProcessorInfo<ElementProcessor<?, String>> targetProcessorInfo = processors.get(target);
 		ElementProcessor<?, String> targetProcessor = targetProcessorInfo.getProcessor();
