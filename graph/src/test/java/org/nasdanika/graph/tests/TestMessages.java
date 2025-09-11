@@ -54,6 +54,11 @@ public class TestMessages {
 		protected Collection<ElementMessage<?,String,?>> processMessage(ElementProcessor<?,String> processor, ElementMessage<?,String,?> message) {
 			System.out.println(processor + " " + message);
 			return super.processMessage(processor, message);
+		}
+
+		@Override
+		protected String parentValue(String messageValue, Element child, Element parent) {
+			return messageValue + ".P";
 		};
 	};
 	
@@ -83,6 +88,26 @@ public class TestMessages {
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = messageProcessorFactory.creatProcessors(Collections.singleton(parent), progressMonitor);
 		ProcessorInfo<ElementProcessor<?, String>> processorInfo = processors.get(parent);
+		ElementProcessor<?, String> processor = processorInfo.getProcessor();
+		RootElementMessage<?, String, ?> rootMessage = processor.sendMessages("Hello");
+		System.out.println(rootMessage.getValue());
+	}
+	
+	@Test
+	public void testChildParent() {
+		ObjectNode<String> child = new ObjectNode<>("Child");
+		ObjectNode<String> parent = new ObjectNode<>("Parent") {
+			@Override
+			public Collection<Element> getChildren() {
+				Collection<Element> children = new ArrayList<>(super.getChildren());
+				children.add(child);
+				return children;
+			}
+		};
+		
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Map<Element, ProcessorInfo<ElementProcessor<?, String>>> processors = messageProcessorFactory.creatProcessors(Collections.singleton(parent), progressMonitor);
+		ProcessorInfo<ElementProcessor<?, String>> processorInfo = processors.get(child);
 		ElementProcessor<?, String> processor = processorInfo.getProcessor();
 		RootElementMessage<?, String, ?> rootMessage = processor.sendMessages("Hello");
 		System.out.println(rootMessage.getValue());

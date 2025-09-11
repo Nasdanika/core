@@ -36,6 +36,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -1004,6 +1007,88 @@ public interface Invocable {
 			
 		};
 	}
+		
+	static Invocable of(EClass eClass) {
+		return of(eClass, f -> createParameter(f.getName(), f.getEType().getInstanceClass()));				
+	}
+	
+	static Invocable of(EClass eClass, java.util.function.Function<EStructuralFeature,Parameter> featureParameterFactory) {
+		List<Entry<EStructuralFeature, Parameter>> pList = eClass
+				.getEAllStructuralFeatures()
+				.stream()
+				.filter(EStructuralFeature::isChangeable)
+				.map(f -> {
+					Parameter p = featureParameterFactory.apply(f);
+					return p == null ? null : Map.entry(f, p);
+				})
+				.filter(Objects::nonNull)				
+				.toList();
+		
+		Parameter[] pa = pList.stream().map(Map.Entry::getValue).toArray(Parameter[]::new);
+				
+		return new Invocable() {
+			
+			@Override
+			public Parameter[] getParameters() {
+				return pa;
+			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> T invoke(Object... args) {
+				EObject eObj = eClass.getEPackage().getEFactoryInstance().create(eClass);
+				for (int i = 0; i < args.length; ++i) {
+					EStructuralFeature f = pList.get(i).getKey();
+					eObj.eSet(f, args[i]);
+				}
+				
+				return (T) eObj;
+			}
+			
+		};	
+	}
+	
+	static Invocable of(EObject eObject) {
+		return of(eObject, f -> createParameter(f.getName(), f.getEType().getInstanceClass()));				
+	}
+		
+	static Invocable of(EObject eObject, java.util.function.Function<EStructuralFeature,Parameter> featureParameterFactory) {
+		List<Entry<EStructuralFeature, Parameter>> pList = eObject
+			.eClass()
+			.getEAllStructuralFeatures()
+			.stream()
+			.filter(EStructuralFeature::isChangeable)
+			.map(f -> {
+				Parameter p = featureParameterFactory.apply(f);
+				return p == null ? null : Map.entry(f, p);
+			})
+			.filter(Objects::nonNull)
+			.toList();
+			
+		
+		Parameter[] pa = pList.stream().map(Map.Entry::getValue).toArray(Parameter[]::new);
+				
+		return new Invocable() {
+			
+			@Override
+			public Parameter[] getParameters() {
+				return pa;
+			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> T invoke(Object... args) {
+				for (int i = 0; i < args.length; ++i) {
+					EStructuralFeature f = pList.get(i).getKey();
+					eObject.eSet(f, args[i]);
+				}
+				
+				return (T) eObject;
+			}
+			
+		};	
+		
+	}	
 	
 	/**
 	 * Invocable which calls the best matching (most specific) constructor

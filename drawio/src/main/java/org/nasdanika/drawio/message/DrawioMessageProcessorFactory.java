@@ -33,7 +33,7 @@ public abstract class DrawioMessageProcessorFactory<V> extends MessageProcessorF
 					if (linkTargetProcessor != null) {
 						V linkTargetValue = linkTargetValue(message.getValue(), modelElement, linkTarget);
 						if (linkTargetValue != null) {		
-							LinkTargetMessage<LinkTarget, V, ElementProcessor<LinkTarget,V>> linkTargetMessage = new LinkTargetMessage<>(message, linkTarget, linkTargetValue, linkTargetProcessor);
+							LinkTargetMessage<LinkTarget, V, ElementProcessor<LinkTarget,V>> linkTargetMessage = createLinkTargetMessage(message, linkTargetProcessor, linkTargetValue); 
 							messages.add(linkTargetMessage);
 						}
 					}
@@ -53,13 +53,27 @@ public abstract class DrawioMessageProcessorFactory<V> extends MessageProcessorF
 					V referrerValue = referrerValue(message.getValue(), (LinkTarget) element, referrer);
 					if (referrerValue != null) {
 						@SuppressWarnings({ "rawtypes", "unchecked" })
-						ReferrerMessage<V> referrerMessage = new ReferrerMessage<>(message, referrer, referrerValue, (ElementProcessor) p);
+						ReferrerMessage<V> referrerMessage = createReferrerMessage(message, (ElementProcessor) p, referrerValue); 
 						messages.add(referrerMessage);
 					}
 				});
 		}
 		
 		return messages;
+	}
+
+	protected ReferrerMessage<V> createReferrerMessage(
+			ElementMessage<?, V, ?> message,
+			ElementProcessor<ModelElement, V> processor, 
+			V referrerValue) {
+		return new ReferrerMessage<>(message, processor, referrerValue);
+	}
+
+	protected LinkTargetMessage<LinkTarget, V, ElementProcessor<LinkTarget, V>> createLinkTargetMessage(
+			ElementMessage<?, V, ?> message, 
+			ElementProcessor<LinkTarget, V> processor, 
+			V linkTargetValue) {
+		return new LinkTargetMessage<>(message, processor, linkTargetValue);
 	}
 
 }

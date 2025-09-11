@@ -67,7 +67,7 @@ public abstract class ElementProcessor<T extends Element,V> {
 		if (parentProcessor != null) {
 			Element parent = parentProcessor.getElement();
 			if (!message.hasSeen(parent)) {
-				V parentValue = childValue(message.getValue(), parent);
+				V parentValue = parentValue(message.getValue(), parent);
 				if (parentValue != null) {
 					ParentMessage<Element, V, ElementProcessor<Element, V>> parentMessage = createParentMessage(message, parentValue);
 					if (parentMessage != null) {

@@ -16,6 +16,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 import org.nasdanika.graph.message.ElementMessage;
 import org.nasdanika.graph.message.ElementProcessor;
+import org.nasdanika.graph.message.Message;
 import org.nasdanika.graph.message.RootElementMessage;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
@@ -63,9 +64,25 @@ public class TestMessage {
 		@Override
 		protected String referrerValue(String messageValue, LinkTarget linkTarget, ModelElement referrer) {
 			return messageValue + ".R";
+		}
+
+		@Override
+		protected String parentValue(String messageValue, Element child, Element parent) {
+			return messageValue + ".P";
 		};
-	};
+	};	
 	
+	public static void dump(Message<?,?> message) {
+		dump(message, 0);
+	}
+	
+	public static void dump(Message<?,?> message, int indent) {
+		for (int i = 0; i < indent; ++i) {
+			System.out.print("  ");
+		}
+		System.out.println(message.getClass().getName() + " " + message.getTarget() + ": " + message.getValue());
+		message.getChildren().forEach(c -> dump(c, indent + 1));
+	}
 		
 	@Test
 	public void testSinglePage() throws Exception {
@@ -75,7 +92,26 @@ public class TestMessage {
 		ProcessorInfo<ElementProcessor<?, String>> processorInfo = processors.get(document);
 		ElementProcessor<?, String> processor = processorInfo.getProcessor();
 		RootElementMessage<?, String, ?> rootMessage = processor.sendMessages("Hello");
-		System.out.println(rootMessage.getValue());
+		dump(rootMessage);
 	}	
+	
+	// TODO double single page
+	
+	// TODO container
+	
+	// TODO double container
+	
+	// TODO connection
+	
+	// TODO double connection
+	
+	// TODO link to page
+	
+	// TODO double link to page
+	
+	// TODO link to element
+	
+	// TODO double link to element
+	
 
 }

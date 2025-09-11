@@ -63,4 +63,10 @@ public class DoubleDrawioMessageProcessorFactory extends DrawioMessageProcessorF
 		return null;
 	}
 
+	@Override
+	protected Double parentValue(Double messageValue, Element child, Element parent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
