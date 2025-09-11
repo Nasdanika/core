@@ -76,7 +76,6 @@ public class TestMessage {
 		ElementProcessor<?, String> processor = processorInfo.getProcessor();
 		RootElementMessage<?, String, ?> rootMessage = processor.sendMessages("Hello");
 		System.out.println(rootMessage.getValue());
-	}
-	
+	}	
 
 }

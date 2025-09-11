@@ -10,8 +10,8 @@ import org.nasdanika.graph.message.ElementProcessor;
  */
 public class LinkTargetMessage<T extends LinkTarget,V,P extends ElementProcessor<T,V>> extends ElementMessage<T,V,P> {
 
-	public LinkTargetMessage(ElementMessage<?,V,?> parent, T target, V value, P processor) {
-		super(parent, target, value, processor);
+	public LinkTargetMessage(ElementMessage<?,V,?> parent, P processor, V value) {
+		super(parent, processor, value);
 	}
 
 }

@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ChildProcessors;
+import org.nasdanika.graph.processor.ParentProcessor;
 import org.nasdanika.graph.processor.ProcessorElement;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.Registry;
@@ -19,6 +20,9 @@ import org.nasdanika.graph.processor.Registry;
  * @param <T> processor element type
  */
 public abstract class ElementProcessor<T extends Element,V> {
+	
+	@ParentProcessor
+	public ElementProcessor<Element,V> parentProcessor;
 		
 	protected T element;
 	
@@ -47,15 +51,27 @@ public abstract class ElementProcessor<T extends Element,V> {
 		for (ProcessorInfo<ElementProcessor<Element, V>> childProcessorInfo: children.values()) {
 			Element child = childProcessorInfo.getElement();
 			if (!message.hasSeen(child)) {
-				if (childProcessorInfo.getProcessor() != null) {
+				ElementProcessor<Element, V> childProcessor = childProcessorInfo.getProcessor();
+				if (childProcessor != null) {
 					V childValue = childValue(message.getValue(), child);
 					if (childValue != null) {
-						ret.add(
-								new ChildMessage<Element,V,ElementProcessor<Element,V>>(
-										message, 
-										child, 
-										childValue, 
-										childProcessorInfo.getProcessor()));
+						ChildMessage<Element, V, ElementProcessor<Element, V>> childMessage = createChildMessage(message, childProcessor, childValue);
+						if (childMessage != null) {
+							ret.add(childMessage);
+						}
+					}
+				}
+			}
+		}
+		
+		if (parentProcessor != null) {
+			Element parent = parentProcessor.getElement();
+			if (!message.hasSeen(parent)) {
+				V parentValue = childValue(message.getValue(), parent);
+				if (parentValue != null) {
+					ParentMessage<Element, V, ElementProcessor<Element, V>> parentMessage = createParentMessage(message, parentValue);
+					if (parentMessage != null) {
+						ret.add(parentMessage);
 					}
 				}
 			}
@@ -63,6 +79,22 @@ public abstract class ElementProcessor<T extends Element,V> {
 		
 		return ret;
 	}
+
+	protected ParentMessage<Element, V, ElementProcessor<Element, V>> createParentMessage(ElementMessage<?, V, ?> message, V parentValue) {
+		return new ParentMessage<Element,V,ElementProcessor<Element,V>>(
+				message, 
+				parentProcessor, 
+				parentValue);
+	}
+
+	protected ChildMessage<Element, V, ElementProcessor<Element, V>> createChildMessage(ElementMessage<?, V, ?> message, ElementProcessor<Element, V> childProcessor, V childValue) {
+		return new ChildMessage<Element,V,ElementProcessor<Element,V>>(
+				message, 
+				childProcessor, 
+				childValue);
+	}
+
+	protected abstract V parentValue(V messageValue, Element parent);
 
 	protected abstract V childValue(V messageValue, Element child);
 	
@@ -74,7 +106,7 @@ public abstract class ElementProcessor<T extends Element,V> {
 	 */
 	public RootElementMessage<T,V,?> sendMessages(V value) {		
 		Queue<ElementMessage<?,V,?>> processingQueue = new ConcurrentLinkedQueue<>();
-		rootMessage = new RootElementMessage<>(element, value, this);
+		rootMessage = new RootElementMessage<>(this, value);
 		
 		processingQueue.add(rootMessage);		
 		

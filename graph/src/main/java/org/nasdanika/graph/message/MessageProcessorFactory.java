@@ -23,6 +23,8 @@ import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
  */
 public abstract class MessageProcessorFactory<V>  {
 	
+	protected abstract V parentValue(V messageValue, Element child, Element parent);
+	
 	protected abstract V childValue(V messageValue, Element parent, Element child);
 
 	protected abstract V sourceValue(V messageValue, Node node, Connection outgoingConnection);
@@ -32,6 +34,37 @@ public abstract class MessageProcessorFactory<V>  {
 	protected abstract V incomingValue(V messageValue, Connection connection);
 
 	protected abstract V outgoingValue(V messageValue, Connection connection);	
+	
+	protected ParentMessage<Element, V, ElementProcessor<Element, V>> createParentMessage(ElementMessage<?, V, ?> message, Element element, ElementProcessor<Element,V> parentProcessor, V parentValue) {
+		return new ParentMessage<Element,V,ElementProcessor<Element,V>>(
+				message, 
+				parentProcessor, 
+				parentValue);
+	}
+
+	protected ChildMessage<Element, V, ElementProcessor<Element, V>> createChildMessage(ElementMessage<?, V, ?> message, Element element, ElementProcessor<Element, V> childProcessor, V childValue) {
+		return new ChildMessage<Element,V,ElementProcessor<Element,V>>(
+				message, 
+				childProcessor, 
+				childValue);
+	}
+	
+	protected <C extends Connection> SourceMessage<C, Node, V> createSourceMessage(IncomingConnectionMessage<C, V> message, NodeProcessor<Node,V> processor, V sourceValue) {
+		return new SourceMessage<C,Node,V>(message, processor, sourceValue);
+	}		
+
+	protected <C extends Connection> TargetMessage<C, Node, V> createTargetMessage(OutgoingConnectionMessage<C, V> message, NodeProcessor<Node,V> processor, V targetValue) {
+		return new TargetMessage<C,Node,V>(message, processor, targetValue);
+	}	
+	
+	protected OutgoingConnectionMessage<Connection, V> createOutgoingConnectionMessage(ElementMessage<?, V, ?> message, ConnectionProcessor<Connection,V> processor, V outgoingValue) {
+		return new OutgoingConnectionMessage<Connection,V>(message, processor, outgoingValue);
+	}
+
+	protected IncomingConnectionMessage<Connection, V> createIncomingConnectionMessage(ElementMessage<?, V, ?> message, ConnectionProcessor<Connection,V> processor,V incomingValue) {
+		return new IncomingConnectionMessage<Connection,V>(message, processor, incomingValue);
+	}
+	
 					
 	@Processor(type = Element.class)
 	public ElementProcessor<Element,V> createElementProcessor(
@@ -53,6 +86,21 @@ public abstract class MessageProcessorFactory<V>  {
 				Collection<ElementMessage<?, V, ?>> messages = super.processMessage(message);
 				messages.addAll(MessageProcessorFactory.this.processMessage(this, message));
 				return messages;
+			}
+
+			@Override
+			protected V parentValue(V messageValue, Element parent) {
+				return MessageProcessorFactory.this.parentValue(messageValue, getElement(), parent);
+			}
+			
+			@Override
+			protected ChildMessage<Element, V, ElementProcessor<Element, V>> createChildMessage(ElementMessage<?, V, ?> message, ElementProcessor<Element, V> childProcessor, V childValue) {
+				return MessageProcessorFactory.this.createChildMessage(message, getElement(), childProcessor, childValue);
+			}
+			
+			@Override
+			protected ParentMessage<Element, V, ElementProcessor<Element, V>> createParentMessage(ElementMessage<?, V, ?> message, V parentValue) {
+				return MessageProcessorFactory.this.createParentMessage(message, getElement(), parentProcessor,  parentValue);
 			}
 			
 		};
@@ -82,6 +130,31 @@ public abstract class MessageProcessorFactory<V>  {
 			protected V targetValue(V messageValue, Connection incomingConnection) {
 				return MessageProcessorFactory.this.targetValue(messageValue, getElement(), incomingConnection);
 			}
+
+			@Override
+			protected V parentValue(V messageValue, Element parent) {
+				return MessageProcessorFactory.this.parentValue(messageValue, getElement(), parent);
+			}
+			
+			@Override
+			protected ChildMessage<Element, V, ElementProcessor<Element, V>> createChildMessage(ElementMessage<?, V, ?> message, ElementProcessor<Element, V> childProcessor, V childValue) {
+				return MessageProcessorFactory.this.createChildMessage(message, getElement(), childProcessor, childValue);
+			}
+			
+			@Override
+			protected ParentMessage<Element, V, ElementProcessor<Element, V>> createParentMessage(ElementMessage<?, V, ?> message, V parentValue) {
+				return MessageProcessorFactory.this.createParentMessage(message, getElement(), parentProcessor,  parentValue);
+			}
+			
+			@Override
+			protected <C extends Connection> SourceMessage<C, Node, V> createSourceMessage(IncomingConnectionMessage<C, V> message, V sourceValue) {
+				return MessageProcessorFactory.this.createSourceMessage(message, this, sourceValue);
+			}
+			
+			@Override
+			protected <C extends Connection> TargetMessage<C, Node, V> createTargetMessage(OutgoingConnectionMessage<C, V> message, V targetValue) {
+				return MessageProcessorFactory.this.createTargetMessage(message, this, targetValue);
+			}
 			
 			@Override
 			public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
@@ -109,6 +182,11 @@ public abstract class MessageProcessorFactory<V>  {
 			}
 
 			@Override
+			protected V parentValue(V messageValue, Element parent) {
+				return MessageProcessorFactory.this.parentValue(messageValue, getElement(), parent);
+			}
+
+			@Override
 			protected V incomingValue(V messageValue) {
 				return MessageProcessorFactory.this.incomingValue(messageValue, getElement());
 			}
@@ -116,6 +194,26 @@ public abstract class MessageProcessorFactory<V>  {
 			@Override
 			protected V outgoingValue(V messageValue) {
 				return MessageProcessorFactory.this.outgoingValue(messageValue, getElement());
+			}
+			
+			@Override
+			protected ChildMessage<Element, V, ElementProcessor<Element, V>> createChildMessage(ElementMessage<?, V, ?> message, ElementProcessor<Element, V> childProcessor, V childValue) {
+				return MessageProcessorFactory.this.createChildMessage(message, getElement(), childProcessor, childValue);
+			}
+			
+			@Override
+			protected ParentMessage<Element, V, ElementProcessor<Element, V>> createParentMessage(ElementMessage<?, V, ?> message, V parentValue) {
+				return MessageProcessorFactory.this.createParentMessage(message, getElement(), parentProcessor,  parentValue);
+			}
+			
+			@Override
+			protected IncomingConnectionMessage<Connection, V> createIncomingConnectionMessage(ElementMessage<?, V, ?> message, V incomingValue) {
+				return MessageProcessorFactory.this.createIncomingConnectionMessage(message, this, incomingValue);
+			}
+			
+			@Override
+			protected OutgoingConnectionMessage<Connection, V> createOutgoingConnectionMessage(ElementMessage<?, V, ?> message, V outgoingValue) {
+				return MessageProcessorFactory.this.createOutgoingConnectionMessage(message, this, outgoingValue);
 			}
 			
 			@Override

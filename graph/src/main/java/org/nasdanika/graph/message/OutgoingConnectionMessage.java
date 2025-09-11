@@ -7,8 +7,8 @@ import org.nasdanika.graph.Connection;
  */
 public class OutgoingConnectionMessage<T extends Connection,V> extends ElementMessage<T,V,ConnectionProcessor<T,V>> {
 
-	public OutgoingConnectionMessage(ElementMessage<?,V,?> parent, T target, V value, ConnectionProcessor<T,V> processor) {
-		super(parent, target, value, processor);
+	public OutgoingConnectionMessage(ElementMessage<?,V,?> parent, ConnectionProcessor<T,V> processor, V value) {
+		super(parent, processor, value);
 	}
 
 }

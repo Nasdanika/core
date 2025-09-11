@@ -14,13 +14,13 @@ public class ElementMessage<T extends Element,V,P extends ElementProcessor<T,V>>
 
 	protected P processor;
 
-	protected ElementMessage(ElementMessage<?,V,?> parent, T target, V value, P processor) {
-		super(parent, target, value);
+	protected ElementMessage(ElementMessage<?,V,?> parent, P processor, V value) {
+		super(parent, processor.getElement(), value);
 		this.processor = processor;
 	}
 
-	protected ElementMessage(T target, V value, P processor) {
-		super(target, value);
+	protected ElementMessage(P processor, V value) {
+		super(processor.getElement(), value);
 		this.processor = processor;
 	}
 

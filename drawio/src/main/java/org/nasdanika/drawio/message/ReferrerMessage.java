@@ -11,8 +11,8 @@ import org.nasdanika.graph.message.ElementProcessor;
  */
 public class ReferrerMessage<V> extends ElementMessage<ModelElement,V,ElementProcessor<ModelElement,V>> {
 
-	public ReferrerMessage(ElementMessage<?,V,?> parent, ModelElement target, V value, ElementProcessor<ModelElement,V> processor) {
-		super(parent, target, value, processor);
+	public ReferrerMessage(ElementMessage<?,V,?> parent, ElementProcessor<ModelElement,V> processor, V value) {
+		super(parent, processor, value);
 	}
 
 }

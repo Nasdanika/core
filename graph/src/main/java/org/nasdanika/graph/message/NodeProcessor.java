@@ -33,8 +33,12 @@ public abstract class NodeProcessor<T extends Node, V> extends ElementProcessor<
 			if (sourceValue == null) {
 				return null;
 			}
-			return new SourceMessage<C,T,V>(message, getElement(), sourceValue, this);
+			return createSourceMessage(message, sourceValue);
 		};
+	}
+
+	protected <C extends Connection> SourceMessage<C, T, V> createSourceMessage(IncomingConnectionMessage<C, V> message, V sourceValue) {
+		return new SourceMessage<C,T,V>(message, this, sourceValue);
 	}		
 		
 	@IncomingHandler
@@ -47,8 +51,12 @@ public abstract class NodeProcessor<T extends Node, V> extends ElementProcessor<
 			if (targetValue == null) {
 				return null;
 			}
-			return new TargetMessage<C,T,V>(message, getElement(), targetValue, this);
+			return createTargetMessage(message, targetValue);
 		};
+	}
+
+	protected <C extends Connection> TargetMessage<C, T, V> createTargetMessage(OutgoingConnectionMessage<C, V> message, V targetValue) {
+		return new TargetMessage<C,T,V>(message, this, targetValue);
 	}
 		
 	protected Collection<Function<ElementMessage<?, V, ?>, OutgoingConnectionMessage<?,V>>> outgoingEndpoints = Collections.synchronizedList(new ArrayList<>());

@@ -7,8 +7,8 @@ import org.nasdanika.graph.Element;
  */
 public class ChildMessage<T extends Element,V,P extends ElementProcessor<T,V>> extends ElementMessage<T,V,P> {
 
-	public ChildMessage(ElementMessage<?,V,?> parent, T target, V value, P processor) {
-		super(parent, target, value, processor);
+	public ChildMessage(ElementMessage<?,V,?> parent, P processor, V value) {
+		super(parent, processor, value);
 	}
 
 }

@@ -39,8 +39,12 @@ public abstract class ConnectionProcessor<T extends Connection, V> extends Eleme
 		if (outgoingValue == null) {
 			return null;
 		}
-		return new OutgoingConnectionMessage<T,V>(message, getElement(), outgoingValue, this);
+		return createOutgoingConnectionMessage(message, outgoingValue);
 	};
+
+	protected OutgoingConnectionMessage<T, V> createOutgoingConnectionMessage(ElementMessage<?, V, ?> message, V outgoingValue) {
+		return new OutgoingConnectionMessage<T,V>(message, this, outgoingValue);
+	}
 	
 	@TargetHandler
 	public Function<ElementMessage<?, V, ?>, IncomingConnectionMessage<T,V>> targetHandler = message -> {
@@ -51,8 +55,12 @@ public abstract class ConnectionProcessor<T extends Connection, V> extends Eleme
 		if (incomingValue == null) {
 			return null;
 		}
-		return new IncomingConnectionMessage<T,V>(message, getElement(), incomingValue, this);
+		return createIncomingConnectionMessage(message, incomingValue);
 	};
+
+	protected IncomingConnectionMessage<T, V> createIncomingConnectionMessage(ElementMessage<?, V, ?> message, V incomingValue) {
+		return new IncomingConnectionMessage<T,V>(message, this, incomingValue);
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
