@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Test;
 import org.nasdanika.common.PrintStreamProgressMonitor;
@@ -16,9 +17,10 @@ import org.nasdanika.graph.ObjectConnection;
 import org.nasdanika.graph.ObjectNode;
 import org.nasdanika.graph.SimpleNode;
 import org.nasdanika.graph.processor.AbstractProcessorFactory;
-import org.nasdanika.graph.processor.ConnectionProcessorConfig;
+import org.nasdanika.graph.processor.ConnectionHandlerFactory;
+import org.nasdanika.graph.processor.ElementHandlerFactory;
 import org.nasdanika.graph.processor.HandlerType;
-import org.nasdanika.graph.processor.NodeProcessorConfig;
+import org.nasdanika.graph.processor.NodeHandlerFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
 
 public class TestAbstractProcessorFactory {
@@ -26,143 +28,118 @@ public class TestAbstractProcessorFactory {
 	private AbstractProcessorFactory<Function<String,String>, Function<String,String>> processorFactory = new AbstractProcessorFactory<Function<String,String>, Function<String,String>>() {
 
 		@Override
-		protected Function<String, String> getHandler(
+		protected ElementHandlerFactory<Function<String, String>, Function<String, String>> getElementHandlerFactory(
 				ProcessorConfig config, 
-				Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider) {
-			// TODO Auto-generated method stub
-			return null;
+				Map<Element, Function<String, String>> childEndpoints) {
+			return new ElementHandlerFactory<Function<String,String>, Function<String,String>>() {
+				
+				@Override
+				public Function<String, String> getParentHandler(Function<String, String> parentEndpoint) {
+					return a -> a + " element parent handler";
+				}
+				
+				@Override
+				public Function<String, String> getHandler(Function<String, String> parentEndpoint) {
+					return a -> a + " element handler";
+				}
+				
+				@Override
+				public Function<String, String> getChildHandler(Element child, Supplier<Function<String, String>> parentEndpointSupplier) {
+					return a -> a + " element child handler";
+				}
+			};
 		}
 
 		@Override
-		protected Function<String, String> getParentHandler(
-				ProcessorConfig config,
-				Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected Function<String, String> getChildHandler(ProcessorConfig config, Element child,
-				Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected Function<String, String> getOutgoingHandler(
-				NodeProcessorConfig<Function<String, String>, Function<String, String>> config,
-				Connection outgoingConnection, Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider,
+		protected NodeHandlerFactory<Function<String, String>, Function<String, String>> getNodeHandlerFactory(
+				ProcessorConfig config, 
+				Map<Element, Function<String, String>> childEndpoints,
 				Map<Connection, Function<String, String>> incomingEndpoints,
 				Map<Connection, Function<String, String>> outgoingEndpoints) {
-			// TODO Auto-generated method stub
-			return null;
+			
+			return new NodeHandlerFactory<Function<String,String>, Function<String,String>>() {
+				
+				@Override
+				public Function<String, String> getParentHandler(Function<String, String> parentEndpoint) {
+					return a -> a + " node parent handler";
+				}
+				
+				@Override
+				public Function<String, String> getHandler(Function<String, String> parentEndpoint) {
+					return a -> a + " node handler";
+				}
+				
+				@Override
+				public Function<String, String> getChildHandler(Element child, Supplier<Function<String, String>> parentEndpointSupplier) {
+					return a -> a + " node child handler";
+				}
+				
+				@Override
+				public Function<String, String> getOutgoingHandler(Connection outgoingConnection, Supplier<Function<String, String>> parentEndpointSupplier) {
+					return a -> a + " node outgoing handler";
+				}
+				
+				@Override
+				public Function<String, String> getIncomingHandler(Connection incomingConnection, Supplier<Function<String, String>> parentEndpointSupplier) {
+					return a -> a + " node incoming handler";
+				}
+			};
 		}
 
 		@Override
-		protected Function<String, String> getIncomingHandler(
-				NodeProcessorConfig<Function<String, String>, Function<String, String>> config,
-				Connection incomingConnection, Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider,
-				Map<Connection, Function<String, String>> incomingEndpoints,
-				Map<Connection, Function<String, String>> outgoingEndpoints) {
-			// TODO Auto-generated method stub
-			return null;
+		protected ConnectionHandlerFactory<Function<String, String>, Function<String, String>> getConnectionHandlerFactory(
+				ProcessorConfig config, 
+				Map<Element, Function<String, String>> childEndpoints,
+				Supplier<Function<String, String>> sourceEndpointSupplier,
+				Supplier<Function<String, String>> targetEndpointSupplier) {
+			
+			return new ConnectionHandlerFactory<Function<String,String>, Function<String,String>>() {
+				
+				@Override
+				public Function<String, String> getParentHandler(Function<String, String> parentEndpoint) {
+					return a -> a + " connection parent handler";
+				}
+				
+				@Override
+				public Function<String, String> getHandler(Function<String, String> parentEndpoint) {
+					return a -> a + " connection handler";
+				}
+				
+				@Override
+				public Function<String, String> getChildHandler(Element child, Supplier<Function<String, String>> parentEndpointSupplier) {
+					return a -> a + " connection child handler";
+				}
+				
+				@Override
+				public Function<String, String> getTargetHandler(Supplier<Function<String, String>> parentEndpointSupplier) {
+					return a -> a + " connection target handler";
+				}
+				
+				@Override
+				public Function<String, String> getSourceHandler(Supplier<Function<String, String>> parentEndpointSupplier) {
+					return a -> a + " connection source handler";
+				}
+			};
 		}
 
 		@Override
-		protected Function<String, String> getHandler(
-				NodeProcessorConfig<Function<String, String>, Function<String, String>> config,
-				Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider,
-				Map<Connection, Function<String, String>> incomingEndpoints,
-				Map<Connection, Function<String, String>> outgoingEndpoints) {
-			if (parentHandler != null) {
-				return a -> parentHandler.apply(a + " World");
-			}
-			return a -> a + " World";
+		protected Function<String, String> createEndpoint(Element element, Function<String, String> handler) {
+			return handler;
 		}
 
 		@Override
-		protected Function<String, String> getChildHandler(
-				NodeProcessorConfig<Function<String, String>, Function<String, String>> config, Element child,
-				Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider,
-				Map<Connection, Function<String, String>> incomingEndpoints,
-				Map<Connection, Function<String, String>> outgoingEndpoints) {
-			return a -> a + " child handler";
+		protected Function<String, String> createParentEndpoint(Element element, Function<String, String> handler) {
+			return handler;
 		}
 
 		@Override
-		protected Function<String, String> getParentHandler(
-				NodeProcessorConfig<Function<String, String>, Function<String, String>> config,
-				Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider,
-				Map<Connection, Function<String, String>> incomingEndpoints,
-				Map<Connection, Function<String, String>> outgoingEndpoints) {
-			return a -> a + " parent handler";
+		protected Function<String, String> createChildEndpoint(Element parent, Element child, Function<String, String> handler) {
+			return handler;
 		}
 
 		@Override
-		protected Function<String, String> getSourceHandler(
-				ConnectionProcessorConfig<Function<String, String>, Function<String, String>> config,
-				Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider,
-				Function<String, String> targetEndpiont) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected Function<String, String> getTargetHandler(
-				ConnectionProcessorConfig<Function<String, String>, Function<String, String>> config,
-				Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider,
-				Function<String, String> sourceEndpiont) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected Function<String, String> getHandler(
-				ConnectionProcessorConfig<Function<String, String>, Function<String, String>> config,
-				Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider,
-				Function<String, String> sourceEndpoint, Function<String, String> targetEndpoint) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected Function<String, String> getChildHandler(
-				ConnectionProcessorConfig<Function<String, String>, Function<String, String>> config, Element child,
-				Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider,
-				Function<String, String> sourceEndpoint, Function<String, String> targetEndpoint) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected Function<String, String> getParentHandler(
-				ConnectionProcessorConfig<Function<String, String>, Function<String, String>> config,
-				Function<String, String> parentHandler,
-				Function<Element, Function<String, String>> childHandlerProvider,
-				Function<String, String> sourceEndpoint, Function<String, String> targetEndpoint) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected Function<String, String> createEndpoint(
-				Connection connection, 
-				Function<String, String> handler,
-				HandlerType type) {
-			// TODO Auto-generated method stub
-			return null;
+		protected Function<String, String> createEndpoint(Connection connection, Function<String, String> handler,	HandlerType type) {
+			return handler;
 		}
 	};
 	

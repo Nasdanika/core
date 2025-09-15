@@ -2,7 +2,7 @@ package org.nasdanika.graph.processor;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
@@ -14,22 +14,22 @@ import org.nasdanika.graph.Node;
  * @param <H> Handler type
  * @param <E> Endpoint type
  */
-public abstract class AbstractNodeProcessor<T extends Node,H,E> extends AbstractElementProcessor<T,H> {
+public abstract class AbstractNodeProcessor<T extends Node,H,E> extends AbstractElementProcessor<T,H,E> {
 	
 	@OutgoingHandler
 	public final H getOutgoingHandler(Connection outgoingConnection) {
 		return getOutgoingHandler(
 				outgoingConnection,
-				parentProcessor == null ? null : parentProcessor.getChildHandler(getElement()),
-				this::createChildHandler,
+				this::getParentEndpoint,
+				childEndpoints,
 				incomingEndpoints,
 				outgoingEndpoints);		
 	}
 		
 	protected abstract H getOutgoingHandler(
 			Connection outgoingConnection, 
-			H parentHandler, 
-			Function<Element,H> childHandlerProvider, 
+			Supplier<E> parentEndpointSupplier, 
+			Map<Element,E> childEndpoints, 
 			Map<Connection,E> incomingEndpoints, 
 			Map<Connection,E> outgoingEndpoints);		
 	
@@ -37,16 +37,16 @@ public abstract class AbstractNodeProcessor<T extends Node,H,E> extends Abstract
 	public final H getIncomingHandler(Connection incomingConnection) {
 		return getIncomingHandler(
 				incomingConnection,
-				parentProcessor == null ? null : parentProcessor.getChildHandler(getElement()),
-				this::createChildHandler,
+				this::getParentEndpoint,
+				childEndpoints,
 				incomingEndpoints,
 				outgoingEndpoints);		
 	}
 	
 	protected abstract H getIncomingHandler(
 			Connection incomingConnection, 
-			H parentHandler, 
-			Function<Element,H> childHandlerProvider, 
+			Supplier<E> parentEndpointSupplier, 
+			Map<Element,E> childEndpoints, 
 			Map<Connection,E> incomingEndpoints, 
 			Map<Connection,E> outgoingEndpoints);		
 		
@@ -67,38 +67,38 @@ public abstract class AbstractNodeProcessor<T extends Node,H,E> extends Abstract
 			incomingEndpoints.put(connection, incomingEndpoint);
 		}
 	}
-		
+	
 	@Override
-	protected final H getHandler(H parentHandler, Function<Element,H> childHandlerProvider) {
-		return getHandler(parentHandler, childHandlerProvider, incomingEndpoints, outgoingEndpoints);
+	protected final H getHandler(E parentEndpoint, Map<Element, E> childEndpoints) {
+		return getHandler(parentEndpoint, childEndpoints, incomingEndpoints, outgoingEndpoints);
 	}
 	
 	protected abstract H getHandler(
-			H parentHandler, 
-			Function<Element,H> childHandlerProvider, 
+			E parentEndpoint, 
+			Map<Element,E> childEndpoints, 
 			Map<Connection,E> incomingEndpoints, 
-			Map<Connection,E> outgoingEndpoints);	
+			Map<Connection,E> outgoingEndpoints);
 	
 	@Override
-	protected final H getChildHandler(Element child, H parentHandler, Function<Element,H> childHandlerProvider) {
-		return getChildHandler(child, parentHandler, childHandlerProvider, incomingEndpoints, outgoingEndpoints);
+	protected final E getChildEndpoint(Element child, Supplier<E> parentEndpointSupplier, Map<Element, E> childEndpoints) {
+		return getChildEndpoint(child, parentEndpointSupplier, childEndpoints, incomingEndpoints, outgoingEndpoints);
 	}
 	
-	protected abstract H getChildHandler(
+	protected abstract E getChildEndpoint(
 			Element child, 
-			H parentHandler, 
-			Function<Element,H> childHandlerProvider, 
+			Supplier<E> parentEndpointSupplier, 
+			Map<Element,E> childEndpoints, 
 			Map<Connection,E> incomingEndpoints, 
-			Map<Connection,E> outgoingEndpoints);	
+			Map<Connection,E> outgoingEndpoints);
 	
 	@Override
-	protected final H getParentHandler(H parentHandler, Function<Element,H> childHandlerProvider) {
-		return getParentHandler(parentHandler, childHandlerProvider, incomingEndpoints, outgoingEndpoints);
+	protected final E getParentEndpoint(E parentEndpoint, Map<Element, E> childEndpoints) {
+		return getParentEndpoint(parentEndpoint, childEndpoints, incomingEndpoints, outgoingEndpoints);
 	}
 	
-	protected abstract H getParentHandler(
-			H parentHandler,
-			Function<Element,H> childHandlerProvider, 
+	protected abstract E getParentEndpoint(
+			E parentEndpoint,
+			Map<Element,E> childEndpoints, 
 			Map<Connection,E> incomingEndpoints, 
 			Map<Connection,E> outgoingEndpoints);	
 

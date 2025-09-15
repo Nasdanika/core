@@ -1,6 +1,7 @@
 package org.nasdanika.graph.processor;
 
-import java.util.function.Function;
+import java.util.Map;
+import java.util.function.Supplier;
 
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
@@ -11,53 +12,84 @@ import org.nasdanika.graph.Element;
  * @param <H> Handler type
  * @param <E> Endpoint type
  */
-public abstract class AbstractConnectionProcessor<T extends Connection,H,E> extends AbstractElementProcessor<T,H> {
+public abstract class AbstractConnectionProcessor<T extends Connection,H,E> extends AbstractElementProcessor<T,H,E> {
 	
 	@TargetEndpoint
 	public E targetEndpoint;
 	
+	public E getTargetEndpoint() {
+		return targetEndpoint;
+	}
+	
 	@SourceEndpoint
 	public E sourceEndpoint;
+	
+	public E getSourceEndpoint() {
+		return sourceEndpoint;
+	}
 		
 	@SourceHandler
 	public final H getSourceHandler() {
 		return getSourceHandler(
-				parentProcessor == null ? null : parentProcessor.getChildHandler(getElement()),
-				this::createChildHandler,
-				targetEndpoint);
+				this::getParentEndpoint,
+				childEndpoints,
+				this::getSourceEndpoint,
+				this::getTargetEndpoint);
 	};
 	
-	protected abstract H getSourceHandler(H parentHandler, Function<Element,H> childHandlerProvider, E targetEndpiont);	
+	protected abstract H getSourceHandler(
+			Supplier<E> parentEndpointSupplier, 
+			Map<Element,E> childEndpoints, 
+			Supplier<E> sourceEndpiontSupplier, 
+			Supplier<E> targetEndpiontSupplier);	
 	
 	@TargetHandler
 	public final H getTargetHandler() {
 		return getTargetHandler(
-				parentProcessor == null ? null : parentProcessor.getChildHandler(getElement()),
-				this::createChildHandler,
-				sourceEndpoint);
+				this::getParentEndpoint,
+				childEndpoints,
+				this::getSourceEndpoint,
+				this::getTargetEndpoint);
 	}
 	
-	protected abstract H getTargetHandler(H parentHandler, Function<Element,H> childHandlerProvider, E sourceEndpiont);	
+	protected abstract H getTargetHandler(
+			Supplier<E> parentEndpointSupplier, 
+			Map<Element,E> childEndpoints,
+			Supplier<E> sourceEndpiontSupplier, 
+			Supplier<E> targetEndpiontSupplier);
 	
 	@Override
-	protected final H getHandler(H parentHandler, Function<Element,H> childHandlerProvider) {
-		return getHandler(parentHandler, childHandlerProvider, sourceEndpoint, targetEndpoint);
+	protected final H getHandler(E parentEndpoint, Map<Element, E> childEndpoints) {
+		return getHandler(parentEndpoint, childEndpoints, this::getSourceEndpoint, this::getTargetEndpoint);
 	}
 	
-	protected abstract H getHandler(H parentHandler, Function<Element,H> childHandlerProvider, E sourceEndpoint, E targetEndpoint);	
+	protected abstract H getHandler(
+			E parentEndpoint, 
+			Map<Element,E> childEndpoints, 
+			Supplier<E> sourceEndpointSupplier, 
+			Supplier<E> targetEndpointSupplier);	
 	
 	@Override
-	protected final H getChildHandler(Element child, H parentHandler, Function<Element,H> childHandlerProvider) {
-		return getChildHandler(child, parentHandler, childHandlerProvider, sourceEndpoint, targetEndpoint);
+	protected final E getChildEndpoint(Element child, Supplier<E> parentEndpointSupplier, Map<Element, E> childEndpoints) {
+		return getChildEndpoint(child, parentEndpointSupplier, childEndpoints, this::getSourceEndpoint, this::getTargetEndpoint);
 	}
 	
-	protected abstract H getChildHandler(Element child, H parentHandler, Function<Element,H> childHandlerProvider, E sourceEndpoint, E targetEndpoint);	
-	
+	protected abstract E getChildEndpoint(
+			Element child, 
+			Supplier<E> parentEndpointSupplier, 
+			Map<Element,E> childEndpoints, 
+			Supplier<E> sourceEndpointSupplier, 
+			Supplier<E> targetEndpointSupplier);	
+
 	@Override
-	protected final H getParentHandler(H parentHandler, Function<Element,H> childHandlerProvider) {
-		return getParentHandler(parentHandler, childHandlerProvider, sourceEndpoint, targetEndpoint);
+	protected final E getParentEndpoint(E parentEndpoint, Map<Element, E> childEndpoints) {
+		return getParentEndpoint(parentEndpoint, childEndpoints, this::getSourceEndpoint, this::getTargetEndpoint);
 	}
 	
-	protected abstract H getParentHandler(H parentHandler, Function<Element,H> childHandlerProvider, E sourceEndpoint, E targetEndpoint);
+	protected abstract E getParentEndpoint(
+			E parentEndpoint, 
+			Map<Element, E> childEndpoints, 
+			Supplier<E> sourceEndpointSupplier, 
+			Supplier<E> targetEndpointSupplier);
 
 }
