@@ -215,6 +215,7 @@
 		<module>http</module>
 		<module>groovy</module>
 		<module>telemetry</module>
+		<module>echarts</module>
 	</modules>	
 
 	<distributionManagement>
