@@ -14,7 +14,7 @@ module org.nasdanika.emf {
 	requires org.jsoup;
 	requires org.eclipse.emf.ecore.xmi;
 	requires spring.expression;	
-	requires org.eclipse.jgit;
+	requires transitive org.eclipse.jgit;
 	requires transitive org.apache.poi.ooxml;
 	requires spring.core;
 	requires org.nasdanika.cli;

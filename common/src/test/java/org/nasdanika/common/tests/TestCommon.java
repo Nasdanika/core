@@ -593,5 +593,10 @@ public class TestCommon {
     		System.out.println(om);
     	}
     }
+    
+    @Test
+    public void testFile() throws Exception {
+    	System.out.println(new File("").getCanonicalPath());
+    }
     	
 }

@@ -1,11 +1,17 @@
 package org.nasdanika.emf.persistence.test;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.junit.jupiter.api.Test;
+import org.nasdanika.emf.GitURIHandler;
+
 
 public class TestJGit {
 
@@ -26,6 +32,19 @@ public class TestJGit {
 						System.out.println(remote + " -> " + config.getString("remote", "origin", "url"));
 					}
 				}
+			}
+		}
+	}
+	
+	@Test
+	public void testGitURIHandler() throws IOException {
+		GitURIHandler gitURIHander = new GitURIHandler();
+		
+		URI pomURI = URI.createURI("git://maven-2025.5.0/pom.xml");
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(gitURIHander.createInputStream(pomURI, null)))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				System.out.println(line);
 			}
 		}
 	}
