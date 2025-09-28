@@ -12,11 +12,11 @@
 	<packaging>jar</packaging>
 	<name>Layer and class loaders based on Maven resolver</name>
 	<dependencies>
-		<dependency>
-		    <groupId>org.apache.maven.resolver</groupId>
-		    <artifactId>maven-resolver-supplier</artifactId>
-		    <version>1.9.23</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-supplier</artifactId>
+            <version>1.9.24</version>
+        </dependency>
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
 			<artifactId>capability</artifactId>
