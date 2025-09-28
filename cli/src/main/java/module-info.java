@@ -1,10 +1,12 @@
 import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.cli.DocumentToModelCommandFactory;
 //import org.nasdanika.cli.CallableElementInvocableCommandFactory;
 import org.nasdanika.cli.DrawioCommandFactory;
 import org.nasdanika.cli.ElementInvocableCommandFactory;
 import org.nasdanika.cli.HelpCommandFactory;
 import org.nasdanika.cli.InvokeCommandFactory;
 import org.nasdanika.cli.RootCommandFactory;
+import org.nasdanika.cli.SaveDocumentCommandFactory;
 import org.nasdanika.cli.SaveModelCommandFactory;
 
 module org.nasdanika.cli {
@@ -25,6 +27,8 @@ module org.nasdanika.cli {
 		HelpCommandFactory,
 		DrawioCommandFactory,
 		SaveModelCommandFactory,
+		SaveDocumentCommandFactory,
+		DocumentToModelCommandFactory,
 		InvokeCommandFactory,
 //		CallableElementInvocableCommandFactory, Invocable factory below is more flexible.
 		ElementInvocableCommandFactory;
