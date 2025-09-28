@@ -36,7 +36,7 @@ public class TestDependencyAndClassLoading {
 				new ModuleLayer[] { getClass().getModule().getLayer() }, 
 				getClass().getClassLoader(), // ClassLoader parentClassLoader,
 				true, // boolean singleLayerClassLoader,				
-				new String[] { "org.apache.groovy:groovy-all:pom:4.0.23" }, 
+				new String[] { "org.apache.groovy:groovy-all:pom:4.0.23", "com.h2database:h2:2.4.240" }, 
 				null, 
 				null, 
 				"target/test-repo",
