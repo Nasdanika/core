@@ -105,6 +105,11 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		return getElement().hasAttribute(ATTRIBUTE_ID) ? getElement().getAttribute(ATTRIBUTE_ID) : null;
 	}
 	
+	@Override
+	public void setId(String id) {
+		getElement().setAttribute(ATTRIBUTE_ID, id);		
+	}		
+	
 	static org.w3c.dom.Element getCellElement(org.w3c.dom.Element element) {
 		return MX_CELL_TAG_NAME.equals(element.getTagName()) ? element : DocumentImpl.getChildrenElements(element, MX_CELL_TAG_NAME).get(0);
 	}
@@ -579,6 +584,6 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		} 
 		
 		throw new IllegalArgumentException("Expected one geometry element, got " + geometryElements.size());
-	}	
+	}
 	
 }

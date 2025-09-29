@@ -13,6 +13,8 @@ public interface Page extends LinkTarget {
 	
 	String getId();	
 	
+	void setId(String id);	
+	
 	Document getDocument();
 	
 	@Override

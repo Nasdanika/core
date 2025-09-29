@@ -67,6 +67,8 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	
 	String getId();
 	
+	void setId(String id);
+	
 	/**
 	 * Resolves some value for the model element by traversing its logical containment hierarchy and resolving that value against logical parents.
 	 * For the containment root the value is resolved against the base.
