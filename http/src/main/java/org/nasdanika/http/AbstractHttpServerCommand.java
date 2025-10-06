@@ -61,7 +61,11 @@ public abstract class AbstractHttpServerCommand extends CommandBase {
 				"the URI is resolved relative to",
 				"http://localhost:<port>/"
 			})
-	private String uriToOpen;	
+	private String uriToOpen;
+	
+	protected String getUriToOpen() {
+		return uriToOpen;
+	}
 
 	protected void startServer(Consumer<? super HttpServerRoutes> routesBuilder) throws Exception {
 		// TODO - start route builders capability providers
@@ -74,11 +78,11 @@ public abstract class AbstractHttpServerCommand extends CommandBase {
 		System.out.println("Litening on port: " + server.port());
 		LOGGER.info("Listening on port {}", server.port());
 		
-		if (!Util.isBlank(uriToOpen) 
+		if (!Util.isBlank(getUriToOpen()) 
 				&& Desktop.isDesktopSupported() 
 				&& Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 			
-		    URI resolvedUri = new URI("http://localhost:" + server.port() + "/").resolve(uriToOpen);			
+		    URI resolvedUri = new URI("http://localhost:" + server.port() + "/").resolve(getUriToOpen());			
 			LOGGER.info("Opening {} in the browser", resolvedUri);
 			Desktop.getDesktop().browse(resolvedUri);
 		}

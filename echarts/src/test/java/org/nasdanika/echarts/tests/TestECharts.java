@@ -58,13 +58,12 @@ public class TestECharts {
 		builder2.addElement(Map.entry("Wednesday", 5));
 		builder2.addElement(Map.entry("Thursday", 6));
 		builder2.addElement(Map.entry("Friday", 7));
-		builder2.lineSeries().setEmphasis(emphasis);
-		
+		builder2.lineSeries().setEmphasis(emphasis);		
 		
 		lineSeriesChart.write(
 				new File("target/line.html"), 
 				"Test", 
-				true,
+				false,
 				chart -> {
 					Option option = chart.getOption();
 					DataZoom dataZoom = new DataZoom();
