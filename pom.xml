@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nasdanika.core</groupId>
-	<version>2025.7.0</version>
+	<version>2025.10.0</version>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Nasdanika Core Parent</name>
@@ -87,19 +87,12 @@
 		        <plugin>
 		            <groupId>org.apache.maven.plugins</groupId>
 		            <artifactId>maven-surefire-plugin</artifactId>
-		            <version>3.5.3</version>
-		            <dependencies>
-		                <dependency>
-		                    <groupId>org.junit.jupiter</groupId>
-		                    <artifactId>junit-jupiter-engine</artifactId>
-		                    <version>5.12.1</version>
-		                </dependency>
-		            </dependencies>
+		            <version>3.5.4</version>
 		        </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.11.2</version>
+				<version>3.12.0</version>
 			
 				<executions>
 					<execution>
@@ -159,20 +152,20 @@
 		<dependency>
 		    <groupId>org.junit.jupiter</groupId>
 		    <artifactId>junit-jupiter-api</artifactId>
-		    <version>5.12.1</version>
+		    <version>6.0.0</version>
 		    <scope>test</scope>
 		</dependency>		
 		<dependency>
 		    <groupId>org.junit.jupiter</groupId>
 		    <artifactId>junit-jupiter-engine</artifactId>
-		    <version>5.12.1</version>
+		    <version>6.0.0</version>
 		    <scope>test</scope>
 		</dependency>		
 		
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.27.3</version>
+			<version>3.27.6</version>
 			<scope>test</scope>
 		</dependency>				
 	</dependencies>
@@ -213,7 +206,7 @@
 		<module>capability</module>
 		<module>cli</module>
 		<module>http</module>
-		<module>groovy</module>
+		<!--<module>groovy</module>-->
 		<module>telemetry</module>
 		<module>echarts</module>
 	</modules>	
@@ -239,7 +232,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>3.2.7</version>
+						<version>3.2.8</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
@@ -254,7 +247,7 @@
 					<plugin>					
 						<groupId>org.sonatype.central</groupId>
 						<artifactId>central-publishing-maven-plugin</artifactId>
-						<version>0.8.0</version>
+						<version>0.9.0</version>
 						<extensions>true</extensions>
 						<configuration>
 							<publishingServerId>central</publishingServerId>

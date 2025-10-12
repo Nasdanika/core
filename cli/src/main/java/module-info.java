@@ -10,12 +10,12 @@ import org.nasdanika.cli.SaveDocumentCommandFactory;
 import org.nasdanika.cli.SaveModelCommandFactory;
 
 module org.nasdanika.cli {
-	
+			
 	exports org.nasdanika.cli;
 	
 	requires transitive org.nasdanika.telemetry;
 	requires transitive org.nasdanika.drawio;
-	requires transitive info.picocli;
+//	requires transitive info.picocli;
 	requires org.apache.commons.text;
 	requires transitive org.jline;
 	requires transitive io.opentelemetry.context;
@@ -32,5 +32,10 @@ module org.nasdanika.cli {
 		InvokeCommandFactory,
 //		CallableElementInvocableCommandFactory, Invocable factory below is more flexible.
 		ElementInvocableCommandFactory;
+	
+	// Waiting for Picocli 4.8.0 with Nasdanika contributions
+	// Bundling picocli with this module in the meantime
+    exports picocli;
+    requires static java.sql;	
 	
 }

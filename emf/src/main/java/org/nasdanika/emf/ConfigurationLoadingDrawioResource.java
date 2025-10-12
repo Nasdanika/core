@@ -13,9 +13,11 @@ import java.util.function.Supplier;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.Context;
@@ -29,6 +31,7 @@ import org.nasdanika.drawio.emf.AbstractDrawioFactory;
 import org.nasdanika.drawio.emf.DrawioContentProvider;
 import org.nasdanika.drawio.emf.DrawioResource;
 import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.mapping.AbstractMappingFactory.Contributor;
 import org.nasdanika.mapping.ContentProvider;
 import org.nasdanika.persistence.Marker;
 import org.xml.sax.SAXException;
@@ -41,7 +44,7 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 	public static final String MAPPING_PROPERTY = "mapping";
 	public static final String MAPPING_REF_PROPERTY = "mapping-ref";
 	
-	protected ConnectionBase connnectionBase = ConnectionBase.SOURCE;	
+	protected ConnectionBase connectionBase = ConnectionBase.SOURCE;	
 	
 	protected Function<URI,EObject> uriResolver;
 	private CapabilityLoader capabilityLoader;
@@ -63,6 +66,7 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 		this.capabilityLoader = capabilityLoader;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		try {
@@ -123,11 +127,20 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 				
 			};
 			
+			ResourceSet rs = getResourceSet();
+			if (rs != null) {
+				for (Adapter adapter: rs.eAdapters()) {
+					if (adapter instanceof Contributor) {
+						drawioFactory.getContributors().add((Contributor<Element, EObject>) adapter);
+					}
+				}
+			}
+			
 			Transformer<Element,EObject> modelFactory = new Transformer<>(drawioFactory);
 			List<Element> documentElements = new ArrayList<>();
 			Consumer<Element> visitor = documentElements::add;
-			@SuppressWarnings({ "rawtypes", "unchecked" })
-			Consumer<org.nasdanika.graph.Element> traverser = (Consumer) org.nasdanika.drawio.Util.traverser(visitor, connnectionBase);
+			@SuppressWarnings("rawtypes")
+			Consumer<org.nasdanika.graph.Element> traverser = (Consumer) org.nasdanika.drawio.Util.traverser(visitor, connectionBase);
 			document.accept(traverser);
 			
 			Map<Element, EObject> modelElements = modelFactory.transform(documentElements, false, getProgressMonitor());
@@ -196,7 +209,7 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 				Context.BASE_URI_PROPERTY, 
 				MAPPING_PROPERTY, 
 				MAPPING_REF_PROPERTY, 
-				connnectionBase);
+				connectionBase);
 	}
 				
 	protected org.nasdanika.ncore.Marker createTargetMarker(

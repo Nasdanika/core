@@ -18,7 +18,7 @@ import org.w3c.dom.Element;
 class RootImpl extends ModelElementImpl implements Root {
 
 	RootImpl(Element element, ModelImpl model) {
-		super(element, model);
+		super(element, model, 0);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

@@ -1066,6 +1066,32 @@ public class TestDrawio {
 				processors.get(pe.getKey()).getProcessor().apply(nodeMessage, progressMonitor);
 			}
 		}
+	}
+		
+	@Test 
+	public void testStyleMagicProperty() throws Exception {
+		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
+		document.accept(el -> {
+			if (el instanceof ModelElement) {
+				ModelElement mel = (ModelElement) el;
+				if ("Alice".equals(mel.getLabel())) {
+					System.out.println(mel.getProperty("$style:fillColor"));
+				}
+			}
+		});	
+	}
+	
+	@Test 
+	public void testSpelMagicProperty() throws Exception {
+		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
+		document.accept(el -> {
+			if (el instanceof ModelElement) {
+				ModelElement mel = (ModelElement) el;
+				if ("Alice".equals(mel.getLabel())) {
+					System.out.println(mel.getProperty("$spel:style[\"fillColor\"]"));
+				}
+			}
+		});	
 	}	
 	
 }

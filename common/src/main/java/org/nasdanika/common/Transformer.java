@@ -476,7 +476,16 @@ public class Transformer<S,T> extends Reflector {
 		}
 		
 		Class<?> aType = a.getAnnotation(Factory.class).type();
+		Class<?> apType = a.getParameterTypes()[0];
+		if (aType.isAssignableFrom(apType)) {
+			aType = apType;
+		}
+		
 		Class<?> bType = b.getAnnotation(Factory.class).type();
+		Class<?> bpType = b.getParameterTypes()[0];
+		if (bType.isAssignableFrom(bpType)) {
+			bType = bpType;
+		}
 		if (!Objects.equals(aType, bType)) {
 			if (aType.isAssignableFrom(bType)) {
 				// b is more specific

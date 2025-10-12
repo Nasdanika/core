@@ -122,22 +122,22 @@ class ModelImpl extends ElementImpl implements Model {
 		throw new IllegalArgumentException("More than one root");		
 	}
 	
-	private ModelElement create(org.w3c.dom.Element element) {
+	private ModelElement create(org.w3c.dom.Element element, int position) {
 		org.w3c.dom.Element cellElement = ModelElementImpl.getCellElement(element);
 		if (!cellElement.hasAttribute(ModelElementImpl.ATTRIBUTE_PARENT)) {
 			return new RootImpl(element, this);
 		}
 		ModelElement parent = find(cellElement.getAttribute(ModelElementImpl.ATTRIBUTE_PARENT));
 		if (parent instanceof Root) {
-			return new LayerImpl(element, this);			
+			return new LayerImpl(element, this, position);			
 		}
 		if (cellElement.hasAttribute(ATTRIBUTE_VERTEX) && "1".equals(cellElement.getAttribute(ATTRIBUTE_VERTEX))) {
-			return new NodeImpl(element, this);
+			return new NodeImpl(element, this, position);
 		}
 		if (cellElement.hasAttribute(ATTRIBUTE_EDGE) && "1".equals(cellElement.getAttribute(ATTRIBUTE_EDGE))) {
-			return new ConnectionImpl(element, this);
+			return new ConnectionImpl(element, this, position);
 		}
-		return new ModelElementImpl(element, this); // Generic model element, shall it ever happen?
+		return new ModelElementImpl(element, this, position); // Generic model element, shall it ever happen?
 	}
 	
 	ModelElement find(String id) {
@@ -179,7 +179,7 @@ class ModelImpl extends ElementImpl implements Model {
 
 			@Override
 			public ModelElement get(int index) {
-				return cache.computeIfAbsent(elements.get(index), ModelImpl.this::create);
+				return cache.computeIfAbsent(elements.get(index), e -> ModelImpl.this.create(e, index));
 			}
 
 			@Override

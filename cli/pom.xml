@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2025.7.0</version>
+	    <version>2025.10.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>cli</artifactId>
@@ -39,7 +39,7 @@
 	        <plugin>
 	            <groupId>org.apache.maven.plugins</groupId>
 	            <artifactId>maven-failsafe-plugin</artifactId>
-	            <version>3.5.3</version>
+	            <version>3.5.4</version>
 			    <executions>
 			        <execution>
 			            <goals>
@@ -51,17 +51,15 @@
 	        </plugin>			
 		</plugins>
 	</build>
-	<dependencies>		
+	<dependencies>
+	   	<!-- Waiting for Picocli 4.8.0 with Nadanika contribution
+	   	Using a copy of CommandLine class as part of this module in the meantime 	
 		<dependency>
 			<groupId>info.picocli</groupId>
 			<artifactId>picocli</artifactId>
-			<!-- 
-	        	Use https://maven.nasdanika.org/snapshots repository or
-        	    build a snapshot from https://github.com/Nasdanika/picocli
-	            gradlew.bat publishToMavenLocal 
-		    -->
-			<version>4.7.7-SNAPSHOT</version>  
-		</dependency>		
+			<version>4.8.0</version>
+		</dependency>
+		-->		
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
 			<artifactId>telemetry</artifactId>
@@ -75,7 +73,7 @@
 		<dependency>
 		    <groupId>org.jline</groupId>
 		    <artifactId>jline</artifactId>
-		    <version>3.30.4</version>
+		    <version>3.30.6</version>
 		</dependency>
 	</dependencies>
 </project>

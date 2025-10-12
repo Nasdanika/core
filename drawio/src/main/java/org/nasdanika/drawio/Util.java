@@ -492,7 +492,7 @@ public final class Util {
 	 * @param connectionBase Connection base for visiting linked pages.
 	 * @return Visitor which passes itself to connected elements (incoming and outgoing connnections for nodes and source and target nodes for connections) and linked pages and adds linked pages' result to child results.
 	 */
-	public static <T> Consumer<Element> traverser(Consumer<Element> visitor, ConnectionBase connectionBase) {
+	public static Consumer<Element> traverser(Consumer<Element> visitor, ConnectionBase connectionBase) {
 		return new Consumer<Element>() {
 			
 			Collection<Element> visited = new HashSet<>();

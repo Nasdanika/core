@@ -3,6 +3,7 @@ package org.nasdanika.persistence;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -27,7 +28,7 @@ public class Util {
 		if (map instanceof MarkedLinkedHashMap) {
 			return ((MarkedLinkedHashMap<?,?>) map).getEntryMarkers(key);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 		
 	/**

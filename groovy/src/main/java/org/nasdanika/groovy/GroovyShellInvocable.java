@@ -1,10 +1,10 @@
 package org.nasdanika.groovy;
 
-import org.apache.groovy.groovysh.Groovysh;
 import org.codehaus.groovy.tools.shell.IO;
 import org.nasdanika.common.Invocable;
 
 import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
 
 public class GroovyShellInvocable implements Invocable {
 	
@@ -20,7 +20,7 @@ public class GroovyShellInvocable implements Invocable {
 	@Override
 	public <T> T invoke(Object... args) {
 		binding.setProperty("args", args);
-		Groovysh groovysh = new Groovysh(binding, new IO());
+		GroovyShell groovysh = new GroovyShell(binding, new IO());
 		return (T) (Object) groovysh.run(null);
 	}
 	

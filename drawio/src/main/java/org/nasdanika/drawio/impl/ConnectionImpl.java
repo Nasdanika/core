@@ -20,8 +20,8 @@ class ConnectionImpl extends ModelElementImpl implements Connection {
 	private static final String TARGET_POINT_ROLE = "targetPoint";
 	private static final String MX_POINT_ATTRIBUTE = "mxPoint";
 
-	ConnectionImpl(Element element, ModelImpl model) {
-		super(element, model);
+	ConnectionImpl(Element element, ModelImpl model, int position) {
+		super(element, model, position);
 	}
 
 	@Override

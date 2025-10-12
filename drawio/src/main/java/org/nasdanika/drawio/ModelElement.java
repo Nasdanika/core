@@ -111,4 +111,10 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	 */
 	boolean isTargetLink();
 	
+	/**
+	 * Position in the parent children collection
+	 * @return
+	 */
+	int getPosition();
+	
 }

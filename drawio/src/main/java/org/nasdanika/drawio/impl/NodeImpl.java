@@ -19,8 +19,8 @@ import org.w3c.dom.Element;
 
 class NodeImpl extends LayerImpl implements Node {
 	
-	NodeImpl(Element element, ModelImpl model) {
-		super(element, model);
+	NodeImpl(Element element, ModelImpl model, int position) {
+		super(element, model, position);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

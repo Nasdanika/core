@@ -47,7 +47,6 @@ import org.nasdanika.common.DocumentationFactory;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
-import org.nasdanika.mapping.AbstractMappingFactory.Contributor;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NcoreFactory;
@@ -81,7 +80,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		boolean canHandle(Object source, EObject target);
 		
 		/**
-		 * Called from createTarget(), allows to customize both the source and target for further mapping
+		 * Called from createTarget(), allows to customize both the source and the target for further mapping
 		 * @param obj
 		 * @param target
 		 * @param elementProvider
@@ -164,6 +163,10 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	}	
 	
 	protected Collection<Contributor<S,T>> contributors = new ArrayList<>();
+	
+	public Collection<Contributor<S, T>> getContributors() {
+		return contributors;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public AbstractMappingFactory(ContentProvider<S> contentProvider, CapabilityLoader capabilityLoader, ProgressMonitor progressMonitor) {
@@ -494,7 +497,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			}
 		}
 		
-		for (Contributor<S,T> contributor: contributors) {
+		for (Contributor<S,T> contributor: getContributors()) {
 			if (contributor.canHandle(obj, target)) {				
 				contributor.initialize(
 						obj, 
@@ -1318,7 +1321,7 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			}
 		}
 		
-		for (Contributor<S,T> contributor: contributors) {
+		for (Contributor<S,T> contributor: getContributors()) {
 			if (contributor.canHandle(obj, target)) {
 				contributor.configure(
 						obj, 

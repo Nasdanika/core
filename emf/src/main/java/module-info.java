@@ -20,7 +20,7 @@ module org.nasdanika.emf {
 	requires org.nasdanika.cli;
 	requires org.apache.commons.lang3;
 	
-	opens org.nasdanika.emf to info.picocli;
+	opens org.nasdanika.emf to info.picocli, org.nasdanika.cli;
 	
 	provides CapabilityFactory with 
 		EObjectCapabilityFactory,

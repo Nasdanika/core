@@ -6,7 +6,7 @@ import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Node;
 
 /**
- * Compares {@link Node}s by rows/columns. Not implemented yet.
+ * Compares {@link Node}s by rows/columns. 
  * @author Pavel
  *
  */

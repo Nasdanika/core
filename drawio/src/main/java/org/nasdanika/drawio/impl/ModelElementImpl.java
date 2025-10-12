@@ -34,12 +34,19 @@ import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Tag;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marker;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.w3c.dom.Attr;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
 
 class ModelElementImpl extends ElementImpl implements ModelElement {
 	
+	private static final String SPEL_PREFIX = "$spel:";
+	private static final String STYLE_PREFIX = "$style:";
 	private static final String GEOMETRY_ROLE = "geometry";
 	static final String AS_ATTRIBUTE = "as";
 	static final String MX_GEOMETRY_ATTRIBUTE = "mxGeometry";
@@ -70,14 +77,16 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	 * For element resolution.
 	 */
 	protected ModelImpl model;
+	private int position;
 
 	/**
 	 * @param element XML element for this page element
 	 * @param rootElement root element containing all model elements to use for lookup of parent and children.
 	 */
-	ModelElementImpl(org.w3c.dom.Element element, ModelImpl model) {
+	ModelElementImpl(org.w3c.dom.Element element, ModelImpl model, int position) {
 		this.element = element;
 		this.model = model;
+		this.position = position;
 	}
 
 	@Override
@@ -246,9 +255,27 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 
 	@Override
 	public String getProperty(String name) {
+		if (name != null) {
+			if (name.startsWith(STYLE_PREFIX)) {
+				String styleKey = name.substring(STYLE_PREFIX.length());
+				if (!Util.isBlank(styleKey)) {
+					return getStyle().get(styleKey);
+				}
+			}
+			if (name.startsWith(SPEL_PREFIX)) {
+				String expr = name.substring(SPEL_PREFIX.length());
+				if (!Util.isBlank(expr)) {
+					ExpressionParser parser = new SpelExpressionParser();
+					Expression exp = parser.parseExpression(expr);
+					EvaluationContext evaluationContext = new StandardEvaluationContext();
+					return exp.getValue(evaluationContext, this, String.class);
+				}
+			}
+		}
+		
 		return interpolate(getRawProperty(name), new HashSet<>());
 	}
-
+	
 	@Override
 	public void setProperty(String name, String value) {
 		if (Util.isBlank(value)) {
@@ -584,6 +611,11 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		} 
 		
 		throw new IllegalArgumentException("Expected one geometry element, got " + geometryElements.size());
+	}
+	
+	@Override
+	public int getPosition() {
+		return position;
 	}
 	
 }
