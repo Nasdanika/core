@@ -186,7 +186,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 			public Page get(int index) {
 				return pages.computeIfAbsent(index, idx -> {
 					try {			
-						return new PageImpl(DocumentImpl.this, getChildrenElements(getElement(), "diagram").get(idx));
+						return new PageImpl(DocumentImpl.this, getChildrenElements(getElement(), "diagram").get(idx), idx);
 					} catch (IOException | ParserConfigurationException | SAXException e) {
 						throw new IllegalArgumentException("Error loading compressed page", e);
 					}

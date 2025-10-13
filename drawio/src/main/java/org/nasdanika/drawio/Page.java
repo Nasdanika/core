@@ -26,5 +26,7 @@ public interface Page extends LinkTarget {
 	Map<String,Tag> getTags();
 	
 	Tag createTag(String name);
+	
+	int getPosition();
 
 }

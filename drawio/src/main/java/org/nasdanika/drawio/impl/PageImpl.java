@@ -31,10 +31,12 @@ class PageImpl extends ElementImpl implements Page {
 	static final String ATTRIBUTE_NAME = "name";
 	private ModelImpl model;
 	private Document document;
+	private int position;
 	
-	PageImpl(Document document, org.w3c.dom.Element element) throws IOException, ParserConfigurationException, SAXException {
+	PageImpl(Document document, org.w3c.dom.Element element, int position) throws IOException, ParserConfigurationException, SAXException {
 		this.document = document;
 		this.element = element;
+		this.position = position;
 		List<org.w3c.dom.Element> modelElements = DocumentImpl.getChildrenElements(element, "mxGraphModel");
 		if (modelElements.isEmpty()) {
 			model = new ModelImpl(this, element.getTextContent());
@@ -192,6 +194,11 @@ class PageImpl extends ElementImpl implements Page {
 	@Override
 	public org.nasdanika.drawio.Tag createTag(String name) {
 		return new TagImpl(name, this);
+	}
+
+	@Override
+	public int getPosition() {
+		return position;
 	}
 
 }
