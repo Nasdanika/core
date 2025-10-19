@@ -34,4 +34,13 @@ public interface Layer extends ModelElement {
 	 */
 	Connection createConnection(Node source, Node target);
 	
+	/**
+	 * Creates layer elements from graph elements.
+	 * This method can be used to generate diagrams from simpler 
+	 * structures which are easier to construct and are not
+	 * Draw.io specific.
+	 * @param element
+	 */
+	void populate(org.nasdanika.graph.Element element);
+	
 }

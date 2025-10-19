@@ -265,6 +265,15 @@ public interface NcoreFactory extends EFactory {
 	DocumentedNamedStringIdentity createDocumentedNamedStringIdentity();
 
 	/**
+	 * Returns a new object of class '<em>Catalog</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Catalog</em>'.
+	 * @generated
+	 */
+	Catalog createCatalog();
+
+	/**
 	 * Returns a new object of class '<em>Tree Item</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

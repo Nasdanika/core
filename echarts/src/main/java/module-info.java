@@ -1,6 +1,6 @@
 module org.nasdanika.echarts {
 	
-	requires transitive org.nasdanika.common;
+	requires transitive org.nasdanika.graph;
 	requires transitive echarts.java;
 	requires java.desktop;
 	

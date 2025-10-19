@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**
  * Adds itself to source and target in constructor
@@ -13,14 +14,42 @@ public class SimpleConnection implements Connection {
 	private Node source;
 	private Node target;
 	private boolean visitTarget;
+	
+	private Supplier<Collection<? extends Element>> childrenSupplier;
 
-	/**
-	 * @param source
-	 * @param target
-	 * @param visitTarget If true, accept() passes visitor to the target.
-	 */	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public SimpleConnection(Node source, Node target, boolean visitTarget) {
+	public SimpleConnection(
+			Node source, 
+			Node target, 
+			boolean visitTarget) {
+		this(source, target, visitTarget, Collections.emptyList());
+	}
+
+	public SimpleConnection(
+			Node source, 
+			Node target, 
+			boolean visitTarget, 
+			Collection<? extends Element> children) {
+		
+		this(
+				source,
+				target,
+				visitTarget,
+				() -> children == null ? Collections.emptyList() : children);
+	}
+	
+	@Override
+	public Collection<? extends Element> getChildren() {
+		Collection<? extends Element> children = childrenSupplier.get();
+		return children;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })	
+	public SimpleConnection(
+			Node source, 
+			Node target, 
+			boolean visitTarget, 
+			Supplier<Collection<? extends Element>> childrenSupplier) {
+		
 		this.source = source;
 		this.target = target;
 		if (source != null) {
@@ -30,6 +59,7 @@ public class SimpleConnection implements Connection {
 			((Collection) target.getIncomingConnections()).add(this);
 		}
 		this.visitTarget = visitTarget;
+		this.childrenSupplier = childrenSupplier == null ? () -> Collections.emptyList() : childrenSupplier;
 	}
 	
 	@Override

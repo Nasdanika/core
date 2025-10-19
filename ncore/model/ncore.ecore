@@ -566,6 +566,10 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedStringIdentity" eSuperTypes="#//DocumentedNamedElement #//StringIdentity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Catalog" eSuperTypes="#//DocumentedNamedStringIdentity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//DocumentedNamedStringIdentity" containment="true" eKeys="#//StringIdentity/id"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TreeItem">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>

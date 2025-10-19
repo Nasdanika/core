@@ -3,6 +3,7 @@ package org.nasdanika.echarts.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
@@ -15,8 +16,11 @@ import org.icepear.echarts.components.marker.MarkArea2DDataItem;
 import org.icepear.echarts.components.marker.MarkArea2DDataItemDim;
 import org.icepear.echarts.origin.component.marker.MarkAreaDataItemOption;
 import org.junit.jupiter.api.Test;
+import org.nasdanika.echarts.GraphChartGenerator;
 import org.nasdanika.echarts.LineSeriesChart;
 import org.nasdanika.echarts.LineSeriesChart.LineSeriesBuilder;
+import org.nasdanika.graph.ObjectNode;
+import org.nasdanika.graph.SimpleConnection;
 
 
 public class TestECharts {
@@ -72,5 +76,19 @@ public class TestECharts {
 				},
 				null);
 	}
+		
+	@Test
+	public void testGraphChart() throws IOException {
+		ObjectNode<String> alice = new ObjectNode<>("Alice"); 
+		ObjectNode<String> bob = new ObjectNode<>("Bob"); 
+		new SimpleConnection(alice, bob, false);
+		
+		GraphChartGenerator generator = new GraphChartGenerator(List.of(alice, bob));
+		generator.setForceLayout(500, 500);
+		generator.write(
+				new File("target/graph.html"), 
+				"Test Graph", 
+				false);
+	}	
 	
 }

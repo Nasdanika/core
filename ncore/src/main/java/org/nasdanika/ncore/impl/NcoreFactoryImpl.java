@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.Catalog;
 import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
@@ -116,6 +117,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.DOCUMENTED_NAMED_ELEMENT: return createDocumentedNamedElement();
 			case NcorePackage.COMPOSITE: return createComposite();
 			case NcorePackage.DOCUMENTED_NAMED_STRING_IDENTITY: return createDocumentedNamedStringIdentity();
+			case NcorePackage.CATALOG: return createCatalog();
 			case NcorePackage.TREE_ITEM: return createTreeItem();
 			case NcorePackage.TREE: return createTree();
 			case NcorePackage.FILE: return createFile();
@@ -477,6 +479,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public DocumentedNamedStringIdentity createDocumentedNamedStringIdentity() {
 		DocumentedNamedStringIdentityImpl documentedNamedStringIdentity = new DocumentedNamedStringIdentityImpl();
 		return documentedNamedStringIdentity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Catalog createCatalog() {
+		CatalogImpl catalog = new CatalogImpl();
+		return catalog;
 	}
 
 	/**

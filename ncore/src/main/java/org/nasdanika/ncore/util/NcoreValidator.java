@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.Catalog;
 import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
@@ -197,6 +198,8 @@ public class NcoreValidator extends EObjectValidator {
 				return validateStringIdentity((StringIdentity)value, diagnostics, context);
 			case NcorePackage.DOCUMENTED_NAMED_STRING_IDENTITY:
 				return validateDocumentedNamedStringIdentity((DocumentedNamedStringIdentity)value, diagnostics, context);
+			case NcorePackage.CATALOG:
+				return validateCatalog((Catalog)value, diagnostics, context);
 			case NcorePackage.TREE_ITEM:
 				return validateTreeItem((TreeItem)value, diagnostics, context);
 			case NcorePackage.TREE:
@@ -665,6 +668,15 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateDocumentedNamedStringIdentity(DocumentedNamedStringIdentity documentedNamedStringIdentity, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(documentedNamedStringIdentity, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateCatalog(Catalog catalog, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(catalog, diagnostics, context);
 	}
 
 	/**

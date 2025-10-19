@@ -1,5 +1,7 @@
 package org.nasdanika.graph;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -12,6 +14,15 @@ public class ObjectNode<T> extends SimpleNode implements Supplier<T> {
 	private T value;
 
 	public ObjectNode(T value) {
+		this(value, Collections.emptyList());
+	}
+
+	public ObjectNode(T value, Collection<? extends Element> children) {
+		this(value, () -> children == null ? Collections.emptyList() : children);
+	}
+
+	public ObjectNode(T value, Supplier<Collection<? extends Element>> childrenSupplier) {
+		super(childrenSupplier == null ? () -> Collections.emptyList() : childrenSupplier);
 		this.value = value;
 	}
 	

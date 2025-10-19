@@ -50,12 +50,12 @@ public class ProcessorFactory<P> {
 	
 	/**
 	 * Handles exceptionally completed stages
-	 * @param throwed
+	 * @param thrown
 	 */
-	protected void onExceptionalCompletions(List<Throwable> throwed) {
-		if (!throwed.isEmpty()) {
-			NasdanikaException ne = new NasdanikaException("Theres's been errors during processor creation");
-			for (Throwable th: throwed) {
+	protected void onExceptionalCompletions(List<Throwable> thrown) {
+		if (!thrown.isEmpty()) {
+			NasdanikaException ne = new NasdanikaException("There's been errors during processor creation");
+			for (Throwable th: thrown) {
 				ne.addSuppressed(th);
 			}
 			throw ne;
@@ -98,7 +98,7 @@ public class ProcessorFactory<P> {
 		join(stages.stream().map(CompletionStage::toCompletableFuture).filter(cf -> !cf.isDone()).collect(Collectors.toList()));
 		
 		// Collecting exceptions
-		List<Throwable> throwed = new ArrayList<>();
+		List<Throwable> thrown = new ArrayList<>();
 		Stream.concat(stages.stream(), endpointWiringStages.stream())
 			.map(CompletionStage::toCompletableFuture)
 			.filter(CompletableFuture::isCompletedExceptionally)
@@ -106,11 +106,11 @@ public class ProcessorFactory<P> {
 				if (e == null) {
 					throw new IllegalArgumentException("Error shall not be null");
 				}
-				throwed.add(e);
+				thrown.add(e);
 				return null;
 			}));
 		
-		onExceptionalCompletions(throwed);
+		onExceptionalCompletions(thrown);
 		
 		Map<Element, ProcessorInfo<P>> ret = new LinkedHashMap<>();
 		processors.forEach((e, r) -> ret.put(e, r.processorInfoCompletableFuture().join()));

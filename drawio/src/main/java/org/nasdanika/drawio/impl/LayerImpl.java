@@ -91,4 +91,14 @@ class LayerImpl extends ModelElementImpl implements Layer {
 		return mElement;
 	}
 
+	@Override
+	public void populate(org.nasdanika.graph.Element element) {
+		// Node -> node
+		// Children -> node, container is true
+		// Connection -> connection, resolve source and target with transformer possibly
+		// value is a map -> properties
+		// otherwise wrap value in label property
+		
+	}
+
 }

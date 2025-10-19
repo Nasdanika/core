@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.Catalog;
 import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
@@ -441,6 +442,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseMarked(documentedNamedStringIdentity);
 				if (result == null) result = caseAdaptable(documentedNamedStringIdentity);
 				if (result == null) result = caseIMarked(documentedNamedStringIdentity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.CATALOG: {
+				Catalog catalog = (Catalog)theEObject;
+				T1 result = caseCatalog(catalog);
+				if (result == null) result = caseDocumentedNamedStringIdentity(catalog);
+				if (result == null) result = caseDocumentedNamedElement(catalog);
+				if (result == null) result = caseStringIdentity(catalog);
+				if (result == null) result = caseNamedElement(catalog);
+				if (result == null) result = caseDocumented(catalog);
+				if (result == null) result = caseModelElement(catalog);
+				if (result == null) result = caseMarked(catalog);
+				if (result == null) result = caseAdaptable(catalog);
+				if (result == null) result = caseIMarked(catalog);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1064,6 +1080,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseDocumentedNamedStringIdentity(DocumentedNamedStringIdentity object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Catalog</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Catalog</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseCatalog(Catalog object) {
 		return null;
 	}
 

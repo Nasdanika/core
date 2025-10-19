@@ -2485,6 +2485,142 @@ public interface NcorePackage extends EPackage {
 	int DOCUMENTED_NAMED_STRING_IDENTITY_OPERATION_COUNT = DOCUMENTED_NAMED_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.CatalogImpl <em>Catalog</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.CatalogImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getCatalog()
+	 * @generated
+	 */
+	int CATALOG = 38;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__MARKERS = DOCUMENTED_NAMED_STRING_IDENTITY__MARKERS;
+
+	/**
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__URIS = DOCUMENTED_NAMED_STRING_IDENTITY__URIS;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__DESCRIPTION = DOCUMENTED_NAMED_STRING_IDENTITY__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__UUID = DOCUMENTED_NAMED_STRING_IDENTITY__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Label Prototype</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__LABEL_PROTOTYPE = DOCUMENTED_NAMED_STRING_IDENTITY__LABEL_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__REPRESENTATIONS = DOCUMENTED_NAMED_STRING_IDENTITY__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__ANNOTATIONS = DOCUMENTED_NAMED_STRING_IDENTITY__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__NAME = DOCUMENTED_NAMED_STRING_IDENTITY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__DOCUMENTATION = DOCUMENTED_NAMED_STRING_IDENTITY__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Context Help</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__CONTEXT_HELP = DOCUMENTED_NAMED_STRING_IDENTITY__CONTEXT_HELP;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__ID = DOCUMENTED_NAMED_STRING_IDENTITY__ID;
+
+	/**
+	 * The feature id for the '<em><b>Items</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG__ITEMS = DOCUMENTED_NAMED_STRING_IDENTITY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Catalog</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG_FEATURE_COUNT = DOCUMENTED_NAMED_STRING_IDENTITY_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Catalog</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATALOG_OPERATION_COUNT = DOCUMENTED_NAMED_STRING_IDENTITY_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.TreeItemImpl <em>Tree Item</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2492,7 +2628,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTreeItem()
 	 * @generated
 	 */
-	int TREE_ITEM = 38;
+	int TREE_ITEM = 39;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2529,7 +2665,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTree()
 	 * @generated
 	 */
-	int TREE = 39;
+	int TREE = 40;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2575,7 +2711,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getFile()
 	 * @generated
 	 */
-	int FILE = 40;
+	int FILE = 41;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2630,7 +2766,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDirectory()
 	 * @generated
 	 */
-	int DIRECTORY = 41;
+	int DIRECTORY = 42;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2694,7 +2830,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getThrowable()
 	 * @generated
 	 */
-	int THROWABLE = 42;
+	int THROWABLE = 43;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -2767,7 +2903,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStackTraceElement()
 	 * @generated
 	 */
-	int STACK_TRACE_ELEMENT = 43;
+	int STACK_TRACE_ELEMENT = 44;
 
 	/**
 	 * The feature id for the '<em><b>Class Name</b></em>' attribute.
@@ -2840,7 +2976,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTreeItemReference()
 	 * @generated
 	 */
-	int TREE_ITEM_REFERENCE = 44;
+	int TREE_ITEM_REFERENCE = 45;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2886,7 +3022,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 45;
+	int INSTANT = 46;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -2896,7 +3032,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 46;
+	int DURATION = 47;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -3816,6 +3952,27 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getDocumentedNamedStringIdentity();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Catalog <em>Catalog</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Catalog</em>'.
+	 * @see org.nasdanika.ncore.Catalog
+	 * @generated
+	 */
+	EClass getCatalog();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.Catalog#getItems <em>Items</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Items</em>'.
+	 * @see org.nasdanika.ncore.Catalog#getItems()
+	 * @see #getCatalog()
+	 * @generated
+	 */
+	EReference getCatalog_Items();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.TreeItem <em>Tree Item</em>}'.
@@ -4872,6 +5029,24 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass DOCUMENTED_NAMED_STRING_IDENTITY = eINSTANCE.getDocumentedNamedStringIdentity();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.CatalogImpl <em>Catalog</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.CatalogImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getCatalog()
+		 * @generated
+		 */
+		EClass CATALOG = eINSTANCE.getCatalog();
+
+		/**
+		 * The meta object literal for the '<em><b>Items</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CATALOG__ITEMS = eINSTANCE.getCatalog_Items();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.TreeItemImpl <em>Tree Item</em>}' class.

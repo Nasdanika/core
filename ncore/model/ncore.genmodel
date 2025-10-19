@@ -131,6 +131,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//StringIdentity/id"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//DocumentedNamedStringIdentity"/>
+    <genClasses ecoreClass="ncore.ecore#//Catalog">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Catalog/items"/>
+    </genClasses>
     <genClasses ecoreClass="ncore.ecore#//TreeItem">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//TreeItem/name"/>
     </genClasses>

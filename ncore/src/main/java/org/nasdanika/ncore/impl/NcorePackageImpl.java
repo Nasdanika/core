@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.Catalog;
 import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
@@ -325,6 +326,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass documentedNamedStringIdentityEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass catalogEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1336,6 +1344,26 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getCatalog() {
+		return catalogEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCatalog_Items() {
+		return (EReference)catalogEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getTreeItem() {
 		return treeItemEClass;
 	}
@@ -1714,6 +1742,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		documentedNamedStringIdentityEClass = createEClass(DOCUMENTED_NAMED_STRING_IDENTITY);
 
+		catalogEClass = createEClass(CATALOG);
+		createEReference(catalogEClass, CATALOG__ITEMS);
+
 		treeItemEClass = createEClass(TREE_ITEM);
 		createEAttribute(treeItemEClass, TREE_ITEM__NAME);
 
@@ -1866,6 +1897,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		compositeEClass.getESuperTypes().add(this.getDocumentedNamedElement());
 		documentedNamedStringIdentityEClass.getESuperTypes().add(this.getDocumentedNamedElement());
 		documentedNamedStringIdentityEClass.getESuperTypes().add(this.getStringIdentity());
+		catalogEClass.getESuperTypes().add(this.getDocumentedNamedStringIdentity());
 		treeEClass.getESuperTypes().add(this.getTreeItem());
 		fileEClass.getESuperTypes().add(this.getTreeItem());
 		directoryEClass.getESuperTypes().add(this.getFile());
@@ -2021,6 +2053,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getStringIdentity_Id(), ecorePackage.getEString(), "id", null, 1, 1, StringIdentity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(documentedNamedStringIdentityEClass, DocumentedNamedStringIdentity.class, "DocumentedNamedStringIdentity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(catalogEClass, Catalog.class, "Catalog", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCatalog_Items(), this.getDocumentedNamedStringIdentity(), null, "items", null, 0, -1, Catalog.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getCatalog_Items().getEKeys().add(this.getStringIdentity_Id());
 
 		initEClass(treeItemEClass, TreeItem.class, "TreeItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTreeItem_Name(), ecorePackage.getEString(), "name", null, 0, 1, TreeItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
