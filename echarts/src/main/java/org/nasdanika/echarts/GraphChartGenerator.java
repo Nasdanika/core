@@ -3,6 +3,7 @@ package org.nasdanika.echarts;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.Supplier;
 
 import org.icepear.echarts.charts.graph.GraphEdgeItem;
 import org.icepear.echarts.charts.graph.GraphNodeItem;
@@ -17,8 +18,6 @@ import org.jgrapht.graph.DefaultUndirectedGraph;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
-import org.nasdanika.graph.ObjectConnection;
-import org.nasdanika.graph.ObjectNode;
 /**
  * Generates a chart from graph elements - Element, Node, Connection
  */
@@ -32,8 +31,8 @@ public class GraphChartGenerator extends GraphSeriesChartGenerator {
 	
 	protected GraphNodeItem createGraphNodeItem(Node node) {
 		GraphNodeItem ret = new GraphNodeItem();
-		if (node instanceof ObjectNode) {
-			ret.setName(String.valueOf(((ObjectNode<?>) node).get()));
+		if (node instanceof Supplier) {
+			ret.setName(String.valueOf(((Supplier<?>) node).get()));
 		} else {
 			ret.setName(node.toString());			
 		}
@@ -45,8 +44,8 @@ public class GraphChartGenerator extends GraphSeriesChartGenerator {
 
 	protected GraphEdgeItem createGraphEdgeItem(Connection connection) {
 		GraphEdgeItem ret = new GraphEdgeItem();
-		if (connection instanceof ObjectConnection) {
-			ret.setName(String.valueOf(((ObjectConnection<?>) connection).get()));
+		if (connection instanceof Supplier) {
+			ret.setName(String.valueOf(((Supplier<?>) connection).get()));
 		}
 		return ret;
 	}
@@ -138,6 +137,7 @@ public class GraphChartGenerator extends GraphSeriesChartGenerator {
 					}							
 					return null;
 				})
+				.filter(Objects::nonNull)
 				.map(cr -> {
 					GraphEdgeItem gei = createGraphEdgeItem(cr.connection());
 					if (gei == null) {

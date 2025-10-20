@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -145,32 +146,29 @@ public interface Element {
 		return from(contentProvider, (ref,root) -> new UnresolvedReferenceNode<R>(ref));
 	}	
 						
-	@SuppressWarnings("unchecked")
-	static <R,V> Element from(ContentProvider<R,V> contentProvider, BiFunction<R,Element,Node> resolver) {
+	static <R,V> Element from(ContentProvider<R,V> contentProvider, BiFunction<R,Map<ContentProvider<R,V>,Element>,Node> resolver) {
 		Map<R,CompletableFuture<Node>> sourceRefs = new HashMap<>();
 		Map<R,CompletableFuture<Node>> targetRefs = new HashMap<>();
 		
 		// Collecting references so we know which elements shall be nodes even if they don't have incoming/outgoing connections defined
-		contentProvider
-			.stream()
-			.filter(ContentProvider.class::isInstance)
-			.map(e -> (ContentProvider<R,V>) e)
-			.forEach(cp -> {
-				R sourceRef = cp.getSourceReference();
-				if (sourceRef != null) {
-					sourceRefs.computeIfAbsent(sourceRef, sr -> new CompletableFuture<>());
-				}
-				R targetRef = cp.getTargetReference();
-				if (targetRef != null) {
-					targetRefs.computeIfAbsent(targetRef, tr -> new CompletableFuture<>());
-				}
-			});
-		
-		List<CompletableFuture<?>> futures = new ArrayList<>();
-		
+		contentProvider.accept(cp -> {
+			R sourceRef = cp.getSourceReference();
+			if (sourceRef != null) {
+				sourceRefs.computeIfAbsent(sourceRef, sr -> new CompletableFuture<>());
+			}
+			R targetRef = cp.getTargetReference();
+			if (targetRef != null) {
+				targetRefs.computeIfAbsent(targetRef, tr -> new CompletableFuture<>());
+			}			
+		});
+				
+		List<CompletableFuture<?>> futures = new ArrayList<>();		
+		Map<ContentProvider<R,V>,Element> registry = new HashMap<>();
+		CompletableFuture<Element> rootCF = from(contentProvider, sourceRefs, targetRefs, registry::put, futures::add);
+				
 		sourceRefs.entrySet()
 			.stream()
-			.filter(e -> !e.getValue().isCompletedExceptionally())
+			.filter(e -> e.getValue().isCompletedExceptionally())
 			.forEach(e -> {
 				CompletableFuture<Node> newValue = e.getValue().handle((n, th) -> {
 					ThrowableNode<Throwable> throwableNode = new ThrowableNode<>(th);
@@ -182,7 +180,19 @@ public interface Element {
 				e.setValue(newValue);
 			});
 		
-		CompletableFuture<Element> rootCF = from(contentProvider, sourceRefs, targetRefs, futures::add);
+		targetRefs.entrySet()
+			.stream()
+			.filter(e -> e.getValue().isCompletedExceptionally())
+			.forEach(e -> {
+				CompletableFuture<Node> newValue = e.getValue().handle((n, th) -> {
+					ThrowableNode<Throwable> throwableNode = new ThrowableNode<>(th);
+					if (n != null) { // Can it be non-null?
+						new SimpleConnection(throwableNode, n, true);
+					}
+					return throwableNode;
+				});
+				e.setValue(newValue);
+			});
 		
 		// Resolving using the resolver
 		CompletableFuture<Void> rrcf = rootCF.thenAccept(root -> {
@@ -191,7 +201,7 @@ public interface Element {
 				.filter(e -> !e.getValue().isDone())
 				.forEach(e -> {
 					R refId = e.getKey();
-					Node resolvedNode = resolver.apply(refId, root);
+					Node resolvedNode = resolver.apply(refId, registry);
 					e.getValue().complete(resolvedNode);
 					CompletableFuture<Node> tRef = targetRefs.get(refId);
 					if (tRef != null) {
@@ -205,13 +215,11 @@ public interface Element {
 				.stream()
 				.filter(e -> !e.getValue().isDone())
 				.forEach(e -> {
-					e.getValue().complete(resolver.apply(e.getKey(), root));
+					e.getValue().complete(resolver.apply(e.getKey(), registry));
 				});
 		});	
 		
-		futures.add(rrcf);
-		
-		
+		futures.add(rrcf);				
 		
 		// join completion 
 		List<Throwable> thrown = new ArrayList<>();
@@ -274,6 +282,7 @@ public interface Element {
 			ContentProvider<R,V> contentProvider,
 			Map<R,CompletableFuture<Node>> sourceRefs,
 			Map<R,CompletableFuture<Node>> targetRefs,
+			BiConsumer<ContentProvider<R,V>, Element> collector,
 			Consumer<CompletableFuture<?>> futures) {
 				
 		ContentProvider<R,V> contentProviderFilter = new ContentProviderFilter<R,V>(contentProvider) {
@@ -300,10 +309,29 @@ public interface Element {
 				contentProviderFilter,
 				sourceRefs,
 				targetRefs,
+				collector,
 				futures);
 		
-		futures.accept(result);
+		futures.accept(result.thenAccept(r -> wire(
+				sourceRefs, 
+				targetRefs, 
+				contentProviderFilter, 
+				contentProviderFilter, 
+				collector, 
+				r)));
 		
+		return result;
+	}
+
+	private static <R, V> void wire(
+			Map<R, CompletableFuture<Node>> sourceRefs, 
+			Map<R, CompletableFuture<Node>> targetRefs,
+			ContentProvider<R,V> contentProvider,
+			ContentProvider<R, V> contentProviderFilter, 
+			BiConsumer<ContentProvider<R,V>, Element> collector,
+			Element result) {
+		
+		collector.accept(contentProviderFilter, result);		
 		if (result instanceof Node) {
 			for (Entry<R, CompletableFuture<Node>> e: sourceRefs.entrySet()) {
 				if (contentProviderFilter.matchReference(e.getKey())) {
@@ -320,35 +348,28 @@ public interface Element {
 				}
 			}
 		}
-		
-		return result;
 	}
 	
 	private static Connection createConnection(Node source, Node target, Object value, Supplier<Collection<? extends Element>> childrenSupplier) {
 		if (value == null) {
-			return new SimpleConnection(source, target, true, childrenSupplier);
+			return new SimpleConnection(source, target, false, childrenSupplier);
 		}
 		
-		return new ObjectConnection<>(source, target, true, value, childrenSupplier);							
+		return new ObjectConnection<>(source, target, false, value, childrenSupplier);							
 	}
 	
 	private static <R,V> CompletableFuture<Element> create(
 			ContentProvider<R,V> contentProvider,
 			Map<R,CompletableFuture<Node>> sourceRefs,
 			Map<R,CompletableFuture<Node>> targetRefs,
+			BiConsumer<ContentProvider<R,V>, Element> collector,
 			Consumer<CompletableFuture<?>> futures) {
-		
-//		BiConsumer<R, Consumer<Node>> sourceProvider,
-//		BiConsumer<R, Consumer<Node>> targetProvider,
-//		(sourceRef, sourceConsumer) -> sourceRefs.get(sourceRef).thenAccept(sourceConsumer),
-//		(targetRef, targetConsumer) -> sourceRefs.get(targetRef).thenAccept(targetConsumer),
-		
 		
 		V value = contentProvider.getValue();
 		Collection<CompletableFuture<Element>> childrenFutures = contentProvider
 				.getChildren()
 				.stream()
-				.map(ccp -> from(ccp, sourceRefs, targetRefs, futures))
+				.map(ccp -> from(ccp, sourceRefs, targetRefs, collector, futures))
 				.toList();
 		
 		Supplier<Collection<? extends Element>> childrenSupplier = () -> {
@@ -371,17 +392,22 @@ public interface Element {
 			for (ContentProvider<R, V> ocp: outgoingConnectionProviders) {
 				ContentProvider<R, V> targetConnectionProvider = ocp.getTarget();
 				if (targetConnectionProvider != null) {
-					CompletableFuture<Element> tncf = from(targetConnectionProvider, sourceRefs, targetRefs, futures);
+					CompletableFuture<Element> tncf = from(targetConnectionProvider, sourceRefs, targetRefs, collector, futures);
 					futures.accept(tncf.thenAccept(t -> {
 						Node targetNode = t instanceof Node ? (Node) t : new ObjectNode<>(t);
-						createConnection(node, targetNode, value, childrenSupplier);
+						Connection connection = createConnection(node, targetNode, value, childrenSupplier);
+						collector.accept(ocp, connection);
 					}));
 				} else {
 					R targetRef = ocp.getTargetReference();
 					if (targetRef == null) {
-						createConnection(node, new DanglingNode(), value, childrenSupplier);							
+						Connection connection = createConnection(node, new DanglingNode(), value, childrenSupplier);							
+						collector.accept(ocp, connection);
 					} else {
-						futures.accept(targetRefs.get(targetRef).thenAccept(t -> createConnection(node, t, value, childrenSupplier)));
+						futures.accept(targetRefs.get(targetRef).thenAccept(t -> {
+							Connection connection = createConnection(node, t, value, childrenSupplier); 
+							collector.accept(ocp, connection);
+						}));
 					}
 				}
 			}
@@ -389,21 +415,27 @@ public interface Element {
 			for (ContentProvider<R, V> icp: incomingConnectionProviders) {
 				ContentProvider<R, V> sourceConnectionProvider = icp.getTarget();
 				if (sourceConnectionProvider != null) {
-					CompletableFuture<Element> sncf = from(sourceConnectionProvider, sourceRefs, targetRefs, futures);
+					CompletableFuture<Element> sncf = from(sourceConnectionProvider, sourceRefs, targetRefs, collector, futures);
 					futures.accept(sncf.thenAccept(s -> {
 						Node sourceNode = s instanceof Node ? (Node) s : new ObjectNode<>(s);
-						createConnection(sourceNode, node, value, childrenSupplier);
+						Connection connection = createConnection(sourceNode, node, value, childrenSupplier);
+						collector.accept(icp, connection);
 					}));
 				} else {
 					R sourceRef = icp.getTargetReference();
 					if (sourceRef == null) {
-						createConnection(new DanglingNode(), node, value, childrenSupplier);							
+						Connection connection = createConnection(new DanglingNode(), node, value, childrenSupplier);							
+						collector.accept(icp, connection);
 					} else {
-						futures.accept(targetRefs.get(sourceRef).thenAccept(s -> createConnection(s, node, value, childrenSupplier)));
+						futures.accept(targetRefs.get(sourceRef).thenAccept(s -> {
+							Connection connection = createConnection(s, node, value, childrenSupplier);
+							collector.accept(icp, connection);
+						}));
 					}
 				}
 			}
 			
+			return CompletableFuture.completedFuture(node);			
 		}
 		
 		// Connection
@@ -422,7 +454,14 @@ public interface Element {
 			if (sourceRef != null) {
 				scf = sourceRefs.get(sourceRef);
 			} else if (sourceContentProvider != null) {
-				scf = from(sourceContentProvider, sourceRefs, targetRefs, futures);
+				ContentProvider<R, V> sourceContentProviderFilter = new ContentProviderFilter<>(sourceContentProvider) {
+					
+					public boolean isSource() {
+						return true;
+					};
+					
+				};
+				scf = from(sourceContentProviderFilter, sourceRefs, targetRefs, collector, futures);
 			} else {
 				scf = CompletableFuture.completedFuture(new DanglingNode());						
 			}
@@ -431,7 +470,14 @@ public interface Element {
 			if (targetRef != null) {
 				tcf = targetRefs.get(targetRef);
 			} else if (targetContentProvider != null) {
-				tcf = from(targetContentProvider, sourceRefs, targetRefs, futures);
+				ContentProvider<R, V> targetContentProviderFilter = new ContentProviderFilter<>(targetContentProvider) {
+					
+					public boolean isTarget() {
+						return true;
+					};
+					
+				};
+				tcf = from(targetContentProviderFilter, sourceRefs, targetRefs, collector, futures);
 			} else {
 				tcf = CompletableFuture.completedFuture(new DanglingNode());						
 			}
@@ -439,20 +485,22 @@ public interface Element {
 			return scf.thenCombine(tcf, (s,t) -> {
 				Node sNode = s instanceof Node ? (Node) s : new ObjectNode<>(s);
 				Node tNode = t instanceof Node ? (Node) t : new ObjectNode<>(t);				
-				return createConnection(sNode, tNode, value, childrenSupplier);
+				Connection connection = createConnection(sNode, tNode, value, childrenSupplier);
+				return connection;
 			});
 		}		
 		
 		// Element		
 		if (value == null) {
-			return CompletableFuture.completedFuture(new Element() {
+			Element ret = new Element() {
 				
 				@Override
 				public Collection<? extends Element> getChildren() {
 					return childrenSupplier.get(); 
 				}
 				
-			});
+			};
+			return CompletableFuture.completedFuture(ret);
 		}
 		
 		ObjectElement<V> objectElement = new ObjectElement<V>(value, childrenSupplier);

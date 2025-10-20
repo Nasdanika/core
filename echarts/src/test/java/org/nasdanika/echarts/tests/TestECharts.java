@@ -19,6 +19,10 @@ import org.junit.jupiter.api.Test;
 import org.nasdanika.echarts.GraphChartGenerator;
 import org.nasdanika.echarts.LineSeriesChart;
 import org.nasdanika.echarts.LineSeriesChart.LineSeriesBuilder;
+import org.nasdanika.graph.Connection;
+import org.nasdanika.graph.ContentProvider;
+import org.nasdanika.graph.Element;
+import org.nasdanika.graph.Node;
 import org.nasdanika.graph.ObjectNode;
 import org.nasdanika.graph.SimpleConnection;
 
@@ -90,5 +94,70 @@ public class TestECharts {
 				"Test Graph", 
 				false);
 	}	
+
+	@Test
+	public void testAliceBobConnectionGraphChart() throws IOException {
+		ContentProvider<Object,Object> cp = ContentProvider.fromYaml(
+				"""
+				source:
+				  value: Alice
+				target:
+				  value: Bob
+				""");
+
+		Connection connection = (Connection) Element.from(cp);
+		
+		GraphChartGenerator generator = new GraphChartGenerator(List.of(connection, connection.getSource()));
+		generator.setForceLayout(500, 500);
+		generator.write(
+				new File("target/alice-bob-connectio-graph.html"), 
+				"Alice -&gt; Bob", 
+				false);
+	}	
+	
+	@Test
+	public void testAliceBobGraphChart() throws IOException {
+		ContentProvider<Object,Object> cp = ContentProvider.fromYaml(
+				"""
+				value: Alice
+				outgoingConnections:
+				  - value: AliceToBob
+				    target:
+				      value: Bob
+				""");
+
+		Node node = (Node) Element.from(cp);
+		
+		Connection connection = node.getOutgoingConnections().iterator().next();
+		GraphChartGenerator generator = new GraphChartGenerator(List.of(node, connection, connection.getTarget()));
+		generator.setForceLayout(500, 500);
+		generator.write(
+				new File("target/alice-bob-graph.html"), 
+				"Alice -&gt; Bob", 
+				false);
+	}
+		
+	@Test
+	public void testAliceBobRefGraphChart() throws IOException {
+		ContentProvider<Object,Object> cp = ContentProvider.fromYaml(
+				"""
+				- value: Alice
+				  outgoingConnections:
+				    - target: bobRef
+				      value: AliceToBob
+				- value: Bob
+				  refId: bobRef    
+				""");
+
+		Element graph = Element.from(cp);
+		
+		GraphChartGenerator generator = new GraphChartGenerator(graph.stream().toList());
+		generator.setForceLayout(500, 500);
+		generator.write(
+				new File("target/alice-bob-graph.html"), 
+				"Alice -&gt; Bob", 
+				false);
+	}	
+	
 	
 }

@@ -2,9 +2,12 @@ package org.nasdanika.graph;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -17,7 +20,7 @@ import org.yaml.snakeyaml.Yaml;
  * resolve references.
  * @param <R,V> Reference type
  */
-public interface ContentProvider<R,V> extends Element {
+public interface ContentProvider<R,V> {
 	
 	/**
 	 * Matches reference ID returned by getSourceReference() or getTargetReference()
@@ -35,7 +38,6 @@ public interface ContentProvider<R,V> extends Element {
 	/**
 	 * @return Content providers to create {@link Element} children
 	 */
-	@Override
 	default Collection<ContentProvider<R,V>> getChildren() {
 		return Collections.emptyList();
 	}
@@ -128,6 +130,23 @@ public interface ContentProvider<R,V> extends Element {
 		outgoingConnections,
 		refId
 	}
+	
+	/**
+	 * Accepts the visitor in children, target, source, incoming connections and outgoing connections.
+	 * @param visitor
+	 */
+	default void accept(Consumer<? super ContentProvider<R,V>> visitor) {
+		accept(visitor, new HashSet<>()::add);
+	}
+	
+	private void accept(Consumer<? super ContentProvider<R,V>> visitor, Predicate<ContentProvider<R,V>> predicate) {
+		if (predicate.test(this)) {
+			getChildren().stream().forEach(c -> c.accept(visitor));
+			getIncomingConnections().stream().forEach(ic -> ic.accept(visitor));
+			getOutgoingConnections().stream().forEach(oc -> oc.accept(visitor));
+			visitor.accept(this);
+		}
+	}
 
 	static ContentProvider<Object,Object> from(JSONObject jsonObject) {
 		return from(jsonObject, (m,k) -> m.get(k.name()));
@@ -155,7 +174,7 @@ public interface ContentProvider<R,V> extends Element {
 			@Override
 			public Collection<ContentProvider<Object, Object>> getChildren() {
 				return StreamSupport.stream(iterable.spliterator(), false)
-					.map(ContentProvider::from)
+					.map(ccp -> ContentProvider.from(ccp, accessor))
 					.toList();
 			}
 			
@@ -373,7 +392,8 @@ public interface ContentProvider<R,V> extends Element {
 	
 	static ContentProvider<Object,Object> fromYaml(String yamlStr, BiFunction<Map<?,?>,Key,Object> accessor) {
 		Yaml yaml = new Yaml();
-		return yaml.load(yamlStr);
+		Object obj = yaml.load(yamlStr);
+		return from(obj, accessor);
 	}	
 
 }
