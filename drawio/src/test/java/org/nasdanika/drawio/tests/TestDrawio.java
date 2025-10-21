@@ -50,6 +50,7 @@ import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.drawio.Tag;
+import org.nasdanika.graph.ContentProvider;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.HandlerType;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
@@ -1092,6 +1093,44 @@ public class TestDrawio {
 				}
 			}
 		});	
+	}
+	
+	
+	@Test
+	public void testFromGraphUncompressed() throws Exception {
+		ContentProvider<Object,Object> cp = ContentProvider.fromYaml(
+				"""
+				- value: Alice
+				  outgoingConnections:
+				    - target: bobRef
+				      value: AliceToBob
+				- value: Bob
+				  refId: bobRef    
+				""");
+
+		org.nasdanika.graph.Element graph = org.nasdanika.graph.Element.from(cp);
+		
+		Document document = Document.create(false, null);
+		Page page = document.createPage();
+		page.setName("My first new page");
+		
+		Model model = page.getModel();
+		Root root = model.getRoot();
+		List<Layer> layers = root.getLayers();
+		assertThat(layers).singleElement();
+		
+		layers.get(0).populate(graph, (g, m) -> {
+			if ("Bob".equals(m.getLabel())) {
+				Map<String, String> style = m.getStyle();
+				style.put("fillColor", "#dae8fc");
+				style.put("strokeColor", "#6c8ebf");
+			}
+		});
+		
+		org.nasdanika.drawio.Util.forceLayout(root, 800, 600);
+				
+		Files.writeString(new File("target/from-graph-uncompressed.drawio").toPath(), document.save(null));
 	}	
+	
 	
 }

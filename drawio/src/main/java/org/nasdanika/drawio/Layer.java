@@ -1,6 +1,7 @@
 package org.nasdanika.drawio;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 /**
  * A diagram may have one or more layers.
@@ -41,6 +42,6 @@ public interface Layer extends ModelElement {
 	 * Draw.io specific.
 	 * @param element
 	 */
-	void populate(org.nasdanika.graph.Element element);
+	void populate(org.nasdanika.graph.Element element, BiConsumer<org.nasdanika.graph.Element, ModelElement> configurator);
 	
 }

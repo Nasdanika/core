@@ -431,7 +431,7 @@ public interface Element {
 						collector.accept(ocp, connection);
 					} else {
 						futures.accept(targetRefs.get(targetRef).thenAccept(t -> {
-							Connection connection = createConnection(node, t, value, childrenSupplier); 
+							Connection connection = createConnection(node, t, ocp.getValue(), childrenSupplier); 
 							collector.accept(ocp, connection);
 						}));
 					}
@@ -454,7 +454,7 @@ public interface Element {
 						collector.accept(icp, connection);
 					} else {
 						futures.accept(targetRefs.get(sourceRef).thenAccept(s -> {
-							Connection connection = createConnection(s, node, value, childrenSupplier);
+							Connection connection = createConnection(s, node, icp.getValue(), childrenSupplier);
 							collector.accept(icp, connection);
 						}));
 					}
