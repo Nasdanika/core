@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -64,6 +66,29 @@ public interface Element {
 			.forEach(e -> childResults.put(e.getKey(), e.getValue()));
 		
 		return visitor.apply(this, childResults);
+	}
+	
+	/**
+	 * Traverses all related elements without visiting the same element twice
+	 * @param visitor
+	 */
+	default void traverse(Consumer<? super Element> visitor) {
+		traverse(visitor, new HashSet<>()::add);
+	}
+	
+	/**
+	 * Accepts the visitor in children first way.
+	 * @param visitor
+	 * @param predicate
+	 * @return True if this element was visited
+	 */
+	default boolean traverse(Consumer<? super Element> visitor, Predicate<? super Element> predicate) {
+		if (predicate.test(this)) {
+			visitor.accept(this);
+			getChildren().forEach(c -> c.traverse(visitor, predicate));
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -385,7 +410,8 @@ public interface Element {
 		if (outgoingConnectionProviders != null && !outgoingConnectionProviders.isEmpty()
 				|| incomingConnectionProviders != null && !incomingConnectionProviders.isEmpty()
 				|| contentProvider.isSource()
-				|| contentProvider.isTarget()) {
+				|| contentProvider.isTarget()
+				|| contentProvider.isNode()) {
 
 			Node node = value == null ? new SimpleNode(childrenSupplier) : new ObjectNode<>(value, childrenSupplier);
 

@@ -64,5 +64,10 @@ public class ContentProviderFilter<R,V> implements ContentProvider<R,V> {
 	public boolean matchReference(R refId) {
 		return target.matchReference(refId);
 	}
+	
+	@Override
+	public boolean isNode() {
+		return isSource() || isTarget() || target.isNode();
+	}
 
 }

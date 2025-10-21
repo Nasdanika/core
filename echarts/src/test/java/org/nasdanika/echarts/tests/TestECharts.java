@@ -3,10 +3,13 @@ package org.nasdanika.echarts.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.icepear.echarts.Option;
 import org.icepear.echarts.charts.line.LineEmphasis;
@@ -25,6 +28,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 import org.nasdanika.graph.ObjectNode;
 import org.nasdanika.graph.SimpleConnection;
+import org.nasdanika.graph.UnresolvedReferenceNode;
 
 
 public class TestECharts {
@@ -107,12 +111,15 @@ public class TestECharts {
 
 		Connection connection = (Connection) Element.from(cp);
 		
-		GraphChartGenerator generator = new GraphChartGenerator(List.of(connection, connection.getSource()));
+		Collection<Element> elements = new ArrayList<>();
+		connection.traverse(elements::add);
+		
+		GraphChartGenerator generator = new GraphChartGenerator(elements);
 		generator.setForceLayout(500, 500);
 		generator.write(
 				new File("target/alice-bob-connectio-graph.html"), 
 				"Alice -&gt; Bob", 
-				false);
+				true);
 	}	
 	
 	@Test
@@ -158,6 +165,39 @@ public class TestECharts {
 				"Alice -&gt; Bob", 
 				false);
 	}	
+		
+	@Test
+	public void testAliceBobResolverGraphChart() throws IOException {
+		ContentProvider<Object,Object> cp = ContentProvider.fromYaml(
+				"""
+				- value: Alice
+				  outgoingConnections:
+				    - target: Bob
+				      value: AliceToBob
+				- value: Bob
+				  node: true
+				""");
 	
+		Element graph = Element.from(cp, (ref, registry) -> {
+			for (Entry<ContentProvider<Object, Object>, Element> re: registry.entrySet()) {
+				Element element = re.getValue();
+				if (element instanceof Supplier) {
+					Object value = ((Supplier<?>) element).get();
+					if (value.equals(ref)) {
+						return (Node) element;
+					}
+				}
+			}
+			
+			return new UnresolvedReferenceNode<>(ref);
+		});
+		
+		GraphChartGenerator generator = new GraphChartGenerator(graph.stream().toList());
+		generator.setForceLayout(500, 500);
+		generator.write(
+				new File("target/alice-bob-resolver-graph.html"), 
+				"Alice -&gt; Bob", 
+				false);
+	}	
 	
 }

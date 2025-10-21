@@ -104,6 +104,14 @@ public interface ContentProvider<R,V> {
 		return false;
 	}
 	
+	/**
+	 * True return forces node type
+	 * @return
+	 */
+	default boolean isNode() {
+		return isSource() || isTarget();
+	}
+	
 	// ---
 	
 	private static <R,V> ContentProvider<R,V> fromValue(V value) {
@@ -122,13 +130,14 @@ public interface ContentProvider<R,V> {
 	}
 		
 	enum Key {
-		value,
+		value,		
 		children,
 		source,
 		target,
 		incomingConnections,
 		outgoingConnections,
-		refId
+		refId,
+		node
 	}
 	
 	/**
@@ -215,6 +224,11 @@ public interface ContentProvider<R,V> {
 			@Override
 			public Object getValue() {
 				return accessor.apply(map, Key.value);
+			}
+			
+			@Override
+			public boolean isNode() {
+				return ContentProvider.super.isNode() || Boolean.TRUE.equals(accessor.apply(map, Key.node));
 			}
 			
 			@Override
