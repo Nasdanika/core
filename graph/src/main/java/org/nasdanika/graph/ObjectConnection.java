@@ -37,7 +37,7 @@ public class ObjectConnection<T> extends SimpleConnection implements Supplier<T>
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getClass(), value);
+		return Objects.hash(getClass(), getSource(), getTarget(), value);
 	}
 
 	@Override
@@ -50,7 +50,13 @@ public class ObjectConnection<T> extends SimpleConnection implements Supplier<T>
 			return false;
 		@SuppressWarnings("unchecked")
 		ObjectConnection<T> other = (ObjectConnection<T>) obj;
-		return Objects.equals(value, other.get());
+		if (!Objects.equals(value, other.get())) {
+			return false;
+		}
+		if (!Objects.equals(getSource(), other.getSource())) {
+			return false;
+		}
+		return Objects.equals(getTarget(), other.getTarget());
 	}	
 		
 }
