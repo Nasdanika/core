@@ -508,6 +508,10 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 			}
 		}
 		
+		if (target != null) {
+			target.eAdapters().add(new MappingAdapter(obj));
+		}
+		
 		return target;
 	}
 	

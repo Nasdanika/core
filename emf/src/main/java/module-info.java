@@ -19,6 +19,7 @@ module org.nasdanika.emf {
 	requires spring.core;
 	requires org.nasdanika.cli;
 	requires org.apache.commons.lang3;
+	requires transitive org.eclipse.emf.ecore.change; // For apply adapters
 	
 	opens org.nasdanika.emf to info.picocli, org.nasdanika.cli;
 	

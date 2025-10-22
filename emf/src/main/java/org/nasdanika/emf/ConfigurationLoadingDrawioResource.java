@@ -2,6 +2,9 @@ package org.nasdanika.emf;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -12,13 +15,17 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.change.ChangeDescription;
+import org.eclipse.emf.ecore.change.util.ChangeRecorder;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.NullProgressMonitor;
@@ -33,6 +40,7 @@ import org.nasdanika.drawio.emf.DrawioResource;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.mapping.AbstractMappingFactory.Contributor;
 import org.nasdanika.mapping.ContentProvider;
+import org.nasdanika.mapping.MappingAdapter;
 import org.nasdanika.persistence.Marker;
 import org.xml.sax.SAXException;
 
@@ -65,12 +73,16 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 		this.uriResolver = uriResolver;
 		this.capabilityLoader = capabilityLoader;
 	}
+	
+	protected Document document;
+	protected ChangeRecorder changeRecorder = new ChangeRecorder(this);
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		try {
-			Document document = Document.load(inputStream, getURI());			
+			document = Document.load(inputStream, getURI());		
+			eAdapters().add(new MappingAdapter(document));
 			ConfigurationLoadingDrawioFactory<EObject> drawioFactory = new ConfigurationLoadingDrawioFactory<EObject>(createContentProvider(document), capabilityLoader, getResourceSet(), getProgressMonitor()) {
 				
 				@Override
@@ -150,7 +162,7 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 				.stream()
 				.distinct()
 				.filter(modelElement -> modelElement != null && modelElement.eContainer() == null)
-				.forEach(cnt::add);
+				.forEach(cnt::add);			
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			throw new IOException("Error loading Drawio document from " + getURI() + ": " + e, e);
 		}
@@ -225,5 +237,38 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 		ret.setPosition(sourceMarker.getPosition());		
 		return ret;
 	}	
+	
+	@Override
+	protected void doSave(OutputStream outputStream, Map<?, ?> options) throws IOException {
+		if (document == null) {
+			try {
+				document = Document.create(true, getURI());
+			} catch (ParserConfigurationException e) {
+				throw new IOException("Could not create document", e);
+			}
+		}
+		
+		ChangeDescription changeDescription = changeRecorder.endRecording();
+		if (changeDescription != null) {
+			ChangeDescriptionApplier changeDescriptionApplier = options == null ? null : (ChangeDescriptionApplier) options.get(ChangeDescriptionApplier.class);
+			if (changeDescriptionApplier == null) {
+				changeDescriptionApplier = (ChangeDescriptionApplier) EcoreUtil.getRegisteredAdapter(this, ChangeDescriptionApplier.class);
+			}
+			if (changeDescriptionApplier == null) {
+				throw new IOException("Unable to apply change description to the source document - there is no adapter for " + ChangeDescriptionApplier.class);
+			}			
+			changeDescriptionApplier.apply(changeDescription, document);
+		}
+		
+		try (Writer writer = new OutputStreamWriter(outputStream)) {
+			String docStr = document.save(null);
+			writer.write(docStr);
+		} catch (TransformerException | IOException e) {
+			throw new IOException("Could not save document", e);
+		}
+		
+		changeRecorder.dispose();
+		changeRecorder = new ChangeRecorder(this);
+	}
 
 }
