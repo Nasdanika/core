@@ -218,6 +218,25 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 				}
 
 				String pName = str.substring(start + 1, end);
+				if (pName.startsWith(STYLE_PREFIX)) {
+					String styleKey = pName.substring(STYLE_PREFIX.length());
+					return Util.isBlank(styleKey) ? null : getStyle().get(styleKey);
+				} 
+				
+				if (pName.startsWith(SPEL_PREFIX)) {
+					String expr = pName.substring(SPEL_PREFIX.length());
+					if (!Util.isBlank(expr)) {
+						try {
+							ExpressionParser parser = new SpelExpressionParser();
+							Expression exp = parser.parseExpression(expr);
+							EvaluationContext evaluationContext = new StandardEvaluationContext();
+							return exp.getValue(evaluationContext, this, String.class);
+						} catch (Exception ex) {
+							return "Error evaluating '" + expr + "': " + ex;
+						}
+					}
+				}
+				
 				String pValue = getRawProperty(pName);
 				if (expanded.add(pName)) {
 					pValue = interpolate(pValue, expanded);
@@ -255,24 +274,6 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 
 	@Override
 	public String getProperty(String name) {
-		if (name != null) {
-			if (name.startsWith(STYLE_PREFIX)) {
-				String styleKey = name.substring(STYLE_PREFIX.length());
-				if (!Util.isBlank(styleKey)) {
-					return getStyle().get(styleKey);
-				}
-			}
-			if (name.startsWith(SPEL_PREFIX)) {
-				String expr = name.substring(SPEL_PREFIX.length());
-				if (!Util.isBlank(expr)) {
-					ExpressionParser parser = new SpelExpressionParser();
-					Expression exp = parser.parseExpression(expr);
-					EvaluationContext evaluationContext = new StandardEvaluationContext();
-					return exp.getValue(evaluationContext, this, String.class);
-				}
-			}
-		}
-		
 		return interpolate(getRawProperty(name), new HashSet<>());
 	}
 	
