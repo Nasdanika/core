@@ -41,7 +41,7 @@ public class SimpleNode implements Node {
 
 	@Override
 	public Collection<? extends Element> getChildren() {		
-		Collection<? extends Element> children = new ArrayList<>(getOutgoingConnections());
+		Collection<Element> children = new ArrayList<>(getOutgoingConnections());
 		Collection<? extends Element> sc = childrenSupplier.get();
 		if (sc != null) {
 			children.addAll(sc);
