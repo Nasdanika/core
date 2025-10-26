@@ -119,7 +119,7 @@ public class TestECharts {
 		generator.write(
 				new File("target/alice-bob-connectio-graph.html"), 
 				"Alice -&gt; Bob", 
-				true);
+				false);
 	}	
 	
 	@Test
