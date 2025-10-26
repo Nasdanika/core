@@ -217,27 +217,28 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 					break; 
 				}
 
+				String pValue;
 				String pName = str.substring(start + 1, end);
 				if (pName.startsWith(STYLE_PREFIX)) {
 					String styleKey = pName.substring(STYLE_PREFIX.length());
-					return Util.isBlank(styleKey) ? null : getStyle().get(styleKey);
-				} 
-				
-				if (pName.startsWith(SPEL_PREFIX)) {
+					pValue = Util.isBlank(styleKey) ? null : getStyle().get(styleKey);
+				} else if (pName.startsWith(SPEL_PREFIX)) {
 					String expr = pName.substring(SPEL_PREFIX.length());
-					if (!Util.isBlank(expr)) {
+					if (Util.isBlank(expr)) {
+						pValue = null;
+					} else {
 						try {
 							ExpressionParser parser = new SpelExpressionParser();
 							Expression exp = parser.parseExpression(expr);
 							EvaluationContext evaluationContext = new StandardEvaluationContext();
-							return exp.getValue(evaluationContext, this, String.class);
+							pValue = exp.getValue(evaluationContext, this, String.class);
 						} catch (Exception ex) {
-							return "Error evaluating '" + expr + "': " + ex;
+							pValue = "Error evaluating '" + expr + "': " + ex;
 						}
 					}
+				} else {				
+					pValue = getRawProperty(pName);
 				}
-				
-				String pValue = getRawProperty(pName);
 				if (expanded.add(pName)) {
 					pValue = interpolate(pValue, expanded);
 				}
