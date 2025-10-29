@@ -5,11 +5,11 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.drawio.Node;
-import org.nasdanika.drawio.comparators.CartesianNodeComparator.Direction;
-import org.nasdanika.drawio.comparators.FlowNodeComparator;
-import org.nasdanika.drawio.comparators.LabelModelElementComparator;
+import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.comparators.CartesianNodeComparator;
+import org.nasdanika.drawio.comparators.CartesianNodeComparator.Direction;
+import org.nasdanika.drawio.comparators.FlowComparator;
+import org.nasdanika.drawio.comparators.LabelModelElementComparator;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
@@ -90,12 +90,12 @@ public class Configuration  {
 		return processor;
 	}
 	
-	public Comparator<Node> getPageNodesComparator() {
-		return new FlowNodeComparator(
-				null, 
-				new CartesianNodeComparator(
-						Direction.downRight, 
-						new LabelModelElementComparator()));
-	}
+//	public Comparator<ModelElement> getPageElementComparator() {
+//		return new FlowComparator(
+//				null, 
+//				new CartesianNodeComparator(
+//						Direction.downRight, 
+//						new LabelModelElementComparator()));
+//	}
 
 }

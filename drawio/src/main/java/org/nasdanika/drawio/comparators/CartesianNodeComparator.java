@@ -24,11 +24,9 @@ public class CartesianNodeComparator implements Comparator<Node> {
 	}
 	
 	private Direction direction;
-	private Comparator<? super Node> fallback;
 
-	public CartesianNodeComparator(Direction direction, Comparator<? super Node> fallback) {
+	public CartesianNodeComparator(Direction direction) {
 		this.direction = direction;
-		this.fallback = fallback;
 	}
 	
 	// Modes - right-down, right-up, left-down, left-up, down-right, ... - 3 boolean flags, 8 combinations. enum?
@@ -59,8 +57,7 @@ public class CartesianNodeComparator implements Comparator<Node> {
 				return vcmp;
 			}
 			// Horizontal 
-			int hcmp = compareHorizontal(o1, o2);
-			return hcmp == 0 ? fallback.compare(o1, o2) : -hcmp;
+			return -compareHorizontal(o1, o2);
 		}
 		case downRight: {
 			// Vertical first - to the left is smaller than to the right
@@ -69,8 +66,7 @@ public class CartesianNodeComparator implements Comparator<Node> {
 				return vcmp;
 			}
 			// Horizontal 
-			int hcmp = compareHorizontal(o1, o2);
-			return hcmp == 0 ? fallback.compare(o1, o2) : hcmp;
+			return compareHorizontal(o1, o2);
 		}
 		case leftDown: {
 			// Horizontal first - to the left is smaller than to the right
@@ -79,8 +75,7 @@ public class CartesianNodeComparator implements Comparator<Node> {
 				return -hcmp;
 			}
 			// Vertical 
-			int vcmp = compareVertical(o1, o2);
-			return vcmp == 0 ? fallback.compare(o1, o2) : vcmp;
+			return compareVertical(o1, o2);
 		}
 		case leftUp: {
 			// Horizontal first - to the left is smaller than to the right
@@ -89,8 +84,7 @@ public class CartesianNodeComparator implements Comparator<Node> {
 				return -hcmp;
 			}
 			// Vertical 
-			int vcmp = compareVertical(o1, o2);
-			return vcmp == 0 ? fallback.compare(o1, o2) : -vcmp;
+			return -compareVertical(o1, o2);
 		}
 		case rightUp: {
 			// Horizontal first - to the left is smaller than to the right
@@ -99,8 +93,7 @@ public class CartesianNodeComparator implements Comparator<Node> {
 				return hcmp;
 			}
 			// Vertical 
-			int vcmp = compareVertical(o1, o2);
-			return vcmp == 0 ? fallback.compare(o1, o2) : -vcmp;
+			return -compareVertical(o1, o2);
 		}
 		case rightDown: {
 			// Horizontal first - to the left is smaller than to the right
@@ -109,8 +102,7 @@ public class CartesianNodeComparator implements Comparator<Node> {
 				return hcmp;
 			}
 			// Vertical 
-			int vcmp = compareVertical(o1, o2);
-			return vcmp == 0 ? fallback.compare(o1, o2) : vcmp;
+			return compareVertical(o1, o2);
 		}
 		case upLeft: {
 			// Vertical first - to the left is smaller than to the right
@@ -119,8 +111,7 @@ public class CartesianNodeComparator implements Comparator<Node> {
 				return -vcmp;
 			}
 			// Horizontal 
-			int hcmp = compareHorizontal(o1, o2);
-			return hcmp == 0 ? fallback.compare(o1, o2) : -hcmp;
+			return -compareHorizontal(o1, o2);
 		}
 		case upRight: {
 			// Vertical first - to the left is smaller than to the right
@@ -129,14 +120,12 @@ public class CartesianNodeComparator implements Comparator<Node> {
 				return -vcmp;
 			}
 			// Horizontal 
-			int hcmp = compareHorizontal(o1, o2);
-			return hcmp == 0 ? fallback.compare(o1, o2) : hcmp;
+			return compareHorizontal(o1, o2);
 		}
 		default:
-			break;
-		
+			break;		
 		}
-		return fallback.compare(o1, o2);
+		return 0;
 	}
 	
 	/**

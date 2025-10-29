@@ -38,7 +38,8 @@ import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.comparators.AngularNodeComparator;
 import org.nasdanika.drawio.comparators.CartesianNodeComparator;
-import org.nasdanika.drawio.comparators.FlowNodeComparator;
+import org.nasdanika.drawio.comparators.Comparators;
+import org.nasdanika.drawio.comparators.FlowComparator;
 import org.nasdanika.drawio.comparators.LabelModelElementComparator;
 import org.nasdanika.drawio.comparators.PositionModelElementComparator;
 import org.nasdanika.drawio.comparators.PropertyModelElementComparator;
@@ -789,42 +790,6 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		return invoke(element, target, registry, pass, progressMonitor);
 	}
 
-	private enum Comparators {
-	
-		label("label"),
-		labelDescending("label-descending"),
-		
-		property("property"),
-		propertyDescending("property-descending"),
-		
-		clockwise("clockwise"),
-		counterclockwise("counterclockwise"),
-		
-		flow("flow"),
-		reverseFlow("reverse-flow"),
-	
-		rightDown("right-down"),
-		rightUp("right-up"),
-		
-		leftDown("left-down"),
-		leftUp("left-up"),
-		
-		downRight("down-right"),
-		downLeft("down-left"),
-		
-		upRight("up-right"),
-		upLeft("up-left"),
-				
-		position("position"),
-		positionReversed("reverse-position");		
-		
-		Comparators(String key) {
-			this.key = key;
-		}
-		
-		public final String key;
-	}
-		
 	protected Collection<Element> getSources(Object target, Map<Element, T> registry, Predicate<Element> predicate) {
 		Collection<Element> result = new ArrayList<>();
 		if (target != null) {
@@ -948,7 +913,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		for (CartesianNodeComparator.Direction direction: CartesianNodeComparator.Direction.values()) {
 			if (Comparators.valueOf(direction.name()).key.equals(comparatorConfig)) {
 				return adapt(
-						new CartesianNodeComparator(direction, SetterFeatureMapper.NATURAL_COMPARATOR), 
+						new CartesianNodeComparator(direction).thenComparing(SetterFeatureMapper.NATURAL_COMPARATOR), 
 						this::areSamePageNodes,
 						registry);
 			}			
@@ -1010,7 +975,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 						}
 						
 						Comparator<Object> flowComparator = adapt(
-								new FlowNodeComparator(connectionPredicate, fallback),
+								new FlowComparator(connectionPredicate).thenComparing(fallback),
 								this::areSamePageNodes,
 								registry);
 						
