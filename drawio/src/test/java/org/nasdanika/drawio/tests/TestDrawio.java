@@ -1117,6 +1117,7 @@ public class TestDrawio {
 		Model model = page.getModel();
 		Root root = model.getRoot();
 		List<Layer> layers = root.getLayers();
+//		layers.get(0).getModel().getPage().getmo.getDocument().getModelElementById(null)
 		assertThat(layers).singleElement();
 		
 		layers.get(0).populate(graph, (g, m) -> {
@@ -1132,5 +1133,18 @@ public class TestDrawio {
 		Files.writeString(new File("target/from-graph-uncompressed.drawio").toPath(), document.save(null));
 	}	
 	
-	
+	@Test 
+	public void testEnumerate() throws Exception {
+		Document document = Document.load(getClass().getResource("alice-bob-enumerate.drawio"));
+		document
+			.stream()
+			.filter(ModelElement.class::isInstance)
+			.map(ModelElement.class::cast)
+			.forEach(me -> {
+				Object ev = me.getEnumarateValue();
+				if (ev != null) {
+					System.out.println(ev + " " + ev.getClass() + " " + me);
+				}
+			});
+	}	
 }

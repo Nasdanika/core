@@ -5,11 +5,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Layer;
+import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
@@ -17,8 +19,11 @@ import org.w3c.dom.Element;
 
 class RootImpl extends ModelElementImpl implements Root {
 
-	RootImpl(Element element, ModelImpl model) {
-		super(element, model, 0);
+	RootImpl(
+			Element element, 
+			ModelImpl model,
+			BiFunction<? super ModelElement, String, String> propertyFilter) {
+		super(element, model, 0, propertyFilter);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -76,6 +81,11 @@ class RootImpl extends ModelElementImpl implements Root {
 	public String getId() {
 		// Roots always have ID 0, returning page id
 		return getModel().getPage().getId();
+	}
+	
+	@Override
+	public String getPath() {
+		return getId();
 	}
 
 }

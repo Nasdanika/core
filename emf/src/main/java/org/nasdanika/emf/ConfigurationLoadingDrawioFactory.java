@@ -1,6 +1,5 @@
 package org.nasdanika.emf;
 
-import java.net.URL;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -138,7 +137,7 @@ public abstract class ConfigurationLoadingDrawioFactory<T extends EObject> exten
 					}				
 					try {
 						eObjectLoader.loadYaml(
-								new URL(refURI.toString()),
+								new java.net.URI(refURI.toString()).toURL(),
 								target, 
 								null, 
 								progressMonitor);

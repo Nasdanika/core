@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,16 +33,22 @@ class PageImpl extends ElementImpl implements Page {
 	private ModelImpl model;
 	private Document document;
 	private int position;
+	private BiFunction<? super ModelElement, String, String> propertyFilter;
 	
-	PageImpl(Document document, org.w3c.dom.Element element, int position) throws IOException, ParserConfigurationException, SAXException {
+	PageImpl(
+			Document document, 
+			org.w3c.dom.Element element, 
+			int position,
+			BiFunction<? super ModelElement, String, String> propertyFilter) throws IOException, ParserConfigurationException, SAXException {
 		this.document = document;
 		this.element = element;
 		this.position = position;
+		this.propertyFilter = propertyFilter;
 		List<org.w3c.dom.Element> modelElements = DocumentImpl.getChildrenElements(element, "mxGraphModel");
 		if (modelElements.isEmpty()) {
 			model = new ModelImpl(this, element.getTextContent());
 		} else if (modelElements.size() == 1) {
-			model = new ModelImpl(this, modelElements.get(0));
+			model = new ModelImpl(this, modelElements.get(0), propertyFilter);
 		} else {
 			throw new IllegalArgumentException("Expected one model element, got " + modelElements.size());
 		}
@@ -105,7 +112,7 @@ class PageImpl extends ElementImpl implements Page {
 				if (modelElement.getOwnerDocument() != element.getOwnerDocument()) {
 					modelElement = (org.w3c.dom.Element) element.getOwnerDocument().importNode(modelElement, true);
 					element.appendChild(modelElement);
-					model = new ModelImpl(this, modelElement);
+					model = new ModelImpl(this, modelElement, propertyFilter);
 				}
 			}			
 		}		

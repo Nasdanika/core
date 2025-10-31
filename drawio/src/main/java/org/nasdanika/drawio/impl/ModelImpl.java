@@ -16,6 +16,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.zip.Deflater;
@@ -64,10 +65,15 @@ class ModelImpl extends ElementImpl implements Model {
 	
 	private Map<org.w3c.dom.Element, ModelElement> cache = new IdentityHashMap<>();
 	private Page page;		
+	private BiFunction<? super ModelElement, String, String> propertyFilter;
 	
-	ModelImpl(Page page, org.w3c.dom.Element element) {
+	ModelImpl(
+			Page page, 
+			org.w3c.dom.Element element,
+			BiFunction<? super ModelElement, String, String> propertyFilter) {
 		this.page = page;
 		this.element = element;		
+		this.propertyFilter = propertyFilter;
 	}
 	
 	ModelImpl(Page page, String compressedStr) throws SAXException, IOException, ParserConfigurationException {
@@ -125,19 +131,19 @@ class ModelImpl extends ElementImpl implements Model {
 	private ModelElement create(org.w3c.dom.Element element, int position) {
 		org.w3c.dom.Element cellElement = ModelElementImpl.getCellElement(element);
 		if (!cellElement.hasAttribute(ModelElementImpl.ATTRIBUTE_PARENT)) {
-			return new RootImpl(element, this);
+			return new RootImpl(element, this, propertyFilter);
 		}
 		ModelElement parent = find(cellElement.getAttribute(ModelElementImpl.ATTRIBUTE_PARENT));
 		if (parent instanceof Root) {
-			return new LayerImpl(element, this, position);			
+			return new LayerImpl(element, this, position, propertyFilter);			
 		}
 		if (cellElement.hasAttribute(ATTRIBUTE_VERTEX) && "1".equals(cellElement.getAttribute(ATTRIBUTE_VERTEX))) {
-			return new NodeImpl(element, this, position);
+			return new NodeImpl(element, this, position, propertyFilter);
 		}
 		if (cellElement.hasAttribute(ATTRIBUTE_EDGE) && "1".equals(cellElement.getAttribute(ATTRIBUTE_EDGE))) {
-			return new ConnectionImpl(element, this, position);
+			return new ConnectionImpl(element, this, position, propertyFilter);
 		}
-		return new ModelElementImpl(element, this, position); // Generic model element, shall it ever happen?
+		return new ModelElementImpl(element, this, position, propertyFilter); // Generic model element, shall it ever happen?
 	}
 	
 	ModelElement find(String id) {

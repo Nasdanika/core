@@ -67,8 +67,14 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	
 	String getId();
 	
-	void setId(String id);
+	/**
+	 * Slash-separated ID path, including page id.
+	 * @return
+	 */
+	String getPath();
 	
+	void setId(String id);
+			
 	/**
 	 * Resolves some value for the model element by traversing its logical containment hierarchy and resolving that value against logical parents.
 	 * For the containment root the value is resolved against the base.
@@ -116,5 +122,11 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	 * @return
 	 */
 	int getPosition();
+	
+	/**
+	 * @return <code>null</code> if enumerate is not checked (enumarate style key is not "1"). Otherwise, if enumerateValue style key is present it is returned.
+	 * If it is not present, the value is computed by counting elements with enumerate set to 1 and enumarateValue not set.  
+	 */
+	Object getEnumarateValue();
 	
 }

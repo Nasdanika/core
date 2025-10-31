@@ -2,6 +2,7 @@ package org.nasdanika.drawio.impl;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
@@ -20,8 +21,12 @@ class ConnectionImpl extends ModelElementImpl implements Connection {
 	private static final String TARGET_POINT_ROLE = "targetPoint";
 	private static final String MX_POINT_ATTRIBUTE = "mxPoint";
 
-	ConnectionImpl(Element element, ModelImpl model, int position) {
-		super(element, model, position);
+	ConnectionImpl(
+			Element element, 
+			ModelImpl model, 
+			int position,
+			BiFunction<? super ModelElement, String, String> propertyFilter) {
+		super(element, model, position, propertyFilter);
 	}
 
 	@Override

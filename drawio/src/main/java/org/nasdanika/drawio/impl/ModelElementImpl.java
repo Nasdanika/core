@@ -34,11 +34,6 @@ import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Tag;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marker;
-import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.Expression;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.w3c.dom.Attr;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
@@ -62,6 +57,8 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	private static final String ELEMENT_LINK_ID_PREFIX = "data:element/" + ID_PREFIX;
 	private static final String ELEMENT_LINK_NAME_PREFIX = "data:element/" + NAME_PREFIX;
 	
+	private static final String SPEL_LINK_PREFIX = "data:spel,";	
+	
 	private static final String ATTRIBUTE_TAGS = "tags";
 	static final String ATTRIBUTE_VALUE = "value";
 	static final String ATTRIBUTE_PARENT = "parent";
@@ -72,21 +69,30 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	static final String ATTRIBUTE_SOURCE = "source";
 	static final String ATTRIBUTE_STYLE = "style";
 	static final String ATTRIBUTE_VISIBLE = "visible";	
+
+	private static final String ENUMERATE_STYLE_KEY = "enumerate";
+	private static final String ENUMERATE_VALUE_STYLE_KEY = "enumerateValue";
 	
 	/**
 	 * For element resolution.
 	 */
 	protected ModelImpl model;
 	private int position;
+	private BiFunction<? super ModelElement, String, String> propertyFilter;
 
 	/**
 	 * @param element XML element for this page element
 	 * @param rootElement root element containing all model elements to use for lookup of parent and children.
 	 */
-	ModelElementImpl(org.w3c.dom.Element element, ModelImpl model, int position) {
+	ModelElementImpl(
+			org.w3c.dom.Element element, 
+			ModelImpl model, 
+			int position,
+			BiFunction<? super ModelElement, String, String> propertyFilter) {
 		this.element = element;
 		this.model = model;
 		this.position = position;
+		this.propertyFilter = propertyFilter;
 	}
 
 	@Override
@@ -228,10 +234,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 						pValue = null;
 					} else {
 						try {
-							ExpressionParser parser = new SpelExpressionParser();
-							Expression exp = parser.parseExpression(expr);
-							EvaluationContext evaluationContext = new StandardEvaluationContext();
-							pValue = exp.getValue(evaluationContext, this, String.class);
+							pValue = evaluate(expr, String.class);
 						} catch (Exception ex) {
 							pValue = "Error evaluating '" + expr + "': " + ex;
 						}
@@ -275,7 +278,11 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 
 	@Override
 	public String getProperty(String name) {
-		return interpolate(getRawProperty(name), new HashSet<>());
+		String rawProperty = getRawProperty(name);
+		if (propertyFilter != null) {
+			rawProperty = propertyFilter.apply(this, rawProperty);					
+		}
+		return interpolate(rawProperty, new HashSet<>());
 	}
 	
 	@Override
@@ -368,6 +375,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 				|| link.startsWith(PAGE_LINK_NAME_PREFIX)
 				|| link.startsWith(ELEMENT_LINK_ID_PREFIX)
 				|| link.startsWith(ELEMENT_LINK_NAME_PREFIX)
+				|| link.startsWith(SPEL_LINK_PREFIX)
 				);
 	}
 	
@@ -489,6 +497,11 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 				throw new ConfigurationException("Element with name '" + name + "' not found on page '" + page.getName() + "' in " + document.getURI(), this);
 			}
 			return target.get();
+		}
+		
+		if (link.startsWith(SPEL_LINK_PREFIX)) {
+			String expr = link.substring(SPEL_LINK_PREFIX.length());
+			return evaluate(expr, LinkTarget.class);
 		}
 
 		return null;
@@ -618,6 +631,35 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	@Override
 	public int getPosition() {
 		return position;
+	}
+	
+	@Override
+	public String getPath() {
+		ModelElement parent = getParent();
+		return parent == null ? getId() : parent.getId() + "/" + getId();
+	}
+	
+	@Override
+	public Object getEnumarateValue() {
+		Map<String, String> style = getStyle();
+		if ("1".equals(style.get(ENUMERATE_STYLE_KEY))) {
+			String value = style.get(ENUMERATE_VALUE_STYLE_KEY);
+			if (!Util.isBlank(value)) {
+				return value;
+			}
+			return getModel()
+				.getPage()
+				.stream()
+				.filter(ModelElement.class::isInstance)
+				.map(ModelElement.class::cast)
+				.filter(me -> {
+					Map<String, String> eStyle = me.getStyle();
+					return "1".equals(eStyle.get(ENUMERATE_STYLE_KEY)) && Util.isBlank(eStyle.get(ENUMERATE_VALUE_STYLE_KEY));
+				})
+				.takeWhile(me -> me != this)
+				.count() + 1;
+		}
+		return null;
 	}
 	
 }

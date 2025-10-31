@@ -25,10 +25,12 @@ import java.util.stream.Stream;
 
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 /**
  * Graph element accepts visitors and supports streaming. 
@@ -531,6 +533,37 @@ public interface Element {
 		
 		ObjectElement<V> objectElement = new ObjectElement<V>(value, childrenSupplier);
 		return CompletableFuture.completedFuture(objectElement);		
+	}
+	
+	/**
+	 * Evaluates SpEL expression in the context of this element
+	 * @param <T>
+	 * @param expression
+	 * @param type
+	 * @return
+	 */
+	default <T> T evaluate(String expression, Class<T> type) {
+		return evaluate(expression, null, type);
+	}
+
+	/**
+	 * Evaluates SpEL expression in the context of this element
+	 * @param <T>
+	 * @param expression
+	 * @param variables
+	 * @param type
+	 * @return
+	 */
+	default <T> T evaluate(String expression, Map<String,Object> variables, Class<T> type) {
+		ExpressionParser parser = new SpelExpressionParser();
+		Expression exp = parser.parseExpression(expression);
+		EvaluationContext evaluationContext = new StandardEvaluationContext();
+		if (variables != null) {
+			for (Entry<String, Object> ve: variables.entrySet()) {
+				evaluationContext.setVariable(ve.getKey(), ve.getValue());
+			}			
+		}
+		return exp.getValue(evaluationContext, this, type);		
 	}
 	
 }

@@ -4,6 +4,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -11,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.LayerElement;
+import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Tag;
@@ -19,8 +21,12 @@ import org.w3c.dom.Element;
 
 class NodeImpl extends LayerImpl implements Node {
 	
-	NodeImpl(Element element, ModelImpl model, int position) {
-		super(element, model, position);
+	NodeImpl(
+			Element element, 
+			ModelImpl model, 
+			int position,
+			BiFunction<? super ModelElement, String, String> propertyFilter) {
+		super(element, model, position, propertyFilter);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

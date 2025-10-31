@@ -40,6 +40,7 @@ import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
+import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.ncore.NcoreFactory;
@@ -56,6 +57,8 @@ public class DocumentImpl extends ElementImpl implements Document {
 	private URI uri;	
 	private Function<URI, Document> uriHandler;
 	private Function<String,String> propertySource;
+	private BiFunction<? super ModelElement, String, String> propertyFilter;
+	
 	
 	/**
 	 * 
@@ -71,7 +74,8 @@ public class DocumentImpl extends ElementImpl implements Document {
 			InputStream in, 
 			URI uri, 
 			Function<URI, Document> uriHandler,
-			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
+			Function<String,String> propertySource,
+			BiFunction<? super ModelElement, String, String> propertyFilter) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(in);
@@ -79,6 +83,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 		this.uri = uri;
 		this.uriHandler = uriHandler;
 		this.propertySource = propertySource;
+		this.propertyFilter = propertyFilter;
 	}
 
 	/**
@@ -95,7 +100,8 @@ public class DocumentImpl extends ElementImpl implements Document {
 			Reader reader, 
 			URI uri, 
 			Function<URI, Document> uriHandler,
-			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
+			Function<String,String> propertySource,
+			BiFunction<? super ModelElement, String, String> propertyFilter) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(new InputSource(reader));
@@ -103,6 +109,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 		this.uri = uri;
 		this.uriHandler = uriHandler;
 		this.propertySource = propertySource;
+		this.propertyFilter = propertyFilter;
 	}
 
 	/**
@@ -116,7 +123,8 @@ public class DocumentImpl extends ElementImpl implements Document {
 			boolean compressed, 
 			URI uri, 
 			Function<URI, Document> uriHandler,
-			Function<String,String> propertySource) throws ParserConfigurationException {
+			Function<String,String> propertySource,
+			BiFunction<? super ModelElement, String, String> propertyFilter) throws ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.newDocument();		
@@ -130,14 +138,16 @@ public class DocumentImpl extends ElementImpl implements Document {
 		this.uri = uri;
 		this.uriHandler = uriHandler;
 		this.propertySource = propertySource;
+		this.propertyFilter = propertyFilter;
 	}
 	
 	public DocumentImpl(
 			String docStr, 
 			URI uri, 
 			Function<URI, Document> uriHandler,
-			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
-		this(new StringReader(docStr), uri, uriHandler, propertySource);
+			Function<String,String> propertySource,
+			BiFunction<? super ModelElement, String, String> propertyFilter) throws ParserConfigurationException, SAXException, IOException {
+		this(new StringReader(docStr), uri, uriHandler, propertySource, propertyFilter);
 	}
 	
 	/**
@@ -186,7 +196,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 			public Page get(int index) {
 				return pages.computeIfAbsent(index, idx -> {
 					try {			
-						return new PageImpl(DocumentImpl.this, getChildrenElements(getElement(), "diagram").get(idx), idx);
+						return new PageImpl(DocumentImpl.this, getChildrenElements(getElement(), "diagram").get(idx), idx, propertyFilter);
 					} catch (IOException | ParserConfigurationException | SAXException e) {
 						throw new IllegalArgumentException("Error loading compressed page", e);
 					}

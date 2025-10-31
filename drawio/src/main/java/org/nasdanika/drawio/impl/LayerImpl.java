@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -26,8 +27,12 @@ import org.w3c.dom.Element;
 
 class LayerImpl extends ModelElementImpl implements Layer {
 	
-	LayerImpl(Element element, ModelImpl model, int position) {
-		super(element, model, position);
+	LayerImpl(
+			Element element, 
+			ModelImpl model, 
+			int position,
+			BiFunction<? super ModelElement, String, String> propertyFilter) {
+		super(element, model, position, propertyFilter);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
