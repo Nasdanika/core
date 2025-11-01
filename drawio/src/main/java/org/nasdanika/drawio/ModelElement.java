@@ -124,7 +124,8 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	int getPosition();
 	
 	/**
-	 * @return <code>null</code> if enumerate is not checked (enumarate style key is not "1"). Otherwise, if enumerateValue style key is present it is returned.
+	 * @return <code>null</code> if enumerate is not checked (enumarate style key is not "1"). 
+	 * Otherwise, if enumerateValue style key is present it is returned.
 	 * If it is not present, the value is computed by counting elements with enumerate set to 1 and enumarateValue not set.  
 	 */
 	Object getEnumarateValue();

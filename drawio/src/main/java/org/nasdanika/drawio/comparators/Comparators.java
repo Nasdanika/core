@@ -27,7 +27,10 @@ public enum Comparators {
 	upLeft("up-left"),
 			
 	position("position"),
-	positionReversed("reverse-position");		
+	positionReversed("reverse-position"),		
+	
+	enumerate("enumerate"),
+	enumerateReversed("reverse-enumerate");		
 	
 	Comparators(String key) {
 		this.key = key;

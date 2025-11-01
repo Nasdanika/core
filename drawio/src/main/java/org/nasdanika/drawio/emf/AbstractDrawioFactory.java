@@ -39,6 +39,7 @@ import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.comparators.AngularNodeComparator;
 import org.nasdanika.drawio.comparators.CartesianNodeComparator;
 import org.nasdanika.drawio.comparators.Comparators;
+import org.nasdanika.drawio.comparators.EnumerateComparator;
 import org.nasdanika.drawio.comparators.FlowComparator;
 import org.nasdanika.drawio.comparators.LabelModelElementComparator;
 import org.nasdanika.drawio.comparators.PositionModelElementComparator;
@@ -891,6 +892,20 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		if (Comparators.positionReversed.key.equals(comparatorConfig)) {
 			return adapt(
 					new PositionModelElementComparator().reversed(), 
+					this::areModelElements, 
+					registry);
+		}
+		
+		if (Comparators.enumerate.key.equals(comparatorConfig)) {
+			return adapt(
+					new EnumerateComparator(), 
+					this::areModelElements, 
+					registry);
+		}
+		
+		if (Comparators.enumerateReversed.key.equals(comparatorConfig)) {
+			return adapt(
+					new EnumerateComparator().reversed(), 
 					this::areModelElements, 
 					registry);
 		}

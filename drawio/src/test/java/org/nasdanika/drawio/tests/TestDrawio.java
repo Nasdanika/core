@@ -50,6 +50,7 @@ import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.drawio.Tag;
+import org.nasdanika.drawio.comparators.EnumerateComparator;
 import org.nasdanika.graph.ContentProvider;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.HandlerType;
@@ -1140,6 +1141,7 @@ public class TestDrawio {
 			.stream()
 			.filter(ModelElement.class::isInstance)
 			.map(ModelElement.class::cast)
+			.sorted(new EnumerateComparator())
 			.forEach(me -> {
 				Object ev = me.getEnumarateValue();
 				if (ev != null) {
