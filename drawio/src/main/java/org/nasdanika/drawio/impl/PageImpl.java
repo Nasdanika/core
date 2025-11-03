@@ -207,5 +207,11 @@ class PageImpl extends ElementImpl implements Page {
 	public int getPosition() {
 		return position;
 	}
+	
+	@Override
+	public void remove() {
+		org.w3c.dom.Element toRemove = getElement();
+		toRemove.getParentNode().removeChild(toRemove);
+	}
 
 }

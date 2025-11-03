@@ -662,4 +662,12 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		return null;
 	}
 	
+	@Override
+	public void remove() {
+		org.w3c.dom.Element toRemove = getElement();
+		toRemove.getParentNode().removeChild(toRemove);
+		onRemove();
+	}
+	
 }
+

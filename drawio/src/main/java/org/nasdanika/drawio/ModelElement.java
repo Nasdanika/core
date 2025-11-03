@@ -130,4 +130,9 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	 */
 	Object getEnumarateValue();
 	
+	/**
+	 * Removes this model element from its container
+	 */
+	void remove();
+	
 }

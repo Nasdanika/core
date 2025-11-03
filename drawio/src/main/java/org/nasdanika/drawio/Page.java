@@ -28,5 +28,10 @@ public interface Page extends LinkTarget {
 	Tag createTag(String name);
 	
 	int getPosition();
+	
+	/**
+	 * Removes this page from the document
+	 */
+	void remove();
 
 }
