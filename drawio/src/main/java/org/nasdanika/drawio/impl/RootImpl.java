@@ -5,13 +5,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.Layer;
-import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
@@ -22,8 +21,8 @@ class RootImpl extends ModelElementImpl implements Root {
 	RootImpl(
 			Element element, 
 			ModelImpl model,
-			BiFunction<? super ModelElement, String, String> propertyFilter) {
-		super(element, model, 0, propertyFilter);
+			Context context) {
+		super(element, model, 0, context);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

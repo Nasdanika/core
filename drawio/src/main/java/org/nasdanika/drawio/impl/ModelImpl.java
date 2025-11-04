@@ -16,7 +16,6 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.zip.Deflater;
@@ -39,6 +38,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.json.JSONObject;
 import org.nasdanika.common.Util;
+import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
@@ -65,19 +65,20 @@ class ModelImpl extends ElementImpl implements Model {
 	
 	private Map<org.w3c.dom.Element, ModelElement> cache = new IdentityHashMap<>();
 	private Page page;		
-	private BiFunction<? super ModelElement, String, String> propertyFilter;
+	private Context context;
 	
 	ModelImpl(
 			Page page, 
 			org.w3c.dom.Element element,
-			BiFunction<? super ModelElement, String, String> propertyFilter) {
+			Context context) {
 		this.page = page;
 		this.element = element;		
-		this.propertyFilter = propertyFilter;
+		this.context = context;
 	}
 	
-	ModelImpl(Page page, String compressedStr) throws SAXException, IOException, ParserConfigurationException {
+	ModelImpl(Page page, String compressedStr, Context context) throws SAXException, IOException, ParserConfigurationException {
 		this.page = page;
+		this.context = context;
 		if (!Base64.isBase64(compressedStr)) {
 			throw new IllegalArgumentException("Compressed diagram is not Base64 encoded");
 		}
@@ -131,19 +132,19 @@ class ModelImpl extends ElementImpl implements Model {
 	private ModelElement create(org.w3c.dom.Element element, int position) {
 		org.w3c.dom.Element cellElement = ModelElementImpl.getCellElement(element);
 		if (!cellElement.hasAttribute(ModelElementImpl.ATTRIBUTE_PARENT)) {
-			return new RootImpl(element, this, propertyFilter);
+			return new RootImpl(element, this, context);
 		}
 		ModelElement parent = find(cellElement.getAttribute(ModelElementImpl.ATTRIBUTE_PARENT));
 		if (parent instanceof Root) {
-			return new LayerImpl(element, this, position, propertyFilter);			
+			return new LayerImpl(element, this, position, context);			
 		}
 		if (cellElement.hasAttribute(ATTRIBUTE_VERTEX) && "1".equals(cellElement.getAttribute(ATTRIBUTE_VERTEX))) {
-			return new NodeImpl(element, this, position, propertyFilter);
+			return new NodeImpl(element, this, position, context);
 		}
 		if (cellElement.hasAttribute(ATTRIBUTE_EDGE) && "1".equals(cellElement.getAttribute(ATTRIBUTE_EDGE))) {
-			return new ConnectionImpl(element, this, position, propertyFilter);
+			return new ConnectionImpl(element, this, position, context);
 		}
-		return new ModelElementImpl(element, this, position, propertyFilter); // Generic model element, shall it ever happen?
+		return new ModelElementImpl(element, this, position, context); // Generic model element, shall it ever happen?
 	}
 	
 	ModelElement find(String id) {

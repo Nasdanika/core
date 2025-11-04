@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractList;
@@ -40,7 +41,6 @@ import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
-import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.ncore.NcoreFactory;
@@ -55,10 +55,8 @@ public class DocumentImpl extends ElementImpl implements Document {
 	private static final String ATTRIBUTE_COMPRESSED = "compressed";
 	private org.w3c.dom.Document document;
 	private URI uri;	
+	private Context context;
 	private Function<URI, Document> uriHandler;
-	private Function<String,String> propertySource;
-	private BiFunction<? super ModelElement, String, String> propertyFilter;
-	
 	
 	/**
 	 * 
@@ -73,17 +71,15 @@ public class DocumentImpl extends ElementImpl implements Document {
 	public DocumentImpl(
 			InputStream in, 
 			URI uri, 
-			Function<URI, Document> uriHandler,
-			Function<String,String> propertySource,
-			BiFunction<? super ModelElement, String, String> propertyFilter) throws ParserConfigurationException, SAXException, IOException {
+			Context context,
+			Function<URI, Document> uriHandler) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(in);
 		element = document.getDocumentElement();
 		this.uri = uri;
+		this.context = context;
 		this.uriHandler = uriHandler;
-		this.propertySource = propertySource;
-		this.propertyFilter = propertyFilter;
 	}
 
 	/**
@@ -98,18 +94,16 @@ public class DocumentImpl extends ElementImpl implements Document {
 	 */
 	public DocumentImpl(
 			Reader reader, 
-			URI uri, 
-			Function<URI, Document> uriHandler,
-			Function<String,String> propertySource,
-			BiFunction<? super ModelElement, String, String> propertyFilter) throws ParserConfigurationException, SAXException, IOException {
+			URI uri,
+			Context context,
+			Function<URI, Document> uriHandler) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(new InputSource(reader));
 		element = document.getDocumentElement();
 		this.uri = uri;
+		this.context = context;
 		this.uriHandler = uriHandler;
-		this.propertySource = propertySource;
-		this.propertyFilter = propertyFilter;
 	}
 
 	/**
@@ -120,11 +114,10 @@ public class DocumentImpl extends ElementImpl implements Document {
 	 * @throws ParserConfigurationException
 	 */
 	public DocumentImpl(
-			boolean compressed, 
+			boolean compressed,	
 			URI uri, 
-			Function<URI, Document> uriHandler,
-			Function<String,String> propertySource,
-			BiFunction<? super ModelElement, String, String> propertyFilter) throws ParserConfigurationException {
+			Context context,
+			Function<URI, Document> uriHandler) throws ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.newDocument();		
@@ -136,18 +129,16 @@ public class DocumentImpl extends ElementImpl implements Document {
 		document.appendChild(mxFileElement);
 		element = document.getDocumentElement();
 		this.uri = uri;
+		this.context = context;
 		this.uriHandler = uriHandler;
-		this.propertySource = propertySource;
-		this.propertyFilter = propertyFilter;
 	}
 	
 	public DocumentImpl(
 			String docStr, 
 			URI uri, 
-			Function<URI, Document> uriHandler,
-			Function<String,String> propertySource,
-			BiFunction<? super ModelElement, String, String> propertyFilter) throws ParserConfigurationException, SAXException, IOException {
-		this(new StringReader(docStr), uri, uriHandler, propertySource, propertyFilter);
+			Context context,
+			Function<URI, Document> uriHandler) throws ParserConfigurationException, SAXException, IOException {
+		this(new StringReader(docStr), uri, context, uriHandler);
 	}
 	
 	/**
@@ -159,9 +150,10 @@ public class DocumentImpl extends ElementImpl implements Document {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 * @throws IOException 
+	 * @throws URISyntaxException 
 	 */
 	@Override
-	public Document getDocument(URI source) throws IOException, ParserConfigurationException, SAXException {
+	public Document getDocument(URI source) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
 		if (source == null) {
 			return null;
 		}
@@ -173,7 +165,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 			source = source.resolve(thisURI);
 		}
 		
-		return uriHandler == null ? Document.load(source, null, this::getProperty) : uriHandler.apply(source);
+		return uriHandler == null ? Document.load(source, context) : uriHandler.apply(source);
 	}
 
 	@Override
@@ -196,7 +188,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 			public Page get(int index) {
 				return pages.computeIfAbsent(index, idx -> {
 					try {			
-						return new PageImpl(DocumentImpl.this, getChildrenElements(getElement(), "diagram").get(idx), idx, propertyFilter);
+						return new PageImpl(DocumentImpl.this, getChildrenElements(getElement(), "diagram").get(idx), idx, context);
 					} catch (IOException | ParserConfigurationException | SAXException e) {
 						throw new IllegalArgumentException("Error loading compressed page", e);
 					}
@@ -253,7 +245,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 	
 	@Override
 	public String getProperty(String name) {
-		return propertySource == null ? null : propertySource.apply(name);
+		return context.getProperty(name);
 	}
 
 	@Override

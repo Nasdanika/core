@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,6 +16,7 @@ import javax.xml.transform.TransformerException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Document;
+import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
@@ -33,22 +33,22 @@ class PageImpl extends ElementImpl implements Page {
 	private ModelImpl model;
 	private Document document;
 	private int position;
-	private BiFunction<? super ModelElement, String, String> propertyFilter;
+	private Context context;
 	
 	PageImpl(
 			Document document, 
 			org.w3c.dom.Element element, 
 			int position,
-			BiFunction<? super ModelElement, String, String> propertyFilter) throws IOException, ParserConfigurationException, SAXException {
+			Context context) throws IOException, ParserConfigurationException, SAXException {
 		this.document = document;
 		this.element = element;
 		this.position = position;
-		this.propertyFilter = propertyFilter;
+		this.context = context;
 		List<org.w3c.dom.Element> modelElements = DocumentImpl.getChildrenElements(element, "mxGraphModel");
 		if (modelElements.isEmpty()) {
-			model = new ModelImpl(this, element.getTextContent());
+			model = new ModelImpl(this, element.getTextContent(), context);
 		} else if (modelElements.size() == 1) {
-			model = new ModelImpl(this, modelElements.get(0), propertyFilter);
+			model = new ModelImpl(this, modelElements.get(0), context);
 		} else {
 			throw new IllegalArgumentException("Expected one model element, got " + modelElements.size());
 		}
@@ -112,7 +112,7 @@ class PageImpl extends ElementImpl implements Page {
 				if (modelElement.getOwnerDocument() != element.getOwnerDocument()) {
 					modelElement = (org.w3c.dom.Element) element.getOwnerDocument().importNode(modelElement, true);
 					element.appendChild(modelElement);
-					model = new ModelImpl(this, modelElement, propertyFilter);
+					model = new ModelImpl(this, modelElement, context);
 				}
 			}			
 		}		

@@ -1,6 +1,7 @@
 package org.nasdanika.drawio.impl;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -31,7 +32,9 @@ import org.nasdanika.drawio.LinkTarget;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.drawio.SpelContext;
 import org.nasdanika.drawio.Tag;
+import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marker;
 import org.w3c.dom.Attr;
@@ -78,7 +81,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	 */
 	protected ModelImpl model;
 	private int position;
-	private BiFunction<? super ModelElement, String, String> propertyFilter;
+	private Context context;
 
 	/**
 	 * @param element XML element for this page element
@@ -88,11 +91,11 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			org.w3c.dom.Element element, 
 			ModelImpl model, 
 			int position,
-			BiFunction<? super ModelElement, String, String> propertyFilter) {
+			Context context) {
 		this.element = element;
 		this.model = model;
 		this.position = position;
-		this.propertyFilter = propertyFilter;
+		this.context = context;
 	}
 
 	@Override
@@ -234,7 +237,11 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 						pValue = null;
 					} else {
 						try {
-							pValue = evaluate(expr, String.class);
+							if (context instanceof SpelContext) {
+								pValue = ((SpelContext) context).evaluate(this, expr, String.class);
+							} else {
+								pValue = evaluate(expr, String.class);
+							}
 						} catch (Exception ex) {
 							pValue = "Error evaluating '" + expr + "': " + ex;
 						}
@@ -278,10 +285,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 
 	@Override
 	public String getProperty(String name) {
-		String rawProperty = getRawProperty(name);
-		if (propertyFilter != null) {
-			rawProperty = propertyFilter.apply(this, rawProperty);					
-		}
+		String rawProperty = context.filterProperty(this, name, getRawProperty(name));
 		return interpolate(rawProperty, new HashSet<>());
 	}
 	
@@ -398,7 +402,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			String docLocation = pageSelector.substring(0, hashIdx);
 			try {
 				document = (DocumentImpl) document.getDocument(URI.createURI(docLocation));
-			} catch (IOException | ParserConfigurationException | SAXException e) {
+			} catch (IOException | ParserConfigurationException | SAXException | URISyntaxException e) {
 				throw new ConfigurationException("Error loading document from " + docLocation + "': " + e, e, this);
 			}
 			pageSelector = pageSelector.substring(hashIdx + 1);

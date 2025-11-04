@@ -8,13 +8,13 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Connection;
+import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.ModelElement;
@@ -31,8 +31,8 @@ class LayerImpl extends ModelElementImpl implements Layer {
 			Element element, 
 			ModelImpl model, 
 			int position,
-			BiFunction<? super ModelElement, String, String> propertyFilter) {
-		super(element, model, position, propertyFilter);
+			Context context) {
+		super(element, model, position, context);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

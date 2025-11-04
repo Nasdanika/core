@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Document;
+import org.nasdanika.drawio.Document.Context;
 import org.xml.sax.SAXException;
 import org.yaml.snakeyaml.Yaml;
 
@@ -128,11 +130,24 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		// TODO - property source from properties, YAML, JSON, context, ...
 		if (isFile) {
 			File documentFile = new File(document);
-			try {
-				return Document.load(documentFile, getUriHandler(
-						uriHandler,
-						URI.createFileURI(documentFile.toString()), progressMonitor), 
-						getPropertySource(propertySource, progressMonitor));
+			try {				
+				Document.Context context = new Document.Context() {
+					
+					@Override
+					public String getProperty(String name) {
+						Function<String, String> contextPropertySource = getPropertySource(propertySource, progressMonitor);
+						return contextPropertySource == null ? Context.super.getProperty(name) : contextPropertySource.apply(name);
+					}
+					
+					@Override
+					public InputStream openStream(URI uri) throws IOException, URISyntaxException {
+						Function<URI, InputStream> contextUriHandler = getUriHandler(uriHandler, URI.createFileURI(documentFile.toString()), progressMonitor);
+						return contextUriHandler == null ? Context.super.openStream(uri) : contextUriHandler.apply(uri);
+					}
+					
+				};				
+				
+				return Document.load(documentFile, context); 
 			} catch (IOException | ParserConfigurationException | SAXException e) {
 				throw new NasdanikaException("Error loading document from '" + documentFile.getAbsolutePath() + "': " + e, e);
 			}
@@ -144,11 +159,24 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		}
 		URI documentURI = URI.createURI(document).resolve(baseURI);
 		try {
-			return Document.load(
-					documentURI, 
-					getUriHandler(uriHandler, documentURI, progressMonitor), 
-					getPropertySource(propertySource, progressMonitor));
-		} catch (IOException | ParserConfigurationException | SAXException e) {
+			Document.Context context = new Document.Context() {
+				
+				@Override
+				public String getProperty(String name) {
+					Function<String, String> contextPropertySource = getPropertySource(propertySource, progressMonitor);
+					return contextPropertySource == null ? Context.super.getProperty(name) : contextPropertySource.apply(name);
+				}
+				
+				@Override
+				public InputStream openStream(URI uri) throws IOException, URISyntaxException {
+					Function<URI, InputStream> contextUriHandler =getUriHandler(uriHandler, documentURI, progressMonitor);
+					return contextUriHandler == null ? Context.super.openStream(uri) : contextUriHandler.apply(uri);
+				}
+				
+			};				
+			
+			return Document.load(documentURI, context);
+		} catch (IOException | ParserConfigurationException | SAXException | URISyntaxException e) {
 			throw new NasdanikaException("Error loading document from '" + documentURI.toString() + "': " + e, e);
 		}
 	}
@@ -161,7 +189,7 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		for (String location: uriMapSources) {
 			try {
 				URI locationURI = URI.createURI(location).resolve(baseURI);
-				URL url = new URL(locationURI.toString());
+				URL url = new java.net.URI(locationURI.toString()).toURL();
 				URLConnection connection = url.openConnection();
 				
 				if (location.endsWith(".json")) {
@@ -199,7 +227,7 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 						throw new CommandLine.ParameterException(spec.commandLine(), "Unknown resource type " + url); 						
 					}
 				}
-			} catch (IOException e) {
+			} catch (IOException | URISyntaxException e) {
 				throw new CommandLine.ParameterException(spec.commandLine(), "Cannot load properties from " + location + ": " + e, e); 
 			}		
 		}
@@ -239,8 +267,8 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		}
 		
 		try {
-			return new URL(uri.toString()).openStream();
-		} catch (IOException e) {
+			return new java.net.URI(uri.toString()).toURL().openStream();
+		} catch (IOException | URISyntaxException e) {
 			throw new NasdanikaException("Error opening stream from " + uri + ": " + e, e);
 		}		
 	}

@@ -2,6 +2,7 @@ package org.nasdanika.http;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -62,7 +63,7 @@ public abstract class DiagramRoutesBuilderFactory extends ServiceCapabilityFacto
 					getEndpointFactory(loader, progressMonitor), 
 					progressMonitor);
 			return CompletableFuture.completedStage(Collections.singleton(capabilityProvider));
-		} catch (IOException | ParserConfigurationException | SAXException e) {
+		} catch (IOException | ParserConfigurationException | SAXException | URISyntaxException e) {
 			return wrapError(e);
 		}		
 	}

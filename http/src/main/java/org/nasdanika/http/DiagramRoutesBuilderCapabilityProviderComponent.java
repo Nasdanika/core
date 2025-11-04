@@ -2,6 +2,7 @@ package org.nasdanika.http;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
@@ -18,6 +19,7 @@ import org.nasdanika.common.Component;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
+import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.processor.ElementProcessorFactory;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.EndpointFactory;
@@ -61,14 +63,26 @@ public class DiagramRoutesBuilderCapabilityProviderComponent extends CapabilityP
 			Function<String, String> propertySource,
 			ConnectionBase connectionBase,
 			EndpointFactory<Object,Object> endpointFactory,
-			ProgressMonitor progressMonitor) throws IOException, ParserConfigurationException, SAXException {
+			ProgressMonitor progressMonitor) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
 		
 		this.routeProperty = routeProperty;
 		
-		document = Document.load(
-				documentURI, 
-				uriHandler, 
-				propertySource);
+		Document.Context context = new Document.Context() {
+			
+			@Override
+			public String getProperty(String name) {
+				return propertySource == null ? Context.super.getProperty(name) : propertySource.apply(name);
+			}
+			
+			@Override
+			public InputStream openStream(URI uri) throws IOException, URISyntaxException {
+				return uriHandler == null ? Context.super.openStream(uri) : uriHandler.apply(uri);
+			}
+			
+			
+		};
+		
+		document = Document.load(documentURI, context); 
 		
 		org.nasdanika.drawio.Element element = selector == null ? document : selector.apply(document);
 		ElementProcessorFactory<Object> elementProcessorFactory = new ElementProcessorFactory<Object>(

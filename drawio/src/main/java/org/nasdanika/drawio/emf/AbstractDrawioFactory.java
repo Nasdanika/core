@@ -1,6 +1,7 @@
 package org.nasdanika.drawio.emf;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -463,7 +464,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			targetModelElement.getRepresentations().put(
 					DRAWIO_REPRESENTATION, 
 					representationDocument.toDataURI(true).toString());
-		} catch (IOException | ParserConfigurationException | SAXException | TransformerException e) {
+		} catch (IOException | ParserConfigurationException | SAXException | TransformerException | URISyntaxException e) {
 			throw new ConfigurationException("Error filtering representation: " + e, e, page); 				
 		}			
 	}

@@ -2,12 +2,12 @@ package org.nasdanika.drawio.impl;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
+import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Point;
@@ -25,8 +25,8 @@ class ConnectionImpl extends ModelElementImpl implements Connection {
 			Element element, 
 			ModelImpl model, 
 			int position,
-			BiFunction<? super ModelElement, String, String> propertyFilter) {
-		super(element, model, position, propertyFilter);
+			Context context) {
+		super(element, model, position, context);
 	}
 
 	@Override

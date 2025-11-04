@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
@@ -76,10 +77,24 @@ public class DrawioResource extends ResourceImpl {
 	 * @throws SAXException
 	 */
 	protected Iterable<Document> loadDocuments(InputStream inputStream) throws IOException, ParserConfigurationException, SAXException {
+		Document.Context context = new Document.Context() {
+			
+			@Override
+			public InputStream openStream(URI uri) throws IOException, URISyntaxException {
+				return getURIHandler().apply(uri);
+			}
+			
+			@Override
+			public String getProperty(String name) {
+				return DrawioResource.this.getProperty(name);
+			}
+			
+			
+		};
 		if (png) {
-			return Document.loadFromPngMetadata(inputStream, getURI().trimFragment(), getURIHandler(), this::getProperty);			
+			return Document.loadFromPngMetadata(inputStream, getURI().trimFragment(), context);			
 		}
-		return Collections.singleton(Document.load(inputStream, getURI().trimFragment(), getURIHandler(), this::getProperty));
+		return Collections.singleton(Document.load(inputStream, getURI().trimFragment(), context));
 	}
 	
 	@Override

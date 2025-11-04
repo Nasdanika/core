@@ -9,11 +9,13 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -23,12 +25,14 @@ import javax.xml.transform.TransformerException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.URIHandler;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.Composable;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.PropertySource;
 import org.nasdanika.drawio.impl.DocumentImpl;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -59,6 +63,133 @@ public interface Document extends Element {
 	}
 	
 	/**
+	 * Document loading context
+	 */
+	interface Context extends PropertySource<String,String>, Composable<Context> {
+		
+		Context INSTANCE = new Context() {
+			
+		};
+		
+		default InputStream openStream(URI uri) throws IOException, URISyntaxException {
+			return new java.net.URI(uri.toString()).toURL().openStream();
+		}
+		
+		@Override
+		default String getProperty(String name) {
+			return null;
+		}
+		
+		default String filterProperty(ModelElement modelElement, String propertyName, String propertyValue) {
+			return propertyValue;
+		}	
+		
+		/**
+		 * Variables for evaluating <code>$spel</code> magic properties and property filtering
+		 * @return
+		 */
+		default Map<String, Object> getVariables(ModelElement modelElement) {
+			return Collections.emptyMap();
+		}
+		
+		@Override
+		default Context compose(Context other) {
+			if (other == null) {
+				return this;
+			}
+			return new Context() {
+				
+				@Override
+				public InputStream openStream(URI uri) throws IOException, URISyntaxException {
+					InputStream stream = Context.this.openStream(uri);
+					return stream == null ? other.openStream(uri) : stream;
+					
+				}
+				
+				@Override
+				public String getProperty(String name) {
+					String property = Context.this.getProperty(name);
+					return org.nasdanika.common.Util.isBlank(property) ? other.getProperty(name) : property;
+				}
+				
+				@Override
+				public String filterProperty(ModelElement modelElement, String propertyName, String propertyValue) {
+					String filteredProperty = Context.this.filterProperty(modelElement, propertyName, propertyValue);
+					return other.filterProperty(modelElement, propertyName, filteredProperty);
+				}				
+				
+				@Override
+				public Map<String, Object> getVariables(ModelElement modelElement) {
+					Map<String, Object> ret = new LinkedHashMap<>(other.getVariables(modelElement));
+					ret.putAll(Context.this.getVariables(modelElement));
+					return ret;
+				}
+				
+			};
+		}
+		
+		static Context fromPropertySource(PropertySource<String,String> propertySource) {
+			return new Context() {
+				
+				@Override
+				public String getProperty(String name) {
+					return propertySource == null ? Context.super.getProperty(name) : propertySource.getProperty(name);
+				}
+				
+			};
+		}
+		
+		static Context fromPropertySource(Function<String,String> propertySource) {
+			return new Context() {
+				
+				@Override
+				public String getProperty(String name) {
+					return propertySource == null ? Context.super.getProperty(name) : propertySource.apply(name);
+				}
+				
+			};
+		}
+		
+		static Context fromVariablesProvider(Function<ModelElement,Map<String,Object>> variablesProvider) {
+			return new Context() {
+				
+				@Override
+				public Map<String, Object> getVariables(ModelElement modelElement) {
+					return variablesProvider.apply(modelElement);
+				}
+				
+			};
+		}
+				
+		static Context fromURIHandler(URIHandler uriHandler) {
+			return new Context() {
+				
+				@Override
+				public InputStream openStream(URI uri) throws IOException, URISyntaxException {
+					return uriHandler == null ? Context.super.openStream(uri) : uriHandler.createInputStream(uri, null);
+				}
+				
+			};
+		}
+		
+		static Context fromURIHandler(Function<URI, InputStream> uriHandler) {
+			return new Context() {
+				
+				@Override
+				public InputStream openStream(URI uri) throws IOException {
+					return uriHandler.apply(uri);
+				}
+				
+			};
+		}
+		
+		static Context from(Context... contexts) {
+			return Stream.of(contexts).reduce(Context::compose).orElse(Context.INSTANCE);
+		}		
+		
+	}
+	
+	/**
 	 * @return a list of pages. This list supports add() method to insert pages from other documents. The add() method creates a clone of the page passed as a parameter. 
 	 */
 	List<Page> getPages();
@@ -79,7 +210,7 @@ public interface Document extends Element {
 	 * @param uriHandler
 	 * @return
 	 */
-	private static Function<URI, Document> wrap(Function<URI,InputStream> uriHandler, Function<String,String> propertySource, BiFunction<? super ModelElement, String, String> propertyFilter) {
+	private static Function<URI, Document> wrap(Context context) {
 		return new Function<URI, Document>() {
 			
 			Map<URI, Document> documents = new ConcurrentHashMap<>();
@@ -90,8 +221,8 @@ public interface Document extends Element {
 			}
 			
 			private Document load(URI source) {
-				try (InputStream in = uriHandler == null ? new java.net.URI(source.toString()).toURL().openStream() : uriHandler.apply(source)) {					
-					return new DocumentImpl(in, source, this, propertySource, propertyFilter);
+				try (InputStream in = context.openStream(source)) {					
+					return new DocumentImpl(in, source, context, this);
 				} catch (IOException | ParserConfigurationException | SAXException | URISyntaxException e) {
 					throw new NasdanikaException("Error loading document from " + source + ": " + e, e);
 				}
@@ -109,30 +240,8 @@ public interface Document extends Element {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 */
-	static Document load(
-			String docStr, 
-			URI uri, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource) throws ParserConfigurationException, SAXException, IOException {
-		return load(docStr, uri, uriHandler, propertySource, null);
-	}
-	
-	/**
-	 * Loads document from an XML string.
-	 * @param docStr
-	 * @param uri Optional document URI for resolution of relative URI's.
-	 * @return
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException 
-	 */
-	static Document load(
-			String docStr, 
-			URI uri, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource, 
-			BiFunction<? super ModelElement, String, String> propertyFilter) throws ParserConfigurationException, SAXException, IOException {
-		return new DocumentImpl(docStr, uri, wrap(uriHandler, propertySource, propertyFilter), propertySource, propertyFilter);
+	static Document load(String docStr,	URI uri, Context context) throws ParserConfigurationException, SAXException, IOException {
+		return new DocumentImpl(docStr, uri, context, wrap(context));
 	}
 
 	/**
@@ -145,33 +254,11 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException 
 	 */
 	static Document load(String docStr, URI uri) throws ParserConfigurationException, SAXException, IOException {
-		return load(docStr, uri, null, null);
+		return load(docStr, uri, Context.INSTANCE);
 	}
 
-	/**
-	 * 
-	 * @param reader
-	 * @param uri Optional document URI for resolution of relative URI's.
-	 * @return
-	 * @throws IOException
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 */
-	static Document load(
-			Reader reader, 
-			URI uri, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
-		return load(reader, uri, uriHandler, propertySource, null);
-	}
-
-	static Document load(
-			Reader reader, 
-			URI uri, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource, 
-			BiFunction<? super ModelElement, String, String> propertyFilter) throws IOException, ParserConfigurationException, SAXException {
-		return new DocumentImpl(reader, uri, wrap(uriHandler, propertySource, propertyFilter), propertySource, propertyFilter);
+	static Document load(Reader reader, URI uri, Context context) throws IOException, ParserConfigurationException, SAXException {
+		return new DocumentImpl(reader, uri, context, wrap(context));
 	}
 	
 	/**
@@ -184,31 +271,11 @@ public interface Document extends Element {
 	 * @throws SAXException
 	 */
 	static Document load(Reader reader, URI uri) throws IOException, ParserConfigurationException, SAXException {
-		return load(reader, uri, null, null);
+		return load(reader, uri, Context.INSTANCE);
 	}
-	
-	/**
-	 * 
-	 * @param compressed
-	 * @param uri Optional document URI for resolution of relative URI's.
-	 * @return
-	 * @throws ParserConfigurationException
-	 */
-	static Document create(
-			boolean compressed, 
-			URI uri, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource) throws ParserConfigurationException {
-		return create(compressed, uri, uriHandler, propertySource, null);
-	}
-	
-	static Document create(
-			boolean compressed, 
-			URI uri, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource, 
-			BiFunction<? super ModelElement, String, String> propertyFilter) throws ParserConfigurationException {
-		return new DocumentImpl(compressed, uri, wrap(uriHandler, propertySource, propertyFilter), propertySource, propertyFilter);
+		
+	static Document create(boolean compressed, URI uri, Context context) throws ParserConfigurationException {
+		return new DocumentImpl(compressed, uri, context, wrap(context));
 	}
 	
 	/**
@@ -219,33 +286,11 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException
 	 */
 	static Document create(boolean compressed, URI uri) throws ParserConfigurationException {
-		return create(compressed, uri, null, null);
+		return create(compressed, uri, Context.INSTANCE);
 	}
 
-	/**
-	 * Loads document using UTF-8 encoding.
-	 * @param in
-	 * @param uri Optional document URI for resolution of relative URI's.
-	 * @return
-	 * @throws IOException
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException 
-	 */
-	static Document load(
-			InputStream in, 
-			URI uri, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
-		return load(in, uri, uriHandler, propertySource, null);
-	}
-
-	static Document load(
-			InputStream in, 
-			URI uri, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource, 
-			BiFunction<? super ModelElement, String, String> propertyFilter) throws IOException, ParserConfigurationException, SAXException {
-		return new DocumentImpl(in, uri, wrap(uriHandler, propertySource, propertyFilter), propertySource, propertyFilter);
+	static Document load(InputStream in, URI uri, Context context) throws IOException, ParserConfigurationException, SAXException {
+		return new DocumentImpl(in, uri, context, wrap(context));
 	}
 
 	/**
@@ -258,7 +303,7 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException 
 	 */
 	static Document load(InputStream in, URI uri) throws IOException, ParserConfigurationException, SAXException {
-		return load(in, uri, null, null);
+		return load(in, uri, Context.INSTANCE);
 	}
 	
 	/**
@@ -306,11 +351,9 @@ public interface Document extends Element {
 	 * @throws IOException
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
+	 * @throws URISyntaxException 
 	 */
-	static Document load(
-			URI source, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
+	static Document load(URI source, Context context) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
 		if (isDataURI(source)) {
 			String uriStr = source.toString();
 			uriStr = uriStr.substring("data:drawio".length());				
@@ -321,20 +364,10 @@ public interface Document extends Element {
 				uriStr = URLDecoder.decode(uriStr.substring(1), StandardCharsets.UTF_8);
 			}
 			JSONObject payload = new JSONObject(new JSONTokener(uriStr));
-			return load(payload.getString("document"), payload.has("uri") ? URI.createURI(payload.getString("uri")) : null, uriHandler, propertySource);
-		}
-		
-		if (uriHandler == null) {
-			uriHandler = uri -> {
-				try {
-					return DefaultConverter.INSTANCE.toInputStream(uri);
-				} catch (IOException e) {
-					throw new NasdanikaException("Error opening input stream for '" + uri + "': " + e, e);
-				}				
-			};
+			return load(payload.getString("document"), payload.has("uri") ? URI.createURI(payload.getString("uri")) : null, context);
 		}
 			
-		return load(uriHandler.apply(source), source, uriHandler, propertySource);
+		return load(context.openStream(source), source, context);
 	}
 	
 	/**
@@ -344,34 +377,14 @@ public interface Document extends Element {
 	 * @throws IOException
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
+	 * @throws URISyntaxException 
 	 */
-	static Document load(URI source) throws IOException, ParserConfigurationException, SAXException {
-		return load(source, null, null);
-	}
-		
-	/**
-	 * Loads document from a URL by opening a stream.
-	 * @param source
-	 * @return
-	 * @throws IOException
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 */
-	static Document load(
-			URL source, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
-
-		return load(source, uriHandler, propertySource, null); 
+	static Document load(URI source) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
+		return load(source, Context.INSTANCE);
 	}
 	
-	static Document load(
-			URL source, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource, 
-			BiFunction<? super ModelElement, String, String> propertyFilter) throws IOException, ParserConfigurationException, SAXException {
-
-		return wrap(uriHandler, propertySource, propertyFilter).apply(URI.createURI(source.toString()));
+	static Document load(URL source, Context context) throws IOException, ParserConfigurationException, SAXException {
+		return wrap(context).apply(URI.createURI(source.toString()));
 	}
 	
 	/**
@@ -382,11 +395,8 @@ public interface Document extends Element {
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */
-	static Document load(
-			File source, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
-		return load(source.toURI().toURL(), uriHandler, propertySource);
+	static Document load(File source, Context context) throws IOException, ParserConfigurationException, SAXException {
+		return load(source.toURI().toURL(), context);
 	}	
 	
 	/**
@@ -398,7 +408,7 @@ public interface Document extends Element {
 	 * @throws SAXException
 	 */
 	static Document load(URL source) throws IOException, ParserConfigurationException, SAXException {
-		return load(source, null, null);
+		return load(source, Context.INSTANCE);
 	}
 	
 	/**
@@ -410,7 +420,7 @@ public interface Document extends Element {
 	 * @throws SAXException
 	 */
 	static Document load(File source) throws IOException, ParserConfigurationException, SAXException {
-		return load(source, null, null);
+		return load(source, Context.INSTANCE);
 	}
 	
 	/**
@@ -421,11 +431,7 @@ public interface Document extends Element {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 */
-	static List<Document> loadFromPngMetadata(
-			InputStream in, 
-			URI uri, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
+	static List<Document> loadFromPngMetadata(InputStream in, URI uri, Context context) throws IOException, ParserConfigurationException, SAXException {
 		ImageReader imageReader = ImageIO.getImageReadersByFormatName("png").next();
 		imageReader.setInput(ImageIO.createImageInputStream(in));
 		IIOMetadata metadata = imageReader.getImageMetadata(0);
@@ -447,7 +453,7 @@ public interface Document extends Element {
 										&& ((org.w3c.dom.Element) grandChild).hasAttribute("keyword")
 										&& "mxfile".equals(((org.w3c.dom.Element) grandChild).getAttribute("keyword"))) {
 									String value = ((org.w3c.dom.Element) grandChild).getAttribute("value");
-									ret.add(load((URLDecoder.decode(value, StandardCharsets.UTF_8)), uri, uriHandler, propertySource));									
+									ret.add(load((URLDecoder.decode(value, StandardCharsets.UTF_8)), uri, context));									
 								}
 							}
 						}
@@ -459,7 +465,7 @@ public interface Document extends Element {
 	}
 
 	static List<Document> loadFromPngMetadata(InputStream in, URI uri) throws IOException, ParserConfigurationException, SAXException {
-		return loadFromPngMetadata(in, uri, null, null);
+		return loadFromPngMetadata(in, uri, Context.INSTANCE);
 	}
 	
 	/**
@@ -469,25 +475,15 @@ public interface Document extends Element {
 	 * @throws IOException
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
+	 * @throws URISyntaxException 
 	 */
-	static List<Document> loadFromPngMetadata(
-			URL source, 
-			Function<URI, InputStream> uriHandler,
-			Function<String,String> propertySource) throws IOException, ParserConfigurationException, SAXException {
+	static List<Document> loadFromPngMetadata(URL source, Context context) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
 		URI sourceUri = URI.createURI(source.toString());
-		if (uriHandler == null) {
-			try (InputStream in = source.openStream()) {
-				return loadFromPngMetadata(in, sourceUri, uriHandler, propertySource);
-			}
-		}
-		
-		try (InputStream in = uriHandler.apply(sourceUri)) {
-			return loadFromPngMetadata(in, sourceUri, uriHandler, propertySource);
-		}		
+		return loadFromPngMetadata(context.openStream(sourceUri), sourceUri, context);
 	}
 	
-	static List<Document> loadFromPngMetadata(URL source) throws IOException, ParserConfigurationException, SAXException {
-		return loadFromPngMetadata(source, null, null);
+	static List<Document> loadFromPngMetadata(URL source) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
+		return loadFromPngMetadata(source, Context.INSTANCE);
 	}
 	
 	/**
@@ -562,7 +558,8 @@ public interface Document extends Element {
 	 * @throws IOException
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
+	 * @throws URISyntaxException 
 	 */
-	Document getDocument(URI source) throws IOException, ParserConfigurationException, SAXException;	
+	Document getDocument(URI source) throws IOException, ParserConfigurationException, SAXException, URISyntaxException;	
 
 }
