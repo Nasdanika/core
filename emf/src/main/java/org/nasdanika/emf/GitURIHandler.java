@@ -89,6 +89,7 @@ public class GitURIHandler extends URIHandlerImpl {
 	
 	@Override
 	public OutputStream createOutputStream(URI uri, Map<?, ?> options) throws IOException {
+		// TODO - collect resource changes to possibly commit - adapt from GitLabURIHandler
 		throw new UnsupportedOperationException("Git URI Handler is read-only");
 	}	
 

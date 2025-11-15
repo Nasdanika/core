@@ -4,10 +4,13 @@ package org.nasdanika.http.tests;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 import java.time.Duration;
+import java.util.List;
 import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.nasdanika.http.SerpapiConnector;
+import org.nasdanika.http.SerpapiConnector.SearchResult;
 import org.nasdanika.http.TelemetryFilter;
 import org.nasdanika.telemetry.TelemetryUtil;
 import org.reactivestreams.Publisher;
@@ -194,6 +197,22 @@ public class TestHttp {
 			
 			System.out.println(response);
 		}
+	}
+	
+	@Test
+	public void testSearch() {
+        String apiKey = System.getenv("SERPER_KEY");
+        String query = "What is a kernel function in microsoft semantic kernel";
+        
+        SerpapiConnector serpApiConnector = new SerpapiConnector(apiKey, "learn.microsoft.com/en-us/semantic-kernel");
+        Flux<SearchResult> results = serpApiConnector.search(query, 1, 0);
+        List<SearchResult> resultList = results.collectList().block();
+        for (SearchResult result: resultList) {
+        	System.out.println("===");
+        	System.out.println(result.title());
+        	System.out.println();
+        	System.out.println(result.markdownMainContent());
+        }
 	}
 
 }
