@@ -2,15 +2,17 @@ package org.nasdanika.http;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.nasdanika.common.Util;
 
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
@@ -22,6 +24,7 @@ import reactor.netty.http.client.HttpClient;
 
 public class SerpapiConnector {
 	
+	private static final String ORGANIC_RESULTS_KEY = "organic_results";
 	public static final String BASE_URL = "https://serpapi.com";
 
 	public record Link(String link, String title) {}
@@ -100,7 +103,12 @@ public class SerpapiConnector {
 		private static LocalDate getDate(JSONObject jsonObject) {
 			if (jsonObject.has(DATE_KEY)) {				
 		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH);
-		        return LocalDate.parse(jsonObject.getString(DATE_KEY), formatter);
+		        try {
+		        	return LocalDate.parse(jsonObject.getString(DATE_KEY), formatter);
+		        } catch (DateTimeParseException e) {
+		        	e.printStackTrace();
+		        	return null; // TODO - parse dates like "5 days ago"
+		        }
 			}
 			return null;
 		}		
@@ -115,9 +123,12 @@ public class SerpapiConnector {
 		this.apiKey = apiKey;
 		this.sites = sites;
 	}
-		
+	
 	public Flux<SearchResult> search(String query, int count, int offset) {
-		System.out.println(">>> Searching: " + query);
+		return search(query, count, offset, null);
+	}
+		
+	public Flux<SearchResult> search(String query, int count, int offset, BiFunction<String,Mono<String>,Mono<String>> cache) {
 		StringBuilder queryBuilder = new StringBuilder(query);
 		for (int i = 0; i < sites.length; ++i) {
 			queryBuilder.append(" ");
@@ -132,25 +143,31 @@ public class SerpapiConnector {
         return HttpClient.create()
                 .baseUrl("https://serpapi.com")
                 .get()
-                .uri(buildUrl(query))
+                .uri(buildUrl(queryBuilder.toString()))
                 .responseSingle((res, content) -> content.asString())
                 .map(JSONObject::new)
                 .flatMapMany(searchResult -> {
-                	JSONArray organicResults = searchResult.getJSONArray("organic_results");
                 	List<Mono<JSONObject>> fullResults = new ArrayList<>();
-                	for (int i = 0; i < organicResults.length(); ++i) {
-                		JSONObject pageResult = organicResults.getJSONObject(i);
-                		String pageUrl = pageResult.getString("link");
-                		Mono<JSONObject> fRes = HttpClient
-                			.create()
-                			.get()
-                			.uri(pageUrl)
-                			.responseSingle((res, content) -> content.asString())
-                			.map(rStr -> {
-                				pageResult.put("content", rStr);
-                				return pageResult; 
-                			});
-                		fullResults.add(fRes);
+                	if (searchResult.has(ORGANIC_RESULTS_KEY)) {
+	                	JSONArray organicResults = searchResult.getJSONArray(ORGANIC_RESULTS_KEY);
+	                	for (int i = 0; i < organicResults.length(); ++i) {
+	                		JSONObject pageResult = organicResults.getJSONObject(i);
+	                		String pageUrl = pageResult.getString("link");
+	                		Mono<String> fResStr = HttpClient
+	                			.create()
+	                			.get()
+	                			.uri(pageUrl)
+	                			.responseSingle((res, content) -> content.asString());                		
+	                		if (cache != null) {
+	                			fResStr = cache.apply(pageUrl, fResStr);
+	                		}
+	                		
+	                		Mono<JSONObject> fRes = fResStr.map(rStr -> {
+	                				pageResult.put("content", rStr);
+	                				return pageResult; 
+	                			});
+	                		fullResults.add(fRes);
+	                	}
                 	}
                 	
                 	return Flux.merge(fullResults);
@@ -158,14 +175,18 @@ public class SerpapiConnector {
                 	if (jRes.has(CONTENT_KEY)) {
                 		String content = jRes.getString(CONTENT_KEY);
                 		Document document = Jsoup.parse(content);
-						Element main = document.body().selectFirst(getMainContentSelector(jRes.optString(LINK_KEY)));
-						String mainContent = main == null ? document.body().html() : main.html();
+						Elements main = selectMainContent(jRes.optString(LINK_KEY), document);
+						String mainContent = main.isEmpty() ? document.body().html() : main.html();
 						jRes.put(MAIN_CONTENT_KEY, mainContent);
 				    	String markdown = Util.isBlank(mainContent) ? "" : FlexmarkHtmlConverter.builder().build().convert(mainContent);
 						jRes.put(MARKDOWN_CONTENT_KEY, markdown);
                 	}
                 	return new SearchResult(jRes);
                 });
+	}
+
+	protected Elements selectMainContent(String link, Document document) {
+		return document.body().select(getMainContentSelector(link));
 	}
 
 	protected String getMainContentSelector(String link) {

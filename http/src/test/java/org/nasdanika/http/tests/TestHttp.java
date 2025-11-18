@@ -2,13 +2,17 @@ package org.nasdanika.http.tests;
 
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.http.SerpapiConnector;
 import org.nasdanika.http.SerpapiConnector.SearchResult;
 import org.nasdanika.http.TelemetryFilter;
@@ -200,12 +204,42 @@ public class TestHttp {
 	}
 	
 	@Test
-	public void testSearch() {
+	public void testSearch() throws IOException {
         String apiKey = System.getenv("SERPER_KEY");
-        String query = "What is a kernel function in microsoft semantic kernel";
+        String query = "microsoft semantic search java plugin function";
         
         SerpapiConnector serpApiConnector = new SerpapiConnector(apiKey, "learn.microsoft.com/en-us/semantic-kernel");
         Flux<SearchResult> results = serpApiConnector.search(query, 1, 0);
+        List<SearchResult> resultList = results.collectList().block();
+        for (SearchResult result: resultList) {
+        	StringBuilder resultMessageBuilder = new StringBuilder("[")
+        			.append(result.title())
+        			.append("](")
+        			.append(result.link())
+        			.append(")")
+        			.append(System.lineSeparator())
+        			.append(System.lineSeparator())
+        			.append("---")
+        			.append(System.lineSeparator())
+        			.append(System.lineSeparator())
+        			.append(result.markdownMainContent());
+        	
+        	String html = MarkdownHelper.INSTANCE.markdownToHtml(resultMessageBuilder.toString());
+        	Files.writeString(Path.of("target", "search-result.html"), html);
+        }
+	}
+	
+	@Test
+	public void testCachedSearch() {
+        String apiKey = System.getenv("SERPER_KEY");
+        String query = "microsoft semantic search java AIService";
+        
+        SerpapiConnector serpApiConnector = new SerpapiConnector(apiKey, "learn.microsoft.com/en-us/semantic-kernel");
+        Flux<SearchResult> results = serpApiConnector.search(query, 1, 0, (url, next) -> {
+        	System.out.println(url);
+//        	return next;
+        	return Mono.just(url);
+        });
         List<SearchResult> resultList = results.collectList().block();
         for (SearchResult result: resultList) {
         	System.out.println("===");
