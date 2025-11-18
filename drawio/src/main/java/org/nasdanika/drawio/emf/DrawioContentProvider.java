@@ -89,7 +89,6 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		this.configProperty = configProperty;
 		this.configRefProperty = configRefProperty;
 		this.connectionBase = connectionBase;
-
 		
 		Consumer<Element> visitor = element -> parentMap.computeIfAbsent(element, this::computeParent);
 		
@@ -146,7 +145,6 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			if (org.nasdanika.common.Util.isBlank(configProperty) && org.nasdanika.common.Util.isBlank(configRefProperty)) {				
 				// Using element's own properties
 				return modelElement::getProperty;
-
 			}
 			
 			if (!org.nasdanika.common.Util.isBlank(configProperty)) {
