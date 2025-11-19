@@ -17,7 +17,7 @@ import org.nasdanika.graph.Element;
  *
  * @param <P>
  */
-public class ReflectiveRegistryWirer<P> extends Reflector {
+public class ReflectiveRegistryWirer<H,E,P> extends Reflector {
 		
 	/**
 	 * Records don't work with non-static types.
@@ -25,12 +25,12 @@ public class ReflectiveRegistryWirer<P> extends Reflector {
 	protected class RegistryMatch {
 		RegistryEntry annotation; 
 		AnnotatedElementRecord setterRecord;
-		ProcessorConfig config;
+		ProcessorConfig<H,E> config;
 		
 		public RegistryMatch(
 				RegistryEntry annotation, 
 				AnnotatedElementRecord setterRecord, 
-				ProcessorConfig config) {
+				ProcessorConfig<H,E> config) {
 			super();
 			this.annotation = annotation;
 			this.setterRecord = setterRecord;
@@ -41,9 +41,9 @@ public class ReflectiveRegistryWirer<P> extends Reflector {
 		
 	protected void wireRegistryEntry(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Collection<ProcessorConfig> registry,
+			Collection<ProcessorConfig<H,E>> registry,
 			Map<String,Object> variables,
-			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider) {
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider) {
 		
 		processorAnnotatedElementRecords
 			.filter(ae -> ae.getAnnotation(RegistryEntry.class) != null)
@@ -59,17 +59,17 @@ public class ReflectiveRegistryWirer<P> extends Reflector {
 
 	protected void wireRegistry(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Collection<ProcessorConfig> registry, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider) {
+			Collection<ProcessorConfig<H,E>> registry, 
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider) {
 
 		processorAnnotatedElementRecords
 				.filter(aer -> aer.getAnnotation(Registry.class) != null)
 				.filter(aer -> aer.mustSet(Map.class, "Fields/methods annotated with Registry must have (parameter) type assignable from Map: " + aer.getAnnotatedElement()))
 				.forEach(setterRecord -> {
 					// Sets a map which is populated as processors get created
-					Map<Element,ProcessorInfo<P>> r = Collections.synchronizedMap(new LinkedHashMap<>());
+					Map<Element,ProcessorInfo<H,E,P>> r = Collections.synchronizedMap(new LinkedHashMap<>());
 					setterRecord.set(r);
-					for (ProcessorConfig re: registry) {
+					for (ProcessorConfig<H,E> re: registry) {
 						if (re != null) {
 							infoProvider.accept(re.getElement(), (rp, pm) -> r.put(re.getElement(), rp));
 						}

@@ -8,18 +8,18 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 
-public class ProcessorInfo<P> extends ProcessorConfigFilter<ProcessorConfig> {
+public class ProcessorInfo<H,E,P> extends ProcessorConfigFilter<H,E,ProcessorConfig<H,E>> {
 	
 	/**
 	 * Functional interface for processor/info creation.
 	 * @param <P>
 	 */
-	public interface Factory<P> {
+	public interface Factory<H,E,P> {
 		
-		ProcessorInfo<P> create(
-				ProcessorConfig config, 
+		ProcessorInfo<H,E,P> create(
+				ProcessorConfig<H,E> config, 
 				boolean parallel, 
-				BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+				BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
 				Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 				Context context,
 				ProgressMonitor progressMonitor);		
@@ -27,7 +27,7 @@ public class ProcessorInfo<P> extends ProcessorConfigFilter<ProcessorConfig> {
 	
 	private P processor;
 
-	public ProcessorInfo(ProcessorConfig config, P processor) {
+	public ProcessorInfo(ProcessorConfig<H,E> config, P processor) {
 		super(config);
 		this.processor = processor;
 	}
@@ -37,7 +37,7 @@ public class ProcessorInfo<P> extends ProcessorConfigFilter<ProcessorConfig> {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <P> ProcessorInfo<P> of(ProcessorConfig config, P processor) {
+	public static <H,E,P> ProcessorInfo<H,E,P> of(ProcessorConfig<H,E> config, P processor) {
 		if (config instanceof ConnectionProcessorConfig) {
 			return of((ConnectionProcessorConfig) config, processor);
 		}
@@ -46,15 +46,15 @@ public class ProcessorInfo<P> extends ProcessorConfigFilter<ProcessorConfig> {
 			return of((NodeProcessorConfig) config, processor);
 		}		
 		
-		return new ProcessorInfo<P>(config, processor);
+		return new ProcessorInfo<H,E,P>(config, processor);
 	}
 	
-	public static <P,H,E> ConnectionProcessorInfo<P,H,E> of(ConnectionProcessorConfig<H,E> config, P processor) {
-		return new ConnectionProcessorInfo<P,H,E>(config, processor);
+	public static <H,E,P> ConnectionProcessorInfo<H,E,P> of(ConnectionProcessorConfig<H,E> config, P processor) {
+		return new ConnectionProcessorInfo<H,E,P>(config, processor);
 	}
 	
-	public static <P,H,E> NodeProcessorInfo<P,H,E> of(NodeProcessorConfig<H,E> config, P processor) {
-		return new NodeProcessorInfo<P,H,E>(config, processor);
+	public static <H,E,P> NodeProcessorInfo<H,E,P> of(NodeProcessorConfig<H,E> config, P processor) {
+		return new NodeProcessorInfo<H,E,P>(config, processor);
 	}
 
 }

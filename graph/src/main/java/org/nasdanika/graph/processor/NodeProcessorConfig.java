@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Node;
 
-public interface NodeProcessorConfig<H,E> extends ProcessorConfig {
+public interface NodeProcessorConfig<H,E> extends ProcessorConfig<H,E> {
 	
 	@Override
 	Node getElement();
@@ -20,8 +20,8 @@ public interface NodeProcessorConfig<H,E> extends ProcessorConfig {
 	
 	Map<Connection, Consumer<H>> getOutgoingHandlerConsumers();
 	
-	default <P> NodeProcessorInfo<P,H,E> toInfo(P processor) {
-		return new NodeProcessorInfo<P,H,E>(this, processor);
+	default <P> NodeProcessorInfo<H,E,P> toInfo(P processor) {
+		return new NodeProcessorInfo<H,E,P>(this, processor);
 	}	
 	
 }

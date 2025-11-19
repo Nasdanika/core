@@ -26,7 +26,7 @@ import org.nasdanika.graph.Element;
  * @param <H> Handler type
  * @param <E> Endpoint type
  */
-public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProcessorWirer<P, H, E> {
+public class ReflectiveProcessorFactoryProvider<H,E,P> extends ReflectiveProcessorWirer<H,E,P> {
 	
 	private List<AnnotatedElementRecord> annotatedElementRecords = new ArrayList<>();
 		
@@ -36,14 +36,14 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 		}
 	}
 	
-	public ProcessorFactory<P> getFactory(Object... registryTargets) {
-		return new ProcessorFactory<P>() {
+	public ProcessorFactory<H,E,P> getFactory(Object... registryTargets) {
+		return new ProcessorFactory<H,E,P>() {
 
 			@Override
-			protected ProcessorInfo<P> createProcessor(
-					ProcessorConfig config, 
+			protected ProcessorInfo<H,E,P> createProcessor(
+					ProcessorConfig<H,E> config, 
 					boolean parallel,
-					BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+					BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
 					Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 					ProgressMonitor progressMonitor) {
 				
@@ -58,10 +58,10 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 			}
 			
 			@Override
-			public Map<Element, ProcessorInfo<P>> createProcessors(Collection<ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
-				Map<Element, ProcessorInfo<P>> registry = super.createProcessors(configs, parallel, progressMonitor);
+			public Map<Element, ProcessorInfo<H,E,P>> createProcessors(Collection<ProcessorConfig<H,E>> configs, boolean parallel, ProgressMonitor progressMonitor) {
+				Map<Element, ProcessorInfo<H,E,P>> registry = super.createProcessors(configs, parallel, progressMonitor);
 				for (Object registryTarget: registryTargets) {
-					BiConsumer<Element, BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider = (e, bc) -> {
+					BiConsumer<Element, BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider = (e, bc) -> {
 						bc.accept(registry.get(e), progressMonitor);
 					};
 					
@@ -80,7 +80,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 		};
 	}
 	
-	protected boolean matchFactoryMethod(ProcessorConfig elementProcessorConfig, Method method, Object target) {
+	protected boolean matchFactoryMethod(ProcessorConfig<H,E> elementProcessorConfig, Method method, Object target) {
 		if (Modifier.isAbstract(method.getModifiers())) {
 			return false;
 		}
@@ -155,9 +155,9 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 	}
 	
 	public P createProcessor(
-			ProcessorConfig config, 
+			ProcessorConfig<H,E> config, 
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			ProgressMonitor progressMonitor) {
 		
@@ -210,9 +210,9 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends ReflectiveProce
 	 */
 	protected Invocable bind(
 			AnnotatedElementRecord aer,
-			ProcessorConfig config, 
+			ProcessorConfig<H,E> config, 
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer) {
 		
 		return aer.bind(config, parallel, infoProvider);		

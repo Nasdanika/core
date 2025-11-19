@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Node;
 
-public class NodeProcessorConfigFilter<H,E> extends ProcessorConfigFilter<NodeProcessorConfig<H,E>> implements NodeProcessorConfig<H,E> {
+public class NodeProcessorConfigFilter<H,E> extends ProcessorConfigFilter<H,E,NodeProcessorConfig<H,E>> implements NodeProcessorConfig<H,E> {
 	
 	public NodeProcessorConfigFilter(NodeProcessorConfig<H,E> config) {
 		super(config);

@@ -4,7 +4,7 @@ import java.util.concurrent.CompletionStage;
 
 import org.nasdanika.graph.Connection;
 
-public interface ConnectionProcessorConfig<H,E> extends ProcessorConfig {
+public interface ConnectionProcessorConfig<H,E> extends ProcessorConfig<H,E> {
 	
 	@Override
 	Connection getElement();
@@ -17,8 +17,8 @@ public interface ConnectionProcessorConfig<H,E> extends ProcessorConfig {
 	
 	void setTargetHandler(H targetHandler);
 	
-	default <P> ConnectionProcessorInfo<P,H,E> toInfo(P processor) {
-		return new ConnectionProcessorInfo<P,H,E>(this, processor);
+	default <P> ConnectionProcessorInfo<H,E,P> toInfo(P processor) {
+		return new ConnectionProcessorInfo<H,E,P>(this, processor);
 	}	
 	
 }

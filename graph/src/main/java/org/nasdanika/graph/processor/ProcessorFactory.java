@@ -27,7 +27,7 @@ import org.nasdanika.graph.Element;
  * @param <E> Endpoint type. Endpoints pass invocations to handlers.
  * @param <R> Registry type
  */
-public class ProcessorFactory<P> {
+public class ProcessorFactory<H,E,P> {
 	
 	/**
 	 * Creates a processor
@@ -38,10 +38,10 @@ public class ProcessorFactory<P> {
 	 * @param progressMonitor
 	 * @return
 	 */
-	protected ProcessorInfo<P> createProcessor(
-			ProcessorConfig config, 
+	protected ProcessorInfo<H,E,P> createProcessor(
+			ProcessorConfig<H,E> config, 
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			ProgressMonitor progressMonitor) {
 		
@@ -73,21 +73,21 @@ public class ProcessorFactory<P> {
 			.map(CompletableFuture::join);
 	}
 		
-	public Map<Element, ProcessorInfo<P>> createProcessors(Collection<ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
-		record ProcessorInfoCompletableFutureRecord<P>(ProcessorConfig config, CompletableFuture<ProcessorInfo<P>> processorInfoCompletableFuture) {}
-		Map<Element, ProcessorInfoCompletableFutureRecord<P>> processors = Collections.synchronizedMap(new LinkedHashMap<>());
+	public Map<Element, ProcessorInfo<H,E,P>> createProcessors(Collection<ProcessorConfig<H,E>> configs, boolean parallel, ProgressMonitor progressMonitor) {
+		record ProcessorInfoCompletableFutureRecord<H,E,P>(ProcessorConfig<H,E> config, CompletableFuture<ProcessorInfo<H,E,P>> processorInfoCompletableFuture) {}
+		Map<Element, ProcessorInfoCompletableFutureRecord<H,E,P>> processors = Collections.synchronizedMap(new LinkedHashMap<>());
 		configs
 			.stream()
 			.filter(Objects::nonNull)
-			.forEach(c -> processors.put(c.getElement(), new ProcessorInfoCompletableFutureRecord<P>(c, new CompletableFuture<ProcessorInfo<P>>())));
+			.forEach(c -> processors.put(c.getElement(), new ProcessorInfoCompletableFutureRecord<H,E,P>(c, new CompletableFuture<ProcessorInfo<H,E,P>>())));
 		
-		Stream<ProcessorInfoCompletableFutureRecord<P>> recordStream = processors.values().stream();
+		Stream<ProcessorInfoCompletableFutureRecord<H,E,P>> recordStream = processors.values().stream();
 		if (parallel) {
 			recordStream = recordStream.parallel();
 		}
 		List<CompletionStage<?>> stages = Collections.synchronizedList(new ArrayList<>());
-		BiConsumer<Element, BiConsumer<ProcessorInfo<P>,ProgressMonitor>> processorProvider = (e, bc) -> {
-			ProcessorInfoCompletableFutureRecord<P> rec = processors.get(e);
+		BiConsumer<Element, BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> processorProvider = (e, bc) -> {
+			ProcessorInfoCompletableFutureRecord<H,E,P> rec = processors.get(e);
 			if (rec != null) {
 				stages.add(rec.processorInfoCompletableFuture().thenAccept(pi -> bc.accept(pi, progressMonitor)));
 			}
@@ -112,7 +112,7 @@ public class ProcessorFactory<P> {
 		
 		onExceptionalCompletions(thrown);
 		
-		Map<Element, ProcessorInfo<P>> ret = new LinkedHashMap<>();
+		Map<Element, ProcessorInfo<H,E,P>> ret = new LinkedHashMap<>();
 		processors.forEach((e, r) -> ret.put(e, r.processorInfoCompletableFuture().join()));
 		return ret;		
 	}

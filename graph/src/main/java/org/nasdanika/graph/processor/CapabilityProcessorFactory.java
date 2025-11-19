@@ -21,7 +21,7 @@ import org.nasdanika.graph.Element;
  * @param <R> Processor requirement to be used by capability factories 
  * @param <P> Processor type
  */
-public class CapabilityProcessorFactory<R,P> extends ProcessorFactory<P> {
+public class CapabilityProcessorFactory<R,H,E,P> extends ProcessorFactory<H,E,P> {
 	
 	private CapabilityLoader capabilityLoader;
 	private R requirement;
@@ -29,9 +29,9 @@ public class CapabilityProcessorFactory<R,P> extends ProcessorFactory<P> {
 	private Class<?> handlerType;
 	private Class<?> endpointType;
 
-	public static record ProcessorRequirement<R,P>(
-			ProcessorConfig config, 
-			BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
+	public static record ProcessorRequirement<R,H,E,P>(
+			ProcessorConfig<H,E> config, 
+			BiConsumer<Element, BiConsumer<ProcessorInfo<H,E,P>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			Class<?> handlerType,
 			Class<?> endpointType,
@@ -52,13 +52,13 @@ public class CapabilityProcessorFactory<R,P> extends ProcessorFactory<P> {
 	}
 	
 	@Override
-	protected ProcessorInfo<P> createProcessor(
-		ProcessorConfig config, 
+	protected ProcessorInfo<H,E,P> createProcessor(
+		ProcessorConfig<H,E> config, 
 		boolean parallel,
-		BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
+		BiConsumer<Element, BiConsumer<ProcessorInfo<H,E,P>, ProgressMonitor>> infoProvider,
 		Consumer<CompletionStage<?>> endpointWiringStageConsumer, ProgressMonitor progressMonitor) {
 		
-		ProcessorRequirement<R,P> processorRequirement = new ProcessorRequirement<>(
+		ProcessorRequirement<R,H,E,P> processorRequirement = new ProcessorRequirement<>(
 				config, 
 				infoProvider, 
 				endpointWiringStageConsumer,
@@ -66,7 +66,7 @@ public class CapabilityProcessorFactory<R,P> extends ProcessorFactory<P> {
 				endpointType,
 				requirement);
 		
-		Requirement<ProcessorRequirement<R, P>, ?> serviceRequirement = ServiceCapabilityFactory.createRequirement(processorType, this::testFactory, processorRequirement);
+		Requirement<ProcessorRequirement<R,H,E,P>, ?> serviceRequirement = ServiceCapabilityFactory.createRequirement(processorType, this::testFactory, processorRequirement);
 		Iterable<CapabilityProvider<Object>> providers = capabilityLoader.load(serviceRequirement, progressMonitor);
 		return ProcessorInfo.of(config, select(providers));
 	}
@@ -103,7 +103,7 @@ public class CapabilityProcessorFactory<R,P> extends ProcessorFactory<P> {
 		return null;
 	}
 	
-	protected boolean testFactory(ServiceCapabilityFactory<ProcessorRequirement<R,P>,?> factory) {
+	protected boolean testFactory(ServiceCapabilityFactory<ProcessorRequirement<R,H,E,P>,?> factory) {
 		return true;		
 	}
 

@@ -13,7 +13,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertySource;
 import org.nasdanika.graph.Element;
 
-public abstract class PropertySourceInvocableFactory<K,V> extends PropertySourceProcessorFactory<Invocable,K,V> {
+public abstract class PropertySourceInvocableFactory<H,E,K,V> extends PropertySourceProcessorFactory<H,E,Invocable,K,V> {
 
 	protected PropertySourceInvocableFactory(CapabilityLoader capabilityLoader, K processorProperty) {
 		super(capabilityLoader, processorProperty);
@@ -23,7 +23,7 @@ public abstract class PropertySourceInvocableFactory<K,V> extends PropertySource
 		super(processorProperty);
 	}
 		
-	public <H,E,T> T createProxy(
+	public <T> T createProxy(
 			Collection<? extends Element> source,
 			K bindProperty,
 			EndpointFactory<H, E> endpointFactory, 
@@ -32,7 +32,7 @@ public abstract class PropertySourceInvocableFactory<K,V> extends PropertySource
 			ClassLoader classLoader, 			 
 			Class<?>... interfaces) {
 		
-		Map<Element, ProcessorInfo<Invocable>> processors = createProcessors(source, endpointFactory, parallel, progressMonitor);		
+		Map<Element, ProcessorInfo<H,E,Invocable>> processors = createProcessors(source, endpointFactory, parallel, progressMonitor);		
 		return Invocable.createProxy(classLoader, (proxy, method, args) -> resolve(proxy, method, args, processors, bindProperty), interfaces);		
 	}	
 	
@@ -42,11 +42,11 @@ public abstract class PropertySourceInvocableFactory<K,V> extends PropertySource
 			Object proxy,
 			Method method, 
 			Object[] args, 
-			Map<Element, ProcessorInfo<Invocable>> processors,
+			Map<Element, ProcessorInfo<H,E,Invocable>> processors,
 			K bindProperty) {
 		
 		List<Invocable> matches = new ArrayList<>();
-		for (Entry<Element, ProcessorInfo<Invocable>> pe: processors.entrySet()) {
+		for (Entry<Element, ProcessorInfo<H,E,Invocable>> pe: processors.entrySet()) {
 			if (pe.getKey() instanceof PropertySource) { 
 				@SuppressWarnings("unchecked")
 				V bindValue = ((PropertySource<K,V>) pe.getKey()).getProperty(bindProperty);
@@ -60,31 +60,5 @@ public abstract class PropertySourceInvocableFactory<K,V> extends PropertySource
 		}
 		return matches.isEmpty() ? null : Invocable.of(matches.toArray(size -> new Invocable[size]));
 	}
-	
-	/**
-	 * Creates processors with NOP endpoint factory
-	 * @param source
-	 * @param processorProperty
-	 * @param parallel
-	 * @param progressMonitor
-	 * @return
-	 */
-	public <T> T createProxy(
-			Collection<? extends Element> source,
-			K bindProperty,
-			boolean parallel,
-			ProgressMonitor progressMonitor,
-			ClassLoader classLoader, 			 
-			Class<?>... interfaces) {
-		
-		return createProxy(
-				source,
-				bindProperty,
-				EndpointFactory.nopEndpointFactory(),
-				parallel,
-				progressMonitor,
-				classLoader,
-				interfaces);
-	}	
 
 }

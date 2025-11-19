@@ -9,7 +9,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 
-public class ConnectionProcessorInfo<P, H, E> extends ProcessorInfo<P> implements ConnectionProcessorConfig<H, E> {
+public class ConnectionProcessorInfo<H,E,P> extends ProcessorInfo<H,E,P> implements ConnectionProcessorConfig<H,E> {
 	
 	/**
 	 * Functional interface for processor/info creation.
@@ -20,7 +20,7 @@ public class ConnectionProcessorInfo<P, H, E> extends ProcessorInfo<P> implement
 		ConnectionProcessorInfo<P,H,E> create(
 				ConnectionProcessorConfig<H,E> config, 
 				boolean parallel, 
-				BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+				BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
 				Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 				Context context,
 				ProgressMonitor progressMonitor);
@@ -31,31 +31,26 @@ public class ConnectionProcessorInfo<P, H, E> extends ProcessorInfo<P> implement
 		super(config, processor);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Connection getElement() {
 		return ((ConnectionProcessorConfig<H, E>) config).getElement();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public CompletionStage<E> getSourceEndpoint() {
 		return ((ConnectionProcessorConfig<H, E>) config).getSourceEndpoint();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setSourceHandler(H sourceHandler) {
 		((ConnectionProcessorConfig<H, E>) config).setSourceHandler(sourceHandler);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public CompletionStage<E> getTargetEndpoint() {
 		return ((ConnectionProcessorConfig<H, E>) config).getTargetEndpoint();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setTargetHandler(H targetHandler) {		
 		((ConnectionProcessorConfig<H, E>) config).setTargetHandler(targetHandler);

@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 import org.nasdanika.graph.Connection;
 
-class ConnectionProcessorConfigImpl<H,E> extends ProcessorConfigImpl implements ConnectionProcessorConfig<H, E> {
+class ConnectionProcessorConfigImpl<H,E> extends ProcessorConfigImpl<H,E> implements ConnectionProcessorConfig<H, E> {
 
 	private CompletableFuture<E> sourceEndpoint = new CompletableFuture<>();
 	private CompletableFuture<E> targetEndpoint = new CompletableFuture<>();
@@ -15,7 +15,6 @@ class ConnectionProcessorConfigImpl<H,E> extends ProcessorConfigImpl implements 
 	private Consumer<H> sourceHandlerConsumer;	
 	private Consumer<H> targetHandlerConsumer;
 	
-
 	ConnectionProcessorConfigImpl(Connection element) {
 		super(element);
 	}

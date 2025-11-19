@@ -25,7 +25,7 @@ import org.nasdanika.graph.processor.ProcessorInfo;
  * @param <W> Endpoint return type
  * @param <R> Registry type
  */
-public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFactory<BiFunction<T,ProgressMonitor,U>> {
+public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFactory<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>, BiFunction<T,ProgressMonitor,U>> {
 	
 	public interface NodeProcessor<T,U,V,W> extends BiFunction<T,ProgressMonitor,U> {
 		
@@ -64,15 +64,14 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 	}
 
 	@Override
-	protected ProcessorInfo<BiFunction<T, ProgressMonitor, U>> createProcessor(
-			ProcessorConfig config, 
+	protected ProcessorInfo<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>, BiFunction<T, ProgressMonitor, U>> createProcessor(
+			ProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>> config, 
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>, BiFunction<T, ProgressMonitor, U>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor) {
 		
 		if (config instanceof NodeProcessorConfig) {
-			@SuppressWarnings("unchecked")
 			NodeProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>> nodeProcessorConfig = (NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>>) config;
 
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> incomingEndpoints = new ConcurrentHashMap<>();
@@ -99,7 +98,6 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 		} 
 		
 		if (config instanceof ConnectionProcessorConfig) {
-			@SuppressWarnings("unchecked")
 			ConnectionProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>> connectionProcessorConfig = (ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>>) config;			
 			ConnectionProcessor<T,U,V,W> connectionProcessor = createConnectionProcessor(connectionProcessorConfig, parallel, infoProvider, endpointWiringStageConsumer, progressMonitor);
 			
@@ -131,7 +129,7 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 	protected abstract ConnectionProcessor<T,U,V,W> createConnectionProcessor(
 			ConnectionProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>> connectionProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>, BiFunction<T, ProgressMonitor, U>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 			
 			ProgressMonitor progressMonitor);
 
@@ -149,7 +147,7 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 	protected abstract NodeProcessor<T,U,V,W> createNodeProcessor(
 			NodeProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>> nodeProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>, BiFunction<T, ProgressMonitor, U>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 			 
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> incomingEndpoints,
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> outgoingEndpoints,			 

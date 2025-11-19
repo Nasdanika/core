@@ -17,7 +17,7 @@ import org.nasdanika.graph.Node;
  * @param <H> Handler type
  * @param <E> Endpoint type
  */
-public class NodeProcessorInfo<P, H, E> extends ProcessorInfo<P> implements NodeProcessorConfig<H, E> {
+public class NodeProcessorInfo<H,E,P> extends ProcessorInfo<H,E,P> implements NodeProcessorConfig<H, E> {
 	/**
 	 * Functional interface for processor/info creation.
 	 * @param <P>
@@ -27,7 +27,7 @@ public class NodeProcessorInfo<P, H, E> extends ProcessorInfo<P> implements Node
 		NodeProcessorInfo<P,H,E> create(
 				NodeProcessorConfig<H,E> config, 
 				boolean parallel, 
-				BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+				BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
 				Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 				Context context,
 				ProgressMonitor progressMonitor);
@@ -38,31 +38,26 @@ public class NodeProcessorInfo<P, H, E> extends ProcessorInfo<P> implements Node
 		super(config, processor);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Node getElement() {
 		return ((NodeProcessorConfig<H, E>) config).getElement();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
 		return ((NodeProcessorConfig<H, E>) config).getIncomingEndpoints();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<Connection, Consumer<H>> getIncomingHandlerConsumers() {
 		return ((NodeProcessorConfig<H, E>) config).getIncomingHandlerConsumers();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
 		return ((NodeProcessorConfig<H, E>) config).getOutgoingEndpoints();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<Connection, Consumer<H>> getOutgoingHandlerConsumers() {
 		return ((NodeProcessorConfig<H, E>) config).getOutgoingHandlerConsumers();

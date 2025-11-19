@@ -37,15 +37,14 @@ import org.nasdanika.graph.Element;
  * @param <U>
  * @param <S>
  */
-public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P> {
+public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E,P> {
 	
-	@SuppressWarnings("unchecked")
 	public void wireProcessor(
-			ProcessorConfig config,
+			ProcessorConfig<H,E> config,
 			P processor,
 			boolean hideWired,
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			ProgressMonitor progressMonitor) {
 		
@@ -54,7 +53,7 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 		
 		wireProcessorElement(processorAnnotatedElementRecordsStreamSupplier.get(), config.getElement());		
 		
-		Map<Element, ProcessorConfig> childProcessorConfigsCopy = new LinkedHashMap<>(config.getChildProcessorConfigs());
+		Map<Element, ProcessorConfig<H,E>> childProcessorConfigsCopy = new LinkedHashMap<>(config.getChildProcessorConfigs());
 		wireChildProcessor(
 				processorAnnotatedElementRecordsStreamSupplier.get(), 
 				config.getChildProcessorConfigs(), 
@@ -66,9 +65,9 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 				childProcessorConfigsCopy , 
 				infoProvider);
 		
-		ProcessorConfig parentConfig = config.getParentProcessorConfig();
+		ProcessorConfig<H,E> parentConfig = config.getParentProcessorConfig();
 		if (parentConfig != null) {			
-			Consumer<Consumer<ProcessorInfo<P>>> parentProcessorInfoConsumerCallback = parentProcessorInfoConsumer -> {
+			Consumer<Consumer<ProcessorInfo<H,E,P>>> parentProcessorInfoConsumerCallback = parentProcessorInfoConsumer -> {
 				infoProvider.accept(parentConfig.getElement(), (pInfo, pMonitor) -> parentProcessorInfoConsumer.accept(pInfo));
 			};
 			wireParentProcessor(processorAnnotatedElementRecordsStreamSupplier.get(), parentProcessorInfoConsumerCallback);
@@ -164,7 +163,7 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 
 	protected void wireParentProcessor(			
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Consumer<Consumer<ProcessorInfo<P>>> parentProcessorInfoProvider) {
+			Consumer<Consumer<ProcessorInfo<H,E,P>>> parentProcessorInfoProvider) {
 
 		processorAnnotatedElementRecords
 				.filter(aer -> aer.getAnnotation(ParentProcessor.class) != null)
@@ -181,15 +180,15 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 	 */
 	private void wireChildProcessor(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Map<Element, ProcessorConfig> childProcessorConfigs, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+			Map<Element, ProcessorConfig<H,E>> childProcessorConfigs, 
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
 			Consumer<Element> wiredChildrenConsumer) {		
 
 		processorAnnotatedElementRecords
 			.filter(aer -> aer.getAnnotation(ChildProcessor.class) != null)
 			.filter(aer -> aer.mustSet(null, "Fields/methods annotated with ChildProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if info is set to true: " + aer.getAnnotatedElement()))
 			.forEach(aer -> {
-				for (Entry<Element, ProcessorConfig> ce: childProcessorConfigs.entrySet()) {
+				for (Entry<Element, ProcessorConfig<H,E>> ce: childProcessorConfigs.entrySet()) {
 					ChildProcessor childProcessorAnnotation = aer.getAnnotation(ChildProcessor.class);
 					if (matchPredicate(ce.getKey(), childProcessorAnnotation.value())) {
 						infoProvider.accept(ce.getKey(), (childProcessorInfo, pMonitor) -> {
@@ -203,17 +202,17 @@ public class ReflectiveProcessorWirer<P, H, E> extends ReflectiveRegistryWirer<P
 
 	protected void wireChildProcessors(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Map<Element, ProcessorConfig> childProcessorConfigs,
-			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider) {		
+			Map<Element, ProcessorConfig<H,E>> childProcessorConfigs,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider) {		
 		
 		processorAnnotatedElementRecords
 				.filter(aer -> aer.getAnnotation(ChildProcessors.class) != null)
 				.filter(aer -> aer.mustSet(Map.class, "Fields/methods annotated with ChildProcessors must have (parameter) type assignable from Map: " + aer.getAnnotatedElement()))
 				.forEach(aer -> {
 					// Sets a map which is populated as processors get created
-					Map<Element,ProcessorInfo<P>> childProcessorInfoMap = Collections.synchronizedMap(new LinkedHashMap<>());
+					Map<Element,ProcessorInfo<H,E,P>> childProcessorInfoMap = Collections.synchronizedMap(new LinkedHashMap<>());
 					aer.set(childProcessorInfoMap);
-					for (ProcessorConfig childConfig: childProcessorConfigs.values()) {
+					for (ProcessorConfig<H,E> childConfig: childProcessorConfigs.values()) {
 						infoProvider.accept(childConfig.getElement(), (childInfo, cpm) -> childProcessorInfoMap.put(childConfig.getElement(), childInfo));
 					}
 				});

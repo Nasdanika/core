@@ -16,7 +16,7 @@ import org.nasdanika.graph.Element;
  * Creates processors by loading {@link Invocable}s by {@link URI} and calling them.
  * @param <P>
  */
-public abstract class URIInvocableCapabilityProcessorFactory<P> extends InvocableProcessorFactory<P> {
+public abstract class URIInvocableCapabilityProcessorFactory<H,E,P> extends InvocableProcessorFactory<H,E,P> {
 	
 	protected CapabilityLoader capabilityLoader;
 
@@ -30,9 +30,9 @@ public abstract class URIInvocableCapabilityProcessorFactory<P> extends Invocabl
 	
 	@Override
 	protected Invocable getProcessorFactory(
-			ProcessorConfig config, 
+			ProcessorConfig<H,E> config, 
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<H,E,P>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor) {
 		
@@ -45,6 +45,6 @@ public abstract class URIInvocableCapabilityProcessorFactory<P> extends Invocabl
 		return capabilityLoader.loadOne(requirement, progressMonitor);
 	}
 	
-	protected abstract URI getURI(ProcessorConfig config, ProgressMonitor progressMonitor);
+	protected abstract URI getURI(ProcessorConfig<H,E> config, ProgressMonitor progressMonitor);
 
 }

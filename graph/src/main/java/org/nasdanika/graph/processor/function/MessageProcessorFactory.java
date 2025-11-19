@@ -59,7 +59,7 @@ public abstract class MessageProcessorFactory<T,U,V,W,NS,CS> extends BiFunctionP
 	protected CS createConnectionProcessorState(
 			ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> connectionProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor) {
 		
@@ -70,9 +70,9 @@ public abstract class MessageProcessorFactory<T,U,V,W,NS,CS> extends BiFunctionP
 	protected ConnectionProcessor<T, U, V, W> createConnectionProcessor(
 			ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> connectionProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
-			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
-			ProgressMonitor progressMonitor) {
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer, ProgressMonitor progressMonitor) {
+		// TODO Auto-generated method stub
 	
 		CS state = createConnectionProcessorState(
 				connectionProcessorConfig, 
@@ -172,7 +172,7 @@ public abstract class MessageProcessorFactory<T,U,V,W,NS,CS> extends BiFunctionP
 	protected NS createNodeProcessorState(
 			NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> nodeProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,
@@ -185,7 +185,7 @@ public abstract class MessageProcessorFactory<T,U,V,W,NS,CS> extends BiFunctionP
 	protected NodeProcessor<T, U, V, W> createNodeProcessor(
 			NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> nodeProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,

@@ -15,7 +15,7 @@ import org.nasdanika.graph.Element;
  * If element is an instance of {@link PropertySource} then {@link URI} is retrieved from it - property value should either be a URI or a String. 
  * @param <P>
  */
-public abstract class PropertySourceProcessorFactory<P,K,V> extends URIInvocableCapabilityProcessorFactory<P> {
+public abstract class PropertySourceProcessorFactory<H,E,P,K,V> extends URIInvocableCapabilityProcessorFactory<H,E,P> {
 	protected CapabilityLoader capabilityLoader;
 	private K processorProperty;
 
@@ -29,7 +29,7 @@ public abstract class PropertySourceProcessorFactory<P,K,V> extends URIInvocable
 	}
 
 	@Override
-	protected URI getURI(ProcessorConfig config, ProgressMonitor progressMonitor) {
+	protected URI getURI(ProcessorConfig<H,E> config, ProgressMonitor progressMonitor) {
 		return getURI(config.getElement());
 	}
 
@@ -51,9 +51,9 @@ public abstract class PropertySourceProcessorFactory<P,K,V> extends URIInvocable
 	 * @param endpointFactory
 	 * @param processorProperty
 	 */
-	public <H,E> Map<Element, ProcessorInfo<P>> createProcessors(
+	public Map<Element, ProcessorInfo<H,E,P>> createProcessors(
 			Collection<? extends Element> source,
-			EndpointFactory<H, E> endpointFactory, 
+			EndpointFactory<H,E> endpointFactory, 
 			boolean parallel,
 			ProgressMonitor progressMonitor) {
 		ProcessorConfigFactory<H,E> processorConfigFactory = new ProcessorConfigFactory<H,E>() {
@@ -74,29 +74,9 @@ public abstract class PropertySourceProcessorFactory<P,K,V> extends URIInvocable
 			
 		};
 		
-		Transformer<Element,ProcessorConfig> processorConfigTransformer = new Transformer<>(processorConfigFactory);		
-		Map<Element, ProcessorConfig> configs = processorConfigTransformer.transform(source, parallel, progressMonitor);		
+		Transformer<Element,ProcessorConfig<H,E>> processorConfigTransformer = new Transformer<>(processorConfigFactory);		
+		Map<Element, ProcessorConfig<H,E>> configs = processorConfigTransformer.transform(source, parallel, progressMonitor);		
 		return createProcessors(configs.values(), parallel, progressMonitor);
 	}	
-	
-	/**
-	 * Creates processors with NOP endpoint factory
-	 * @param source
-	 * @param processorProperty
-	 * @param parallel
-	 * @param progressMonitor
-	 * @return
-	 */
-	public Map<Element, ProcessorInfo<P>> createNopEndpointProcessors(
-			Collection<? extends Element> source,
-			boolean parallel,
-			ProgressMonitor progressMonitor) {
-		
-		return createProcessors(
-				source,
-				EndpointFactory.nopEndpointFactory(),
-				parallel,
-				progressMonitor);
-	}
 	
 }

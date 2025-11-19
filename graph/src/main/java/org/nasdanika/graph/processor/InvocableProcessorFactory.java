@@ -13,14 +13,14 @@ import org.nasdanika.graph.Element;
  * Creates processors by loading {@link Invocable}s by {@link URI} and calling them.
  * @param <P>
  */
-public abstract class InvocableProcessorFactory<P> extends ReflectiveWiringProcessorFactory<P> {
+public abstract class InvocableProcessorFactory<H,E,P> extends ReflectiveWiringProcessorFactory<H,E,P> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected P doCreateProcessor(
-			ProcessorConfig config, 
+			ProcessorConfig<H,E> config, 
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<H,E,P>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor) {
 		
@@ -32,9 +32,9 @@ public abstract class InvocableProcessorFactory<P> extends ReflectiveWiringProce
 	}
 	
 	protected P createDefaultProcessor(
-			ProcessorConfig config, 
+			ProcessorConfig<H,E> config, 
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<H,E,P>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor) {
 		
@@ -42,9 +42,9 @@ public abstract class InvocableProcessorFactory<P> extends ReflectiveWiringProce
 	}
 
 	protected abstract Invocable getProcessorFactory(
-			ProcessorConfig config, 
+			ProcessorConfig<H,E> config, 
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<P>, ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<H,E,P>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor);
 

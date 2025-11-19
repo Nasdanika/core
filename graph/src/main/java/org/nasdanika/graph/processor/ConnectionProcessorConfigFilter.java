@@ -4,7 +4,7 @@ import java.util.concurrent.CompletionStage;
 
 import org.nasdanika.graph.Connection;
 
-public class ConnectionProcessorConfigFilter<H,E> extends ProcessorConfigFilter<ConnectionProcessorConfig<H,E>> implements ConnectionProcessorConfig<H,E> {
+public class ConnectionProcessorConfigFilter<H,E> extends ProcessorConfigFilter<H,E,ConnectionProcessorConfig<H,E>> implements ConnectionProcessorConfig<H,E> {
 	
 	public ConnectionProcessorConfigFilter(ConnectionProcessorConfig<H, E> config) {
 		super(config);

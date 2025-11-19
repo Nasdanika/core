@@ -21,7 +21,7 @@ public class BiFunctionConnectionProcessorImpl implements ConnectionProcessor<Ob
 	public BiFunctionConnectionProcessorImpl(
 			ConnectionProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> connectionProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endointWiringStageConsumer) {
 		
 		this.config = connectionProcessorConfig;		

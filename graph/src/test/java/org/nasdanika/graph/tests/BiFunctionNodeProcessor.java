@@ -26,7 +26,7 @@ public class BiFunctionNodeProcessor implements NodeProcessor<Object, Object, Ob
 	public BiFunctionNodeProcessor(
 			NodeProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> nodeProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> incomingEndpoints,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> outgoingEndpoints,

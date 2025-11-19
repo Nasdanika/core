@@ -17,7 +17,7 @@ public class ReflectiveProcessorFactory {
 	public Object createEObjectNodeProcessor(
 			NodeProcessorConfig<Function<Element,Element>,Function<Element,Element>> config, 
 			boolean parallel, 
-			Function<Element,CompletionStage<ProcessorInfo<Object>>> infoProvider,
+			Function<Element,CompletionStage<ProcessorInfo<Object,Object,Object>>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Function<ProgressMonitor, Object> next,
 			ProgressMonitor progressMonitor) {

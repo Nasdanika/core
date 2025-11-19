@@ -20,7 +20,7 @@ import org.nasdanika.graph.Element;
 /**
  * Invokes handlers asynchronously
  */
-public class AsyncInvocableConnectionProcessor implements AutoCloseable {
+public class AsyncInvocableConnectionProcessor<H,E> implements AutoCloseable {
 	
 	protected Executor executor;
 	private boolean shutdownExecutor;
@@ -44,8 +44,8 @@ public class AsyncInvocableConnectionProcessor implements AutoCloseable {
 			ProgressMonitor loaderProgressMonitor,
 			Object data,
 			String fragment,
-			ProcessorConfig config,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<Invocable>, ProgressMonitor>> infoProvider,
+			ProcessorConfig<H,E> config,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<H,E,Invocable>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			ProgressMonitor wiringProgressMonitor) {
 
@@ -77,15 +77,15 @@ public class AsyncInvocableConnectionProcessor implements AutoCloseable {
 	}
 	
 	@ParentProcessor(true)
-	public ProcessorInfo<Object> parentInfo;
+	public ProcessorInfo<H,E,Object> parentInfo;
 	
 	/**
 	 * Finds parent processor of type {@link Executor} or {@link Adaptable} to executor
 	 * @param parentInfo
 	 */
 	@Registry
-	public void setRegistry(Map<Element, ProcessorInfo<?>> registry) {
-		for (ProcessorInfo<?> pInfo = parentInfo; executor == null && pInfo != null; pInfo = registry.get(pInfo.getParentProcessorConfig().getElement())) {
+	public void setRegistry(Map<Element, ProcessorInfo<H,E,?>> registry) {
+		for (ProcessorInfo<H,E,?> pInfo = parentInfo; executor == null && pInfo != null; pInfo = registry.get(pInfo.getParentProcessorConfig().getElement())) {
 			executor = Adaptable.adaptTo(parentInfo.getProcessor(), Executor.class);
 		}
 	}

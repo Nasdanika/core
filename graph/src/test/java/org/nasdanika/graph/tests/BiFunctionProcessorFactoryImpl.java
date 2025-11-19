@@ -26,7 +26,7 @@ public class BiFunctionProcessorFactoryImpl extends BiFunctionProcessorFactory<O
 	protected ConnectionProcessor<Object, Object, Object, Object> createConnectionProcessor(
 			ConnectionProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> connectionProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor) {
 
@@ -37,7 +37,7 @@ public class BiFunctionProcessorFactoryImpl extends BiFunctionProcessorFactory<O
 	protected NodeProcessor<Object, Object, Object, Object> createNodeProcessor(
 			NodeProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> nodeProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> incomingEndpoints,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> outgoingEndpoints,

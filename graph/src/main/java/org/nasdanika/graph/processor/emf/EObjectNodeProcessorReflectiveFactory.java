@@ -63,7 +63,7 @@ public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
 	public Object createEObjectNodeProcessor(
 			NodeProcessorConfig<H,E> config, 
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,Object>,ProgressMonitor>> infoProvider,
 			Function<ProgressMonitor, Object> next,			
 			ProgressMonitor progressMonitor) {
 		EObject eObj = ((EObjectNode) config.getElement()).get();

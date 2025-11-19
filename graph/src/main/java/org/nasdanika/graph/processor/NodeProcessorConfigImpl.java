@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Node;
 
-class NodeProcessorConfigImpl<H,E> extends ProcessorConfigImpl implements NodeProcessorConfig<H, E> {
+class NodeProcessorConfigImpl<H,E> extends ProcessorConfigImpl<H,E> implements NodeProcessorConfig<H, E> {
 
 	// Endpoints are created for each connection and completed when a handler is passes to a corresponding handler consumer.
 	private Map<Connection, CompletableFuture<E>> incomingEndpoints;
@@ -24,8 +24,8 @@ class NodeProcessorConfigImpl<H,E> extends ProcessorConfigImpl implements NodePr
 
 	NodeProcessorConfigImpl(Node node) {
 		super(node);
-		incomingEndpoints = node.getIncomingConnections().stream().collect(Collectors.toUnmodifiableMap(c -> c, c -> new CompletableFuture<E>()));
-		outgoingEndpoints = node.getOutgoingConnections().stream().collect(Collectors.toUnmodifiableMap(c -> c, c -> new CompletableFuture<E>()));
+		incomingEndpoints = node.getIncomingConnections().stream().collect(Collectors.toUnmodifiableMap(Function.identity(), c -> new CompletableFuture<E>()));
+		outgoingEndpoints = node.getOutgoingConnections().stream().collect(Collectors.toUnmodifiableMap(Function.identity(), c -> new CompletableFuture<E>()));
 	}
 	
 	// --- Client API ---

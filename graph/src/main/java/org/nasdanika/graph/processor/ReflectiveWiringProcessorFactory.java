@@ -11,15 +11,15 @@ import org.nasdanika.graph.Element;
  * Base clsss for processor factories reflectively wiring processors.
  * @param <P>
  */
-public abstract class ReflectiveWiringProcessorFactory<P> extends ProcessorFactory<P> {
+public abstract class ReflectiveWiringProcessorFactory<H,E,P> extends ProcessorFactory<H,E,P> {
 	
-	ReflectiveProcessorWirer<P,?,?> wirerer = new ReflectiveProcessorWirer<>();
+	ReflectiveProcessorWirer<H,E,P> wirerer = new ReflectiveProcessorWirer<>();
 
 	@Override
-	protected ProcessorInfo<P> createProcessor(
-			ProcessorConfig config, 
+	protected ProcessorInfo<H,E,P> createProcessor(
+			ProcessorConfig<H,E> config, 
 			boolean parallel,
-			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			ProgressMonitor progressMonitor) {
 		
@@ -45,9 +45,9 @@ public abstract class ReflectiveWiringProcessorFactory<P> extends ProcessorFacto
 	}
 
 	protected abstract P doCreateProcessor(
-			ProcessorConfig config, 
+			ProcessorConfig<H,E> config, 
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			ProgressMonitor progressMonitor); 
 		
