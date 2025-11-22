@@ -12,40 +12,48 @@ class ConnectionProcessorConfigImpl<H,E> extends ProcessorConfigImpl<H,E> implem
 	private CompletableFuture<E> sourceEndpoint = new CompletableFuture<>();
 	private CompletableFuture<E> targetEndpoint = new CompletableFuture<>();
 	
-	private Consumer<H> sourceHandlerConsumer;	
-	private Consumer<H> targetHandlerConsumer;
+	private CompletableFuture<H> sourceHandlerConsumer = new CompletableFuture<H>();	
+	private CompletableFuture<H> targetHandlerConsumer = new CompletableFuture<H>();
 	
-	ConnectionProcessorConfigImpl(Connection element) {
-		super(element);
+	ConnectionProcessorConfigImpl(Connection element, Function<H,E> clientEndpointFactory, Function<H,E> processorEndpointFactory) {
+		super(element, clientEndpointFactory, processorEndpointFactory);
 	}
 	
 	@Override
 	public Connection getElement() {
 		return (Connection) super.getElement();
 	}
-
+	
 	@Override
-	public CompletionStage<E> getSourceEndpoint() {
-		return sourceEndpoint;
+	public Synapse<H, E> getSourceSynapse() {
+		return new Synapse<H,E>() {
+
+			@Override
+			public CompletionStage<E> getEndpoint() {
+				return sourceEndpoint;
+			}
+
+			@Override
+			public boolean setHandler(H handler) {
+				return sourceHandlerConsumer.complete(handler);
+			}
+		};
 	}
-
+	
 	@Override
-	public void setSourceHandler(H sourceHandler) {
-		if (sourceHandlerConsumer != null) {
-			sourceHandlerConsumer.accept(sourceHandler);
-		}
-	}
+	public Synapse<H, E> getTargetSynapse() {
+		return new Synapse<H,E>() {
 
-	@Override
-	public CompletionStage<E> getTargetEndpoint() {
-		return targetEndpoint;
-	}
+			@Override
+			public CompletionStage<E> getEndpoint() {
+				return targetEndpoint;
+			}
 
-	@Override
-	public void setTargetHandler(H targetHandler) {
-		if (targetHandlerConsumer != null) {
-			targetHandlerConsumer.accept(targetHandler);
-		}
+			@Override
+			public boolean setHandler(H handler) {
+				return targetHandlerConsumer.complete(handler);
+			}
+		};
 	}
 	
 	// --- Wiring methods ---
@@ -54,14 +62,14 @@ class ConnectionProcessorConfigImpl<H,E> extends ProcessorConfigImpl<H,E> implem
 	 * Source handler endpoint is source's outgoing endpoint for this connection  
 	 */
 	void wireSourceHandlerEndpoint(Function<H,E> endpointFactory, Consumer<E> endpointConsumer) {		
-		sourceHandlerConsumer =	handler ->  endpointConsumer.accept(endpointFactory.apply(handler));		
+		sourceHandlerConsumer.thenApply(endpointFactory).thenAccept(endpointConsumer);		
 	}
 	
 	/**
 	 * Target handler endpoint is target's incoming endpoint for this connection  
 	 */
 	void wireTargetHandlerEndpoint(Function<H,E> endpointFactory, Consumer<E> endpointConsumer) {		
-		targetHandlerConsumer = handler ->  endpointConsumer.accept(endpointFactory.apply(handler));		
+		targetHandlerConsumer.thenApply(endpointFactory).thenAccept(endpointConsumer);		
 	}
 	
 	void setSourceEndpoint(E se) {

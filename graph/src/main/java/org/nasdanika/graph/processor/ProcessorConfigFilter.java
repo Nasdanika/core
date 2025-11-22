@@ -2,8 +2,7 @@ package org.nasdanika.graph.processor;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.CompletionStage;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import org.nasdanika.graph.Element;
 
@@ -36,33 +35,24 @@ public class ProcessorConfigFilter<H, E, C extends ProcessorConfig<H,E>> impleme
 	}
 
 	@Override
-	public Map<Element, CompletionStage<E>> getChildEndpoints() {
-		return config.getChildEndpoints();
+	public Map<Element, Synapse<H, E>> getChildSynapses() {
+		return config.getChildSynapses();
 	}
 
 	@Override
-	public Map<Element, Consumer<H>> getChildHandlerConsumers() {
-		return config.getChildHandlerConsumers();
+	public Synapse<H, E> getParentSynapse() {
+		return config.getParentSynapse();
 	}
 
 	@Override
-	public CompletionStage<E> getParentEndpoint() {
-		return config.getParentEndpoint();
+	public Synapse<H, E> getClientSynapse(Object clientKey) {
+		return config.getClientSynapse(clientKey);
 	}
-
+	
 	@Override
-	public void setParentHandler(H parentHandler) {
-		config.setParentHandler(parentHandler);		
-	}
-
-	@Override
-	public CompletionStage<E> getClientEndpoint() {
-		return config.getClientEndpoint();
-	}
-
-	@Override
-	public void setClientHandler(H clientHandler) {
-		config.setClientHandler(clientHandler);		
+	public void setProcessorSynapseConsumer(BiConsumer<Object, Synapse<H, E>> processorSynapseConsumer) {
+		config.setProcessorSynapseConsumer(processorSynapseConsumer);
+		
 	}
 
 }

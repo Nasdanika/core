@@ -37,23 +37,13 @@ public class ConnectionProcessorInfo<H,E,P> extends ProcessorInfo<H,E,P> impleme
 	}
 
 	@Override
-	public CompletionStage<E> getSourceEndpoint() {
-		return ((ConnectionProcessorConfig<H, E>) config).getSourceEndpoint();
+	public Synapse<H, E> getSourceSynapse() {
+		return ((ConnectionProcessorConfig<H, E>) config).getSourceSynapse();
 	}
 
 	@Override
-	public void setSourceHandler(H sourceHandler) {
-		((ConnectionProcessorConfig<H, E>) config).setSourceHandler(sourceHandler);
-	}
-
-	@Override
-	public CompletionStage<E> getTargetEndpoint() {
-		return ((ConnectionProcessorConfig<H, E>) config).getTargetEndpoint();
-	}
-
-	@Override
-	public void setTargetHandler(H targetHandler) {		
-		((ConnectionProcessorConfig<H, E>) config).setTargetHandler(targetHandler);
+	public Synapse<H, E> getTargetSynapse() {
+		return ((ConnectionProcessorConfig<H, E>) config).getTargetSynapse();
 	}
 
 }

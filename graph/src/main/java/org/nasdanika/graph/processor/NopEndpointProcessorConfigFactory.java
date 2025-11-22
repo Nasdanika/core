@@ -1,6 +1,6 @@
 package org.nasdanika.graph.processor;
 
-import org.nasdanika.graph.Connection;
+import org.nasdanika.graph.Element;
 
 /**
  * Mix-in interface for processor factories with no-operation endpoints.
@@ -15,7 +15,7 @@ public class NopEndpointProcessorConfigFactory<H> extends ProcessorConfigFactory
 	 * Returns argument handler.
 	 */
 	@Override
-	public H createEndpoint(Connection connection, H handler, HandlerType type) {
+	public H createEndpoint(Element element, H handler, HandlerType type) {
 		return handler;
 	}
 	

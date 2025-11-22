@@ -44,23 +44,13 @@ public class NodeProcessorInfo<H,E,P> extends ProcessorInfo<H,E,P> implements No
 	}
 
 	@Override
-	public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
-		return ((NodeProcessorConfig<H, E>) config).getIncomingEndpoints();
+	public Map<Connection, Synapse<H, E>> getIncomingSynapses() {
+		return ((NodeProcessorConfig<H, E>) config).getIncomingSynapses();
 	}
 
 	@Override
-	public Map<Connection, Consumer<H>> getIncomingHandlerConsumers() {
-		return ((NodeProcessorConfig<H, E>) config).getIncomingHandlerConsumers();
-	}
-
-	@Override
-	public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
-		return ((NodeProcessorConfig<H, E>) config).getOutgoingEndpoints();
-	}
-
-	@Override
-	public Map<Connection, Consumer<H>> getOutgoingHandlerConsumers() {
-		return ((NodeProcessorConfig<H, E>) config).getOutgoingHandlerConsumers();
+	public Map<Connection, Synapse<H, E>> getOutgoingSynapses() {
+		return ((NodeProcessorConfig<H, E>) config).getOutgoingSynapses();
 	}
 
 }

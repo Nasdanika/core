@@ -55,8 +55,8 @@ public abstract class AbstractElementInvocableCommand<H,E,T> extends CommandBase
 		})
 	private ConnectionBase connectionBase;	
 	
-	protected ElementInvocableFactory createFactory(ProgressMonitor progressMonitor) {
-		return new ElementInvocableFactory(documentSupplier.getDocument(null), processorProperty);
+	protected ElementInvocableFactory<H,E> createFactory(ProgressMonitor progressMonitor) {
+		return new ElementInvocableFactory<H,E>(documentSupplier.getDocument(null), processorProperty);
 	}
 		
 	protected ClassLoader getClassLoader(ProgressMonitor progressMonitor) {
@@ -69,7 +69,7 @@ public abstract class AbstractElementInvocableCommand<H,E,T> extends CommandBase
 	}
 	
 	protected T createProxy(ProgressMonitor progressMonitor, Class<?>... interfaces) {
-		ElementInvocableFactory factory = createFactory(progressMonitor);
+		ElementInvocableFactory<H,E> factory = createFactory(progressMonitor);
 		return factory.createProxy(
 				bindProperty, 
 				getEndpointFactory(progressMonitor), 

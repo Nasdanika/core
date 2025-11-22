@@ -1,7 +1,5 @@
 package org.nasdanika.graph.processor;
 
-import java.util.concurrent.CompletionStage;
-
 import org.nasdanika.graph.Connection;
 
 public class ConnectionProcessorConfigFilter<H,E> extends ProcessorConfigFilter<H,E,ConnectionProcessorConfig<H,E>> implements ConnectionProcessorConfig<H,E> {
@@ -15,20 +13,14 @@ public class ConnectionProcessorConfigFilter<H,E> extends ProcessorConfigFilter<
 		return config.getElement();
 	}
 
-	public CompletionStage<E> getSourceEndpoint() {
-		return config.getSourceEndpoint();
+	@Override
+	public Synapse<H, E> getSourceSynapse() {
+		return config.getSourceSynapse();
 	}
-	
-	public void setSourceHandler(H sourceHandler) {
-		config.setSourceHandler(sourceHandler);
-	}
-	
-	public CompletionStage<E> getTargetEndpoint() {
-		return config.getTargetEndpoint();
-	}
-	
-	public void setTargetHandler(H targetHandler) {
-		config.setTargetHandler(targetHandler);
+
+	@Override
+	public Synapse<H, E> getTargetSynapse() {
+		return config.getTargetSynapse();
 	}
 	
 }

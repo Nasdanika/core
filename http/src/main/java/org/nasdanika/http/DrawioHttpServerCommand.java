@@ -94,7 +94,7 @@ public class DrawioHttpServerCommand extends AbstractHttpServerCommand {
 			
 			Map<org.nasdanika.graph.Element,Component> components = new HashMap<>();
 			
-			ElementProcessorFactory<Object> elementProcessorFactory = new ElementProcessorFactory<Object>(
+			ElementProcessorFactory<Object,Object,Object> elementProcessorFactory = new ElementProcessorFactory<Object,Object,Object>(
 					document, 
 					getCapabilityLoader(), 
 					processorProperty) {
@@ -104,9 +104,9 @@ public class DrawioHttpServerCommand extends AbstractHttpServerCommand {
 				 */
 				@Override
 				protected Object doCreateProcessor(
-						ProcessorConfig config, 
+						ProcessorConfig<Object,Object> config, 
 						boolean parallel,
-						BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<Object>, ProgressMonitor>> infoProvider,
+						BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<Object,Object,Object>, ProgressMonitor>> infoProvider,
 						Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 						ProgressMonitor progressMonitor) {
 					
@@ -120,7 +120,7 @@ public class DrawioHttpServerCommand extends AbstractHttpServerCommand {
 			};
 			
 			EndpointFactory<Object,Object> endpointFactory = null; // TODO - option, invocable.
-			Map<Element, ProcessorInfo<Object>> processors = elementProcessorFactory.createProcessors(endpointFactory , connectionBase, progressMonitor);
+			Map<Element, ProcessorInfo<Object,Object,Object>> processors = elementProcessorFactory.createProcessors(endpointFactory , connectionBase, progressMonitor);
 			
 			// Starting
 			start(document, components, progressMonitor);

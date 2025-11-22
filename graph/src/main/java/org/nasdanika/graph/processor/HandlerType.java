@@ -7,6 +7,14 @@ package org.nasdanika.graph.processor;
  */
 public enum HandlerType {
 	
+	PARENT,
+	
+	CHILD,
+	
+	CLIENT,
+	
+	PROCESSOR,
+	
 	/**
 	 * Connection's target handler to invoke source node outgoing endpoint for this connection.
 	 */

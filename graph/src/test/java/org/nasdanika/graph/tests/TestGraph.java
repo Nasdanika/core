@@ -102,6 +102,6 @@ public class TestGraph {
 	@Test
 	public void testGraphFactorySequential() {
 		testGraphFactory(false, 200, 10);
-	}			
+	}
 	
 }

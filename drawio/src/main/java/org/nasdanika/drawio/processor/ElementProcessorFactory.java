@@ -19,7 +19,7 @@ import org.nasdanika.graph.processor.PropertySourceProcessorFactory;
  * Creates processors for {@link org.nasdanika.drawio.Element}.
  * @param <P>
  */
-public class ElementProcessorFactory<P> extends PropertySourceProcessorFactory<P,String,String> {
+public class ElementProcessorFactory<H,E,P> extends PropertySourceProcessorFactory<H,E,P,String,String> {
 
 	protected org.nasdanika.drawio.Element element;
 
@@ -45,7 +45,7 @@ public class ElementProcessorFactory<P> extends PropertySourceProcessorFactory<P
 	 * @param endpointFactory
 	 * @param processorProperty
 	 */
-	public <H,E> Map<Element, ProcessorInfo<P>> createProcessors(
+	public Map<Element, ProcessorInfo<H,E,P>> createProcessors(
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
 			ProgressMonitor progressMonitor) {
@@ -60,24 +60,6 @@ public class ElementProcessorFactory<P> extends PropertySourceProcessorFactory<P
 				false,
 				progressMonitor);
 	}	
-	
-	/**
-	 * Creates processors with NOP endpoint factory
-	 * @param source
-	 * @param processorProperty
-	 * @param parallel
-	 * @param progressMonitor
-	 * @return
-	 */
-	public Map<Element, ProcessorInfo<P>> createNopEndpointProcessors(
-			ConnectionBase connectionBase,
-			ProgressMonitor progressMonitor) {
-		
-		return createProcessors(
-				EndpointFactory.nopEndpointFactory(),
-				connectionBase,
-				progressMonitor);
-	}
 
 	@Override
 	protected URI getURI(String value) {

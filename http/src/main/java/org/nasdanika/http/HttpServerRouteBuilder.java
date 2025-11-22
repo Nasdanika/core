@@ -27,12 +27,12 @@ public interface HttpServerRouteBuilder {
 	void buildRoutes(HttpServerRoutes routes); 
 		
 	@SuppressWarnings("unchecked")
-	private static <P> void buildRoutes(
-			Collection<ProcessorInfo<P>> processorInfos,
-			Function<ProcessorInfo<P>, Route> routeProvider,
+	private static <H,E,P> void buildRoutes(
+			Collection<ProcessorInfo<H,E,P>> processorInfos,
+			Function<ProcessorInfo<H,E,P>, Route> routeProvider,
 			HttpServerRoutes routes) {
 				
-		for (ProcessorInfo<P> pInfo: processorInfos) {
+		for (ProcessorInfo<H,E,P> pInfo: processorInfos) {
 			P processor = pInfo.getProcessor();
 			if (processor != null) {
 				HttpServerRouteBuilder httpServerRouteBuilder = Adaptable.adaptTo(processor, HttpServerRouteBuilder.class);
@@ -90,12 +90,12 @@ public interface HttpServerRouteBuilder {
 	 * @param routes
 	 */
 	@SuppressWarnings("unchecked")
-	static <P> void buildRoutes(
-			Collection<ProcessorInfo<P>> processorInfos,
+	static <H,E,P> void buildRoutes(
+			Collection<ProcessorInfo<H,E,P>> processorInfos,
 			String routeProperty,
 			HttpServerRoutes routes) {
 		
-		Function<ProcessorInfo<P>, Route> routeProvider = pInfo -> {
+		Function<ProcessorInfo<H,E,P>, Route> routeProvider = pInfo -> {
 			if (pInfo.getElement() instanceof PropertySource) {			
 				Object routeVal = ((PropertySource<Object, Object>) pInfo.getElement()).getProperty(routeProperty);
 				if (routeVal == null) {

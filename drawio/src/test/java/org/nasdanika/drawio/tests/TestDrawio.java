@@ -61,9 +61,9 @@ import org.nasdanika.graph.processor.ProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
+import org.nasdanika.graph.processor.Synapse;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory;
 import org.nasdanika.graph.processor.function.MessageProcessorFactory;
-import org.nasdanika.graph.processor.function.ReflectiveBiFunctionProcessorFactoryProvider;
 
 public class TestDrawio {
 
@@ -373,38 +373,36 @@ public class TestDrawio {
 		NopEndpointProcessorConfigFactory<Function<String,String>> processorConfigFactory = new NopEndpointProcessorConfigFactory<>();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		
-		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
-		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
+		Transformer<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>,Function<String,String>>> transformer = new Transformer<>(processorConfigFactory);
+		Map<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>,Function<String,String>>> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
 		
 		@SuppressWarnings("unchecked")
 		NodeProcessorConfig<Function<String, String>, Function<String, String>> aliceProcessorConfig = (NodeProcessorConfig<Function<String, String>, Function<String, String>>) configs.get(aliceNode);
 		assertThat(aliceProcessorConfig.getChildProcessorConfigs() == null || aliceProcessorConfig.getChildProcessorConfigs().isEmpty()).isTrue();
-		assertThat(aliceProcessorConfig.getIncomingEndpoints()).isEmpty();
-		assertThat(aliceProcessorConfig.getIncomingHandlerConsumers()).isEmpty();
-		assertThat(aliceProcessorConfig.getOutgoingEndpoints().size()).isEqualTo(1);
-		assertThat(aliceProcessorConfig.getOutgoingHandlerConsumers().size()).isEqualTo(1);
+		assertThat(aliceProcessorConfig.getIncomingSynapses()).isEmpty();
+		assertThat(aliceProcessorConfig.getOutgoingSynapses().size()).isEqualTo(1);
 		
-		aliceProcessorConfig.getOutgoingHandlerConsumers().forEach((connection, handlerConsumer) -> {
-			handlerConsumer.accept(request -> {
+		aliceProcessorConfig.getOutgoingSynapses().forEach((connection, synapse) -> {
+			synapse.setHandler(request -> {
 				String myName = ((Node) connection.getSource()).getLabel();
 				return request + System.lineSeparator() + "[" + myName + "] My name is " + myName + ".";
 			});
 		});
 		
-		for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> outgoingEndpointCompletionStageEntry: aliceProcessorConfig.getOutgoingEndpoints().entrySet()) {
-			outgoingEndpointCompletionStageEntry.getValue().thenAccept(outgoingEndpoint -> {
+		for (Entry<org.nasdanika.graph.Connection, Synapse<Function<String, String>, Function<String, String>>> outgoingEndpointCompletionStageEntry: aliceProcessorConfig.getOutgoingSynapses().entrySet()) {
+			outgoingEndpointCompletionStageEntry.getValue().getEndpoint().thenAccept(outgoingEndpoint -> {
 				String dialog = outgoingEndpoint.apply("[" + ((Node) outgoingEndpointCompletionStageEntry.getKey().getSource()).getLabel() + "] Hello!");
 				System.out.println(dialog);				
 			});
 		}
 		
-		ProcessorFactory<Object> processorFactory = new ProcessorFactory<Object>() {
+		ProcessorFactory<Function<String,String>,Function<String,String>,Object> processorFactory = new ProcessorFactory<Function<String,String>,Function<String,String>,Object>() {
 			
 			@Override
-			protected ProcessorInfo<Object> createProcessor(
-					ProcessorConfig config, 
+			protected ProcessorInfo<Function<String,String>,Function<String,String>,Object> createProcessor(
+					ProcessorConfig<Function<String,String>,Function<String,String>> config, 
 					boolean parallel, 
-					BiConsumer<org.nasdanika.graph.Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> inforProvider,
+					BiConsumer<org.nasdanika.graph.Element,BiConsumer<ProcessorInfo<Function<String,String>,Function<String,String>,Object>,ProgressMonitor>> inforProvider,
 					Consumer<java.util.concurrent.CompletionStage<?>> endpointWiringStageConsumer, 
 					ProgressMonitor progressMonitor) {
 				
@@ -414,17 +412,15 @@ public class TestDrawio {
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
 						// Wiring
 						assertThat(nodeProcessorConfig.getChildProcessorConfigs() == null || nodeProcessorConfig.getChildProcessorConfigs().isEmpty()).isTrue();
-						assertThat(nodeProcessorConfig.getOutgoingEndpoints()).isEmpty();
-						assertThat(nodeProcessorConfig.getOutgoingHandlerConsumers()).isEmpty();
-						assertThat(nodeProcessorConfig.getIncomingEndpoints().size()).isEqualTo(1);
-						assertThat(nodeProcessorConfig.getIncomingHandlerConsumers().size()).isEqualTo(1);
+						assertThat(nodeProcessorConfig.getOutgoingSynapses()).isEmpty();
+						assertThat(nodeProcessorConfig.getIncomingSynapses().size()).isEqualTo(1);
 						
 						// Bob ask Alice and then replies to Alice
-						nodeProcessorConfig.getIncomingHandlerConsumers().forEach((connection, handlerConsumer) -> {
-							handlerConsumer.accept(request -> {
+						nodeProcessorConfig.getIncomingSynapses().forEach((connection, synapse) -> {
+							synapse.setHandler(request -> {
 								StringBuilder sb = new StringBuilder(request).append(System.lineSeparator());
-								for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> incomingEndpointCompletionStageEntry: nodeProcessorConfig.getIncomingEndpoints().entrySet()) {
-									incomingEndpointCompletionStageEntry.getValue().thenAccept(incomingEndpoint -> {
+								for (Entry<org.nasdanika.graph.Connection, Synapse<Function<String, String>, Function<String, String>>> incomingSynapseEntry: nodeProcessorConfig.getIncomingSynapses().entrySet()) {
+									incomingSynapseEntry.getValue().getEndpoint().thenAccept(incomingEndpoint -> {
 										String myName = ((Node) connection.getTarget()).getLabel();
 										sb.append(incomingEndpoint.apply("[" + myName + "] Hi, my name is " + myName + ". What is your name?"));										
 									});
@@ -441,7 +437,7 @@ public class TestDrawio {
 			}
 		};
 		
-		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> processors = processorFactory.createProcessors(
+		Map<org.nasdanika.graph.Element, ProcessorInfo<Function<String,String>,Function<String,String>,Object>> processors = processorFactory.createProcessors(
 				configs
 					.values()
 					.stream()
@@ -450,9 +446,9 @@ public class TestDrawio {
 				false, 
 				progressMonitor);
 		
-		for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> outgoingEndpointCompletionStageEntry: aliceProcessorConfig.getOutgoingEndpoints().entrySet()) {
-			outgoingEndpointCompletionStageEntry.getValue().thenAccept(outgoingEndpoint -> {
-				String dialog = outgoingEndpoint.apply("[" + ((Node) outgoingEndpointCompletionStageEntry.getKey().getSource()).getLabel() + "] Hello!");
+		for (Entry<org.nasdanika.graph.Connection, Synapse<Function<String, String>, Function<String, String>>> outgoingSynapseEntry: aliceProcessorConfig.getOutgoingSynapses().entrySet()) {
+			outgoingSynapseEntry.getValue().getEndpoint().thenAccept(outgoingEndpoint -> {
+				String dialog = outgoingEndpoint.apply("[" + ((Node) outgoingSynapseEntry.getKey().getSource()).getLabel() + "] Hello!");
 				System.out.println(dialog);				
 			});
 		}
@@ -489,38 +485,36 @@ public class TestDrawio {
 			
 		};
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
-		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
+		Transformer<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>,Function<String,String>>> transformer = new Transformer<>(processorConfigFactory);
+		Map<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>,Function<String,String>>> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
 		
 		@SuppressWarnings("unchecked")
 		NodeProcessorConfig<Function<String, String>, Function<String, String>> aliceProcessorConfig = (NodeProcessorConfig<Function<String, String>, Function<String, String>>) configs.get(aliceNode);
 		assertThat(aliceProcessorConfig.getChildProcessorConfigs() == null || aliceProcessorConfig.getChildProcessorConfigs().isEmpty()).isTrue();
-		assertThat(aliceProcessorConfig.getIncomingEndpoints()).isEmpty();
-		assertThat(aliceProcessorConfig.getIncomingHandlerConsumers()).isEmpty();
-		assertThat(aliceProcessorConfig.getOutgoingEndpoints().size()).isEqualTo(1);
-		assertThat(aliceProcessorConfig.getOutgoingHandlerConsumers().size()).isEqualTo(1);
+		assertThat(aliceProcessorConfig.getIncomingSynapses()).isEmpty();
+		assertThat(aliceProcessorConfig.getOutgoingSynapses().size()).isEqualTo(1);
 		
-		aliceProcessorConfig.getOutgoingHandlerConsumers().forEach((connection, handlerConsumer) -> {
-			handlerConsumer.accept(request -> {
+		aliceProcessorConfig.getOutgoingSynapses().forEach((connection, synapse) -> {
+			synapse.setHandler(request -> {
 				String myName = ((Node) connection.getSource()).getLabel();
 				return request + System.lineSeparator() + "[" + myName + "] My name is " + myName + ".";
 			});
 		});
 		
-		for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> outgoingEndpointCompletionStageEntry: aliceProcessorConfig.getOutgoingEndpoints().entrySet()) {
-			outgoingEndpointCompletionStageEntry.getValue().thenAccept(outgoingEndpoint -> {
-				String dialog = outgoingEndpoint.apply("[" + ((Node) outgoingEndpointCompletionStageEntry.getKey().getSource()).getLabel() + "] Hello!");
+		for (Entry<org.nasdanika.graph.Connection, Synapse<Function<String, String>, Function<String, String>>> outgoingSynapseEntry: aliceProcessorConfig.getOutgoingSynapses().entrySet()) {
+			outgoingSynapseEntry.getValue().getEndpoint().thenAccept(outgoingEndpoint -> {
+				String dialog = outgoingEndpoint.apply("[" + ((Node) outgoingSynapseEntry.getKey().getSource()).getLabel() + "] Hello!");
 				System.out.println(dialog);				
 			});
 		}
 		
-		ProcessorFactory<Object> processorFactory = new ProcessorFactory<Object>() {
+		ProcessorFactory<Function<String,String>,Function<String,String>,Object> processorFactory = new ProcessorFactory<Function<String,String>,Function<String,String>,Object>() {
 			
 			@Override
-			protected ProcessorInfo<Object> createProcessor(
-					ProcessorConfig config, 
+			protected ProcessorInfo<Function<String,String>,Function<String,String>,Object> createProcessor(
+					ProcessorConfig<Function<String,String>,Function<String,String>> config, 
 					boolean parallel, 
-					BiConsumer<org.nasdanika.graph.Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> inforProvider,
+					BiConsumer<org.nasdanika.graph.Element,BiConsumer<ProcessorInfo<Function<String,String>,Function<String,String>,Object>,ProgressMonitor>> inforProvider,
 					Consumer<java.util.concurrent.CompletionStage<?>> endpointWiringStageConsumer, 
 					ProgressMonitor progressMonitor) {
 				
@@ -530,17 +524,15 @@ public class TestDrawio {
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
 						// Wiring
 						assertThat(nodeProcessorConfig.getChildProcessorConfigs() == null || nodeProcessorConfig.getChildProcessorConfigs().isEmpty()).isTrue();
-						assertThat(nodeProcessorConfig.getOutgoingEndpoints()).isEmpty();
-						assertThat(nodeProcessorConfig.getOutgoingHandlerConsumers()).isEmpty();
-						assertThat(nodeProcessorConfig.getIncomingEndpoints().size()).isEqualTo(1);
-						assertThat(nodeProcessorConfig.getIncomingHandlerConsumers().size()).isEqualTo(1);
+						assertThat(nodeProcessorConfig.getOutgoingSynapses()).isEmpty();
+						assertThat(nodeProcessorConfig.getIncomingSynapses().size()).isEqualTo(1);
 						
 						// Bob ask Alice and then replies to Alice
-						nodeProcessorConfig.getIncomingHandlerConsumers().forEach((connection, handlerConsumer) -> {
-							handlerConsumer.accept(request -> {
+						nodeProcessorConfig.getIncomingSynapses().forEach((connection, synapse) -> {
+							synapse.setHandler(request -> {
 								StringBuilder sb = new StringBuilder(request).append(System.lineSeparator());
-								for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> incomingEndpointCompletionStageEntry: nodeProcessorConfig.getIncomingEndpoints().entrySet()) {
-									incomingEndpointCompletionStageEntry.getValue().thenAccept(incomingEndpoint -> {
+								for (Entry<org.nasdanika.graph.Connection, Synapse<Function<String, String>, Function<String, String>>> incomingSynapseEntry: nodeProcessorConfig.getIncomingSynapses().entrySet()) {
+									incomingSynapseEntry.getValue().getEndpoint().thenAccept(incomingEndpoint -> {
 										String myName = ((Node) connection.getTarget()).getLabel();
 										sb.append(incomingEndpoint.apply("[" + myName + "] Hi, my name is " + myName + ". What is your name?"));										
 									});
@@ -554,8 +546,8 @@ public class TestDrawio {
 				} else if (config instanceof ConnectionProcessorConfig) {
 					@SuppressWarnings("unchecked")
 					ConnectionProcessorConfig<Function<String, String>, Function<String, String>> connectionProcessorConfig = (ConnectionProcessorConfig<Function<String, String>, Function<String, String>>) config;
-					endpointWiringStageConsumer.accept(connectionProcessorConfig.getTargetEndpoint().thenAccept(targetEndpoint -> {
-						connectionProcessorConfig.setSourceHandler(new Function<String, String>() {
+					endpointWiringStageConsumer.accept(connectionProcessorConfig.getTargetSynapse().getEndpoint().thenAccept(targetEndpoint -> {
+						connectionProcessorConfig.getSourceSynapse().setHandler(new Function<String, String>() {
 							
 							@Override
 							public String apply(String str) {
@@ -565,8 +557,8 @@ public class TestDrawio {
 						});						
 					}));
 					
-					endpointWiringStageConsumer.accept(connectionProcessorConfig.getSourceEndpoint().thenAccept(sourceEndpoint -> {
-						connectionProcessorConfig.setTargetHandler(new Function<String, String>() {
+					endpointWiringStageConsumer.accept(connectionProcessorConfig.getSourceSynapse().getEndpoint().thenAccept(sourceEndpoint -> {
+						connectionProcessorConfig.getTargetSynapse().setHandler(new Function<String, String>() {
 							
 							@Override
 							public String apply(String str) {
@@ -582,11 +574,11 @@ public class TestDrawio {
 			}
 		};
 		
-		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> processors = processorFactory.createProcessors(configs.values(), false, progressMonitor);
+		Map<org.nasdanika.graph.Element, ProcessorInfo<Function<String,String>,Function<String,String>,Object>> processors = processorFactory.createProcessors(configs.values(), false, progressMonitor);
 		
-		for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> outgoingEndpointCompletionStageEntry: aliceProcessorConfig.getOutgoingEndpoints().entrySet()) {
-			outgoingEndpointCompletionStageEntry.getValue().thenAccept(outgoingEndpoint -> {
-				String dialog = outgoingEndpoint.apply("[" + ((Node) outgoingEndpointCompletionStageEntry.getKey().getSource()).getLabel() + "] Hello!");
+		for (Entry<org.nasdanika.graph.Connection, Synapse<Function<String, String>, Function<String, String>>> outgoingSynapseEntry: aliceProcessorConfig.getOutgoingSynapses().entrySet()) {
+			outgoingSynapseEntry.getValue().getEndpoint().thenAccept(outgoingEndpoint -> {
+				String dialog = outgoingEndpoint.apply("[" + ((Node) outgoingSynapseEntry.getKey().getSource()).getLabel() + "] Hello!");
 				System.out.println(dialog);				
 			});
 		}
@@ -603,10 +595,10 @@ public class TestDrawio {
 			
 		};
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
-		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
+		Transformer<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>,Function<String,String>>> transformer = new Transformer<>(processorConfigFactory);
+		Map<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>,Function<String,String>>> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
 		
-		ReflectiveProcessorFactoryProvider<Object, Function<String, String>,Function<String, String>> processorFactoryProvider = new ReflectiveProcessorFactoryProvider<>(new AliceBobProcessorFactory()) {
+		ReflectiveProcessorFactoryProvider<Function<String, String>,Function<String, String>,Object> processorFactoryProvider = new ReflectiveProcessorFactoryProvider<>(new AliceBobProcessorFactory()) {
 			/**
 			 * A trick around module things - test classes are not exported.
 			 * @param target
@@ -672,9 +664,9 @@ public class TestDrawio {
 		};
 		
 		AliceBobProcessorRegistry registry = new AliceBobProcessorRegistry();
-		ProcessorFactory<Object> processorFactory = processorFactoryProvider.getFactory(registry);				
-		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> processors = processorFactory.createProcessors(configs.values(), false, progressMonitor);
-		for (Entry<org.nasdanika.graph.Element, ProcessorInfo<Object>> pe: processors.entrySet()) {
+		ProcessorFactory<Function<String,String>,Function<String,String>,Object> processorFactory = processorFactoryProvider.getFactory(registry);				
+		Map<org.nasdanika.graph.Element, ProcessorInfo<Function<String,String>,Function<String,String>,Object>> processors = processorFactory.createProcessors(configs.values(), false, progressMonitor);
+		for (Entry<org.nasdanika.graph.Element, ProcessorInfo<Function<String,String>,Function<String,String>,Object>> pe: processors.entrySet()) {
 			org.nasdanika.graph.Element element = pe.getKey();
 			if (element instanceof ModelElement) {
 				System.out.println(((ModelElement) element).getLabel());
@@ -723,8 +715,8 @@ public class TestDrawio {
 		};
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();				
-		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
-		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
+		Transformer<org.nasdanika.graph.Element, ProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>>> transformer = new Transformer<>(processorConfigFactory);
+		Map<org.nasdanika.graph.Element, ProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>>> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
 
 		BiFunctionProcessorFactory<String, CompletionStage<String>, String, CompletionStage<String>> processorFactory = new BiFunctionProcessorFactory<String, CompletionStage<String>, String, CompletionStage<String>>() {
 
@@ -732,7 +724,7 @@ public class TestDrawio {
 			protected ConnectionProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createConnectionProcessor(
 					ConnectionProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>> connectionProcessorConfig,
 					boolean parallel,
-					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>,ProgressMonitor>> infoProvider,
+					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>,BiFunction<String, ProgressMonitor, CompletionStage<String>>>,ProgressMonitor>> infoProvider,
 					Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 					ProgressMonitor progressMonitor) {
 
@@ -743,7 +735,7 @@ public class TestDrawio {
 			protected NodeProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createNodeProcessor(
 					NodeProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>> nodeProcessorConfig,
 					boolean parallel,
-					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>,ProgressMonitor>> processorInfo,
+					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>,BiFunction<String, ProgressMonitor, CompletionStage<String>>>,ProgressMonitor>> processorInfo,
 					Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 					Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> incomingEndpoints,
 					Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> outgoingEndpoints,
@@ -759,7 +751,12 @@ public class TestDrawio {
 			}
 		};
 				
-		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>> processors = processorFactory.createProcessors(configs.values(), true, progressMonitor);
+		Map<
+			org.nasdanika.graph.Element, 
+			ProcessorInfo<
+				BiFunction<String, ProgressMonitor, CompletionStage<String>>,
+				BiFunction<String, ProgressMonitor, CompletionStage<String>>,
+				BiFunction<String, ProgressMonitor, CompletionStage<String>>>> processors = processorFactory.createProcessors(configs.values(), true, progressMonitor);
 		
 		BiFunction<String, ProgressMonitor, CompletionStage<String>> processor = processors.get(startNode).getProcessor();
 		processor.apply("First", progressMonitor).thenAccept(System.out::println);
@@ -774,39 +771,39 @@ public class TestDrawio {
 	@Test
 	@Disabled("Does not work unless the module is open so ReflectiveTarget can be accessed using reflection")
 	public void testAsyncReflectiveComputeGraph() throws Exception {
-		Document document = Document.load(getClass().getResource("compute-graph.drawio"));
-		
-		Optional<Node> startOptional = document
-				.stream()
-				.filter(Node.class::isInstance)
-				.map(Node.class::cast)
-				.filter(n -> "Start".equals(n.getLabel()))
-				.findAny();
-			
-			assertThat(startOptional.isPresent()).isTrue();		
-			Node startNode = startOptional.get();		
-		
-		NopEndpointProcessorConfigFactory<Function<String,String>> processorConfigFactory = new NopEndpointProcessorConfigFactory<>() {
-			
-			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
-				return false;
-			};
-			
-		};
-		
-		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();				
-		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
-		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
-
-		ReflectiveTarget reflectiveTarget = new ReflectiveTarget();
-		ReflectiveBiFunctionProcessorFactoryProvider<String, CompletionStage<String>, String, CompletionStage<String>> processorFactoryProvider = new ReflectiveBiFunctionProcessorFactoryProvider<>(reflectiveTarget);
-		BiFunctionProcessorFactory<String, CompletionStage<String>, String, CompletionStage<String>> processorFactory = processorFactoryProvider.getFactory();
-		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>> processors = processorFactory.createProcessors(configs.values(), true, progressMonitor);
-		
-		BiFunction<String, ProgressMonitor, CompletionStage<String>> processor = processors.get(startNode).getProcessor();
-		processor.apply("First", progressMonitor).thenAccept(System.out::println);
-		processor.apply("Second", progressMonitor).thenAccept(System.out::println);
-		processor.apply("Third", progressMonitor).thenAccept(System.out::println);			
+//		Document document = Document.load(getClass().getResource("compute-graph.drawio"));
+//		
+//		Optional<Node> startOptional = document
+//				.stream()
+//				.filter(Node.class::isInstance)
+//				.map(Node.class::cast)
+//				.filter(n -> "Start".equals(n.getLabel()))
+//				.findAny();
+//			
+//			assertThat(startOptional.isPresent()).isTrue();		
+//			Node startNode = startOptional.get();		
+//		
+//		NopEndpointProcessorConfigFactory<Function<String,String>> processorConfigFactory = new NopEndpointProcessorConfigFactory<>() {
+//			
+//			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
+//				return false;
+//			};
+//			
+//		};
+//		
+//		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();				
+//		Transformer<org.nasdanika.graph.Element, ProcessorConfig<Object,Object>> transformer = new Transformer<>(processorConfigFactory);
+//		Map<org.nasdanika.graph.Element, ProcessorConfig<Object,Object>> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
+//
+//		ReflectiveTarget reflectiveTarget = new ReflectiveTarget();
+//		ReflectiveBiFunctionProcessorFactoryProvider<String, CompletionStage<String>, String, CompletionStage<String>> processorFactoryProvider = new ReflectiveBiFunctionProcessorFactoryProvider<>(reflectiveTarget);
+//		BiFunctionProcessorFactory<String, CompletionStage<String>, String, CompletionStage<String>> processorFactory = processorFactoryProvider.getFactory();
+//		Map<org.nasdanika.graph.Element, ProcessorInfo<Object,Object,BiFunction<String, ProgressMonitor, CompletionStage<String>>>> processors = processorFactory.createProcessors(configs.values(), true, progressMonitor);
+//		
+//		BiFunction<String, ProgressMonitor, CompletionStage<String>> processor = processors.get(startNode).getProcessor();
+//		processor.apply("First", progressMonitor).thenAccept(System.out::println);
+//		processor.apply("Second", progressMonitor).thenAccept(System.out::println);
+//		processor.apply("Third", progressMonitor).thenAccept(System.out::println);			
 	}
 	
 	
@@ -872,8 +869,8 @@ public class TestDrawio {
 			
 		};
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();				
-		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
-		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
+		Transformer<org.nasdanika.graph.Element, ProcessorConfig<Object,Object>> transformer = new Transformer<>(processorConfigFactory);
+		Map<org.nasdanika.graph.Element, ProcessorConfig<Object,Object>> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
 		System.out.println(configs.size());
 	}
 	
@@ -977,14 +974,14 @@ public class TestDrawio {
 			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
 				return false;
 			}
-
+			
 			@Override
 			public BiFunction<TestMessage, ProgressMonitor, Void> createEndpoint(
-					org.nasdanika.graph.Connection connection, 
+					org.nasdanika.graph.Element element, 
 					BiFunction<TestMessage, ProgressMonitor, Void> handler,
 					HandlerType type) {
 				return (m, p) -> {
-					System.out.println("Passing message through " + connection + ", handler type: " + type);					
+					System.out.println("Passing message through " + element + ", handler type: " + type);					
 					handler.apply(m, p);
 					return null;
 				};
@@ -994,8 +991,8 @@ public class TestDrawio {
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		
-		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
-		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
+		Transformer<org.nasdanika.graph.Element, ProcessorConfig<BiFunction<TestMessage, ProgressMonitor, Void>, BiFunction<TestMessage, ProgressMonitor, Void>>> transformer = new Transformer<>(processorConfigFactory);
+		Map<org.nasdanika.graph.Element, ProcessorConfig<BiFunction<TestMessage, ProgressMonitor, Void>, BiFunction<TestMessage, ProgressMonitor, Void>>> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
 				
 		MessageProcessorFactory<TestMessage,Void,TestMessage,Void,Void,Void> processorFactory = new MessageProcessorFactory<TestMessage,Void,TestMessage,Void,Void,Void>() {
 
@@ -1052,7 +1049,7 @@ public class TestDrawio {
 			
 		};
 		
-		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<TestMessage, ProgressMonitor, Void>>> processors = processorFactory.createProcessors(
+		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<TestMessage, ProgressMonitor, Void>, BiFunction<TestMessage, ProgressMonitor, Void>,BiFunction<TestMessage, ProgressMonitor, Void>>> processors = processorFactory.createProcessors(
 				configs					
 					.values()
 					.stream()
@@ -1061,7 +1058,7 @@ public class TestDrawio {
 				false, 
 				progressMonitor);
 		
-		for (Entry<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<TestMessage, ProgressMonitor, Void>>> pe: processors.entrySet()) {
+		for (Entry<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<TestMessage, ProgressMonitor, Void>, BiFunction<TestMessage, ProgressMonitor, Void>,BiFunction<TestMessage, ProgressMonitor, Void>>> pe: processors.entrySet()) {
 			if (pe.getKey() instanceof Node) {
 				System.out.println("===");
 				TestMessage nodeMessage = new TestMessage(null, null, "Root message to " + pe.getKey());

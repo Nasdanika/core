@@ -1,15 +1,9 @@
 package org.nasdanika.drawio.gen.section;
 
-import java.util.Comparator;
 import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.drawio.ModelElement;
-import org.nasdanika.drawio.comparators.CartesianNodeComparator;
-import org.nasdanika.drawio.comparators.CartesianNodeComparator.Direction;
-import org.nasdanika.drawio.comparators.FlowComparator;
-import org.nasdanika.drawio.comparators.LabelModelElementComparator;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
@@ -81,10 +75,10 @@ public class Configuration  {
 	 * @param infoProvider
 	 * @param progressMonitor
 	 */
-	public <T> T filter(
-			ProcessorConfig config, 
+	public <H,E,T> T filter(
+			ProcessorConfig<H,E> config, 
 			T processor, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,Object>,ProgressMonitor>> infoProvider,
 			ProgressMonitor progressMonitor) {
 		
 		return processor;

@@ -19,7 +19,7 @@ public class AliceBobProcessorFactory {
 	public AliceProcessor createAliceProcessor(
 			NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<Function<String,String>,Function<String,String>,Object>,ProgressMonitor>> infoProvider,
 			Function<ProgressMonitor, Object> next,
 			ProgressMonitor progressMonitor) {
 		return new AliceProcessor();
@@ -29,7 +29,7 @@ public class AliceBobProcessorFactory {
 	public BobProcessor createBobProcessor(
 			NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<Function<String,String>,Function<String,String>,Object>,ProgressMonitor>> infoProvider,
 			Function<ProgressMonitor, Object> next,
 			ProgressMonitor progressMonitor) {
 		return new BobProcessor();
@@ -39,7 +39,7 @@ public class AliceBobProcessorFactory {
 	public BobHouseProcessor createBobHouseProcessor(
 			NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<Function<String,String>,Function<String,String>,Object>,ProgressMonitor>> infoProvider,
 			Function<ProgressMonitor, Object> next,
 			ProgressMonitor progressMonitor) {
 		return new BobHouseProcessor();
@@ -52,7 +52,7 @@ public class AliceBobProcessorFactory {
 		public Function<String,String> createLibraryProcessor(
 				NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 				boolean parallel, 
-				BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+				BiConsumer<Element,BiConsumer<ProcessorInfo<Function<String,String>,Function<String,String>,Object>,ProgressMonitor>> infoProvider,
 				Function<ProgressMonitor, Object> next,
 				ProgressMonitor progressMonitor) {
 			return question -> "Answer to " + question;
@@ -64,7 +64,7 @@ public class AliceBobProcessorFactory {
 	public AliceBobConnectionProcessor createAliceBobConnectionProcessor(
 			ConnectionProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<Function<String,String>,Function<String,String>,Object>,ProgressMonitor>> infoProvider,
 			Function<ProgressMonitor, Object> next,
 			ProgressMonitor progressMonitor) {
 		return new AliceBobConnectionProcessor();

@@ -16,6 +16,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.graph.Element;
+import org.nasdanika.graph.processor.EndpointFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.xml.sax.SAXException;
 
@@ -58,16 +59,18 @@ public class DiagramCapabilityFactory extends AbstractCapabilityFactory<DiagramR
 				return wrap(document);
 			}
 			
-			ElementInvocableFactory elementInvocableFactory = new ElementInvocableFactory(requirement.selector() == null ? document : (org.nasdanika.drawio.Element) requirement.selector().apply(document), requirement.processor());
+			ElementInvocableFactory<Object,Object> elementInvocableFactory = new ElementInvocableFactory<>(requirement.selector() == null ? document : (org.nasdanika.drawio.Element) requirement.selector().apply(document), requirement.processor());
 			if (requirement.bind() == null) {
 				// Processors
-				Map<Element, ProcessorInfo<Object>> processors = elementInvocableFactory.createProcessors(null, false, progressMonitor);						
+				Map<Element, ProcessorInfo<Object,Object,Object>> processors = elementInvocableFactory.createProcessors(null, false, progressMonitor);						
 				return wrap(processors);
 			}
 			
+			EndpointFactory<Object,Object> endpointFactory = EndpointFactory.nopEndpointFactory();
 			java.util.function.Function<Object,Object> proxy = elementInvocableFactory.createProxy(
 					requirement.bind(),
-					null,
+					endpointFactory,
+					null, 
 					progressMonitor,
 					requirement.classLoader(),
 					requirement.interfaces());

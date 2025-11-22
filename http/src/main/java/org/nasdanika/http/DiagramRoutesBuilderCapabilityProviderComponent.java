@@ -51,7 +51,7 @@ public class DiagramRoutesBuilderCapabilityProviderComponent extends CapabilityP
 
 	private String routeProperty; 	
 	
-	private Map<Element, ProcessorInfo<Object>> processors;
+	private Map<Element, ProcessorInfo<Object,Object,Object>> processors;
 	
 	public DiagramRoutesBuilderCapabilityProviderComponent(
 			URI documentURI,
@@ -85,7 +85,7 @@ public class DiagramRoutesBuilderCapabilityProviderComponent extends CapabilityP
 		document = Document.load(documentURI, context); 
 		
 		org.nasdanika.drawio.Element element = selector == null ? document : selector.apply(document);
-		ElementProcessorFactory<Object> elementProcessorFactory = new ElementProcessorFactory<Object>(
+		ElementProcessorFactory<Object,Object,Object> elementProcessorFactory = new ElementProcessorFactory<Object,Object,Object>(
 				element , 
 				loader.getCapabilityLoader(), 
 				processorProperty) {
@@ -95,9 +95,9 @@ public class DiagramRoutesBuilderCapabilityProviderComponent extends CapabilityP
 			 */
 			@Override
 			protected Object doCreateProcessor(
-					ProcessorConfig config, 
+					ProcessorConfig<Object,Object> config, 
 					boolean parallel,
-					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<Object>, ProgressMonitor>> infoProvider,
+					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<Object,Object,Object>, ProgressMonitor>> infoProvider,
 					Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 					ProgressMonitor progressMonitor) {
 				

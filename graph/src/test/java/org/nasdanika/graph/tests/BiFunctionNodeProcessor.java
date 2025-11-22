@@ -42,8 +42,8 @@ public class BiFunctionNodeProcessor implements NodeProcessor<Object, Object, Ob
 	public Object apply(Object arg, ProgressMonitor progressMonitor) {
 		int counter = 0; 
 
-		assertEquals(config.getIncomingEndpoints().size(), incomingEndpoints.size());
-		assertEquals(config.getOutgoingEndpoints().size(), outgoingEndpoints.size());
+		assertEquals(config.getIncomingSynapses().size(), incomingEndpoints.size());
+		assertEquals(config.getOutgoingSynapses().size(), outgoingEndpoints.size());
 		
 		for (Entry<Connection, BiFunction<Object, ProgressMonitor, Object>> ie: incomingEndpoints.entrySet()) {			
 			Object ret = ie.getValue().apply(config.getElement(), progressMonitor);			

@@ -616,7 +616,7 @@ public class TestEObjectGraph {
 	
 			@Override
 			public BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>> createEndpoint(
-					Connection connection, 
+					Element element, 
 					BiFunction<TestMessage, ProgressMonitor, Integer> handler,
 					HandlerType type) {
 				
@@ -668,7 +668,7 @@ public class TestEObjectGraph {
 	
 			@Override
 			public BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>> createEndpoint(
-					Connection connection, 
+					Element element, 
 					BiFunction<TestMessage, ProgressMonitor, Integer> handler,
 					HandlerType type) {
 				
@@ -750,7 +750,7 @@ public class TestEObjectGraph {
 	
 			@Override
 			public BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>> createEndpoint(
-					Connection connection, 
+					Element element, 
 					BiFunction<TestMessage, ProgressMonitor, Integer> handler,
 					HandlerType type) {
 				

@@ -20,6 +20,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.nasdanika.common.Invocable;
@@ -38,6 +39,20 @@ import org.nasdanika.graph.Element;
  * @param <S>
  */
 public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E,P> {
+	
+	private static <K,H,E> Map<K,CompletionStage<E>> endpointsMap(Map<K,Synapse<H,E>> synapses) {
+		return synapses
+				.entrySet()
+				.stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getEndpoint()));
+	}
+	
+	private static <K,H,E> Map<K,Consumer<H>> handlerConsumersMap(Map<K,Synapse<H,E>> synapses) {
+		return synapses
+				.entrySet()
+				.stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()::setHandler));
+	}
 	
 	public void wireProcessor(
 			ProcessorConfig<H,E> config,
@@ -88,24 +103,69 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 				config.getRegistry().values(), 
 				infoProvider);
 		
+		Synapse<H, E> parentSynapse = config.getParentSynapse();
+		if (parentSynapse != null) {
+			Consumer<E> parentEndpointConsumer = wireParentEndpoint(processorAnnotatedElementRecordsStreamSupplier.get());
+			if (parentEndpointConsumer != null) {
+				endpointWiringStageConsumer.accept(parentSynapse.getEndpoint().thenAccept(parentEndpointConsumer));
+			}			
+			wireParentHandler(processorAnnotatedElementRecordsStreamSupplier.get(), parentSynapse);
+		}
+				
+		Map<Element, CompletionStage<E>> unwiredChildEndpoints = new LinkedHashMap<>(endpointsMap(config.getChildSynapses())); // Making a copy to remove wired on completion 
+		wireChildEndpoint(
+				processorAnnotatedElementRecordsStreamSupplier.get(), 
+				endpointsMap(config.getChildSynapses()), 
+				progressMonitor)
+		.forEach(r -> {
+			if (r.consume()) {
+				unwiredChildEndpoints.remove(r.element());
+			}
+			endpointWiringStageConsumer.accept(r.result());
+		});
+		
+		wireChildEndpoints(processorAnnotatedElementRecordsStreamSupplier.get(), unwiredChildEndpoints);
+		
+		Map<Element, Consumer<H>> childHandlerConsumers = handlerConsumersMap(config.getChildSynapses());
+		Collection<Object> wiredHandlerChildren = wireChildHandler(processorAnnotatedElementRecordsStreamSupplier.get(), childHandlerConsumers);
+		Map<Element, Consumer<H>> unwiredChildHandlerConsumers;
+		if (hideWired) {
+			unwiredChildHandlerConsumers = new LinkedHashMap<>(childHandlerConsumers);
+			unwiredChildHandlerConsumers.keySet().removeAll(wiredHandlerChildren);
+		} else {
+			unwiredChildHandlerConsumers = childHandlerConsumers;
+		}
+		wireChildHandlerConsumers(processorAnnotatedElementRecordsStreamSupplier.get(), unwiredChildHandlerConsumers);
+		
+		config.setProcessorSynapseConsumer((clientKey, synapse) -> {			
+			wireClientEndpoint(
+					processorAnnotatedElementRecordsStreamSupplier.get(), 
+					clientKey,
+					synapse.getEndpoint(), 
+					progressMonitor)
+			.forEach(r -> r.result().toCompletableFuture().join());
+			
+			wireClientHandler(processorAnnotatedElementRecordsStreamSupplier.get(), clientKey, synapse::setHandler);
+		});
+		
 		if (config instanceof NodeProcessorConfig) {
 			NodeProcessorConfig<H, E> nodeProcessorConfig = (NodeProcessorConfig<H, E>) config;
-			Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = new LinkedHashMap<>(nodeProcessorConfig.getIncomingEndpoints()); // Making a copy to remove wired on completion 
+			Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = new LinkedHashMap<>(endpointsMap(nodeProcessorConfig.getIncomingSynapses())); // Making a copy to remove wired on completion 
 			wireIncomingEndpoint(
 					processorAnnotatedElementRecordsStreamSupplier.get(), 
-					nodeProcessorConfig.getIncomingEndpoints(), 
+					endpointsMap(nodeProcessorConfig.getIncomingSynapses()), 
 					progressMonitor)
 			.forEach(r -> {
 				if (r.consume()) {
-					unwiredIncomingEndpoints.remove(r.connection());
+					unwiredIncomingEndpoints.remove(r.element());
 				}
 				endpointWiringStageConsumer.accept(r.result());
 			});
 			
 			wireIncomingEndpoints(processorAnnotatedElementRecordsStreamSupplier.get(), unwiredIncomingEndpoints);
 			
-			Map<Connection, Consumer<H>> incomingHandlerConsumers = nodeProcessorConfig.getIncomingHandlerConsumers();
-			Collection<Connection> wiredHandlerIncomingConnections = wireIncomingHandler(processorAnnotatedElementRecordsStreamSupplier.get(), incomingHandlerConsumers);
+			Map<Connection, Consumer<H>> incomingHandlerConsumers = handlerConsumersMap(nodeProcessorConfig.getIncomingSynapses());
+			Collection<Object> wiredHandlerIncomingConnections = wireIncomingHandler(processorAnnotatedElementRecordsStreamSupplier.get(), incomingHandlerConsumers);
 			Map<Connection, Consumer<H>> unwiredIncomingHandlerConsumers;
 			if (hideWired) {
 				unwiredIncomingHandlerConsumers = new LinkedHashMap<>(incomingHandlerConsumers);
@@ -115,21 +175,21 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			}
 			wireIncomingHandlerConsumers(processorAnnotatedElementRecordsStreamSupplier.get(), unwiredIncomingHandlerConsumers);
 			
-			Map<Connection, CompletionStage<E>> outgoingEndpoints = new LinkedHashMap<>(nodeProcessorConfig.getOutgoingEndpoints()); // Making a copy to removed wired on completion
+			Map<Connection, CompletionStage<E>> outgoingEndpoints = new LinkedHashMap<>(endpointsMap(nodeProcessorConfig.getOutgoingSynapses())); // Making a copy to removed wired on completion
 			wireOutgoingEndpoint(
 					processorAnnotatedElementRecordsStreamSupplier.get(), 
 					outgoingEndpoints, 
 					progressMonitor)
 			.forEach(r -> {
 				if (r.consume()) {
-					outgoingEndpoints.remove(r.connection());
+					outgoingEndpoints.remove(r.element());
 				}
 				endpointWiringStageConsumer.accept(r.result());
 			});
 			wireOutgoingEndpoints(processorAnnotatedElementRecordsStreamSupplier.get(), outgoingEndpoints);
 			
-			Map<Connection, Consumer<H>> outgoingHandlerConsumers = nodeProcessorConfig.getOutgoingHandlerConsumers(); 
-			Collection<Connection> wiredHandlerOutgoingConnections = wireOutgoingHandler(processorAnnotatedElementRecordsStreamSupplier.get(), outgoingHandlerConsumers);
+			Map<Connection, Consumer<H>> outgoingHandlerConsumers = handlerConsumersMap(nodeProcessorConfig.getOutgoingSynapses()); 
+			Collection<Object> wiredHandlerOutgoingConnections = wireOutgoingHandler(processorAnnotatedElementRecordsStreamSupplier.get(), outgoingHandlerConsumers);
 			Map<Connection, Consumer<H>> unwiredOutgoingHandlerConsumers;
 			if (hideWired) {
 				unwiredOutgoingHandlerConsumers = new LinkedHashMap<>(outgoingHandlerConsumers);
@@ -142,13 +202,13 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			ConnectionProcessorConfig<H, E> connectionProcessorConfig = (ConnectionProcessorConfig<H, E>) config;
 			Consumer<E> sourceEndpointConsumer = wireSourceEndpoint(processorAnnotatedElementRecordsStreamSupplier.get());
 			if (sourceEndpointConsumer != null) {
-				endpointWiringStageConsumer.accept(connectionProcessorConfig.getSourceEndpoint().thenAccept(sourceEndpointConsumer));
+				endpointWiringStageConsumer.accept(connectionProcessorConfig.getSourceSynapse().getEndpoint().thenAccept(sourceEndpointConsumer));
 			}			
 			wireSourceHandler(processorAnnotatedElementRecordsStreamSupplier.get(), connectionProcessorConfig);
 			
 			Consumer<E> targetEndpointConsumer = wireTargetEndpoint(processorAnnotatedElementRecordsStreamSupplier.get());
 			if (targetEndpointConsumer != null) {			
-				endpointWiringStageConsumer.accept(connectionProcessorConfig.getTargetEndpoint().thenAccept(targetEndpointConsumer));
+				endpointWiringStageConsumer.accept(connectionProcessorConfig.getTargetSynapse().getEndpoint().thenAccept(targetEndpointConsumer));
 			}
 			wireTargetHandler(processorAnnotatedElementRecordsStreamSupplier.get(), connectionProcessorConfig);
 		}
@@ -222,7 +282,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 	 * Matches processor field or method and incoming connection.
 	 * @return
 	 */
-	protected boolean matchIncomingHandler(AnnotatedElement handlerMember, Connection incomingConnection) {
+	protected boolean matchIncomingHandler(AnnotatedElement handlerMember, Object incomingConnection) {
 		IncomingHandler incomingHandlerAnnotation = handlerMember.getAnnotation(IncomingHandler.class);
 		if (incomingHandlerAnnotation == null) {
 			return false;
@@ -252,27 +312,27 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 	 * @return Wired connections
 	 */
 	@SuppressWarnings("unchecked")
-	protected Collection<Connection> wireIncomingHandler(
+	protected Collection<Object> wireIncomingHandler(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
 			Map<Connection, Consumer<H>> incomingHandlerConsumers) {		
 
-		Set<Connection> wired = Collections.synchronizedSet(new HashSet<>());
+		Set<Object> wired = Collections.synchronizedSet(new HashSet<>());
 
 		// Streaming fields and methods and then flat mapping them to all permutations with incoming handler consumers.
 		// then filtering using matchIncomingHandler, sorting by priority, for all matching - wiring and removing from ret.
 		processorAnnotatedElementRecords
-			.filter(aer -> !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
-			.flatMap(aer -> incomingHandlerConsumers.entrySet().stream().map(ihce -> new ConnectionMatch<Consumer<H>>(
+			.filter(aer -> aer.getAnnotatedElement().isAnnotationPresent(IncomingHandler.class) && !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
+			.flatMap(aer -> incomingHandlerConsumers.entrySet().stream().map(ihce -> new Match<Consumer<H>>(
 					aer, 
 					ihce.getKey(), 
 					ihce.getValue(), 
 					ao -> ao.getAnnotation(IncomingHandler.class).priority(), 
 					ao -> ao.getAnnotation(IncomingHandler.class).value())))
-			.filter(mr -> matchIncomingHandler(mr.annotatedElementRecord.getAnnotatedElement(), mr.connection))
+			.filter(mr -> matchIncomingHandler(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
 			.sorted()
 			.forEach(mr -> {
 				AnnotatedElement handlerMember = mr.annotatedElementRecord.getAnnotatedElement();
-				Connection incomingConnection = mr.connection;
+				Object incomingConnection = mr.key;
 				if (wired.add(incomingConnection)) { // Wiring once
 					IncomingHandler incomingHandlerAnnotation = mr.annotatedElementRecord.getAnnotation(IncomingHandler.class);
 					switch (incomingHandlerAnnotation.wrap()) {
@@ -315,7 +375,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 	 * Matches processor field or method and incoming connection.
 	 * @return
 	 */
-	protected boolean matchIncomingEndpoint(AnnotatedElement endpointMember, Connection incomingConnection) {
+	protected boolean matchIncomingEndpoint(AnnotatedElement endpointMember, Object incomingConnection) {
 		IncomingEndpoint incomingEndpointAnnotation = endpointMember.getAnnotation(IncomingEndpoint.class);
 		if (incomingEndpointAnnotation == null) {
 			return false;
@@ -335,30 +395,30 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 		return matchPredicate(incomingConnection, incomingEndpointAnnotation.value());
 	}	
 	
-	protected class ConnectionMatch<T> implements Comparable<ConnectionMatch<T>> {
+	protected class Match<T> implements Comparable<Match<T>> {
 		
 		AnnotatedElementRecord annotatedElementRecord; 
-		Connection connection; 
+		Object key; 
 		T value; 
 		Function<AnnotatedElement, Integer> priorityGetter; 
 		Function<AnnotatedElement, String> selectorGetter;
 		
-		ConnectionMatch(
+		Match(
 				AnnotatedElementRecord annotatedElementRecord, 
-				Connection connection, 
+				Object key, 
 				T value,
 				Function<AnnotatedElement, Integer> priorityGetter, 
 				Function<AnnotatedElement, String> selectorGetter) {
 			super();
 			this.annotatedElementRecord = annotatedElementRecord;
-			this.connection = connection;
+			this.key = key;
 			this.value = value;
 			this.priorityGetter = priorityGetter;
 			this.selectorGetter = selectorGetter;
 		}
 
 		@Override
-		public int compareTo(ConnectionMatch<T> o) {
+		public int compareTo(Match<T> o) {
 			AnnotatedElement a = annotatedElementRecord.getAnnotatedElement();
 			AnnotatedElement b = o.annotatedElementRecord.getAnnotatedElement();
 			
@@ -393,7 +453,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 		
 	}
 	
-	private record EndpointWireRecord(Connection connection, CompletionStage<Void> result, boolean consume) {};
+	private record EndpointWireRecord(Object element, CompletionStage<Void> result, boolean consume) {};
 
 	/**
 	 * @param processor
@@ -407,23 +467,23 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			ProgressMonitor progressMonitor) {
 						
 		Set<Field> wiredFields = Collections.synchronizedSet(new HashSet<>()); // For setting a field once, setter methods may be invoked multiple times.
-		Set<Connection> consumedConnections = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
+		Set<Object> consumedConnections = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
 				
 		// Streaming fields and methods and then flat mapping them to all permutations with incoming endpoints.
 		// then filtering using matchIncomingEndpoint, sorting by priority, wiring all matching and removing from ret.
 		return processorAnnotatedElementRecords
-			.filter(aer -> !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
-			.flatMap(aer -> incomingEndpoints.entrySet().stream().map(iee -> new ConnectionMatch<CompletionStage<E>>( 
+			.filter(aer -> aer.getAnnotatedElement().isAnnotationPresent(IncomingEndpoint.class) && !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
+			.flatMap(aer -> incomingEndpoints.entrySet().stream().map(iee -> new Match<CompletionStage<E>>( 
 					aer, 
 					iee.getKey(), 
 					iee.getValue(), 
 					ao -> ao.getAnnotation(IncomingEndpoint.class).priority(), 
 					ao -> ao.getAnnotation(IncomingEndpoint.class).value())))
-			.filter(mr -> matchIncomingEndpoint(mr.annotatedElementRecord.getAnnotatedElement(), mr.connection))
+			.filter(mr -> matchIncomingEndpoint(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
 			.sorted()
 			.map(mr -> {
 				AnnotatedElement endpointMember = mr.annotatedElementRecord.getAnnotatedElement();
-				Connection incomingConnection = mr.connection;
+				Object incomingConnection = mr.key;
 				IncomingEndpoint incomingEndpointAnnotation = endpointMember.getAnnotation(IncomingEndpoint.class);
 				boolean consumed = incomingEndpointAnnotation.consume() && !consumedConnections.add(incomingConnection);
 				boolean fieldWired = endpointMember instanceof Field && !wiredFields.add((Field) endpointMember);
@@ -468,7 +528,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 	 * Matches processor field or method and outgoing connection.
 	 * @return
 	 */
-	protected boolean matchOutgoingHandler(AnnotatedElement handlerMember, Connection outgoingConnection) {
+	protected boolean matchOutgoingHandler(AnnotatedElement handlerMember, Object outgoingConnection) {
 		OutgoingHandler outgoingHandlerAnnotation = handlerMember.getAnnotation(OutgoingHandler.class);
 		if (outgoingHandlerAnnotation == null) {
 			return false;
@@ -495,26 +555,27 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 	 * @return Wired connections
 	 */
 	@SuppressWarnings("unchecked")
-	protected Collection<Connection> wireOutgoingHandler(
+	protected Collection<Object> wireOutgoingHandler(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
 			Map<Connection, Consumer<H>> outgoingHandlerConsumers) {
-		Set<Connection> wired = Collections.synchronizedSet(new HashSet<>());
+		
+		Set<Object> wired = Collections.synchronizedSet(new HashSet<>());
 
 		// Streaming fields and methods and then flat mapping them to all permutations with outgoing handler consumers.
 		// then filtering using matchOutgoingHandler, sorting by priority, wiring all matching and removing from ret.
 		processorAnnotatedElementRecords
-			.filter(aer -> !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
-			.flatMap(aer -> outgoingHandlerConsumers.entrySet().stream().map(ihce -> new ConnectionMatch<Consumer<H>>(
+			.filter(aer -> aer.getAnnotatedElement().isAnnotationPresent(OutgoingHandler.class) && !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
+			.flatMap(aer -> outgoingHandlerConsumers.entrySet().stream().map(ihce -> new Match<Consumer<H>>(
 					aer, 
 					ihce.getKey(), 
 					ihce.getValue(), 
 					ao -> ao.getAnnotation(OutgoingHandler.class).priority(), 
 					ao -> ao.getAnnotation(OutgoingHandler.class).value())))
-			.filter(mr -> matchOutgoingHandler(mr.annotatedElementRecord.getAnnotatedElement(), mr.connection))
+			.filter(mr -> matchOutgoingHandler(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
 			.sorted()
 			.forEach(mr -> {
 				AnnotatedElement handlerMember = mr.annotatedElementRecord.getAnnotatedElement();
-				Connection outgoingConnection = mr.connection;
+				Object outgoingConnection = mr.key;
 				if (wired.add(outgoingConnection)) {
 					OutgoingHandler outgoingHandlerAnnotation = mr.annotatedElementRecord.getAnnotation(OutgoingHandler.class);
 					switch (outgoingHandlerAnnotation.wrap()) {
@@ -564,7 +625,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 	 * Matches processor field or method and outgoing connection.
 	 * @return
 	 */
-	protected boolean matchOutgoingEndpoint(AnnotatedElement endpointMember, Connection outgoingConnection) {
+	protected boolean matchOutgoingEndpoint(AnnotatedElement endpointMember, Object outgoingConnection) {
 		OutgoingEndpoint outgoingEndpointAnnotation = endpointMember.getAnnotation(OutgoingEndpoint.class);
 		if (outgoingEndpointAnnotation == null) {
 			return false;
@@ -590,23 +651,23 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			ProgressMonitor progressMonitor) {
 		
 		Set<Field> wiredFields = Collections.synchronizedSet(new HashSet<>()); // For setting a field once, setter methods may be invoked multiple times.
-		Set<Connection> consumedConnections = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
+		Set<Object> consumedConnections = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
 
 		// Streaming fields and methods and then flat mapping them to all permutations with outgoing endpoints.
 		// then filtering using matchOutgoingEndpoint, sorting by priority, wiring all matching and removing from ret.
 		return processorAnnotatedElementRecords
-			.filter(aer -> !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
-			.flatMap(aer -> outgoingEndpoints.entrySet().stream().map(iee -> new ConnectionMatch<CompletionStage<E>>(
+			.filter(aer -> aer.getAnnotatedElement().isAnnotationPresent(OutgoingEndpoint.class) && !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
+			.flatMap(aer -> outgoingEndpoints.entrySet().stream().map(iee -> new Match<CompletionStage<E>>(
 					aer, 
 					iee.getKey(), 
 					iee.getValue(), 
 					ao -> ao.getAnnotation(OutgoingEndpoint.class).priority(), 
 					ao -> ao.getAnnotation(OutgoingEndpoint.class).value())))
-			.filter(mr -> matchOutgoingEndpoint(mr.annotatedElementRecord.getAnnotatedElement(), mr.connection))
+			.filter(mr -> matchOutgoingEndpoint(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
 			.sorted()
 			.map(mr -> {				
 				AnnotatedElement endpointMember = mr.annotatedElementRecord.getAnnotatedElement();
-				Connection outgoingConnection = mr.connection;
+				Object outgoingConnection = mr.key;
 				OutgoingEndpoint outgoingEndpointAnnotation = endpointMember.getAnnotation(OutgoingEndpoint.class);
 				boolean consumed = outgoingEndpointAnnotation.consume() && !consumedConnections.add(outgoingConnection);
 				boolean fieldWired = endpointMember instanceof Field && !wiredFields.add((Field) endpointMember);
@@ -658,7 +719,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			.findFirst();
 		
 		if (getter.isPresent()) {
-			 connectionProcessorConfig.setTargetHandler((H) getter.get().get());
+			 connectionProcessorConfig.getTargetSynapse().setHandler((H) getter.get().get());
 		}
 	}
 
@@ -686,7 +747,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			.findFirst();
 		
 		if (getter.isPresent()) {
-			 connectionProcessorConfig.setSourceHandler((H) getter.get().get());
+			 connectionProcessorConfig.getSourceSynapse().setHandler((H) getter.get().get());
 		}
 	}
 
@@ -702,5 +763,334 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 		}
 		return null;
 	}
+	
+	// Children
+		
+	/**
+	 * Matches processor field or method and child
+	 * @return
+	 */
+	protected boolean matchChildEndpoint(AnnotatedElement endpointMember, Object child) {
+		ChildEndpoint childEndpointAnnotation = endpointMember.getAnnotation(ChildEndpoint.class);
+		if (childEndpointAnnotation == null) {
+			return false;
+		}
+		
+		if (endpointMember instanceof Method) {
+			Method endpointMethod = (Method) endpointMember;
+			int pc = endpointMethod.getParameterCount();
+			if (pc == 0 || pc > 3) {
+				throw new NasdanikaException("A method annotated with ChildEndpoint shall have 1 - 3 parameters: " + endpointMethod);
+			}
+			if (pc > 1 && !endpointMethod.getParameterTypes()[0].isInstance(child)) {
+				return false;				
+			}
+		}
+				
+		return matchPredicate(child, childEndpointAnnotation.value());
+	}		
+	
+	/**
+	 * @param processor
+	 * @param incomingEndpoints
+	 * @param progressMonitor
+	 * @return Wired child endpoints for collection of failures
+	 */
+	protected Stream<EndpointWireRecord> wireChildEndpoint(
+			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
+			Map<Element, CompletionStage<E>> childEndpoints,
+			ProgressMonitor progressMonitor) {
+						
+		Set<Field> wiredFields = Collections.synchronizedSet(new HashSet<>()); // For setting a field once, setter methods may be invoked multiple times.
+		Set<Object> consumedChildren = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
+				
+		// Streaming fields and methods and then flat mapping them to all permutations with incoming endpoints.
+		// then filtering using matchIncomingEndpoint, sorting by priority, wiring all matching and removing from ret.
+		return processorAnnotatedElementRecords
+			.filter(aer -> aer.getAnnotatedElement().isAnnotationPresent(ChildEndpoint.class) && !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
+			.flatMap(aer -> childEndpoints.entrySet().stream().map(cee -> new Match<CompletionStage<E>>( 
+					aer, 
+					cee.getKey(), 
+					cee.getValue(), 
+					ao -> ao.getAnnotation(ChildEndpoint.class).priority(), 
+					ao -> ao.getAnnotation(ChildEndpoint.class).value())))
+			.filter(mr -> matchChildEndpoint(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
+			.sorted()
+			.map(mr -> {
+				AnnotatedElement endpointMember = mr.annotatedElementRecord.getAnnotatedElement();
+				Object child = mr.key;
+				ChildEndpoint childEndpointAnnotation = endpointMember.getAnnotation(ChildEndpoint.class);
+				boolean consumed = childEndpointAnnotation.consume() && !consumedChildren.add(child);
+				boolean fieldWired = endpointMember instanceof Field && !wiredFields.add((Field) endpointMember);
+				if (!consumed && !fieldWired) { // Wiring an endpoint once is consumed and setting a field once
+					CompletionStage<Void> result = mr.value.thenAccept(childEndpoint -> {
+						if (endpointMember instanceof Field) {
+							mr.annotatedElementRecord.set(childEndpoint);
+						} else {
+							Method endpointMethod = (Method) endpointMember;
+							switch (endpointMethod.getParameterCount()) {
+							case 1:
+								mr.annotatedElementRecord.invoke(childEndpoint);
+								break;
+							case 2:
+								mr.annotatedElementRecord.invoke(child, childEndpoint);
+								break;
+							case 3:
+								mr.annotatedElementRecord.invoke(child, childEndpoint, progressMonitor);
+								break;								
+							default:
+								throw new NasdanikaException("Incoming endpoint method shall have 1 to 3 parameters: " + endpointMethod);
+							}							
+						}
+					});
+					return new EndpointWireRecord(child, result, childEndpointAnnotation.consume());
+				}
+				return null;
+			})
+			.filter(Objects::nonNull);
+	}
+	
+	protected void wireChildEndpoints(
+			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
+			Map<Element, CompletionStage<E>> childEndpoints) {
+		processorAnnotatedElementRecords
+				.filter(aer -> aer.getAnnotatedElement().isAnnotationPresent(ChildEndpoints.class))
+				.filter(aer -> aer.mustSet(Map.class, "Fields/methods annotated with ChildEndpoints must have (parameter) type assignable from Map: " + aer.getAnnotatedElement()))
+				.forEach(aer -> aer.set(childEndpoints));
+	}
+		
+	/**
+	 * 
+	 * @param processor
+	 * @param childHandlerConsumers
+	 * @param parallel
+	 * @return Wired element
+	 */
+	@SuppressWarnings("unchecked")
+	protected Collection<Object> wireChildHandler(
+			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
+			Map<Element, Consumer<H>> childHandlerConsumers) {		
+
+		Set<Object> wired = Collections.synchronizedSet(new HashSet<>());
+
+		// Streaming fields and methods and then flat mapping them to all permutations with incoming handler consumers.
+		// then filtering using matchIncomingHandler, sorting by priority, for all matching - wiring and removing from ret.
+		processorAnnotatedElementRecords
+			.filter(aer -> aer.getAnnotatedElement().isAnnotationPresent(ChildHandler.class) && !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
+			.flatMap(aer -> childHandlerConsumers.entrySet().stream().map(chce -> new Match<Consumer<H>>(
+					aer, 
+					chce.getKey(), 
+					chce.getValue(), 
+					ao -> ao.getAnnotation(ChildHandler.class).priority(), 
+					ao -> ao.getAnnotation(ChildHandler.class).value())))
+			.filter(mr -> matchIncomingHandler(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
+			.sorted()
+			.forEach(mr -> {
+				AnnotatedElement handlerMember = mr.annotatedElementRecord.getAnnotatedElement();
+				Object child = mr.key;
+				if (wired.add(child)) { // Wiring once
+					ChildHandler childHandlerAnnotation = mr.annotatedElementRecord.getAnnotation(ChildHandler.class);
+					switch (childHandlerAnnotation.wrap()) {
+					case ASYNC_INVOCABLE:
+						mr.value.accept((H) asInvocable(mr.annotatedElementRecord, childHandlerAnnotation.parameterNames()).asAsync());						
+						break;
+					case INVOCABLE:
+						mr.value.accept((H) asInvocable(mr.annotatedElementRecord, childHandlerAnnotation.parameterNames()));						
+						break;
+					case NONE:						
+						if (handlerMember instanceof Field) {					
+							mr.value.accept((H) mr.annotatedElementRecord.get());
+						} else {
+							Method handlerSupplierMethod = (Method) handlerMember;
+							Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(child);
+							mr.value.accept((H) incomingHandler);
+						}
+						break;
+					default:
+						throw new UnsupportedOperationException(childHandlerAnnotation.wrap().name() + " wrap type is not supported (yet)");						
+					}												
+				}
+			});
+				
+		return wired;
+	}	
+		
+	protected void wireChildHandlerConsumers(
+			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
+			Map<Element, Consumer<H>> childHandlerConsumers) {				
+		
+		processorAnnotatedElementRecords
+				.filter(aer -> aer.getAnnotation(ChildHandlerConsumers.class) != null)
+				.filter(aer -> aer.mustSet(Map.class, "Fields/methods annotated with ChildHandlersConsumers must have (parameter) type assignable from Map: " + aer.getAnnotatedElement()))
+				.forEach(aer -> aer.set(childHandlerConsumers));
+	}	
+
+	@SuppressWarnings("unchecked")
+	protected void wireParentHandler(
+			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
+			Synapse<H,E> parentSynapse) {
+		Optional<AnnotatedElementRecord> getter = processorAnnotatedElementRecords
+			.filter(aer -> aer.getAnnotation(ParentHandler.class) != null)
+			.filter(aer -> aer.mustGet(null, "Cannot use " + aer.getAnnotatedElement() + " to get parent handler"))
+			.findFirst();
+		
+		if (getter.isPresent()) {
+			 parentSynapse.setHandler((H) getter.get().get());
+		}
+	}
+
+	protected Consumer<E> wireParentEndpoint(Stream<AnnotatedElementRecord> processorAnnotatedElementRecords) {		
+		Optional<AnnotatedElementRecord> setter = processorAnnotatedElementRecords
+			.filter(aer -> aer.getAnnotation(ParentEndpoint.class) != null)
+			.filter(aer -> aer.mustSet(null, "Cannot use " + aer.getAnnotatedElement() + " to set parent endpoint"))
+			.findFirst();
+				
+		if (setter.isPresent()) {			
+			return sourceEndpoint -> setter.get().set(sourceEndpoint);
+		}
+		return null;
+	}	
+	
+	// Clients 
+		
+	/**
+	 * Matches processor field or method and client
+	 * @return
+	 */
+	protected boolean matchClientEndpoint(AnnotatedElement endpointMember, Object clientKey) {
+		ClientEndpoint clientEndpointAnnotation = endpointMember.getAnnotation(ClientEndpoint.class);
+		if (clientEndpointAnnotation == null) {
+			return false;
+		}
+		
+		if (endpointMember instanceof Method) {
+			Method endpointMethod = (Method) endpointMember;
+			int pc = endpointMethod.getParameterCount();
+			if (pc == 0 || pc > 3) {
+				throw new NasdanikaException("A method annotated with ChildEndpoint shall have 1 - 3 parameters: " + endpointMethod);
+			}
+			if (pc > 1 && !endpointMethod.getParameterTypes()[0].isInstance(clientKey)) {
+				return false;				
+			}
+		}
+				
+		return matchPredicate(clientKey, clientEndpointAnnotation.value());
+	}		
+	
+	/**
+	 * @param processor
+	 * @param incomingEndpoints
+	 * @param progressMonitor
+	 * @return Wired client endpoints for collection of failures
+	 */
+	protected Stream<EndpointWireRecord> wireClientEndpoint(
+			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
+			Object clientKey,
+			CompletionStage<E> clientEndpointCS,
+			ProgressMonitor progressMonitor) {
+						
+		Set<Field> wiredFields = Collections.synchronizedSet(new HashSet<>()); // For setting a field once, setter methods may be invoked multiple times.
+		Set<Object> consumedClients = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
+				
+		// Streaming fields and methods and then flat mapping them to all permutations with incoming endpoints.
+		// then filtering using matchIncomingEndpoint, sorting by priority, wiring all matching and removing from ret.
+		return processorAnnotatedElementRecords
+			.filter(aer -> aer.getAnnotatedElement().isAnnotationPresent(ClientEndpoint.class) && !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
+			.map(aer -> new Match<CompletionStage<E>>( 
+					aer, 
+					clientKey, 
+					clientEndpointCS, 
+					ao -> ao.getAnnotation(ClientEndpoint.class).priority(), 
+					ao -> ao.getAnnotation(ClientEndpoint.class).value()))
+			.filter(mr -> matchClientEndpoint(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
+			.sorted()
+			.map(mr -> {
+				AnnotatedElement endpointMember = mr.annotatedElementRecord.getAnnotatedElement();
+				ClientEndpoint clientEndpointAnnotation = endpointMember.getAnnotation(ClientEndpoint.class);
+				boolean consumed = clientEndpointAnnotation.consume() && !consumedClients.add(clientKey);
+				boolean fieldWired = endpointMember instanceof Field && !wiredFields.add((Field) endpointMember);
+				if (!consumed && !fieldWired) { // Wiring an endpoint once is consumed and setting a field once
+					CompletionStage<Void> result = mr.value.thenAccept(clientEndpoint -> {
+						if (endpointMember instanceof Field) {
+							mr.annotatedElementRecord.set(clientEndpoint);
+						} else {
+							Method endpointMethod = (Method) endpointMember;
+							switch (endpointMethod.getParameterCount()) {
+							case 1:
+								mr.annotatedElementRecord.invoke(clientEndpoint);
+								break;
+							case 2:
+								mr.annotatedElementRecord.invoke(clientKey, clientEndpoint);
+								break;
+							case 3:
+								mr.annotatedElementRecord.invoke(clientKey, clientEndpoint, progressMonitor);
+								break;								
+							default:
+								throw new NasdanikaException("Incoming endpoint method shall have 1 to 3 parameters: " + endpointMethod);
+							}							
+						}
+					});
+					return new EndpointWireRecord(clientKey, result, clientEndpointAnnotation.consume());
+				}
+				return null;
+			})
+			.filter(Objects::nonNull);
+	}
+		
+	/**
+	 * 
+	 * @param processor
+	 * @param incomingHandlerConsumers
+	 * @param parallel
+	 * @return Wired connections
+	 */
+	@SuppressWarnings("unchecked")
+	protected Collection<Object> wireClientHandler(
+			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
+			Object clientKey,
+			Consumer<H> clientHandlerConsumer) {		
+
+		Set<Object> wired = Collections.synchronizedSet(new HashSet<>());
+
+		// Streaming fields and methods and then flat mapping them to all permutations with incoming handler consumers.
+		// then filtering using matchIncomingHandler, sorting by priority, for all matching - wiring and removing from ret.
+		processorAnnotatedElementRecords
+			.filter(aer -> aer.getAnnotatedElement().isAnnotationPresent(ClientHandler.class) && !Modifier.isAbstract(((Member) aer.getAnnotatedElement()).getModifiers()))
+			.map(aer -> new Match<Consumer<H>>(
+					aer, 
+					clientKey, 
+					clientHandlerConsumer, 
+					ao -> ao.getAnnotation(ClientHandler.class).priority(), 
+					ao -> ao.getAnnotation(ClientHandler.class).value()))
+			.filter(mr -> matchIncomingHandler(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
+			.sorted()
+			.forEach(mr -> {
+				AnnotatedElement handlerMember = mr.annotatedElementRecord.getAnnotatedElement();
+				if (wired.add(clientKey)) { // Wiring once
+					ClientHandler clientHandlerAnnotation = mr.annotatedElementRecord.getAnnotation(ClientHandler.class);
+					switch (clientHandlerAnnotation.wrap()) {
+					case ASYNC_INVOCABLE:
+						mr.value.accept((H) asInvocable(mr.annotatedElementRecord, clientHandlerAnnotation.parameterNames()).asAsync());						
+						break;
+					case INVOCABLE:
+						mr.value.accept((H) asInvocable(mr.annotatedElementRecord, clientHandlerAnnotation.parameterNames()));						
+						break;
+					case NONE:						
+						if (handlerMember instanceof Field) {					
+							mr.value.accept((H) mr.annotatedElementRecord.get());
+						} else {
+							Method handlerSupplierMethod = (Method) handlerMember;
+							Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(clientKey);
+							mr.value.accept((H) incomingHandler);
+						}
+						break;
+					default:
+						throw new UnsupportedOperationException(clientHandlerAnnotation.wrap().name() + " wrap type is not supported (yet)");						
+					}												
+				}
+			});
+				
+		return wired;
+	}	
 		
 }

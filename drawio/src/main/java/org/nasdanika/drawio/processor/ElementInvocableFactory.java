@@ -16,7 +16,7 @@ import org.nasdanika.graph.processor.EndpointFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
 
-public class ElementInvocableFactory extends ElementProcessorFactory<Object> {
+public class ElementInvocableFactory<H,E> extends ElementProcessorFactory<H,E,Object> {
 
 	public ElementInvocableFactory(org.nasdanika.drawio.Element element, CapabilityLoader capabilityLoader, String processorProperty) {
 		super(element, capabilityLoader, processorProperty);
@@ -40,7 +40,7 @@ public class ElementInvocableFactory extends ElementProcessorFactory<Object> {
 	 * @param interfaces
 	 * @return
 	 */
-	public <H,E,T> T createProxy(
+	public <T> T createProxy(
 			String bindProperty,
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
@@ -48,23 +48,23 @@ public class ElementInvocableFactory extends ElementProcessorFactory<Object> {
 			ClassLoader classLoader, 			 
 			Class<?>... interfaces) {
 		
-		Map<Element, ProcessorInfo<Object>> processors = createProcessors(endpointFactory, connectionBase, progressMonitor);
+		Map<Element, ProcessorInfo<H,E,Object>> processors = createProcessors(endpointFactory, connectionBase, progressMonitor);
 		return Invocable.createProxy(classLoader, (proxy, nameOrSignature) -> resolve(proxy, nameOrSignature, processors, bindProperty), interfaces);		
 	}	
 	
 	protected Invocable resolve(
 			Object proxy,
 			String nameOrSignature, 
-			Map<Element, ProcessorInfo<Object>> processors,
+			Map<Element, ProcessorInfo<H,E,Object>> processors,
 			String bindProperty) {
 		
 		List<Invocable> matches = new ArrayList<>();
-		for (Entry<Element, ProcessorInfo<Object>> pe: processors.entrySet()) {
+		for (Entry<Element, ProcessorInfo<H,E,Object>> pe: processors.entrySet()) {
 			if (pe.getKey() instanceof PropertySource) { 
 				@SuppressWarnings("unchecked")
 				String bindValue = ((PropertySource<String,String>) pe.getKey()).getProperty(bindProperty);
 				if (Objects.equals(nameOrSignature, bindValue)) {
-					ProcessorInfo<Object> processorInfo = pe.getValue();
+					ProcessorInfo<H,E,Object> processorInfo = pe.getValue();
 					Object processor = processorInfo.getProcessor();
 					if (processor instanceof Invocable) {
 						matches.add(((Invocable) processor).bind(proxy));
@@ -75,7 +75,7 @@ public class ElementInvocableFactory extends ElementProcessorFactory<Object> {
 		return matches.isEmpty() ? null : Invocable.of(matches.toArray(size -> new Invocable[size]));
 	}
 	
-	public <H,E,T> T createProxy(
+	public <T> T createProxy(
 			String bindProperty,
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
@@ -90,51 +90,51 @@ public class ElementInvocableFactory extends ElementProcessorFactory<Object> {
 				Thread.currentThread().getContextClassLoader(),
 				interfaces);
 	}	
-	
-	/**
-	 * Creates processors with NOP endpoint factory
-	 * @param source
-	 * @param processorProperty
-	 * @param parallel
-	 * @param progressMonitor
-	 * @return
-	 */
-	public <T> T createProxy(
-			String bindProperty,
-			ConnectionBase connectionBase,
-			ProgressMonitor progressMonitor,
-			ClassLoader classLoader, 			 
-			Class<?>... interfaces) {
-		
-		return createProxy(
-				bindProperty,
-				EndpointFactory.nopEndpointFactory(),
-				connectionBase,
-				progressMonitor,
-				classLoader,
-				interfaces);
-	}
-	
-	/**
-	 * Creates processors with NOP endpoint factory
-	 * @param source
-	 * @param processorProperty
-	 * @param parallel
-	 * @param progressMonitor
-	 * @return
-	 */
-	public <T> T createProxy(
-			String bindProperty,
-			ConnectionBase connectionBase,
-			ProgressMonitor progressMonitor,
-			Class<?>... interfaces) {
-		
-		return createProxy(
-				bindProperty,
-				connectionBase,
-				progressMonitor,
-				Thread.currentThread().getContextClassLoader(),
-				interfaces);
-	}	
+//	
+//	/**
+//	 * Creates processors with NOP endpoint factory
+//	 * @param source
+//	 * @param processorProperty
+//	 * @param parallel
+//	 * @param progressMonitor
+//	 * @return
+//	 */
+//	public <T> T createProxy(
+//			String bindProperty,
+//			ConnectionBase connectionBase,
+//			ProgressMonitor progressMonitor,
+//			ClassLoader classLoader, 			 
+//			Class<?>... interfaces) {
+//		
+//		return createProxy(
+//				bindProperty,
+//				EndpointFactory.nopEndpointFactory(),
+//				connectionBase,
+//				progressMonitor,
+//				classLoader,
+//				interfaces);
+//	}
+//	
+//	/**
+//	 * Creates processors with NOP endpoint factory
+//	 * @param source
+//	 * @param processorProperty
+//	 * @param parallel
+//	 * @param progressMonitor
+//	 * @return
+//	 */
+//	public <T> T createProxy(
+//			String bindProperty,
+//			ConnectionBase connectionBase,
+//			ProgressMonitor progressMonitor,
+//			Class<?>... interfaces) {
+//		
+//		return createProxy(
+//				bindProperty,
+//				connectionBase,
+//				progressMonitor,
+//				Thread.currentThread().getContextClassLoader(),
+//				interfaces);
+//	}	
 	
 }

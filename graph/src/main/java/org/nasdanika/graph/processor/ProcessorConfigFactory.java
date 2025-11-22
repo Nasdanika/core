@@ -14,13 +14,13 @@ import org.nasdanika.graph.Node;
 /**
  * Reflective {@link Transformer} target which creates {@link ProcessorConfig} and its subclasses for {@link Element} and its subclasses respectively.
  */
-public abstract class ProcessorConfigFactory<H,E> implements EndpointFactory<H, E> {
+public abstract class ProcessorConfigFactory<H,E> implements EndpointFactory<H,E> {
 		
-	private <T extends ProcessorConfigImpl> T wireConfig(
+	private <T extends ProcessorConfigImpl<H,E>> T wireConfig(
 			T config,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorConfig,ProgressMonitor>> configProvider, 
-			Consumer<BiConsumer<Map<Element, ProcessorConfig>,ProgressMonitor>> registryProvider,
+			BiConsumer<Element, BiConsumer<ProcessorConfig<H,E>,ProgressMonitor>> configProvider, 
+			Consumer<BiConsumer<Map<Element, ProcessorConfig<H,E>>,ProgressMonitor>> registryProvider,
 			ProgressMonitor progressMonitor) {
 
 		if (progressMonitor.isCancelled()) {
@@ -32,25 +32,26 @@ public abstract class ProcessorConfigFactory<H,E> implements EndpointFactory<H, 
 		for (Element child: config.getElement().getChildren()) {
 			configProvider.accept(child, (cf, pm) -> {
 				if (cf != null) {
-					config.putChildConfig(child, cf);
-					((ProcessorConfigImpl) cf).setParentConfig(config);
+					Pipe<H,E> childPipe = Pipe.create(h -> createEndpoint(config.getElement(), h, HandlerType.PARENT), h -> createEndpoint(child, h, HandlerType.CHILD));
+					config.putChildConfigAndSynapse(child, cf, childPipe.getSource());
+					((ProcessorConfigImpl<H,E>) cf).setParentConfigAndSynapse(config, childPipe.getTarget());
 				}				
 			});
+			
 		}
-		
 		return config;
 	}
 			
 	@org.nasdanika.common.Transformer.Factory(type=Element.class)
-	public ProcessorConfig createElementConfig(
+	public ProcessorConfig<H,E> createElementConfig(
 			Element element,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorConfig,ProgressMonitor>> configProvider, 
-			Consumer<BiConsumer<Map<Element, ProcessorConfig>,ProgressMonitor>> registryProvider,
+			BiConsumer<Element, BiConsumer<ProcessorConfig<H,E>,ProgressMonitor>> configProvider, 
+			Consumer<BiConsumer<Map<Element, ProcessorConfig<H,E>>,ProgressMonitor>> registryProvider,
 			ProgressMonitor progressMonitor) {
 
 		return wireConfig(
-				new ProcessorConfigImpl(element),
+				new ProcessorConfigImpl<H,E>(element, h -> createEndpoint(element, h, HandlerType.CLIENT), h -> createEndpoint(element, h, HandlerType.PROCESSOR)),
 				parallel,
 				configProvider,
 				registryProvider,
@@ -58,19 +59,21 @@ public abstract class ProcessorConfigFactory<H,E> implements EndpointFactory<H, 
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	@org.nasdanika.common.Transformer.Factory(type=Node.class)
 	public NodeProcessorConfig<H, E> createNodeConfig(
 			Node node,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorConfig,ProgressMonitor>> configProvider, 
-			Consumer<BiConsumer<Map<Element, ProcessorConfig>,ProgressMonitor>> registryProvider,
+			BiConsumer<Element, BiConsumer<ProcessorConfig<H,E>,ProgressMonitor>> configProvider, 
+			Consumer<BiConsumer<Map<Element, ProcessorConfig<H,E>>,ProgressMonitor>> registryProvider,
 			ProgressMonitor progressMonitor) {
 		
 		try (ProgressMonitor subMonitor =  progressMonitor.split("Creating node config", 1, node)) {
 			
 			NodeProcessorConfigImpl<H, E> configImpl = wireConfig(
-					new NodeProcessorConfigImpl<>(node),
+					new NodeProcessorConfigImpl<>(
+							node, 
+							h -> createEndpoint(node, h, HandlerType.CLIENT), 
+							h -> createEndpoint(node, h, HandlerType.PROCESSOR)),
 					parallel,
 					configProvider,
 					registryProvider,
@@ -148,8 +151,8 @@ public abstract class ProcessorConfigFactory<H,E> implements EndpointFactory<H, 
 	public ConnectionProcessorConfig<H, E> createConnectionConfig(
 			Connection connection,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorConfig,ProgressMonitor>> configProvider, 
-			Consumer<BiConsumer<Map<Element, ProcessorConfig>,ProgressMonitor>> registryProvider,
+			BiConsumer<Element, BiConsumer<ProcessorConfig<H,E>,ProgressMonitor>> configProvider, 
+			Consumer<BiConsumer<Map<Element, ProcessorConfig<H,E>>,ProgressMonitor>> registryProvider,
 			ProgressMonitor progressMonitor) {
 		
 		if (isPassThrough(connection)) {
@@ -161,7 +164,10 @@ public abstract class ProcessorConfigFactory<H,E> implements EndpointFactory<H, 
 			Node target = connection.getTarget();
 			
 			ConnectionProcessorConfigImpl<H, E> configImpl = wireConfig(
-					new ConnectionProcessorConfigImpl<>(connection),
+					new ConnectionProcessorConfigImpl<>(
+							connection,
+							h -> createEndpoint(connection, h, HandlerType.CLIENT), 
+							h -> createEndpoint(connection, h, HandlerType.PROCESSOR)),
 					parallel,
 					configProvider,
 					registryProvider,
@@ -169,7 +175,6 @@ public abstract class ProcessorConfigFactory<H,E> implements EndpointFactory<H, 
 			
 			if (source != null) {
 				configProvider.accept(source, (sourceConfig, pMonitor) -> {
-					@SuppressWarnings("unchecked")
 					Consumer<E> sourceHandlerEndpointConsumer = ep -> ((NodeProcessorConfigImpl<H, E>) sourceConfig).setOutgoingEndpoint(connection, ep); 
 					configImpl.wireSourceHandlerEndpoint(sourceHandler -> createEndpoint(connection, sourceHandler, HandlerType.SOURCE), sourceHandlerEndpointConsumer);					
 				});
@@ -177,7 +182,6 @@ public abstract class ProcessorConfigFactory<H,E> implements EndpointFactory<H, 
 			
 			if (target != null) {
 				configProvider.accept(target, (targetConfig, pMonitor) -> {
-					@SuppressWarnings("unchecked")
 					Consumer<E> targetHandlerEndpointConsumer = ep -> ((NodeProcessorConfigImpl<H, E>) targetConfig).setIncomingEndpoint(connection, ep); 
 					configImpl.wireTargetHandlerEndpoint(targetHandler -> createEndpoint(connection, targetHandler, HandlerType.TARGET), targetHandlerEndpointConsumer);
 				});

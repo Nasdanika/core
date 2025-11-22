@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.NasdanikaException;
-import org.nasdanika.graph.Connection;
+import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.EndpointFactory;
 import org.nasdanika.graph.processor.HandlerType;
 
@@ -29,12 +29,12 @@ public abstract class ActivationEnpointFactory implements EndpointFactory<Object
 	 * If isActivator(handler) return true then an endpoint is created for a delayed activation. 
 	 */
 	@Override
-	public Object createEndpoint(Connection connection, Object handler, HandlerType type) {
+	public Object createEndpoint(Element element, Object handler, HandlerType type) {
 		if (!isActivator(handler)) {
 			return handler;
 		}
 		
-		ActivationParticipant activationParticipant = createActivationParticipant(connection, handler, type);
+		ActivationParticipant activationParticipant = createActivationParticipant(element, handler, type);
 		activationParticipants.add(activationParticipant);
 		return activationParticipant.getEndpoint();
 	}
@@ -47,7 +47,7 @@ public abstract class ActivationEnpointFactory implements EndpointFactory<Object
 	 * @param type
 	 * @return
 	 */
-	protected abstract ActivationParticipant createActivationParticipant(Connection connection, Object handler, HandlerType type);
+	protected abstract ActivationParticipant createActivationParticipant(Element element, Object handler, HandlerType type);
 	
 	/**
 	 * If this method returns true, an {@link ActivationParticipant} is created for activating the handler at some later point in time.

@@ -16,6 +16,7 @@ import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
+import org.nasdanika.graph.processor.Synapse;
 
 /**
  * A processor factory with {@link BiFunction} handler and endpoint
@@ -75,23 +76,23 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 			NodeProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>> nodeProcessorConfig = (NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>>) config;
 
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> incomingEndpoints = new ConcurrentHashMap<>();
-			for (Entry<Connection, CompletionStage<BiFunction<V,ProgressMonitor, W>>> incomingEndpointEntry: nodeProcessorConfig.getIncomingEndpoints().entrySet()) {
-				endpointWiringStageConsumer.accept(incomingEndpointEntry.getValue().thenAccept(endpoint -> incomingEndpoints.put(incomingEndpointEntry.getKey(), endpoint)));
+			for (Entry<Connection, Synapse<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>>> incomingSynapseEntry: nodeProcessorConfig.getIncomingSynapses().entrySet()) {
+				endpointWiringStageConsumer.accept(incomingSynapseEntry.getValue().getEndpoint().thenAccept(endpoint -> incomingEndpoints.put(incomingSynapseEntry.getKey(), endpoint)));
 			}
 						
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> outgoingEndpoints = new ConcurrentHashMap<>();
-			for (Entry<Connection, CompletionStage<BiFunction<V,ProgressMonitor,W>>> outgoingEndpointEntry: nodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
-				endpointWiringStageConsumer.accept(outgoingEndpointEntry.getValue().thenAccept(endpoint -> outgoingEndpoints.put(outgoingEndpointEntry.getKey(), endpoint)));				
+			for (Entry<Connection, Synapse<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>>> outgoingSynapseEntry: nodeProcessorConfig.getOutgoingSynapses().entrySet()) {
+				endpointWiringStageConsumer.accept(outgoingSynapseEntry.getValue().getEndpoint().thenAccept(endpoint -> outgoingEndpoints.put(outgoingSynapseEntry.getKey(), endpoint)));				
 			}
 						
 			NodeProcessor<T, U, V, W> nodeProcessor = createNodeProcessor(nodeProcessorConfig, parallel, infoProvider, endpointWiringStageConsumer, incomingEndpoints, outgoingEndpoints, progressMonitor);			
 			
-			for (Entry<Connection, Consumer<BiFunction<T,ProgressMonitor,U>>> incomingHandlerConsumerEntry: nodeProcessorConfig.getIncomingHandlerConsumers().entrySet()) {
-				incomingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeProcessor.applyIncoming(incomingHandlerConsumerEntry.getKey(), t, pm));
+			for (Entry<Connection, Synapse<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>>> incomingSynapseEntry: nodeProcessorConfig.getIncomingSynapses().entrySet()) {
+				incomingSynapseEntry.getValue().setHandler((t,pm) -> nodeProcessor.applyIncoming(incomingSynapseEntry.getKey(), t, pm));
 			}
 			
-			for (Entry<Connection, Consumer<BiFunction<T,ProgressMonitor,U>>> outgoingHandlerConsumerEntry: nodeProcessorConfig.getOutgoingHandlerConsumers().entrySet()) {
-				outgoingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeProcessor.applyOutgoing(outgoingHandlerConsumerEntry.getKey(), t, pm));
+			for (Entry<Connection, Synapse<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>>> outgoingSynapseEntry: nodeProcessorConfig.getOutgoingSynapses().entrySet()) {
+				outgoingSynapseEntry.getValue().setHandler((t,pm) -> nodeProcessor.applyOutgoing(outgoingSynapseEntry.getKey(), t, pm));
 			}
 			
 			return ProcessorInfo.of(nodeProcessorConfig, nodeProcessor);						
@@ -102,15 +103,17 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 			ConnectionProcessor<T,U,V,W> connectionProcessor = createConnectionProcessor(connectionProcessorConfig, parallel, infoProvider, endpointWiringStageConsumer, progressMonitor);
 			
 			endpointWiringStageConsumer.accept(connectionProcessorConfig
-				.getSourceEndpoint()
+				.getSourceSynapse()
+				.getEndpoint()
 				.thenAccept(endpoint -> {										
-					connectionProcessorConfig.setTargetHandler((t,pm) -> connectionProcessor.targetApply(t, endpoint, pm));
+					connectionProcessorConfig.getTargetSynapse().setHandler((t,pm) -> connectionProcessor.targetApply(t, endpoint, pm));
 				}));
 			
 			endpointWiringStageConsumer.accept(connectionProcessorConfig
-				.getTargetEndpoint()
+				.getTargetSynapse()
+				.getEndpoint()
 				.thenAccept(endpoint -> {										
-					connectionProcessorConfig.setSourceHandler((t,pm) -> connectionProcessor.sourceApply(t, endpoint, pm));
+					connectionProcessorConfig.getSourceSynapse().setHandler((t,pm) -> connectionProcessor.sourceApply(t, endpoint, pm));
 				}));
 			
 			return ProcessorInfo.of(connectionProcessorConfig, connectionProcessor);			

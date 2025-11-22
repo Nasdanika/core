@@ -4,7 +4,7 @@ import java.util.concurrent.Executor;
 
 import org.nasdanika.common.AsyncInvocable;
 import org.nasdanika.common.Invocable;
-import org.nasdanika.graph.Connection;
+import org.nasdanika.graph.Element;
 
 /**
  * If handler is instance of {@link AsyncInvocable} then it is invoked asynchronously using {@link Invocable}.async
@@ -18,7 +18,7 @@ public class AsyncInvocableEndpointFactory implements EndpointFactory<Object, Ob
 	}
 
 	@Override
-	public Object createEndpoint(Connection connection, Object handler, HandlerType type) {
+	public Object createEndpoint(Element element, Object handler, HandlerType type) {
 		if (handler instanceof AsyncInvocable) {
 			return ((Invocable) handler).async(executor);
 		}

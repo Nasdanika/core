@@ -68,8 +68,8 @@ public abstract class PropertySourceProcessorFactory<H,E,P,K,V> extends URIInvoc
 			}
 
 			@Override
-			public E createEndpoint(Connection connection, H handler, HandlerType type) {
-				return endpointFactory.createEndpoint(connection, handler, type);
+			public E createEndpoint(Element element, H handler, HandlerType type) {
+				return endpointFactory.createEndpoint(element, handler, type);
 			}
 			
 		};

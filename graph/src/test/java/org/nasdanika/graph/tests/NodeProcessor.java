@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
+import org.nasdanika.graph.processor.Synapse;
 
 /**
  * Passes this element as endpoint argument and expects the other side element back.
@@ -30,26 +31,26 @@ public class NodeProcessor implements Supplier<Integer> {
 			boolean passThrough) {
 		this.config = config;
 		this.passThrough = passThrough;
-		for (Entry<Connection, Consumer<Function<Element, Element>>> ihc: config.getIncomingHandlerConsumers().entrySet()) {
-			ihc.getValue().accept(e -> {
-				assertEquals(passThrough ? ihc.getKey().getSource() : ihc.getKey() , e);
+		for (Entry<Connection, Synapse<Function<Element, Element>, Function<Element, Element>>> ise: config.getIncomingSynapses().entrySet()) {
+			ise.getValue().setHandler(e -> {
+				assertEquals(passThrough ? ise.getKey().getSource() : ise.getKey() , e);
 				return config.getElement();
 			});			
 		}
 		
-		for (Entry<Connection, Consumer<Function<Element, Element>>> ohc: config.getOutgoingHandlerConsumers().entrySet()) {
-			ohc.getValue().accept(e -> {
-				assertEquals(passThrough ? ohc.getKey().getTarget() : ohc.getKey() , e);
+		for (Entry<Connection, Synapse<Function<Element, Element>, Function<Element, Element>>> ose: config.getOutgoingSynapses().entrySet()) {
+			ose.getValue().setHandler(e -> {
+				assertEquals(passThrough ? ose.getKey().getTarget() : ose.getKey() , e);
 				return config.getElement();
 			});			
 		}
 		
-		for (Entry<Connection, CompletionStage<Function<Element, Element>>> ie: config.getIncomingEndpoints().entrySet()) {
-			endpointWiringStageConsumer.accept(ie.getValue().thenAccept(e -> incomingEndpoints.put(ie.getKey(), e)));
+		for (Entry<Connection, Synapse<Function<Element, Element>, Function<Element, Element>>> ise: config.getIncomingSynapses().entrySet()) {
+			endpointWiringStageConsumer.accept(ise.getValue().getEndpoint().thenAccept(e -> incomingEndpoints.put(ise.getKey(), e)));
 		}
 		
-		for (Entry<Connection, CompletionStage<Function<Element, Element>>> oe: config.getOutgoingEndpoints().entrySet()) {
-			endpointWiringStageConsumer.accept(oe.getValue().thenAccept(e -> outgoingEndpoints.put(oe.getKey(), e)));
+		for (Entry<Connection, Synapse<Function<Element, Element>, Function<Element, Element>>> ose: config.getOutgoingSynapses().entrySet()) {
+			endpointWiringStageConsumer.accept(ose.getValue().getEndpoint().thenAccept(e -> outgoingEndpoints.put(ose.getKey(), e)));
 		}
 		
 	}
@@ -57,8 +58,8 @@ public class NodeProcessor implements Supplier<Integer> {
 	@Override
 	public Integer get() {
 		int counter = 0; 
-		assertEquals(config.getIncomingEndpoints().size(), incomingEndpoints.size());
-		assertEquals(config.getOutgoingEndpoints().size(), outgoingEndpoints.size());
+		assertEquals(config.getIncomingSynapses().size(), incomingEndpoints.size());
+		assertEquals(config.getOutgoingSynapses().size(), outgoingEndpoints.size());
 		
 		for (Entry<Connection, Function<Element, Element>> ie: incomingEndpoints.entrySet()) {			
 			Element ret = ie.getValue().apply(config.getElement());			
