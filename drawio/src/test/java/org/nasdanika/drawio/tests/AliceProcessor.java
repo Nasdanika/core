@@ -26,7 +26,7 @@ public class AliceProcessor extends BobHouseProcessor {
 		return bobEndpoint.apply("[" + aliceNode.getLabel() + "] Hello!");
 	}	
 	
-	@RegistryEntry("label == 'Bob'")
+	@RegistryEntry(value = "label == 'Bob'", clientKey = "#element.label")
 	public void setBobSynapse(Synapse<Function<String,String>, Function<String,String>> bobSynapse) {
 		bobSynapse.setHandler(str -> "{Alice's handler for Bob} " + str);
 	};

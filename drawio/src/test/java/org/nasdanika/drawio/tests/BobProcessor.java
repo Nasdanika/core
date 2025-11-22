@@ -85,11 +85,13 @@ public class BobProcessor implements Runnable {
 	
 	@ClientEndpoint
 	public void setClientEndpoint(Object clientKey, Function<String,String> clientEndpoint) {
+		System.out.println("Bob's client endpoint: " + clientKey);
 		clientEndpoints.put(clientKey, clientEndpoint);
 	} 
 	
 	@ClientHandler
 	public Function<String,String> getClientHandler(Object clientKey) {
+		System.out.println("Bob's client handler: " + clientKey);
 		return str -> "{Bob's client handler - %s} ".formatted(clientKey) + str;
 	}
 

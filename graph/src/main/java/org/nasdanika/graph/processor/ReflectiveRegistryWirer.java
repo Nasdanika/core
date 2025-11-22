@@ -59,7 +59,7 @@ public class ReflectiveRegistryWirer<H,E,P> extends Reflector {
 							(rm.annotation.type() == RegistryEntry.Type.SYNAPSE || setterRecord.getSetterType() == Synapse.class)) {
 						
 						String clientKeyExpr = rm.annotation.clientKey();
-						Object clientKey = Util.isBlank(clientKeyExpr) ? setterRecord.getTarget() : evaluate(setterRecord.getTarget(), clientKeyExpr, variables, Object.class);
+						Object clientKey = Util.isBlank(clientKeyExpr) ? rm.config.getElement() : evaluate(rm.config.getElement(), clientKeyExpr, variables, Object.class);
 						Synapse<H, E> synapse = rpInfo.getClientSynapse(clientKey);
 						setterRecord.set(synapse);
 					} else if (setterRecord.canSet(rpInfo.getClass()) &&
