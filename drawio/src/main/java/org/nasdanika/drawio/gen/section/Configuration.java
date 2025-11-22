@@ -11,7 +11,7 @@ import org.nasdanika.graph.processor.ProcessorInfo;
 /**
  * Base class for processor configuration/customization classes.
  */
-public class Configuration  {
+public class Configuration {
 	
 	public static final String DOC_FORMAT_PROPERTY = "doc-format";
 	public static final String DOC_REF_PROPERTY = "doc-ref";
