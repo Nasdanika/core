@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reflector;
+import org.nasdanika.common.Util;
 import org.nasdanika.graph.Element;
 
 /**
@@ -47,23 +48,26 @@ public class ReflectiveRegistryWirer<H,E,P> extends Reflector {
 		
 		processorAnnotatedElementRecords
 			.filter(ae -> ae.getAnnotation(RegistryEntry.class) != null)
-			.filter(ae -> ae.mustSet(null, "Fields/methods annotated with RegistryEntry must have (parameter) type assignable from the processor type or ProcessorInfo if info is set to true: " + ae.getAnnotatedElement()))
+			.filter(ae -> ae.mustSet(null, "Fields/methods annotated with RegistryEntry must have (parameter) type assignable from the processor type, ProcessorInfo or Synapse: " + ae.getAnnotatedElement()))
 			.flatMap(setterRecord -> registry.stream().filter(Objects::nonNull).map(re -> new RegistryMatch(setterRecord.getAnnotation(RegistryEntry.class), setterRecord, re)))
 			.filter(rm -> evaluatePredicate(rm.config.getElement(), rm.annotation.value(), variables))
 			.forEach(rm -> {
 				infoProvider.accept(rm.config.getElement(), (rpInfo, pMonitor) -> {
-					P processor = rpInfo.getProcessor();
 					AnnotatedElementRecord setterRecord = rm.setterRecord;
-					if (processor == null) {
-						if (setterRecord.canSet(ProcessorInfo.class)) {
-							setterRecord.set(rpInfo);
-						}
-					} else if (rm.annotation.info()) {
-						setterRecord.set(rpInfo);					
-					} else if (setterRecord.canSet(processor.getClass())) {
-						setterRecord.set(processor);
-					} else if (setterRecord.canSet(ProcessorInfo.class)) {
-						setterRecord.set(rpInfo);
+					P processor = rpInfo.getProcessor();
+					if (setterRecord.canSet(Synapse.class) &&
+							(rm.annotation.type() == RegistryEntry.Type.SYNAPSE || setterRecord.getSetterType() == Synapse.class)) {
+						
+						String clientKeyExpr = rm.annotation.clientKey();
+						Object clientKey = Util.isBlank(clientKeyExpr) ? setterRecord.getTarget() : evaluate(setterRecord.getTarget(), clientKeyExpr, variables, Object.class);
+						Synapse<H, E> synapse = rpInfo.getClientSynapse(clientKey);
+						setterRecord.set(synapse);
+					} else if (setterRecord.canSet(rpInfo.getClass()) &&
+							(rm.annotation.type() == RegistryEntry.Type.INFO || ProcessorInfo.class.isAssignableFrom(setterRecord.getSetterType()))) {
+						
+						setterRecord.set(rpInfo);											
+					} else if (processor != null && rm.annotation.type() == RegistryEntry.Type.PROCESSOR && setterRecord.canSet(processor.getClass())) {
+						setterRecord.set(processor);						
 					}
 				});
 			});

@@ -40,10 +40,10 @@ public class BobProcessor implements Runnable {
 	@RegistryEntry("label == 'Library'")
 	public Function<String,String> library;
 	
-	private NodeProcessorInfo<Object, Function<String,String>, Function<String,String>> libraryInfo;
+	private NodeProcessorInfo<Function<String,String>, Function<String,String>,Object> libraryInfo;
 	
-	@RegistryEntry(value = "label == 'Library'", info = true)
-	public void setLibraryConfig(NodeProcessorInfo<Object,Function<String,String>, Function<String,String>> libraryInfo) {
+	@RegistryEntry("label == 'Library'")
+	public void setLibraryInfo(NodeProcessorInfo<Function<String,String>, Function<String,String>,Object> libraryInfo) {
 		this.libraryInfo = libraryInfo;
 	};
 	

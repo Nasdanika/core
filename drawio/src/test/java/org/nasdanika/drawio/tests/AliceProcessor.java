@@ -6,6 +6,8 @@ import org.nasdanika.drawio.Node;
 import org.nasdanika.graph.processor.OutgoingEndpoint;
 import org.nasdanika.graph.processor.OutgoingHandler;
 import org.nasdanika.graph.processor.ProcessorElement;
+import org.nasdanika.graph.processor.RegistryEntry;
+import org.nasdanika.graph.processor.Synapse;
 
 public class AliceProcessor extends BobHouseProcessor {
 	
@@ -23,5 +25,10 @@ public class AliceProcessor extends BobHouseProcessor {
 	public String talkToBob(String str) {
 		return bobEndpoint.apply("[" + aliceNode.getLabel() + "] Hello!");
 	}	
+	
+	@RegistryEntry("label == 'Bob'")
+	public void setBobSynapse(Synapse<Function<String,String>, Function<String,String>> bobSynapse) {
+		bobSynapse.setHandler(str -> "{Alice's handler for Bob} " + str);
+	};
 
 }

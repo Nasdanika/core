@@ -10,8 +10,6 @@ import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.processor.CapabilityProcessorFactory.ProcessorRequirement;
-import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.EvaluationException;
 
 import reactor.core.publisher.Flux;
 
@@ -61,16 +59,7 @@ public class ReflectiveProcessorServiceFactory<R,H,E,P> extends ServiceCapabilit
 			tcp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(targets::add);
 		}
 		
-		ReflectiveProcessorFactoryProvider<H,E,P> rpfp = new ReflectiveProcessorFactoryProvider<>(targets.toArray()) {
-			
-			@Override
-			protected void onEvaluationException(Object obj, String expr, EvaluationContext evaluationContext, EvaluationException exception) {
-//				System.err.println("---");
-//				System.err.println(expr);
-//				exception.printStackTrace();
-			}
-			
-		};
+		ReflectiveProcessorFactoryProvider<H,E,P> rpfp = new ReflectiveProcessorFactoryProvider<>(targets.toArray());
 		
 		P processor = rpfp.createProcessor(
 				serviceRequirement.config(),

@@ -8,7 +8,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * A field or method to inject processor of config of matching registry entry 
+ * A field or method to inject processor, processor info or synapse of matching registry entry 
  * @author Pavel
  *
  */
@@ -16,12 +16,27 @@ import java.lang.annotation.Target;
 @Target({FIELD, METHOD})
 public @interface RegistryEntry {
 	
+	enum Type {
+		
+		PROCESSOR,
+		INFO,
+		SYNAPSE
+		
+	}
+	
 	/**
 	 * A <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
 	 * which is evaluated in the context of an element with <code>target</code> variable for registry targets and <code>element</code>,<code>config</code>, and <code>processor</code> for element processors. 
 	 * @return
 	 */
-	String value();
+	String value() default "";
+	
+	/**
+	 * A <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring expression</a>
+	 * which is evaluated in the context of an element with <code>target</code> variable for registry targets and <code>element</code>,<code>config</code>, and <code>processor</code> for element processors. 
+	 * @return
+	 */
+	String clientKey() default "";
 	
 	/**
 	 * If <code>true</code> {@link ProcessorInfo} is injected, processor otherwise.
@@ -29,6 +44,6 @@ public @interface RegistryEntry {
 	 * If processor is null and the target type is compatible with ProcessorInfo then info is injected even if this attribute is false. 
 	 * @return   
 	 */
-	boolean info() default false;
+	Type type() default Type.PROCESSOR;
 			
 }

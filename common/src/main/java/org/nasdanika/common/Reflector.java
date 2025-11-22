@@ -207,6 +207,10 @@ public class Reflector {
 		public boolean canSet(Class<?> type) {
 			return Reflector.this.canSet(annotatedElement, type);
 		}
+				
+		public Class<?> getSetterType() {
+			return Reflector.this.getSetterType(annotatedElement);
+		}		
 		
 		public boolean mustSet(Class<?> type, String message) {
 			return Reflector.this.mustSet(annotatedElement, type, message);
@@ -314,18 +318,27 @@ public class Reflector {
 			return true;
 		}
 		
+		try {			
+			return evaluate(obj, expr, variables, Boolean.class);
+		} catch (EvaluationException e) {
+			onEvaluationException(obj, expr, variables, e);
+			return false;
+		}
+
+	}
+	
+	protected <T> T evaluate(Object obj, String expr, Map<String,Object> variables, Class<T> type) {
+		if (Util.isBlank(expr)) {
+			return null;
+		}
+		
 		ExpressionParser parser = getExpressionParser();
 		Expression exp = parser.parseExpression(expr);
 		EvaluationContext evaluationContext = getEvaluationContext();
 		if (variables != null) {
 			variables.entrySet().forEach(ve -> evaluationContext.setVariable(ve.getKey(), ve.getValue()));
 		}
-		try {			
-			return evaluationContext == null ? exp.getValue(obj, Boolean.class) : exp.getValue(evaluationContext, obj, Boolean.class);
-		} catch (EvaluationException e) {
-			onEvaluationException(obj, expr, evaluationContext, e);
-			return false;
-		}
+		return evaluationContext == null ? exp.getValue(obj, type) : exp.getValue(evaluationContext, obj, type);
 	}
 	
 	protected EvaluationContext getEvaluationContext() {
@@ -351,7 +364,7 @@ public class Reflector {
 	 * @param expr
 	 * @param evaluationContext
 	 */
-	protected void onEvaluationException(Object obj, String expr, EvaluationContext evaluationContext, EvaluationException exception) {
+	protected void onEvaluationException(Object obj, String expr, Map<String,Object> variables, EvaluationException exception) {
 		
 	}
 	
@@ -423,6 +436,19 @@ public class Reflector {
 		}
 		return false;
 	}
+		
+	protected Class<?> getSetterType(AnnotatedElement element) {
+		if (element instanceof Field) {
+			return ((Field) element).getType();
+		}
+		if (element instanceof Method) {
+			Method method = (Method) element;
+			if (!Modifier.isAbstract(((Member) method).getModifiers()) && method.getParameterCount() == 1) {
+				return method.getParameterTypes()[0];
+			}
+		}
+		return null;
+	}	
 	
 	protected boolean mustSet(AnnotatedElement element, Class<?> type, String message) {
 		if (canSet(element, type)) {
