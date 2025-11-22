@@ -52,7 +52,19 @@ public class ReflectiveRegistryWirer<H,E,P> extends Reflector {
 			.filter(rm -> evaluatePredicate(rm.config.getElement(), rm.annotation.value(), variables))
 			.forEach(rm -> {
 				infoProvider.accept(rm.config.getElement(), (rpInfo, pMonitor) -> {
-					rm.setterRecord.set(rm.annotation.info() ? rpInfo : rpInfo.getProcessor());
+					P processor = rpInfo.getProcessor();
+					AnnotatedElementRecord setterRecord = rm.setterRecord;
+					if (processor == null) {
+						if (setterRecord.canSet(ProcessorInfo.class)) {
+							setterRecord.set(rpInfo);
+						}
+					} else if (rm.annotation.info()) {
+						setterRecord.set(rpInfo);					
+					} else if (setterRecord.canSet(processor.getClass())) {
+						setterRecord.set(processor);
+					} else if (setterRecord.canSet(ProcessorInfo.class)) {
+						setterRecord.set(rpInfo);
+					}
 				});
 			});
 	}

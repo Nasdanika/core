@@ -25,6 +25,8 @@ public @interface RegistryEntry {
 	
 	/**
 	 * If <code>true</code> {@link ProcessorInfo} is injected, processor otherwise.
+	 * If the target (field or parameter) type is ProcessorInfo then info is injected regardless of this setting.
+	 * If processor is null and the target type is compatible with ProcessorInfo then info is injected even if this attribute is false. 
 	 * @return   
 	 */
 	boolean info() default false;

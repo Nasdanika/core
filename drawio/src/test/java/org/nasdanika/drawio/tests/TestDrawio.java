@@ -675,6 +675,15 @@ public class TestDrawio {
 		System.out.println(processors.size());
 		
 		System.out.println(registry.aliceProcessor.talkToBob("Hi!"));
+		
+		Synapse<Function<String, String>, Function<String, String>> bobClient = registry.bobInfo.getClientSynapse("Bob's client");
+		
+		bobClient.getEndpoint().thenAccept(ep -> {
+			System.out.println("Bob's endpoint: " + ep);
+			System.out.println(ep.apply("Calling Bob's endpoint"));
+		});
+		
+		bobClient.setHandler(str -> "{Bob client hanler } " + str);		
 	}	
 	
 	@Disabled("Does not work unless the module is open so AliceBobHandlers can be accessed using reflection")

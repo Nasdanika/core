@@ -28,6 +28,8 @@ import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Wires processor using annotations.
@@ -39,6 +41,8 @@ import org.nasdanika.graph.Element;
  * @param <S>
  */
 public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E,P> {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(ReflectiveProcessorWirer.class);
 	
 	private static <K,H,E> Map<K,CompletionStage<E>> endpointsMap(Map<K,Synapse<H,E>> synapses) {
 		return synapses
@@ -143,7 +147,11 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 					clientKey,
 					synapse.getEndpoint(), 
 					progressMonitor)
-			.forEach(r -> r.result().toCompletableFuture().join());
+			.forEach(r -> r.result().whenComplete((rs, e) -> {
+				if (e != null) {
+					LOGGER.error("Exception in client endpoint wiring for client key '" + clientKey + "': " + e, e);
+				}
+			}));
 			
 			wireClientHandler(processorAnnotatedElementRecordsStreamSupplier.get(), clientKey, synapse::setHandler);
 		});
@@ -883,7 +891,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 					chce.getValue(), 
 					ao -> ao.getAnnotation(ChildHandler.class).priority(), 
 					ao -> ao.getAnnotation(ChildHandler.class).value())))
-			.filter(mr -> matchIncomingHandler(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
+			.filter(mr -> matchChildHandler(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
 			.sorted()
 			.forEach(mr -> {
 				AnnotatedElement handlerMember = mr.annotatedElementRecord.getAnnotatedElement();
@@ -913,6 +921,30 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			});
 				
 		return wired;
+	}	
+	
+	/**
+	 * Matches processor field or method and outgoing connection.
+	 * @return
+	 */
+	protected boolean matchChildHandler(AnnotatedElement handlerMember, Object child) {
+		ChildHandler childHandlerAnnotation = handlerMember.getAnnotation(ChildHandler.class);
+		if (childHandlerAnnotation == null) {
+			return false;
+		}
+		
+		if (handlerMember instanceof Method && childHandlerAnnotation.wrap() == HandlerWrapper.NONE) {
+			Method handlerMethod = (Method) handlerMember;
+			int pc = handlerMethod.getParameterCount();
+			if (pc > 1) {
+				throw new NasdanikaException("A method annotated with ChildHandler shall have zero or one parameter: " + handlerMethod);
+			}
+			if (pc == 1 && !handlerMethod.getParameterTypes()[0].isInstance(child)) {
+				return false;				
+			}
+		}
+				
+		return matchPredicate(child, childHandlerAnnotation.value());
 	}	
 		
 	protected void wireChildHandlerConsumers(
@@ -1062,7 +1094,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 					clientHandlerConsumer, 
 					ao -> ao.getAnnotation(ClientHandler.class).priority(), 
 					ao -> ao.getAnnotation(ClientHandler.class).value()))
-			.filter(mr -> matchIncomingHandler(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
+			.filter(mr -> matchClientHandler(mr.annotatedElementRecord.getAnnotatedElement(), mr.key))
 			.sorted()
 			.forEach(mr -> {
 				AnnotatedElement handlerMember = mr.annotatedElementRecord.getAnnotatedElement();
@@ -1092,5 +1124,29 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 				
 		return wired;
 	}	
+		
+	/**
+	 * Matches processor field or method and outgoing connection.
+	 * @return
+	 */
+	protected boolean matchClientHandler(AnnotatedElement handlerMember, Object clientKey) {
+		ClientHandler clientHandlerAnnotation = handlerMember.getAnnotation(ClientHandler.class);
+		if (clientHandlerAnnotation == null) {
+			return false;
+		}
+		
+		if (handlerMember instanceof Method && clientHandlerAnnotation.wrap() == HandlerWrapper.NONE) {
+			Method handlerMethod = (Method) handlerMember;
+			int pc = handlerMethod.getParameterCount();
+			if (pc > 1) {
+				throw new NasdanikaException("A method annotated with ClientHandler shall have zero or one parameter: " + handlerMethod);
+			}
+			if (pc == 1 && !handlerMethod.getParameterTypes()[0].isInstance(clientKey)) {
+				return false;				
+			}
+		}
+				
+		return matchPredicate(clientKey, clientHandlerAnnotation.value());
+	}		
 		
 }
