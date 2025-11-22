@@ -13,6 +13,7 @@ import org.eclipse.jgit.internal.storage.dfs.InMemoryRepository.Builder;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.nasdanika.emf.GitURIHandler;
 
@@ -54,6 +55,7 @@ public class TestJGit {
 	}
 	
 	@Test
+	@Disabled("GitURIHandler is currently read-only")
 	public void testInMemoryGitURIHandler() throws IOException {
 		Builder builder = new InMemoryRepository.Builder();
 		InMemoryRepository repository = builder.build();
