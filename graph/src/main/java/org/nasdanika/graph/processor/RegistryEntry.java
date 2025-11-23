@@ -20,7 +20,9 @@ public @interface RegistryEntry {
 		
 		PROCESSOR,
 		INFO,
-		SYNAPSE
+		SYNAPSE,
+		HANDLER,
+		ENDPOINT
 		
 	}
 	
@@ -45,5 +47,12 @@ public @interface RegistryEntry {
 	 * @return   
 	 */
 	Type type() default Type.PROCESSOR;
+	
+	/**
+	 * Applicable to HANDLER type on a method. If this array is not empty then a dynamic proxy is created with 
+	 * calls of interface method(s) invoking the method and all other method calls (e.g. equals()) routed to the invocation handler instance.
+	 * @return
+	 */
+	Class<?>[] proxy() default {};
 			
 }

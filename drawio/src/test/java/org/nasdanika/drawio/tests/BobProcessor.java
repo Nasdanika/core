@@ -87,6 +87,9 @@ public class BobProcessor implements Runnable {
 	public void setClientEndpoint(Object clientKey, Function<String,String> clientEndpoint) {
 		System.out.println("Bob's client endpoint: " + clientKey);
 		clientEndpoints.put(clientKey, clientEndpoint);
+		if ("registry-proxy-handler".equals(clientKey)) {
+			System.out.println(clientEndpoint.apply("Calling proxy"));
+		}
 	} 
 	
 	@ClientHandler

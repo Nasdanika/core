@@ -14,6 +14,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -67,6 +69,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.jsoup.Jsoup;
+import org.nasdanika.common.Invocable.ProxyTargetResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -1491,6 +1494,48 @@ public class Util {
 			}
 		});				
 	}
+	
+	/**
+	 * Wraps a method into a functional interface proxy
+	 * Creates a dynamic proxy dispatching abstract interface methods to a given method.
+	 * Handles invocation of default methods.
+	 * @param classLoader
+	 * @param resolver
+	 * @param interfaces
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T createProxy(
+			Method targetMethod,
+			Object target,
+			ClassLoader classLoader, 
+			Class<?>... interfaces) {
+		
+		InvocationHandler invocationHandler = new InvocationHandler() {
+			
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+				if (method.isDefault()) {						
+					return MethodHandles.lookup()
+							.findSpecial(
+									method.getDeclaringClass(), 
+									method.getName(), 
+									MethodType.methodType(method.getReturnType(), method.getParameterTypes()), 
+									method.getDeclaringClass())
+                            .bindTo(proxy)
+                            .invokeWithArguments(args);											
+				}	
+				
+				if (method.getDeclaringClass().isInterface()) {
+					return targetMethod.invoke(target, args);
+				}
+				
+				return method.invoke(this, args); // equals, hashCode, ...
+			}
+		};
+		
+		return (T) Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
+	}	
 	
 	public static final String DATA_IMAGE_PREFIX = "data:image/";
 	public static final String BASE64_SUFFIX = ";base64,";

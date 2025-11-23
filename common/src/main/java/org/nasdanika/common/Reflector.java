@@ -9,12 +9,16 @@ import java.lang.annotation.Annotation;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -140,6 +144,39 @@ public class Reflector {
 		
 		public Class<?> getDeclaringClass() {
 			return declaringClass;
+		}
+		
+		public Object createFunctionalProxy(Class<?>[] interfaces) {
+			return createFunctionalProxy(Thread.currentThread().getContextClassLoader(), interfaces);
+		}
+		public Object createFunctionalProxy(ClassLoader classLoader, Class<?>[] interfaces) {
+			if (annotatedElement instanceof Method) {
+				InvocationHandler invocationHandler = new InvocationHandler() {
+					
+					@Override
+					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+						if (method.isDefault()) {						
+							return MethodHandles.lookup()
+									.findSpecial(
+											method.getDeclaringClass(), 
+											method.getName(), 
+											MethodType.methodType(method.getReturnType(), method.getParameterTypes()), 
+											method.getDeclaringClass())
+		                            .bindTo(proxy)
+		                            .invokeWithArguments(args);											
+						}	
+						
+						if (method.getDeclaringClass().isInterface()) {
+							return invokeMethod(target, (Method) annotatedElement, args);
+						}
+						
+						return method.invoke(this, args); // equals, hashCode, ...
+					}
+				};
+				
+				return Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
+			} 
+			return null;
 		}
 		
 		public void set(Object value) {

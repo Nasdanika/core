@@ -434,8 +434,7 @@ public interface Invocable {
 										MethodType.methodType(method.getReturnType(), method.getParameterTypes()), 
 										method.getDeclaringClass())
 	                            .bindTo(proxy)
-	                            .invokeWithArguments(args);					
-						
+	                            .invokeWithArguments(args);											
 					}					
 					
 					// A hack for object methods like toString(), hashCode(), equals()

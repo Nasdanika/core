@@ -15,5 +15,12 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Target({FIELD, METHOD})
 public @interface ParentHandler {
+	
+	/**
+	 * Applicable to annotated methods. If this array is not empty then a dynamic proxy is created with 
+	 * calls of interface method(s) invoking this method and all other method calls (e.g. equals()) routed to the invocation handler instance.
+	 * @return
+	 */
+	Class<?>[] proxy() default {};	
 		
 }

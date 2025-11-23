@@ -296,7 +296,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			return false;
 		}
 		
-		if (handlerMember instanceof Method && incomingHandlerAnnotation.wrap() == HandlerWrapper.NONE) {
+		if (handlerMember instanceof Method && incomingHandlerAnnotation.wrap() == HandlerWrapper.NONE && incomingHandlerAnnotation.proxy().length == 0) {
 			Method handlerMethod = (Method) handlerMember;
 			int pc = handlerMethod.getParameterCount();
 			if (pc > 1) {
@@ -350,14 +350,18 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 					case INVOCABLE:
 						mr.value.accept((H) asInvocable(mr.annotatedElementRecord, incomingHandlerAnnotation.parameterNames()));						
 						break;
-					case NONE:
-						
+					case NONE:						
 						if (handlerMember instanceof Field) {					
 							mr.value.accept((H) mr.annotatedElementRecord.get());
 						} else {
-							Method handlerSupplierMethod = (Method) handlerMember;
-							Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(incomingConnection);
-							mr.value.accept((H) incomingHandler);
+							if (incomingHandlerAnnotation.proxy().length == 0) {
+								Method handlerSupplierMethod = (Method) handlerMember;
+								Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(incomingConnection);
+								mr.value.accept((H) incomingHandler);
+							} else {
+								Object proxy = mr.annotatedElementRecord.createFunctionalProxy(incomingHandlerAnnotation.proxy());
+								mr.value.accept((H) proxy);								
+							}	
 						}
 						break;
 					default:
@@ -542,7 +546,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			return false;
 		}
 		
-		if (handlerMember instanceof Method && outgoingHandlerAnnotation.wrap() == HandlerWrapper.NONE) {
+		if (handlerMember instanceof Method && outgoingHandlerAnnotation.wrap() == HandlerWrapper.NONE && outgoingHandlerAnnotation.proxy().length == 0) {
 			Method handlerMethod = (Method) handlerMember;
 			int pc = handlerMethod.getParameterCount();
 			if (pc > 1) {
@@ -597,9 +601,14 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 						if (handlerMember instanceof Field) {		
 							mr.value.accept((H) mr.annotatedElementRecord.get());
 						} else {
-							Method handlerSupplierMethod = (Method) handlerMember;
-							Object outgoinggHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(outgoingConnection);
-							mr.value.accept((H) outgoinggHandler);
+							if (outgoingHandlerAnnotation.proxy().length == 0) {
+								Method handlerSupplierMethod = (Method) handlerMember;
+								Object outgoinggHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(outgoingConnection);
+								mr.value.accept((H) outgoinggHandler);
+							} else {
+								Object proxy = mr.annotatedElementRecord.createFunctionalProxy(outgoingHandlerAnnotation.proxy());
+								mr.value.accept((H) proxy);								
+							}	
 						}
 						break;
 					default:
@@ -723,11 +732,19 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			ConnectionProcessorConfig<H,E> connectionProcessorConfig) {
 		Optional<AnnotatedElementRecord> getter = processorAnnotatedElementRecords
 			.filter(aer -> aer.getAnnotation(TargetHandler.class) != null)
-			.filter(aer -> aer.mustGet(null, "Cannot use " + aer.getAnnotatedElement() + " to get target connection handler"))
+			.filter(aer -> aer.getAnnotation(TargetHandler.class).proxy().length > 0 || aer.mustGet(null, "Cannot use " + aer.getAnnotatedElement() + " to get target connection handler"))
 			.findFirst();
 		
 		if (getter.isPresent()) {
-			 connectionProcessorConfig.getTargetSynapse().setHandler((H) getter.get().get());
+			AnnotatedElementRecord aer = getter.get();
+			TargetHandler tha = aer.getAnnotation(TargetHandler.class);
+			Synapse<H, E> targetSynapse = connectionProcessorConfig.getTargetSynapse();
+			if (tha.proxy().length == 0) {
+				targetSynapse.setHandler((H) getter.get().get());
+			} else {
+				Object proxy = aer.createFunctionalProxy(tha.proxy());
+				targetSynapse.setHandler((H) proxy);
+			}
 		}
 	}
 
@@ -751,11 +768,19 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			ConnectionProcessorConfig<H,E> connectionProcessorConfig) {
 		Optional<AnnotatedElementRecord> getter = processorAnnotatedElementRecords
 			.filter(aer -> aer.getAnnotation(SourceHandler.class) != null)
-			.filter(aer -> aer.mustGet(null, "Cannot use " + aer.getAnnotatedElement() + " to get source connection handler"))
+			.filter(aer -> aer.getAnnotation(SourceHandler.class).proxy().length > 0 || aer.mustGet(null, "Cannot use " + aer.getAnnotatedElement() + " to get source connection handler"))
 			.findFirst();
 		
 		if (getter.isPresent()) {
-			 connectionProcessorConfig.getSourceSynapse().setHandler((H) getter.get().get());
+			Synapse<H, E> sourceSynapse = connectionProcessorConfig.getSourceSynapse();
+			AnnotatedElementRecord aer = getter.get();
+			SourceHandler sha = aer.getAnnotation(SourceHandler.class);
+			if (sha.proxy().length == 0) {
+				sourceSynapse.setHandler((H) getter.get().get());
+			} else {
+				Object proxy = aer.createFunctionalProxy(sha.proxy());
+				sourceSynapse.setHandler((H) proxy);				
+			}			 
 		}
 	}
 
@@ -909,9 +934,14 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 						if (handlerMember instanceof Field) {					
 							mr.value.accept((H) mr.annotatedElementRecord.get());
 						} else {
-							Method handlerSupplierMethod = (Method) handlerMember;
-							Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(child);
-							mr.value.accept((H) incomingHandler);
+							if (childHandlerAnnotation.proxy().length == 0) {							
+								Method handlerSupplierMethod = (Method) handlerMember;
+								Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(child);
+								mr.value.accept((H) incomingHandler);
+							} else {
+								Object proxy = mr.annotatedElementRecord.createFunctionalProxy(childHandlerAnnotation.proxy());
+								mr.value.accept((H) proxy);								
+							}
 						}
 						break;
 					default:
@@ -933,7 +963,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			return false;
 		}
 		
-		if (handlerMember instanceof Method && childHandlerAnnotation.wrap() == HandlerWrapper.NONE) {
+		if (handlerMember instanceof Method && childHandlerAnnotation.wrap() == HandlerWrapper.NONE && childHandlerAnnotation.proxy().length == 0) {
 			Method handlerMethod = (Method) handlerMember;
 			int pc = handlerMethod.getParameterCount();
 			if (pc > 1) {
@@ -963,11 +993,18 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			Synapse<H,E> parentSynapse) {
 		Optional<AnnotatedElementRecord> getter = processorAnnotatedElementRecords
 			.filter(aer -> aer.getAnnotation(ParentHandler.class) != null)
-			.filter(aer -> aer.mustGet(null, "Cannot use " + aer.getAnnotatedElement() + " to get parent handler"))
+			.filter(aer -> aer.getAnnotation(ParentHandler.class).proxy().length > 0 || aer.mustGet(null, "Cannot use " + aer.getAnnotatedElement() + " to get parent handler"))
 			.findFirst();
 		
 		if (getter.isPresent()) {
-			 parentSynapse.setHandler((H) getter.get().get());
+			AnnotatedElementRecord aer = getter.get();
+			ParentHandler pha = aer.getAnnotation(ParentHandler.class);
+			if (pha.proxy().length == 0) {
+				parentSynapse.setHandler((H) getter.get().get());
+			} else {
+				Object proxy = aer.createFunctionalProxy(pha.proxy());
+				parentSynapse.setHandler((H) proxy);
+			}
 		}
 	}
 
@@ -1111,9 +1148,14 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 						if (handlerMember instanceof Field) {					
 							mr.value.accept((H) mr.annotatedElementRecord.get());
 						} else {
-							Method handlerSupplierMethod = (Method) handlerMember;
-							Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(clientKey);
-							mr.value.accept((H) incomingHandler);
+							if (clientHandlerAnnotation.proxy().length == 0) {
+								Method handlerSupplierMethod = (Method) handlerMember;
+								Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? mr.annotatedElementRecord.get() : mr.annotatedElementRecord.invoke(clientKey);
+								mr.value.accept((H) incomingHandler);
+							} else {
+								Object proxy = mr.annotatedElementRecord.createFunctionalProxy(clientHandlerAnnotation.proxy());
+								mr.value.accept((H) proxy);								
+							}
 						}
 						break;
 					default:
@@ -1135,7 +1177,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			return false;
 		}
 		
-		if (handlerMember instanceof Method && clientHandlerAnnotation.wrap() == HandlerWrapper.NONE) {
+		if (handlerMember instanceof Method && clientHandlerAnnotation.wrap() == HandlerWrapper.NONE && clientHandlerAnnotation.proxy().length == 0) {
 			Method handlerMethod = (Method) handlerMember;
 			int pc = handlerMethod.getParameterCount();
 			if (pc > 1) {

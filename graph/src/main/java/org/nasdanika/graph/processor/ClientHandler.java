@@ -44,4 +44,11 @@ public @interface ClientHandler {
 	 */
 	String[] parameterNames() default {};
 	
+	/**
+	 * Applicable to annotated methods. If this array is not empty then a dynamic proxy is created with 
+	 * calls of interface method(s) invoking this method and all other method calls (e.g. equals()) routed to the invocation handler instance.
+	 * @return
+	 */
+	Class<?>[] proxy() default {};	
+	
 }
