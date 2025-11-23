@@ -22,9 +22,9 @@ public class NodeProcessorInfo<H,E,P> extends ProcessorInfo<H,E,P> implements No
 	 * Functional interface for processor/info creation.
 	 * @param <P>
 	 */
-	public interface Factory<P,H,E> {
+	public interface Factory<H,E,P> {
 		
-		NodeProcessorInfo<P,H,E> create(
+		NodeProcessorInfo<H,E,P> create(
 				NodeProcessorConfig<H,E> config, 
 				boolean parallel, 
 				BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,

@@ -15,9 +15,9 @@ public class ConnectionProcessorInfo<H,E,P> extends ProcessorInfo<H,E,P> impleme
 	 * Functional interface for processor/info creation.
 	 * @param <P>
 	 */
-	public interface Factory<P,H,E> {
+	public interface Factory<H,E,P> {
 		
-		ConnectionProcessorInfo<P,H,E> create(
+		ConnectionProcessorInfo<H,E,P> create(
 				ConnectionProcessorConfig<H,E> config, 
 				boolean parallel, 
 				BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
