@@ -1,8 +1,6 @@
-package org.nasdanika.graph.processor.capability;
+package org.nasdanika.graph.processor;
 
 import java.util.function.Function;
-
-import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
 
 import reactor.core.publisher.Flux;
 
