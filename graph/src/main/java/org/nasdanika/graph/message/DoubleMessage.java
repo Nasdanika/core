@@ -1,13 +1,16 @@
 package org.nasdanika.graph.message;
 
-public class DoubleMessage<T> extends Message<T,Double> {
+import org.nasdanika.graph.Element;
+import org.nasdanika.graph.processor.HandlerType;
 
-	public DoubleMessage(Message<?, Double> parent, T target, Double value) {
-		super(parent, target, value);
+public class DoubleMessage extends Message<Double> {
+
+	public DoubleMessage(HandlerType type, Message<Double> parent, Element target, Double value) {
+		super(type, parent, target, value);
 	}
 
-	protected DoubleMessage(T target, Double value) {
-		super(target, value);
+	protected DoubleMessage(HandlerType type, Element target, Double value) {
+		super(type, target, value);
 	}
 
 }

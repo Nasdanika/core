@@ -1,12 +1,12 @@
 package org.nasdanika.graph.message;
 
 /**
- * Root message without a parent.
+ * Root message without a parent, type and target.
  */
-public class RootDoubleMessage<T> extends DoubleMessage<T> {
+public class RootDoubleMessage extends DoubleMessage {
 
-	public RootDoubleMessage(T target, Double value) {
-		super(target, value);
+	public RootDoubleMessage(Double value) {
+		super(null, null, null, value);
 	}
 
 }

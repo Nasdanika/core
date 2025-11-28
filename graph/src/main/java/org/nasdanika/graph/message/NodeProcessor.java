@@ -1,96 +1,173 @@
 package org.nasdanika.graph.message;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.function.Function;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.nasdanika.graph.Connection;
-import org.nasdanika.graph.Node;
+import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.IncomingEndpoint;
 import org.nasdanika.graph.processor.IncomingHandler;
-import org.nasdanika.graph.processor.OutgoingEndpoint;
-import org.nasdanika.graph.processor.OutgoingHandler;
 
-public abstract class NodeProcessor<T extends Node, V> extends ElementProcessor<T, V> {
+public abstract class NodeProcessor<V> extends ElementProcessor<V> {
 
-	protected abstract V sourceValue(V messageValue, Connection outgoingConnection);
+	protected abstract V outgoingValue(Message<V> message, Connection outgoingConnection);
 	
-	protected abstract V targetValue(V messageValue, Connection incomingConnection);
+	protected abstract V incomingValue(Message<V> message, Connection incomingConnection);
+		
+	protected Map<Connection, BiConsumer<Message<V>,V>> incomingEndpoints = new ConcurrentHashMap<>();
 	
-	/**
-	 * Creates 
-	 * @param connection
-	 * @return
-	 */
-	@OutgoingHandler
-	public <C extends Connection> Function<IncomingConnectionMessage<C, V>, SourceMessage<C,T,V>> getOutgoingHandler(C outgoingConnection) {
-		return message -> {
-			if (message.hasSeen(getElement())) {
-				return null;
-			}
-			V sourceValue = sourceValue(message.getValue(), outgoingConnection);
-			if (sourceValue == null) {
-				return null;
-			}
-			return createSourceMessage(message, sourceValue);
-		};
-	}
-
-	protected <C extends Connection> SourceMessage<C, T, V> createSourceMessage(IncomingConnectionMessage<C, V> message, V sourceValue) {
-		return new SourceMessage<C,T,V>(message, this, sourceValue);
-	}		
-		
-	@IncomingHandler
-	public <C extends Connection> Function<OutgoingConnectionMessage<C, V>, TargetMessage<C,T,V>> getIncomingHandler(C incomingConnection) {
-		return message -> {
-			if (message.hasSeen(getElement())) {
-				return null;
-			}
-			V targetValue = targetValue(message.getValue(), incomingConnection);
-			if (targetValue == null) {
-				return null;
-			}
-			return createTargetMessage(message, targetValue);
-		};
-	}
-
-	protected <C extends Connection> TargetMessage<C, T, V> createTargetMessage(OutgoingConnectionMessage<C, V> message, V targetValue) {
-		return new TargetMessage<C,T,V>(message, this, targetValue);
-	}
-		
-	protected Collection<Function<ElementMessage<?, V, ?>, OutgoingConnectionMessage<?,V>>> outgoingEndpoints = Collections.synchronizedList(new ArrayList<>());
-		
-	@OutgoingEndpoint
-	public void addOutgoingEndpoints(Function<ElementMessage<?, V, ?>, OutgoingConnectionMessage<?,V>> outgoingEndpoint) {
-		outgoingEndpoints.add(outgoingEndpoint);
-	}
-	
-	protected Collection<Function<ElementMessage<?, V, ?>, IncomingConnectionMessage<?,V>>> incomingEndpoints = Collections.synchronizedList(new ArrayList<>());	
-		
 	@IncomingEndpoint
-	public void addIncomingEndpoints(Function<ElementMessage<?, V, ?>, IncomingConnectionMessage<?,V>> incomingEndpoint) {
-		incomingEndpoints.add(incomingEndpoint);
-	}	
+	public void setIncomingEndpoint(Connection incomingConnection, BiConsumer<Message<V>,V> endpoint) {
+		incomingEndpoints.put(incomingConnection, endpoint);
+	}
 	
-	@Override
-	public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
-		Collection<ElementMessage<?, V, ?>> messages = super.processMessage(message);
-		for (Function<ElementMessage<?, V, ?>, OutgoingConnectionMessage<?, V>> oe: outgoingEndpoints) {
-			OutgoingConnectionMessage<?, V> om = oe.apply(message);
-			if (om != null) {
-				messages.add(om);
+	@IncomingHandler
+	public Consumer<Message<V>> getIncomingHandler(Connection incomingConnection) {
+		return message -> {
+			if (parentEndpoint != null) {
+				V parentValue = parentValue(message);
+				if (parentValue != null) {
+					parentEndpoint.accept(message, parentValue);
+				}				
 			}
-		}
+			
+			for (Entry<Element, BiConsumer<Message<V>, V>> ce: childEndpoints.entrySet()) {
+				V childValue = childValue(message, ce.getKey());
+				if (childValue != null) {
+					ce.getValue().accept(message, childValue);
+				}
+			}		
+			
+			for (Entry<Connection, BiConsumer<Message<V>, V>> ie: incomingEndpoints.entrySet()) {
+				if (ie.getKey() != incomingConnection) {
+					V incomingValue = incomingValue(message, ie.getKey());
+					if (incomingValue != null) {
+						ie.getValue().accept(message, incomingValue);
+					}
+				}
+			}		
+			
+			for (Entry<Connection, BiConsumer<Message<V>, V>> oe: outgoingEndpoints.entrySet()) {
+				V outgoingValue = outgoingValue(message, oe.getKey());
+				if (outgoingValue != null) {
+					oe.getValue().accept(message, outgoingValue);
+				}
+			}		
+			
+			onIncomingMessage(incomingConnection, message);
+		};
+	}
 		
-		for (Function<ElementMessage<?, V, ?>, IncomingConnectionMessage<?, V>> ie: incomingEndpoints) {
-			IncomingConnectionMessage<?,V> im = ie.apply(message);
-			if (im != null) {
-				messages.add(im);
+	protected void onIncomingMessage(Connection incomingConnection, Message<V> message) {
+		
+	}
+	
+	protected Map<Connection, BiConsumer<Message<V>,V>> outgoingEndpoints = new ConcurrentHashMap<>();
+	
+	@IncomingEndpoint
+	public void setOutgoingEndpoint(Connection outgoingConnection, BiConsumer<Message<V>,V> endpoint) {
+		outgoingEndpoints.put(outgoingConnection, endpoint);
+	}
+	
+	@IncomingHandler
+	public Consumer<Message<V>> getOutgoingHandler(Connection outgoingConnection) {
+		return message -> {
+			if (parentEndpoint != null) {
+				V parentValue = parentValue(message);
+				if (parentValue != null) {
+					parentEndpoint.accept(message, parentValue);
+				}				
+			}
+			
+			for (Entry<Element, BiConsumer<Message<V>, V>> ce: childEndpoints.entrySet()) {
+				V childValue = childValue(message, ce.getKey());
+				if (childValue != null) {
+					ce.getValue().accept(message, childValue);
+				}
+			}		
+			
+			for (Entry<Connection, BiConsumer<Message<V>, V>> ie: incomingEndpoints.entrySet()) {
+				V incomingValue = incomingValue(message, ie.getKey());
+				if (incomingValue != null) {
+					ie.getValue().accept(message, incomingValue);
+				}
+			}		
+			
+			for (Entry<Connection, BiConsumer<Message<V>, V>> oe: outgoingEndpoints.entrySet()) {
+				if (oe.getKey() != outgoingConnection) {
+					V outgoingValue = outgoingValue(message, oe.getKey());
+					if (outgoingValue != null) {
+						oe.getValue().accept(message, outgoingValue);
+					}
+				}
+			}		
+			
+			onOutgoingMessage(outgoingConnection, message);
+		};
+	}
+		
+	protected void onOutgoingMessage(Connection outgoingConnection, Message<V> message) {
+		
+	}
+
+	@Override
+	protected void onChildMessage(Element child, Message<V> message) {
+		super.onChildMessage(child, message);
+		
+		for (Entry<Connection, BiConsumer<Message<V>, V>> ie: incomingEndpoints.entrySet()) {
+			V incomingValue = incomingValue(message, ie.getKey());
+			if (incomingValue != null) {
+				ie.getValue().accept(message, incomingValue);
 			}
 		}		
 		
-		return messages;
-	}	
+		for (Entry<Connection, BiConsumer<Message<V>, V>> oe: outgoingEndpoints.entrySet()) {
+			V outgoingValue = outgoingValue(message, oe.getKey());
+			if (outgoingValue != null) {
+				oe.getValue().accept(message, outgoingValue);
+			}
+		}		
+	}
+	
+	@Override
+	protected void onClientMessage(Object clientKey, Message<V> message) {
+		super.onClientMessage(clientKey, message);
+		
+		for (Entry<Connection, BiConsumer<Message<V>, V>> ie: incomingEndpoints.entrySet()) {
+			V incomingValue = incomingValue(message, ie.getKey());
+			if (incomingValue != null) {
+				ie.getValue().accept(message, incomingValue);
+			}
+		}		
+		
+		for (Entry<Connection, BiConsumer<Message<V>, V>> oe: outgoingEndpoints.entrySet()) {
+			V outgoingValue = outgoingValue(message, oe.getKey());
+			if (outgoingValue != null) {
+				oe.getValue().accept(message, outgoingValue);
+			}
+		}		
+	}
+	
+	@Override
+	protected void onParentMessage(Message<V> message) {
+		super.onParentMessage(message);
+		
+		for (Entry<Connection, BiConsumer<Message<V>, V>> ie: incomingEndpoints.entrySet()) {
+			V incomingValue = incomingValue(message, ie.getKey());
+			if (incomingValue != null) {
+				ie.getValue().accept(message, incomingValue);
+			}
+		}		
+		
+		for (Entry<Connection, BiConsumer<Message<V>, V>> oe: outgoingEndpoints.entrySet()) {
+			V outgoingValue = outgoingValue(message, oe.getKey());
+			if (outgoingValue != null) {
+				oe.getValue().accept(message, outgoingValue);
+			}
+		}		
+	}
 
 }

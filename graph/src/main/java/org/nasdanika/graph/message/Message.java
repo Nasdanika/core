@@ -5,30 +5,37 @@ import java.util.Collections;
 import java.util.List;
 
 import org.nasdanika.graph.Element;
+import org.nasdanika.graph.processor.HandlerType;
 
 /**
  * A message sent to a target of type T and value of type V
  * @param <T> Message target type
  * @param <V> Message value type
  */
-public class Message<T,V> implements Element {
+public class Message<V> implements Element {
 	
-	private T target;
+	private HandlerType type;
+	private Element target;
 	private V value;
-	private Message<?,V> parent;
-	private List<Message<?,V>> children = Collections.synchronizedList(new ArrayList<>());
+	private Message<V> parent;
+	private List<Message<V>> children = Collections.synchronizedList(new ArrayList<>());
 
-	public Message(T target, V value) {
-		this(null, target, value);
+	public Message(HandlerType type, Element target, V value) {
+		this(type, null, target, value);
 	}
 
-	public Message(Message<?,V> parent, T target, V value) {
+	public Message(HandlerType type, Message<V> parent, Element target, V value) {
+		this.type = type;
 		this.parent = parent;
 		if (parent != null) {
 			parent.children.add(this);
 		}
 		this.target = target;
 		this.value = value;
+	}
+	
+	public HandlerType getType() {
+		return type;
 	}
 		
 	public V getValue() {
@@ -40,7 +47,7 @@ public class Message<T,V> implements Element {
 	 * related elements.
 	 * @return
 	 */
-	public T getTarget() {
+	public Element getTarget() {
 		return target;
 	}
 	
@@ -57,11 +64,11 @@ public class Message<T,V> implements Element {
 		return getParent() != null && getParent().hasSeen(target);
 	}
 	
-	public Message<?,V> getParent() {
+	public Message<V> getParent() {
 		return parent;
 	}
 	
-	public Message<?,V> getRoot() {
+	public Message<V> getRoot() {
 		if (getParent() == null) {
 			return this;
 		}
@@ -72,13 +79,13 @@ public class Message<T,V> implements Element {
 	 * Message path starting from the root message.
 	 * @return
 	 */
-	public List<Message<?,V>> getPath() {
-		List<Message<?,V>> path = getParent() == null ? getParent().getPath() : new ArrayList<>();
+	public List<Message<V>> getPath() {
+		List<Message<V>> path = getParent() == null ? getParent().getPath() : new ArrayList<>();
 		path.add(this);
 		return path;			
 	}
 	
-	public List<Message<?,V>> getChildren() {
+	public List<Message<V>> getChildren() {
 		return children;
 	}
 	
@@ -86,12 +93,12 @@ public class Message<T,V> implements Element {
 	 * @param target
 	 * @return Messages which reached the argument target from this message
 	 */
-	public List<Message<?,V>> getMessages(Object target) {
-		List<Message<?,V>> ret = new ArrayList<>();
+	public List<Message<V>> getMessages(Object target) {
+		List<Message<V>> ret = new ArrayList<>();
 		if (this.target == target) {
 			ret.add(this);
 		}
-		for (Message<?,V> child: getChildren()) {
+		for (Message<V> child: getChildren()) {
 			ret.addAll(child.getMessages(target));
 		}
 		return ret;

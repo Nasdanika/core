@@ -1,127 +1,105 @@
 package org.nasdanika.graph.message;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.nasdanika.graph.Element;
-import org.nasdanika.graph.processor.ChildProcessors;
-import org.nasdanika.graph.processor.ParentProcessor;
-import org.nasdanika.graph.processor.ProcessorElement;
-import org.nasdanika.graph.processor.ProcessorInfo;
-import org.nasdanika.graph.processor.Registry;
+import org.nasdanika.graph.processor.ChildEndpoint;
+import org.nasdanika.graph.processor.ChildHandler;
+import org.nasdanika.graph.processor.ClientHandler;
+import org.nasdanika.graph.processor.ParentEndpoint;
+import org.nasdanika.graph.processor.ParentHandler;
 
 /**
  * Element processor.
  * Sends a root message and stores it.
  * @param <T> processor element type
  */
-public abstract class ElementProcessor<T extends Element,V> {
-	
-	@ParentProcessor
-	public ElementProcessor<Element,V> parentProcessor;
+public abstract class ElementProcessor<V> {
 		
-	protected T element;
-	
-	@ProcessorElement	
-	public void setElement(T element) {
-		this.element = element;
-	}
-	
-	public T getElement() {
-		return element;
-	}
-	
-	@Registry 
-	public Map<Element, ProcessorInfo<ElementProcessor<Element, V>>> registry;
-	
-	@ChildProcessors
-	public Map<Element, ProcessorInfo<ElementProcessor<Element, V>>> children;
+	protected abstract V parentValue(Message<V> message);
 
-	/**
-	 * Processes a message, returns a list of messages which were sent as a result of processing
-	 * @param message
-	 * @return
-	 */
-	public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
-		List<ElementMessage<?, V, ?>> ret = new ArrayList<>();
-		for (ProcessorInfo<ElementProcessor<Element, V>> childProcessorInfo: children.values()) {
-			Element child = childProcessorInfo.getElement();
-			if (!message.hasSeen(child)) {
-				ElementProcessor<Element, V> childProcessor = childProcessorInfo.getProcessor();
-				if (childProcessor != null) {
-					V childValue = childValue(message.getValue(), child);
-					if (childValue != null) {
-						ChildMessage<Element, V, ElementProcessor<Element, V>> childMessage = createChildMessage(message, childProcessor, childValue);
-						if (childMessage != null) {
-							ret.add(childMessage);
-						}
-					}
-				}
+	protected abstract V childValue(Message<V> message, Element child);
+		
+	@ParentHandler(proxy = Consumer.class)
+	public void receiveFromParent(Message<V> parentMessage) {
+		for (Entry<Element, BiConsumer<Message<V>, V>> ce: childEndpoints.entrySet()) {
+			V childValue = childValue(parentMessage, ce.getKey());
+			if (childValue != null) {
+				ce.getValue().accept(parentMessage, childValue);
 			}
 		}
 		
-		if (parentProcessor != null) {
-			Element parent = parentProcessor.getElement();
-			if (!message.hasSeen(parent)) {
-				V parentValue = parentValue(message.getValue(), parent);
+		onParentMessage(parentMessage);
+	}
+	
+	@ParentEndpoint
+	public BiConsumer<Message<V>,V> parentEndpoint;
+		
+	protected Map<Element, BiConsumer<Message<V>,V>> childEndpoints = new ConcurrentHashMap<>();
+	
+	@ChildEndpoint
+	public void setChildEndpoint(Element child, BiConsumer<Message<V>,V> endpoint) {
+		childEndpoints.put(child, endpoint);
+	}
+	
+	@ChildHandler
+	public Consumer<Message<V>> getChildHandler(Element child) {
+		return message -> {
+			if (parentEndpoint != null) {
+				V parentValue = parentValue(message);
 				if (parentValue != null) {
-					ParentMessage<Element, V, ElementProcessor<Element, V>> parentMessage = createParentMessage(message, parentValue);
-					if (parentMessage != null) {
-						ret.add(parentMessage);
+					parentEndpoint.accept(message, parentValue);
+				}				
+			}
+			
+			for (Entry<Element, BiConsumer<Message<V>, V>> ce: childEndpoints.entrySet()) {
+				if (ce.getKey() != child) {
+					V childValue = childValue(message, ce.getKey());
+					if (childValue != null) {
+						ce.getValue().accept(message, childValue);
 					}
 				}
+			}		
+			
+			onChildMessage(child, message);
+		};
+	}
+		
+	@ClientHandler
+	public Consumer<Message<V>> getClientHandler(Object clientKey) {
+		return message -> {
+			if (parentEndpoint != null) {
+				V parentValue = parentValue(message);
+				if (parentValue != null) {
+					parentEndpoint.accept(message, parentValue);
+				}				
 			}
-		}
-		
-		return ret;
-	}
-
-	protected ParentMessage<Element, V, ElementProcessor<Element, V>> createParentMessage(ElementMessage<?, V, ?> message, V parentValue) {
-		return new ParentMessage<Element,V,ElementProcessor<Element,V>>(
-				message, 
-				parentProcessor, 
-				parentValue);
-	}
-
-	protected ChildMessage<Element, V, ElementProcessor<Element, V>> createChildMessage(ElementMessage<?, V, ?> message, ElementProcessor<Element, V> childProcessor, V childValue) {
-		return new ChildMessage<Element,V,ElementProcessor<Element,V>>(
-				message, 
-				childProcessor, 
-				childValue);
-	}
-
-	protected abstract V parentValue(V messageValue, Element parent);
-
-	protected abstract V childValue(V messageValue, Element child);
-	
-	private RootElementMessage<T,V,?> rootMessage;	
-	
-	/**
-	 * Sends messages to releated elements to establish traceability.
-	 * Processes breadth first by using a queue
-	 */
-	public RootElementMessage<T,V,?> sendMessages(V value) {		
-		Queue<ElementMessage<?,V,?>> processingQueue = new ConcurrentLinkedQueue<>();
-		rootMessage = new RootElementMessage<>(this, value);
-		
-		processingQueue.add(rootMessage);		
-		
-		ElementMessage<?,V,?> message;
-		while ((message = processingQueue.poll()) != null) {
-			for (ElementMessage<?,V,?> child: message.process()) {
-				processingQueue.add(child);
-			}
-		}
-		
-		return rootMessage;
+			
+			for (Entry<Element, BiConsumer<Message<V>, V>> ce: childEndpoints.entrySet()) {
+				V childValue = childValue(message, ce.getKey());
+				if (childValue != null) {
+					ce.getValue().accept(message, childValue);
+				}
+			}	
+			
+			onClientMessage(clientKey, message);
+		};
 	}	
 	
-	public RootElementMessage<T,V,?> getRootMessage() {
-		return rootMessage;
+	protected void onClientMessage(Object clientKey, Message<V> message) {
+		
+	}	
+	
+	protected void onParentMessage(Message<V> message) {
+		
+	}
+	
+	protected void onChildMessage(Element child, Message<V> message) {
+		
 	}
 	
 }

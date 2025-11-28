@@ -1,9 +1,9 @@
 package org.nasdanika.graph.message;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.nasdanika.common.ProgressMonitor;
@@ -11,7 +11,8 @@ import org.nasdanika.common.Transformer;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
-import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
+import org.nasdanika.graph.processor.ConnectionProcessorConfig;
+import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.Processor;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
@@ -23,234 +24,220 @@ import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
  */
 public abstract class MessageProcessorFactory<V>  {
 	
-	protected abstract V parentValue(V messageValue, Element child, Element parent);
+	protected abstract V parentValue(Element element, Message<V> message);
 	
-	protected abstract V childValue(V messageValue, Element parent, Element child);
-
-	protected abstract V sourceValue(V messageValue, Node node, Connection outgoingConnection);
-
-	protected abstract V targetValue(V messageValue, Node node, Connection incomingConnection);
-	
-	protected abstract V incomingValue(V messageValue, Connection connection);
-
-	protected abstract V outgoingValue(V messageValue, Connection connection);	
-	
-	protected ParentMessage<Element, V, ElementProcessor<Element, V>> createParentMessage(ElementMessage<?, V, ?> message, Element element, ElementProcessor<Element,V> parentProcessor, V parentValue) {
-		return new ParentMessage<Element,V,ElementProcessor<Element,V>>(
-				message, 
-				parentProcessor, 
-				parentValue);
-	}
-
-	protected ChildMessage<Element, V, ElementProcessor<Element, V>> createChildMessage(ElementMessage<?, V, ?> message, Element element, ElementProcessor<Element, V> childProcessor, V childValue) {
-		return new ChildMessage<Element,V,ElementProcessor<Element,V>>(
-				message, 
-				childProcessor, 
-				childValue);
-	}
-	
-	protected <C extends Connection> SourceMessage<C, Node, V> createSourceMessage(IncomingConnectionMessage<C, V> message, NodeProcessor<Node,V> processor, V sourceValue) {
-		return new SourceMessage<C,Node,V>(message, processor, sourceValue);
-	}		
-
-	protected <C extends Connection> TargetMessage<C, Node, V> createTargetMessage(OutgoingConnectionMessage<C, V> message, NodeProcessor<Node,V> processor, V targetValue) {
-		return new TargetMessage<C,Node,V>(message, processor, targetValue);
+	protected abstract V childValue(Element element, Message<V> message, Element child);
+		
+	protected void onClientMessage(Element element, Object clientKey, Message<V> message) {
+		
 	}	
 	
-	protected OutgoingConnectionMessage<Connection, V> createOutgoingConnectionMessage(ElementMessage<?, V, ?> message, ConnectionProcessor<Connection,V> processor, V outgoingValue) {
-		return new OutgoingConnectionMessage<Connection,V>(message, processor, outgoingValue);
-	}
-
-	protected IncomingConnectionMessage<Connection, V> createIncomingConnectionMessage(ElementMessage<?, V, ?> message, ConnectionProcessor<Connection,V> processor,V incomingValue) {
-		return new IncomingConnectionMessage<Connection,V>(message, processor, incomingValue);
+	protected void onParentMessage(Element element, Message<V> message) {
+		
 	}
 	
-					
+	protected void onChildMessage(Element element, Element child, Message<V> message) {
+		
+	}	
+	
 	@Processor(type = Element.class)
-	public ElementProcessor<Element,V> createElementProcessor(
-		ProcessorConfig config, 
+	public ElementProcessor<V> createElementProcessor(
+		ProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>> config, 
 		boolean parallel, 
-		BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+		BiConsumer<Element,BiConsumer<ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, ElementProcessor<V>>,ProgressMonitor>> infoProvider,
 		Function<ProgressMonitor, Object> next,		
 		ProgressMonitor progressMonitor) {
 		
-		return new ElementProcessor<Element,V>() {
+		return new ElementProcessor<V>() {
 
 			@Override
-			protected V childValue(V messageValue, Element child) {
-				return MessageProcessorFactory.this.childValue(messageValue, getElement(), child);
-			}
-			
-			@Override
-			public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
-				Collection<ElementMessage<?, V, ?>> messages = super.processMessage(message);
-				messages.addAll(MessageProcessorFactory.this.processMessage(this, message));
-				return messages;
+			protected V parentValue(Message<V> message) {
+				return MessageProcessorFactory.this.parentValue(config.getElement(), message);
 			}
 
 			@Override
-			protected V parentValue(V messageValue, Element parent) {
-				return MessageProcessorFactory.this.parentValue(messageValue, getElement(), parent);
+			protected V childValue(Message<V> message, Element child) {
+				return MessageProcessorFactory.this.childValue(config.getElement(), message, child);
 			}
 			
 			@Override
-			protected ChildMessage<Element, V, ElementProcessor<Element, V>> createChildMessage(ElementMessage<?, V, ?> message, ElementProcessor<Element, V> childProcessor, V childValue) {
-				return MessageProcessorFactory.this.createChildMessage(message, getElement(), childProcessor, childValue);
+			protected void onChildMessage(Element child, Message<V> message) {
+				super.onChildMessage(child, message);
+				MessageProcessorFactory.this.onChildMessage(config.getElement(), child, message);
 			}
 			
 			@Override
-			protected ParentMessage<Element, V, ElementProcessor<Element, V>> createParentMessage(ElementMessage<?, V, ?> message, V parentValue) {
-				return MessageProcessorFactory.this.createParentMessage(message, getElement(), parentProcessor,  parentValue);
+			protected void onClientMessage(Object clientKey, Message<V> message) {
+				super.onClientMessage(clientKey, message);
+				MessageProcessorFactory.this.onClientMessage(config.getElement(), clientKey, message);
 			}
+			
+			@Override
+			protected void onParentMessage(Message<V> message) {
+				super.onParentMessage(message);
+				MessageProcessorFactory.this.onParentMessage(config.getElement(), message);
+			}			
 			
 		};
 	}
-				
-	@Processor(type = Node.class)
-	public NodeProcessor<Node,V> createNodeProcessor(
-		ProcessorConfig config, 
-		boolean parallel, 
-		BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
-		Function<ProgressMonitor, Object> next,		
-		ProgressMonitor progressMonitor) {
+	
+	protected abstract V sourceValue(Connection connection, Message<V> message);
+	
+	protected abstract V targetValue(Connection connection, Message<V> message);
 		
-		return new NodeProcessor<Node,V>() {
-
-			@Override
-			protected V childValue(V messageValue, Element child) {
-				return MessageProcessorFactory.this.childValue(messageValue, getElement(), child);
-			}
-
-			@Override
-			protected V sourceValue(V messageValue, Connection outgoingConnection) {
-				return MessageProcessorFactory.this.sourceValue(messageValue, getElement(), outgoingConnection);
-			}
-
-			@Override
-			protected V targetValue(V messageValue, Connection incomingConnection) {
-				return MessageProcessorFactory.this.targetValue(messageValue, getElement(), incomingConnection);
-			}
-
-			@Override
-			protected V parentValue(V messageValue, Element parent) {
-				return MessageProcessorFactory.this.parentValue(messageValue, getElement(), parent);
-			}
-			
-			@Override
-			protected ChildMessage<Element, V, ElementProcessor<Element, V>> createChildMessage(ElementMessage<?, V, ?> message, ElementProcessor<Element, V> childProcessor, V childValue) {
-				return MessageProcessorFactory.this.createChildMessage(message, getElement(), childProcessor, childValue);
-			}
-			
-			@Override
-			protected ParentMessage<Element, V, ElementProcessor<Element, V>> createParentMessage(ElementMessage<?, V, ?> message, V parentValue) {
-				return MessageProcessorFactory.this.createParentMessage(message, getElement(), parentProcessor,  parentValue);
-			}
-			
-			@Override
-			protected <C extends Connection> SourceMessage<C, Node, V> createSourceMessage(IncomingConnectionMessage<C, V> message, V sourceValue) {
-				return MessageProcessorFactory.this.createSourceMessage(message, this, sourceValue);
-			}
-			
-			@Override
-			protected <C extends Connection> TargetMessage<C, Node, V> createTargetMessage(OutgoingConnectionMessage<C, V> message, V targetValue) {
-				return MessageProcessorFactory.this.createTargetMessage(message, this, targetValue);
-			}
-			
-			@Override
-			public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
-				Collection<ElementMessage<?, V, ?>> messages = super.processMessage(message);
-				messages.addAll(MessageProcessorFactory.this.processMessage(this, message));
-				return messages;
-			}
-			
-		};
+	protected void onSourceMessage(Connection connection, Message<V> message) {
+		
+	}	
+	
+	protected void onTargetMessage(Connection connection, Message<V> message) {
+		
 	}
-					
+	
 	@Processor(type = Connection.class)
-	public ConnectionProcessor<Connection,V> createConnectionProcessor(
-		ProcessorConfig config, 
+	public ElementProcessor<V> createConnectionProcessor(
+		ConnectionProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>> config, 
 		boolean parallel, 
-		BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
+		BiConsumer<Element,BiConsumer<ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, ElementProcessor<V>>,ProgressMonitor>> infoProvider,
 		Function<ProgressMonitor, Object> next,		
 		ProgressMonitor progressMonitor) {
 		
-		return new ConnectionProcessor<Connection,V>() {
+		return new ConnectionProcessor<V>() {
 
 			@Override
-			protected V childValue(V messageValue, Element child) {
-				return MessageProcessorFactory.this.childValue(messageValue, getElement(), child);
-			}
-
-			@Override
-			protected V parentValue(V messageValue, Element parent) {
-				return MessageProcessorFactory.this.parentValue(messageValue, getElement(), parent);
+			protected V parentValue(Message<V> message) {
+				return MessageProcessorFactory.this.parentValue(config.getElement(), message);
 			}
 
 			@Override
-			protected V incomingValue(V messageValue) {
-				return MessageProcessorFactory.this.incomingValue(messageValue, getElement());
+			protected V childValue(Message<V> message, Element child) {
+				return MessageProcessorFactory.this.childValue(config.getElement(), message, child);
+			}
+			
+			@Override
+			protected void onChildMessage(Element child, Message<V> message) {
+				super.onChildMessage(child, message);
+				MessageProcessorFactory.this.onChildMessage(config.getElement(), child, message);
+			}
+			
+			@Override
+			protected void onClientMessage(Object clientKey, Message<V> message) {
+				super.onClientMessage(clientKey, message);
+				MessageProcessorFactory.this.onClientMessage(config.getElement(), clientKey, message);
+			}
+			
+			@Override
+			protected void onParentMessage(Message<V> message) {
+				super.onParentMessage(message);
+				MessageProcessorFactory.this.onParentMessage(config.getElement(), message);
 			}
 
 			@Override
-			protected V outgoingValue(V messageValue) {
-				return MessageProcessorFactory.this.outgoingValue(messageValue, getElement());
+			protected V sourceValue(Message<V> message) {
+				return MessageProcessorFactory.this.sourceValue(config.getElement(), message);
+			}
+
+			@Override
+			protected V targetValue(Message<V> message) {
+				return MessageProcessorFactory.this.targetValue(config.getElement(), message);
+			}		
+			
+			@Override
+			protected void onSourceMessage(Message<V> message) {
+				super.onSourceMessage(message);
+				MessageProcessorFactory.this.onSourceMessage(config.getElement(), message);
 			}
 			
 			@Override
-			protected ChildMessage<Element, V, ElementProcessor<Element, V>> createChildMessage(ElementMessage<?, V, ?> message, ElementProcessor<Element, V> childProcessor, V childValue) {
-				return MessageProcessorFactory.this.createChildMessage(message, getElement(), childProcessor, childValue);
-			}
-			
-			@Override
-			protected ParentMessage<Element, V, ElementProcessor<Element, V>> createParentMessage(ElementMessage<?, V, ?> message, V parentValue) {
-				return MessageProcessorFactory.this.createParentMessage(message, getElement(), parentProcessor,  parentValue);
-			}
-			
-			@Override
-			protected IncomingConnectionMessage<Connection, V> createIncomingConnectionMessage(ElementMessage<?, V, ?> message, V incomingValue) {
-				return MessageProcessorFactory.this.createIncomingConnectionMessage(message, this, incomingValue);
-			}
-			
-			@Override
-			protected OutgoingConnectionMessage<Connection, V> createOutgoingConnectionMessage(ElementMessage<?, V, ?> message, V outgoingValue) {
-				return MessageProcessorFactory.this.createOutgoingConnectionMessage(message, this, outgoingValue);
-			}
-			
-			@Override
-			public Collection<ElementMessage<?, V, ?>> processMessage(ElementMessage<?, V, ?> message) {
-				Collection<ElementMessage<?, V, ?>> messages = super.processMessage(message);
-				messages.addAll(MessageProcessorFactory.this.processMessage(this, message));
-				return messages;
+			protected void onTargetMessage(Message<V> message) {
+				super.onTargetMessage(message);
+				MessageProcessorFactory.this.onTargetMessage(config.getElement(), message);
 			}
 			
 		};
 	}
 	
-	/**
-	 * Override to create additional messages if needed.
-	 * @param processor
-	 * @param message
-	 * @return
-	 */
-	protected Collection<ElementMessage<?, V, ?>> processMessage(ElementProcessor<?,V> processor, ElementMessage<?, V, ?> message) {
-		return Collections.emptyList();
+	protected abstract V outgoingValue(Node node, Message<V> message, Connection outgoingConnection);
+	
+	protected abstract V incomingValue(Node node, Message<V> message, Connection incomingConnection);
+	
+	protected void onIncomingMessage(Node node, Connection incomingConnection, Message<V> message) {
+		
 	}
 	
-	public Map<Element, ProcessorInfo<ElementProcessor<?,V>>> creatProcessors(Collection<Element> elements, ProgressMonitor progressMonitor) {
+	protected void onOutgoingMessage(Node node, Connection incomingConnection, Message<V> message) {
 		
-		NopEndpointProcessorConfigFactory<ElementProcessor<?,V>> processorConfigFactory = new NopEndpointProcessorConfigFactory<ElementProcessor<?,V>>() {
+	}	
+	
+	@Processor(type = Node.class)
+	public ElementProcessor<V> createElementProcessor(
+		NodeProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>> config, 
+		boolean parallel, 
+		BiConsumer<Element,BiConsumer<ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, ElementProcessor<V>>,ProgressMonitor>> infoProvider,
+		Function<ProgressMonitor, Object> next,		
+		ProgressMonitor progressMonitor) {
+		
+		return new NodeProcessor<V>() {
+
+			@Override
+			protected V parentValue(Message<V> message) {
+				return MessageProcessorFactory.this.parentValue(config.getElement(), message);
+			}
+
+			@Override
+			protected V childValue(Message<V> message, Element child) {
+				return MessageProcessorFactory.this.childValue(config.getElement(), message, child);
+			}
 			
 			@Override
-			protected boolean isPassThrough(Connection incomingConnection) {
-				return false;
+			protected void onChildMessage(Element child, Message<V> message) {
+				super.onChildMessage(child, message);
+				MessageProcessorFactory.this.onChildMessage(config.getElement(), child, message);
+			}
+			
+			@Override
+			protected void onClientMessage(Object clientKey, Message<V> message) {
+				super.onClientMessage(clientKey, message);
+				MessageProcessorFactory.this.onClientMessage(config.getElement(), clientKey, message);
+			}
+			
+			@Override
+			protected void onParentMessage(Message<V> message) {
+				super.onParentMessage(message);
+				MessageProcessorFactory.this.onParentMessage(config.getElement(), message);
+			}
+
+			@Override
+			protected V outgoingValue(Message<V> message, Connection outgoingConnection) {
+				return MessageProcessorFactory.this.outgoingValue(config.getElement(), message, outgoingConnection);
+			}
+
+			@Override
+			protected V incomingValue(Message<V> message, Connection incomingConnection) {
+				return MessageProcessorFactory.this.incomingValue(config.getElement(), message, incomingConnection);
+			}		
+			
+			@Override
+			protected void onIncomingMessage(Connection incomingConnection, Message<V> message) {
+				super.onIncomingMessage(incomingConnection, message);
+				MessageProcessorFactory.this.onIncomingMessage(config.getElement(), incomingConnection, message);
+			}
+			
+			@Override
+			protected void onOutgoingMessage(Connection outgoingConnection, Message<V> message) {
+				super.onOutgoingMessage(outgoingConnection, message);
+				MessageProcessorFactory.this.onChildMessage(config.getElement(), outgoingConnection, message);				
 			}
 			
 		};
+	}
 		
-		Transformer<Element,ProcessorConfig> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
-		Map<Element, ProcessorConfig> configs = processorConfigTransformer.transform(elements, false, progressMonitor);
+	public Map<Element, ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, ElementProcessor<V>>> createProcessors(Collection<Element> elements, ProgressMonitor progressMonitor) {		
+		MessageProcessorConfigFactory<V> processorConfigFactory = new MessageProcessorConfigFactory<>();
+		
+		Transformer<Element,ProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>>> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
+		Map<Element, ProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>>> configs = processorConfigTransformer.transform(elements, false, progressMonitor);
 				
-		ReflectiveProcessorFactoryProvider<ElementProcessor<?,V>, Function<ElementMessage<?,V,?>, ElementMessage<?,V,?>>, Function<ElementMessage<?,V,?>, ElementMessage<?,V,?>>> rpfp = new ReflectiveProcessorFactoryProvider<>(this);
+		ReflectiveProcessorFactoryProvider<Consumer<Message<V>>, BiConsumer<Message<V>,V>, ElementProcessor<V>> rpfp = new ReflectiveProcessorFactoryProvider<>(this);
 		return rpfp.getFactory().createProcessors(configs.values(), false, progressMonitor);
 	}	
 	

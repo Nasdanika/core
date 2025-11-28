@@ -1,12 +1,13 @@
 package org.nasdanika.graph.message;
 
 /**
- * Root message without a parent.
+ * Root message without a parent, type and target.
+ * It can be used by client code to pass to client endpoints.
  */
-public class RootMessage<T,V> extends Message<T,V> {
+public class RootMessage<V> extends Message<V> {
 
-	public RootMessage(T target, V value) {
-		super(target, value);
+	public RootMessage(V value) {
+		super(null, null, null, value);
 	}
 
 }

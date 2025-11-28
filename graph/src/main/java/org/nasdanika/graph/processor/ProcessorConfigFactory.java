@@ -32,7 +32,9 @@ public abstract class ProcessorConfigFactory<H,E> implements EndpointFactory<H,E
 		for (Element child: config.getElement().getChildren()) {
 			configProvider.accept(child, (cf, pm) -> {
 				if (cf != null) {
-					Pipe<H,E> childPipe = Pipe.create(h -> createEndpoint(config.getElement(), h, HandlerType.PARENT), h -> createEndpoint(child, h, HandlerType.CHILD));
+					Pipe<H,E> childPipe = Pipe.create(
+							h -> createEndpoint(child, h, HandlerType.PARENT), 
+							h -> createEndpoint(config.getElement(), h, HandlerType.CHILD));
 					config.putChildConfigAndSynapse(child, cf, childPipe.getSource());
 					((ProcessorConfigImpl<H,E>) cf).setParentConfigAndSynapse(config, childPipe.getTarget());
 				}				
