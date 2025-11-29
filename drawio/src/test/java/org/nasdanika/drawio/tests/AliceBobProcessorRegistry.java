@@ -13,7 +13,7 @@ public class AliceBobProcessorRegistry {
 	
 	
 	@RegistryEntry("label == 'Bob'")
-	public ProcessorInfo<Function<String,String>,Function<String,String>,BobProcessor> bobInfo;	
+	public ProcessorInfo<Function<String,String>,Function<String,String>,String,BobProcessor> bobInfo;	
 	
 	@RegistryEntry("label == 'Bob''s House'")
 	public void setBobHouseProcessor(Runnable bobHouse) {

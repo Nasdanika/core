@@ -14,7 +14,7 @@ import picocli.CommandLine.ParentCommand;
 /**
  * Base class for commands creating processors and dynamic proxies from diagram elements using {@link ElementInvocableFactory}
  */
-public abstract class AbstractElementInvocableCommand<H,E,T> extends CommandBase {
+public abstract class AbstractElementInvocableCommand<H,E,K,T> extends CommandBase {
 
 	protected AbstractElementInvocableCommand() {
 		super();
@@ -55,8 +55,8 @@ public abstract class AbstractElementInvocableCommand<H,E,T> extends CommandBase
 		})
 	private ConnectionBase connectionBase;	
 	
-	protected ElementInvocableFactory<H,E> createFactory(ProgressMonitor progressMonitor) {
-		return new ElementInvocableFactory<H,E>(documentSupplier.getDocument(null), processorProperty);
+	protected ElementInvocableFactory<H,E,K> createFactory(ProgressMonitor progressMonitor) {
+		return new ElementInvocableFactory<H,E,K>(documentSupplier.getDocument(null), processorProperty);
 	}
 		
 	protected ClassLoader getClassLoader(ProgressMonitor progressMonitor) {
@@ -64,12 +64,12 @@ public abstract class AbstractElementInvocableCommand<H,E,T> extends CommandBase
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected EndpointFactory<H, E> getEndpointFactory(ProgressMonitor progressMonitor) {
-		return (EndpointFactory<H, E>) EndpointFactory.nopEndpointFactory();
+	protected EndpointFactory<H,E> getEndpointFactory(ProgressMonitor progressMonitor) {
+		return (EndpointFactory<H,E>) EndpointFactory.nopEndpointFactory();
 	}
 	
 	protected T createProxy(ProgressMonitor progressMonitor, Class<?>... interfaces) {
-		ElementInvocableFactory<H,E> factory = createFactory(progressMonitor);
+		ElementInvocableFactory<H,E,K> factory = createFactory(progressMonitor);
 		return factory.createProxy(
 				bindProperty, 
 				getEndpointFactory(progressMonitor), 

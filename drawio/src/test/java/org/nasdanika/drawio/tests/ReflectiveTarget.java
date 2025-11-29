@@ -19,14 +19,14 @@ public class ReflectiveTarget {
 	
 	@ConnectionProcessorFactory
 	public ConnectionProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createConnectionProcessor(
-			ConnectionProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>> connectionProcessorConfig,
+			ConnectionProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>, String> connectionProcessorConfig,
 			ProgressMonitor progressMonitor) {
 		return new AsyncStatefulConnectionProcessor();
 	}
 
 	@NodeProcessorFactory
 	public NodeProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createNodeProcessor(
-			NodeProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>> nodeProcessorConfig,
+			NodeProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>, String> nodeProcessorConfig,
 			Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> incomingEndpoints,
 			Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> outgoingEndpoints,
 			ProgressMonitor progressMonitor) {

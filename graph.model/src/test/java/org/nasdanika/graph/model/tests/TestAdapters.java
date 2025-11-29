@@ -80,7 +80,7 @@ public class TestAdapters {
 		}
 		
 		// Configs and processors
-		NopEndpointProcessorConfigFactory<Function<String,String>> processorConfigFactory = new NopEndpointProcessorConfigFactory<>() {
+		NopEndpointProcessorConfigFactory<Function<String,String>, String> processorConfigFactory = new NopEndpointProcessorConfigFactory<>() {
 			
 			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
 				return false;
@@ -88,8 +88,8 @@ public class TestAdapters {
 			
 		};
 		
-		Transformer<org.nasdanika.graph.Element, ProcessorConfig> transformer = new Transformer<>(processorConfigFactory);
-		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = transformer.transform(registry.values(), false, progressMonitor);
+		Transformer<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>, Function<String,String>, String>> transformer = new Transformer<>(processorConfigFactory);
+		Map<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>, Function<String,String>, String>> configs = transformer.transform(registry.values(), false, progressMonitor);
 
 		System.out.println(configs.size());
 	}

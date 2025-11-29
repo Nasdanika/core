@@ -19,7 +19,7 @@ import picocli.CommandLine.Mixin;
 		name = "call")
 @ParentCommands(Document.Supplier.class)
 //@Description()
-public class CallableElementInvocableCommand extends AbstractElementInvocableCommand<Object,Object,Callable<Integer>> {
+public class CallableElementInvocableCommand extends AbstractElementInvocableCommand<Object,Object,Object,Callable<Integer>> {
 	
 	public CallableElementInvocableCommand() {
 		super();

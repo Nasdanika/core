@@ -38,10 +38,20 @@ public class MessageProcessorConfigFactory<V,K> extends ProcessorConfigFactory<C
 //			System.out.println("\tValue " + value);			
 			
 			if (!parentMessage.hasSeen(element)) {				
-				Message<V> message = new Message<V>(type, parentMessage, element, value);
-				executor.execute(() -> handler.accept(message));
+				Message<V> message = createMessage(element, type, parentMessage, value);
+				if (message != null) {
+					executor.execute(() -> handler.accept(message));
+				}
 			}
 		};
+	}
+	
+	protected Message<V> createMessage(
+			Element element, 
+			HandlerType type,
+			Message<V> parentMessage,
+			V value) {
+		return new Message<V>(type, parentMessage, element, value);
 	}
 	
 	@Override

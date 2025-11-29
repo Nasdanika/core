@@ -20,7 +20,7 @@ import picocli.CommandLine.Parameters;
 		name = "invoke")
 @ParentCommands(Document.Supplier.class)
 @Description(icon = "https://docs.nasdanika.org/images/automation.svg")
-public class ElementInvocableCommand extends AbstractElementInvocableCommand<Object,Object,Invocable> {
+public class ElementInvocableCommand extends AbstractElementInvocableCommand<Object,Object,Object,Invocable> {
 	
 	@Parameters(
 			arity = "*", 

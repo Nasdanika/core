@@ -19,7 +19,7 @@ import org.nasdanika.graph.processor.PropertySourceProcessorFactory;
  * Creates processors for {@link org.nasdanika.drawio.Element}.
  * @param <P>
  */
-public class ElementProcessorFactory<H,E,P> extends PropertySourceProcessorFactory<H,E,P,String,String> {
+public class ElementProcessorFactory<H,E,K,P> extends PropertySourceProcessorFactory<H,E,K,P,String,String> {
 
 	protected org.nasdanika.drawio.Element element;
 
@@ -45,7 +45,7 @@ public class ElementProcessorFactory<H,E,P> extends PropertySourceProcessorFacto
 	 * @param endpointFactory
 	 * @param processorProperty
 	 */
-	public Map<Element, ProcessorInfo<H,E,P>> createProcessors(
+	public Map<Element, ProcessorInfo<H,E,K,P>> createProcessors(
 			EndpointFactory<H, E> endpointFactory, 
 			ConnectionBase connectionBase,
 			ProgressMonitor progressMonitor) {

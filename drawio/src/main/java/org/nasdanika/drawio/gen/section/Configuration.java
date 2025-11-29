@@ -75,10 +75,10 @@ public class Configuration {
 	 * @param infoProvider
 	 * @param progressMonitor
 	 */
-	public <H,E,T> T filter(
-			ProcessorConfig<H,E> config, 
+	public <H,E,K,T> T filter(
+			ProcessorConfig<H,E,K> config, 
 			T processor, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,Object>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,K,Object>,ProgressMonitor>> infoProvider,
 			ProgressMonitor progressMonitor) {
 		
 		return processor;

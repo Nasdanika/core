@@ -59,10 +59,10 @@ public class DiagramCapabilityFactory extends AbstractCapabilityFactory<DiagramR
 				return wrap(document);
 			}
 			
-			ElementInvocableFactory<Object,Object> elementInvocableFactory = new ElementInvocableFactory<>(requirement.selector() == null ? document : (org.nasdanika.drawio.Element) requirement.selector().apply(document), requirement.processor());
+			ElementInvocableFactory<Object,Object,Object> elementInvocableFactory = new ElementInvocableFactory<>(requirement.selector() == null ? document : (org.nasdanika.drawio.Element) requirement.selector().apply(document), requirement.processor());
 			if (requirement.bind() == null) {
 				// Processors
-				Map<Element, ProcessorInfo<Object,Object,Object>> processors = elementInvocableFactory.createProcessors(null, false, progressMonitor);						
+				Map<Element, ProcessorInfo<Object,Object,Object,Object>> processors = elementInvocableFactory.createProcessors(null, false, progressMonitor);						
 				return wrap(processors);
 			}
 			
