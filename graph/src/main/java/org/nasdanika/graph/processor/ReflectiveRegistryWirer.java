@@ -20,7 +20,7 @@ import org.nasdanika.graph.processor.RegistryEntry.Type;
  *
  * @param <P>
  */
-public class ReflectiveRegistryWirer<H,E,P> extends Reflector {
+public class ReflectiveRegistryWirer<H,E,K,P> extends Reflector {
 		
 	/**
 	 * Records don't work with non-static types.
@@ -28,12 +28,12 @@ public class ReflectiveRegistryWirer<H,E,P> extends Reflector {
 	protected class RegistryMatch {
 		RegistryEntry annotation; 
 		AnnotatedElementRecord setterRecord;
-		ProcessorConfig<H,E> config;
+		ProcessorConfig<H,E,K> config;
 		
 		public RegistryMatch(
 				RegistryEntry annotation, 
 				AnnotatedElementRecord setterRecord, 
-				ProcessorConfig<H,E> config) {
+				ProcessorConfig<H,E,K> config) {
 			super();
 			this.annotation = annotation;
 			this.setterRecord = setterRecord;
@@ -45,9 +45,9 @@ public class ReflectiveRegistryWirer<H,E,P> extends Reflector {
 	@SuppressWarnings("unchecked")
 	protected void wireRegistryEntry(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Collection<ProcessorConfig<H,E>> registry,
+			Collection<ProcessorConfig<H,E,K>> registry,
 			Map<String,Object> variables,
-			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider) {
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,K,P>,ProgressMonitor>> infoProvider) {
 		
 		processorAnnotatedElementRecords
 			.filter(ae -> ae.getAnnotation(RegistryEntry.class) != null)
@@ -62,7 +62,7 @@ public class ReflectiveRegistryWirer<H,E,P> extends Reflector {
 					case SYNAPSE: {
 						String clientKeyExpr = rm.annotation.clientKey();
 						Object clientKey = Util.isBlank(clientKeyExpr) ? rm.config.getElement() : evaluate(rm.config.getElement(), clientKeyExpr, variables, Object.class);
-						Synapse<H, E> synapse = rpInfo.getClientSynapse(clientKey);
+						Synapse<H,E> synapse = rpInfo.getClientSynapse((K) clientKey);
 						if (synapse != null) {						
 							if (rm.annotation.type() == Type.SYNAPSE) {
 								if (reRecord.canSet(synapse.getClass())) {
@@ -100,7 +100,7 @@ public class ReflectiveRegistryWirer<H,E,P> extends Reflector {
 						if (reRecord.canSet(Synapse.class) && reRecord.getSetterType() == Synapse.class) {							
 							String clientKeyExpr = rm.annotation.clientKey();
 							Object clientKey = Util.isBlank(clientKeyExpr) ? rm.config.getElement() : evaluate(rm.config.getElement(), clientKeyExpr, variables, Object.class);
-							Synapse<H, E> synapse = rpInfo.getClientSynapse(clientKey);
+							Synapse<H,E> synapse = rpInfo.getClientSynapse((K) clientKey);
 							reRecord.set(synapse);
 						} else if (reRecord.canSet(rpInfo.getClass()) && ProcessorInfo.class.isAssignableFrom(reRecord.getSetterType())) {							
 							reRecord.set(rpInfo);											
@@ -118,17 +118,17 @@ public class ReflectiveRegistryWirer<H,E,P> extends Reflector {
 
 	protected void wireRegistry(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Collection<ProcessorConfig<H,E>> registry, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider) {
+			Collection<ProcessorConfig<H,E,K>> registry, 
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,K,P>,ProgressMonitor>> infoProvider) {
 
 		processorAnnotatedElementRecords
 				.filter(aer -> aer.getAnnotation(Registry.class) != null)
 				.filter(aer -> aer.mustSet(Map.class, "Fields/methods annotated with Registry must have (parameter) type assignable from Map: " + aer.getAnnotatedElement()))
 				.forEach(setterRecord -> {
 					// Sets a map which is populated as processors get created
-					Map<Element,ProcessorInfo<H,E,P>> r = Collections.synchronizedMap(new LinkedHashMap<>());
+					Map<Element,ProcessorInfo<H,E,K,P>> r = Collections.synchronizedMap(new LinkedHashMap<>());
 					setterRecord.set(r);
-					for (ProcessorConfig<H,E> re: registry) {
+					for (ProcessorConfig<H,E,K> re: registry) {
 						if (re != null) {
 							infoProvider.accept(re.getElement(), (rp, pm) -> r.put(re.getElement(), rp));
 						}

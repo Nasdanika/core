@@ -9,41 +9,41 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 
-public class ConnectionProcessorInfo<H,E,P> extends ProcessorInfo<H,E,P> implements ConnectionProcessorConfig<H,E> {
+public class ConnectionProcessorInfo<H,E,K,P> extends ProcessorInfo<H,E,K,P> implements ConnectionProcessorConfig<H,E,K> {
 	
 	/**
 	 * Functional interface for processor/info creation.
 	 * @param <P>
 	 */
-	public interface Factory<H,E,P> {
+	public interface Factory<H,E,K,P> {
 		
-		ConnectionProcessorInfo<H,E,P> create(
-				ConnectionProcessorConfig<H,E> config, 
+		ConnectionProcessorInfo<H,E,K,P> create(
+				ConnectionProcessorConfig<H,E,K> config, 
 				boolean parallel, 
-				BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
+				BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,K,P>,ProgressMonitor>> infoProvider,
 				Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 				Context context,
 				ProgressMonitor progressMonitor);
 		
 	}		
 	
-	public ConnectionProcessorInfo(ConnectionProcessorConfig<H, E> config, P processor) {
+	public ConnectionProcessorInfo(ConnectionProcessorConfig<H,E,K> config, P processor) {
 		super(config, processor);
 	}
 
 	@Override
 	public Connection getElement() {
-		return ((ConnectionProcessorConfig<H, E>) config).getElement();
+		return ((ConnectionProcessorConfig<H,E,K>) config).getElement();
 	}
 
 	@Override
 	public Synapse<H, E> getSourceSynapse() {
-		return ((ConnectionProcessorConfig<H, E>) config).getSourceSynapse();
+		return ((ConnectionProcessorConfig<H,E,K>) config).getSourceSynapse();
 	}
 
 	@Override
 	public Synapse<H, E> getTargetSynapse() {
-		return ((ConnectionProcessorConfig<H, E>) config).getTargetSynapse();
+		return ((ConnectionProcessorConfig<H,E,K>) config).getTargetSynapse();
 	}
 
 }

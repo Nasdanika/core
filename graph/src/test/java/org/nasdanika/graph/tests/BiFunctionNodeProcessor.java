@@ -19,14 +19,14 @@ import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.NodePro
 public class BiFunctionNodeProcessor implements NodeProcessor<Object, Object, Object, Object> {
 	
 	boolean passThrough;
-	private NodeProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> config;
+	private NodeProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>, String> config;
 	private Map<Connection, BiFunction<Object, ProgressMonitor, Object>> incomingEndpoints;
 	private Map<Connection, BiFunction<Object, ProgressMonitor, Object>> outgoingEndpoints;
 	
 	public BiFunctionNodeProcessor(
-			NodeProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> nodeProcessorConfig,
+			NodeProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>, String> nodeProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,String,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> incomingEndpoints,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> outgoingEndpoints,

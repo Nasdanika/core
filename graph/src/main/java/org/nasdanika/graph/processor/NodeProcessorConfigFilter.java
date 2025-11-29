@@ -5,9 +5,9 @@ import java.util.Map;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Node;
 
-public class NodeProcessorConfigFilter<H,E> extends ProcessorConfigFilter<H,E,NodeProcessorConfig<H,E>> implements NodeProcessorConfig<H,E> {
+public class NodeProcessorConfigFilter<H,E,K> extends ProcessorConfigFilter<H,E,K,NodeProcessorConfig<H,E,K>> implements NodeProcessorConfig<H,E,K> {
 	
-	public NodeProcessorConfigFilter(NodeProcessorConfig<H,E> config) {
+	public NodeProcessorConfigFilter(NodeProcessorConfig<H,E,K> config) {
 		super(config);
 	}
 		

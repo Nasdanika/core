@@ -22,11 +22,13 @@ import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
  * Basic message processor factory
  * @param <V>
  */
-public abstract class MessageProcessorFactory<V>  {
+public abstract class MessageProcessorFactory<V,K>  {
 	
 	protected abstract V parentValue(Element element, Message<V> message);
 	
 	protected abstract V childValue(Element element, Message<V> message, Element child);
+	
+	protected abstract V clientValue(Element element, Message<V> message, K clientKey);
 		
 	protected void onClientMessage(Element element, Object clientKey, Message<V> message) {
 		
@@ -41,14 +43,14 @@ public abstract class MessageProcessorFactory<V>  {
 	}	
 	
 	@Processor(type = Element.class)
-	public ElementProcessor<V> createElementProcessor(
-		ProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>> config, 
+	public ElementProcessor<V,K> createElementProcessor(
+		ProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>,K> config, 
 		boolean parallel, 
-		BiConsumer<Element,BiConsumer<ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, ElementProcessor<V>>,ProgressMonitor>> infoProvider,
+		BiConsumer<Element,BiConsumer<ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, K, ElementProcessor<V,K>>,ProgressMonitor>> infoProvider,
 		Function<ProgressMonitor, Object> next,		
 		ProgressMonitor progressMonitor) {
 		
-		return new ElementProcessor<V>() {
+		return new ElementProcessor<V,K>() {
 
 			@Override
 			protected V parentValue(Message<V> message) {
@@ -59,6 +61,11 @@ public abstract class MessageProcessorFactory<V>  {
 			protected V childValue(Message<V> message, Element child) {
 				return MessageProcessorFactory.this.childValue(config.getElement(), message, child);
 			}
+
+			@Override
+			protected V clientValue(Message<V> message, K clientKey) {
+				return MessageProcessorFactory.this.clientValue(config.getElement(), message, clientKey);
+			}			
 			
 			@Override
 			protected void onChildMessage(Element child, Message<V> message) {
@@ -76,7 +83,7 @@ public abstract class MessageProcessorFactory<V>  {
 			protected void onParentMessage(Message<V> message) {
 				super.onParentMessage(message);
 				MessageProcessorFactory.this.onParentMessage(config.getElement(), message);
-			}			
+			}
 			
 		};
 	}
@@ -94,14 +101,14 @@ public abstract class MessageProcessorFactory<V>  {
 	}
 	
 	@Processor(type = Connection.class)
-	public ElementProcessor<V> createConnectionProcessor(
-		ConnectionProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>> config, 
+	public ConnectionProcessor<V,K> createConnectionProcessor(
+		ConnectionProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>,K> config, 
 		boolean parallel, 
-		BiConsumer<Element,BiConsumer<ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, ElementProcessor<V>>,ProgressMonitor>> infoProvider,
+		BiConsumer<Element,BiConsumer<ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, K, ElementProcessor<V,K>>,ProgressMonitor>> infoProvider,
 		Function<ProgressMonitor, Object> next,		
 		ProgressMonitor progressMonitor) {
 		
-		return new ConnectionProcessor<V>() {
+		return new ConnectionProcessor<V,K>() {
 
 			@Override
 			protected V parentValue(Message<V> message) {
@@ -112,6 +119,11 @@ public abstract class MessageProcessorFactory<V>  {
 			protected V childValue(Message<V> message, Element child) {
 				return MessageProcessorFactory.this.childValue(config.getElement(), message, child);
 			}
+
+			@Override
+			protected V clientValue(Message<V> message, K clientKey) {
+				return MessageProcessorFactory.this.clientValue(config.getElement(), message, clientKey);
+			}			
 			
 			@Override
 			protected void onChildMessage(Element child, Message<V> message) {
@@ -169,19 +181,24 @@ public abstract class MessageProcessorFactory<V>  {
 	}	
 	
 	@Processor(type = Node.class)
-	public ElementProcessor<V> createElementProcessor(
-		NodeProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>> config, 
+	public NodeProcessor<V,K> createElementProcessor(
+		NodeProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>, K> config, 
 		boolean parallel, 
-		BiConsumer<Element,BiConsumer<ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, ElementProcessor<V>>,ProgressMonitor>> infoProvider,
+		BiConsumer<Element,BiConsumer<ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, K, ElementProcessor<V,K>>,ProgressMonitor>> infoProvider,
 		Function<ProgressMonitor, Object> next,		
 		ProgressMonitor progressMonitor) {
 		
-		return new NodeProcessor<V>() {
+		return new NodeProcessor<V,K>() {
 
 			@Override
 			protected V parentValue(Message<V> message) {
 				return MessageProcessorFactory.this.parentValue(config.getElement(), message);
 			}
+
+			@Override
+			protected V clientValue(Message<V> message, K clientKey) {
+				return MessageProcessorFactory.this.clientValue(config.getElement(), message, clientKey);
+			}			
 
 			@Override
 			protected V childValue(Message<V> message, Element child) {
@@ -231,13 +248,13 @@ public abstract class MessageProcessorFactory<V>  {
 		};
 	}
 		
-	public Map<Element, ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, ElementProcessor<V>>> createProcessors(Collection<Element> elements, ProgressMonitor progressMonitor) {		
-		MessageProcessorConfigFactory<V> processorConfigFactory = new MessageProcessorConfigFactory<>();
+	public Map<Element, ProcessorInfo<Consumer<Message<V>>, BiConsumer<Message<V>,V>, K, ElementProcessor<V,K>>> createProcessors(Collection<? extends Element> elements, ProgressMonitor progressMonitor) {		
+		MessageProcessorConfigFactory<V,K> processorConfigFactory = new MessageProcessorConfigFactory<>();
 		
-		Transformer<Element,ProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>>> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
-		Map<Element, ProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>>> configs = processorConfigTransformer.transform(elements, false, progressMonitor);
+		Transformer<Element,ProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>, K>> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
+		Map<Element, ProcessorConfig<Consumer<Message<V>>, BiConsumer<Message<V>,V>, K>> configs = processorConfigTransformer.transform(elements, false, progressMonitor);
 				
-		ReflectiveProcessorFactoryProvider<Consumer<Message<V>>, BiConsumer<Message<V>,V>, ElementProcessor<V>> rpfp = new ReflectiveProcessorFactoryProvider<>(this);
+		ReflectiveProcessorFactoryProvider<Consumer<Message<V>>, BiConsumer<Message<V>,V>, K, ElementProcessor<V,K>> rpfp = new ReflectiveProcessorFactoryProvider<>(this);
 		return rpfp.getFactory().createProcessors(configs.values(), false, progressMonitor);
 	}	
 	

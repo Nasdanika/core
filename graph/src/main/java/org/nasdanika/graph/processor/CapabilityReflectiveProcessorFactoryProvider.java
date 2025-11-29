@@ -10,7 +10,7 @@ import reactor.core.publisher.Flux;
  * @param <C> Capability type
  * @param <P> Processor type
  */
-public class CapabilityReflectiveProcessorFactoryProvider<R,C,P> extends ReflectiveProcessorFactoryProvider<Function<R,Flux<C>>,Function<R,Flux<C>>,P> {
+public class CapabilityReflectiveProcessorFactoryProvider<R,C,K,P> extends ReflectiveProcessorFactoryProvider<Function<R,Flux<C>>,Function<R,Flux<C>>,K,P> {
 
 	protected CapabilityReflectiveProcessorFactoryProvider(Object... targets) {
 		super(targets);

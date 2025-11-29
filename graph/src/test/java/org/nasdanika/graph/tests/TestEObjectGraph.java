@@ -251,7 +251,7 @@ public class TestEObjectGraph {
 		createGraph(true, ePackages, new PrintStreamProgressMonitor());
 	}	
 	
-	private record ConfigResult<H,E>(GraphResult graphResult, Collection<ProcessorConfig<H,E>> configs) {}	
+	private record ConfigResult<H,E>(GraphResult graphResult, Collection<ProcessorConfig<H,E,String>> configs) {}	
 	
 	protected <H,E> ConfigResult<H,E> createConfigs(
 			boolean parallel, 
@@ -264,7 +264,7 @@ public class TestEObjectGraph {
 				ePackages,
 				progressMonitor);
 		
-		ProcessorConfigFactory<Object, Object> processorConfigFactory = new NopEndpointProcessorConfigFactory<Object>() {
+		ProcessorConfigFactory<Object, Object, String> processorConfigFactory = new NopEndpointProcessorConfigFactory<Object, String>() {
 			
 			@Override
 			protected boolean isPassThrough(Connection connection) {
@@ -273,11 +273,11 @@ public class TestEObjectGraph {
 			
 		};
 		
-		Transformer<Element,ProcessorConfig<H,E>> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
-		Map<Element, ProcessorConfig<H,E>> configs = processorConfigTransformer.transform(graphResult.registry().values(), parallel, progressMonitor);
+		Transformer<Element,ProcessorConfig<H,E,String>> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
+		Map<Element, ProcessorConfig<H,E,String>> configs = processorConfigTransformer.transform(graphResult.registry().values(), parallel, progressMonitor);
 		System.out.println("Configs: " + configs.size());
 			
-		List<ProcessorConfig<H,E>> configValuesNonNull = configs.values().stream().filter(Objects::nonNull).toList();
+		List<ProcessorConfig<H,E,String>> configValuesNonNull = configs.values().stream().filter(Objects::nonNull).toList();
 		assertEquals(
 				configValuesNonNull.size(), 
 				passThrough ? graphResult.nodes() : graphResult.nodes() + graphResult.connections());
@@ -314,21 +314,21 @@ public class TestEObjectGraph {
 			ProgressMonitor progressMonitor = new NullProgressMonitor(); // new PrintStreamProgressMonitor();
 			ConfigResult<Function<Element,Element>,Function<Element,Element>> configs = createConfigs(parallel, passThrough, ePackages, progressMonitor);
 			
-			ProcessorFactory<Function<Element,Element>,Function<Element,Element>,Object> processorFactory = new ProcessorFactory<Function<Element,Element>,Function<Element,Element>,Object>() {
+			ProcessorFactory<Function<Element,Element>,Function<Element,Element>,String,Object> processorFactory = new ProcessorFactory<Function<Element,Element>,Function<Element,Element>,String,Object>() {
 				
 				@Override
-				protected ProcessorInfo<Function<Element,Element>, Function<Element,Element>, Object> createProcessor(ProcessorConfig<Function<Element,Element>, Function<Element,Element>> config,
+				protected ProcessorInfo<Function<Element,Element>, Function<Element,Element>, String, Object> createProcessor(ProcessorConfig<Function<Element,Element>, Function<Element,Element>, String> config,
 						boolean parallel,
-						BiConsumer<Element, BiConsumer<ProcessorInfo<Function<Element,Element>, Function<Element,Element>, Object>, ProgressMonitor>> infoProvider,
+						BiConsumer<Element, BiConsumer<ProcessorInfo<Function<Element,Element>, Function<Element,Element>, String, Object>, ProgressMonitor>> infoProvider,
 						Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 						ProgressMonitor progressMonitor) {
 					
 					if (config instanceof NodeProcessorConfig) {
-						return config.toInfo(new NodeProcessor((NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, endpointWiringStageConsumer, passThrough));
+						return config.toInfo(new NodeProcessor((NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>, String>) config, endpointWiringStageConsumer, passThrough));
 					}
 					
 					if (config instanceof ConnectionProcessorConfig) {
-						return config.toInfo(new ConnectionProcessor((ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, endpointWiringStageConsumer));
+						return config.toInfo(new ConnectionProcessor((ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>, String>) config, endpointWiringStageConsumer));
 					}
 					
 					throw new IllegalArgumentException("Neither node nor connection config: " + config);
@@ -336,7 +336,7 @@ public class TestEObjectGraph {
 				
 			};
 			
-			Map<Element, ProcessorInfo<Function<Element,Element>,Function<Element,Element>,Object>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
+			Map<Element, ProcessorInfo<Function<Element,Element>,Function<Element,Element>,String,Object>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
 			assertEquals(configs.configs().size(), processors.size());
 			
 			@SuppressWarnings("unchecked")
@@ -382,7 +382,7 @@ public class TestEObjectGraph {
 			
 			BiFunctionProcessorFactoryImpl processorFactory = new BiFunctionProcessorFactoryImpl(passThrough);
 			
-			Map<Element, ProcessorInfo<Object,Object,BiFunction<Object, ProgressMonitor, Object>>> processors = processorFactory.createProcessors((Collection) configs.configs(), parallel, progressMonitor);
+			Map<Element, ProcessorInfo<Object,Object,String,BiFunction<Object, ProgressMonitor, Object>>> processors = processorFactory.createProcessors((Collection) configs.configs(), parallel, progressMonitor);
 			assertEquals(configs.configs().size(), processors.size());
 			
 			Stream<BiFunction<Object,ProgressMonitor,Object>> ps = processors
@@ -427,10 +427,10 @@ public class TestEObjectGraph {
 			ProgressMonitor progressMonitor = new NullProgressMonitor(); // new PrintStreamProgressMonitor();
 			ConfigResult<Function<Element,Element>,Function<Element,Element>> configs = createConfigs(parallel, passThrough, ePackages, progressMonitor);
 									
-			ReflectiveProcessorFactoryProvider<Function<Element, Element>, Function<Element, Element>,Supplier<Integer>> processorFactoryProvider = new ReflectiveProcessorFactoryProvider<>(new ReflectiveProcessorFactory()); 			
-			ProcessorFactory<Function<Element, Element>, Function<Element, Element>, Supplier<Integer>> processorFactory = processorFactoryProvider.getFactory();
+			ReflectiveProcessorFactoryProvider<Function<Element, Element>, Function<Element, Element>, String, Supplier<Integer>> processorFactoryProvider = new ReflectiveProcessorFactoryProvider<>(new ReflectiveProcessorFactory()); 			
+			ProcessorFactory<Function<Element, Element>, Function<Element, Element>, String, Supplier<Integer>> processorFactory = processorFactoryProvider.getFactory();
 			
-			Map<Element, ProcessorInfo<Function<Element, Element>, Function<Element, Element>, Supplier<Integer>>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
+			Map<Element, ProcessorInfo<Function<Element, Element>, Function<Element, Element>, String, Supplier<Integer>>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
 			assertEquals(configs.configs().size(), processors.size());
 			
 			Stream<Supplier<Integer>> ps = processors.values().stream().filter(Objects::nonNull).map(ProcessorInfo::getProcessor);			
@@ -475,7 +475,7 @@ public class TestEObjectGraph {
 		
 	protected ConfigResult<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> createMessageConfigs(
 			boolean parallel, 
-			ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> processorConfigFactory,
+			ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>, String> processorConfigFactory,
 			List<EPackage> ePackages, 
 			ProgressMonitor progressMonitor) {
 		
@@ -484,11 +484,11 @@ public class TestEObjectGraph {
 				ePackages,
 				progressMonitor);
 				
-		Transformer<Element,ProcessorConfig<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>>> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
-		Map<Element, ProcessorConfig<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>>> configs = processorConfigTransformer.transform(graphResult.registry().values(), parallel, progressMonitor);
+		Transformer<Element,ProcessorConfig<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>, String>> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
+		Map<Element, ProcessorConfig<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>, String>> configs = processorConfigTransformer.transform(graphResult.registry().values(), parallel, progressMonitor);
 		System.out.println("Configs: " + configs.size());
 			
-		List<ProcessorConfig<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>>> configValuesNonNull = configs.values().stream().filter(Objects::nonNull).toList();
+		List<ProcessorConfig<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>, String>> configValuesNonNull = configs.values().stream().filter(Objects::nonNull).toList();
 		assertEquals(configValuesNonNull.size(), graphResult.nodes() + graphResult.connections());
 		return new ConfigResult<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>>(graphResult, configValuesNonNull);
 	}	
@@ -496,7 +496,7 @@ public class TestEObjectGraph {
 	private void testMessageProcessorFactory(
 			boolean parallel, 
 			int passes, 
-			ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> processorConfigFactory) {
+			ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>, String> processorConfigFactory) {
 		List<EPackage> ePackages = Arrays.asList(
 				EcorePackage.eINSTANCE, 
 				NcorePackage.eINSTANCE);
@@ -506,7 +506,7 @@ public class TestEObjectGraph {
 			ProgressMonitor progressMonitor = new NullProgressMonitor(); // new PrintStreamProgressMonitor();
 			ConfigResult<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> configs = createMessageConfigs(parallel, processorConfigFactory, ePackages, progressMonitor);
 			
-			MessageProcessorFactory<TestMessage,Integer,TestMessage,CompletionStage<Integer>,Void,Void> processorFactory = new MessageProcessorFactory<TestMessage,Integer,TestMessage,CompletionStage<Integer>,Void,Void>() {
+			MessageProcessorFactory<TestMessage,Integer,TestMessage,CompletionStage<Integer>,Void,Void,String> processorFactory = new MessageProcessorFactory<TestMessage,Integer,TestMessage,CompletionStage<Integer>,Void,Void,String>() {
 
 				@Override
 				protected TestMessage createSourceMessage(
@@ -561,7 +561,7 @@ public class TestEObjectGraph {
 				
 			};
 			
-			Map<Element, ProcessorInfo<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>, BiFunction<TestMessage, ProgressMonitor, Integer>>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
+			Map<Element, ProcessorInfo<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>, String, BiFunction<TestMessage, ProgressMonitor, Integer>>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
 			assertEquals(configs.configs().size(), processors.size());
 			
 			Stream<BiFunction<TestMessage, ProgressMonitor, Integer>> ps = processors
@@ -607,7 +607,7 @@ public class TestEObjectGraph {
 		Queue<Runnable> processingQueue = new PriorityQueue<>(); //				
 		long start = System.currentTimeMillis();		
 		
-		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> processorConfigFactory = new ProcessorConfigFactory<>() {
+		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>, String> processorConfigFactory = new ProcessorConfigFactory<>() {
 			
 			@Override
 			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
@@ -659,7 +659,7 @@ public class TestEObjectGraph {
 	public void testMessageProcessorFactoryAsync() throws InterruptedException {				
 		AtomicInteger counter = new AtomicInteger();
 		
-		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> processorConfigFactory = new ProcessorConfigFactory<>() {
+		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>, String> processorConfigFactory = new ProcessorConfigFactory<>() {
 			
 			@Override
 			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {
@@ -741,7 +741,7 @@ public class TestEObjectGraph {
 		
 		long start = System.currentTimeMillis();
 		
-		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>> processorConfigFactory = new ProcessorConfigFactory<>() {
+		ProcessorConfigFactory<BiFunction<TestMessage, ProgressMonitor, Integer>, BiFunction<TestMessage, ProgressMonitor, CompletionStage<Integer>>, String> processorConfigFactory = new ProcessorConfigFactory<>() {
 			
 			@Override
 			protected boolean isPassThrough(org.nasdanika.graph.Connection connection) {

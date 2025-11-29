@@ -5,11 +5,11 @@ import java.util.function.BiConsumer;
 
 import org.nasdanika.graph.Element;
 
-public interface ProcessorConfig<H,E> {
+public interface ProcessorConfig<H,E,K> {
 	
 	Element getElement();
 	
-	Map<Element, ProcessorConfig<H,E>> getChildProcessorConfigs();
+	Map<Element, ProcessorConfig<H,E,K>> getChildProcessorConfigs();
 
 	/**
 	 * Parent processor uses this map to communicate with child processors.
@@ -18,7 +18,7 @@ public interface ProcessorConfig<H,E> {
 	 */
 	Map<Element, Synapse<H,E>> getChildSynapses();
 			
-	ProcessorConfig<H,E> getParentProcessorConfig();
+	ProcessorConfig<H,E,K> getParentProcessorConfig();
 
 	/**
 	 * Child processor calls this method to obtain a synapse to communicate with the parent, if there is one.
@@ -30,7 +30,7 @@ public interface ProcessorConfig<H,E> {
 	 * Processor calls this method and passes a consumer for receiving processor synapses piped to client synapses 
 	 * @return
 	 */
-	void setProcessorSynapseConsumer(BiConsumer<Object,Synapse<H,E>> processorSynapseConsumer);
+	void setProcessorSynapseConsumer(BiConsumer<K,Synapse<H,E>> processorSynapseConsumer);
 		
 	/**
 	 * Client code calls this method to obtain a synapse to communicate with the processor.
@@ -38,11 +38,11 @@ public interface ProcessorConfig<H,E> {
 	 * @param clientKey
 	 * @return
 	 */
-	Synapse<H,E> getClientSynapse(Object clientKey);	
+	Synapse<H,E> getClientSynapse(K clientKey);	
 	
-	Map<Element,ProcessorConfig<H,E>> getRegistry();
+	Map<Element,ProcessorConfig<H,E,K>> getRegistry();
 	
-	default <P> ProcessorInfo<H,E,P> toInfo(P processor) {
+	default <P> ProcessorInfo<H,E,K,P> toInfo(P processor) {
 		return ProcessorInfo.of(this, processor);
 	}
 	

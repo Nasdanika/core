@@ -18,11 +18,13 @@ import org.nasdanika.graph.processor.ParentHandler;
  * Sends a root message and stores it.
  * @param <T> processor element type
  */
-public abstract class ElementProcessor<V> {
+public abstract class ElementProcessor<V,K> {
 		
 	protected abstract V parentValue(Message<V> message);
 
 	protected abstract V childValue(Message<V> message, Element child);
+
+	protected abstract V clientValue(Message<V> message, K clientKey);
 		
 	@ParentHandler(proxy = Consumer.class)
 	public void receiveFromParent(Message<V> parentMessage) {
@@ -32,6 +34,13 @@ public abstract class ElementProcessor<V> {
 				ce.getValue().accept(parentMessage, childValue);
 			}
 		}
+		
+		for (Entry<K, BiConsumer<Message<V>, V>> ce: clientEndpoints.entrySet()) {
+			V clientValue = clientValue(parentMessage, ce.getKey());
+			if (clientValue != null) {
+				ce.getValue().accept(parentMessage, clientValue);
+			}
+		}					
 		
 		onParentMessage(parentMessage);
 	}
@@ -44,6 +53,13 @@ public abstract class ElementProcessor<V> {
 	@ChildEndpoint
 	public void setChildEndpoint(Element child, BiConsumer<Message<V>,V> endpoint) {
 		childEndpoints.put(child, endpoint);
+	}
+	
+	protected Map<K, BiConsumer<Message<V>,V>> clientEndpoints = new ConcurrentHashMap<>();
+	
+	@ChildEndpoint
+	public void setClientEndpoint(K clientKey, BiConsumer<Message<V>,V> endpoint) {
+		clientEndpoints.put(clientKey, endpoint);
 	}
 	
 	@ChildHandler
@@ -63,14 +79,21 @@ public abstract class ElementProcessor<V> {
 						ce.getValue().accept(message, childValue);
 					}
 				}
-			}		
+			}	
+			
+			for (Entry<K, BiConsumer<Message<V>, V>> ce: clientEndpoints.entrySet()) {
+				V clientValue = clientValue(message, ce.getKey());
+				if (clientValue != null) {
+					ce.getValue().accept(message, clientValue);
+				}
+			}					
 			
 			onChildMessage(child, message);
 		};
 	}
 		
 	@ClientHandler
-	public Consumer<Message<V>> getClientHandler(Object clientKey) {
+	public Consumer<Message<V>> getClientHandler(K clientKey) {
 		return message -> {
 			if (parentEndpoint != null) {
 				V parentValue = parentValue(message);
@@ -85,6 +108,15 @@ public abstract class ElementProcessor<V> {
 					ce.getValue().accept(message, childValue);
 				}
 			}	
+			
+			for (Entry<K, BiConsumer<Message<V>, V>> ce: clientEndpoints.entrySet()) {
+				if (ce.getKey() != clientKey) {
+					V clientValue = clientValue(message, ce.getKey());
+					if (clientValue != null) {
+						ce.getValue().accept(message, clientValue);
+					}
+				}
+			}					
 			
 			onClientMessage(clientKey, message);
 		};

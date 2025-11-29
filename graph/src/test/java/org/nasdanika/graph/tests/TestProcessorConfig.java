@@ -41,19 +41,19 @@ public class TestProcessorConfig {
 	@Test
 	public void testClientHandlerAndEndpoint() {
 		ObjectElement<String> element = new ObjectElement<String>("Hello");				
-		ProcessorConfigFactory<Supplier<String>, Supplier<String>> processorConfigFactory = new NopEndpointProcessorConfigFactory<Supplier<String>>();		
-		Transformer<Element,ProcessorConfig<Supplier<String>,Supplier<String>>> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
+		ProcessorConfigFactory<Supplier<String>, Supplier<String>, String> processorConfigFactory = new NopEndpointProcessorConfigFactory<Supplier<String>, String>();		
+		Transformer<Element,ProcessorConfig<Supplier<String>,Supplier<String>,String>> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Map<Element, ProcessorConfig<Supplier<String>,Supplier<String>>> configs = processorConfigTransformer.transform(Collections.singleton(element), false, progressMonitor);
+		Map<Element, ProcessorConfig<Supplier<String>,Supplier<String>,String>> configs = processorConfigTransformer.transform(Collections.singleton(element), false, progressMonitor);
 		System.out.println("Configs: " + configs.size());
 			
-		ProcessorFactory<Supplier<String>,Supplier<String>,Object> processorFactory = new ProcessorFactory<Supplier<String>,Supplier<String>,Object>() {
+		ProcessorFactory<Supplier<String>,Supplier<String>,String,Object> processorFactory = new ProcessorFactory<Supplier<String>,Supplier<String>,String,Object>() {
 			
 			@Override
-			protected ProcessorInfo<Supplier<String>, Supplier<String>, Object> createProcessor(
-					ProcessorConfig<Supplier<String>, Supplier<String>> config, 
+			protected ProcessorInfo<Supplier<String>, Supplier<String>, String, Object> createProcessor(
+					ProcessorConfig<Supplier<String>, Supplier<String>, String> config, 
 					boolean parallel,
-					BiConsumer<Element, BiConsumer<ProcessorInfo<Supplier<String>, Supplier<String>, Object>, ProgressMonitor>> infoProvider,
+					BiConsumer<Element, BiConsumer<ProcessorInfo<Supplier<String>, Supplier<String>, String, Object>, ProgressMonitor>> infoProvider,
 					Consumer<CompletionStage<?>> endpointWiringStageConsumer, ProgressMonitor progressMonitor) {
 				
 				config.setProcessorSynapseConsumer((cs,ps) -> {
@@ -65,9 +65,9 @@ public class TestProcessorConfig {
 						
 		};
 		
-		Map<Element, ProcessorInfo<Supplier<String>, Supplier<String>,Object>> processors = processorFactory.createProcessors(configs.values(), false, progressMonitor);
+		Map<Element, ProcessorInfo<Supplier<String>, Supplier<String>, String, Object>> processors = processorFactory.createProcessors(configs.values(), false, progressMonitor);
 		
-		for (Entry<Element, ProcessorInfo<Supplier<String>, Supplier<String>, Object>> pe: processors.entrySet()) {
+		for (Entry<Element, ProcessorInfo<Supplier<String>, Supplier<String>, String, Object>> pe: processors.entrySet()) {
 			Synapse<Supplier<String>, Supplier<String>> clientSynapse = pe.getValue().getClientSynapse("Test client");
 			clientSynapse.setHandler(() -> "From test client");
 			clientSynapse.getEndpoint().thenAccept(supplier -> System.out.println("[Test client] " + supplier.get()));						

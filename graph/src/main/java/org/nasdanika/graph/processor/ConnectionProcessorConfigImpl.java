@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 import org.nasdanika.graph.Connection;
 
-class ConnectionProcessorConfigImpl<H,E> extends ProcessorConfigImpl<H,E> implements ConnectionProcessorConfig<H, E> {
+class ConnectionProcessorConfigImpl<H,E,K> extends ProcessorConfigImpl<H,E,K> implements ConnectionProcessorConfig<H,E,K> {
 
 	private CompletableFuture<E> sourceEndpoint = new CompletableFuture<>();
 	private CompletableFuture<E> targetEndpoint = new CompletableFuture<>();
@@ -25,7 +25,7 @@ class ConnectionProcessorConfigImpl<H,E> extends ProcessorConfigImpl<H,E> implem
 	}
 	
 	@Override
-	public Synapse<H, E> getSourceSynapse() {
+	public Synapse<H,E> getSourceSynapse() {
 		return new Synapse<H,E>() {
 
 			@Override
@@ -41,7 +41,7 @@ class ConnectionProcessorConfigImpl<H,E> extends ProcessorConfigImpl<H,E> implem
 	}
 	
 	@Override
-	public Synapse<H, E> getTargetSynapse() {
+	public Synapse<H,E> getTargetSynapse() {
 		return new Synapse<H,E>() {
 
 			@Override

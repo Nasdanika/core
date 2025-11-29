@@ -24,7 +24,7 @@ import org.nasdanika.graph.processor.ProcessorInfo;
  * @param <V> First endpoint argument type 
  * @param <W> Endpoint return type
  */
-public abstract class MessageProcessorFactory<T,U,V,W,NS,CS> extends BiFunctionProcessorFactory<T,U,V,W> {
+public abstract class MessageProcessorFactory<T,U,V,W,NS,CS,K> extends BiFunctionProcessorFactory<T,U,V,W,K> {
 
 	/**
 	 * Creates a message to be sent to the connection source
@@ -57,9 +57,9 @@ public abstract class MessageProcessorFactory<T,U,V,W,NS,CS> extends BiFunctionP
 			ProgressMonitor progressMonitor);
 	
 	protected CS createConnectionProcessorState(
-			ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> connectionProcessorConfig,
+			ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K> connectionProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor) {
 		
@@ -68,9 +68,9 @@ public abstract class MessageProcessorFactory<T,U,V,W,NS,CS> extends BiFunctionP
 	
 	@Override
 	protected ConnectionProcessor<T, U, V, W> createConnectionProcessor(
-			ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> connectionProcessorConfig,
+			ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K> connectionProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, ProgressMonitor progressMonitor) {
 		// TODO Auto-generated method stub
 	
@@ -170,9 +170,9 @@ public abstract class MessageProcessorFactory<T,U,V,W,NS,CS> extends BiFunctionP
 			ProgressMonitor progressMonitor);
 	
 	protected NS createNodeProcessorState(
-			NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> nodeProcessorConfig,
+			NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K> nodeProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,
@@ -183,9 +183,9 @@ public abstract class MessageProcessorFactory<T,U,V,W,NS,CS> extends BiFunctionP
 	
 	@Override
 	protected NodeProcessor<T, U, V, W> createNodeProcessor(
-			NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> nodeProcessorConfig,
+			NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K> nodeProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,

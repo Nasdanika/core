@@ -29,7 +29,7 @@ import org.nasdanika.ncore.util.NcoreUtil;
  *
  */
 @Factory(type = EObjectNode.class)
-public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
+public class EObjectNodeProcessorReflectiveFactory<H,E,K> extends Reflector {
 	
 	protected List<AnnotatedElementRecord> annotatedElementRecords = new ArrayList<>();
 
@@ -61,9 +61,9 @@ public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
 	
 	@Processor(type = EObjectNode.class)
 	public Object createEObjectNodeProcessor(
-			NodeProcessorConfig<H,E> config, 
+			NodeProcessorConfig<H,E,K> config, 
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,Object>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,K,Object>,ProgressMonitor>> infoProvider,
 			Function<ProgressMonitor, Object> next,			
 			ProgressMonitor progressMonitor) {
 		EObject eObj = ((EObjectNode) config.getElement()).get();

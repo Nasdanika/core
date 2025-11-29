@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * @param <U>
  * @param <S>
  */
-public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E,P> {
+public class ReflectiveProcessorWirer<H,E,K,P> extends ReflectiveRegistryWirer<H,E,K,P> {
 	
 	private static Logger LOGGER = LoggerFactory.getLogger(ReflectiveProcessorWirer.class);
 	
@@ -59,11 +59,11 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 	}
 	
 	public void wireProcessor(
-			ProcessorConfig<H,E> config,
+			ProcessorConfig<H,E,K> config,
 			P processor,
 			boolean hideWired,
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,K,P>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			ProgressMonitor progressMonitor) {
 		
@@ -72,7 +72,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 		
 		wireProcessorElement(processorAnnotatedElementRecordsStreamSupplier.get(), config.getElement());		
 		
-		Map<Element, ProcessorConfig<H,E>> childProcessorConfigsCopy = new LinkedHashMap<>(config.getChildProcessorConfigs());
+		Map<Element, ProcessorConfig<H,E,K>> childProcessorConfigsCopy = new LinkedHashMap<>(config.getChildProcessorConfigs());
 		wireChildProcessor(
 				processorAnnotatedElementRecordsStreamSupplier.get(), 
 				config.getChildProcessorConfigs(), 
@@ -84,9 +84,9 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 				childProcessorConfigsCopy , 
 				infoProvider);
 		
-		ProcessorConfig<H,E> parentConfig = config.getParentProcessorConfig();
+		ProcessorConfig<H,E,K> parentConfig = config.getParentProcessorConfig();
 		if (parentConfig != null) {			
-			Consumer<Consumer<ProcessorInfo<H,E,P>>> parentProcessorInfoConsumerCallback = parentProcessorInfoConsumer -> {
+			Consumer<Consumer<ProcessorInfo<H,E,K,P>>> parentProcessorInfoConsumerCallback = parentProcessorInfoConsumer -> {
 				infoProvider.accept(parentConfig.getElement(), (pInfo, pMonitor) -> parentProcessorInfoConsumer.accept(pInfo));
 			};
 			wireParentProcessor(processorAnnotatedElementRecordsStreamSupplier.get(), parentProcessorInfoConsumerCallback);
@@ -157,7 +157,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 		});
 		
 		if (config instanceof NodeProcessorConfig) {
-			NodeProcessorConfig<H, E> nodeProcessorConfig = (NodeProcessorConfig<H, E>) config;
+			NodeProcessorConfig<H,E,K> nodeProcessorConfig = (NodeProcessorConfig<H,E,K>) config;
 			Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = new LinkedHashMap<>(endpointsMap(nodeProcessorConfig.getIncomingSynapses())); // Making a copy to remove wired on completion 
 			wireIncomingEndpoint(
 					processorAnnotatedElementRecordsStreamSupplier.get(), 
@@ -207,7 +207,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 			}			
 			wireOutgoingHandlerConsumers(processorAnnotatedElementRecordsStreamSupplier.get(), unwiredOutgoingHandlerConsumers);
 		} else if (config instanceof ConnectionProcessorConfig) {
-			ConnectionProcessorConfig<H, E> connectionProcessorConfig = (ConnectionProcessorConfig<H, E>) config;
+			ConnectionProcessorConfig<H,E,K> connectionProcessorConfig = (ConnectionProcessorConfig<H,E,K>) config;
 			Consumer<E> sourceEndpointConsumer = wireSourceEndpoint(processorAnnotatedElementRecordsStreamSupplier.get());
 			if (sourceEndpointConsumer != null) {
 				endpointWiringStageConsumer.accept(connectionProcessorConfig.getSourceSynapse().getEndpoint().thenAccept(sourceEndpointConsumer));
@@ -231,7 +231,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 
 	protected void wireParentProcessor(			
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Consumer<Consumer<ProcessorInfo<H,E,P>>> parentProcessorInfoProvider) {
+			Consumer<Consumer<ProcessorInfo<H,E,K,P>>> parentProcessorInfoProvider) {
 
 		processorAnnotatedElementRecords
 				.filter(aer -> aer.getAnnotation(ParentProcessor.class) != null)
@@ -248,15 +248,15 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 	 */
 	private void wireChildProcessor(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Map<Element, ProcessorConfig<H,E>> childProcessorConfigs, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
+			Map<Element, ProcessorConfig<H,E,K>> childProcessorConfigs, 
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,K,P>,ProgressMonitor>> infoProvider,
 			Consumer<Element> wiredChildrenConsumer) {		
 
 		processorAnnotatedElementRecords
 			.filter(aer -> aer.getAnnotation(ChildProcessor.class) != null)
 			.filter(aer -> aer.mustSet(null, "Fields/methods annotated with ChildProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if info is set to true: " + aer.getAnnotatedElement()))
 			.forEach(aer -> {
-				for (Entry<Element, ProcessorConfig<H,E>> ce: childProcessorConfigs.entrySet()) {
+				for (Entry<Element, ProcessorConfig<H,E,K>> ce: childProcessorConfigs.entrySet()) {
 					ChildProcessor childProcessorAnnotation = aer.getAnnotation(ChildProcessor.class);
 					if (matchPredicate(ce.getKey(), childProcessorAnnotation.value())) {
 						infoProvider.accept(ce.getKey(), (childProcessorInfo, pMonitor) -> {
@@ -270,17 +270,17 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 
 	protected void wireChildProcessors(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Map<Element, ProcessorConfig<H,E>> childProcessorConfigs,
-			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider) {		
+			Map<Element, ProcessorConfig<H,E,K>> childProcessorConfigs,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,K,P>,ProgressMonitor>> infoProvider) {		
 		
 		processorAnnotatedElementRecords
 				.filter(aer -> aer.getAnnotation(ChildProcessors.class) != null)
 				.filter(aer -> aer.mustSet(Map.class, "Fields/methods annotated with ChildProcessors must have (parameter) type assignable from Map: " + aer.getAnnotatedElement()))
 				.forEach(aer -> {
 					// Sets a map which is populated as processors get created
-					Map<Element,ProcessorInfo<H,E,P>> childProcessorInfoMap = Collections.synchronizedMap(new LinkedHashMap<>());
+					Map<Element,ProcessorInfo<H,E,K,P>> childProcessorInfoMap = Collections.synchronizedMap(new LinkedHashMap<>());
 					aer.set(childProcessorInfoMap);
-					for (ProcessorConfig<H,E> childConfig: childProcessorConfigs.values()) {
+					for (ProcessorConfig<H,E,K> childConfig: childProcessorConfigs.values()) {
 						infoProvider.accept(childConfig.getElement(), (childInfo, cpm) -> childProcessorInfoMap.put(childConfig.getElement(), childInfo));
 					}
 				});
@@ -729,7 +729,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 	@SuppressWarnings("unchecked")
 	protected void wireTargetHandler(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			ConnectionProcessorConfig<H,E> connectionProcessorConfig) {
+			ConnectionProcessorConfig<H,E,K> connectionProcessorConfig) {
 		Optional<AnnotatedElementRecord> getter = processorAnnotatedElementRecords
 			.filter(aer -> aer.getAnnotation(TargetHandler.class) != null)
 			.filter(aer -> aer.getAnnotation(TargetHandler.class).proxy().length > 0 || aer.mustGet(null, "Cannot use " + aer.getAnnotatedElement() + " to get target connection handler"))
@@ -765,7 +765,7 @@ public class ReflectiveProcessorWirer<H,E,P> extends ReflectiveRegistryWirer<H,E
 	@SuppressWarnings("unchecked")
 	protected void wireSourceHandler(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			ConnectionProcessorConfig<H,E> connectionProcessorConfig) {
+			ConnectionProcessorConfig<H,E,K> connectionProcessorConfig) {
 		Optional<AnnotatedElementRecord> getter = processorAnnotatedElementRecords
 			.filter(aer -> aer.getAnnotation(SourceHandler.class) != null)
 			.filter(aer -> aer.getAnnotation(SourceHandler.class).proxy().length > 0 || aer.mustGet(null, "Cannot use " + aer.getAnnotatedElement() + " to get source connection handler"))

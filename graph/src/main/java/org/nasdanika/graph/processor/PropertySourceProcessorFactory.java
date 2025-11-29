@@ -15,28 +15,28 @@ import org.nasdanika.graph.Element;
  * If element is an instance of {@link PropertySource} then {@link URI} is retrieved from it - property value should either be a URI or a String. 
  * @param <P>
  */
-public abstract class PropertySourceProcessorFactory<H,E,P,K,V> extends URIInvocableCapabilityProcessorFactory<H,E,P> {
+public abstract class PropertySourceProcessorFactory<H,E,K,P,R,V> extends URIInvocableCapabilityProcessorFactory<H,E,K,P> {
 	protected CapabilityLoader capabilityLoader;
-	private K processorProperty;
+	private R processorProperty;
 
-	public PropertySourceProcessorFactory(K processorProperty) {
+	public PropertySourceProcessorFactory(R processorProperty) {
 		this.processorProperty = processorProperty;
 	}
 	
-	public PropertySourceProcessorFactory(CapabilityLoader capabilityLoader, K processorProperty) {
+	public PropertySourceProcessorFactory(CapabilityLoader capabilityLoader, R processorProperty) {
 		super(capabilityLoader);
 		this.processorProperty = processorProperty;
 	}
 
 	@Override
-	protected URI getURI(ProcessorConfig<H,E> config, ProgressMonitor progressMonitor) {
+	protected URI getURI(ProcessorConfig<H,E,K> config, ProgressMonitor progressMonitor) {
 		return getURI(config.getElement());
 	}
 
 	protected URI getURI(Element element) {
 		if (element instanceof PropertySource) {
 			@SuppressWarnings("unchecked")
-			V value = ((PropertySource<K,V>) element).getProperty(processorProperty);
+			V value = ((PropertySource<R,V>) element).getProperty(processorProperty);
 			return getURI(value);
 		}
 		return null;
@@ -51,12 +51,12 @@ public abstract class PropertySourceProcessorFactory<H,E,P,K,V> extends URIInvoc
 	 * @param endpointFactory
 	 * @param processorProperty
 	 */
-	public Map<Element, ProcessorInfo<H,E,P>> createProcessors(
+	public Map<Element, ProcessorInfo<H,E,K,P>> createProcessors(
 			Collection<? extends Element> source,
 			EndpointFactory<H,E> endpointFactory, 
 			boolean parallel,
 			ProgressMonitor progressMonitor) {
-		ProcessorConfigFactory<H,E> processorConfigFactory = new ProcessorConfigFactory<H,E>() {
+		ProcessorConfigFactory<H,E,K> processorConfigFactory = new ProcessorConfigFactory<H,E,K>() {
 			
 			@Override
 			protected boolean isPassThrough(Connection connection) {
@@ -74,8 +74,8 @@ public abstract class PropertySourceProcessorFactory<H,E,P,K,V> extends URIInvoc
 			
 		};
 		
-		Transformer<Element,ProcessorConfig<H,E>> processorConfigTransformer = new Transformer<>(processorConfigFactory);		
-		Map<Element, ProcessorConfig<H,E>> configs = processorConfigTransformer.transform(source, parallel, progressMonitor);		
+		Transformer<Element,ProcessorConfig<H,E,K>> processorConfigTransformer = new Transformer<>(processorConfigFactory);		
+		Map<Element, ProcessorConfig<H,E,K>> configs = processorConfigTransformer.transform(source, parallel, progressMonitor);		
 		return createProcessors(configs.values(), parallel, progressMonitor);
 	}	
 	

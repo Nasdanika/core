@@ -18,16 +18,16 @@ import reactor.core.publisher.Flux;
  * @param <R>
  * @param <P>
  */
-public class ReflectiveProcessorServiceFactory<R,H,E,P> extends ServiceCapabilityFactory<ProcessorRequirement<R,H,E,P>, P> {
+public class ReflectiveProcessorServiceFactory<R,H,E,K,P> extends ServiceCapabilityFactory<ProcessorRequirement<R,H,E,K,P>, P> {
 	
 	/**
 	 * Requirement for a {@link ReflectiveProcessorFactoryProvider} target
 	 * @param <R>
 	 * @param <P>
 	 */
-	public static record ReflectiveProcessorFactoryProviderTargetRequirement<R,H,E,P>(
+	public static record ReflectiveProcessorFactoryProviderTargetRequirement<R,H,E,K,P>(
 			Class<P> processorType,
-			ProcessorRequirement<R,H,E,P> processorRequirement) {}	
+			ProcessorRequirement<R,H,E,K,P> processorRequirement) {}	
 	
 	@Override
 	public boolean isFor(Class<?> type, Object serviceRequirement) {
@@ -37,18 +37,18 @@ public class ReflectiveProcessorServiceFactory<R,H,E,P> extends ServiceCapabilit
 	@Override
 	protected CompletionStage<Iterable<CapabilityProvider<P>>> createService(
 			Class<P> processorType,
-			ProcessorRequirement<R,H,E,P> serviceRequirement,
+			ProcessorRequirement<R,H,E,K,P> serviceRequirement,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
 		
-		ReflectiveProcessorFactoryProviderTargetRequirement<R,H,E,P> targetRequirement = new ReflectiveProcessorFactoryProviderTargetRequirement<>(processorType, serviceRequirement);		
+		ReflectiveProcessorFactoryProviderTargetRequirement<R,H,E,K,P> targetRequirement = new ReflectiveProcessorFactoryProviderTargetRequirement<>(processorType, serviceRequirement);		
 		CompletionStage<Iterable<CapabilityProvider<Object>>> targetsCS = loader.load(targetRequirement, progressMonitor);
 		return targetsCS.thenApply(targets -> createProcessors(processorType, serviceRequirement, loader, targets, progressMonitor));
 	}
 	
 	protected Iterable<CapabilityProvider<P>> createProcessors(
 			Class<P> processorType,
-			ProcessorRequirement<R,H,E,P> serviceRequirement,
+			ProcessorRequirement<R,H,E,K,P> serviceRequirement,
 			Loader loader,
 			Iterable<CapabilityProvider<Object>> targetCapabilityProviders, 
 			ProgressMonitor progressMonitor) {
@@ -59,7 +59,7 @@ public class ReflectiveProcessorServiceFactory<R,H,E,P> extends ServiceCapabilit
 			tcp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(targets::add);
 		}
 		
-		ReflectiveProcessorFactoryProvider<H,E,P> rpfp = new ReflectiveProcessorFactoryProvider<>(targets.toArray());
+		ReflectiveProcessorFactoryProvider<H,E,K,P> rpfp = new ReflectiveProcessorFactoryProvider<>(targets.toArray());
 		
 		P processor = rpfp.createProcessor(
 				serviceRequirement.config(),

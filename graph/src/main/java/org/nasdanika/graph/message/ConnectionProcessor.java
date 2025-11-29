@@ -10,7 +10,7 @@ import org.nasdanika.graph.processor.SourceHandler;
 import org.nasdanika.graph.processor.TargetEndpoint;
 import org.nasdanika.graph.processor.TargetHandler;
 
-public abstract class ConnectionProcessor<V> extends ElementProcessor<V> {
+public abstract class ConnectionProcessor<V,K> extends ElementProcessor<V,K> {
 
 	protected abstract V sourceValue(Message<V> message);
 	
@@ -36,7 +36,14 @@ public abstract class ConnectionProcessor<V> extends ElementProcessor<V> {
 			if (childValue != null) {
 				ce.getValue().accept(sourceMessage, childValue);
 			}
-		}			
+		}	
+		
+		for (Entry<K, BiConsumer<Message<V>, V>> ce: clientEndpoints.entrySet()) {
+			V clientValue = clientValue(sourceMessage, ce.getKey());
+			if (clientValue != null) {
+				ce.getValue().accept(sourceMessage, clientValue);
+			}
+		}					
 		
 		if (targetEndpoint != null) {
 			V targetValue = targetValue(sourceMessage);
@@ -63,6 +70,13 @@ public abstract class ConnectionProcessor<V> extends ElementProcessor<V> {
 				ce.getValue().accept(targetMessage, childValue);
 			}
 		}			
+		
+		for (Entry<K, BiConsumer<Message<V>, V>> ce: clientEndpoints.entrySet()) {
+			V clientValue = clientValue(targetMessage, ce.getKey());
+			if (clientValue != null) {
+				ce.getValue().accept(targetMessage, clientValue);
+			}
+		}					
 		
 		if (sourceEndpoint != null) {
 			V sourceValue = sourceValue(targetMessage);

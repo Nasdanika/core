@@ -9,7 +9,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.HandlerType;
 import org.nasdanika.graph.processor.ProcessorConfigFactory;
 
-public class MessageProcessorConfigFactory<V> extends ProcessorConfigFactory<Consumer<Message<V>>, BiConsumer<Message<V>,V>> {
+public class MessageProcessorConfigFactory<V,K> extends ProcessorConfigFactory<Consumer<Message<V>>, BiConsumer<Message<V>,V>,K> {
 	
 	private Executor executor;
 

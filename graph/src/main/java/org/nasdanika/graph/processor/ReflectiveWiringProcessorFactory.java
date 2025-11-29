@@ -11,15 +11,15 @@ import org.nasdanika.graph.Element;
  * Base clsss for processor factories reflectively wiring processors.
  * @param <P>
  */
-public abstract class ReflectiveWiringProcessorFactory<H,E,P> extends ProcessorFactory<H,E,P> {
+public abstract class ReflectiveWiringProcessorFactory<H,E,K,P> extends ProcessorFactory<H,E,K,P> {
 	
-	ReflectiveProcessorWirer<H,E,P> wirerer = new ReflectiveProcessorWirer<>();
+	ReflectiveProcessorWirer<H,E,K,P> wirerer = new ReflectiveProcessorWirer<>();
 
 	@Override
-	protected ProcessorInfo<H,E,P> createProcessor(
-			ProcessorConfig<H,E> config, 
+	protected ProcessorInfo<H,E,K,P> createProcessor(
+			ProcessorConfig<H,E,K> config, 
 			boolean parallel,
-			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,K,P>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			ProgressMonitor progressMonitor) {
 		
@@ -45,9 +45,9 @@ public abstract class ReflectiveWiringProcessorFactory<H,E,P> extends ProcessorF
 	}
 
 	protected abstract P doCreateProcessor(
-			ProcessorConfig<H,E> config, 
+			ProcessorConfig<H,E,K> config, 
 			boolean parallel, 
-			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,K,P>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			ProgressMonitor progressMonitor); 
 		

@@ -6,7 +6,7 @@ import java.util.function.BiConsumer;
 
 import org.nasdanika.graph.Element;
 
-public class ProcessorConfigFilter<H, E, C extends ProcessorConfig<H,E>> implements ProcessorConfig<H,E> {
+public class ProcessorConfigFilter<H,E,K,C extends ProcessorConfig<H,E,K>> implements ProcessorConfig<H,E,K> {
 	
 	protected C config;
 
@@ -20,37 +20,37 @@ public class ProcessorConfigFilter<H, E, C extends ProcessorConfig<H,E>> impleme
 	}
 
 	@Override
-	public Map<Element, ProcessorConfig<H,E>> getChildProcessorConfigs() {
+	public Map<Element, ProcessorConfig<H,E,K>> getChildProcessorConfigs() {
 		return config.getChildProcessorConfigs();
 	}
 
 	@Override
-	public ProcessorConfig<H,E> getParentProcessorConfig() {
+	public ProcessorConfig<H,E,K> getParentProcessorConfig() {
 		return config.getParentProcessorConfig();
 	}
 
 	@Override
-	public Map<Element, ProcessorConfig<H,E>> getRegistry() {
+	public Map<Element, ProcessorConfig<H,E,K>> getRegistry() {
 		return config.getRegistry();
 	}
 
 	@Override
-	public Map<Element, Synapse<H, E>> getChildSynapses() {
+	public Map<Element, Synapse<H,E>> getChildSynapses() {
 		return config.getChildSynapses();
 	}
 
 	@Override
-	public Synapse<H, E> getParentSynapse() {
+	public Synapse<H,E> getParentSynapse() {
 		return config.getParentSynapse();
 	}
 
 	@Override
-	public Synapse<H, E> getClientSynapse(Object clientKey) {
+	public Synapse<H,E> getClientSynapse(K clientKey) {
 		return config.getClientSynapse(clientKey);
 	}
 	
 	@Override
-	public void setProcessorSynapseConsumer(BiConsumer<Object, Synapse<H, E>> processorSynapseConsumer) {
+	public void setProcessorSynapseConsumer(BiConsumer<K, Synapse<H,E>> processorSynapseConsumer) {
 		config.setProcessorSynapseConsumer(processorSynapseConsumer);
 		
 	}

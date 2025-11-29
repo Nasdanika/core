@@ -11,7 +11,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.IncomingEndpoint;
 import org.nasdanika.graph.processor.IncomingHandler;
 
-public abstract class NodeProcessor<V> extends ElementProcessor<V> {
+public abstract class NodeProcessor<V,K> extends ElementProcessor<V,K> {
 
 	protected abstract V outgoingValue(Message<V> message, Connection outgoingConnection);
 	
@@ -40,6 +40,13 @@ public abstract class NodeProcessor<V> extends ElementProcessor<V> {
 					ce.getValue().accept(message, childValue);
 				}
 			}		
+			
+			for (Entry<K, BiConsumer<Message<V>, V>> ce: clientEndpoints.entrySet()) {
+				V clientValue = clientValue(message, ce.getKey());
+				if (clientValue != null) {
+					ce.getValue().accept(message, clientValue);
+				}
+			}					
 			
 			for (Entry<Connection, BiConsumer<Message<V>, V>> ie: incomingEndpoints.entrySet()) {
 				if (ie.getKey() != incomingConnection) {
@@ -88,6 +95,13 @@ public abstract class NodeProcessor<V> extends ElementProcessor<V> {
 					ce.getValue().accept(message, childValue);
 				}
 			}		
+			
+			for (Entry<K, BiConsumer<Message<V>, V>> ce: clientEndpoints.entrySet()) {
+				V clientValue = clientValue(message, ce.getKey());
+				if (clientValue != null) {
+					ce.getValue().accept(message, clientValue);
+				}
+			}					
 			
 			for (Entry<Connection, BiConsumer<Message<V>, V>> ie: incomingEndpoints.entrySet()) {
 				V incomingValue = incomingValue(message, ie.getKey());

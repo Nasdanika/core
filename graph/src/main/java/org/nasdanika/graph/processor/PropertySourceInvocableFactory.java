@@ -13,26 +13,26 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertySource;
 import org.nasdanika.graph.Element;
 
-public abstract class PropertySourceInvocableFactory<H,E,K,V> extends PropertySourceProcessorFactory<H,E,Invocable,K,V> {
+public abstract class PropertySourceInvocableFactory<H,E,K,R,V> extends PropertySourceProcessorFactory<H,E,K,Invocable,R,V> {
 
-	protected PropertySourceInvocableFactory(CapabilityLoader capabilityLoader, K processorProperty) {
+	protected PropertySourceInvocableFactory(CapabilityLoader capabilityLoader, R processorProperty) {
 		super(capabilityLoader, processorProperty);
 	}
 
-	protected PropertySourceInvocableFactory(K processorProperty) {
+	protected PropertySourceInvocableFactory(R processorProperty) {
 		super(processorProperty);
 	}
 		
 	public <T> T createProxy(
 			Collection<? extends Element> source,
-			K bindProperty,
+			R bindProperty,
 			EndpointFactory<H, E> endpointFactory, 
 			boolean parallel,
 			ProgressMonitor progressMonitor,
 			ClassLoader classLoader, 			 
 			Class<?>... interfaces) {
 		
-		Map<Element, ProcessorInfo<H,E,Invocable>> processors = createProcessors(source, endpointFactory, parallel, progressMonitor);		
+		Map<Element, ProcessorInfo<H,E,K,Invocable>> processors = createProcessors(source, endpointFactory, parallel, progressMonitor);		
 		return Invocable.createProxy(classLoader, (proxy, method, args) -> resolve(proxy, method, args, processors, bindProperty), interfaces);		
 	}	
 	
@@ -42,14 +42,14 @@ public abstract class PropertySourceInvocableFactory<H,E,K,V> extends PropertySo
 			Object proxy,
 			Method method, 
 			Object[] args, 
-			Map<Element, ProcessorInfo<H,E,Invocable>> processors,
-			K bindProperty) {
+			Map<Element, ProcessorInfo<H,E,K,Invocable>> processors,
+			R bindProperty) {
 		
 		List<Invocable> matches = new ArrayList<>();
-		for (Entry<Element, ProcessorInfo<H,E,Invocable>> pe: processors.entrySet()) {
+		for (Entry<Element, ProcessorInfo<H,E,K,Invocable>> pe: processors.entrySet()) {
 			if (pe.getKey() instanceof PropertySource) { 
 				@SuppressWarnings("unchecked")
-				V bindValue = ((PropertySource<K,V>) pe.getKey()).getProperty(bindProperty);
+				V bindValue = ((PropertySource<R,V>) pe.getKey()).getProperty(bindProperty);
 				if (match(bindValue, method, args)) {
 					Invocable processor = pe.getValue().getProcessor();
 					if (processor != null) {

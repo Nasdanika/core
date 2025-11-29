@@ -16,7 +16,7 @@ import reactor.core.publisher.Flux;
  * @param <R> Capability requirement type
  * @param <C> Capability type
  */
-public class CapabilityProcessorConfigFactory<R,C> extends NopEndpointProcessorConfigFactory<Function<R,Flux<C>>> {
+public class CapabilityProcessorConfigFactory<R,C,K> extends NopEndpointProcessorConfigFactory<Function<R,Flux<C>>,K> {
 	
 	
 

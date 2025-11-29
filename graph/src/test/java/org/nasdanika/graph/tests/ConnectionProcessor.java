@@ -7,7 +7,6 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 
@@ -17,7 +16,7 @@ public class ConnectionProcessor {
 	private Function<Element, Element> targetEndpoint;
 
 	public ConnectionProcessor(
-			ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>> config, 
+			ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>, String> config, 
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer) {
 		config.getSourceSynapse().setHandler(e -> {
 			assertEquals(config.getElement().getSource() , e);

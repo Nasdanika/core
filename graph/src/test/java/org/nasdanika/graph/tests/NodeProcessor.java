@@ -20,13 +20,13 @@ import org.nasdanika.graph.processor.Synapse;
  */
 public class NodeProcessor implements Supplier<Integer> {
 	
-	private NodeProcessorConfig<Function<Element, Element>, Function<Element, Element>> config;
+	private NodeProcessorConfig<Function<Element, Element>, Function<Element, Element>, String> config;
 	private Map<Connection, Function<Element, Element>> incomingEndpoints = new ConcurrentHashMap<>();
 	private Map<Connection, Function<Element, Element>> outgoingEndpoints = new ConcurrentHashMap<>();
 	private boolean passThrough;
 
 	public NodeProcessor(
-			NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>> config, 
+			NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>, String> config, 
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			boolean passThrough) {
 		this.config = config;

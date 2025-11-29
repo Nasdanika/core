@@ -16,12 +16,12 @@ import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.Connect
 
 public class BiFunctionConnectionProcessorImpl implements ConnectionProcessor<Object, Object, Object, Object> {
 	
-	private ConnectionProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> config;
+	private ConnectionProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>, String> config;
 
 	public BiFunctionConnectionProcessorImpl(
-			ConnectionProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> connectionProcessorConfig,
+			ConnectionProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>, String> connectionProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,String,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endointWiringStageConsumer) {
 		
 		this.config = connectionProcessorConfig;		

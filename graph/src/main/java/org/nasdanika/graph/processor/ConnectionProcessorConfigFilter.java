@@ -2,9 +2,9 @@ package org.nasdanika.graph.processor;
 
 import org.nasdanika.graph.Connection;
 
-public class ConnectionProcessorConfigFilter<H,E> extends ProcessorConfigFilter<H,E,ConnectionProcessorConfig<H,E>> implements ConnectionProcessorConfig<H,E> {
+public class ConnectionProcessorConfigFilter<H,E,K> extends ProcessorConfigFilter<H,E,K,ConnectionProcessorConfig<H,E,K>> implements ConnectionProcessorConfig<H,E,K> {
 	
-	public ConnectionProcessorConfigFilter(ConnectionProcessorConfig<H, E> config) {
+	public ConnectionProcessorConfigFilter(ConnectionProcessorConfig<H,E,K> config) {
 		super(config);
 	}
 
@@ -14,12 +14,12 @@ public class ConnectionProcessorConfigFilter<H,E> extends ProcessorConfigFilter<
 	}
 
 	@Override
-	public Synapse<H, E> getSourceSynapse() {
+	public Synapse<H,E> getSourceSynapse() {
 		return config.getSourceSynapse();
 	}
 
 	@Override
-	public Synapse<H, E> getTargetSynapse() {
+	public Synapse<H,E> getTargetSynapse() {
 		return config.getTargetSynapse();
 	}
 	

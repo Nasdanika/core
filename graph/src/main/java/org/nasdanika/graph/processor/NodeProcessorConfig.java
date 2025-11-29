@@ -5,7 +5,7 @@ import java.util.Map;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Node;
 
-public interface NodeProcessorConfig<H,E> extends ProcessorConfig<H,E> {
+public interface NodeProcessorConfig<H,E,K> extends ProcessorConfig<H,E,K> {
 	
 	@Override
 	Node getElement();
@@ -14,8 +14,8 @@ public interface NodeProcessorConfig<H,E> extends ProcessorConfig<H,E> {
 	
 	Map<Connection, Synapse<H,E>> getOutgoingSynapses();
 	
-	default <P> NodeProcessorInfo<H,E,P> toInfo(P processor) {
-		return new NodeProcessorInfo<H,E,P>(this, processor);
+	default <P> NodeProcessorInfo<H,E,K,P> toInfo(P processor) {
+		return new NodeProcessorInfo<H,E,K,P>(this, processor);
 	}	
 	
 }

@@ -2,7 +2,7 @@ package org.nasdanika.graph.processor;
 
 import org.nasdanika.graph.Connection;
 
-public interface ConnectionProcessorConfig<H,E> extends ProcessorConfig<H,E> {
+public interface ConnectionProcessorConfig<H,E,K> extends ProcessorConfig<H,E,K> {
 	
 	@Override
 	Connection getElement();
@@ -11,8 +11,8 @@ public interface ConnectionProcessorConfig<H,E> extends ProcessorConfig<H,E> {
 	
 	Synapse<H,E> getTargetSynapse();
 	
-	default <P> ConnectionProcessorInfo<H,E,P> toInfo(P processor) {
-		return new ConnectionProcessorInfo<H,E,P>(this, processor);
+	default <P> ConnectionProcessorInfo<H,E,K,P> toInfo(P processor) {
+		return new ConnectionProcessorInfo<H,E,K,P>(this, processor);
 	}	
 	
 }

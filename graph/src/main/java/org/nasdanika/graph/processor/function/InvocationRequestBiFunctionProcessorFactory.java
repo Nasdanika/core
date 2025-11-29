@@ -17,7 +17,7 @@ import org.nasdanika.graph.processor.ProcessorInfo;
 /**
  * Creates reflective processors which pass invocations between targets.  
  */
-public abstract class InvocationRequestBiFunctionProcessorFactory extends BiFunctionProcessorFactory<InvocationRequest, Object, InvocationRequest, Object> {
+public abstract class InvocationRequestBiFunctionProcessorFactory<K> extends BiFunctionProcessorFactory<InvocationRequest, Object, InvocationRequest, Object, K> {
 	
 	/**
 	 * First argument of target methods to differentiate between invocation sources
@@ -61,17 +61,17 @@ public abstract class InvocationRequestBiFunctionProcessorFactory extends BiFunc
 	 * @return
 	 */
 	protected abstract Collection<Object> createConnectionProcessorTargets(
-			ConnectionProcessorConfig<BiFunction<InvocationRequest, ProgressMonitor, Object>, BiFunction<InvocationRequest, ProgressMonitor, Object>> connectionProcessorConfig,
+			ConnectionProcessorConfig<BiFunction<InvocationRequest, ProgressMonitor, Object>, BiFunction<InvocationRequest, ProgressMonitor, Object>, K> connectionProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>,K,BiFunction<InvocationRequest, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor);
 
 	@Override
 	protected ConnectionProcessor<InvocationRequest, Object, InvocationRequest, Object> createConnectionProcessor(
-			ConnectionProcessorConfig<BiFunction<InvocationRequest, ProgressMonitor, Object>, BiFunction<InvocationRequest, ProgressMonitor, Object>> connectionProcessorConfig,
+			ConnectionProcessorConfig<BiFunction<InvocationRequest, ProgressMonitor, Object>, BiFunction<InvocationRequest, ProgressMonitor, Object>, K> connectionProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>,K,BiFunction<InvocationRequest, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor) {
 		
@@ -91,9 +91,9 @@ public abstract class InvocationRequestBiFunctionProcessorFactory extends BiFunc
 	 * @return
 	 */
 	protected abstract Collection<Object> createNodeProcessorTargets(
-			NodeProcessorConfig<BiFunction<InvocationRequest, ProgressMonitor, Object>, BiFunction<InvocationRequest, ProgressMonitor, Object>> nodeProcessorConfig,
+			NodeProcessorConfig<BiFunction<InvocationRequest, ProgressMonitor, Object>, BiFunction<InvocationRequest, ProgressMonitor, Object>, K> nodeProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>,K,BiFunction<InvocationRequest, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Map<Connection, BiFunction<InvocationRequest, ProgressMonitor, Object>> incomingEndpoints,
 			Map<Connection, BiFunction<InvocationRequest, ProgressMonitor, Object>> outgoingEndpoints,
@@ -101,9 +101,9 @@ public abstract class InvocationRequestBiFunctionProcessorFactory extends BiFunc
 
 	@Override
 	protected NodeProcessor<InvocationRequest, Object, InvocationRequest, Object> createNodeProcessor(
-			NodeProcessorConfig<BiFunction<InvocationRequest, ProgressMonitor, Object>, BiFunction<InvocationRequest, ProgressMonitor, Object>> nodeProcessorConfig,
+			NodeProcessorConfig<BiFunction<InvocationRequest, ProgressMonitor, Object>, BiFunction<InvocationRequest, ProgressMonitor, Object>, K> nodeProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<InvocationRequest, ProgressMonitor, Object>,BiFunction<InvocationRequest, ProgressMonitor, Object>,K,BiFunction<InvocationRequest, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Map<Connection, BiFunction<InvocationRequest, ProgressMonitor, Object>> incomingEndpoints,
 			Map<Connection, BiFunction<InvocationRequest, ProgressMonitor, Object>> outgoingEndpoints,

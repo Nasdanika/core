@@ -17,40 +17,40 @@ import org.nasdanika.graph.Node;
  * @param <H> Handler type
  * @param <E> Endpoint type
  */
-public class NodeProcessorInfo<H,E,P> extends ProcessorInfo<H,E,P> implements NodeProcessorConfig<H, E> {
+public class NodeProcessorInfo<H,E,K,P> extends ProcessorInfo<H,E,K,P> implements NodeProcessorConfig<H,E,K> {
 	/**
 	 * Functional interface for processor/info creation.
 	 * @param <P>
 	 */
-	public interface Factory<H,E,P> {
+	public interface Factory<H,E,K,P> {
 		
-		NodeProcessorInfo<H,E,P> create(
-				NodeProcessorConfig<H,E> config, 
+		NodeProcessorInfo<H,E,K,P> create(
+				NodeProcessorConfig<H,E,K> config, 
 				boolean parallel, 
-				BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,P>,ProgressMonitor>> infoProvider,
+				BiConsumer<Element,BiConsumer<ProcessorInfo<H,E,K,P>,ProgressMonitor>> infoProvider,
 				Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 				Context context,
 				ProgressMonitor progressMonitor);
 		
 	}			
 	
-	public NodeProcessorInfo(NodeProcessorConfig<H, E> config, P processor) {
+	public NodeProcessorInfo(NodeProcessorConfig<H,E,K> config, P processor) {
 		super(config, processor);
 	}
 	
 	@Override
 	public Node getElement() {
-		return ((NodeProcessorConfig<H, E>) config).getElement();
+		return ((NodeProcessorConfig<H,E,K>) config).getElement();
 	}
 
 	@Override
-	public Map<Connection, Synapse<H, E>> getIncomingSynapses() {
-		return ((NodeProcessorConfig<H, E>) config).getIncomingSynapses();
+	public Map<Connection, Synapse<H,E>> getIncomingSynapses() {
+		return ((NodeProcessorConfig<H,E,K>) config).getIncomingSynapses();
 	}
 
 	@Override
-	public Map<Connection, Synapse<H, E>> getOutgoingSynapses() {
-		return ((NodeProcessorConfig<H, E>) config).getOutgoingSynapses();
+	public Map<Connection, Synapse<H,E>> getOutgoingSynapses() {
+		return ((NodeProcessorConfig<H,E,K>) config).getOutgoingSynapses();
 	}
 
 }

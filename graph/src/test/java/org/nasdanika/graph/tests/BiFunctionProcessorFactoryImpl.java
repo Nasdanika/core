@@ -14,7 +14,7 @@ import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory;
 
-public class BiFunctionProcessorFactoryImpl extends BiFunctionProcessorFactory<Object, Object, Object, Object> {
+public class BiFunctionProcessorFactoryImpl extends BiFunctionProcessorFactory<Object, Object, Object, Object, String> {
 	
 	private boolean passThrough;
 
@@ -24,9 +24,9 @@ public class BiFunctionProcessorFactoryImpl extends BiFunctionProcessorFactory<O
 
 	@Override
 	protected ConnectionProcessor<Object, Object, Object, Object> createConnectionProcessor(
-			ConnectionProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> connectionProcessorConfig,
+			ConnectionProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>, String> connectionProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,String,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor) {
 
@@ -35,9 +35,9 @@ public class BiFunctionProcessorFactoryImpl extends BiFunctionProcessorFactory<O
 
 	@Override
 	protected NodeProcessor<Object, Object, Object, Object> createNodeProcessor(
-			NodeProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> nodeProcessorConfig,
+			NodeProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>, String> nodeProcessorConfig,
 			boolean parallel,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>,BiFunction<Object, ProgressMonitor, Object>,String,BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> incomingEndpoints,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> outgoingEndpoints,

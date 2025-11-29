@@ -36,7 +36,7 @@ import org.nasdanika.graph.processor.ProcessorInfo;
  * @param <W> Endpoint return type
  * @param <R> Registry type
  */
-public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Reflector  {
+public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W,K> extends Reflector  {
 	
 	@Retention(RUNTIME)
 	@Target({ METHOD, TYPE })
@@ -96,16 +96,16 @@ public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Refle
 		}
 	}		
 	
-	public BiFunctionProcessorFactory<T,U,V,W> getFactory() {
+	public BiFunctionProcessorFactory<T,U,V,W,K> getFactory() {
 		
-		return new BiFunctionProcessorFactory<T, U, V, W>() {
+		return new BiFunctionProcessorFactory<T, U, V, W, K>() {
 			
 			@SuppressWarnings("unchecked")
 			@Override
 			protected ConnectionProcessor<T, U, V, W> createConnectionProcessor(
-					ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> connectionProcessorConfig,
+					ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K> connectionProcessorConfig,
 					boolean parallel,
-					BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+					BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
 					Consumer<CompletionStage<?>> endpointWiringStageConsumer, ProgressMonitor progressMonitor) {
 				
 				Connection connection = connectionProcessorConfig.getElement();
@@ -132,9 +132,9 @@ public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Refle
 			@SuppressWarnings("unchecked")
 			@Override
 			protected NodeProcessor<T, U, V, W> createNodeProcessor(
-					NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> nodeProcessorConfig,
+					NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K> nodeProcessorConfig,
 					boolean parallel,
-					BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
+					BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, K, BiFunction<T, ProgressMonitor, U>>, ProgressMonitor>> infoProvider,
 					Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 					Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
 					Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,
