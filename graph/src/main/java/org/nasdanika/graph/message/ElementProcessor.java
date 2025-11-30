@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ChildEndpoint;
 import org.nasdanika.graph.processor.ChildHandler;
+import org.nasdanika.graph.processor.ClientEndpoint;
 import org.nasdanika.graph.processor.ClientHandler;
 import org.nasdanika.graph.processor.ParentEndpoint;
 import org.nasdanika.graph.processor.ParentHandler;
@@ -55,13 +56,6 @@ public abstract class ElementProcessor<V,K> {
 		childEndpoints.put(child, endpoint);
 	}
 	
-	protected Map<K, BiConsumer<Message<V>,V>> clientEndpoints = new ConcurrentHashMap<>();
-	
-	@ChildEndpoint
-	public void setClientEndpoint(K clientKey, BiConsumer<Message<V>,V> endpoint) {
-		clientEndpoints.put(clientKey, endpoint);
-	}
-	
 	@ChildHandler
 	public Consumer<Message<V>> getChildHandler(Element child) {
 		return message -> {
@@ -90,6 +84,13 @@ public abstract class ElementProcessor<V,K> {
 			
 			onChildMessage(child, message);
 		};
+	}
+	
+	protected Map<K, BiConsumer<Message<V>,V>> clientEndpoints = new ConcurrentHashMap<>();
+	
+	@ClientEndpoint
+	public void setClientEndpoint(K clientKey, BiConsumer<Message<V>,V> endpoint) {
+		clientEndpoints.put(clientKey, endpoint);
 	}
 		
 	@ClientHandler
