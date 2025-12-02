@@ -50,7 +50,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class DocumentImpl extends ElementImpl implements Document {
+public class DocumentImpl extends ElementImpl<Document> implements Document {
 	
 	private static final String ATTRIBUTE_COMPRESSED = "compressed";
 	private org.w3c.dom.Document document;
@@ -169,8 +169,8 @@ public class DocumentImpl extends ElementImpl implements Document {
 	}
 
 	@Override
-	public <T> T accept(BiFunction<org.nasdanika.drawio.Element, Map<org.nasdanika.drawio.Element, T>, T> visitor, ConnectionBase connectionBase) {
-		Map<org.nasdanika.drawio.Element, T> pageResults = new LinkedHashMap<>();
+	public <T> T accept(BiFunction<org.nasdanika.drawio.Element<?>, Map<org.nasdanika.drawio.Element<?>, T>, T> visitor, ConnectionBase connectionBase) {
+		Map<org.nasdanika.drawio.Element<?>, T> pageResults = new LinkedHashMap<>();
 		for (Page page: getPages()) {
 			pageResults.put(page, page.accept(visitor, connectionBase));
 		}
@@ -387,8 +387,8 @@ public class DocumentImpl extends ElementImpl implements Document {
 
 	@Override
 	public org.nasdanika.drawio.model.Document toModelDocument(ModelFactory factory, Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory) throws IOException, TransformerException {	
-		Map<Element, CompletableFuture<EObject>> registry = new HashMap<>();		
-		Function<Element, CompletableFuture<EObject>> modelElementProvider = e -> registry.computeIfAbsent(e, f -> new CompletableFuture<EObject>());
+		Map<Element<?>, CompletableFuture<EObject>> registry = new HashMap<>();		
+		Function<Element<?>, CompletableFuture<EObject>> modelElementProvider = e -> registry.computeIfAbsent(e, f -> new CompletableFuture<EObject>());
 		org.nasdanika.drawio.model.Document ret = factory.createDocument();
 		modelElementProvider.apply(this).complete(ret);
 		if (uri != null) {

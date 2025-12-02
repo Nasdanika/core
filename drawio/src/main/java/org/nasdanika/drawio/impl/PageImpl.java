@@ -26,8 +26,7 @@ import org.nasdanika.drawio.model.Tag;
 import org.nasdanika.persistence.Marker;
 import org.xml.sax.SAXException;
 
-
-class PageImpl extends ElementImpl implements Page {
+class PageImpl extends ElementImpl<Page> implements Page {
 	
 	static final String ATTRIBUTE_NAME = "name";
 	private ModelImpl model;
@@ -152,7 +151,7 @@ class PageImpl extends ElementImpl implements Page {
 	org.nasdanika.drawio.model.Page toModelPage(
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory, 
-			Function<Element, CompletableFuture<EObject>> modelElementProvider) {
+			Function<Element<?>, CompletableFuture<EObject>> modelElementProvider) {
 		org.nasdanika.drawio.model.Page mPage = factory.createPage();
 		modelElementProvider.apply(this).complete(mPage);
 		mPage.setName(getName());
@@ -189,7 +188,7 @@ class PageImpl extends ElementImpl implements Page {
 		Map<String, org.nasdanika.drawio.Tag> ret = new HashMap<>();
 		accept(e -> {
 			if (e instanceof ModelElement) {
-				ModelElement modelElement = (ModelElement) e;
+				ModelElement<?> modelElement = (ModelElement<?>) e;
 				for (org.nasdanika.drawio.Tag tag: modelElement.getTags()) {
 					ret.put(tag.getName(), tag);
 				}

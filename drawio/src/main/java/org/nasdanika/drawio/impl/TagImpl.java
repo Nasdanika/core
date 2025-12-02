@@ -41,11 +41,11 @@ public class TagImpl implements Tag {
 	}
 
 	@Override
-	public Collection<ModelElement> getElements() {
-		Collection<ModelElement> ret = new ArrayList<>();
+	public Collection<ModelElement<?>> getElements() {
+		Collection<ModelElement<?>> ret = new ArrayList<>();
 		page.accept(e -> {
 			if (e instanceof ModelElement) {
-				ModelElement modelElement = (ModelElement) e;
+				ModelElement<?> modelElement = (ModelElement<?>) e;
 				for (Tag tag: modelElement.getTags()) {
 					if (name.equals(tag.getName())) {
 						ret.add(modelElement);

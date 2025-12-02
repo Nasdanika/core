@@ -75,7 +75,7 @@ public class TestLinkTargets {
 	@Test 
 	public void testLinkedPagesTraversal() throws Exception {
 		Document document = Document.load(getClass().getResource("links.drawio"));
-		Consumer<Element> visitor = e -> {
+		Consumer<Element<?>> visitor = e -> {
 			if (e instanceof ModelElement) {
 //				System.out.println(((ModelElement) e).getLabel());
 			} else if (e instanceof Page) {
@@ -102,7 +102,7 @@ public class TestLinkTargets {
 				.findFirst();
 		
 		assertTrue(linkSource.isPresent());		
-		LinkTarget linkTarget = linkSource.get().getLinkTarget();
+		LinkTarget<?> linkTarget = linkSource.get().getLinkTarget();
 		assertNotNull(linkTarget);
 		assertEquals("Linked", ((Node) linkTarget).getLabel());
 		assertTrue(linkSource.get().getModel().getPage() == ((Node) linkTarget).getModel().getPage());
@@ -119,7 +119,7 @@ public class TestLinkTargets {
 				.findFirst();
 		
 		assertTrue(linkSource.isPresent());		
-		LinkTarget linkTarget = linkSource.get().getLinkTarget();
+		LinkTarget<?> linkTarget = linkSource.get().getLinkTarget();
 		assertNotNull(linkTarget);
 		Node targetNode = (Node) linkTarget;
 		assertEquals("Linked", targetNode.getLabel());
@@ -138,7 +138,7 @@ public class TestLinkTargets {
 				.findFirst();
 		
 		assertTrue(linkSource.isPresent());		
-		LinkTarget linkTarget = linkSource.get().getLinkTarget();
+		LinkTarget<?> linkTarget = linkSource.get().getLinkTarget();
 		assertNotNull(linkTarget);
 		Node targetNode = (Node) linkTarget;
 		assertEquals("Linked", targetNode.getLabel());
@@ -159,7 +159,7 @@ public class TestLinkTargets {
 				.findFirst();
 		
 		assertTrue(backLinkSource.isPresent());		
-		LinkTarget backLinkTarget = backLinkSource.get().getLinkTarget();
+		LinkTarget<?> backLinkTarget = backLinkSource.get().getLinkTarget();
 		assertNotNull(backLinkTarget);
 		Node backLinkTargetNode = (Node) backLinkTarget;
 		assertEquals("Linked", backLinkTargetNode.getLabel());

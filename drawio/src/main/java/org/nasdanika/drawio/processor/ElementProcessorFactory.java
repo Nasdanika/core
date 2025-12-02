@@ -21,10 +21,10 @@ import org.nasdanika.graph.processor.PropertySourceProcessorFactory;
  */
 public class ElementProcessorFactory<H,E,K,P> extends PropertySourceProcessorFactory<H,E,K,P,String,String> {
 
-	protected org.nasdanika.drawio.Element element;
+	protected org.nasdanika.drawio.Element<?> element;
 
 	public ElementProcessorFactory(
-			org.nasdanika.drawio.Element element, 
+			org.nasdanika.drawio.Element<?> element, 
 			CapabilityLoader capabilityLoader, 
 			String processorProperty) {
 		super(capabilityLoader, processorProperty);
@@ -32,7 +32,7 @@ public class ElementProcessorFactory<H,E,K,P> extends PropertySourceProcessorFac
 	}
 
 	public ElementProcessorFactory(
-			org.nasdanika.drawio.Element element, 
+			org.nasdanika.drawio.Element<?> element, 
 			String processorProperty) {
 		super(processorProperty);
 		this.element = element;
@@ -51,7 +51,7 @@ public class ElementProcessorFactory<H,E,K,P> extends PropertySourceProcessorFac
 			ProgressMonitor progressMonitor) {
 		
 		Collection<Element> elements = new HashSet<>();
-		Consumer<org.nasdanika.drawio.Element> consumer = org.nasdanika.drawio.Util.traverser(elements::add, ConnectionBase.SOURCE);
+		Consumer<org.nasdanika.drawio.Element<?>> consumer = org.nasdanika.drawio.Util.traverser(elements::add, ConnectionBase.SOURCE);
 		element.accept(consumer, connectionBase);
 		
 		return createProcessors(

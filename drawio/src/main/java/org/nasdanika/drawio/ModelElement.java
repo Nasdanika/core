@@ -13,7 +13,7 @@ import org.nasdanika.common.PropertySource;
  * @author Pavel
  *
  */
-public interface ModelElement extends LinkTarget, PropertySource<String, String> {
+public interface ModelElement<M extends ModelElement<M>> extends LinkTarget<M>, PropertySource<String, String> {
 	
 	/**
 	 * Containing model
@@ -25,7 +25,7 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	 * Containing model element
 	 * @return
 	 */
-	ModelElement getParent();
+	ModelElement<?> getParent();
 	
 	String getLabel();
 	
@@ -50,7 +50,7 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	 * @param value
 	 * @return
 	 */
-	default ModelElement style(String key, String value) {
+	default ModelElement<M> style(String key, String value) {
 		getStyle().put(key, value);
 		return this;
 	}
@@ -84,7 +84,7 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	 * @param connectionBase Indicates logical "mounting" of connections.
 	 * @return
 	 */
-	<T> T resolve(T base, BiFunction<? super ModelElement,T,T> resolver, ConnectionBase connectionBase);
+	<T> T resolve(T base, BiFunction<? super ModelElement<?>,T,T> resolver, ConnectionBase connectionBase);
 	
 	/**
 	 * Resolves URI
@@ -93,7 +93,7 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	 * @param connectionBase Connection base (logical parent)
 	 * @return
 	 */
-	default URI resolveURI(URI base, Function<? super ModelElement,URI> uriProvider, ConnectionBase connectionBase) {
+	default URI resolveURI(URI base, Function<? super ModelElement<?>,URI> uriProvider, ConnectionBase connectionBase) {
 		return resolve(base, (modelElement, parentURI) -> {			
 			URI uri = uriProvider.apply(modelElement);
 			if (uri == null) {
@@ -110,7 +110,7 @@ public interface ModelElement extends LinkTarget, PropertySource<String, String>
 	/**
 	 * @return Linked {@link Page} or {@link ModelElement}.
 	 */
-	LinkTarget getLinkTarget();
+	LinkTarget<?> getLinkTarget();
 		
 	/**
 	 * @return True if there is a link and it is in one of {@link LinkTarget} ({@link Page} / {@link ModelElement}) formats.

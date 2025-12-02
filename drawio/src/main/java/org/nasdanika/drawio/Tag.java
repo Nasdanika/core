@@ -12,6 +12,6 @@ public interface Tag {
 	/**
 	 * @return tagged elements on the page
 	 */
-	Collection<ModelElement> getElements();
+	Collection<ModelElement<?>> getElements();
 
 }

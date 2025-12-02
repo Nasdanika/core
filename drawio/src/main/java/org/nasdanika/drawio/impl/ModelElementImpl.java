@@ -41,7 +41,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
 
-class ModelElementImpl extends ElementImpl implements ModelElement {
+class ModelElementImpl<M extends ModelElement<M>> extends ElementImpl<M> implements ModelElement<M> {
 	
 	private static final String SPEL_PREFIX = "$spel:";
 	private static final String STYLE_PREFIX = "$style:";
@@ -99,7 +99,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	}
 
 	@Override
-	public ModelElement getParent() {
+	public ModelElement<?> getParent() {
 		if (getCellElement().hasAttribute(ATTRIBUTE_PARENT)) {	
 			return model.find(getCellElement().getAttribute(ATTRIBUTE_PARENT));
 		}
@@ -107,7 +107,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	}
 	
 	@Override
-	public List<? extends Element> getChildren() {
+	public List<? extends Element<?>> getChildren() {
 		if (element.hasAttribute(ATTRIBUTE_ID)) {
 			return model.collect(e -> ModelElementImpl.getCellElement(e).hasAttribute(ATTRIBUTE_PARENT) && ModelElementImpl.getCellElement(e).getAttribute(ATTRIBUTE_PARENT).equals(element.getAttribute(ATTRIBUTE_ID)));
 		}
@@ -271,7 +271,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		return str;
 	}
 	
-	private String getInheritedProperty(ModelElement modelElement, String name) {
+	private String getInheritedProperty(ModelElement<?> modelElement, String name) {
 		if (modelElement == null) {
 			Function<String, String> propertySource = ((DocumentImpl) getModel().getPage().getDocument())::getProperty;
 			return propertySource == null ? null : propertySource.apply(name);
@@ -357,12 +357,12 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		}		
 	}
 	
-	public <T> T resolve(T base, BiFunction<? super ModelElement,T,T> resolver, ConnectionBase connectionBase) {
-		ModelElement logicalParent = getLogicalParent(connectionBase);
+	public <T> T resolve(T base, BiFunction<? super ModelElement<?>,T,T> resolver, ConnectionBase connectionBase) {
+		ModelElement<?> logicalParent = getLogicalParent(connectionBase);
 		return resolver.apply(this, logicalParent == null ? base : logicalParent.resolve(base, resolver, connectionBase)); 
 	}
 	
-	protected ModelElement getLogicalParent(ConnectionBase connectionBase) {
+	protected ModelElement<?> getLogicalParent(ConnectionBase connectionBase) {
 		return getParent();
 	}
 
@@ -439,7 +439,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	}
 
 	@Override
-	public LinkTarget getLinkTarget() {
+	public LinkTarget<?> getLinkTarget() {
 		String link = getLink();
 		if (Util.isBlank(link)) {
 			return null;
@@ -467,6 +467,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			}
 			
 			String id = elementSelector;
+			@SuppressWarnings("rawtypes")
 			Optional<ModelElement> target = page
 				.stream()
 				.filter(ModelElement.class::isInstance)
@@ -490,6 +491,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			}
 			
 			String name = URLDecoder.decode(elementSelector, StandardCharsets.UTF_8);
+			@SuppressWarnings("rawtypes")
 			Optional<ModelElement> target = page
 					.stream()
 					.filter(ModelElement.class::isInstance)
@@ -524,7 +526,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return super.equals(obj) && obj instanceof ModelElement && getModel().equals(((ModelElement) obj).getModel());
+		return super.equals(obj) && obj instanceof ModelElement && getModel().equals(((ModelElement<?>) obj).getModel());
 	}
 
 	@Override
@@ -546,7 +548,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	
 	@Override	
 	protected String getMarkerLocation() {
-		return ((ElementImpl) getModel().getPage()).getMarkerLocation();
+		return ((ElementImpl<?>) getModel().getPage()).getMarkerLocation();
 	}
 	
 	public Set<String> getPropertyNames() {
@@ -576,13 +578,13 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	protected <T extends org.nasdanika.drawio.model.ModelElement> T toModelElement(
 			T mElement, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<Element<?>, CompletableFuture<EObject>> modelElementProvider,
 			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		modelElementProvider.apply(this).complete(mElement);
 		mElement.setId(getId());
 		mElement.setLabel(getLabel());
 		mElement.setLink(getLink());
-		LinkTarget linkTarget = getLinkTarget();
+		LinkTarget<?> linkTarget = getLinkTarget();
 		if (linkTarget != null) {
 			modelElementProvider.apply(linkTarget).thenAccept(mlp -> mElement.setLinkTarget((org.nasdanika.drawio.model.LinkTarget) mlp));
 		}
@@ -639,7 +641,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	
 	@Override
 	public String getPath() {
-		ModelElement parent = getParent();
+		ModelElement<?> parent = getParent();
 		return parent == null ? getId() : parent.getId() + "/" + getId();
 	}
 	
@@ -657,6 +659,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 				.filter(ModelElement.class::isInstance)
 				.map(ModelElement.class::cast)
 				.filter(me -> {
+					@SuppressWarnings("unchecked")
 					Map<String, String> eStyle = me.getStyle();
 					return "1".equals(eStyle.get(ENUMERATE_STYLE_KEY)) && Util.isBlank(eStyle.get(ENUMERATE_VALUE_STYLE_KEY));
 				})

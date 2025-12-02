@@ -10,7 +10,7 @@ import org.nasdanika.drawio.ModelElement;
  * @author Pavel
  *
  */
-public class PropertyModelElementComparator implements Comparator<ModelElement> {
+public class PropertyModelElementComparator implements Comparator<ModelElement<?>> {
 	
 	private String property;
 
@@ -19,14 +19,14 @@ public class PropertyModelElementComparator implements Comparator<ModelElement> 
 	}
 	
 	@Override
-	public int compare(ModelElement o1, ModelElement o2) {				
+	public int compare(ModelElement<?> o1, ModelElement<?> o2) {				
 		if (Objects.equals(o1, o2)) {
 			return 0;
 		}
 		
 		if (o1 instanceof ModelElement && o2 instanceof ModelElement) {
-			String p1 = ((ModelElement) o1).getProperty(property);
-			String p2 = ((ModelElement) o2).getProperty(property);
+			String p1 = ((ModelElement<?>) o1).getProperty(property);
+			String p2 = ((ModelElement<?>) o2).getProperty(property);
 			
 			if (org.nasdanika.common.Util.isBlank(p1)) {
 				if (!org.nasdanika.common.Util.isBlank(p2)) {

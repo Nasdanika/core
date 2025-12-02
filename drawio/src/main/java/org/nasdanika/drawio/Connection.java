@@ -5,7 +5,7 @@ package org.nasdanika.drawio;
  * @author Pavel
  *
  */
-public interface Connection extends LayerElement, org.nasdanika.graph.Connection {
+public interface Connection extends LayerElement<Connection>, org.nasdanika.graph.Connection {
 	
 	@Override
 	Node getSource();

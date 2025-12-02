@@ -31,24 +31,24 @@ import org.yaml.snakeyaml.Yaml;
 /**
  * Skips page and model - roots are document children
  */
-public class DrawioContentProvider implements ContentProvider<Element> {
+public class DrawioContentProvider implements ContentProvider<Element<?>> {
 	
 	private static final String CONFIG_PROPERTY = "config";
 
 	private static final String CONFIG_REF_PROPERTY = "config-ref";
 	
 	// element -> parent
-	private Map<Element, PropertySource<String,Object>> propertySources = new LinkedHashMap<>();
+	private Map<Element<?>, PropertySource<String,Object>> propertySources = new LinkedHashMap<>();
 	
 	// element -> parent
-	private Map<Element, Element> parentMap = new ConcurrentHashMap<>();
+	private Map<Element<?>, Element<?>> parentMap = new ConcurrentHashMap<>();
 
 	private String baseURIProperty;
 	private String configProperty;
 	private String configRefProperty;
 	private ConnectionBase connectionBase;
 
-	public DrawioContentProvider(Element root) {
+	public DrawioContentProvider(Element<?> root) {
 		this(root, Context.BASE_URI_PROPERTY, CONFIG_PROPERTY, CONFIG_REF_PROPERTY, ConnectionBase.SOURCE);
 	}
 
@@ -57,7 +57,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	 * @param root
 	 */
 	public DrawioContentProvider(
-			Element root, 
+			Element<?> root, 
 			String baseURIProperty,
 			String configProperty,
 			String configRefProperty,
@@ -71,7 +71,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 				connectionBase);
 	}
 	
-	public DrawioContentProvider(Collection<Element> elements) {
+	public DrawioContentProvider(Collection<Element<?>> elements) {
 		this(elements, Context.BASE_URI_PROPERTY, CONFIG_PROPERTY, CONFIG_REF_PROPERTY, ConnectionBase.SOURCE);
 	}
 
@@ -80,7 +80,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	 * @param elements To resolve links
 	 */
 	public DrawioContentProvider(
-			Collection<Element> elements, 
+			Collection<Element<?>> elements, 
 			String baseURIProperty,
 			String configProperty,
 			String configRefProperty,
@@ -90,17 +90,17 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		this.configRefProperty = configRefProperty;
 		this.connectionBase = connectionBase;
 		
-		Consumer<Element> visitor = element -> parentMap.computeIfAbsent(element, this::computeParent);
+		Consumer<Element<?>> visitor = element -> parentMap.computeIfAbsent(element, this::computeParent);
 		
 		// "regular" parents
-		for (Element element: elements) {	
+		for (Element<?> element: elements) {	
 			element.accept(Util.withLinkTargets(visitor, connectionBase), connectionBase);
 		}		
 		
 		// link parents override - page targets are "children"
-		for (Element element: parentMap.keySet()) {	
+		for (Element<?> element: parentMap.keySet()) {	
 			if (element instanceof ModelElement) {
-				LinkTarget linkTarget = ((ModelElement) element).getLinkTarget();
+				LinkTarget<?> linkTarget = ((ModelElement<?>) element).getLinkTarget();
 				if (linkTarget instanceof Page) {
 					Page targetPage = (Page) linkTarget;
 					parentMap.put(targetPage, element);
@@ -111,7 +111,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		}				
 	}
 	
-	private Element computeParent(Element element) {
+	private Element<?> computeParent(Element<?> element) {
 		 // Logically merging Root, Model, and Page
 		if (element instanceof Root) {
 			return computeParent(((Root) element).getModel().getPage());
@@ -133,15 +133,15 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		}
 		
 		if (element instanceof ModelElement) {
-			return ((ModelElement) element).getParent();
+			return ((ModelElement<?>) element).getParent();
 		}
 		return null;
 	}	
 	
 	@SuppressWarnings("unchecked")
-	private PropertySource<String,Object> createElementPropertySource(Element element) {
+	private PropertySource<String,Object> createElementPropertySource(Element<?> element) {
 		if (element instanceof ModelElement) {
-			ModelElement modelElement = (ModelElement) element;
+			ModelElement<?> modelElement = (ModelElement<?>) element;
 			if (org.nasdanika.common.Util.isBlank(configProperty) && org.nasdanika.common.Util.isBlank(configRefProperty)) {				
 				// Using element's own properties
 				return modelElement::getProperty;
@@ -194,12 +194,12 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	}		
 	
 	@Override
-	public Element getParent(Element element) {
+	public Element<?> getParent(Element<?> element) {
 		return parentMap.get(element);
 	}
 
 	@Override
-	public Collection<? extends Element> getChildren(Element element) {
+	public Collection<? extends Element<?>> getChildren(Element<?> element) {
 		return parentMap
 				.entrySet()
 				.stream()
@@ -210,12 +210,12 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	}
 
 	@Override
-	public URI getBaseURI(Element element) {
+	public URI getBaseURI(Element<?> element) {
 		if (element == null) {
 			return null;
 		}
 		
-		Element parent = getParent(element);
+		Element<?> parent = getParent(element);
 		URI resolveBase = element.getURI();
 		if (parent != null) {
 			URI parentBaseURI = getBaseURI(parent);
@@ -225,7 +225,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		}
 		
 		if (element instanceof ModelElement && !org.nasdanika.common.Util.isBlank(baseURIProperty)) {
-			String baseURIStr = ((ModelElement) element).getProperty(baseURIProperty);
+			String baseURIStr = ((ModelElement<?>) element).getProperty(baseURIProperty);
 			if (!org.nasdanika.common.Util.isBlank(baseURIStr)) {
 				URI baseURI = URI.createURI(baseURIStr);
 				if (baseURI.isRelative()) {
@@ -241,7 +241,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	}
 
 	@Override
-	public Object getProperty(Element element, String property) {
+	public Object getProperty(Element<?> element, String property) {
 		if (element instanceof Page) {
 			return getProperty(((Page) element).getModel().getRoot(), property);
 		}
@@ -253,22 +253,22 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	}
 
 	@Override
-	public Marked asMarked(Element element) {
+	public Marked asMarked(Element<?> element) {
 		return element;
 	}
 
 	@Override
-	public Element getConnectionSource(Element element) {
+	public Element<?> getConnectionSource(Element<?> element) {
 		return element instanceof Connection ? ((Connection) element).getSource() : null;
 	}
 
 	@Override
-	public Element getConnectionTarget(Element element) {
+	public Element<?> getConnectionTarget(Element<?> element) {
 		return element instanceof Connection ? ((Connection) element).getTarget() : null;
 	}
 
 	@Override
-	public String getName(Element element) {
+	public String getName(Element<?> element) {
 		if (element instanceof Page) {
 			return ((Page) element).getName();
 		}
@@ -279,7 +279,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 			return ((Root) element).getModel().getPage().getName();
 		}
 		if (element instanceof ModelElement) {
-			String label = ((ModelElement) element).getLabel();
+			String label = ((ModelElement<?>) element).getLabel();
 			return org.nasdanika.common.Util.isBlank(label) ? null : Jsoup.parse(label).text();
 		}
 
@@ -287,18 +287,18 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 	}
 
 	@Override
-	public String getDescription(Element element) {
+	public String getDescription(Element<?> element) {
 		if (element instanceof Page) {
 			return ((Page) element).getModel().getRoot().getTooltip();
 		}
 		if (element instanceof Model) {
 			return ((Model) element).getRoot().getTooltip();
 		}
-		return element instanceof ModelElement ? ((ModelElement) element).getTooltip() : null;
+		return element instanceof ModelElement ? ((ModelElement<?>) element).getTooltip() : null;
 	}
 
 	@Override
-	public Object getIdentity(Element element) {
+	public Object getIdentity(Element<?> element) {
 		if (element instanceof Page) {
 			return ((Page) element).getId();
 		}
@@ -308,7 +308,7 @@ public class DrawioContentProvider implements ContentProvider<Element> {
 		if (element instanceof Root) {
 			return ((Root) element).getModel().getPage().getId();
 		}
-		return element instanceof ModelElement ? ((ModelElement) element).getId() : null;
+		return element instanceof ModelElement ? ((ModelElement<?>) element).getId() : null;
 	}
 
 }

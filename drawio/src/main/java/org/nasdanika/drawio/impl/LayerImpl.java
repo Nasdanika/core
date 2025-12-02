@@ -25,7 +25,7 @@ import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.persistence.Marker;
 import org.w3c.dom.Element;
 
-class LayerImpl extends ModelElementImpl implements Layer {
+class LayerImpl<L extends Layer<L>> extends ModelElementImpl<L> implements Layer<L> {
 	
 	LayerImpl(
 			Element element, 
@@ -37,7 +37,7 @@ class LayerImpl extends ModelElementImpl implements Layer {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<LayerElement> getChildren() {
+	public List<LayerElement<?>> getChildren() {
 		return (List) super.getChildren();
 	}
 
@@ -48,7 +48,7 @@ class LayerImpl extends ModelElementImpl implements Layer {
 		nodeElement.setAttribute(ATTRIBUTE_PARENT, element.getAttribute(ATTRIBUTE_ID));
 		nodeElement.setAttribute(ModelImpl.ATTRIBUTE_VERTEX, "1");
 		element.getParentNode().appendChild(nodeElement);
-		List<LayerElement> elements = getElements();
+		List<LayerElement<?>> elements = getElements();
 		return (Node) elements.get(elements.size() - 1);
 	}
 
@@ -71,14 +71,14 @@ class LayerImpl extends ModelElementImpl implements Layer {
 		geometryElement.setAttribute("as", "geometry");
 		
 		element.getParentNode().appendChild(connectionElement);
-		List<LayerElement> elements = getElements();
+		List<LayerElement<?>> elements = getElements();
 		return (Connection) elements.get(elements.size() - 1);
 	}
 	
 	org.nasdanika.drawio.model.Layer toModelLayer(
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<org.nasdanika.drawio.Element<?>, CompletableFuture<EObject>> modelElementProvider,
 			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		return toModelLayer(factory, factory.createLayer(), markerFactory, modelElementProvider, tagProvider);
 	}
@@ -87,13 +87,13 @@ class LayerImpl extends ModelElementImpl implements Layer {
 			ModelFactory factory,			
 			T mElement,
 			Function<Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<org.nasdanika.drawio.Element<?>, CompletableFuture<EObject>> modelElementProvider,
 			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		
 		toModelElement(mElement, markerFactory, modelElementProvider, tagProvider);
 
 		EList<org.nasdanika.drawio.model.LayerElement> layerElements = ((org.nasdanika.drawio.model.Layer) mElement).getElements();
-		for (LayerElement layerElement: getElements()) {
+		for (LayerElement<?> layerElement: getElements()) {
 			if (layerElement instanceof NodeImpl) {
 				layerElements.add(((NodeImpl) layerElement).toModelNode(factory, markerFactory, modelElementProvider, tagProvider));
 			} else {
@@ -115,10 +115,10 @@ class LayerImpl extends ModelElementImpl implements Layer {
 //	</mxGraphModel>
 	
 	protected Node createNode(
-			Layer layer,
+			Layer<?> layer,
 			org.nasdanika.graph.Node graphNode, 
 			BiConsumer<org.nasdanika.graph.Node, Node> nodeConsumer, 
-			BiConsumer<org.nasdanika.graph.Element, ModelElement> configurator) {
+			BiConsumer<org.nasdanika.graph.Element, ModelElement<?>> configurator) {
 		
 		Node ret = layer.createNode();
 		Rectangle geometry = ret.getGeometry();
@@ -151,7 +151,7 @@ class LayerImpl extends ModelElementImpl implements Layer {
 		return ret;
 	}
 	
-	protected void populate(org.nasdanika.graph.Element element, ModelElement modelElement) {
+	protected void populate(org.nasdanika.graph.Element element, ModelElement<?> modelElement) {
 		if (element instanceof Supplier) {
 			Object value = ((Supplier<?>) element).get();
 			if (value instanceof Map) {
@@ -174,7 +174,7 @@ class LayerImpl extends ModelElementImpl implements Layer {
 	}
 
 	@Override
-	public void populate(org.nasdanika.graph.Element element, BiConsumer<org.nasdanika.graph.Element, ModelElement> configurator) {
+	public void populate(org.nasdanika.graph.Element element, BiConsumer<org.nasdanika.graph.Element, ModelElement<?>> configurator) {
 		Map<org.nasdanika.graph.Node, Node> nodeMap = new HashMap<>();
 		if (element instanceof org.nasdanika.graph.Node) {
 			createNode(this, (org.nasdanika.graph.Node) element, nodeMap::put, configurator);

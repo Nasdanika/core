@@ -14,7 +14,7 @@ import org.nasdanika.drawio.Element;
 import org.nasdanika.persistence.Marker;
 import org.nasdanika.persistence.MarkerImpl;
 
-abstract class ElementImpl implements Element {
+abstract class ElementImpl<E extends Element<E>> implements Element<E> {
 	
 	static final String ATTRIBUTE_ID = "id";
 	
@@ -26,9 +26,9 @@ abstract class ElementImpl implements Element {
 	}
 
 	@Override
-	public <T> T accept(BiFunction<Element, Map<Element, T>, T> visitor, ConnectionBase connectionBase) {
-		Map<org.nasdanika.drawio.Element, T> childResults = new LinkedHashMap<>();
-		for (Element child: getLogicalChildren(connectionBase)) {
+	public <T> T accept(BiFunction<Element<?>, Map<Element<?>, T>, T> visitor, ConnectionBase connectionBase) {
+		Map<org.nasdanika.drawio.Element<?>, T> childResults = new LinkedHashMap<>();
+		for (Element<?> child: getLogicalChildren(connectionBase)) {
 			if (child != null) {
 				childResults.put(child, child.accept(visitor, connectionBase));
 			}
@@ -36,12 +36,12 @@ abstract class ElementImpl implements Element {
 		return visitor.apply(this, childResults);
 	}
 	
-	protected List<? extends Element> getLogicalChildren(ConnectionBase connectionBase) {
+	protected List<? extends Element<?>> getLogicalChildren(ConnectionBase connectionBase) {
 		if (connectionBase == null || connectionBase == ConnectionBase.PARENT) {
 			return getChildren();
 		}
 		
-		Predicate<Element> isConnection = Connection.class::isInstance;
+		Predicate<Element<?>> isConnection = Connection.class::isInstance;
 		return getChildren().stream().filter(isConnection.negate()).toList();
 	}
 	
@@ -62,7 +62,7 @@ abstract class ElementImpl implements Element {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ElementImpl other = (ElementImpl) obj;
+		ElementImpl<?> other = (ElementImpl<?>) obj;
 		
 		if (element == other.element) {
 			return true;
@@ -94,6 +94,12 @@ abstract class ElementImpl implements Element {
 	}	
 	
 	protected String getMarkerLocation() {
+		return null;
+	}
+	
+	@Override
+	public org.nasdanika.common.Realm.Element<E> getRealmElement() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -8,7 +8,7 @@ import java.util.Map;
  * @author Pavel
  *
  */
-public interface Model extends Element {
+public interface Model extends Element<Model> {
 	
 	/**
 	 * @return Diagram root which contains layers.

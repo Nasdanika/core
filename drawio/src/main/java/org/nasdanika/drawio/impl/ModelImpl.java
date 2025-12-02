@@ -52,7 +52,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-class ModelImpl extends ElementImpl implements Model {
+class ModelImpl extends ElementImpl<Model> implements Model {
 	
 	static final String ATTRIBUTE_VERTEX = "vertex";
 	static final String ATTRIBUTE_EDGE = "edge";	
@@ -63,7 +63,7 @@ class ModelImpl extends ElementImpl implements Model {
 	static final String ATTRIBUTE_BACKGROUND_IMAGE = "backgroundImage";
 	static final String ATTRIBUTE_SHADOW = "shadow";
 	
-	private Map<org.w3c.dom.Element, ModelElement> cache = new IdentityHashMap<>();
+	private Map<org.w3c.dom.Element, ModelElement<?>> cache = new IdentityHashMap<>();
 	private Page page;		
 	private Context context;
 	
@@ -119,7 +119,7 @@ class ModelImpl extends ElementImpl implements Model {
 
 	@Override
 	public Root getRoot() {
-		List<ModelElement> result = collect(e -> !ModelElementImpl.getCellElement(e).hasAttribute(ModelElementImpl.ATTRIBUTE_PARENT));
+		List<ModelElement<?>> result = collect(e -> !ModelElementImpl.getCellElement(e).hasAttribute(ModelElementImpl.ATTRIBUTE_PARENT));
 		if (result.isEmpty()) {
 			return null;
 		}
@@ -129,12 +129,13 @@ class ModelImpl extends ElementImpl implements Model {
 		throw new IllegalArgumentException("More than one root");		
 	}
 	
-	private ModelElement create(org.w3c.dom.Element element, int position) {
+	@SuppressWarnings("rawtypes")
+	private ModelElement<?> create(org.w3c.dom.Element element, int position) {
 		org.w3c.dom.Element cellElement = ModelElementImpl.getCellElement(element);
 		if (!cellElement.hasAttribute(ModelElementImpl.ATTRIBUTE_PARENT)) {
 			return new RootImpl(element, this, context);
 		}
-		ModelElement parent = find(cellElement.getAttribute(ModelElementImpl.ATTRIBUTE_PARENT));
+		ModelElement<?> parent = find(cellElement.getAttribute(ModelElementImpl.ATTRIBUTE_PARENT));
 		if (parent instanceof Root) {
 			return new LayerImpl(element, this, position, context);			
 		}
@@ -147,8 +148,8 @@ class ModelImpl extends ElementImpl implements Model {
 		return new ModelElementImpl(element, this, position, context); // Generic model element, shall it ever happen?
 	}
 	
-	ModelElement find(String id) {
-		List<ModelElement> result = collect(e -> e.hasAttribute(ModelElementImpl.ATTRIBUTE_ID) && id.equals(e.getAttribute(ModelElementImpl.ATTRIBUTE_ID)));
+	ModelElement<?> find(String id) {
+		List<ModelElement<?>> result = collect(e -> e.hasAttribute(ModelElementImpl.ATTRIBUTE_ID) && id.equals(e.getAttribute(ModelElementImpl.ATTRIBUTE_ID)));
 		if (result.isEmpty()) {
 			return null;
 		}
@@ -163,7 +164,7 @@ class ModelImpl extends ElementImpl implements Model {
 	 * @param predicate DOM element predicate
 	 * @return
 	 */
-	List<ModelElement> collect(Predicate<org.w3c.dom.Element> predicate) {
+	<ME extends ModelElement<?>> List<ME> collect(Predicate<org.w3c.dom.Element> predicate) {
 		List<org.w3c.dom.Element> rootElements = DocumentImpl.getChildrenElements(element, "root");
 		if (rootElements.size() != 1) {
 			throw new IllegalArgumentException("There should be only one root XML element, found " + rootElements.size());
@@ -182,11 +183,12 @@ class ModelImpl extends ElementImpl implements Model {
 			}
 		}
 		
-		return new AbstractList<ModelElement>() {
+		return new AbstractList<ME>() {
 
+			@SuppressWarnings("unchecked")
 			@Override
-			public ModelElement get(int index) {
-				return cache.computeIfAbsent(elements.get(index), e -> ModelImpl.this.create(e, index));
+			public ME get(int index) {
+				return (ME) cache.computeIfAbsent(elements.get(index), e -> ModelImpl.this.create(e, index));
 			}
 
 			@Override
@@ -194,19 +196,20 @@ class ModelImpl extends ElementImpl implements Model {
 				return elements.size();
 			}
 			
+			@SuppressWarnings("unchecked")
 			@Override
-			public ModelElement remove(int index) {
+			public ME remove(int index) {
 				if (index < 0 || index >= elements.size()) {
 					throw new IndexOutOfBoundsException("Index: " + index + ", size: " + elements.size());
 				}
 				
 				org.w3c.dom.Element toRemove = elements.remove(index);
 				toRemove.getParentNode().removeChild(toRemove);
-				ModelElement removed = cache.remove(toRemove);
+				ModelElement<?> removed = cache.remove(toRemove);
 				if (removed instanceof ModelElementImpl) {
-					((ModelElementImpl) removed).onRemove();
+					((ModelElementImpl<?>) removed).onRemove();
 				}
-				return removed;
+				return (ME) removed;
 			}
 			
 		};
@@ -262,7 +265,7 @@ class ModelImpl extends ElementImpl implements Model {
 	org.nasdanika.drawio.model.Model toModelModel(
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<Element<?>, CompletableFuture<EObject>> modelElementProvider,
 			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		org.nasdanika.drawio.model.Model mModel = factory.createModel();		
 		modelElementProvider.apply(this).complete(mModel);

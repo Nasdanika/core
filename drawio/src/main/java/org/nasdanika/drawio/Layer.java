@@ -8,18 +8,18 @@ import java.util.function.BiConsumer;
  * @author Pavel
  *
  */
-public interface Layer extends ModelElement {
+public interface Layer<L extends Layer<L>> extends ModelElement<L> {
 
 	/**
 	 * Layer elements
 	 * @return
 	 */
-	default List<LayerElement> getElements() {
+	default List<LayerElement<?>> getElements() {
 		return getChildren();
 	}
 	
 	@Override
-	List<LayerElement> getChildren();
+	List<LayerElement<?>> getChildren();
 	
 	/**
 	 * Creates a new node
@@ -42,6 +42,6 @@ public interface Layer extends ModelElement {
 	 * Draw.io specific.
 	 * @param element
 	 */
-	void populate(org.nasdanika.graph.Element element, BiConsumer<org.nasdanika.graph.Element, ModelElement> configurator);
+	void populate(org.nasdanika.graph.Element element, BiConsumer<org.nasdanika.graph.Element, ModelElement<?>> configurator);
 	
 }

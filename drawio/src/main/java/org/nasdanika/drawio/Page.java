@@ -3,7 +3,7 @@ package org.nasdanika.drawio;
 import java.util.List;
 import java.util.Map;
 
-public interface Page extends LinkTarget {
+public interface Page extends LinkTarget<Page> {
 
 	Model getModel();
 

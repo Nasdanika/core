@@ -5,19 +5,19 @@ package org.nasdanika.drawio;
  * @author Pavel
  *
  */
-public interface LayerElement extends ModelElement {
+public interface LayerElement<L extends LayerElement<L>> extends ModelElement<L> {
 	
 	/**
 	 * Containing layer.
 	 * @return
 	 */
-	default Layer getLayer() {
-		ModelElement parent = getParent();
+	default Layer<?> getLayer() {
+		ModelElement<?> parent = getParent();
 		if (parent instanceof Layer) {
-			return (Layer) parent;
+			return (Layer<?>) parent;
 		}
 		if (parent instanceof LayerElement) {
-			return ((LayerElement) parent).getLayer();
+			return ((LayerElement<?>) parent).getLayer();
 		}
 			
 		return null;	

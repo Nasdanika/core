@@ -23,7 +23,7 @@ import org.springframework.expression.spel.support.StandardTypeLocator;
  */
 public interface SpelContext extends Document.Context {
 	
-	default EvaluationContext createEvaluationContext(ModelElement modelElement) {
+	default EvaluationContext createEvaluationContext(ModelElement<?> modelElement) {
 		StandardEvaluationContext ret = new StandardEvaluationContext();
 		ClassLoader classLoader = getClassLoader(modelElement);
 		if (classLoader != null) {
@@ -35,24 +35,24 @@ public interface SpelContext extends Document.Context {
 		return ret;
 	}
 	
-	default ClassLoader getClassLoader(ModelElement modelElement) {
+	default ClassLoader getClassLoader(ModelElement<?> modelElement) {
 		return Thread.currentThread().getContextClassLoader();
 	}
 	
-	default SpelExpressionParser createExpressionParser(ModelElement modelElement) {
+	default SpelExpressionParser createExpressionParser(ModelElement<?> modelElement) {
 		SpelParserConfiguration config = new SpelParserConfiguration(getCompilerMode(modelElement), getClassLoader(modelElement));
 		return new SpelExpressionParser(config);
 	}	
 		
-	default SpelCompilerMode getCompilerMode(ModelElement modelElement) {
+	default SpelCompilerMode getCompilerMode(ModelElement<?> modelElement) {
 		return null;
 	}
 	
-	default <T> T evaluate(ModelElement modelElement, String expression, Class<T> type) {
+	default <T> T evaluate(ModelElement<?> modelElement, String expression, Class<T> type) {
 		return evaluate(modelElement, expression, Collections.emptyMap(), type);
 	}
 
-	default <T> T evaluate(ModelElement modelElement, String expression, Map<String,Object> variables, Class<T> type) {
+	default <T> T evaluate(ModelElement<?> modelElement, String expression, Map<String,Object> variables, Class<T> type) {
 		ExpressionParser parser = createExpressionParser(modelElement);
 		Expression exp = parser.parseExpression(expression);
 		EvaluationContext evaluationContext = createEvaluationContext(modelElement);
@@ -82,12 +82,12 @@ public interface SpelContext extends Document.Context {
 			}
 			
 			@Override
-			public String filterProperty(ModelElement modelElement, String propertyName, String propertyValue) {
+			public String filterProperty(ModelElement<?> modelElement, String propertyName, String propertyValue) {
 				return superComposed.filterProperty(modelElement, propertyName, propertyValue);
 			}				
 			
 			@Override
-			public Map<String, Object> getVariables(ModelElement modelElement) {
+			public Map<String, Object> getVariables(ModelElement<?> modelElement) {
 				return superComposed.getVariables(modelElement);				
 			}
 			

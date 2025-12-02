@@ -44,7 +44,7 @@ import org.xml.sax.SAXException;
  * @author Pavel
  *
  */
-public interface Document extends Element {
+public interface Document extends Element<Document> {
 
 	/**
 	 * Supplies a document
@@ -80,7 +80,7 @@ public interface Document extends Element {
 			return null;
 		}
 		
-		default String filterProperty(ModelElement modelElement, String propertyName, String propertyValue) {
+		default String filterProperty(ModelElement<?> modelElement, String propertyName, String propertyValue) {
 			return propertyValue;
 		}	
 		
@@ -88,7 +88,7 @@ public interface Document extends Element {
 		 * Variables for evaluating <code>$spel</code> magic properties and property filtering
 		 * @return
 		 */
-		default Map<String, Object> getVariables(ModelElement modelElement) {
+		default Map<String, Object> getVariables(ModelElement<?> modelElement) {
 			return Collections.emptyMap();
 		}
 		
@@ -113,13 +113,13 @@ public interface Document extends Element {
 				}
 				
 				@Override
-				public String filterProperty(ModelElement modelElement, String propertyName, String propertyValue) {
+				public String filterProperty(ModelElement<?> modelElement, String propertyName, String propertyValue) {
 					String filteredProperty = Context.this.filterProperty(modelElement, propertyName, propertyValue);
 					return other.filterProperty(modelElement, propertyName, filteredProperty);
 				}				
 				
 				@Override
-				public Map<String, Object> getVariables(ModelElement modelElement) {
+				public Map<String, Object> getVariables(ModelElement<?> modelElement) {
 					Map<String, Object> ret = new LinkedHashMap<>(other.getVariables(modelElement));
 					ret.putAll(Context.this.getVariables(modelElement));
 					return ret;
@@ -150,11 +150,11 @@ public interface Document extends Element {
 			};
 		}
 		
-		static Context fromVariablesProvider(Function<ModelElement,Map<String,Object>> variablesProvider) {
+		static Context fromVariablesProvider(Function<ModelElement<?>,Map<String,Object>> variablesProvider) {
 			return new Context() {
 				
 				@Override
-				public Map<String, Object> getVariables(ModelElement modelElement) {
+				public Map<String, Object> getVariables(ModelElement<?> modelElement) {
 					return variablesProvider.apply(modelElement);
 				}
 				

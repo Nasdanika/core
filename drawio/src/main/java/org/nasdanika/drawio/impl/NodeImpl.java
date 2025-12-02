@@ -18,7 +18,7 @@ import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.w3c.dom.Element;
 
-class NodeImpl extends LayerImpl implements Node {
+class NodeImpl extends LayerImpl<Node> implements Node {
 	
 	NodeImpl(
 			Element element, 
@@ -30,7 +30,7 @@ class NodeImpl extends LayerImpl implements Node {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<LayerElement> getChildren() {
+	public List<LayerElement<?>> getChildren() {
 		return (List) super.getChildren();
 	}
 
@@ -134,8 +134,8 @@ class NodeImpl extends LayerImpl implements Node {
 	}
 
 	@Override
-	protected List<? extends org.nasdanika.drawio.Element> getLogicalChildren(ConnectionBase connectionBase) {
-		List<org.nasdanika.drawio.Element> logicalChildren = new ArrayList<>(super.getLogicalChildren(connectionBase));
+	protected List<? extends org.nasdanika.drawio.Element<?>> getLogicalChildren(ConnectionBase connectionBase) {
+		List<org.nasdanika.drawio.Element<?>> logicalChildren = new ArrayList<>(super.getLogicalChildren(connectionBase));
 		if (connectionBase == ConnectionBase.SOURCE) {
 			logicalChildren.addAll(getOutgoingConnections());
 		} else if (connectionBase == ConnectionBase.TARGET) {
@@ -147,7 +147,7 @@ class NodeImpl extends LayerImpl implements Node {
 	org.nasdanika.drawio.model.Node toModelNode(
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<org.nasdanika.drawio.Element<?>, CompletableFuture<EObject>> modelElementProvider,
 			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		org.nasdanika.drawio.model.Node mNode = toModelLayer(factory, factory.createNode(), markerFactory, modelElementProvider, tagProvider);
 		Rectangle geometry = getGeometry();

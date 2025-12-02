@@ -15,7 +15,7 @@ import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.w3c.dom.Element;
 
-class ConnectionImpl extends ModelElementImpl implements Connection {
+class ConnectionImpl extends ModelElementImpl<Connection> implements Connection {
 
 	private static final String SOURCE_POINT_ROLE = "sourcePoint";
 	private static final String TARGET_POINT_ROLE = "targetPoint";
@@ -39,7 +39,7 @@ class ConnectionImpl extends ModelElementImpl implements Connection {
 		return (Node) model.find(getCellElement().getAttribute(ATTRIBUTE_TARGET));
 	}
 	
-	protected ModelElement getLogicalParent(ConnectionBase connectionBase) {
+	protected ModelElement<?> getLogicalParent(ConnectionBase connectionBase) {
 		if (connectionBase == null) {
 			return getParent();
 		}
@@ -64,7 +64,7 @@ class ConnectionImpl extends ModelElementImpl implements Connection {
 	org.nasdanika.drawio.model.Connection toModelConnection(
 			ModelFactory factory, 
 			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
-			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider,
+			Function<org.nasdanika.drawio.Element<?>, CompletableFuture<EObject>> modelElementProvider,
 			Function<Tag, org.nasdanika.drawio.model.Tag> tagProvider) {
 		org.nasdanika.drawio.model.Connection mConnection = toModelElement(factory.createConnection(), markerFactory, modelElementProvider, tagProvider);
 		

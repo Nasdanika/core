@@ -2,13 +2,13 @@ package org.nasdanika.drawio;
 
 import java.util.List;
 
-public interface Root extends ModelElement {
+public interface Root extends ModelElement<Root> {
 	
-	List<Layer> getLayers();
+	List<Layer<?>> getLayers();
 	
-	Layer createLayer();
+	Layer<?> createLayer();
 	
 	@Override
-	List<Layer> getChildren();
+	List<Layer<?>> getChildren();
 
 }

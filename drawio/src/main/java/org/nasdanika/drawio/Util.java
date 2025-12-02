@@ -110,7 +110,7 @@ public final class Util {
 		return ret;
 	}
 	
-	private static boolean isSameOrAncestor(ModelElement child, ModelElement ancestor) {
+	private static boolean isSameOrAncestor(ModelElement<?> child, ModelElement<?> ancestor) {
 		if (child == null) {
 			return false;
 		}
@@ -130,12 +130,12 @@ public final class Util {
 	 * @param elements
 	 * @return
 	 */
-	private static int[] affinity(ModelElement element, Collection<? extends ModelElement> elements) {
+	private static int[] affinity(ModelElement<?> element, Collection<? extends ModelElement<?>> elements) {
 		int[] outgoing = { 0 };
 		element.accept(e -> {
 			if (e instanceof Connection) {
 				Node target = ((Connection) e).getTarget();
-				for (ModelElement oe: elements) {
+				for (ModelElement<?> oe: elements) {
 					if (isSameOrAncestor(target, oe)) {
 						++outgoing[0];
 					}
@@ -147,7 +147,7 @@ public final class Util {
 		element.accept(e -> {
 			if (e instanceof Connection) {
 				Node source = ((Connection) e).getSource();
-				for (ModelElement oe: elements) {
+				for (ModelElement<?> oe: elements) {
 					if (isSameOrAncestor(source, oe)) {
 						++inbound[0];
 					}
@@ -289,7 +289,7 @@ public final class Util {
 		if (!children.isEmpty()) {
 			Point childOffset = new Point((int) offset.getX(), (int) offset.getY() + 30);
 			Map<Node, Rectangle> childGeometry = layout(children, childOffset, offsetGeneratorProvider);
-			for (ModelElement child: children) {
+			for (ModelElement<?> child: children) {
 				Rectangle childRectangle = childGeometry.get(child);
 				rectangle.add(childRectangle);
 			}
@@ -300,7 +300,7 @@ public final class Util {
 	
 	// Mappers
 	
-	private static Collection<? extends Element> getChildren(Element element) {
+	private static Collection<? extends Element<?>> getChildren(Element<?> element) {
 		if (element instanceof Document) {
 			return ((Document) element).getPages();
 		}
@@ -314,29 +314,29 @@ public final class Util {
 			return ((Root) element).getLayers();
 		}
 		if (element instanceof Layer) {
-			return ((Layer) element).getElements();
+			return ((Layer<?>) element).getElements();
 		}
 		return Collections.emptySet();
 	}
 	
 	
-	public static Function<Element, Stream<? extends Element>> childrenMapper(Predicate<Element> predicate) {
-		return new Function<Element, Stream<? extends Element>>() {
+	public static Function<Element<?>, Stream<? extends Element<?>>> childrenMapper(Predicate<Element<?>> predicate) {
+		return new Function<Element<?>, Stream<? extends Element<?>>>() {
 						
 			@Override
-			public Stream<? extends Element> apply(Element element) {
-				Stream<? extends Element> ret = getChildren(element).stream();
+			public Stream<? extends Element<?>> apply(Element<?> element) {
+				Stream<? extends Element<?>> ret = getChildren(element).stream();
 				return predicate == null ? ret : ret.filter(predicate);
 			}
 			
 		};
 	}
 	
-	public static Function<Element, Stream<? extends Element>> childrenRecursiveMapper() {
-		return new Function<Element, Stream<? extends Element>>() {
+	public static Function<Element<?>, Stream<? extends Element<?>>> childrenRecursiveMapper() {
+		return new Function<Element<?>, Stream<? extends Element<?>>>() {
 			
 			@Override
-			public Stream<? extends Element> apply(Element element) {
+			public Stream<? extends Element<?>> apply(Element<?> element) {
 				return getChildren(element).stream().flatMap(childrenRecursiveMapper());
 			}
 			
@@ -344,7 +344,7 @@ public final class Util {
 		
 	}
 	
-	public static Stream<Element> childrenStream(Element element, Predicate<Element> predicate) {
+	public static Stream<Element<?>> childrenStream(Element<?> element, Predicate<Element<?>> predicate) {
 		return Stream.of(element).flatMap(childrenMapper(predicate));
 	}
 	
@@ -354,17 +354,17 @@ public final class Util {
 	 * @param connectionBase Connection base for visiting linked pages.
 	 * @return Visitor which passes itself to linked pages and adds linked pages' result to child results.
 	 */
-	public static <T> BiFunction<Element, Map<Element, T>, T> withLinkTargets(BiFunction<? super Element, Map<? extends Element, T>, T> visitor, ConnectionBase connectionBase) {
-		return new BiFunction<Element, Map<Element, T>, T>() {
+	public static <T> BiFunction<Element<?>, Map<Element<?>, T>, T> withLinkTargets(BiFunction<? super Element<?>, Map<? extends Element<?>, T>, T> visitor, ConnectionBase connectionBase) {
+		return new BiFunction<Element<?>, Map<Element<?>, T>, T>() {
 			
-			Map<LinkTarget, T> results = new HashMap<>();
+			Map<LinkTarget<?>, T> results = new HashMap<>();
 
 			@Override
-			public T apply(Element element, Map<Element, T> childResults) {				
+			public T apply(Element<?> element, Map<Element<?>, T> childResults) {				
 				if (element instanceof ModelElement) {
-					LinkTarget linkTarget = ((ModelElement) element).getLinkTarget();
+					LinkTarget<?> linkTarget = ((ModelElement<?>) element).getLinkTarget();
 					if (linkTarget != null) {
-						Map<Element, T> cr = new LinkedHashMap<>();
+						Map<Element<?>, T> cr = new LinkedHashMap<>();
 						if (childResults != null) {
 							cr.putAll(childResults);
 						}
@@ -392,15 +392,15 @@ public final class Util {
 	 * @param connectionBase Connection base for visiting linked pages.
 	 * @return Visitor which passes itself to linked pages.
 	 */
-	public static <T> Consumer<Element> withLinkTargets(Consumer<Element> visitor, ConnectionBase connectionBase) {
-		return new Consumer<Element>() {
+	public static <T> Consumer<Element<?>> withLinkTargets(Consumer<Element<?>> visitor, ConnectionBase connectionBase) {
+		return new Consumer<Element<?>>() {
 			
-			Collection<LinkTarget> visited = new HashSet<>();
+			Collection<LinkTarget<?>> visited = new HashSet<>();
 
 			@Override
-			public void accept(Element element) {				
+			public void accept(Element<?> element) {				
 				if (element instanceof ModelElement) {
-					LinkTarget linkTarget = ((ModelElement) element).getLinkTarget();
+					LinkTarget<?> linkTarget = ((ModelElement<?>) element).getLinkTarget();
 					if (linkTarget != null && visited.add(linkTarget)) { // No double-visiting
 						linkTarget.accept(this, connectionBase);
 					}
@@ -418,13 +418,13 @@ public final class Util {
 	 * @param connectionBase Connection base for visiting linked pages.
 	 * @return Visitor which passes itself to connected elements (incoming and outgoing connnections for nodes and source and target nodes for connections) and linked pages and adds linked pages' result to child results.
 	 */
-	public static <T> BiFunction<Element, Map<Element, T>, T> traverser(BiFunction<? super Element, Map<? extends Element, T>, T> visitor, ConnectionBase connectionBase) {
-		return new BiFunction<Element, Map<Element, T>, T>() {
+	public static <T> BiFunction<Element<?>, Map<Element<?>, T>, T> traverser(BiFunction<? super Element<?>, Map<? extends Element<?>, T>, T> visitor, ConnectionBase connectionBase) {
+		return new BiFunction<Element<?>, Map<Element<?>, T>, T>() {
 			
-			Map<Element, T> results = new HashMap<>();
+			Map<Element<?>, T> results = new HashMap<>();
 
 			@Override
-			public T apply(Element element, Map<Element, T> childResults) {
+			public T apply(Element<?> element, Map<Element<?>, T> childResults) {
 				if (results.containsKey(element)) {
 					return results.get(element);
 				}
@@ -455,15 +455,15 @@ public final class Util {
 				}
 				
 				if (element instanceof ModelElement) {
-					ModelElement modelElement = (ModelElement) element;
-					ModelElement parent = modelElement.getParent();
+					ModelElement<?> modelElement = (ModelElement<?>) element;
+					ModelElement<?> parent = modelElement.getParent();
 					if (parent != null && !results.containsKey(parent)) {
 						results.put(parent, parent.accept(this, connectionBase));						
 					}
 					
-					LinkTarget linkTarget = modelElement.getLinkTarget();
+					LinkTarget<?> linkTarget = modelElement.getLinkTarget();
 					if (linkTarget != null) {
-						Map<Element, T> cr = new LinkedHashMap<>();
+						Map<Element<?>, T> cr = new LinkedHashMap<>();
 						if (childResults != null) {
 							cr.putAll(childResults);
 						}
@@ -492,13 +492,13 @@ public final class Util {
 	 * @param connectionBase Connection base for visiting linked pages.
 	 * @return Visitor which passes itself to connected elements (incoming and outgoing connnections for nodes and source and target nodes for connections) and linked pages and adds linked pages' result to child results.
 	 */
-	public static Consumer<Element> traverser(Consumer<Element> visitor, ConnectionBase connectionBase) {
-		return new Consumer<Element>() {
+	public static Consumer<Element<?>> traverser(Consumer<Element<?>> visitor, ConnectionBase connectionBase) {
+		return new Consumer<Element<?>>() {
 			
-			Collection<Element> visited = new HashSet<>();
+			Collection<Element<?>> visited = new HashSet<>();
 
 			@Override
-			public void accept(Element element) {
+			public void accept(Element<?> element) {
 				if (element != null && visited.add(element)) {
 					if (element instanceof Node) {
 						Node node = (Node) element;
@@ -522,13 +522,13 @@ public final class Util {
 					}
 					
 					if (element instanceof ModelElement) {
-						ModelElement modelElement = (ModelElement) element;
-						ModelElement parent = modelElement.getParent();
+						ModelElement<?> modelElement = (ModelElement<?>) element;
+						ModelElement<?> parent = modelElement.getParent();
 						if (parent != null) {
 							parent.accept(this, connectionBase);						
 						}
 						
-						LinkTarget linkTarget = modelElement.getLinkTarget();
+						LinkTarget<?> linkTarget = modelElement.getLinkTarget();
 						if (linkTarget != null && visited.add(linkTarget)) { // No double-visiting
 							linkTarget.accept(this, connectionBase);
 						}
