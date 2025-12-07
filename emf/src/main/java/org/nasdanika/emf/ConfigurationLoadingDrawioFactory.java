@@ -33,7 +33,7 @@ public abstract class ConfigurationLoadingDrawioFactory<T extends EObject> exten
 	private ResourceSet resourceSet;
 			
 	protected ConfigurationLoadingDrawioFactory(
-			ContentProvider<Element> contentProvider, 
+			ContentProvider<Element<?>> contentProvider, 
 			CapabilityLoader capabilityLoader,
 			ResourceSet resourceSet,
 			ProgressMonitor progressMonitor) {
@@ -42,7 +42,7 @@ public abstract class ConfigurationLoadingDrawioFactory<T extends EObject> exten
 	}
 
 	protected ConfigurationLoadingDrawioFactory(
-			ContentProvider<Element> contentProvider,
+			ContentProvider<Element<?>> contentProvider,
 			ResourceSet resourceSet,
 			ProgressMonitor progressMonitor) {
 		super(contentProvider, progressMonitor);
@@ -63,9 +63,9 @@ public abstract class ConfigurationLoadingDrawioFactory<T extends EObject> exten
 	
 	@Override
 	protected void configureTarget(
-			Element obj, 
+			Element<?> obj, 
 			T target, 
-			Map<Element, T> registry, 
+			Map<Element<?>, T> registry, 
 			boolean isPrototype,
 			ProgressMonitor progressMonitor) {
 

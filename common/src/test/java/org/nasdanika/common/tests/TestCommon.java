@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -37,6 +38,7 @@ import org.nasdanika.common.DelimitedStringMap;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ListCompoundSupplier;
+import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressEntry;
@@ -598,5 +600,99 @@ public class TestCommon {
     public void testFile() throws Exception {
     	System.out.println(new File("").getCanonicalPath());
     }
+    
+    @Test
+    public void testMarkdown() throws Exception {
+    	String html = MarkdownHelper.INSTANCE.markdownToHtml(
+    		"""
+    		# Test
+    		
+    		* One
+    		* Two		
+    		""");
+    	
+    	System.out.println(html);
+    }
+        
+    @Test
+    public void testUnsupportedQualifiedFencedBlock() throws Exception {
+    	String html = MarkdownHelper.INSTANCE.markdownToHtml(
+    		"""
+    		# Test
+    		
+    		* One
+    		* Two
+    		
+    		```my-qualifier
+    		Purum-param
+    		```
+    						
+    		""");
+    	
+    	System.out.println(html);
+    }
+    
+	@Test
+	public void testQualifiedFencedBlock() throws Exception {
+		MarkdownHelper markdownHelper = new MarkdownHelper() {
+		
+			@Override
+			protected String processQualifiedFencedBlock(String blockContent, String qualifier) {
+				if ("my-qualifier".equals(qualifier)) {
+					return "|>>> " + blockContent + " <<<|";
+				}
+				
+				return super.processQualifiedFencedBlock(blockContent, qualifier);
+			}
+			
+		};		
+		
+		String html = markdownHelper.markdownToHtml(
+			"""
+			# Test
+			
+			* One
+			* Two
+			
+			```my-qualifier
+			Purum-param
+			```
+							
+			""");
+		
+		System.out.println(html);
+	}
+    
+	@Test
+	public void testQualifiedFencedBlockProvider() throws Exception {
+		MarkdownHelper markdownHelper = new MarkdownHelper() {
+			
+			@Override
+			protected Collection<QualifiedFencedBlockProcessorProvider> getQualifiedFencedBlockProcessorProviders() {
+				return Collections.singleton(q -> {
+					if ("my-qualifier".equals(q)) {
+						return c -> "|>>> " + c + " <<<|";
+					}
+					return null;
+				});
+			}
+			
+		};		
+		
+		String html = markdownHelper.markdownToHtml(
+			"""
+			# Test
+			
+			* One
+			* Two
+			
+			```my-qualifier
+			Purum-param
+			```
+							
+			""");
+		
+		System.out.println(html);
+	}
     	
 }

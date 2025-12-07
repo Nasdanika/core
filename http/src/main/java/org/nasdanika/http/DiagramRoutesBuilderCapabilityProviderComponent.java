@@ -16,7 +16,9 @@ import org.eclipse.emf.common.util.URI;
 import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.capability.CapabilityProviderComponent;
 import org.nasdanika.common.Component;
+import org.nasdanika.common.ExclusiveRealm;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Realm;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Document.Context;
@@ -55,7 +57,7 @@ public class DiagramRoutesBuilderCapabilityProviderComponent extends CapabilityP
 	
 	public DiagramRoutesBuilderCapabilityProviderComponent(
 			URI documentURI,
-			Function<Document, org.nasdanika.drawio.Element> selector,
+			Function<Document, org.nasdanika.drawio.Element<?>> selector,
 			String processorProperty,
 			String routeProperty,
 			Loader loader,
@@ -68,6 +70,13 @@ public class DiagramRoutesBuilderCapabilityProviderComponent extends CapabilityP
 		this.routeProperty = routeProperty;
 		
 		Document.Context context = new Document.Context() {
+			
+			private Realm realm = new ExclusiveRealm();
+
+			@Override
+			public Realm getRealm() {
+				return realm;
+			}
 			
 			@Override
 			public String getProperty(String name) {
@@ -84,7 +93,7 @@ public class DiagramRoutesBuilderCapabilityProviderComponent extends CapabilityP
 		
 		document = Document.load(documentURI, context); 
 		
-		org.nasdanika.drawio.Element element = selector == null ? document : selector.apply(document);
+		org.nasdanika.drawio.Element<?> element = selector == null ? document : selector.apply(document);
 		ElementProcessorFactory<Object,Object,Object,Object> elementProcessorFactory = new ElementProcessorFactory<Object,Object,Object,Object>(
 				element , 
 				loader.getCapabilityLoader(), 

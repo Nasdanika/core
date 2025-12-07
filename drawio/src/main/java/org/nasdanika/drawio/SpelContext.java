@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.URI;
+import org.nasdanika.common.Realm;
 import org.nasdanika.drawio.Document.Context;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
@@ -89,6 +90,11 @@ public interface SpelContext extends Document.Context {
 			@Override
 			public Map<String, Object> getVariables(ModelElement<?> modelElement) {
 				return superComposed.getVariables(modelElement);				
+			}
+			
+			@Override
+			public Realm getRealm() {
+				return SpelContext.this.getRealm();
 			}
 			
 		};

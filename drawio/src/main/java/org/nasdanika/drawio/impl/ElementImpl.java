@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
+import org.nasdanika.common.Realm;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Element;
@@ -96,11 +97,24 @@ abstract class ElementImpl<E extends Element<E>> implements Element<E> {
 	protected String getMarkerLocation() {
 		return null;
 	}
-	
-	@Override
-	public org.nasdanika.common.Realm.Element<E> getRealmElement() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
+	@Override
+	public Realm.Element<E> getRealmElement() {
+		return new Realm.Element<E>() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public E get() {
+				return (E) ElementImpl.this;
+			}
+
+			@Override
+			public Realm getRealm() {
+				return ElementImpl.this.getRealm();
+			}
+		};
+	}
+	
+	protected abstract Realm getRealm();
+	
 }

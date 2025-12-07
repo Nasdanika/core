@@ -18,7 +18,9 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.nasdanika.common.ExclusiveRealm;
 import org.nasdanika.common.NasdanikaException;
+import org.nasdanika.common.Realm;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.model.ModelFactory;
@@ -79,6 +81,13 @@ public class DrawioResource extends ResourceImpl {
 	protected Iterable<Document> loadDocuments(InputStream inputStream) throws IOException, ParserConfigurationException, SAXException {
 		Document.Context context = new Document.Context() {
 			
+			private Realm realm = new ExclusiveRealm();
+
+			@Override
+			public Realm getRealm() {
+				return realm;
+			}
+			
 			@Override
 			public InputStream openStream(URI uri) throws IOException, URISyntaxException {
 				return getURIHandler().apply(uri);
@@ -88,8 +97,7 @@ public class DrawioResource extends ResourceImpl {
 			public String getProperty(String name) {
 				return DrawioResource.this.getProperty(name);
 			}
-			
-			
+						
 		};
 		if (png) {
 			return Document.loadFromPngMetadata(inputStream, getURI().trimFragment(), context);			

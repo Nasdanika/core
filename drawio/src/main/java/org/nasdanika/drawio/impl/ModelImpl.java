@@ -37,6 +37,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.json.JSONObject;
+import org.nasdanika.common.Realm;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.Element;
@@ -363,6 +364,11 @@ class ModelImpl extends ElementImpl<Model> implements Model {
 	public Model setPageView(boolean pageView) {
 		setAttribute(ATTRIBUTE_PAGE, pageView ? "1" : "0");
 		return this;
+	}
+
+	@Override
+	protected Realm getRealm() {
+		return getPage().getDocument().getRealmElement().getRealm();
 	}
 	
 }

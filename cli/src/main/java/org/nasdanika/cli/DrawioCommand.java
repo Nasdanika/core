@@ -24,8 +24,10 @@ import org.json.JSONTokener;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Description;
+import org.nasdanika.common.ExclusiveRealm;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Realm;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Document.Context;
@@ -133,6 +135,13 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 			try {				
 				Document.Context context = new Document.Context() {
 					
+					private Realm realm = new ExclusiveRealm();
+
+					@Override
+					public Realm getRealm() {
+						return realm;
+					}
+					
 					@Override
 					public String getProperty(String name) {
 						Function<String, String> contextPropertySource = getPropertySource(propertySource, progressMonitor);
@@ -160,6 +169,13 @@ public class DrawioCommand extends CommandGroup implements Document.Supplier {
 		URI documentURI = URI.createURI(document).resolve(baseURI);
 		try {
 			Document.Context context = new Document.Context() {
+				
+				private Realm realm = new ExclusiveRealm();
+
+				@Override
+				public Realm getRealm() {
+					return realm;
+				}
 				
 				@Override
 				public String getProperty(String name) {

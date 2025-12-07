@@ -18,11 +18,11 @@ import org.nasdanika.graph.processor.ProcessorInfo;
 
 public class ElementInvocableFactory<H,E,K> extends ElementProcessorFactory<H,E,K,Object> {
 
-	public ElementInvocableFactory(org.nasdanika.drawio.Element element, CapabilityLoader capabilityLoader, String processorProperty) {
+	public ElementInvocableFactory(org.nasdanika.drawio.Element<?> element, CapabilityLoader capabilityLoader, String processorProperty) {
 		super(element, capabilityLoader, processorProperty);
 	}
 
-	public ElementInvocableFactory(org.nasdanika.drawio.Element element, String processorProperty) {
+	public ElementInvocableFactory(org.nasdanika.drawio.Element<?> element, String processorProperty) {
 		super(element, processorProperty);
 	}
 		

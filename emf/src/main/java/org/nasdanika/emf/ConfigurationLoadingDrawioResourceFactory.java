@@ -50,7 +50,7 @@ public class ConfigurationLoadingDrawioResourceFactory implements Resource.Facto
 		return new ConfigurationLoadingDrawioResource(uri, capabilityLoader, uriResolver) {
 			
 			@Override
-			protected ClassLoader getClassLoader(Element context, URI baseURI, Supplier<ClassLoader> ancestorClassLoaderSupplier) {
+			protected ClassLoader getClassLoader(Element<?> context, URI baseURI, Supplier<ClassLoader> ancestorClassLoaderSupplier) {
 				return ConfigurationLoadingDrawioResourceFactory.this.getClassLoader(context, baseURI, ancestorClassLoaderSupplier);
 			};
 			
@@ -61,21 +61,21 @@ public class ConfigurationLoadingDrawioResourceFactory implements Resource.Facto
 			
 			@Override
 			protected void filterRepresentationElement(
-					Element representationElement, 
-					Map<Element, EObject> registry,
+					Element<?> representationElement, 
+					Map<Element<?>, EObject> registry,
 					ProgressMonitor progressMonitor) {
 				
 				ConfigurationLoadingDrawioResourceFactory.this.filterRepresentationElement(representationElement, registry, progressMonitor);			
 			}
 			
 			@Override
-			protected Map<String, Object> getVariables(Element context) {
+			protected Map<String, Object> getVariables(Element<?> context) {
 				return ConfigurationLoadingDrawioResourceFactory.this.getVariables(this, context);
 			}
 			
 			@Override
-			protected ContentProvider<Element> createContentProvider(Document document) {
-				return ConfigurationLoadingDrawioResourceFactory.this.createContentProvider(this, document);
+			protected ContentProvider<Element<?>> createContentProvider(Document document, Map<?, ?> options) {
+				return ConfigurationLoadingDrawioResourceFactory.this.createContentProvider(this, document, options);
 			}			
 			
 			@Override
@@ -105,7 +105,7 @@ public class ConfigurationLoadingDrawioResourceFactory implements Resource.Facto
 		return new StandardEvaluationContext();
 	}	
 	
-	protected ClassLoader getClassLoader(Element context, URI baseURI, Supplier<ClassLoader> logicalParentClassLoaderSupplier) {
+	protected ClassLoader getClassLoader(Element<?> context, URI baseURI, Supplier<ClassLoader> logicalParentClassLoaderSupplier) {
 		return logicalParentClassLoaderSupplier == null ? Thread.currentThread().getContextClassLoader() : logicalParentClassLoaderSupplier.get();
 	}	
 
@@ -121,17 +121,25 @@ public class ConfigurationLoadingDrawioResourceFactory implements Resource.Facto
 	 * @param progressMonitor
 	 */
 	protected void filterRepresentationElement(
-			Element representationElement, 
-			Map<org.nasdanika.drawio.Element, EObject> registry,
+			Element<?> representationElement, 
+			Map<Element<?>, EObject> registry,
 			ProgressMonitor progressMonitor) {
 		
 	}
 	
-	protected Map<String, Object> getVariables(ConfigurationLoadingDrawioResource resource, Element context) {
+	protected Map<String, Object> getVariables(ConfigurationLoadingDrawioResource resource, Element<?> context) {
 		return Collections.emptyMap();
 	}
 	
-	protected ContentProvider<Element> createContentProvider(ConfigurationLoadingDrawioResource resource, Document document) {
+	@SuppressWarnings("unchecked")
+	protected ContentProvider<Element<?>> createContentProvider(ConfigurationLoadingDrawioResource resource, Document document, Map<?, ?> options) {
+		if (options != null) {
+			Object cp = options.get(ContentProvider.class);
+			if (cp instanceof ContentProvider) {
+				return (ContentProvider<Element<?>>) cp;
+			}
+		}
+				
 		return new DrawioContentProvider(
 				document, 
 				Context.BASE_URI_PROPERTY, 
