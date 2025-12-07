@@ -11,6 +11,7 @@ import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Point;
+import org.nasdanika.drawio.PointList;
 import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.w3c.dom.Element;
@@ -20,6 +21,8 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 	private static final String SOURCE_POINT_ROLE = "sourcePoint";
 	private static final String TARGET_POINT_ROLE = "targetPoint";
 	private static final String MX_POINT_ATTRIBUTE = "mxPoint";
+	
+	private PointList points;
 
 	ConnectionImpl(
 			Element element, 
@@ -27,6 +30,7 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 			int position,
 			Context context) {
 		super(element, model, position, context);
+		points = new PointListImpl(this);
 	}
 
 	@Override
@@ -169,6 +173,11 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 	@Override
 	public Point getTargetPoint() {
 		return new PointImpl(this::getTargetPointElement);
+	}
+
+	@Override
+	public PointList getPoints() {
+		return points;
 	}			
 
 }
