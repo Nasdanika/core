@@ -337,6 +337,51 @@ public class TestDrawio {
 		
 		Files.writeString(new File("target/layout.drawio").toPath(), document.save(null));
 	}
+
+	@Test
+	public void testPointsLayout() throws Exception {
+		Document document = Document.create(false, null);
+		Page page = document.createPage();
+		page.setName("My first new page with points");
+
+		Model model = page.getModel();
+		Root root = model.getRoot();
+		List<Layer> layers = root.getLayers();
+		assertThat(layers).singleElement();
+
+		// Add layer
+		Layer newLayer = root.createLayer();
+		newLayer.setLabel("My new layer");
+
+		// Add nodes
+		Node source = newLayer.createNode();
+		source.setLabel("My source node");
+		Rectangle sourceGeometry = source.getGeometry();
+		sourceGeometry.setWidth(120);
+		sourceGeometry.setHeight(50);
+		source.getTags().add(page.createTag("aws"));
+
+		Node target = newLayer.createNode();
+		target.setLabel("My target node");
+		target.getGeometry().setBounds(60, 140, 100, 30);
+
+		// Add connection
+		Connection connection = newLayer.createConnection(source, target);
+		connection.setLabel("My connection");
+		Map<String, String> connectionStyle = connection.getStyle();
+		connectionStyle.put("rounded", "1");
+		connectionStyle.put("orthogonalLoop", "1");
+		connectionStyle.put("jettySize", "auto");
+		connectionStyle.put("html", "1");
+		connection.addPoint(80,110);
+		connection.addPoint(310,110);
+		connection.addPoint(310,260);
+		connection.addPoint(125,260);
+
+		org.nasdanika.drawio.Util.layout(root, 20);
+
+		Files.writeString(new File("target/layout_points.drawio").toPath(), document.save(null));
+	}
 	
 	@Test 
 	public void testLoadFromPngMetadata() throws Exception {

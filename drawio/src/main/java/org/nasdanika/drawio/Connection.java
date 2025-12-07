@@ -27,6 +27,7 @@ public interface Connection extends LayerElement<Connection>, org.nasdanika.grap
 	
 	PointList getPoints();
 
+	void addPoint(double x, double y);
 }
 
 //<mxGraphModel dx="3346" dy="1071" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
