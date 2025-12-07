@@ -25,4 +25,5 @@ public interface Connection extends LayerElement<Connection>, org.nasdanika.grap
 	
 	Point getTargetPoint();
 
+	void addPoint(double x, double y);
 }

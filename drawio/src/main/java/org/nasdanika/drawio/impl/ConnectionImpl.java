@@ -14,12 +14,14 @@ import org.nasdanika.drawio.Point;
 import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 class ConnectionImpl extends ModelElementImpl<Connection> implements Connection {
 
 	private static final String SOURCE_POINT_ROLE = "sourcePoint";
 	private static final String TARGET_POINT_ROLE = "targetPoint";
 	private static final String MX_POINT_ATTRIBUTE = "mxPoint";
+	private static final String MX_POINTS_ARRAY_ATTRIBUTE = "Array";
 
 	ConnectionImpl(
 			Element element, 
@@ -169,6 +171,33 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 	@Override
 	public Point getTargetPoint() {
 		return new PointImpl(this::getTargetPointElement);
-	}			
+	}
 
+	@Override
+	public void addPoint(double x, double y) {
+		Element geometryElement = getGeometryElement(false);
+		NodeList array = geometryElement.getElementsByTagName(MX_POINTS_ARRAY_ATTRIBUTE);
+		Element e = (Element) array.item(0);
+		Point point = new PointImpl(this::getPointsElement);
+		point.setLocation(x, y);
+	}
+
+	protected org.w3c.dom.Element getPointsElement(boolean create) {
+
+		Element geometryElement = getGeometryElement(true);
+		List<org.w3c.dom.Element> pointsElement = DocumentImpl.getChildrenElements(
+				geometryElement,
+				MX_POINTS_ARRAY_ATTRIBUTE);
+
+		if (create) {
+			org.w3c.dom.Element ret = element.getOwnerDocument().createElement(MX_POINT_ATTRIBUTE);
+			pointsElement.get(0).appendChild(ret);
+			return ret;
+		}
+		if (pointsElement.size() == 1) {
+			return pointsElement.get(0);
+		}
+
+		throw new IllegalArgumentException("Expected one points element, got " + pointsElement.size());
+	}
 }

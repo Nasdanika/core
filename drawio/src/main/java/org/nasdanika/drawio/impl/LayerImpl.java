@@ -69,6 +69,10 @@ class LayerImpl<L extends Layer<L>> extends ModelElementImpl<L> implements Layer
 		connectionElement.appendChild(geometryElement);
 		geometryElement.setAttribute("relative", "1");
 		geometryElement.setAttribute("as", "geometry");
+
+		Element array = geometryElement.getOwnerDocument().createElement("Array");
+		array.setAttribute("as", "points");
+		geometryElement.appendChild(array);
 		
 		element.getParentNode().appendChild(connectionElement);
 		List<LayerElement<?>> elements = getElements();
