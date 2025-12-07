@@ -1,6 +1,8 @@
 package org.nasdanika.common;
 
 import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,6 +27,12 @@ import com.vladsch.flexmark.util.data.DataHolder;
  *
  */
 public class MarkdownHelper {
+	
+	public interface QualifiedFencedBlockProcessorProvider {
+		
+		java.util.function.Function<String,String> getProcessor(String qualifier);
+		
+	}
 	
 	private static final String FENSED_BLOCK_START_PREFIX_REGEX = "(^|((\\R|^)(\\s)*\\R))"; //String start or an empty line before   "\\R(\\s)*\\R"; 
 	private static final String FENCED_BLOCK_START_SUFFIX_REGEX = "(\\s)*\\R"; // Zero or more whitespace followed by a new line.
@@ -102,7 +110,10 @@ public class MarkdownHelper {
 	private static final Pattern START_JPEG_RESOURCE_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_JPEG_RESOURCE_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
 
 	private static final String FENCED_BLOCK = "```";
-	private static final Pattern FENCED_BLOCK_PATTERN = Pattern.compile("\\R"+FENCED_BLOCK+"(\\s)*((\\R(\\s)*\\R)|$)");	
+	private static final Pattern FENCED_BLOCK_PATTERN = Pattern.compile("\\R"+FENCED_BLOCK+"(\\s)*((\\R(\\s)*\\R)|$)");
+		
+	private static final String START_QUALIFIED_BLOCK = "```\\S+";
+	private static final Pattern START_QUALIFIED_FENCED_BLOCK_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_QUALIFIED_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
 
 	protected String[] getAbbreviations() {
 		return ABBREVIATIONS;
@@ -142,6 +153,7 @@ public class MarkdownHelper {
 			ret = processFencedBlocks(ret, DiagramGenerator.MERMAID_DIALECT, START_MERMAID_RESOURCE_PATTERN, replacements, true);
 			ret = processFencedBlocks(ret, null, START_PNG_RESOURCE_PATTERN, replacements, true);
 			ret = processFencedBlocks(ret, null, START_JPEG_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, null, START_QUALIFIED_FENCED_BLOCK_PATTERN, replacements, false);
 					
 			return ret;		
 		}
@@ -211,17 +223,22 @@ public class MarkdownHelper {
 							String token = nextToken();
 							
 							if (dialect == null) {
-								replacementBuilder.append("<img src=\"data:image/");
-								if (startPattern == START_PNG_PATTERN || startPattern == START_PNG_RESOURCE_PATTERN) {
-									replacementBuilder.append("png");
-								} else if (startPattern == START_JPEG_PATTERN || startPattern == START_JPEG_RESOURCE_PATTERN) {
-									replacementBuilder.append("jpeg");
+								if (startPattern == START_QUALIFIED_FENCED_BLOCK_PATTERN) {
+									String qualifier = input.substring(startMatcherStart, startMatcherEnd).trim();									
+									replacementBuilder.append(processQualifiedFencedBlock(bareSpec, qualifier.substring(3)));
+								} else {
+									replacementBuilder.append("<img src=\"data:image/");
+									if (startPattern == START_PNG_PATTERN || startPattern == START_PNG_RESOURCE_PATTERN) {
+										replacementBuilder.append("png");
+									} else if (startPattern == START_JPEG_PATTERN || startPattern == START_JPEG_RESOURCE_PATTERN) {
+										replacementBuilder.append("jpeg");
+									}
+									replacementBuilder
+										.append(";base64, ")
+										.append(bareSpec)
+										.append("\"/>")
+										.append(System.lineSeparator());
 								}
-								replacementBuilder
-									.append(";base64, ")
-									.append(bareSpec)
-									.append("\"/>")
-									.append(System.lineSeparator());
 							} else {
 								replacementBuilder
 									.append(getDiagramGenerator().generateDiagram(bareSpec, dialect))
@@ -246,6 +263,21 @@ public class MarkdownHelper {
 		return output.toString();
 	}
 	
+	protected Collection<QualifiedFencedBlockProcessorProvider> getQualifiedFencedBlockProcessorProviders() {
+		return Collections.emptyList();
+	}
+
+	protected String processQualifiedFencedBlock(String blockContent, String qualifier) {
+		for (QualifiedFencedBlockProcessorProvider qfbpp: getQualifiedFencedBlockProcessorProviders()) {
+			java.util.function.Function<String, String> qfbp = qfbpp.getProcessor(qualifier);
+			if (qfbp != null) {
+				return qfbp.apply(blockContent);
+			}
+		}		
+		
+		return "<div class=\"nsd-error\">Unsupported fenced block qualifier: " + qualifier + "</div>";
+	}
+
 	/**
 	 * Override to process bare spec.
 	 * @param dialect

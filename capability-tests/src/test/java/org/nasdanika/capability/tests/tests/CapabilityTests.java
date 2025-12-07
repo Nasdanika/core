@@ -6,10 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.capability.tests.AggregatorFactory;
 import org.nasdanika.capability.tests.MyService;
 import org.nasdanika.capability.tests.TestCapabilityFactory;
 import org.nasdanika.capability.tests.TestServiceFactory;
+import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -90,5 +92,29 @@ public class CapabilityTests {
 			publisher.subscribe(System.out::println);
 		}
 	}
+	
+	@Test
+	public void testMarkdown() {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Requirement<Object, MarkdownHelper> requirement = ServiceCapabilityFactory.createRequirement(MarkdownHelper.class);
+		MarkdownHelper markdownHelper = capabilityLoader.loadOne(requirement, progressMonitor);
+		
+		
+		String html = markdownHelper.markdownToHtml(
+			"""
+			# Test
+			
+			* One
+			* Two
+			
+			```my-qualifier
+			Purum-param
+			```
+							
+			""");
+		
+		System.out.println(html);
+	}	
 	
 }

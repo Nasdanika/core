@@ -83,10 +83,10 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 		try {
 			document = Document.load(inputStream, getURI());		
 			eAdapters().add(new MappingAdapter(document));
-			ConfigurationLoadingDrawioFactory<EObject> drawioFactory = new ConfigurationLoadingDrawioFactory<EObject>(createContentProvider(document), capabilityLoader, getResourceSet(), getProgressMonitor()) {
+			ConfigurationLoadingDrawioFactory<EObject> drawioFactory = new ConfigurationLoadingDrawioFactory<EObject>(createContentProvider(document, options), capabilityLoader, getResourceSet(), getProgressMonitor()) {
 				
 				@Override
-				protected EObject getByRefId(Element obj, String refId, int pass, Map<Element, EObject> registry) {
+				protected EObject getByRefId(Element<?> obj, String refId, int pass, Map<Element<?>, EObject> registry) {
 					return ConfigurationLoadingDrawioResource.this.getByRefId(obj, getContentProvider().getBaseURI(obj),  refId, pass, registry);
 				}
 				
@@ -96,9 +96,9 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 				}
 				
 				@Override
-				protected ClassLoader getClassLoader(Element context) {
+				protected ClassLoader getClassLoader(Element<?> context) {
 					Supplier<ClassLoader> lpcs = () -> {
-						Element ancestor = getContentProvider().getParent(context);
+						Element<?> ancestor = getContentProvider().getParent(context);
 						if (ancestor == null) {
 							return Thread.currentThread().getContextClassLoader();
 						}
@@ -118,15 +118,15 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 				
 				@Override
 				protected void filterRepresentationElement(
-						Element element,
-						Map<Element, EObject> registry, 
+						Element<?> element,
+						Map<Element<?>, EObject> registry, 
 						ProgressMonitor progressMonitor) {
 					super.filterRepresentationElement(element, registry, progressMonitor);
 					ConfigurationLoadingDrawioResource.this.filterRepresentationElement(element, registry, progressMonitor);
 				}
 				
 				@Override
-				protected Map<String, Object> getVariables(Element context) {
+				protected Map<String, Object> getVariables(Element<?> context) {
 					return ConfigurationLoadingDrawioResource.this.getVariables(context);
 				}
 				
@@ -143,19 +143,19 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 			if (rs != null) {
 				for (Adapter adapter: rs.eAdapters()) {
 					if (adapter instanceof Contributor) {
-						drawioFactory.getContributors().add((Contributor<Element, EObject>) adapter);
+						drawioFactory.getContributors().add((Contributor<Element<?>, EObject>) adapter);
 					}
 				}
 			}
 			
-			Transformer<Element,EObject> modelFactory = new Transformer<>(drawioFactory);
-			List<Element> documentElements = new ArrayList<>();
-			Consumer<Element> visitor = documentElements::add;
+			Transformer<Element<?>,EObject> modelFactory = new Transformer<>(drawioFactory);
+			List<Element<?>> documentElements = new ArrayList<>();
+			Consumer<Element<?>> visitor = documentElements::add;
 			@SuppressWarnings("rawtypes")
 			Consumer<org.nasdanika.graph.Element> traverser = (Consumer) org.nasdanika.drawio.Util.traverser(visitor, connectionBase);
 			document.accept(traverser);
 			
-			Map<Element, EObject> modelElements = modelFactory.transform(documentElements, false, getProgressMonitor());
+			Map<Element<?>, EObject> modelElements = modelFactory.transform(documentElements, false, getProgressMonitor());
 			
 			EList<EObject> cnt = getContents();
 			modelElements.values()
@@ -169,8 +169,8 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 	}
 	
 	protected void filterRepresentationElement(
-			Element element, 
-			Map<Element, EObject> registry,
+			Element<?> element, 
+			Map<Element<?>, EObject> registry,
 			ProgressMonitor progressMonitor) {
 		
 	}
@@ -187,7 +187,7 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 		return org.nasdanika.drawio.model.ModelFactory.eINSTANCE;
 	}	
 	
-	protected EObject getByRefId(Element element, URI baseURI, String refId, int pass, Map<Element, EObject> registry) {
+	protected EObject getByRefId(Element<?> element, URI baseURI, String refId, int pass, Map<Element<?>, EObject> registry) {
 		if (uriResolver == null) {
 			return null;
 		}
@@ -203,7 +203,7 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 		return uriResolver.apply(refURI);
 	}
 	
-	protected ClassLoader getClassLoader(Element context, URI baseURI, Supplier<ClassLoader> ancestorClassLoaderSupplier) {
+	protected ClassLoader getClassLoader(Element<?> context, URI baseURI, Supplier<ClassLoader> ancestorClassLoaderSupplier) {
 		return ancestorClassLoaderSupplier == null ? Thread.currentThread().getContextClassLoader() : ancestorClassLoaderSupplier.get();
 	}	
 
@@ -211,11 +211,19 @@ public class ConfigurationLoadingDrawioResource extends ResourceImpl {
 		return AbstractDrawioFactory.DEFAULT_APP_BASE;
 	}
 	
-	protected Map<String, Object> getVariables(Element context) {
+	protected Map<String, Object> getVariables(Element<?> context) {
 		return Collections.emptyMap();
 	}
 	
-	protected ContentProvider<Element> createContentProvider(Document document) {
+	@SuppressWarnings("unchecked")
+	protected ContentProvider<Element<?>> createContentProvider(Document document, Map<?, ?> options) {
+		if (options != null) {
+			Object cp = options.get(ContentProvider.class);
+			if (cp instanceof ContentProvider) {
+				return (ContentProvider<Element<?>>) cp;
+			}
+		}
+		
 		return new DrawioContentProvider(
 				document, 
 				Context.BASE_URI_PROPERTY, 

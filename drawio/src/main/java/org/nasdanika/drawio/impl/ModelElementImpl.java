@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.AbstractSplitJoinSet;
 import org.nasdanika.common.DelimitedStringMap;
+import org.nasdanika.common.Realm;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Element;
@@ -674,6 +675,11 @@ class ModelElementImpl<M extends ModelElement<M>> extends ElementImpl<M> impleme
 		org.w3c.dom.Element toRemove = getElement();
 		toRemove.getParentNode().removeChild(toRemove);
 		onRemove();
+	}
+
+	@Override
+	protected Realm getRealm() {
+		return getModel().getPage().getDocument().getRealmElement().getRealm();
 	}
 	
 }

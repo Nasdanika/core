@@ -71,7 +71,7 @@ public class TestDrawio {
 	public void testCompressed() throws Exception {
 		Document document = Document.load(getClass().getResource("compressed.drawio"));
 		assertThat(document.getElement().getTagName()).isEqualTo("mxfile");
-		BiFunction<Element, Map<Element, String>, String> visitor = (element, childResults) -> {
+		BiFunction<Element<?>, Map<Element<?>, String>, String> visitor = (element, childResults) -> {
 			return element.getElement().getTagName() + "[" + element.getElement().getAttribute("id") + "] " + childResults;
 		};
 		String result = document.accept(visitor, null);
@@ -81,9 +81,9 @@ public class TestDrawio {
 			System.out.println("Page: " + page.getName());
 			Model model = page.getModel();
 			Root root = model.getRoot();
-			for (Layer layer: root.getLayers()) {
+			for (Layer<?> layer: root.getLayers()) {
 				System.out.println("\tLayer: " + layer.getLabel());
-				for (ModelElement modelElement: layer.getElements()) {
+				for (ModelElement<?> modelElement: layer.getElements()) {
 					modelElement.setTooltip("Karamba");
 					modelElement.setLink("https://nasdanika.org");
 				}
@@ -104,7 +104,7 @@ public class TestDrawio {
 		assertThat(document.getElement().getTagName()).isEqualTo("mxfile");
 		assertThat(document.getPages().size()).isEqualTo(2);
 		
-		BiFunction<Element, Map<Element, String>, String> visitor = (element, childResults) -> {
+		BiFunction<Element<?>, Map<Element<?>, String>, String> visitor = (element, childResults) -> {
 			return element.getElement().getTagName() + "[" + element.getElement().getAttribute("id") + "] " + childResults;
 		};
 		String result = document.accept(visitor, null);
@@ -114,9 +114,9 @@ public class TestDrawio {
 			System.out.println("Page: " + page.getName());
 			Model model = page.getModel();
 			Root root = model.getRoot();
-			for (Layer layer: root.getLayers()) {
+			for (Layer<?> layer: root.getLayers()) {
 				System.out.println("\tLayer: " + layer.getLabel());
-				for (ModelElement modelElement: layer.getElements()) {
+				for (ModelElement<?> modelElement: layer.getElements()) {
 					dump(modelElement, "\t\t");
 				}
 				
@@ -136,11 +136,11 @@ public class TestDrawio {
 		
 		Model model = page.getModel();
 		Root root = model.getRoot();
-		List<Layer> layers = root.getLayers();
+		List<Layer<?>> layers = root.getLayers();
 		assertThat(layers).singleElement();
 		
 		// Add layer
-		Layer newLayer = root.createLayer();
+		Layer<?> newLayer = root.createLayer();
 		newLayer.setLabel("My new layer");
 				
 		// Add nodes
@@ -173,7 +173,7 @@ public class TestDrawio {
 		Files.writeString(new File("target/new-uncompressed.drawio").toPath(), document.save(null));
 	}	
 	
-	private void dump(ModelElement modelElement, String indent) throws TransformerException, IOException {
+	private void dump(ModelElement<?> modelElement, String indent) throws TransformerException, IOException {
 		modelElement.setTooltip("Kurumba");
 		modelElement.setLink("https://nasdanika.org");
 		
@@ -196,10 +196,10 @@ public class TestDrawio {
 					System.out.println(indent + "\t\t" + connection.getLabel() + " <- " + connection.getSource().getLabel());
 				}
 			}
-			List<LayerElement> children = node.getElements();
+			List<LayerElement<?>> children = node.getElements();
 			if (!children.isEmpty()) {
 				System.out.println(indent + "\tChildren:");
-				for (ModelElement child: children) {
+				for (ModelElement<?> child: children) {
 					dump(child, indent + "\t\t");
 				}
 			}
@@ -217,11 +217,12 @@ public class TestDrawio {
 		assertThat(actors).isEqualTo(1);
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testURI() throws Exception {
 		Document document = Document.load(getClass().getResource("uris.drawio"));
 		URI base = URI.createURI("nasdanika://drawio/tests/");
-		Function<ModelElement, URI> uriProvider = e -> {
+		Function<ModelElement<?>, URI> uriProvider = e -> {
 			String uriProperty = e.getProperty("uri");
 			if (Util.isBlank(uriProperty)) {
 				return null;
@@ -286,11 +287,11 @@ public class TestDrawio {
 		
 		Model model = page.getModel();
 		Root root = model.getRoot();
-		List<Layer> layers = root.getLayers();
+		List<Layer<?>> layers = root.getLayers();
 		assertThat(layers).singleElement();
 		
 		// Add layer
-		Layer newLayer = root.createLayer();
+		Layer<?> newLayer = root.createLayer();
 		newLayer.setLabel("My new layer");
 				
 		// Add nodes
@@ -376,7 +377,6 @@ public class TestDrawio {
 		Transformer<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>,Function<String,String>,String>> transformer = new Transformer<>(processorConfigFactory);
 		Map<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>,Function<String,String>,String>> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
 		
-		@SuppressWarnings("unchecked")
 		NodeProcessorConfig<Function<String, String>, Function<String, String>, String> aliceProcessorConfig = (NodeProcessorConfig<Function<String, String>, Function<String, String>, String>) configs.get(aliceNode);
 		assertThat(aliceProcessorConfig.getChildProcessorConfigs() == null || aliceProcessorConfig.getChildProcessorConfigs().isEmpty()).isTrue();
 		assertThat(aliceProcessorConfig.getIncomingSynapses()).isEmpty();
@@ -407,7 +407,6 @@ public class TestDrawio {
 					ProgressMonitor progressMonitor) {
 				
 				if (config instanceof NodeProcessorConfig) {
-					@SuppressWarnings("unchecked")
 					NodeProcessorConfig<Function<String, String>, Function<String, String>, String> nodeProcessorConfig = (NodeProcessorConfig<Function<String, String>, Function<String, String>, String>) config;
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
 						// Wiring
@@ -488,7 +487,6 @@ public class TestDrawio {
 		Transformer<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>,Function<String,String>,String>> transformer = new Transformer<>(processorConfigFactory);
 		Map<org.nasdanika.graph.Element, ProcessorConfig<Function<String,String>,Function<String,String>,String>> configs = transformer.transform(Collections.singleton(document), false, progressMonitor);
 		
-		@SuppressWarnings("unchecked")
 		NodeProcessorConfig<Function<String, String>, Function<String, String>, String> aliceProcessorConfig = (NodeProcessorConfig<Function<String, String>, Function<String, String>, String>) configs.get(aliceNode);
 		assertThat(aliceProcessorConfig.getChildProcessorConfigs() == null || aliceProcessorConfig.getChildProcessorConfigs().isEmpty()).isTrue();
 		assertThat(aliceProcessorConfig.getIncomingSynapses()).isEmpty();
@@ -519,7 +517,6 @@ public class TestDrawio {
 					ProgressMonitor progressMonitor) {
 				
 				if (config instanceof NodeProcessorConfig) {
-					@SuppressWarnings("unchecked")
 					NodeProcessorConfig<Function<String, String>, Function<String, String>, String> nodeProcessorConfig = (NodeProcessorConfig<Function<String, String>, Function<String, String>, String>) config;
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
 						// Wiring
@@ -544,7 +541,6 @@ public class TestDrawio {
 						
 					}
 				} else if (config instanceof ConnectionProcessorConfig) {
-					@SuppressWarnings("unchecked")
 					ConnectionProcessorConfig<Function<String, String>, Function<String, String>, String> connectionProcessorConfig = (ConnectionProcessorConfig<Function<String, String>, Function<String, String>, String>) config;
 					endpointWiringStageConsumer.accept(connectionProcessorConfig.getTargetSynapse().getEndpoint().thenAccept(targetEndpoint -> {
 						connectionProcessorConfig.getSourceSynapse().setHandler(new Function<String, String>() {
@@ -669,7 +665,7 @@ public class TestDrawio {
 		for (Entry<org.nasdanika.graph.Element, ProcessorInfo<Function<String,String>,Function<String,String>,String,Object>> pe: processors.entrySet()) {
 			org.nasdanika.graph.Element element = pe.getKey();
 			if (element instanceof ModelElement) {
-				System.out.println(((ModelElement) element).getLabel());
+				System.out.println(((ModelElement<?>) element).getLabel());
 			}
 		}
 		System.out.println(processors.size());
@@ -855,10 +851,10 @@ public class TestDrawio {
 		
 		Model model = page.getModel();
 		Root root = model.getRoot();
-		List<Layer> layers = root.getLayers();
+		List<Layer<?>> layers = root.getLayers();
 		assertThat(layers).singleElement();
 		
-		Layer backgroundLayer = root.getLayers().get(0);
+		Layer<?> backgroundLayer = root.getLayers().get(0);
 		
 		Node container = backgroundLayer.createNode();
 		Map<String, String> containerStyle = container.getStyle();
@@ -906,8 +902,8 @@ public class TestDrawio {
 	public void testDeleteAliceFromLayer() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 		for (Page page: document.getPages()) {
-			for (Layer layer: page.getModel().getRoot().getLayers()) {
-				for (LayerElement layerElement: layer.getElements()) {
+			for (Layer<?> layer: page.getModel().getRoot().getLayers()) {
+				for (LayerElement<?> layerElement: layer.getElements()) {
 					if ("Alice".equals(layerElement.getLabel())) {
 						layer.getElements().remove(layerElement);
 						break;
@@ -922,8 +918,8 @@ public class TestDrawio {
 	public void testDeleteBob() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 		for (Page page: document.getPages()) {
-			for (Layer layer: page.getModel().getRoot().getLayers()) {
-				for (LayerElement layerElement: layer.getElements()) {
+			for (Layer<?> layer: page.getModel().getRoot().getLayers()) {
+				for (LayerElement<?> layerElement: layer.getElements()) {
 					if ("bobs-house".equals(layerElement.getId())) {
 						layerElement.getChildren().clear();
 						break;
@@ -1098,7 +1094,7 @@ public class TestDrawio {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 		document.accept(el -> {
 			if (el instanceof ModelElement) {
-				ModelElement mel = (ModelElement) el;
+				ModelElement<?> mel = (ModelElement<?>) el;
 				if ("Alice".equals(mel.getLabel())) {
 					System.out.println(mel.getProperty("$style:fillColor"));
 				}
@@ -1111,7 +1107,7 @@ public class TestDrawio {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 		document.accept(el -> {
 			if (el instanceof ModelElement) {
-				ModelElement mel = (ModelElement) el;
+				ModelElement<?> mel = (ModelElement<?>) el;
 				if ("Alice".equals(mel.getLabel())) {
 					System.out.println(mel.getProperty("$spel:style[\"fillColor\"]"));
 				}
@@ -1140,7 +1136,7 @@ public class TestDrawio {
 		
 		Model model = page.getModel();
 		Root root = model.getRoot();
-		List<Layer> layers = root.getLayers();
+		List<Layer<?>> layers = root.getLayers();
 //		layers.get(0).getModel().getPage().getmo.getDocument().getModelElementById(null)
 		assertThat(layers).singleElement();
 		
@@ -1171,5 +1167,15 @@ public class TestDrawio {
 					System.out.println(ev + " " + ev.getClass() + " " + me);
 				}
 			});
+	}
+		
+	@Test 
+	public void testRealm() throws Exception {
+		Document document = Document.load(getClass().getResource("alice-bob-enumerate.drawio"));
+		
+		document.getRealmElement().read((r, d) -> {
+			System.out.println(d.getURI());
+		});
+		
 	}	
 }

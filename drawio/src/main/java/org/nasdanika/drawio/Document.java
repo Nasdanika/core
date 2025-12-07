@@ -30,9 +30,11 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.nasdanika.common.Composable;
 import org.nasdanika.common.DiagramGenerator;
+import org.nasdanika.common.ExclusiveRealm;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertySource;
+import org.nasdanika.common.Realm;
 import org.nasdanika.drawio.impl.DocumentImpl;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -69,6 +71,13 @@ public interface Document extends Element<Document> {
 		
 		Context INSTANCE = new Context() {
 			
+			private Realm realm = new ExclusiveRealm();
+
+			@Override
+			public Realm getRealm() {
+				return realm;
+			}
+			
 		};
 		
 		default InputStream openStream(URI uri) throws IOException, URISyntaxException {
@@ -91,6 +100,8 @@ public interface Document extends Element<Document> {
 		default Map<String, Object> getVariables(ModelElement<?> modelElement) {
 			return Collections.emptyMap();
 		}
+
+		Realm getRealm();
 		
 		@Override
 		default Context compose(Context other) {
@@ -125,11 +136,23 @@ public interface Document extends Element<Document> {
 					return ret;
 				}
 				
+				@Override
+				public Realm getRealm() {
+					return Context.this.getRealm();
+				}
+				
 			};
 		}
 		
 		static Context fromPropertySource(PropertySource<String,String> propertySource) {
 			return new Context() {
+				
+				private Realm realm = new ExclusiveRealm();
+
+				@Override
+				public Realm getRealm() {
+					return realm;
+				}
 				
 				@Override
 				public String getProperty(String name) {
@@ -142,6 +165,13 @@ public interface Document extends Element<Document> {
 		static Context fromPropertySource(Function<String,String> propertySource) {
 			return new Context() {
 				
+				private Realm realm = new ExclusiveRealm();
+
+				@Override
+				public Realm getRealm() {
+					return realm;
+				}
+				
 				@Override
 				public String getProperty(String name) {
 					return propertySource == null ? Context.super.getProperty(name) : propertySource.apply(name);
@@ -152,6 +182,13 @@ public interface Document extends Element<Document> {
 		
 		static Context fromVariablesProvider(Function<ModelElement<?>,Map<String,Object>> variablesProvider) {
 			return new Context() {
+				
+				private Realm realm = new ExclusiveRealm();
+
+				@Override
+				public Realm getRealm() {
+					return realm;
+				}
 				
 				@Override
 				public Map<String, Object> getVariables(ModelElement<?> modelElement) {
@@ -164,6 +201,13 @@ public interface Document extends Element<Document> {
 		static Context fromURIHandler(URIHandler uriHandler) {
 			return new Context() {
 				
+				private Realm realm = new ExclusiveRealm();
+
+				@Override
+				public Realm getRealm() {
+					return realm;
+				}
+				
 				@Override
 				public InputStream openStream(URI uri) throws IOException, URISyntaxException {
 					return uriHandler == null ? Context.super.openStream(uri) : uriHandler.createInputStream(uri, null);
@@ -174,6 +218,13 @@ public interface Document extends Element<Document> {
 		
 		static Context fromURIHandler(Function<URI, InputStream> uriHandler) {
 			return new Context() {
+				
+				private Realm realm = new ExclusiveRealm();
+
+				@Override
+				public Realm getRealm() {
+					return realm;
+				}
 				
 				@Override
 				public InputStream openStream(URI uri) throws IOException {

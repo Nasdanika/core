@@ -38,6 +38,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.nasdanika.common.NasdanikaException;
+import org.nasdanika.common.Realm;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
@@ -423,6 +424,11 @@ public class DocumentImpl extends ElementImpl<Document> implements Document {
 	@Override
 	public String toString() {
 		return super.toString() + " " + uri;
+	}
+	
+	@Override
+	protected Realm getRealm() {
+		return context.getRealm();
 	}
 
 }

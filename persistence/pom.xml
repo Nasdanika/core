@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2025.10.0</version>
+	    <version>2025.12.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>persistence</artifactId>
@@ -18,6 +18,5 @@
 			<artifactId>resources</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 	</dependencies>
 </project>

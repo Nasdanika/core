@@ -12,7 +12,9 @@ import org.eclipse.emf.common.util.URI;
 import org.nasdanika.capability.AbstractCapabilityFactory;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.requirements.DiagramRequirement;
+import org.nasdanika.common.ExclusiveRealm;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Realm;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.graph.Element;
@@ -35,6 +37,13 @@ public class DiagramCapabilityFactory extends AbstractCapabilityFactory<DiagramR
 		
 		try {
 			Document.Context requirementContext = new Document.Context() {
+				
+				private Realm realm = new ExclusiveRealm();
+
+				@Override
+				public Realm getRealm() {
+					return realm;
+				}
 				
 				@Override
 				public InputStream openStream(URI uri) throws IOException, URISyntaxException {
@@ -59,7 +68,7 @@ public class DiagramCapabilityFactory extends AbstractCapabilityFactory<DiagramR
 				return wrap(document);
 			}
 			
-			ElementInvocableFactory<Object,Object,Object> elementInvocableFactory = new ElementInvocableFactory<>(requirement.selector() == null ? document : (org.nasdanika.drawio.Element) requirement.selector().apply(document), requirement.processor());
+			ElementInvocableFactory<Object,Object,Object> elementInvocableFactory = new ElementInvocableFactory<>(requirement.selector() == null ? document : (org.nasdanika.drawio.Element<?>) requirement.selector().apply(document), requirement.processor());
 			if (requirement.bind() == null) {
 				// Processors
 				Map<Element, ProcessorInfo<Object,Object,Object,Object>> processors = elementInvocableFactory.createProcessors(null, false, progressMonitor);						

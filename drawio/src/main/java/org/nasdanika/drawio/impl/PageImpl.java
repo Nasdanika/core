@@ -15,6 +15,7 @@ import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.Realm;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.Element;
@@ -211,6 +212,11 @@ class PageImpl extends ElementImpl<Page> implements Page {
 	public void remove() {
 		org.w3c.dom.Element toRemove = getElement();
 		toRemove.getParentNode().removeChild(toRemove);
+	}
+
+	@Override
+	protected Realm getRealm() {
+		return getDocument().getRealmElement().getRealm();
 	}
 
 }

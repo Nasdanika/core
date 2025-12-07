@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>parent</artifactId>
 		<groupId>org.nasdanika.core</groupId>
-		<version>2025.10.0</version>
+		<version>2025.12.0</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>emf</artifactId>
@@ -39,7 +39,7 @@
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-ooxml</artifactId>
-		    <version>5.4.1</version>
+		    <version>5.5.1</version>
 		</dependency>
 	</dependencies>
 </project>

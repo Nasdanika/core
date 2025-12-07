@@ -64,7 +64,7 @@ import org.xml.sax.SAXException;
  * @author Pavel
  * @param <S> Semantic element type
  */
-public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractMappingFactory<Element, T> {
+public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractMappingFactory<Element<?>, T> {
 	
 	public static final String CONDITION_KEY = "condition";
 	
@@ -78,13 +78,13 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	private static final String DATA_URI_JPEG_PREFIX_NO_BASE_64 = "data:image/jpeg,";
 
 	protected AbstractDrawioFactory(
-			ContentProvider<Element> contentProvider, 
+			ContentProvider<Element<?>> contentProvider, 
 			CapabilityLoader capabilityLoader,
 			ProgressMonitor progressMonitor) {
 		super(contentProvider, capabilityLoader, progressMonitor);
 	}
 
-	protected AbstractDrawioFactory(ContentProvider<Element> contentProvider, ProgressMonitor progressMonitor) {
+	protected AbstractDrawioFactory(ContentProvider<Element<?>> contentProvider, ProgressMonitor progressMonitor) {
 		super(contentProvider, progressMonitor);
 	}
 		
@@ -148,7 +148,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	@org.nasdanika.common.Transformer.Factory
 	public final T createModelElementTarget(
-			org.nasdanika.drawio.ModelElement modelElement,
+			org.nasdanika.drawio.ModelElement<?> modelElement,
 			boolean parallel,
 			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
@@ -190,8 +190,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
 	public final boolean wireModelElementRefIds(
-			org.nasdanika.drawio.ModelElement modelElement,
-			Map<Element, T> registry,
+			org.nasdanika.drawio.ModelElement<?> modelElement,
+			Map<Element<?>, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
@@ -219,7 +219,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		return PAGE_ELEMENT_PROPERTY;
 	}	
 	
-	public boolean isPageElement(Element obj) {	
+	public boolean isPageElement(Element<?> obj) {	
 		String pageElementProperty = getPageElementProperty();
 		if (Util.isBlank(pageElementProperty)) {
 			return false;
@@ -242,8 +242,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
 	public final boolean wirePageElement(
-			org.nasdanika.drawio.ModelElement modelElement,
-			Map<Element, T> registry,
+			org.nasdanika.drawio.ModelElement<?> modelElement,
+			Map<Element<?>, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
@@ -252,7 +252,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		}
 		Page page = modelElement.getModel().getPage();
 		
-		Element pageParent = getContentProvider().getParent(page);
+		Element<?> pageParent = getContentProvider().getParent(page);
 		if (pageParent instanceof ModelElement) {
 			T pageParentTarget = registry.get(pageParent);		
 			if (pageParentTarget == null) {
@@ -274,12 +274,12 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
 	public final boolean wireModelElementLinkTarget(
-			org.nasdanika.drawio.ModelElement modelElement,
-			Map<Element, T> registry,
+			org.nasdanika.drawio.ModelElement<?> modelElement,
+			Map<Element<?>, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		LinkTarget linkTarget = modelElement.getLinkTarget();
+		LinkTarget<?> linkTarget = modelElement.getLinkTarget();
 		if (linkTarget instanceof org.nasdanika.drawio.ModelElement) {
 			T target = registry.get(linkTarget);
 			if (target == null) {
@@ -300,8 +300,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
 	public final boolean wireModelElementSelector(
-			org.nasdanika.drawio.ModelElement modelElement,
-			Map<Element, T> registry,
+			org.nasdanika.drawio.ModelElement<?> modelElement,
+			Map<Element<?>, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		return wireSelector(modelElement, registry, pass, progressMonitor);
@@ -316,8 +316,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
 	public final boolean wireModelElementPrototype(
-			org.nasdanika.drawio.ModelElement modelElement,
-			Map<Element, T> registry,
+			org.nasdanika.drawio.ModelElement<?> modelElement,
+			Map<Element<?>, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
@@ -333,8 +333,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class)
 	public final boolean wireModelElementTargetSelector(
-			org.nasdanika.drawio.ModelElement modelElement,
-			Map<Element, T> registry,
+			org.nasdanika.drawio.ModelElement<?> modelElement,
+			Map<Element<?>, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
@@ -346,8 +346,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	@SuppressWarnings("unchecked")
 	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 1)
 	public final void wireTargetReferences(
-			ModelElement modelElement,
-			Map<Element, T> registry,
+			ModelElement<?> modelElement,
+			Map<Element<?>, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
@@ -356,8 +356,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			Object referenceSpec = getContentProvider().getProperty(modelElement, referenceProperty);			
 			if (referenceSpec != null && !(referenceSpec instanceof String && Util.isBlank((String) referenceSpec))) {
 				ReferenceMapper referenceMapper = new ReferenceMapper(referenceSpec, modelElement);
-				List<Element> ancestorsPath = new ArrayList<>();
-				Z: for (Element ancestor = getContentProvider().getParent(modelElement); ancestor != null; ancestor = getContentProvider().getParent(ancestor)) {
+				List<Element<?>> ancestorsPath = new ArrayList<>();
+				Z: for (Element<?> ancestor = getContentProvider().getParent(modelElement); ancestor != null; ancestor = getContentProvider().getParent(ancestor)) {
 					ancestorsPath.add(ancestor);					
 					for (T ancestorTarget: mapper.select(ancestor, registry, progressMonitor)) {						
 						if (referenceMapper.matchAncestorTarget(ancestorTarget, ancestorsPath, registry, modelElement)) {
@@ -369,7 +369,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 								if (feature == null) {
 									throw new ConfigurationException("Feature " + referenceName + " not found in " + eClass.getName(), modelElement); 
 								} else if (feature instanceof EReference) {							
-									LinkedList<Element> sourcePath = new LinkedList<>();
+									LinkedList<Element<?>> sourcePath = new LinkedList<>();
 									sourcePath.add(modelElement);
 									Comparator<Object> comparator = referenceMapper.getComparator(ancestorTarget, registry, progressMonitor);
 									for (T target: referenceMapper.getElements(sourcePath, registry, new HashSet<>()::add, modelElement, progressMonitor)) {
@@ -426,11 +426,11 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	public final void mapDocument(
 			Document document,
 			T documentTarget,
-			Map<Element, T> registry,
+			Map<Element<?>, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		Mapper<Element,T> mapper = getMapper(pass);
+		Mapper<Element<?>,T> mapper = getMapper(pass);
 		if (mapper != null) {
 			mapper.wire(document, registry, progressMonitor);
 		}
@@ -439,12 +439,12 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	protected void addRepresentationPage(
 			org.nasdanika.ncore.ModelElement targetModelElement, 
 			Page page,
-			Map<Element, T> registry,
+			Map<Element<?>, T> registry,
 			ProgressMonitor progressMonitor) {		
 		
 		page.accept(pageElement -> {
 			if (pageElement instanceof Element) {
-				filterRepresentation((Element) pageElement, registry, progressMonitor);
+				filterRepresentation((Element<?>) pageElement, registry, progressMonitor);
 			}
 		});
 		String targetRepresentation = targetModelElement.getRepresentations().get(DRAWIO_REPRESENTATION);
@@ -477,14 +477,14 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 * @return
 	 */
 	protected void filterRepresentation(
-			Element element, 
-			Map<Element, T> registry,
+			Element<?> element, 
+			Map<Element<?>, T> registry,
 			ProgressMonitor progressMonitor) {
 		
 		filterRepresentationElement(element, registry, progressMonitor);
 		
 		if (element instanceof org.nasdanika.drawio.ModelElement) {
-			org.nasdanika.drawio.ModelElement modelElement = (org.nasdanika.drawio.ModelElement) element;
+			org.nasdanika.drawio.ModelElement<?> modelElement = (org.nasdanika.drawio.ModelElement<?>) element;
 			
 			// Expanding placeholders for label and tooltip
 			if ("1".equals(modelElement.getProperty("placeholders"))) {
@@ -506,11 +506,11 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	/**
 	 * Service/capability interface for filtering representation elements
 	 */
-	public interface RepresentationElementFilter<T extends EObject> extends Contributor<Element,T> {
+	public interface RepresentationElementFilter<T extends EObject> extends Contributor<Element<?>,T> {
 		
 		void filterRepresentationElement(
-				Element element, 
-				Map<Element, ? extends EObject> registry,
+				Element<?> element, 
+				Map<Element<?>, ? extends EObject> registry,
 				ProgressMonitor progressMonitor);	
 		
 	}	
@@ -525,12 +525,12 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 * @param progressMonitor
 	 */
 	protected void filterRepresentationElement(
-			Element element, 
-			Map<Element, T> registry,
+			Element<?> element, 
+			Map<Element<?>, T> registry,
 			ProgressMonitor progressMonitor) {
 
 		if (element instanceof org.nasdanika.drawio.ModelElement) {			
-			org.nasdanika.drawio.ModelElement modelElement = (org.nasdanika.drawio.ModelElement) element;
+			org.nasdanika.drawio.ModelElement<?> modelElement = (org.nasdanika.drawio.ModelElement<?>) element;
 			String semanticUUIDPropertyName = getSemanticUUIDPropertyName();
 			T target = registry.get(element);
 			if (!Util.isBlank(semanticUUIDPropertyName) && target instanceof org.nasdanika.ncore.ModelElement) {
@@ -553,7 +553,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			}
 		}
 				
-		for (Contributor<Element,T> contributor: contributors) {
+		for (Contributor<Element<?>,T> contributor: contributors) {
 			if (contributor instanceof RepresentationElementFilter && contributor.canHandle(element, null)) {
 				((RepresentationElementFilter<?>) contributor).filterRepresentationElement(
 						element, 
@@ -583,13 +583,13 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		
 	@org.nasdanika.common.Transformer.Wire(phase = 2)
 	public final void mapModelElement(
-			org.nasdanika.drawio.ModelElement modelElement,
+			org.nasdanika.drawio.ModelElement<?> modelElement,
 			T target,
-			Map<Element, T> registry,
+			Map<Element<?>, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 
-		Mapper<Element,T> mapper = getMapper(pass);
+		Mapper<Element<?>,T> mapper = getMapper(pass);
 		if (mapper != null) {
 			mapper.wire(modelElement, registry, progressMonitor);
 		}
@@ -599,7 +599,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		// Semantic mapping
 		if (target instanceof org.nasdanika.drawio.model.SemanticElement) {
 			SemanticMapping semanticMapping = createSemanticMapping();
-			for (Element ancestor = getContentProvider().getParent(modelElement); ancestor != null; ancestor = getContentProvider().getParent(ancestor)) {
+			for (Element<?> ancestor = getContentProvider().getParent(modelElement); ancestor != null; ancestor = getContentProvider().getParent(ancestor)) {
 				if (ancestor instanceof Page) {
 					semanticMapping.setPageID(((Page) ancestor).getId());						
 				} else if (ancestor instanceof Document) {
@@ -617,7 +617,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		if (target instanceof org.nasdanika.ncore.ModelElement) {
 			// Page representation
 			org.nasdanika.ncore.ModelElement targetModelElement = (org.nasdanika.ncore.ModelElement) target;
-			LinkTarget linkTarget = modelElement.getLinkTarget();
+			LinkTarget<?> linkTarget = modelElement.getLinkTarget();
 			if (linkTarget instanceof Page) {
 				addRepresentationPage(
 						targetModelElement, 
@@ -674,7 +674,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	public final void wireDocumentConfiguration(
 			Document document,
 			T documentTarget,
-			Map<Element, T> registry,
+			Map<Element<?>, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 				
@@ -688,7 +688,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	protected void configureDocumentElement(
 			Document document,
 			T documentTarget,
-			Map<Element,T> registry,
+			Map<Element<?>,T> registry,
 			ProgressMonitor progressMonitor) {
 		
 		if (documentTarget instanceof org.nasdanika.ncore.Marked) {
@@ -698,9 +698,9 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	
 	@org.nasdanika.common.Transformer.Wire(phase = 4)
 	public final void wireModelElementConfiguration(
-			org.nasdanika.drawio.ModelElement modelElement,
+			org.nasdanika.drawio.ModelElement<?> modelElement,
 			T target,
-			Map<Element,T> registry,
+			Map<Element<?>,T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
@@ -741,9 +741,9 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	@org.nasdanika.common.Transformer.Wire(phase = 5)
 	public final boolean mapOperations(
-			Element element,
+			Element<?> element,
 			T target,
-			Map<Element,T> registry,
+			Map<Element<?>,T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
@@ -760,8 +760,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	@org.nasdanika.common.Transformer.Wire(phase = 5, targetType = Void.class)
 	public final boolean mapOperations(
-			Element element,
-			Map<Element,T> registry,
+			Element<?> element,
+			Map<Element<?>,T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
@@ -773,8 +773,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	
 	@org.nasdanika.common.Transformer.Wire(phase = 6, targetType = Void.class)
 	public final boolean wireInvoke(
-			Element element,
-			Map<Element,T> registry,
+			Element<?> element,
+			Map<Element<?>,T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
@@ -783,21 +783,21 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	
 	@org.nasdanika.common.Transformer.Wire(phase = 6)
 	public final boolean wireInvoke(
-			Element element,
+			Element<?> element,
 			T target,
-			Map<Element, T> registry,
+			Map<Element<?>, T> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
 	
 		return invoke(element, target, registry, pass, progressMonitor);
 	}
 
-	protected Collection<Element> getSources(Object target, Map<Element, T> registry, Predicate<Element> predicate) {
-		Collection<Element> result = new ArrayList<>();
+	protected Collection<Element<?>> getSources(Object target, Map<Element<?>, T> registry, Predicate<Element<?>> predicate) {
+		Collection<Element<?>> result = new ArrayList<>();
 		if (target != null) {
-			for (Entry<Element, T> re: registry.entrySet()) {
+			for (Entry<Element<?>, T> re: registry.entrySet()) {
 				if (Objects.equals(target, re.getValue())) {
-					Element source = re.getKey();
+					Element<?> source = re.getKey();
 					if (predicate == null || predicate.test(source)) {
 						result.add(source);
 					}
@@ -807,24 +807,24 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		return result;
 	}		
 	
-	protected record JoinRecord(Element o1, Element o2) {}
+	protected record JoinRecord(Element<?> o1, Element<?> o2) {}
 
 	protected Collection<JoinRecord> join(
 			Object ase, 
 			Object bse,
-			BiPredicate<? super Element, ? super Element> predicate,
-			Map<Element,T> registry) {
+			BiPredicate<? super Element<?>, ? super Element<?>> predicate,
+			Map<Element<?>,T> registry) {
 		
-		Collection<Element> as = getSources(ase, registry, null);
+		Collection<Element<?>> as = getSources(ase, registry, null);
 		as.add(null); // outer join
 		
-		Collection<Element> bs = getSources(bse, registry, null);
+		Collection<Element<?>> bs = getSources(bse, registry, null);
 		bs.add(null); // outer join
 		
 		Collection<JoinRecord> result = new ArrayList<>();
 		
-		for (Element aSource: as) {
-			for (Element bSource: bs) {
+		for (Element<?> aSource: as) {
+			for (Element<?> bSource: bs) {
 				if (predicate.test(aSource, bSource)) {
 					result.add(new JoinRecord(aSource, bSource));
 				}
@@ -837,8 +837,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	@SuppressWarnings("unchecked")
 	protected <CT> Comparator<Object> adapt(
 			Comparator<CT> comparator,
-			BiPredicate<? super Element, ? super Element> predicate,			
-			Map<Element, T> registry,
+			BiPredicate<? super Element<?>, ? super Element<?>> predicate,			
+			Map<Element<?>, T> registry,
 			Comparator<Object> fallback) {
 		return (a, b) -> {
 			for (JoinRecord jr: join(a, b, predicate, registry)) {
@@ -859,12 +859,12 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	 */
 	protected <CT> Comparator<Object> adapt(
 			Comparator<CT> comparator,
-			BiPredicate<? super Element, ? super Element> predicate,			
-			Map<Element, T> registry) {
+			BiPredicate<? super Element<?>, ? super Element<?>> predicate,			
+			Map<Element<?>, T> registry) {
 		return adapt(comparator, predicate, registry, SetterFeatureMapper.NATURAL_COMPARATOR);
 	}
 	
-	protected boolean areModelElements(Element a, Element b) {
+	protected boolean areModelElements(Element<?> a, Element<?> b) {
 		return a instanceof org.nasdanika.drawio.ModelElement && b instanceof org.nasdanika.drawio.ModelElement;
 	}
 	
@@ -872,8 +872,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	protected Comparator<Object> createMapperComparator(
 			T target, 
 			Object comparatorConfig, 
-			Map<Element, T> registry,
-			Element context,
+			Map<Element<?>, T> registry,
+			Element<?> context,
 			ProgressMonitor progressMonitor) {
 		
 		if (Comparators.label.key.equals(comparatorConfig)) {
@@ -1003,7 +1003,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		return super.createMapperComparator(target, comparatorConfig, registry, context, progressMonitor);
 	}
 	
-	protected boolean areSamePageNodes(Element a, Element b) {
+	protected boolean areSamePageNodes(Element<?> a, Element<?> b) {
 		return a instanceof Node
 				&& b instanceof Node
 				&& Objects.equals(((Node) a).getModel().getPage(), ((Node) b).getModel().getPage());	
@@ -1012,12 +1012,12 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	protected Comparator<Object> createAngularComparator(
 			T target,
 			Object angleConfig, 
-			Map<Element, T> registry,			
-			Element context,
+			Map<Element<?>, T> registry,			
+			Element<?> context,
 			Comparator<Object> fallback) {
 
 		return (a, b) -> {		
-			for (Element base: getSources(target, registry, Node.class::isInstance)) {
+			for (Element<?> base: getSources(target, registry, Node.class::isInstance)) {
 				if (base instanceof org.nasdanika.drawio.model.Node) {
 					Node baseNode = (Node) base;
 					Double angle = getAngle(angleConfig, baseNode, context);
@@ -1038,7 +1038,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 			String expr, 
 			Map<String,Object> variables, 
 			Class<V> resultType, 
-			Element context) {
+			Element<?> context) {
 		
 		if (Util.isBlank(expr)) {
 			return null;
@@ -1059,7 +1059,7 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 		}
 	}
 		
-	protected Double getAngle(Object value, Node base, Element context) {
+	protected Double getAngle(Object value, Node base, Element<?> context) {
 		if (value == null) {
 			return null;
 		}

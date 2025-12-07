@@ -58,8 +58,8 @@ public class ModelMixIn {
 			
 			@Override
 			protected void filterRepresentationElement(
-					Element representationElement,
-					Map<org.nasdanika.drawio.Element, EObject> registry, ProgressMonitor progressMonitor) {
+					Element<?> representationElement,
+					Map<Element<?>, EObject> registry, ProgressMonitor progressMonitor) {
 				// TODO Auto-generated method stub
 				
 				for (CommandSpec mixIn: spec.mixins().values()) {
