@@ -60,7 +60,7 @@ class RootImpl extends ModelElementImpl<Root> implements Root {
 		org.nasdanika.drawio.model.Root mRoot = toModelElement(factory.createRoot(), markerFactory, modelElementProvider, tagProvider);
 		modelElementProvider.apply(this).complete(mRoot);
 		for (Layer<?> layer: getLayers()) {
-			mRoot.getLayers().add(((LayerImpl) layer).toModelLayer(factory, markerFactory, modelElementProvider, tagProvider));
+			mRoot.getLayers().add(((LayerImpl<?>) layer).toModelLayer(factory, markerFactory, modelElementProvider, tagProvider));
 		}
 		return mRoot;
 	}	

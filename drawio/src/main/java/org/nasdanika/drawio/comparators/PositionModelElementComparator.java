@@ -10,11 +10,11 @@ import org.nasdanika.drawio.ModelElement;
  * @author Pavel
  *
  */
-public class PositionModelElementComparator implements Comparator<ModelElement> {
+public class PositionModelElementComparator implements Comparator<ModelElement<?>> {
 		
 
 	@Override
-	public int compare(ModelElement o1, ModelElement o2) {
+	public int compare(ModelElement<?> o1, ModelElement<?> o2) {
 		if (Objects.equals(o1, o2)) {
 			return 0;
 		}

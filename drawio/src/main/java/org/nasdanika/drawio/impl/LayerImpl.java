@@ -27,6 +27,8 @@ import org.w3c.dom.Element;
 
 class LayerImpl<L extends Layer<L>> extends ModelElementImpl<L> implements Layer<L> {
 	
+	private static final String MX_CELL_ELEMENT = "mxCell";
+
 	LayerImpl(
 			Element element, 
 			ModelImpl model, 
@@ -43,7 +45,7 @@ class LayerImpl<L extends Layer<L>> extends ModelElementImpl<L> implements Layer
 
 	@Override
 	public Node createNode() {
-		Element nodeElement = element.getOwnerDocument().createElement("mxCell");
+		Element nodeElement = element.getOwnerDocument().createElement(MX_CELL_ELEMENT);
 		nodeElement.setAttribute(ATTRIBUTE_ID, UUID.randomUUID().toString());
 		nodeElement.setAttribute(ATTRIBUTE_PARENT, element.getAttribute(ATTRIBUTE_ID));
 		nodeElement.setAttribute(ModelImpl.ATTRIBUTE_VERTEX, "1");
@@ -54,7 +56,7 @@ class LayerImpl<L extends Layer<L>> extends ModelElementImpl<L> implements Layer
 
 	@Override
 	public Connection createConnection(Node source, Node target) {
-		Element connectionElement = element.getOwnerDocument().createElement("mxCell");
+		Element connectionElement = element.getOwnerDocument().createElement(MX_CELL_ELEMENT);
 		connectionElement.setAttribute(ATTRIBUTE_ID, UUID.randomUUID().toString());
 		connectionElement.setAttribute(ATTRIBUTE_PARENT, element.getAttribute(ATTRIBUTE_ID));
 		connectionElement.setAttribute(ModelImpl.ATTRIBUTE_EDGE, "1");
@@ -69,10 +71,6 @@ class LayerImpl<L extends Layer<L>> extends ModelElementImpl<L> implements Layer
 		connectionElement.appendChild(geometryElement);
 		geometryElement.setAttribute("relative", "1");
 		geometryElement.setAttribute("as", "geometry");
-
-		Element array = geometryElement.getOwnerDocument().createElement("Array");
-		array.setAttribute("as", "points");
-		geometryElement.appendChild(array);
 		
 		element.getParentNode().appendChild(connectionElement);
 		List<LayerElement<?>> elements = getElements();

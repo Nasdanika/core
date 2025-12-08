@@ -16,7 +16,7 @@ import org.nasdanika.drawio.Rectangle;
 public class AngularNodeComparator implements Comparator<Node> {
 
 	public static Rectangle getAbsoluteGeometry(Node node) {
-		ModelElement parent = node.getParent();
+		ModelElement<?> parent = node.getParent();
 		if (parent instanceof Node) {
 			Rectangle parentAbsoluteGeometry = getAbsoluteGeometry((Node) parent);
 			Rectangle nodeGeometry = node.getGeometry();

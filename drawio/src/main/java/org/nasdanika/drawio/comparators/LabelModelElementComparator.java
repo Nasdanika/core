@@ -11,19 +11,19 @@ import org.nasdanika.drawio.ModelElement;
  * @author Pavel
  *
  */
-public class LabelModelElementComparator implements Comparator<ModelElement> {
+public class LabelModelElementComparator implements Comparator<ModelElement<?>> {
 
 	@Override
-	public int compare(ModelElement o1, ModelElement o2) {				
+	public int compare(ModelElement<?> o1, ModelElement<?> o2) {				
 		if (Objects.equals(o1, o2)) {
 			return 0;
 		}
 		
-		String l1 = ((ModelElement) o1).getLabel();
+		String l1 = ((ModelElement<?>) o1).getLabel();
 		if (l1 != null) {
 			l1 = Jsoup.parse(l1).text();
 		}
-		String l2 = ((ModelElement) o2).getLabel();
+		String l2 = ((ModelElement<?>) o2).getLabel();
 		if (l2 != null) {
 			l2 = Jsoup.parse(l2).text();
 		}

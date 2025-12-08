@@ -26,7 +26,7 @@ import org.nasdanika.drawio.ModelElement;
  * @author Pavel
  *
  */
-public class EnumerateComparator implements Comparator<ModelElement> {
+public class EnumerateComparator implements Comparator<ModelElement<?>> {
 	
 	private Object[] parse(Object enumerateValue) {
 		if (enumerateValue instanceof String) {
@@ -46,7 +46,7 @@ public class EnumerateComparator implements Comparator<ModelElement> {
 	}
 		
 	@Override
-	public int compare(ModelElement o1, ModelElement o2) {
+	public int compare(ModelElement<?> o1, ModelElement<?> o2) {
 		if (Objects.equals(o1, o2)) {
 			return 0;
 		}

@@ -14,7 +14,7 @@ import org.nasdanika.drawio.Page;
  * @author Pavel
  *
  */
-public class FlowComparator implements Comparator<ModelElement> {
+public class FlowComparator implements Comparator<ModelElement<?>> {
 	
 	private Predicate<? super Connection> connectionPredicate;
 
@@ -27,7 +27,7 @@ public class FlowComparator implements Comparator<ModelElement> {
 	}
 	
 	@Override
-	public int compare(ModelElement o1, ModelElement o2) {
+	public int compare(ModelElement<?> o1, ModelElement<?> o2) {
 		if (Objects.equals(o1, o2)) {
 			return 0;
 		}
@@ -61,7 +61,7 @@ public class FlowComparator implements Comparator<ModelElement> {
 	 * @param o1
 	 * @param o2
 	 */
-	private Integer traverse(ModelElement source, ModelElement target, Stack<ModelElement> tracker) {
+	private Integer traverse(ModelElement<?> source, ModelElement<?> target, Stack<ModelElement<?>> tracker) {
 		if (Objects.equals(source, target)) {
 			return 0;
 		}
