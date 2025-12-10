@@ -227,8 +227,8 @@ public interface Document extends Element<Document> {
 				}
 				
 				@Override
-				public InputStream openStream(URI uri) throws IOException {
-					return uriHandler.apply(uri);
+				public InputStream openStream(URI uri) throws IOException, URISyntaxException {
+					return uriHandler == null ? Context.super.openStream(uri) : uriHandler.apply(uri);
 				}
 				
 			};

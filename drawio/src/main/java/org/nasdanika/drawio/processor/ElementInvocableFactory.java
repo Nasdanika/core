@@ -77,7 +77,7 @@ public class ElementInvocableFactory<H,E,K> extends ElementProcessorFactory<H,E,
 	
 	public <T> T createProxy(
 			String bindProperty,
-			EndpointFactory<H, E> endpointFactory, 
+			EndpointFactory<H,E> endpointFactory, 
 			ConnectionBase connectionBase,
 			ProgressMonitor progressMonitor,
 			Class<?>... interfaces) {

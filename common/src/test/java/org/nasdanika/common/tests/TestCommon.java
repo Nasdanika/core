@@ -623,7 +623,7 @@ public class TestCommon {
     		* One
     		* Two
     		
-    		```my-qualifier
+    		```java
     		Purum-param
     		```
     						

@@ -183,10 +183,10 @@ public class MarkdownHelper {
 				if (endMatcher.find()) {
 					if (startMatcherStart > i) {
 						output.append(input.substring(i, startMatcherStart));
+						i = startMatcherStart;
 					}
 					String bareSpec = processSpec(dialect, endMatcherContent.substring(0, endMatcher.start())) ;
 					String match = endMatcherContent.substring(endMatcher.start(), endMatcher.end());
-				    i = startMatcherEnd + endMatcher.start() + match.indexOf("```") + 3; // Just the closing back-ticks, no space or new line characters.
 					
 					if (resource) {					
 						try {		
@@ -225,7 +225,11 @@ public class MarkdownHelper {
 							if (dialect == null) {
 								if (startPattern == START_QUALIFIED_FENCED_BLOCK_PATTERN) {
 									String qualifier = input.substring(startMatcherStart, startMatcherEnd).trim();									
-									replacementBuilder.append(processQualifiedFencedBlock(bareSpec, qualifier.substring(3)));
+									String result = processQualifiedFencedBlock(bareSpec, qualifier.substring(3));
+									if (result == null) {
+										continue;
+									}
+									replacementBuilder.append(result);
 								} else {
 									replacementBuilder.append("<img src=\"data:image/");
 									if (startPattern == START_PNG_PATTERN || startPattern == START_PNG_RESOURCE_PATTERN) {
@@ -256,6 +260,7 @@ public class MarkdownHelper {
 							output.append("<div class=\"nsd-error\">Error during diagram rendering: " + e + "</div>");
 						}
 					}				
+				    i = startMatcherEnd + endMatcher.start() + match.indexOf("```") + 3; // Just the closing back-ticks, no space or new line characters.
 				}
 		    }
 		}
@@ -275,7 +280,7 @@ public class MarkdownHelper {
 			}
 		}		
 		
-		return "<div class=\"nsd-error\">Unsupported fenced block qualifier: " + qualifier + "</div>";
+		return null;
 	}
 
 	/**
