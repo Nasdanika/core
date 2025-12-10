@@ -2,6 +2,7 @@ package org.nasdanika.drawio.processor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.AccessibleObject;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
@@ -68,7 +69,15 @@ public class DiagramCapabilityFactory extends AbstractCapabilityFactory<DiagramR
 				return wrap(document);
 			}
 			
-			ElementInvocableFactory<Object,Object,Object> elementInvocableFactory = new ElementInvocableFactory<>(requirement.selector() == null ? document : (org.nasdanika.drawio.Element<?>) requirement.selector().apply(document), requirement.processor());
+			ElementInvocableFactory<Object,Object,Object> elementInvocableFactory = new ElementInvocableFactory<>(requirement.selector() == null ? document : (org.nasdanika.drawio.Element<?>) requirement.selector().apply(document), requirement.processor()) {
+				
+				@Override
+				protected boolean isMakeAccessible(AccessibleObject accessibleObject) {
+					return requirement.makeAccessiblePredicate() != null && requirement.makeAccessiblePredicate().test(accessibleObject);
+				}
+				
+			};			
+			
 			if (requirement.bind() == null) {
 				// Processors
 				Map<Element, ProcessorInfo<Object,Object,Object,Object>> processors = elementInvocableFactory.createProcessors(null, false, progressMonitor);						

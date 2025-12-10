@@ -1,5 +1,6 @@
 package org.nasdanika.graph.processor;
 
+import java.lang.reflect.AccessibleObject;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -13,7 +14,18 @@ import org.nasdanika.graph.Element;
  */
 public abstract class ReflectiveWiringProcessorFactory<H,E,K,P> extends ProcessorFactory<H,E,K,P> {
 	
-	ReflectiveProcessorWirer<H,E,K,P> wirerer = new ReflectiveProcessorWirer<>();
+	ReflectiveProcessorWirer<H,E,K,P> wirerer = new ReflectiveProcessorWirer<>() {
+		
+		@Override
+		protected boolean isMakeAccessible(AccessibleObject accessibleObject) {
+			return ReflectiveWiringProcessorFactory.this.isMakeAccessible(accessibleObject);
+		}
+		
+	};
+		
+	protected boolean isMakeAccessible(AccessibleObject accessibleObject) {
+		return false;
+	}	
 
 	@Override
 	protected ProcessorInfo<H,E,K,P> createProcessor(

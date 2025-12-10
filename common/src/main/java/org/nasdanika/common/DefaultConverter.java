@@ -12,6 +12,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -286,18 +287,22 @@ public class DefaultConverter extends ReflectiveConverter {
 	
 	// URI
 	
-	public InputStream toInputStream(URI uri, ClassLoader classLoader) throws IOException {
+	public InputStream toInputStream(URI uri, ClassLoader classLoader) throws IOException, URISyntaxException {
 		if (Util.CLASSPATH_SCHEME.equals(uri.scheme())) {
 			String resource = uri.toString().substring(Util.CLASSPATH_URL_PREFIX.length());
 			return Objects.requireNonNull(classLoader.getResourceAsStream(resource), "ClassLoader resource not found: " + resource);
 		}
-		return toInputStream(new URL(uri.toString()));
+		return toInputStream(new java.net.URI(uri.toString()).toURL());
 	}
 	
 	@ConverterMethod
 	public InputStream toInputStream(URI uri) throws IOException {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();		
-		return toInputStream(uri, cl);
+		try {
+			return toInputStream(uri, cl);
+		} catch (URISyntaxException e) {
+			throw new IOException(e);
+		}
 	}
 	
 	/**

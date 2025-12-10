@@ -5,7 +5,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Factory;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
-import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.common.ProgressMonitor;
 
 public class BinaryResourceFactoryCapabilityFactory extends ResourceFactoryCapabilityFactory {

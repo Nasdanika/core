@@ -11,6 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -169,7 +170,9 @@ public class Reflector {
 						if (method.getDeclaringClass().isInterface()) {
 							return invokeMethod(target, (Method) annotatedElement, args);
 						}
-						
+						if (!method.canAccess(this) && isMakeAccessible(method)) {
+							method.setAccessible(true);
+						}						
 						return method.invoke(this, args); // equals, hashCode, ...
 					}
 				};
@@ -413,6 +416,9 @@ public class Reflector {
 	 */
 	protected Object getFieldValue(Object target, Field field) {
 		try {
+			if (!field.canAccess(target) && isMakeAccessible(field)) {
+				field.setAccessible(true);
+			}			
 			return  field.get(target);
 		} catch (IllegalAccessException e) {
 			throw new NasdanikaException("Cannot access field " + field + " of " + target + ": " + e, e);
@@ -432,10 +438,17 @@ public class Reflector {
 			if (value instanceof Invocable && !field.getType().isInstance(value) && field.getType().isInterface()) {
 				value = ((Invocable) value).createProxy(field.getType());
 			}
+			if (!field.canAccess(target) && isMakeAccessible(field)) {
+				field.setAccessible(true);
+			}
 			field.set(target, value);
 		} catch (IllegalAccessException e) {
 			throw new NasdanikaException("Cannot access field " + field + " of " + target + ": " + e, e);
 		}	
+	}
+	
+	protected boolean isMakeAccessible(AccessibleObject accessibleObject) {
+		return false;
 	}
 	
 	/**
@@ -456,7 +469,9 @@ public class Reflector {
 					args[i] = ((Invocable) arg).createProxy(parameterType);
 				}
 			}
-			
+			if (!method.canAccess(target) && isMakeAccessible(method)) {
+				method.setAccessible(true);
+			}			
 			return method.invoke(target, args);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new NasdanikaException("Error invoking " + method + " of " + target + ": " + e, e);

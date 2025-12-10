@@ -3,6 +3,7 @@ package org.nasdanika.capability.factories;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.URLDecoder;
@@ -21,6 +22,7 @@ import java.util.OptionalInt;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -244,7 +246,13 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 				return wrapError(new IllegalArgumentException("Diagram and script are mutually exclusive"));
 			}
 			
-			CompletionStage<DiagramRequirement> diagramRequirementCS = classLoaderCS.thenApply(classLoader -> createDiagramRequirement(requirement, invocableRequirement, classLoader, loader, progressMonitor));
+			CompletionStage<DiagramRequirement> diagramRequirementCS = classLoaderCS.thenApply(classLoader -> createDiagramRequirement(
+					requirement, 
+					invocableRequirement, 
+					classLoader, 
+					loader,
+					ao -> true, // To support scripting reflection. TODO - implement as invocable attribute/component
+					progressMonitor));
 			CompletionStage<Object> diagramCS = diagramRequirementCS.thenCompose(diagramRequirement -> loader.loadOne(diagramRequirement, progressMonitor));
 			return wrapCompletionStage(diagramCS.thenApply(Invocable::ofValue));
 		}
@@ -368,6 +376,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 			InvocableRequirement spec, 
 			ClassLoader classLoader,
 			Loader loader,
+			Predicate<AccessibleObject> makeAccessiblePredicate, 
 			ProgressMonitor progressMonitor) {
 		String[] diagramInterfaces = spec.diagram().interfaces();
 		Class<?>[] interfaces;
@@ -409,6 +418,7 @@ public class URIInvocableCapabilityFactory extends ServiceCapabilityFactory<Obje
 				spec.diagram().processor(), 
 				spec.diagram().bind(), 
 				classLoader, 
+				makeAccessiblePredicate,
 				interfaces);
 		
 		return diagramRequirement;

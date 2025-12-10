@@ -1,7 +1,9 @@
 package org.nasdanika.capability.requirements;
 
 import java.io.InputStream;
+import java.lang.reflect.AccessibleObject;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.common.util.URI;
 
@@ -35,6 +37,8 @@ public record DiagramRequirement(
 		ClassLoader classLoader,
 		
 //		Function<ProcessorInfo<Invocable>,Invocable> processorFilter, Not supported yet		
+		
+		Predicate<AccessibleObject> makeAccessiblePredicate, 
 		
 		/**
 		 * Interfaces to be implemented by a proxy.
