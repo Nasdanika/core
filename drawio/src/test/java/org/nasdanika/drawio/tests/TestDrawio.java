@@ -169,6 +169,10 @@ public class TestDrawio {
 		connectionStyle.put("orthogonalLoop", "1");
 		connectionStyle.put("jettySize", "auto");
 		connectionStyle.put("html", "1");
+		
+		// Connection points
+		connection.getEntryPoint().setLocation(0.5, 0);
+		connection.getExitPoint().setLocation(0.5, 1);				
 				
 		Files.writeString(new File("target/new-uncompressed.drawio").toPath(), document.save(null));
 	}	

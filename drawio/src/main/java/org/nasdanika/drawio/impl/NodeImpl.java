@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document.Context;
+import org.nasdanika.drawio.Geometry;
 import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Rectangle;
@@ -129,8 +130,8 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 	}
 
 	@Override
-	public Rectangle getGeometry() {
-		return new RectangleImpl(this::getGeometryElement);
+	public Geometry getGeometry() {
+		return new GeometryImpl(this::getGeometryElement);
 	}
 
 	@Override

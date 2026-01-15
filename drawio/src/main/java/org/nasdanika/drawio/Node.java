@@ -10,6 +10,6 @@ public interface Node extends Layer<Node>, LayerElement<Node>, org.nasdanika.gra
 	@Override
 	List<Connection> getOutgoingConnections();	
 		
-	Rectangle getGeometry();
+	Geometry getGeometry();
 
 }
