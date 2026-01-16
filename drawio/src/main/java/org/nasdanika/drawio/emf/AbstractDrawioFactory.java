@@ -150,8 +150,8 @@ public abstract class AbstractDrawioFactory<T extends EObject> extends AbstractM
 	public final T createModelElementTarget(
 			org.nasdanika.drawio.ModelElement<?> modelElement,
 			boolean parallel,
-			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
-			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
+			BiConsumer<Element<?>, BiConsumer<T,ProgressMonitor>> elementProvider, 
+			Consumer<BiConsumer<Map<Element<?>, T>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {
 
 		return createTarget(

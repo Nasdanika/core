@@ -270,8 +270,8 @@ public class ReflectiveContributor<S, T extends EObject> extends Reflector imple
 	public void initialize(
 			S source, 
 			T target, 
-			BiConsumer<EObject, BiConsumer<EObject, ProgressMonitor>> elementProvider,
-			Consumer<BiConsumer<Map<EObject, EObject>, ProgressMonitor>> registry, 
+			BiConsumer<S, BiConsumer<T, ProgressMonitor>> elementProvider,
+			Consumer<BiConsumer<Map<S, T>, ProgressMonitor>> registry, 
 			ProgressMonitor progressMonitor) {
 		
 		List<AnnotatedElementRecord> initializers = annotatedElementRecords

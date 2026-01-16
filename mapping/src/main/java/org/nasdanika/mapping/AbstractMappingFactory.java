@@ -90,8 +90,8 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 		default void initialize(
 				S obj,
 				T target,
-				BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
-				Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
+				BiConsumer<S, BiConsumer<T,ProgressMonitor>> elementProvider, 
+				Consumer<BiConsumer<Map<S, T>,ProgressMonitor>> registry,
 				ProgressMonitor progressMonitor) {
 			
 		}		
@@ -423,8 +423,8 @@ public abstract class AbstractMappingFactory<S, T extends EObject> {
 	@SuppressWarnings("unchecked")
 	protected T createTarget(
 			S obj,
-			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
-			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
+			BiConsumer<S, BiConsumer<T,ProgressMonitor>> elementProvider, 
+			Consumer<BiConsumer<Map<S, T>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {	
 
 		T target = null;		
