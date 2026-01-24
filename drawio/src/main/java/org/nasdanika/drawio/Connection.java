@@ -27,8 +27,8 @@ public interface Connection extends LayerElement<Connection>, org.nasdanika.grap
 	
 	PointList getPoints();
 	
-	ConnectionPoint getExitPoint();
+	Point getOffset();
 	
-	ConnectionPoint getEntryPoint();
+	Point setOffset(double x, double y);
 	
 }

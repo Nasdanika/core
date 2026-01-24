@@ -6,16 +6,20 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
+import org.nasdanika.drawio.ConnectionPoint;
+import org.nasdanika.drawio.ConnectionPointSpec;
 import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.Geometry;
 import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Tag;
+import org.nasdanika.drawio.impl.ConnectionImpl.ConnectionPointSpecAdapter;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.w3c.dom.Element;
 
@@ -36,7 +40,11 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 	}
 
 	@Override
-	public List<Connection> getIncomingConnections() {
+	public List<Connection> getAllIncomingConnections() {
+		return getIncomingConnections(c -> true);
+	}
+		
+	public List<Connection> getIncomingConnections(Predicate<Connection> connectionPredicate) {	
 		List<Connection> incomingConnections = new ArrayList<>();
 
 		Predicate<org.w3c.dom.Element> predicate = 
@@ -49,6 +57,7 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 			.stream()
 			.filter(Connection.class::isInstance)
 			.map(Connection.class::cast)
+			.filter(connectionPredicate)
 			.forEach(incomingConnections::add);
 		
 		return new AbstractList<Connection>() {
@@ -83,7 +92,12 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 	}
 
 	@Override
-	public List<Connection> getOutgoingConnections() {
+	public List<Connection> getAllOutgoingConnections() {
+		return getOutgoingConnections(c -> true);
+	}
+		
+	public List<Connection> getOutgoingConnections(Predicate<Connection> connectionPredicate) {
+		
 		List<Connection> outgoingConnections = new ArrayList<>();
 
 		Predicate<org.w3c.dom.Element> predicate = 
@@ -96,6 +110,7 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 			.stream()
 			.filter(Connection.class::isInstance)
 			.map(Connection.class::cast)
+			.filter(connectionPredicate)
 			.forEach(outgoingConnections::add);
 		
 		return new AbstractList<Connection>() {
@@ -172,6 +187,69 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 		getAllIncomingConnections().clear();
 		getAllOutgoingConnections().clear();
 		super.onRemove();
+	}
+
+	@Override
+	public List<Connection> getIncomingConnections() {				
+		return getIncomingConnections(c -> !((ConnectionImpl) c).getEntryPoint().isSet());
+	}
+
+	@Override
+	public List<Connection> getOutgoingConnections() {
+		return getOutgoingConnections(c -> !((ConnectionImpl) c).getExitPoint().isSet());
+	}
+	
+	private class ConnectionPointImpl extends ConnectionPointSpecImpl implements ConnectionPoint {
+		
+		protected ConnectionPointImpl() {
+			super();
+		}
+
+		protected ConnectionPointImpl(ConnectionPointSpec spec) {
+			super(spec);
+		}
+
+		@Override
+		public List<Connection> getIncomingConnections() {
+			return NodeImpl.this.getIncomingConnections(c -> ((ConnectionImpl) c).getEntryPoint().specEquals(this));
+		}
+
+		@Override
+		public List<Connection> getOutgoingConnections() {
+			return NodeImpl.this.getOutgoingConnections(c -> ((ConnectionImpl) c).getExitPoint().specEquals(this));
+		}
+
+		@Override
+		public Node getNode() {
+			return NodeImpl.this;
+		}
+		
+	}
+
+	@Override
+	public List<ConnectionPoint> getConnectionPoints() {
+		Stream<ConnectionPointSpec> icp = getAllIncomingConnections()
+			.stream()
+			.map(c -> ((ConnectionImpl) c).getEntryPoint())
+			.filter(ConnectionPointSpecAdapter::isSet)
+			.map(ConnectionPointSpecImpl::new);
+		
+		Stream<ConnectionPointSpec> ocp = getAllOutgoingConnections()
+				.stream()
+				.map(c -> ((ConnectionImpl) c).getExitPoint())
+				.filter(ConnectionPointSpecAdapter::isSet)
+				.map(ConnectionPointSpecImpl::new);
+		
+		return Stream.concat(icp, ocp)
+				.distinct()
+				.map(ConnectionPointImpl::new)
+				.map(ConnectionPoint.class::cast) // For type compatibility
+				.toList();
+	}
+
+	@Override
+	public ConnectionPoint createConnectionPoint() {
+		return new ConnectionPointImpl();
 	}
 
 }

@@ -120,7 +120,7 @@ public final class Util {
 		return isSameOrAncestor(child.getParent(), ancestor);
 	}
 	
-	private static Node getConnectableNode(Connectable connectable) {
+	public static Node getConnectableNode(Connectable connectable) {
 		if (connectable instanceof ConnectionPoint) {
 			return ((ConnectionPoint) connectable).getNode();
 		}
@@ -451,11 +451,11 @@ public final class Util {
 				}
 				if (element instanceof Connection) {
 					Connection connection = (Connection) element;
-					Node source = connection.getTarget();
+					Node source = getConnectableNode(connection.getTarget());
 					if (source != null && !results.containsKey(source)) {
 						results.put(source, source.accept(this, connectionBase));
 					}
-					Node target = connection.getTarget();
+					Node target = getConnectableNode(connection.getTarget());
 					if (target != null && !results.containsKey(target)) {
 						results.put(target, target.accept(this, connectionBase));
 					}
@@ -518,11 +518,11 @@ public final class Util {
 					}
 					if (element instanceof Connection) {
 						Connection connection = (Connection) element;
-						Node source = connection.getSource();
+						Node source = getConnectableNode(connection.getSource());
 						if (source != null) {
 							source.accept(this, connectionBase);
 						}
-						Node target = connection.getTarget();
+						Node target = getConnectableNode(connection.getTarget());
 						if (target != null) {
 							target.accept(this, connectionBase);
 						}

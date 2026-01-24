@@ -10,7 +10,7 @@ public interface Node extends Layer<Node>, LayerElement<Node>, Connectable {
 	
 	/**
 	 * Factory method.
-	 * Creates a connection point for this node, but doesn't add it to the list of connection points. 
+	 * Creates a connection point for this node. 
 	 * @return
 	 */
 	ConnectionPoint createConnectionPoint();

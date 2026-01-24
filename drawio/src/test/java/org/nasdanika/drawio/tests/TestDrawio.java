@@ -39,6 +39,7 @@ import org.nasdanika.common.Transformer;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
+import org.nasdanika.drawio.ConnectionPoint;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Layer;
@@ -160,9 +161,19 @@ public class TestDrawio {
 		targetTags.add(page.createTag("aws"));
 		targetTags.add(page.createTag("azure"));
 		
-		// Add connection 
-		Connection connection = newLayer.createConnection(source, target);
+		// Add connection
+		
+		ConnectionPoint sourceConnectionPoint = source.createConnectionPoint();
+		sourceConnectionPoint.setLocation(0.5, 1);
+				
+		ConnectionPoint targetConnectionPoint = target.createConnectionPoint();
+		targetConnectionPoint.setLocation(0, 0.33);		
+		
+		Connection connection = newLayer.createConnection(
+				sourceConnectionPoint, 
+				targetConnectionPoint);
 		connection.setLabel("My connection");
+		connection.setOffset(100, -15);
 		Map<String, String> connectionStyle = connection.getStyle();
 		connectionStyle.put("edgeStyle", "orthogonalEdgeStyle");
 		connectionStyle.put("rounded", "1");
@@ -171,10 +182,23 @@ public class TestDrawio {
 		connectionStyle.put("html", "1");
 		
 		// Connection points
-		connection.getEntryPoint().setLocation(0.5, 0);
-		connection.getExitPoint().setLocation(0.5, 1);				
+		
 				
-		Files.writeString(new File("target/new-uncompressed.drawio").toPath(), document.save(null));
+		File file = new File("target/new-uncompressed.drawio");
+		Files.writeString(file.toPath(), document.save(null));
+				
+		// Reading 
+		Document loadedDocument = Document.load(file);		
+		loadedDocument
+			.stream()
+			.filter(Node.class::isInstance)
+			.map(Node.class::cast)
+			.forEach(node -> {
+				for (ConnectionPoint cp: node.getConnectionPoints()) {
+					System.out.println(cp.getIncomingConnections().size() + " : " + cp.getOutgoingConnections().size());
+				}
+			});
+		
 	}	
 	
 	private void dump(ModelElement<?> modelElement, String indent) throws TransformerException, IOException {
@@ -189,7 +213,7 @@ public class TestDrawio {
 			if (!outcomingConnections.isEmpty()) {
 				System.out.println(indent + "\tOutgoing connections:");
 				for (Connection connection: outcomingConnections) {
-					Node target = connection.getTarget();
+					Node target = org.nasdanika.drawio.Util.getConnectableNode(connection.getTarget());
 					System.out.println(indent + "\t\t" + connection.getLabel() + " -> " + target.getLabel());
 				}
 			}
@@ -197,7 +221,7 @@ public class TestDrawio {
 			if (!inboundConnections.isEmpty()) {
 				System.out.println(indent + "\tIncoming connections:");
 				for (Connection connection: inboundConnections) {
-					System.out.println(indent + "\t\t" + connection.getLabel() + " <- " + connection.getSource().getLabel());
+					System.out.println(indent + "\t\t" + connection.getLabel() + " <- " + org.nasdanika.drawio.Util.getConnectableNode(connection.getSource()).getLabel());
 				}
 			}
 			List<LayerElement<?>> children = node.getElements();
@@ -209,8 +233,8 @@ public class TestDrawio {
 			}
 		} else if (modelElement instanceof Connection) {
 			Connection connection = (Connection) modelElement;
-			System.out.println(indent + "\tSource: " + connection.getSource().getLabel());
-			System.out.println(indent + "\tTarget: " + connection.getTarget().getLabel());			
+			System.out.println(indent + "\tSource: " + org.nasdanika.drawio.Util.getConnectableNode(connection.getSource()).getLabel());
+			System.out.println(indent + "\tTarget: " + org.nasdanika.drawio.Util.getConnectableNode(connection.getTarget()).getLabel());			
 		}		
 	}	
 	

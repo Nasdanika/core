@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.drawio.Connectable;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.Layer;
@@ -55,17 +56,11 @@ class LayerImpl<L extends Layer<L>> extends ModelElementImpl<L> implements Layer
 	}
 
 	@Override
-	public Connection createConnection(Node source, Node target) {
+	public Connection createConnection(Connectable source, Connectable target) {
 		Element connectionElement = element.getOwnerDocument().createElement(MX_CELL_ELEMENT);
 		connectionElement.setAttribute(ATTRIBUTE_ID, UUID.randomUUID().toString());
 		connectionElement.setAttribute(ATTRIBUTE_PARENT, element.getAttribute(ATTRIBUTE_ID));
 		connectionElement.setAttribute(ModelImpl.ATTRIBUTE_EDGE, "1");
-		if (source != null) {
-			connectionElement.setAttribute(ATTRIBUTE_SOURCE, source.getElement().getAttribute(ATTRIBUTE_ID));
-		}
-		if (target != null) {
-			connectionElement.setAttribute(ATTRIBUTE_TARGET, target.getElement().getAttribute(ATTRIBUTE_ID));
-		}
 		
 		Element geometryElement = element.getOwnerDocument().createElement("mxGeometry");
 		connectionElement.appendChild(geometryElement);
@@ -74,7 +69,10 @@ class LayerImpl<L extends Layer<L>> extends ModelElementImpl<L> implements Layer
 		
 		element.getParentNode().appendChild(connectionElement);
 		List<LayerElement<?>> elements = getElements();
-		return (Connection) elements.get(elements.size() - 1);
+		Connection connection = (Connection) elements.get(elements.size() - 1);
+		connection.setSource(source);
+		connection.setTarget(target);
+		return connection;
 	}
 	
 	org.nasdanika.drawio.model.Layer toModelLayer(

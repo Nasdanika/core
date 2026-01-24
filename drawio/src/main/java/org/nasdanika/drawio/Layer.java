@@ -33,7 +33,7 @@ public interface Layer<L extends Layer<L>> extends ModelElement<L> {
 	 * @param target Target node, can be null
 	 * @return
 	 */
-	Connection createConnection(Node source, Node target);
+	Connection createConnection(Connectable source, Connectable target);
 	
 	/**
 	 * Creates layer elements from graph elements.

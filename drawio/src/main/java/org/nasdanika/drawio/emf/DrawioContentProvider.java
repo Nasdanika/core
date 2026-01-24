@@ -124,11 +124,11 @@ public class DrawioContentProvider implements ContentProvider<Element<?>> {
 		}
 		if (element instanceof Connection) {
 			if (connectionBase == ConnectionBase.SOURCE) {
-				return ((Connection) element).getSource();
+				return org.nasdanika.drawio.Util.getConnectableNode(((Connection) element).getSource());
 			} 
 			
 			if (connectionBase == ConnectionBase.TARGET) {
-				return ((Connection) element).getTarget();
+				return org.nasdanika.drawio.Util.getConnectableNode(((Connection) element).getTarget());
 			}
 		}
 		
@@ -259,12 +259,12 @@ public class DrawioContentProvider implements ContentProvider<Element<?>> {
 
 	@Override
 	public Element<?> getConnectionSource(Element<?> element) {
-		return element instanceof Connection ? ((Connection) element).getSource() : null;
+		return element instanceof Connection ? org.nasdanika.drawio.Util.getConnectableNode(((Connection) element).getSource()) : null;
 	}
 
 	@Override
 	public Element<?> getConnectionTarget(Element<?> element) {
-		return element instanceof Connection ? ((Connection) element).getTarget() : null;
+		return element instanceof Connection ? org.nasdanika.drawio.Util.getConnectableNode(((Connection) element).getTarget()) : null;
 	}
 
 	@Override

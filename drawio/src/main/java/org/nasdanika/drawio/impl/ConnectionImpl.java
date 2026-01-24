@@ -1,14 +1,16 @@
 package org.nasdanika.drawio.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Connectable;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
-import org.nasdanika.drawio.ConnectionPoint;
+import org.nasdanika.drawio.ConnectionPointSpec;
 import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
@@ -19,9 +21,25 @@ import org.nasdanika.drawio.model.ModelFactory;
 import org.w3c.dom.Element;
 
 class ConnectionImpl extends ModelElementImpl<Connection> implements Connection {
+	
+	interface ConnectionPointSpecAdapter extends ConnectionPointSpec {
+		
+		boolean isSet();
+		
+		void unset();
+		
+		default public boolean specEquals(ConnectionPointSpec spec) {
+			if (!isSet()) {
+				return false;
+			}
+			return ConnectionPointSpec.super.specEquals(spec);
+		}		
+		
+	}	
 
 	private static final String SOURCE_POINT_ROLE = "sourcePoint";
 	private static final String TARGET_POINT_ROLE = "targetPoint";
+	private static final String OFFSET_POINT_ROLE = "offset";
 	private static final String MX_POINT_ATTRIBUTE = "mxPoint";
 	
 	private PointList points;
@@ -89,66 +107,51 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 
 	@Override
 	public void setSource(Connectable source) {
-		if (node == null) {
+		if (source == null) {
 			getCellElement().removeAttribute(ATTRIBUTE_SOURCE);
+			getExitPoint().unset();
 		} else {
-			getCellElement().setAttribute(ATTRIBUTE_SOURCE, node.getId());
+			getCellElement().setAttribute(ATTRIBUTE_SOURCE, org.nasdanika.drawio.Util.getConnectableNode(source).getId());
+			if (source instanceof ConnectionPointSpec) {
+				getExitPoint().setSpec((ConnectionPointSpec) source);
+			}
 		}
 	}
 
 	@Override
 	public void setTarget(Connectable target) {
-		if (node == null) {
+		if (target == null) {
 			getCellElement().removeAttribute(ATTRIBUTE_TARGET);
+			getEntryPoint().unset();
 		} else {
-			getCellElement().setAttribute(ATTRIBUTE_TARGET, node.getId());
+			getCellElement().setAttribute(ATTRIBUTE_TARGET, org.nasdanika.drawio.Util.getConnectableNode(target).getId());
+			if (target instanceof ConnectionPointSpec) {
+				getEntryPoint().setSpec((ConnectionPointSpec) target);
+			}
 		}
 	}
 	
-	protected org.w3c.dom.Element getSourcePointElement(boolean create) {
+	protected org.w3c.dom.Element getPointElement(String role, boolean create) {
 		Element geometryElement = getGeometryElement(true);
-		List<org.w3c.dom.Element> sourcePointElements = DocumentImpl.getChildrenElements(
+		List<org.w3c.dom.Element> rolePointElements = DocumentImpl.getChildrenElements(
 				geometryElement, 
 				MX_POINT_ATTRIBUTE,
-				pe -> SOURCE_POINT_ROLE.equals(pe.getAttribute(AS_ATTRIBUTE)));
+				pe -> role.equals(pe.getAttribute(AS_ATTRIBUTE)));
 		
-		if (sourcePointElements.isEmpty()) {
+		if (rolePointElements.isEmpty()) {
 			if (create) {
 				org.w3c.dom.Element ret = element.getOwnerDocument().createElement(MX_POINT_ATTRIBUTE);
-				ret.setAttribute(AS_ATTRIBUTE, SOURCE_POINT_ROLE);
+				ret.setAttribute(AS_ATTRIBUTE, role);
 				geometryElement.appendChild(ret);
 				return ret;
 			}
 		} 
 		
-		if (sourcePointElements.size() == 1) {
-			return sourcePointElements.get(0);
+		if (rolePointElements.size() == 1) {
+			return rolePointElements.get(0);
 		} 
 		
-		throw new IllegalArgumentException("Expected one source point element, got " + sourcePointElements.size());
-	}	
-		
-	protected org.w3c.dom.Element getTargetPointElement(boolean create) {
-		Element geometryElement = getGeometryElement(true);
-		List<org.w3c.dom.Element> targetPointElements = DocumentImpl.getChildrenElements(
-				geometryElement, 
-				MX_POINT_ATTRIBUTE,
-				pe -> TARGET_POINT_ROLE.equals(pe.getAttribute(AS_ATTRIBUTE)));
-		
-		if (targetPointElements.isEmpty()) {
-			if (create) {
-				org.w3c.dom.Element ret = element.getOwnerDocument().createElement(MX_POINT_ATTRIBUTE);
-				ret.setAttribute(AS_ATTRIBUTE, TARGET_POINT_ROLE);
-				geometryElement.appendChild(ret);
-				return ret;
-			}
-		} 
-		
-		if (targetPointElements.size() == 1) {
-			return targetPointElements.get(0);
-		} 
-		
-		throw new IllegalArgumentException("Expected one target point element, got " + targetPointElements.size());
+		throw new IllegalArgumentException("Expected one " + role + " point element, got " + rolePointElements.size());
 	}	
 
 	@Override
@@ -161,7 +164,7 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 
 	@Override
 	public Point getSourcePoint() {
-		return new PointImpl(this::getSourcePointElement);
+		return new PointImpl(create -> getPointElement(SOURCE_POINT_ROLE, create));
 	}
 
 	@Override
@@ -174,21 +177,144 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 
 	@Override
 	public Point getTargetPoint() {
-		return new PointImpl(this::getTargetPointElement);
+		return new PointImpl(create -> getPointElement(TARGET_POINT_ROLE, create));
+	}
+	
+	@Override
+	public Point setOffset(double x, double y) {
+		Point ret = getOffset();
+		ret.setX(x);
+		ret.setY(y);
+		return ret;		
+	}
+
+	@Override
+	public Point getOffset() {
+		return new PointImpl(create -> getPointElement(OFFSET_POINT_ROLE, create));
 	}
 	
 	public PointList getPoints() {
 		return points;
 	}
+	
+	private static final String X_STYLE_KEY = "X";
+	private static final String DX_STYLE_KEY = "Dx";
+	private static final String Y_STYLE_KEY = "Y";
+	private static final String DY_STYLE_KEY = "Dy";	
+	private static final String PERIMETER_STYLE_KEY = "Dy";	
 		
-	@Override
-	public ConnectionPoint getExitPoint() {
-		return new ConnectionPointImpl("exit");
+	private class ConnectionPointSpecAdapterImpl implements ConnectionPointSpecAdapter {
+				
+		private Map<String, String> style;
+		private String prefix;
+
+		ConnectionPointSpecAdapterImpl(String prefix) {
+			this.style = getStyle();
+			this.prefix = prefix;
+		}
+
+		@Override
+		public Element getElement() {
+			return null; // No backing element
+		}
+
+		@Override
+		public double getX() {
+			String xstr = style.get(prefix + X_STYLE_KEY);
+			return Util.isBlank(xstr) ? Double.NaN : Double.parseDouble(xstr);
+		}
+
+		@Override
+		public double getY() {
+			String ystr = style.get(prefix + Y_STYLE_KEY);
+			return Util.isBlank(ystr) ? Double.NaN : Double.parseDouble(ystr);
+		}
+
+		@Override
+		public void setX(double x) {
+			if (Double.isNaN(x)) {
+				style.remove(prefix + X_STYLE_KEY);
+				style.remove(prefix + DX_STYLE_KEY);
+			} else {
+				style.put(prefix + X_STYLE_KEY, String.valueOf(x));
+				if (!style.containsKey(DX_STYLE_KEY)) {
+					setDx(0);
+				}
+			}			
+		}
+
+		@Override
+		public void setY(double y) {
+			if (Double.isNaN(y)) {
+				style.remove(prefix + Y_STYLE_KEY);
+				style.remove(prefix + DY_STYLE_KEY);
+			} else {
+				style.put(prefix + Y_STYLE_KEY, String.valueOf(y));
+				if (!style.containsKey(DY_STYLE_KEY)) {
+					setDy(0);
+				}
+			}			
+		}
+
+		@Override
+		public double getDx() {
+			String dxstr = style.get(prefix + DX_STYLE_KEY);
+			return Util.isBlank(dxstr) ? Double.NaN : Double.parseDouble(dxstr);
+		}
+
+		@Override
+		public double getDy() {
+			String dystr = style.get(prefix + DY_STYLE_KEY);
+			return Util.isBlank(dystr) ? Double.NaN : Double.parseDouble(dystr);
+		}
+
+		@Override
+		public void setDx(double dx) {
+			style.put(prefix + DX_STYLE_KEY, String.valueOf(dx));
+		}
+
+		@Override
+		public void setDy(double dy) {
+			style.put(prefix + DY_STYLE_KEY, String.valueOf(dy));
+		}
+
+		@Override
+		public boolean isPerimeter() {
+			String pstr = style.get(prefix + PERIMETER_STYLE_KEY);
+			return Util.isBlank(pstr) || "1".equals(pstr);
+		}
+
+		@Override
+		public void setPerimeter(boolean perimeter) {
+			if (perimeter) {
+				style.remove(prefix + PERIMETER_STYLE_KEY);
+			} else {
+				style.put(prefix + PERIMETER_STYLE_KEY, "0");				
+			}
+		}
+
+		@Override
+		public boolean isSet() {
+			return style.containsKey(prefix + X_STYLE_KEY);
+		}
+
+		@Override
+		public void unset() {
+			style.remove(prefix + X_STYLE_KEY);
+			style.remove(prefix + DX_STYLE_KEY);
+			style.remove(prefix + Y_STYLE_KEY);
+			style.remove(prefix + DY_STYLE_KEY);
+			style.remove(prefix + PERIMETER_STYLE_KEY);
+		}
+		
+	}	
+		
+	ConnectionPointSpecAdapter getExitPoint() {
+		return new ConnectionPointSpecAdapterImpl("exit");
 	}
 
-	@Override
-	public ConnectionPoint getEntryPoint() {
-		return new ConnectionPointImpl("entry");
+	ConnectionPointSpecAdapter getEntryPoint() {
+		return new ConnectionPointSpecAdapterImpl("entry");
 	}			
 	
 }
