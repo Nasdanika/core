@@ -120,6 +120,13 @@ public final class Util {
 		return isSameOrAncestor(child.getParent(), ancestor);
 	}
 	
+	private static Node getConnectableNode(Connectable connectable) {
+		if (connectable instanceof ConnectionPoint) {
+			return ((ConnectionPoint) connectable).getNode();
+		}
+		return (Node) connectable;
+	}
+	
 	/**
 	 * Computes affinity of a given diagram element to a collection of other elements.
 	 * Affinity is a two-elements array with the first element containing a total number of 
@@ -134,7 +141,7 @@ public final class Util {
 		int[] outgoing = { 0 };
 		element.accept(e -> {
 			if (e instanceof Connection) {
-				Node target = ((Connection) e).getTarget();
+				Node target = getConnectableNode(((Connection) e).getTarget());
 				for (ModelElement<?> oe: elements) {
 					if (isSameOrAncestor(target, oe)) {
 						++outgoing[0];
@@ -146,7 +153,7 @@ public final class Util {
 		int[] inbound = { 0 };
 		element.accept(e -> {
 			if (e instanceof Connection) {
-				Node source = ((Connection) e).getSource();
+				Node source = getConnectableNode(((Connection) e).getSource());
 				for (ModelElement<?> oe: elements) {
 					if (isSameOrAncestor(source, oe)) {
 						++inbound[0];
@@ -429,14 +436,14 @@ public final class Util {
 					return results.get(element);
 				}
 				
-				if (element instanceof Node) {
-					Node node = (Node) element;
-					for (Connection oc: node.getOutgoingConnections()) {
+				if (element instanceof Connectable) {
+					Connectable connectable = (Connectable) element;
+					for (Connection oc: connectable.getOutgoingConnections()) {
 						if (!results.containsKey(oc)) {
 							results.put(oc, oc.accept(this, connectionBase));
 						}
 					}
-					for (Connection ic: node.getIncomingConnections()) {
+					for (Connection ic: connectable.getIncomingConnections()) {
 						if (!results.containsKey(ic)) {
 							results.put(ic, ic.accept(this, connectionBase));
 						}
@@ -500,12 +507,12 @@ public final class Util {
 			@Override
 			public void accept(Element<?> element) {
 				if (element != null && visited.add(element)) {
-					if (element instanceof Node) {
-						Node node = (Node) element;
-						for (Connection oc: node.getOutgoingConnections()) {
+					if (element instanceof Connectable) {
+						Connectable connectable = (Connectable) element;
+						for (Connection oc: connectable.getOutgoingConnections()) {
 							oc.accept(this, connectionBase);
 						}
-						for (Connection ic: node.getIncomingConnections()) {
+						for (Connection ic: connectable.getIncomingConnections()) {
 							ic.accept(this, connectionBase);
 						}
 					}
@@ -558,9 +565,9 @@ public final class Util {
 		}	
 		
 		for (Node node: nodes) {
-			for (Connection connection: node.getOutgoingConnections()) {
-				if (dGraph.getEdge(connection.getTarget(), node) == null) { // Not yet connected, connect
-					dGraph.addEdge(node, connection.getTarget(), connection);
+			for (Connection connection: node.getAllOutgoingConnections()) {
+				if (dGraph.getEdge(getConnectableNode(connection.getTarget()), node) == null) { // Not yet connected, connect
+					dGraph.addEdge(node, getConnectableNode(connection.getTarget()), connection);
 				}
 			}
 		}		

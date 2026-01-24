@@ -138,9 +138,9 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 	protected List<? extends org.nasdanika.drawio.Element<?>> getLogicalChildren(ConnectionBase connectionBase) {
 		List<org.nasdanika.drawio.Element<?>> logicalChildren = new ArrayList<>(super.getLogicalChildren(connectionBase));
 		if (connectionBase == ConnectionBase.SOURCE) {
-			logicalChildren.addAll(getOutgoingConnections());
+			logicalChildren.addAll(getAllOutgoingConnections());
 		} else if (connectionBase == ConnectionBase.TARGET) {
-			logicalChildren.addAll(getIncomingConnections());			
+			logicalChildren.addAll(getAllIncomingConnections());			
 		}
 		return logicalChildren;
 	}
@@ -169,8 +169,8 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 	
 	@Override
 	protected void onRemove() {
-		getIncomingConnections().clear();
-		getOutgoingConnections().clear();
+		getAllIncomingConnections().clear();
+		getAllOutgoingConnections().clear();
 		super.onRemove();
 	}
 

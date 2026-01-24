@@ -8,18 +8,18 @@ package org.nasdanika.drawio;
 public interface Connection extends LayerElement<Connection>, org.nasdanika.graph.Connection {
 	
 	@Override
-	Node getSource();
+	Connectable getSource();
 	
-	void setSource(Node node);
+	void setSource(Connectable source);
 	
 	Point setSourcePoint(double x, double y);
 	
 	Point getSourcePoint();
 	
 	@Override
-	Node getTarget();
+	Connectable getTarget();
 	
-	void setTarget(Node node);
+	void setTarget(Connectable target);
 		
 	Point setTargetPoint(double x, double y);
 	

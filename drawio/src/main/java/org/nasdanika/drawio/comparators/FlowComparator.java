@@ -5,7 +5,9 @@ import java.util.Objects;
 import java.util.Stack;
 import java.util.function.Predicate;
 
+import org.nasdanika.drawio.Connectable;
 import org.nasdanika.drawio.Connection;
+import org.nasdanika.drawio.ConnectionPoint;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
@@ -55,6 +57,13 @@ public class FlowComparator implements Comparator<ModelElement<?>> {
 		}		
 		return 0;
 	}
+		
+	private static Node getConnectableNode(Connectable connectable) {
+		if (connectable instanceof ConnectionPoint) {
+			return ((ConnectionPoint) connectable).getNode();
+		}
+		return (Node) connectable;
+	}	
 	
 	/**
 	 * Returns number of connections traversed from o1 to o2. Integer.MAX_VALUE if not reacheable. 0 if o1 is the same as o2 
@@ -74,14 +83,14 @@ public class FlowComparator implements Comparator<ModelElement<?>> {
 			if (source instanceof Connection) {				
 				Connection sc = (Connection) source;
 				if (connectionPredicate == null || connectionPredicate.test(sc)) {				
-					Node st = sc.getTarget();
+					Node st = getConnectableNode(sc.getTarget());
 					if (st != null) {
 						Integer targetTraverse = traverse(st, target, tracker);
 						result = targetTraverse == null ? null : targetTraverse + 1;
 					}
 				}
 			} else if (source instanceof Node) {				
-				for (Connection oc: ((Node) source).getOutgoingConnections()) {
+				for (Connection oc: ((Node) source).getAllOutgoingConnections()) {
 					Integer ocTraverse = traverse(oc, target, tracker);
 					if (ocTraverse != null && (result == null || result > ocTraverse + 1)) {
 						result = ocTraverse + 1;
