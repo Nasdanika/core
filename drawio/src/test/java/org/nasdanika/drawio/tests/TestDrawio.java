@@ -167,7 +167,6 @@ public class TestDrawio {
 		sourceConnectionPoint.setLocation(0.5, 1);
 				
 		ConnectionPoint targetConnectionPoint = target.createConnectionPoint();
-		targetConnectionPoint.setLocation(0, 0.33);		
 		
 		Connection connection = newLayer.createConnection(
 				sourceConnectionPoint, 
@@ -181,8 +180,7 @@ public class TestDrawio {
 		connectionStyle.put("jettySize", "auto");
 		connectionStyle.put("html", "1");
 		
-		// Connection points
-		
+		targetConnectionPoint.setLocation(0, 0.33);		
 				
 		File file = new File("target/new-uncompressed.drawio");
 		Files.writeString(file.toPath(), document.save(null));

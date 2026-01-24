@@ -114,6 +114,8 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 			getCellElement().setAttribute(ATTRIBUTE_SOURCE, org.nasdanika.drawio.Util.getConnectableNode(source).getId());
 			if (source instanceof ConnectionPointSpec) {
 				getExitPoint().setSpec((ConnectionPointSpec) source);
+			} else {
+				getExitPoint().unset();
 			}
 		}
 	}
@@ -127,6 +129,8 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 			getCellElement().setAttribute(ATTRIBUTE_TARGET, org.nasdanika.drawio.Util.getConnectableNode(target).getId());
 			if (target instanceof ConnectionPointSpec) {
 				getEntryPoint().setSpec((ConnectionPointSpec) target);
+			} else {
+				getEntryPoint().unset();
 			}
 		}
 	}

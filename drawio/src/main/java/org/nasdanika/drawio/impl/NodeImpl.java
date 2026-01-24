@@ -4,6 +4,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -223,6 +224,66 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 		public Node getNode() {
 			return NodeImpl.this;
 		}
+		
+		private void updateAllConnectionPointSpecs(Consumer<ConnectionPointSpec> updater) {
+			getIncomingConnections() 
+				.stream()
+				.map(c -> ((ConnectionImpl) c).getEntryPoint())
+				.forEach(updater);
+			
+			getOutgoingConnections() 
+			.stream()
+			.map(c -> ((ConnectionImpl) c).getExitPoint())
+			.forEach(updater);			
+		}
+		
+		@Override
+		public void setDx(double dx) {
+			updateAllConnectionPointSpecs(spec -> spec.setDx(dx));
+			super.setDx(dx);
+		}
+		
+		@Override
+		public void setDy(double dy) {
+			updateAllConnectionPointSpecs(spec -> spec.setDy(dy));
+			super.setDy(dy);
+		}
+		
+		@Override
+		public void setPerimeter(boolean perimeter) {
+			updateAllConnectionPointSpecs(spec -> spec.setPerimeter(perimeter));
+			super.setPerimeter(perimeter);
+		}
+		
+		@Override
+		public void setX(double x) {
+			updateAllConnectionPointSpecs(spec -> spec.setX(x));
+			super.setX(x);
+		}
+		
+		@Override
+		public void setY(double y) {
+			updateAllConnectionPointSpecs(spec -> spec.setY(y));
+			super.setY(y);
+		}
+		
+		@Override
+		public void setLocation(double x, double y) {
+			updateAllConnectionPointSpecs(spec -> spec.setLocation(x,y));
+			super.setLocation(x, y);
+		}
+		
+		@Override
+		public void setLocation(double x, double y, double dx, double dy) {
+			updateAllConnectionPointSpecs(spec -> spec.setLocation(x,y,dx,dy));
+			super.setLocation(x, y, dx, dy);
+		}
+		
+		@Override
+		public void setSpec(ConnectionPointSpec spec) {
+			updateAllConnectionPointSpecs(cps -> cps.setSpec(spec));
+			super.setSpec(spec);
+		}		
 		
 	}
 
