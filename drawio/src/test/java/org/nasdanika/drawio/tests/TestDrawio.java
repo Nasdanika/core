@@ -194,8 +194,10 @@ public class TestDrawio {
 			.filter(Node.class::isInstance)
 			.map(Node.class::cast)
 			.forEach(node -> {
+				System.out.println(node.getIncomingConnections().size() + " : " + node.getAllIncomingConnections().size());
+				System.out.println(node.getOutgoingConnections().size() + " : " + node.getAllOutgoingConnections().size());
 				for (ConnectionPoint cp: node.getConnectionPoints()) {
-					System.out.println(cp.getIncomingConnections().size() + " : " + cp.getOutgoingConnections().size());
+					System.out.println("\t" + cp.getIncomingConnections().size() + " : " + cp.getOutgoingConnections().size());
 				}
 			});
 		
