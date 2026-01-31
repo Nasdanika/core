@@ -88,6 +88,16 @@ public class AngularNodeComparator implements Comparator<Node> {
 					return super.toString() + "[" + getX() + ", " + getY() + ", " + getWidth() + ", " + getHeight() + "]";
 				}
 				
+				@Override
+				public String getRole() {
+					return null;
+				}
+
+				@Override
+				public void setRole(String role) {
+					throw new UnsupportedOperationException();
+				}
+				
 			};
 		}
 		return node.getGeometry();
@@ -129,6 +139,16 @@ public class AngularNodeComparator implements Comparator<Node> {
 			@Override
 			public String toString() {
 				return super.toString() + "[" + getX() + ", " + getY() + "]";
+			}
+
+			@Override
+			public String getRole() {
+				return null;
+			}
+
+			@Override
+			public void setRole(String role) {
+				throw new UnsupportedOperationException();
 			}
 			
 		};

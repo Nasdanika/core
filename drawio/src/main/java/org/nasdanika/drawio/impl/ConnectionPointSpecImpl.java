@@ -88,6 +88,16 @@ class ConnectionPointSpecImpl implements ConnectionPointSpec {
 			return false;
 		ConnectionPointSpecImpl other = (ConnectionPointSpecImpl) obj;
 		return specEquals(other);
+	}
+
+	@Override
+	public String getRole() {
+		return null;
+	}
+
+	@Override
+	public void setRole(String role) {
+		throw new UnsupportedOperationException();
 	}		
 
 }

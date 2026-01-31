@@ -13,8 +13,7 @@ public class RectangleImpl extends PointImpl implements Rectangle {
 
 	static final String ATTRIBUTE_WIDTH = "width"; 
 	static final String ATTRIBUTE_HEIGHT = "height";
-	
-	
+		
 	protected boolean isEmpty(Element element) {
 		return !element.hasAttribute(ATTRIBUTE_HEIGHT) && !element.hasAttribute(ATTRIBUTE_WIDTH) && !element.hasAttribute(ATTRIBUTE_X) && !element.hasAttribute(ATTRIBUTE_Y); 
 	}

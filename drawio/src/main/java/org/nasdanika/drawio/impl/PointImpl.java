@@ -2,6 +2,7 @@ package org.nasdanika.drawio.impl;
 
 import java.util.function.Function;
 
+import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Point;
 import org.w3c.dom.Element;
 
@@ -9,6 +10,7 @@ class PointImpl implements Point {
 	
 	static final String ATTRIBUTE_X = "x"; 
 	static final String ATTRIBUTE_Y = "y"; 	
+	static final String ATTRIBUTE_AS = "as"; 	
 	
 	protected Function<Boolean, Element> elementProvider;
 
@@ -86,5 +88,25 @@ class PointImpl implements Point {
 	public String toString() {
 		return super.toString() + "[" + getX() + ", " + getY() + "]";
 	}
+	
+	@Override
+	public String getRole() {
+		Element element = getElement();
+		return element != null && element.hasAttribute(ATTRIBUTE_AS) ? element.getAttribute(ATTRIBUTE_AS) : null;
+	}
+
+	@Override
+	public void setRole(String role) {
+		Element element = elementProvider.apply(true);
+		if (Util.isBlank(role)) {
+			element.removeAttribute(ATTRIBUTE_AS);
+			if (isEmpty(element)) {
+				element.getParentNode().removeChild(element);
+			}
+		} else {
+			element.setAttribute(ATTRIBUTE_AS, role);
+		}
+	}
+	
 
 }

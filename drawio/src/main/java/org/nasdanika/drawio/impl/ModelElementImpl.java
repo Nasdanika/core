@@ -24,10 +24,10 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.AbstractSplitJoinSet;
-import org.nasdanika.common.DelimitedStringMap;
 import org.nasdanika.common.Realm;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.ConnectionBase;
+import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.LinkTarget;
 import org.nasdanika.drawio.Model;
@@ -35,7 +35,8 @@ import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.SpelContext;
 import org.nasdanika.drawio.Tag;
-import org.nasdanika.drawio.Document.Context;
+import org.nasdanika.drawio.style.Style;
+import org.nasdanika.drawio.style.impl.StyleImpl;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marker;
 import org.w3c.dom.Attr;
@@ -76,6 +77,8 @@ class ModelElementImpl<M extends ModelElement<M>> extends ElementImpl<M> impleme
 
 	private static final String ENUMERATE_STYLE_KEY = "enumerate";
 	private static final String ENUMERATE_VALUE_STYLE_KEY = "enumerateValue";
+		
+	protected static final String MX_CELL_ELEMENT = "mxCell";	
 	
 	/**
 	 * For element resolution.
@@ -182,8 +185,8 @@ class ModelElementImpl<M extends ModelElement<M>> extends ElementImpl<M> impleme
 	}
 
 	@Override
-	public Map<String, String> getStyle() {
-		return new DelimitedStringMap(";", "=") {
+	public Style getStyle() {
+		return new StyleImpl() {
 
 			@Override
 			protected String getState() {

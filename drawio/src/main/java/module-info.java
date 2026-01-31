@@ -19,6 +19,7 @@ module org.nasdanika.drawio {
 	requires org.apache.commons.codec;
 	
 	exports org.nasdanika.drawio;
+	exports org.nasdanika.drawio.style;
 	exports org.nasdanika.drawio.comparators;
 	exports org.nasdanika.drawio.emf;
 	exports org.nasdanika.drawio.processor;

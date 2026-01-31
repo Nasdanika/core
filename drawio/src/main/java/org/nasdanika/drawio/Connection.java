@@ -1,5 +1,7 @@
 package org.nasdanika.drawio;
 
+import org.nasdanika.drawio.style.ConnectionStyle;
+
 /**
  * Connection between two nodes. Both source and target can be null.
  * @author Pavel
@@ -30,5 +32,14 @@ public interface Connection extends LayerElement<Connection>, org.nasdanika.grap
 	Point getOffset();
 	
 	Point setOffset(double x, double y);
+	
+	@Override
+	ConnectionStyle getStyle();
+		
+	/**
+	 * Creates a new child node. For example, a label
+	 * @return
+	 */
+	Node createNode();
 	
 }

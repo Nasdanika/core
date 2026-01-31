@@ -42,6 +42,7 @@ import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.ConnectionPoint;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
+import org.nasdanika.drawio.Geometry;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.Model;
@@ -52,6 +53,7 @@ import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.comparators.EnumerateComparator;
+import org.nasdanika.drawio.style.ConnectionStyle;
 import org.nasdanika.graph.ContentProvider;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.HandlerType;
@@ -163,8 +165,7 @@ public class TestDrawio {
 		
 		// Add connection
 		
-		ConnectionPoint sourceConnectionPoint = source.createConnectionPoint();
-		sourceConnectionPoint.setLocation(0.5, 1);
+		ConnectionPoint sourceConnectionPoint = source.createConnectionPoint(0.5, 1);
 				
 		ConnectionPoint targetConnectionPoint = target.createConnectionPoint();
 		
@@ -173,14 +174,38 @@ public class TestDrawio {
 				targetConnectionPoint);
 		connection.setLabel("My connection");
 		connection.setOffset(100, -15);
-		Map<String, String> connectionStyle = connection.getStyle();
+		ConnectionStyle connectionStyle = connection.getStyle();
 		connectionStyle.put("edgeStyle", "orthogonalEdgeStyle");
 		connectionStyle.put("rounded", "1");
 		connectionStyle.put("orthogonalLoop", "1");
 		connectionStyle.put("jettySize", "auto");
 		connectionStyle.put("html", "1");
 		
+		connectionStyle
+			.dashed("1")
+			.width("2")
+			.color("#0077ff");
+		
 		targetConnectionPoint.setLocation(0, 0.33);		
+		
+		// Label
+//	    <mxCell id="xssCvPtsf-id2eiGLFJD-5" connectable="0" 
+//			parent="xssCvPtsf-id2eiGLFJD-3" 
+//			style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Target" vertex="1">
+//	    <mxGeometry relative="1" x="0.8979" as="geometry">
+//	      <mxPoint x="20" as="offset" />
+//	    </mxGeometry>
+	//  </mxCell>
+		
+		Node connectionLabel = connection.createNode();
+		connectionLabel.setLabel("Connection label");
+		Geometry clg = connectionLabel.getGeometry();
+		clg.setX(0.9);
+		clg.setRelative(true);
+		
+		org.nasdanika.drawio.Point clgp = clg.getPoints().add();
+		clgp.setRole("offset");
+		clgp.setY(20);		
 				
 		File file = new File("target/new-uncompressed.drawio");
 		Files.writeString(file.toPath(), document.save(null));

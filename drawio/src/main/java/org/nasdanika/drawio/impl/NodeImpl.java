@@ -3,6 +3,7 @@ package org.nasdanika.drawio.impl;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -22,6 +23,8 @@ import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.impl.ConnectionImpl.ConnectionPointSpecAdapter;
 import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.drawio.style.NodeStyle;
+import org.nasdanika.drawio.style.impl.NodeStyleImpl;
 import org.w3c.dom.Element;
 
 class NodeImpl extends LayerImpl<Node> implements Node {
@@ -283,7 +286,27 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 		public void setSpec(ConnectionPointSpec spec) {
 			updateAllConnectionPointSpecs(cps -> cps.setSpec(spec));
 			super.setSpec(spec);
-		}		
+		}	
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(getNode().hashCode() , getX(), getDx(), getY(), getDy(), isPerimeter());
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ConnectionPointImpl other = (ConnectionPointImpl) obj;
+			if (!getNode().equals(other.getNode())) {
+				return false;
+			}
+			return specEquals(other);
+		}				
 		
 	}
 
@@ -311,6 +334,23 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 	@Override
 	public ConnectionPoint createConnectionPoint() {
 		return new ConnectionPointImpl();
+	}
+	
+	@Override
+	public NodeStyle getStyle() {
+		return new NodeStyleImpl() {
+
+			@Override
+			protected String getState() {
+				return getCellElement().getAttribute(ATTRIBUTE_STYLE);
+			}
+
+			@Override
+			protected void setState(String state) {
+				getCellElement().setAttribute(ATTRIBUTE_STYLE, state);
+			}
+			
+		};
 	}
 
 }

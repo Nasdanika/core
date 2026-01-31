@@ -1,12 +1,12 @@
 package org.nasdanika.drawio;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.PropertySource;
+import org.nasdanika.drawio.style.Style;
 
 /**
  * Base interface for {@link Model} elements
@@ -42,7 +42,7 @@ public interface ModelElement<M extends ModelElement<M>> extends LinkTarget<M>, 
 	/**
 	 * @return style property represented as a map
 	 */
-	Map<String,String> getStyle();
+	Style getStyle();
 	
 	/**
 	 * A fluent method equivalent to getStyle().put(key, value)

@@ -13,5 +13,9 @@ public interface Point {
 	void setY(double y);
 	
 	void setLocation(double x, double y);
+	
+	String getRole();
+	
+	void setRole(String role);	
 
 }

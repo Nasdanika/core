@@ -27,8 +27,6 @@ import org.nasdanika.persistence.Marker;
 import org.w3c.dom.Element;
 
 class LayerImpl<L extends Layer<L>> extends ModelElementImpl<L> implements Layer<L> {
-	
-	private static final String MX_CELL_ELEMENT = "mxCell";
 
 	LayerImpl(
 			Element element, 

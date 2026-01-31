@@ -2,6 +2,7 @@ package org.nasdanika.drawio.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
@@ -18,6 +19,8 @@ import org.nasdanika.drawio.Point;
 import org.nasdanika.drawio.PointList;
 import org.nasdanika.drawio.Tag;
 import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.drawio.style.ConnectionStyle;
+import org.nasdanika.drawio.style.impl.ConnectionStyleImpl;
 import org.w3c.dom.Element;
 
 class ConnectionImpl extends ModelElementImpl<Connection> implements Connection {
@@ -50,7 +53,7 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 			int position,
 			Context context) {
 		super(element, model, position, context);
-		points = new PointListImpl(this);
+		points = new ConnectionPointListImpl(this);
 	}
 
 	@Override
@@ -310,6 +313,16 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 			style.remove(prefix + DY_STYLE_KEY);
 			style.remove(prefix + PERIMETER_STYLE_KEY);
 		}
+
+		@Override
+		public String getRole() {
+			return null;
+		}
+
+		@Override
+		public void setRole(String role) {
+			throw new UnsupportedOperationException();
+		}
 		
 	}	
 		
@@ -319,6 +332,35 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 
 	ConnectionPointSpecAdapter getEntryPoint() {
 		return new ConnectionPointSpecAdapterImpl("entry");
-	}			
+	}
+	
+	@Override
+	public ConnectionStyle getStyle() {
+		return new ConnectionStyleImpl() {
+
+			@Override
+			protected String getState() {
+				return getCellElement().getAttribute(ATTRIBUTE_STYLE);
+			}
+
+			@Override
+			protected void setState(String state) {
+				getCellElement().setAttribute(ATTRIBUTE_STYLE, state);
+			}
+			
+		};
+	}
+	
+	@Override
+	public Node createNode() {
+		Element nodeElement = element.getOwnerDocument().createElement(MX_CELL_ELEMENT);
+		nodeElement.setAttribute(ATTRIBUTE_ID, UUID.randomUUID().toString());
+		nodeElement.setAttribute(ATTRIBUTE_PARENT, element.getAttribute(ATTRIBUTE_ID));
+		nodeElement.setAttribute(ModelImpl.ATTRIBUTE_VERTEX, "1");
+		element.getParentNode().appendChild(nodeElement);
+		List<? extends org.nasdanika.drawio.Element<?>> elements = getChildren();
+		return (Node) elements.get(elements.size() - 1);
+	}
+	
 	
 }

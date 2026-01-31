@@ -9,9 +9,10 @@ import org.nasdanika.drawio.PointList;
 import org.w3c.dom.Element;
 
 /**
- * Points list which supports remove operation, but not add or set. Although it supports add(int index, double x, double y) and add(double x, double y) operations.
+ * Points list which supports remove operation, but not add or set. 
+ * Although it supports add(int index, double x, double y) and add(double x, double y) operations.
  */
-class PointListImpl extends AbstractList<Point> implements PointList {
+class ConnectionPointListImpl extends AbstractList<Point> implements PointList {
 	
 	private static final String MX_POINT_ELEMENT = "mxPoint";
 
@@ -23,7 +24,7 @@ class PointListImpl extends AbstractList<Point> implements PointList {
 	
 	private ConnectionImpl connection;
 
-	PointListImpl(ConnectionImpl connection) {
+	ConnectionPointListImpl(ConnectionImpl connection) {
 		this.connection = connection;
 	}
 
@@ -108,7 +109,7 @@ class PointListImpl extends AbstractList<Point> implements PointList {
 	}
 	
 	@Override
-	public Point add(int index, double x, double y) {
+	public Point add(int index) {
 		Element geometryElement = connection.getGeometryElement(true);
 		List<Element> arrayElements = DocumentImpl.getChildrenElements(geometryElement, ARRAY_ELEMENT, e -> POINTS_ROLE.equals(e.getAttribute(AS_ATTRIBUTE)));
 		if (arrayElements.isEmpty()) {
@@ -131,9 +132,7 @@ class PointListImpl extends AbstractList<Point> implements PointList {
 			arrayElement.insertBefore(pointElement, refPointElement);
 		}
 		
-		Point point = new PointImpl(create -> pointElement);
-		point.setLocation(x, y);
-		return point;
+		return new PointImpl(create -> pointElement);
 	}
 
 }
