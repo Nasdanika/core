@@ -4,6 +4,7 @@ package org.nasdanika.drawio.style;
  * Style for connections (edges). Extends {@link LineStyle}.
  */
 public interface ConnectionStyle extends LineStyle {
+	
     String startArrow();
 
     ConnectionStyle startArrow(String value);
@@ -14,11 +15,18 @@ public interface ConnectionStyle extends LineStyle {
 
     Arrow startArrowEnum();
 
-    ConnectionStyle startArrowEnum(Arrow arrow);
+    ConnectionStyle startArrow(Arrow arrow);
 
     Arrow endArrowEnum();
 
     ConnectionStyle endArrowEnum(Arrow arrow);
+    
+    /**
+     * Style of the edge, e.g. orthogonalEdgeStyle.
+     */
+    String edgeStyle();
+
+    ConnectionStyle edgeStyle(String value);
     
     @Override
     ConnectionStyle color(String value);
@@ -28,5 +36,17 @@ public interface ConnectionStyle extends LineStyle {
 
     @Override
     ConnectionStyle dashed(String value);
+    
+    @Override
+    ConnectionStyle opacity(String value);
+    
+    @Override
+    ConnectionStyle opacity(int value);
+
+    @Override
+    ConnectionStyle rounded(boolean value);
+	
+    @Override
+    ConnectionStyle shadow(boolean value);    
     
 }

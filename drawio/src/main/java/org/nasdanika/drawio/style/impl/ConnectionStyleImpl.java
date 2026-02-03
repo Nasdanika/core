@@ -7,6 +7,7 @@ public abstract class ConnectionStyleImpl extends LineStyleImpl implements Conne
 
     private static final String END_ARROW = "endArrow";
 	private static final String START_ARROW = "startArrow";
+    private static final String EDGE_STYLE = "edgeStyle";
 
 	@Override
     public String startArrow() {
@@ -36,7 +37,7 @@ public abstract class ConnectionStyleImpl extends LineStyleImpl implements Conne
     }
 
     @Override
-    public ConnectionStyle startArrowEnum(Arrow arrow) {
+    public ConnectionStyle startArrow(Arrow arrow) {
         startArrow(arrow == null ? null : arrow.value());
         return this;
     }
@@ -53,6 +54,17 @@ public abstract class ConnectionStyleImpl extends LineStyleImpl implements Conne
     }
     
     @Override
+    public String edgeStyle() {
+        return get(EDGE_STYLE);
+    }
+
+    @Override
+    public ConnectionStyle edgeStyle(String value) {
+        put(EDGE_STYLE, value);
+        return this;
+    }
+    
+    @Override
     public ConnectionStyle color(String value) {
     	return (ConnectionStyle) super.color(value);
     }
@@ -65,6 +77,26 @@ public abstract class ConnectionStyleImpl extends LineStyleImpl implements Conne
     @Override
     public ConnectionStyle dashed(String value) {
     	return (ConnectionStyle) super.dashed(value);
+    }
+    
+    @Override
+    public ConnectionStyle opacity(int opacity) {
+    	return (ConnectionStyle) super.opacity(opacity);
+    }
+    
+    @Override
+    public ConnectionStyle opacity(String value) {
+    	return (ConnectionStyle) super.opacity(value);
+    }
+    
+    @Override
+    public ConnectionStyle rounded(boolean rounded) {
+    	return (ConnectionStyle) super.rounded(rounded);
+    }
+    
+    @Override
+    public ConnectionStyle shadow(boolean shadow) {
+    	return (ConnectionStyle) super.shadow(shadow);
     }
     
 }

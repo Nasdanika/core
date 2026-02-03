@@ -177,13 +177,13 @@ public class TestDrawio {
 		connection.setLabel("My connection");
 		connection.setOffset(100, -15);
 		ConnectionStyle connectionStyle = connection.getStyle();
-		connectionStyle.put("edgeStyle", "orthogonalEdgeStyle");
-		connectionStyle.put("rounded", "1");
 		connectionStyle.put("orthogonalLoop", "1");
 		connectionStyle.put("jettySize", "auto");
 		connectionStyle.put("html", "1");
 		
 		connectionStyle
+			.edgeStyle("orthogonalEdgeStyle")
+			.rounded(true)
 			.dashed("1")
 			.width("2")
 			.color("#0077ff");

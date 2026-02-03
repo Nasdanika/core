@@ -40,4 +40,5 @@ public abstract class LineStyleImpl extends StyleImpl implements LineStyle {
         put(DASHED, value);
         return this;
     }
+
 }

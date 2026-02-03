@@ -16,4 +16,5 @@ public interface LineStyle extends Style {
     String dashed();
 
     LineStyle dashed(String value);
+    
 }
