@@ -25,6 +25,8 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.transform.TransformerException;
 
@@ -1230,5 +1232,20 @@ public class TestDrawio {
 			System.out.println(d.getURI());
 		});
 		
-	}	
+	}
+	
+	@Test
+	public void testSegmentMatch() {
+	    Pattern CHILD_PATTERN = Pattern.compile("child\\[(.+?)\\]");
+        String input = "child[status=active]";
+
+        Matcher m = CHILD_PATTERN.matcher(input);
+        if (m.matches()) {
+            String qualifier = m.group(1);
+            System.out.println("Qualifier: " + qualifier);
+        } else {
+            System.out.println("No match");
+	    }
+	}
+	
 }

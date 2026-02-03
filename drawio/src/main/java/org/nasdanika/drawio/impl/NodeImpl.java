@@ -4,6 +4,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -18,6 +19,7 @@ import org.nasdanika.drawio.ConnectionPointSpec;
 import org.nasdanika.drawio.Document.Context;
 import org.nasdanika.drawio.Geometry;
 import org.nasdanika.drawio.LayerElement;
+import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Tag;
@@ -29,6 +31,9 @@ import org.w3c.dom.Element;
 
 class NodeImpl extends LayerImpl<Node> implements Node {
 	
+	private static final String INCOMING_CONNECTION_SELECTOR = "incoming-connection";
+	private static final String OUTGOING_CONNECTION_SELECTOR = "outgoing-connection";
+
 	NodeImpl(
 			Element element, 
 			ModelImpl model, 
@@ -352,5 +357,21 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 			
 		};
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	protected ModelElement<?> resolve(String segment) {		
+		Optional<ModelElement> icOptional = select(getAllIncomingConnections(), segment, INCOMING_CONNECTION_SELECTOR);
+		if (icOptional != null) {
+			return icOptional.orElse(null);
+		}
+		
+		Optional<ModelElement> ocOptional = select(getAllIncomingConnections(), segment, OUTGOING_CONNECTION_SELECTOR);
+		if (ocOptional != null) {
+			return ocOptional.orElse(null);
+		}		
+		
+		return super.resolve(segment);
+	}	
 
 }

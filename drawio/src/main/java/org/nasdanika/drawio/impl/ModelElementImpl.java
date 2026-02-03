@@ -6,6 +6,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,6 +47,10 @@ import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
 
 class ModelElementImpl<M extends ModelElement<M>> extends ElementImpl<M> implements ModelElement<M> {
+
+	private static final String CHILD_SELECTOR = "child";
+	protected static final String PATH_SEGMENT_SEPARATOR = "/";
+	protected static final String EQUALS = "=";
 	
 	private static final String SPEL_PREFIX = "$spel:";
 	private static final String STYLE_PREFIX = "$style:";
@@ -289,10 +296,79 @@ class ModelElementImpl<M extends ModelElement<M>> extends ElementImpl<M> impleme
 
 	@Override
 	public String getProperty(String name) {
-		String rawProperty = context.filterProperty(this, name, getRawProperty(name));
-		return interpolate(rawProperty, new HashSet<>());
+		int separatorIdx = name.indexOf(PATH_SEGMENT_SEPARATOR);
+		if (separatorIdx == -1) {		
+			String rawProperty = context.filterProperty(this, name, getRawProperty(name));
+			return interpolate(rawProperty, new HashSet<>());
+		}
+		
+		ModelElement<?> target = resolve(name.substring(0, separatorIdx));
+		return target == null ? null : target.getProperty(name.substring(separatorIdx + 1));
 	}
 	
+	@SuppressWarnings("rawtypes")
+	protected ModelElement<?> resolve(String segment) {
+		if ("..".equals(segment)) {
+			return getParent();
+		}
+		if ("link-target".equals(segment)) {
+			LinkTarget<?> linkTarget = getLinkTarget();
+			if (linkTarget instanceof ModelElement) {
+				return (ModelElement<?>) linkTarget;
+			}
+			if (linkTarget instanceof Page) {
+				return ((Page) linkTarget).getModel().getRoot();
+			}
+			return null;			
+		}
+				
+		Optional<ModelElement> childOptional = select(getChildren(), segment, CHILD_SELECTOR);
+		return childOptional == null ? null : childOptional.orElse(null);
+	}
+	
+	/**
+	 * 
+	 * @param source
+	 * @param segment
+	 * @param selector
+	 * @return null if segment doesn't match selector, empty optional if no results. 
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected static Optional<ModelElement> select(Collection<?> source, String segment, String selector) {
+		if (selector.equals(segment)) {
+			return source
+					.stream()
+					.filter(ModelElement.class::isInstance)
+					.map(ModelElement.class::cast)
+					.findFirst();
+		}
+		
+		String qualifier = getQualifier(segment, selector);
+		if (qualifier == null) {
+			return null;
+		}
+		
+		int equalsIdx = qualifier.indexOf(EQUALS);
+		if (equalsIdx == -1) {
+			// By ID
+			return source
+					.stream()
+					.filter(ModelElement.class::isInstance)
+					.map(ModelElement.class::cast)
+					.filter(e -> qualifier.equals(e.getId()))
+					.findFirst();				
+		}
+		
+		String propertyName = qualifier.substring(0, equalsIdx);
+		String propertyValue = qualifier.substring(equalsIdx + 1);			
+		return source
+				.stream()
+				.filter(ModelElement.class::isInstance)
+				.map(ModelElement.class::cast)
+				.filter(e -> propertyValue.equals(e.getProperty(propertyName)))
+				.findFirst();										
+	}
+
 	@Override
 	public void setProperty(String name, String value) {
 		if (Util.isBlank(value)) {
@@ -663,7 +739,6 @@ class ModelElementImpl<M extends ModelElement<M>> extends ElementImpl<M> impleme
 				.filter(ModelElement.class::isInstance)
 				.map(ModelElement.class::cast)
 				.filter(me -> {
-					@SuppressWarnings("unchecked")
 					Map<String, String> eStyle = me.getStyle();
 					return "1".equals(eStyle.get(ENUMERATE_STYLE_KEY)) && Util.isBlank(eStyle.get(ENUMERATE_VALUE_STYLE_KEY));
 				})
@@ -684,6 +759,17 @@ class ModelElementImpl<M extends ModelElement<M>> extends ElementImpl<M> impleme
 	protected Realm getRealm() {
 		return getModel().getPage().getDocument().getRealmElement().getRealm();
 	}
+	
+	protected static String getQualifier(String segment, String selector) {
+	    Pattern pattern = Pattern.compile(selector + "\\[(.+?)\\]");
+
+        Matcher m = pattern.matcher(segment);
+        if (m.matches()) {
+            return m.group(1);
+	    }
+        
+        return null;
+	}	
 	
 }
 

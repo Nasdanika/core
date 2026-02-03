@@ -361,6 +361,16 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 		List<? extends org.nasdanika.drawio.Element<?>> elements = getChildren();
 		return (Node) elements.get(elements.size() - 1);
 	}
-	
+
+	@Override
+	protected ModelElement<?> resolve(String segment) {
+		if ("source".equals(segment)) {
+			return getSource();
+		}
+		if ("target".equals(segment)) {
+			return getTarget();
+		}
+		return super.resolve(segment);
+	}
 	
 }
