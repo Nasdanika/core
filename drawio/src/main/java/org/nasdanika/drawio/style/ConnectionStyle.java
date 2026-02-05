@@ -4,14 +4,22 @@ package org.nasdanika.drawio.style;
  * Style for connections (edges). Extends {@link LineStyle}.
  */
 public interface ConnectionStyle extends LineStyle {
+		
+    boolean startFill();
+
+    ConnectionStyle startFill(boolean startFill);
+	
+    boolean endFill();
+
+    ConnectionStyle endFill(boolean endFill);	
 	
     String startArrow();
 
-    ConnectionStyle startArrow(String value);
+    ConnectionStyle startArrow(String arrow);
 
     String endArrow();
 
-    ConnectionStyle endArrow(String value);
+    ConnectionStyle endArrow(String arrow);
 
     Arrow startArrowEnum();
 
@@ -48,5 +56,11 @@ public interface ConnectionStyle extends LineStyle {
 	
     @Override
     ConnectionStyle shadow(boolean value);    
+    
+    @Override
+    ConnectionStyle enumerate(boolean enumerate);
+	
+    @Override
+    ConnectionStyle enumerateValue(String enumerateValue);    
     
 }

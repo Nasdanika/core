@@ -171,8 +171,9 @@ public abstract class NodeStyleImpl extends LineStyleImpl implements NodeStyle {
     public NodeStyle collapsible(boolean collapsible) {
 		if (collapsible) {
 			put(COLLAPSIBLE, "1");
+		} else {
+			remove(COLLAPSIBLE);
 		}
-		remove(COLLAPSIBLE);
 		return this;
     }
     
@@ -185,10 +186,20 @@ public abstract class NodeStyleImpl extends LineStyleImpl implements NodeStyle {
     public NodeStyle container(boolean container) {
 		if (container) {
 			put(CONTAINER, "1");
+		} else {
+			remove(CONTAINER);
 		}
-		remove(CONTAINER);
 		return this;
     }
     
+    @Override
+    public NodeStyle enumerateValue(String enumerateValue) {
+    	return (NodeStyle) super.enumerateValue(enumerateValue);
+    }
+    
+    @Override
+    public NodeStyle enumerate(boolean enumerate) {
+    	return (NodeStyle) super.enumerate(enumerate);
+    }
     
 }

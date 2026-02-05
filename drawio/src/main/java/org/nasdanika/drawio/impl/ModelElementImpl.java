@@ -302,28 +302,40 @@ class ModelElementImpl<M extends ModelElement<M>> extends ElementImpl<M> impleme
 			return interpolate(rawProperty, new HashSet<>());
 		}
 		
-		ModelElement<?> target = resolve(name.substring(0, separatorIdx));
-		return target == null ? null : target.getProperty(name.substring(separatorIdx + 1));
+		List<ModelElement<?>> targets = selectSegment(name.substring(0, separatorIdx));
+		return targets.isEmpty() ? null : targets.getFirst().getProperty(name.substring(separatorIdx + 1));
+	}
+
+	@Override
+	public List<ModelElement<?>> select(String selector) {
+		int separatorIdx = selector.indexOf(PATH_SEGMENT_SEPARATOR);
+		if (separatorIdx == -1) {	
+			return selectSegment(selector);
+		}
+		
+		return selectSegment(selector.substring(0, separatorIdx))
+				.stream()
+				.flatMap(t -> t.select(selector.substring(separatorIdx + 1)).stream())
+				.toList();		
 	}
 	
-	@SuppressWarnings("rawtypes")
-	protected ModelElement<?> resolve(String segment) {
+	protected List<ModelElement<?>> selectSegment(String segment) {
 		if ("..".equals(segment)) {
-			return getParent();
+			return Collections.singletonList(getParent());
 		}
 		if ("link-target".equals(segment)) {
 			LinkTarget<?> linkTarget = getLinkTarget();
 			if (linkTarget instanceof ModelElement) {
-				return (ModelElement<?>) linkTarget;
+				return Collections.singletonList((ModelElement<?>) linkTarget);
 			}
 			if (linkTarget instanceof Page) {
-				return ((Page) linkTarget).getModel().getRoot();
+				return Collections.singletonList(((Page) linkTarget).getModel().getRoot());
 			}
 			return null;			
 		}
 				
-		Optional<ModelElement> childOptional = select(getChildren(), segment, CHILD_SELECTOR);
-		return childOptional == null ? null : childOptional.orElse(null);
+		List<ModelElement<?>> children = selectSegment(getChildren(), segment, CHILD_SELECTOR);
+		return children == null ? Collections.emptyList() : children;
 	}
 	
 	/**
@@ -334,13 +346,13 @@ class ModelElementImpl<M extends ModelElement<M>> extends ElementImpl<M> impleme
 	 * @return null if segment doesn't match selector, empty optional if no results. 
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected static Optional<ModelElement> select(Collection<?> source, String segment, String selector) {
+	protected static List<ModelElement<?>> selectSegment(Collection<?> source, String segment, String selector) {
 		if (selector.equals(segment)) {
-			return source
+			return (List) source
 					.stream()
 					.filter(ModelElement.class::isInstance)
 					.map(ModelElement.class::cast)
-					.findFirst();
+					.toList();
 		}
 		
 		String qualifier = getQualifier(segment, selector);
@@ -351,22 +363,22 @@ class ModelElementImpl<M extends ModelElement<M>> extends ElementImpl<M> impleme
 		int equalsIdx = qualifier.indexOf(EQUALS);
 		if (equalsIdx == -1) {
 			// By ID
-			return source
+			return (List) source
 					.stream()
 					.filter(ModelElement.class::isInstance)
 					.map(ModelElement.class::cast)
 					.filter(e -> qualifier.equals(e.getId()))
-					.findFirst();				
+					.toList();				
 		}
 		
 		String propertyName = qualifier.substring(0, equalsIdx);
 		String propertyValue = qualifier.substring(equalsIdx + 1);			
-		return source
+		return (List) source
 				.stream()
 				.filter(ModelElement.class::isInstance)
 				.map(ModelElement.class::cast)
 				.filter(e -> propertyValue.equals(e.getProperty(propertyName)))
-				.findFirst();										
+				.toList();										
 	}
 
 	@Override

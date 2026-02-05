@@ -1,6 +1,7 @@
 package org.nasdanika.drawio.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.awt.Point;
@@ -1247,5 +1248,97 @@ public class TestDrawio {
             System.out.println("No match");
 	    }
 	}
+		
+	/**
+	 * Does not create processor instances - wires endpoints and handlers in code.
+	 * @throws Exception
+	 */
+	@Test 
+	public void testSelectors() throws Exception {
+		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
+		Node bob = document
+			.stream()
+			.filter(Node.class::isInstance)
+			.map(Node.class::cast)
+			.filter(n -> "Bob".equals(n.getLabel()))
+			.findAny()
+			.get();
+		
+		// Parent
+		ModelElement<?> bobsHouse = bob.select("..").getFirst();
+		assertEquals("bobs-house", bobsHouse.getId());
+		
+		// Child
+		assertEquals("bob", bobsHouse.select("child").getFirst().getId());
+		assertEquals("bob", bobsHouse.select("child[bob]").getFirst().getId());
+		assertEquals("bob", bobsHouse.select("child[alias=bobby]").getFirst().getId());
+		
+		// Incoming Connection
+		assertEquals("alice-to-bob", bob.select("incoming-connection").getFirst().getId());
+		assertEquals("alice-to-bob", bob.select("incoming-connection[alice-to-bob]").getFirst().getId());
+		assertEquals("alice-to-bob", bob.select("incoming-connection[classification=top-secret]").getFirst().getId());
+		
+		// Source
+		ModelElement<?> alice = bob.select("incoming-connection/source").getFirst();
+		assertEquals("alice", alice.getId());
+
+		// Outgoing connection		
+		assertEquals("alice-to-bob", alice.select("outgoing-connection").getFirst().getId());
+		assertEquals("alice-to-bob", alice.select("outgoing-connection[alice-to-bob]").getFirst().getId());
+		assertEquals("alice-to-bob", alice.select("outgoing-connection[classification=top-secret]").getFirst().getId());
+		
+		// Target
+		ModelElement<?> bob2 = alice.select("outgoing-connection/target").getFirst();
+		assertEquals("bob", bob2.getId());
+		
+		// Long path
+		assertEquals("bobs-house", alice.select("outgoing-connection/target/..").getFirst().getId());		
+	}		
+	
+	/**
+	 * Does not create processor instances - wires endpoints and handlers in code.
+	 * @throws Exception
+	 */
+	@Test 
+	public void testProperyPaths() throws Exception {
+		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
+		Node bob = document
+			.stream()
+			.filter(Node.class::isInstance)
+			.map(Node.class::cast)
+			.filter(n -> "Bob".equals(n.getLabel()))
+			.findAny()
+			.get();
+		
+		// Parent
+		assertEquals("bobs-house", bob.getProperty("../id"));
+		
+		// Child
+		ModelElement<?> bobsHouse = bob.select("..").getFirst();
+		assertEquals("bobby", bobsHouse.getProperty("child/alias"));
+		assertEquals("bob", bobsHouse.getProperty("child[bob]/id"));
+		assertEquals("bob", bobsHouse.getProperty("child[alias=bobby]/id"));
+		
+		// Incoming Connection
+		assertEquals("top-secret", bob.getProperty("incoming-connection/classification"));
+		assertEquals("alice-to-bob", bob.getProperty("incoming-connection[alice-to-bob]/id"));
+		assertEquals("alice-to-bob", bob.getProperty("incoming-connection[classification=top-secret]/id"));
+		
+		// Source
+		ModelElement<?> alice = bob.select("incoming-connection/source").getFirst();
+		assertEquals("alice", alice.getId());
+
+		// Outgoing connection		
+		assertEquals("top-secret", alice.getProperty("outgoing-connection/classification"));
+		assertEquals("alice-to-bob", alice.getProperty("outgoing-connection[alice-to-bob]/id"));
+		assertEquals("alice-to-bob", alice.getProperty("outgoing-connection[classification=top-secret]/id"));
+		
+		// Target
+		assertEquals("bobby", alice.getProperty("outgoing-connection/target/alias"));
+		
+		// Long path
+		assertEquals("bobs-house", alice.getProperty("outgoing-connection/target/../id"));		
+		
+	}	
 	
 }

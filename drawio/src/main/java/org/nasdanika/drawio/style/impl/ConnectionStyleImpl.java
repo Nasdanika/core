@@ -8,6 +8,38 @@ public abstract class ConnectionStyleImpl extends LineStyleImpl implements Conne
     private static final String END_ARROW = "endArrow";
 	private static final String START_ARROW = "startArrow";
     private static final String EDGE_STYLE = "edgeStyle";
+    private static final String START_FILL = "startFill";
+    private static final String END_FILL = "endFill";
+    
+	@Override
+    public boolean startFill() {
+        return !"0".equals(get(START_FILL));
+    }
+
+    @Override
+    public ConnectionStyle startFill(boolean startFill) {
+		if (!startFill) {
+			put(START_FILL, "0");
+		} else {
+			remove(START_FILL);
+		}
+		return this;
+    }
+    
+	@Override
+    public boolean endFill() {
+        return !"0".equals(get(END_FILL));
+    }
+
+    @Override
+    public ConnectionStyle endFill(boolean endFill) {
+		if (!endFill) {
+			put(END_FILL, "0");
+		} else {
+			remove(END_FILL);
+		}
+		return this;
+    }    
 
 	@Override
     public String startArrow() {
@@ -97,6 +129,16 @@ public abstract class ConnectionStyleImpl extends LineStyleImpl implements Conne
     @Override
     public ConnectionStyle shadow(boolean shadow) {
     	return (ConnectionStyle) super.shadow(shadow);
+    }
+    
+    @Override
+    public ConnectionStyle enumerateValue(String enumerateValue) {
+    	return (ConnectionStyle) super.enumerateValue(enumerateValue);
+    }
+    
+    @Override
+    public ConnectionStyle enumerate(boolean enumerate) {
+    	return (ConnectionStyle) super.enumerate(enumerate);
     }
     
 }

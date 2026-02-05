@@ -1,5 +1,6 @@
 package org.nasdanika.drawio.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -363,14 +364,14 @@ class ConnectionImpl extends ModelElementImpl<Connection> implements Connection 
 	}
 
 	@Override
-	protected ModelElement<?> resolve(String segment) {
+	protected List<ModelElement<?>> selectSegment(String segment) {
 		if ("source".equals(segment)) {
-			return getSource();
+			return Collections.singletonList(getSource());
 		}
 		if ("target".equals(segment)) {
-			return getTarget();
+			return Collections.singletonList(getTarget());
 		}
-		return super.resolve(segment);
+		return super.selectSegment(segment);
 	}
 	
 }

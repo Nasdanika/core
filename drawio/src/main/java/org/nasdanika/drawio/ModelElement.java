@@ -1,5 +1,6 @@
 package org.nasdanika.drawio;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -134,5 +135,13 @@ public interface ModelElement<M extends ModelElement<M>> extends LinkTarget<M>, 
 	 * Removes this model element from its container
 	 */
 	void remove();
+	
+	/**
+	 * Selects related elements - parent, children, ...
+	 * @param selector
+	 * @return
+	 */
+	public List<ModelElement<?>> select(String selector);
+	
 	
 }

@@ -4,7 +4,6 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -358,20 +357,19 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 		};
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected ModelElement<?> resolve(String segment) {		
-		Optional<ModelElement> icOptional = select(getAllIncomingConnections(), segment, INCOMING_CONNECTION_SELECTOR);
-		if (icOptional != null) {
-			return icOptional.orElse(null);
+	protected List<ModelElement<?>> selectSegment(String segment) {		
+		List<ModelElement<?>> ic = selectSegment(getAllIncomingConnections(), segment, INCOMING_CONNECTION_SELECTOR);
+		if (ic != null) {
+			return ic;
 		}
 		
-		Optional<ModelElement> ocOptional = select(getAllIncomingConnections(), segment, OUTGOING_CONNECTION_SELECTOR);
-		if (ocOptional != null) {
-			return ocOptional.orElse(null);
+		List<ModelElement<?>> oc = selectSegment(getAllOutgoingConnections(), segment, OUTGOING_CONNECTION_SELECTOR);
+		if (oc != null) {
+			return oc;
 		}		
 		
-		return super.resolve(segment);
+		return super.selectSegment(segment);
 	}	
 
 }

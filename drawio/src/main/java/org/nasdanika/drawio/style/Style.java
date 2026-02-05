@@ -9,16 +9,24 @@ public interface Style extends Map<String,String> {
 	
     String opacity();
 
-    Style opacity(String value);
+    Style opacity(String opacity);
     
-    Style opacity(int value);
+    Style opacity(int opacity);
 
-    Style rounded(boolean value);
+    Style rounded(boolean rounded);
 	
     boolean rounded();
 
-    Style shadow(boolean value);
+    Style shadow(boolean shadow);
 	
     boolean shadow();
+    
+    Style enumerate(boolean enumerate);
+	
+    boolean enumerate();
+    
+    String enumerateValue();
+
+    Style enumerateValue(String enumerateValue);
 
 }

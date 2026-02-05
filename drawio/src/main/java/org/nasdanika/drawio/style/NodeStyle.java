@@ -73,5 +73,12 @@ public interface NodeStyle extends LineStyle {
     NodeStyle collapsible(boolean collapsible);
     
     boolean collapsible();
+        
+    @Override
+    NodeStyle enumerate(boolean enumerate);
+	
+    @Override
+    NodeStyle enumerateValue(String enumerateValue);    
+    
     
 }
