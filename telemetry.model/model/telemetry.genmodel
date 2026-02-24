@@ -110,6 +110,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Span/status"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/flags"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Span/changeDescription"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference telemetry.ecore#//Span/logRecords"/>
     </genClasses>
     <genClasses ecoreClass="telemetry.ecore#//SpanEvent">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanEvent/timeUnixNano"/>
@@ -229,6 +230,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Exemplar/asInt"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Exemplar/spanId"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Exemplar/traceId"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference telemetry.ecore#//Exemplar/span"/>
     </genClasses>
     <genClasses ecoreClass="telemetry.ecore#//LogsData">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//LogsData/resourceLogs"/>

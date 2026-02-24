@@ -862,6 +862,16 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getSpan_LogRecords() {
+		return (EReference)spanEClass.getEStructuralFeatures().get(17);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSpanEvent() {
 		return spanEventEClass;
 	}
@@ -1862,6 +1872,16 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getExemplar_Span() {
+		return (EReference)exemplarEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getLogsData() {
 		return logsDataEClass;
 	}
@@ -2191,6 +2211,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEReference(spanEClass, SPAN__STATUS);
 		createEAttribute(spanEClass, SPAN__FLAGS);
 		createEReference(spanEClass, SPAN__CHANGE_DESCRIPTION);
+		createEReference(spanEClass, SPAN__LOG_RECORDS);
 
 		spanEventEClass = createEClass(SPAN_EVENT);
 		createEAttribute(spanEventEClass, SPAN_EVENT__TIME_UNIX_NANO);
@@ -2310,6 +2331,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEAttribute(exemplarEClass, EXEMPLAR__AS_INT);
 		createEAttribute(exemplarEClass, EXEMPLAR__SPAN_ID);
 		createEAttribute(exemplarEClass, EXEMPLAR__TRACE_ID);
+		createEReference(exemplarEClass, EXEMPLAR__SPAN);
 
 		logsDataEClass = createEClass(LOGS_DATA);
 		createEReference(logsDataEClass, LOGS_DATA__RESOURCE_LOGS);
@@ -2437,6 +2459,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEReference(getSpan_Status(), this.getSpanStatus(), null, "status", null, 0, 1, Span.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpan_Flags(), ecorePackage.getEInt(), "flags", null, 0, 1, Span.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpan_ChangeDescription(), theChangePackage.getChangeDescription(), null, "changeDescription", null, 0, 1, Span.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSpan_LogRecords(), this.getLogRecord(), null, "logRecords", null, 0, -1, Span.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(spanEventEClass, SpanEvent.class, "SpanEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSpanEvent_TimeUnixNano(), ecorePackage.getELong(), "timeUnixNano", null, 0, 1, SpanEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2556,6 +2579,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEAttribute(getExemplar_AsInt(), ecorePackage.getELongObject(), "asInt", null, 0, 1, Exemplar.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExemplar_SpanId(), ecorePackage.getEString(), "spanId", null, 0, 1, Exemplar.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExemplar_TraceId(), ecorePackage.getEString(), "traceId", null, 0, 1, Exemplar.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getExemplar_Span(), this.getSpan(), null, "span", null, 0, 1, Exemplar.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(logsDataEClass, LogsData.class, "LogsData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getLogsData_ResourceLogs(), this.getResourceLogs(), null, "resourceLogs", null, 0, -1, LogsData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

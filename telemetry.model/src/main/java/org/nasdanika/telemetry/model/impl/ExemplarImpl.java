@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.telemetry.model.Exemplar;
 import org.nasdanika.telemetry.model.KeyValue;
 import org.nasdanika.telemetry.model.ModelPackage;
+import org.nasdanika.telemetry.model.Span;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,6 +34,7 @@ import org.nasdanika.telemetry.model.ModelPackage;
  *   <li>{@link org.nasdanika.telemetry.model.impl.ExemplarImpl#getAsInt <em>As Int</em>}</li>
  *   <li>{@link org.nasdanika.telemetry.model.impl.ExemplarImpl#getSpanId <em>Span Id</em>}</li>
  *   <li>{@link org.nasdanika.telemetry.model.impl.ExemplarImpl#getTraceId <em>Trace Id</em>}</li>
+ *   <li>{@link org.nasdanika.telemetry.model.impl.ExemplarImpl#getSpan <em>Span</em>}</li>
  * </ul>
  *
  * @generated
@@ -234,6 +236,35 @@ public class ExemplarImpl extends MinimalEObjectImpl.Container implements Exempl
 	 * @generated
 	 */
 	@Override
+	public Span getSpan() {
+		return (Span)eDynamicGet(ModelPackage.EXEMPLAR__SPAN, ModelPackage.Literals.EXEMPLAR__SPAN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Span basicGetSpan() {
+		return (Span)eDynamicGet(ModelPackage.EXEMPLAR__SPAN, ModelPackage.Literals.EXEMPLAR__SPAN, false, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSpan(Span newSpan) {
+		eDynamicSet(ModelPackage.EXEMPLAR__SPAN, ModelPackage.Literals.EXEMPLAR__SPAN, newSpan);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ModelPackage.EXEMPLAR__FILTERED_ATTRIBUTES:
@@ -262,6 +293,9 @@ public class ExemplarImpl extends MinimalEObjectImpl.Container implements Exempl
 				return getSpanId();
 			case ModelPackage.EXEMPLAR__TRACE_ID:
 				return getTraceId();
+			case ModelPackage.EXEMPLAR__SPAN:
+				if (resolve) return getSpan();
+				return basicGetSpan();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -294,6 +328,9 @@ public class ExemplarImpl extends MinimalEObjectImpl.Container implements Exempl
 			case ModelPackage.EXEMPLAR__TRACE_ID:
 				setTraceId((String)newValue);
 				return;
+			case ModelPackage.EXEMPLAR__SPAN:
+				setSpan((Span)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -324,6 +361,9 @@ public class ExemplarImpl extends MinimalEObjectImpl.Container implements Exempl
 			case ModelPackage.EXEMPLAR__TRACE_ID:
 				setTraceId(TRACE_ID_EDEFAULT);
 				return;
+			case ModelPackage.EXEMPLAR__SPAN:
+				setSpan((Span)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -348,6 +388,8 @@ public class ExemplarImpl extends MinimalEObjectImpl.Container implements Exempl
 				return SPAN_ID_EDEFAULT == null ? getSpanId() != null : !SPAN_ID_EDEFAULT.equals(getSpanId());
 			case ModelPackage.EXEMPLAR__TRACE_ID:
 				return TRACE_ID_EDEFAULT == null ? getTraceId() != null : !TRACE_ID_EDEFAULT.equals(getTraceId());
+			case ModelPackage.EXEMPLAR__SPAN:
+				return basicGetSpan() != null;
 		}
 		return super.eIsSet(featureID);
 	}

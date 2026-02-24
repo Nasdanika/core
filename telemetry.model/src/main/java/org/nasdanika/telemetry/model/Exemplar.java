@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.telemetry.model.Exemplar#getAsInt <em>As Int</em>}</li>
  *   <li>{@link org.nasdanika.telemetry.model.Exemplar#getSpanId <em>Span Id</em>}</li>
  *   <li>{@link org.nasdanika.telemetry.model.Exemplar#getTraceId <em>Trace Id</em>}</li>
+ *   <li>{@link org.nasdanika.telemetry.model.Exemplar#getSpan <em>Span</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.telemetry.model.ModelPackage#getExemplar()
@@ -162,5 +163,27 @@ public interface Exemplar extends EObject {
 	 * @generated
 	 */
 	void setTraceId(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Span</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Span</em>' reference.
+	 * @see #setSpan(Span)
+	 * @see org.nasdanika.telemetry.model.ModelPackage#getExemplar_Span()
+	 * @model
+	 * @generated
+	 */
+	Span getSpan();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.telemetry.model.Exemplar#getSpan <em>Span</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Span</em>' reference.
+	 * @see #getSpan()
+	 * @generated
+	 */
+	void setSpan(Span value);
 
 } // Exemplar

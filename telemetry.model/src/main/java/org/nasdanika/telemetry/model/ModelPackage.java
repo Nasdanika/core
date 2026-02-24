@@ -637,13 +637,22 @@ public interface ModelPackage extends EPackage {
 	int SPAN__CHANGE_DESCRIPTION = 16;
 
 	/**
+	 * The feature id for the '<em><b>Log Records</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPAN__LOG_RECORDS = 17;
+
+	/**
 	 * The number of structural features of the '<em>Span</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPAN_FEATURE_COUNT = 17;
+	int SPAN_FEATURE_COUNT = 18;
 
 	/**
 	 * The number of operations of the '<em>Span</em>' class.
@@ -2078,13 +2087,22 @@ public interface ModelPackage extends EPackage {
 	int EXEMPLAR__TRACE_ID = 5;
 
 	/**
+	 * The feature id for the '<em><b>Span</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXEMPLAR__SPAN = 6;
+
+	/**
 	 * The number of structural features of the '<em>Exemplar</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXEMPLAR_FEATURE_COUNT = 6;
+	int EXEMPLAR_FEATURE_COUNT = 7;
 
 	/**
 	 * The number of operations of the '<em>Exemplar</em>' class.
@@ -2931,6 +2949,17 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSpan_ChangeDescription();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.telemetry.model.Span#getLogRecords <em>Log Records</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Log Records</em>'.
+	 * @see org.nasdanika.telemetry.model.Span#getLogRecords()
+	 * @see #getSpan()
+	 * @generated
+	 */
+	EReference getSpan_LogRecords();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.telemetry.model.SpanEvent <em>Span Event</em>}'.
@@ -4014,6 +4043,17 @@ public interface ModelPackage extends EPackage {
 	EAttribute getExemplar_TraceId();
 
 	/**
+	 * Returns the meta object for the reference '{@link org.nasdanika.telemetry.model.Exemplar#getSpan <em>Span</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Span</em>'.
+	 * @see org.nasdanika.telemetry.model.Exemplar#getSpan()
+	 * @see #getExemplar()
+	 * @generated
+	 */
+	EReference getExemplar_Span();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.telemetry.model.LogsData <em>Logs Data</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4710,6 +4750,14 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SPAN__CHANGE_DESCRIPTION = eINSTANCE.getSpan_ChangeDescription();
+
+		/**
+		 * The meta object literal for the '<em><b>Log Records</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPAN__LOG_RECORDS = eINSTANCE.getSpan_LogRecords();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.telemetry.model.impl.SpanEventImpl <em>Span Event</em>}' class.
@@ -5548,6 +5596,14 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute EXEMPLAR__TRACE_ID = eINSTANCE.getExemplar_TraceId();
+
+		/**
+		 * The meta object literal for the '<em><b>Span</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EXEMPLAR__SPAN = eINSTANCE.getExemplar_Span();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.telemetry.model.impl.LogsDataImpl <em>Logs Data</em>}' class.

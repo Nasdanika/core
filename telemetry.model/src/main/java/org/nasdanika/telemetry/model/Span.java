@@ -38,6 +38,7 @@ import org.eclipse.emf.ecore.change.ChangeDescription;
  *   <li>{@link org.nasdanika.telemetry.model.Span#getStatus <em>Status</em>}</li>
  *   <li>{@link org.nasdanika.telemetry.model.Span#getFlags <em>Flags</em>}</li>
  *   <li>{@link org.nasdanika.telemetry.model.Span#getChangeDescription <em>Change Description</em>}</li>
+ *   <li>{@link org.nasdanika.telemetry.model.Span#getLogRecords <em>Log Records</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.telemetry.model.ModelPackage#getSpan()
@@ -435,5 +436,17 @@ public interface Span extends EObject {
 	 * @generated
 	 */
 	void setChangeDescription(ChangeDescription value);
+
+	/**
+	 * Returns the value of the '<em><b>Log Records</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.telemetry.model.LogRecord}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Log Records</em>' reference list.
+	 * @see org.nasdanika.telemetry.model.ModelPackage#getSpan_LogRecords()
+	 * @model
+	 * @generated
+	 */
+	EList<LogRecord> getLogRecords();
 
 } // Span
