@@ -4,11 +4,6 @@
   <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
     <details key="documentation" value="An Ecore model of OpenTelemetry concepts - traces, spans, metrics, logs, and supporting types.&#xA;Based on the OpenTelemetry specification: https://opentelemetry.io/docs/specs/otel/"/>
   </eAnnotations>
-
-  <!-- ============================================================ -->
-  <!-- Common types                                                  -->
-  <!-- ============================================================ -->
-
   <eClassifiers xsi:type="ecore:EClass" name="Resource">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Resource represents the entity producing telemetry as Attributes.&#xA;For example, a process producing telemetry that is running in a container on Kubernetes has a Pod name, it is in a namespace and possibly is part of a Deployment which also has a name.&#xA;All three of these attributes can be included in the Resource."/>
@@ -31,7 +26,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="InstrumentationScope">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="InstrumentationScope is a message representing the instrumentation scope information such as the fully qualified name and version."/>
@@ -56,7 +50,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="KeyValue">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="KeyValue is a key-value pair that is used to store Span attributes, Link attributes, etc."/>
@@ -69,7 +62,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="AnyValue">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives."/>
@@ -96,11 +88,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
-  <!-- ============================================================ -->
-  <!-- Traces                                                        -->
-  <!-- ============================================================ -->
-
   <eClassifiers xsi:type="ecore:EClass" name="TracesData">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="TracesData represents the traces export payload which can be serialized to different formats, e.g., OTLP/gRPC, JSON, and proto."/>
@@ -112,7 +99,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="ResourceSpans">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A collection of ScopeSpans from a Resource."/>
@@ -135,7 +121,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="ScopeSpans">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A collection of Spans produced by an InstrumentationScope."/>
@@ -154,7 +139,6 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="Span">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A Span represents a single operation performed by a single component of the system.&#xA;The next available field id is 17."/>
@@ -232,8 +216,9 @@
         <details key="documentation" value="Flags, a bit field. 8 least significant bits are the trace flags as defined in W3C Trace Context specification."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changeDescription" eType="ecore:EClass ../../org.eclipse.emf.ecore.change/model/Change.ecore#//ChangeDescription"
+        containment="true"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="SpanEvent">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Event is a time-stamped annotation of the span, consisting of user-supplied text description and key-value pairs."/>
@@ -257,7 +242,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="droppedAttributesCount"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="SpanLink">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A pointer from the current span to another span in the same trace or in a different trace. For example, this can be used in batching operations, where a single batch handler processes multiple requests from different traces or when the handler receives a request from a different project."/>
@@ -287,7 +271,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="SpanStatus">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="The Status type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs."/>
@@ -303,11 +286,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
-  <!-- ============================================================ -->
-  <!-- Metrics                                                       -->
-  <!-- ============================================================ -->
-
   <eClassifiers xsi:type="ecore:EClass" name="MetricsData">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="MetricsData represents the metrics export payload which can be serialized to different formats, e.g., OTLP/gRPC, JSON, and proto."/>
@@ -319,7 +297,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="ResourceMetrics">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A collection of ScopeMetrics from a Resource."/>
@@ -330,7 +307,6 @@
         eType="#//ScopeMetrics" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="ScopeMetrics">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A collection of Metrics produced by an Scope."/>
@@ -341,7 +317,6 @@
         eType="#//Metric" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="Metric" abstract="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Defines a Metric which has one or more timeseries. The following is a brief summary of the Metric data model.&#xA;&#xA;Metric is a named entity with a description and unit."/>
@@ -368,7 +343,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="Gauge" eSuperTypes="#//Metric">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Gauge represents the type of a scalar metric that always exports the current value for every data point. It should be used for an unknown aggregation."/>
@@ -376,7 +350,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="dataPoints" upperBound="-1"
         eType="#//NumberDataPoint" containment="true"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="Sum" eSuperTypes="#//Metric">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Sum represents the type of a scalar metric that is calculated as a sum of all reported measurements over a time interval."/>
@@ -391,7 +364,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="Histogram" eSuperTypes="#//Metric">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Histogram represents the type of a metric that is calculated by aggregating as a Histogram of all reported measurements over a time interval."/>
@@ -401,7 +373,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="aggregationTemporality"
         eType="#//AggregationTemporality"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="ExponentialHistogram" eSuperTypes="#//Metric">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="ExponentialHistogram represents the type of a metric that is calculated by aggregating as a ExponentialHistogram of all reported double measurements over a time interval."/>
@@ -411,7 +382,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="aggregationTemporality"
         eType="#//AggregationTemporality"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="Summary" eSuperTypes="#//Metric">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Summary metric data are used to convey quantile summaries."/>
@@ -419,7 +389,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="dataPoints" upperBound="-1"
         eType="#//SummaryDataPoint" containment="true"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="NumberDataPoint">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="NumberDataPoint is a single data point in a timeseries that describes the time-varying scalar value of a metric."/>
@@ -446,7 +415,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="HistogramDataPoint">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="HistogramDataPoint is a single data point in a timeseries that describes the time-varying values of a Histogram."/>
@@ -491,7 +459,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="ExponentialHistogramDataPoint">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="ExponentialHistogramDataPoint is a single data point in a timeseries that describes the time-varying values of a ExponentialHistogram of double values."/>
@@ -531,7 +498,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="zeroThreshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="ExponentialHistogramDataPointBuckets">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Buckets are a set of bucket counts, encoded in a contiguous array of counts."/>
@@ -544,7 +510,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="bucketCounts" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="SummaryDataPoint">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="SummaryDataPoint is a single data point in a timeseries that describes the time-varying values of a Summary metric."/>
@@ -559,7 +524,6 @@
         eType="#//SummaryDataPointValueAtQuantile" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="flags" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="SummaryDataPointValueAtQuantile">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Represents the value at a given quantile of a distribution."/>
@@ -575,7 +539,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="Exemplar">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A representation of an exemplar, which is a sample input measurement. Exemplars also hold information about the environment when the measurement was recorded, for example the span and trace ID of the active span when the exemplar was recorded."/>
@@ -600,11 +563,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
-  <!-- ============================================================ -->
-  <!-- Logs                                                          -->
-  <!-- ============================================================ -->
-
   <eClassifiers xsi:type="ecore:EClass" name="LogsData">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="LogsData represents the logs export payload which can be serialized to different formats, e.g., OTLP/gRPC, JSON, and proto."/>
@@ -616,7 +574,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="ResourceLogs">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A collection of ScopeLogs from a Resource."/>
@@ -627,7 +584,6 @@
         eType="#//ScopeLogs" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="ScopeLogs">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A collection of Logs produced by a Scope."/>
@@ -638,7 +594,6 @@
         eType="#//LogRecord" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EClass" name="LogRecord">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A log record according to OpenTelemetry Log Data Model: https://opentelemetry.io/docs/specs/otel/logs/data-model/"/>
@@ -693,16 +648,11 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-
-  <!-- ============================================================ -->
-  <!-- Enumerations                                                  -->
-  <!-- ============================================================ -->
-
   <eClassifiers xsi:type="ecore:EEnum" name="SpanKind">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="SpanKind is the type of span. Can be used to specify additional relationships between spans in addition to a parent/child relationship."/>
     </eAnnotations>
-    <eLiterals name="SPAN_KIND_UNSPECIFIED" value="0">
+    <eLiterals name="SPAN_KIND_UNSPECIFIED">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Unspecified. Do NOT use as default. Implementations MAY assume SpanKind to be INTERNAL when receiving UNSPECIFIED."/>
       </eAnnotations>
@@ -733,12 +683,11 @@
       </eAnnotations>
     </eLiterals>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EEnum" name="StatusCode">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="For the semantics of status codes see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#set-status"/>
     </eAnnotations>
-    <eLiterals name="STATUS_CODE_UNSET" value="0">
+    <eLiterals name="STATUS_CODE_UNSET">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="The default status."/>
       </eAnnotations>
@@ -754,12 +703,11 @@
       </eAnnotations>
     </eLiterals>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EEnum" name="AggregationTemporality">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="AggregationTemporality defines how a metric aggregator reports aggregated values. It describes how those values relate to the time interval over which they are aggregated."/>
     </eAnnotations>
-    <eLiterals name="AGGREGATION_TEMPORALITY_UNSPECIFIED" value="0">
+    <eLiterals name="AGGREGATION_TEMPORALITY_UNSPECIFIED">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="UNSPECIFIED is the default AggregationTemporality, it MUST not be used."/>
       </eAnnotations>
@@ -775,12 +723,11 @@
       </eAnnotations>
     </eLiterals>
   </eClassifiers>
-
   <eClassifiers xsi:type="ecore:EEnum" name="SeverityNumber">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Possible values for LogRecord.SeverityNumber."/>
     </eAnnotations>
-    <eLiterals name="SEVERITY_NUMBER_UNSPECIFIED" value="0">
+    <eLiterals name="SEVERITY_NUMBER_UNSPECIFIED">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="UNSPECIFIED is the default SeverityNumber, it MUST not be used."/>
       </eAnnotations>
@@ -810,5 +757,4 @@
     <eLiterals name="SEVERITY_NUMBER_FATAL3" value="23"/>
     <eLiterals name="SEVERITY_NUMBER_FATAL4" value="24"/>
   </eClassifiers>
-
 </ecore:EPackage>

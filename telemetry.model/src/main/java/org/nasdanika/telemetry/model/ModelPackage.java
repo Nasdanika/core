@@ -628,13 +628,22 @@ public interface ModelPackage extends EPackage {
 	int SPAN__FLAGS = 15;
 
 	/**
+	 * The feature id for the '<em><b>Change Description</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPAN__CHANGE_DESCRIPTION = 16;
+
+	/**
 	 * The number of structural features of the '<em>Span</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPAN_FEATURE_COUNT = 16;
+	int SPAN_FEATURE_COUNT = 17;
 
 	/**
 	 * The number of operations of the '<em>Span</em>' class.
@@ -2913,6 +2922,17 @@ public interface ModelPackage extends EPackage {
 	EAttribute getSpan_Flags();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link org.nasdanika.telemetry.model.Span#getChangeDescription <em>Change Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Change Description</em>'.
+	 * @see org.nasdanika.telemetry.model.Span#getChangeDescription()
+	 * @see #getSpan()
+	 * @generated
+	 */
+	EReference getSpan_ChangeDescription();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.telemetry.model.SpanEvent <em>Span Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4682,6 +4702,14 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SPAN__FLAGS = eINSTANCE.getSpan_Flags();
+
+		/**
+		 * The meta object literal for the '<em><b>Change Description</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPAN__CHANGE_DESCRIPTION = eINSTANCE.getSpan_ChangeDescription();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.telemetry.model.impl.SpanEventImpl <em>Span Event</em>}' class.

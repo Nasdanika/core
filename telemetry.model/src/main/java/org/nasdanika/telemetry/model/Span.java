@@ -5,6 +5,7 @@ package org.nasdanika.telemetry.model;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.change.ChangeDescription;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,6 +37,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.telemetry.model.Span#getDroppedLinksCount <em>Dropped Links Count</em>}</li>
  *   <li>{@link org.nasdanika.telemetry.model.Span#getStatus <em>Status</em>}</li>
  *   <li>{@link org.nasdanika.telemetry.model.Span#getFlags <em>Flags</em>}</li>
+ *   <li>{@link org.nasdanika.telemetry.model.Span#getChangeDescription <em>Change Description</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.telemetry.model.ModelPackage#getSpan()
@@ -411,5 +413,27 @@ public interface Span extends EObject {
 	 * @generated
 	 */
 	void setFlags(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Change Description</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Change Description</em>' containment reference.
+	 * @see #setChangeDescription(ChangeDescription)
+	 * @see org.nasdanika.telemetry.model.ModelPackage#getSpan_ChangeDescription()
+	 * @model containment="true"
+	 * @generated
+	 */
+	ChangeDescription getChangeDescription();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.telemetry.model.Span#getChangeDescription <em>Change Description</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Change Description</em>' containment reference.
+	 * @see #getChangeDescription()
+	 * @generated
+	 */
+	void setChangeDescription(ChangeDescription value);
 
 } // Span

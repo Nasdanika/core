@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.change.ChangeDescription;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -47,6 +48,7 @@ import org.nasdanika.telemetry.model.SpanStatus;
  *   <li>{@link org.nasdanika.telemetry.model.impl.SpanImpl#getDroppedLinksCount <em>Dropped Links Count</em>}</li>
  *   <li>{@link org.nasdanika.telemetry.model.impl.SpanImpl#getStatus <em>Status</em>}</li>
  *   <li>{@link org.nasdanika.telemetry.model.impl.SpanImpl#getFlags <em>Flags</em>}</li>
+ *   <li>{@link org.nasdanika.telemetry.model.impl.SpanImpl#getChangeDescription <em>Change Description</em>}</li>
  * </ul>
  *
  * @generated
@@ -510,6 +512,36 @@ public class SpanImpl extends MinimalEObjectImpl.Container implements Span {
 	 * @generated
 	 */
 	@Override
+	public ChangeDescription getChangeDescription() {
+		return (ChangeDescription)eDynamicGet(ModelPackage.SPAN__CHANGE_DESCRIPTION, ModelPackage.Literals.SPAN__CHANGE_DESCRIPTION, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetChangeDescription(ChangeDescription newChangeDescription, NotificationChain msgs) {
+		msgs = eDynamicInverseAdd((InternalEObject)newChangeDescription, ModelPackage.SPAN__CHANGE_DESCRIPTION, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setChangeDescription(ChangeDescription newChangeDescription) {
+		eDynamicSet(ModelPackage.SPAN__CHANGE_DESCRIPTION, ModelPackage.Literals.SPAN__CHANGE_DESCRIPTION, newChangeDescription);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ModelPackage.SPAN__ATTRIBUTES:
@@ -520,6 +552,8 @@ public class SpanImpl extends MinimalEObjectImpl.Container implements Span {
 				return ((InternalEList<?>)getLinks()).basicRemove(otherEnd, msgs);
 			case ModelPackage.SPAN__STATUS:
 				return basicSetStatus(null, msgs);
+			case ModelPackage.SPAN__CHANGE_DESCRIPTION:
+				return basicSetChangeDescription(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -564,6 +598,8 @@ public class SpanImpl extends MinimalEObjectImpl.Container implements Span {
 				return getStatus();
 			case ModelPackage.SPAN__FLAGS:
 				return getFlags();
+			case ModelPackage.SPAN__CHANGE_DESCRIPTION:
+				return getChangeDescription();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -628,6 +664,9 @@ public class SpanImpl extends MinimalEObjectImpl.Container implements Span {
 			case ModelPackage.SPAN__FLAGS:
 				setFlags((Integer)newValue);
 				return;
+			case ModelPackage.SPAN__CHANGE_DESCRIPTION:
+				setChangeDescription((ChangeDescription)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -688,6 +727,9 @@ public class SpanImpl extends MinimalEObjectImpl.Container implements Span {
 			case ModelPackage.SPAN__FLAGS:
 				setFlags(FLAGS_EDEFAULT);
 				return;
+			case ModelPackage.SPAN__CHANGE_DESCRIPTION:
+				setChangeDescription((ChangeDescription)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -732,6 +774,8 @@ public class SpanImpl extends MinimalEObjectImpl.Container implements Span {
 				return getStatus() != null;
 			case ModelPackage.SPAN__FLAGS:
 				return getFlags() != FLAGS_EDEFAULT;
+			case ModelPackage.SPAN__CHANGE_DESCRIPTION:
+				return getChangeDescription() != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -4,7 +4,8 @@
     editorDirectory="" modelPluginID="org.nasdanika.telemetry.model" modelName="Telemetry"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
     bundleManifest="false" featureDelegation="Dynamic" complianceLevel="21.0" suppressGenModelAnnotations="false"
-    copyrightFields="false" operationReflection="true" importOrganizing="true">
+    copyrightFields="false" usedGenPackages="../../org.eclipse.emf.ecore.change/model/Change.genmodel#//change ../../org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore"
+    operationReflection="true" importOrganizing="true">
   <foreignModel>telemetry.ecore</foreignModel>
   <genPackages prefix="Model" basePackage="org.nasdanika.telemetry" disposableProviderFactory="true"
       ecorePackage="telemetry.ecore#/">
@@ -108,6 +109,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/droppedLinksCount"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Span/status"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/flags"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Span/changeDescription"/>
     </genClasses>
     <genClasses ecoreClass="telemetry.ecore#//SpanEvent">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanEvent/timeUnixNano"/>
