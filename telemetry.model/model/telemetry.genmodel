@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.nasdanika.telemetry.model/src/main/java" creationIcons="false"
+    editorDirectory="" modelPluginID="org.nasdanika.telemetry.model" modelName="Telemetry"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    bundleManifest="false" featureDelegation="Dynamic" complianceLevel="21.0" suppressGenModelAnnotations="false"
+    copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>telemetry.ecore</foreignModel>
+  <genPackages prefix="Model" basePackage="org.nasdanika.telemetry" disposableProviderFactory="true"
+      ecorePackage="telemetry.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="telemetry.ecore#//SpanKind">
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SpanKind/SPAN_KIND_UNSPECIFIED"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SpanKind/SPAN_KIND_INTERNAL"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SpanKind/SPAN_KIND_SERVER"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SpanKind/SPAN_KIND_CLIENT"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SpanKind/SPAN_KIND_PRODUCER"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SpanKind/SPAN_KIND_CONSUMER"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="telemetry.ecore#//StatusCode">
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//StatusCode/STATUS_CODE_UNSET"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//StatusCode/STATUS_CODE_OK"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//StatusCode/STATUS_CODE_ERROR"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="telemetry.ecore#//AggregationTemporality">
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//AggregationTemporality/AGGREGATION_TEMPORALITY_UNSPECIFIED"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//AggregationTemporality/AGGREGATION_TEMPORALITY_DELTA"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//AggregationTemporality/AGGREGATION_TEMPORALITY_CUMULATIVE"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="telemetry.ecore#//SeverityNumber">
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_UNSPECIFIED"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_TRACE"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_TRACE2"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_TRACE3"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_TRACE4"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_DEBUG"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_DEBUG2"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_DEBUG3"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_DEBUG4"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_INFO"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_INFO2"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_INFO3"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_INFO4"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_WARN"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_WARN2"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_WARN3"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_WARN4"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_ERROR"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_ERROR2"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_ERROR3"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_ERROR4"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_FATAL"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_FATAL2"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_FATAL3"/>
+      <genEnumLiterals ecoreEnumLiteral="telemetry.ecore#//SeverityNumber/SEVERITY_NUMBER_FATAL4"/>
+    </genEnums>
+    <genClasses ecoreClass="telemetry.ecore#//Resource">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Resource/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Resource/droppedAttributesCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Resource/schemaUrl"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//InstrumentationScope">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//InstrumentationScope/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//InstrumentationScope/version"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//InstrumentationScope/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//InstrumentationScope/droppedAttributesCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//InstrumentationScope/schemaUrl"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//KeyValue">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//KeyValue/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//KeyValue/value"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//AnyValue">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//AnyValue/stringValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//AnyValue/boolValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//AnyValue/intValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//AnyValue/doubleValue"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//AnyValue/arrayValue"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//AnyValue/kvlistValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//AnyValue/bytesValue"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//TracesData">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//TracesData/resourceSpans"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//ResourceSpans">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ResourceSpans/resource"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ResourceSpans/scopeSpans"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ResourceSpans/schemaUrl"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//ScopeSpans">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ScopeSpans/scope"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ScopeSpans/spans"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ScopeSpans/schemaUrl"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//Span">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/traceId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/spanId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/traceState"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/parentSpanId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/kind"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/startTimeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/endTimeUnixNano"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Span/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/droppedAttributesCount"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Span/events"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/droppedEventsCount"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Span/links"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/droppedLinksCount"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Span/status"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Span/flags"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//SpanEvent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanEvent/timeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanEvent/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//SpanEvent/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanEvent/droppedAttributesCount"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//SpanLink">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanLink/traceId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanLink/spanId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanLink/traceState"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//SpanLink/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanLink/droppedAttributesCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanLink/flags"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//SpanStatus">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanStatus/message"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SpanStatus/code"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//MetricsData">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//MetricsData/resourceMetrics"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//ResourceMetrics">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ResourceMetrics/resource"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ResourceMetrics/scopeMetrics"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ResourceMetrics/schemaUrl"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//ScopeMetrics">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ScopeMetrics/scope"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ScopeMetrics/metrics"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ScopeMetrics/schemaUrl"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="telemetry.ecore#//Metric">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Metric/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Metric/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Metric/unit"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Metric/metadata"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//Gauge">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Gauge/dataPoints"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//Sum">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Sum/dataPoints"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Sum/aggregationTemporality"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Sum/isMonotonic"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//Histogram">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Histogram/dataPoints"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Histogram/aggregationTemporality"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//ExponentialHistogram">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ExponentialHistogram/dataPoints"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogram/aggregationTemporality"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//Summary">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Summary/dataPoints"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//NumberDataPoint">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//NumberDataPoint/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//NumberDataPoint/startTimeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//NumberDataPoint/timeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//NumberDataPoint/asDouble"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//NumberDataPoint/asInt"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//NumberDataPoint/exemplars"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//NumberDataPoint/flags"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//HistogramDataPoint">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//HistogramDataPoint/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//HistogramDataPoint/startTimeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//HistogramDataPoint/timeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//HistogramDataPoint/count"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//HistogramDataPoint/sum"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//HistogramDataPoint/bucketCounts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//HistogramDataPoint/explicitBounds"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//HistogramDataPoint/exemplars"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//HistogramDataPoint/flags"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//HistogramDataPoint/min"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//HistogramDataPoint/max"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//ExponentialHistogramDataPoint">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ExponentialHistogramDataPoint/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPoint/startTimeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPoint/timeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPoint/count"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPoint/sum"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPoint/scale"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPoint/zeroCount"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ExponentialHistogramDataPoint/positive"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ExponentialHistogramDataPoint/negative"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPoint/flags"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ExponentialHistogramDataPoint/exemplars"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPoint/min"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPoint/max"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPoint/zeroThreshold"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//ExponentialHistogramDataPointBuckets">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPointBuckets/offset"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ExponentialHistogramDataPointBuckets/bucketCounts"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//SummaryDataPoint">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//SummaryDataPoint/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SummaryDataPoint/startTimeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SummaryDataPoint/timeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SummaryDataPoint/count"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SummaryDataPoint/sum"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//SummaryDataPoint/quantileValues"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SummaryDataPoint/flags"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//SummaryDataPointValueAtQuantile">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SummaryDataPointValueAtQuantile/quantile"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//SummaryDataPointValueAtQuantile/value"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//Exemplar">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//Exemplar/filteredAttributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Exemplar/timeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Exemplar/asDouble"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Exemplar/asInt"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Exemplar/spanId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//Exemplar/traceId"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//LogsData">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//LogsData/resourceLogs"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//ResourceLogs">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ResourceLogs/resource"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ResourceLogs/scopeLogs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ResourceLogs/schemaUrl"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//ScopeLogs">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ScopeLogs/scope"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//ScopeLogs/logRecords"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//ScopeLogs/schemaUrl"/>
+    </genClasses>
+    <genClasses ecoreClass="telemetry.ecore#//LogRecord">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//LogRecord/timeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//LogRecord/observedTimeUnixNano"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//LogRecord/severityNumber"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//LogRecord/severityText"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//LogRecord/body"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference telemetry.ecore#//LogRecord/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//LogRecord/droppedAttributesCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//LogRecord/flags"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//LogRecord/traceId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute telemetry.ecore#//LogRecord/spanId"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

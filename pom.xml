@@ -207,6 +207,7 @@
 		<module>http</module>
 		<!--<module>groovy</module>-->
 		<module>telemetry</module>
+		<module>telemetry.model</module>
 		<module>echarts</module>
 	</modules>	
 

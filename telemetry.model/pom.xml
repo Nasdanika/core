@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>parent</artifactId>
+		<groupId>org.nasdanika.core</groupId>
+		<version>2025.12.0</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>telemetry-model</artifactId>
+	<packaging>jar</packaging>
+	<name>Ecore Model for telemetry</name>
+	<description>For exporting OpenTelemetry signals to a model and linking recorded changes to spans</description>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.5.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>model</classifier>
+							<includes>
+								<include>model/**</include>
+							</includes>
+							<classesDirectory>${project.basedir}</classesDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>		
+		</plugins>
+	</build>
+
+	<dependencies>	
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>capability</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>
