@@ -35,20 +35,13 @@ import picocli.CommandLine.Parameters;
 /**
  * Base class for launcher generators, override and implement getModuleName() and getClassName()
  */
-public abstract class AbstractLauncherCommand extends CommandBase {
+public abstract class AbstractLauncherCommand extends AbstractModuleResolverCommand {
 	
 	private static final String SINGLE_SUFFIX = ".*";
 	private static final String DOUBLE_SUFFIX = ".**";
 
 	@Option(names = {"-o", "--output"}, description = "Output file")
 	private String output;
-	
-	@Option(
-			names = {"-p", "--path-separator"}, 
-			description = {
-					"Path separator, " ,					
-					"defaults to the system path separator"})
-	private String pathSeparator;
 	
 	@Parameters(description = { 
 			"Directories to scan for modules,",
@@ -60,9 +53,6 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 
 	@Option(names = {"-b", "--base"}, description = "Base repositories directory")
 	private File base;
-	
-	@Option(names = {"-P", "--prefix"},	description = "Module path prefix")
-	private String prefix;	
 
 	protected abstract String getClassName();
 	
@@ -74,12 +64,6 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 				}, 
 			defaultValue = "%*")
 	private String args;	
-	
-	@Option(names = {"-v", "--verbose"}, description = "Output debug information")
-	private boolean verbose;
-	
-	@Option(names = {"-s", "--absolute"}, description = "Use absolute paths")
-	private boolean absolute;
 	
 	@Option(names = {"-t", "--options"}, description = "Output only options")
 	private boolean options;
@@ -111,11 +95,6 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 			description = "Modules to add to the module path"
 			)
 	private File modulesFile;	
-	
-	@Option(
-			names = {"-C", "--claspath-modules"}, 
-			description = "Comma-separated list of classpath modules")
-	private String classPathModules;		
 	
 	@Option(
 			names = {"-j", "--java"}, 
@@ -362,63 +341,6 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 		return builder.toString();
 	}
 
-	protected void buildClasspath(
-			Map<String, File> moduleMap, 
-			Map<String,File> nonModuleMap,			
-			Map<String, ModuleReference> repoModules,
-			Map<String, ModuleReference> modulePath, 
-			StringBuilder builder) throws IOException {
-		// Modules which did not make it to the module path are in the classpath		
-		List<ModuleReference> classPath = new ArrayList<>(); 		
-		repoModules.values().stream().filter(k -> !modulePath.containsKey(k.descriptor().name())).forEach(classPath::add);
-		if (classPathModules != null) {
-			String[] cpma = classPathModules.split(",");
-			for (String cpm: cpma) {
-				ModuleReference mr = repoModules.get(cpm);
-				if (mr != null && !classPath.contains(mr)) {
-					classPath.add(mr);
-				}
-			}
-		}		
-
-		if (!classPath.isEmpty() || !nonModuleMap.isEmpty()) {
-			boolean firstEntry = true;
-			for (ModuleReference e: classPath) {
-				if (firstEntry) {
-					builder.append(" -classpath \"");
-					if (verbose) {
-						System.out.println("--- Class path ---");
-					}
-					firstEntry = false;
-				} else {
-					builder.append(pathSeparator == null ? File.pathSeparatorChar : pathSeparator);
-				}
-				String mp = modulePath(e, moduleMap);
-				if (verbose) {
-					System.out.println(e.descriptor().name() + " " + mp);
-				}
-				builder.append(mp);
-			}
-			for (Entry<String, File> nonModuleEntry: nonModuleMap.entrySet()) {
-				if (firstEntry) {
-					builder.append(" -classpath \"");
-					if (verbose) {
-						System.out.println("--- Class path ---");
-					}
-					firstEntry = false;
-				} else {
-					builder.append(pathSeparator == null ? File.pathSeparatorChar : pathSeparator);
-				}
-				String mp = nonModulePath(nonModuleEntry);
-				if (verbose) {
-					System.out.println("(no module) " + mp);
-				}
-				builder.append(mp);
-			}
-			builder.append("\"");
-		}
-	}
-
 	protected void buildAddModules(Collection<String> modulesToAdd, StringBuilder builder) {
 		if (!Util.isBlank(addModules)) {
 			modulesToAdd = Collections.singleton(addModules);
@@ -440,32 +362,6 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 				}
 				builder.append(m);
 			}
-		}
-	}
-
-	protected void buildModulePath(
-			StringBuilder builder, 
-			Map<String, File> moduleMap,
-			Map<String, ModuleReference> modulePath) throws IOException {
-		if (!modulePath.isEmpty()) {
-			boolean firstModuleEntry = true;
-			for (ModuleReference e: modulePath.values()) {
-				if (firstModuleEntry) {
-					builder.append(" -p \"");
-					if (verbose) {
-						System.out.println("--- Module path ---");
-					}
-					firstModuleEntry = false;
-				} else {
-					builder.append(pathSeparator == null ? File.pathSeparatorChar : pathSeparator);
-				}
-				String mp = modulePath(e, moduleMap);
-				if (verbose) {
-					System.out.println(e.descriptor().name() + " " + mp);
-				}
-				builder.append(mp);
-			}
-			builder.append("\"");
 		}
 	}
 		
@@ -498,38 +394,5 @@ public abstract class AbstractLauncherCommand extends CommandBase {
 		
 		return false;
 	}
-
-	/**
-	 * Finds path by matching module reference location to file URI.
-	 * @param ref
-	 * @param moduleMap
-	 * @return
-	 * @throws IOException 
-	 */
-	private String modulePath(ModuleReference ref, Map<String,File> moduleMap) throws IOException {
-		Optional<URI> lopt = ref.location();
-		if (lopt.isPresent()) {
-			URI location = lopt.get();
-			for (Entry<String, File> mme: moduleMap.entrySet()) {
-				if (location.equals(mme.getValue().toURI())) {
-					String path = absolute ? mme.getValue().getCanonicalFile().getAbsolutePath().replace(File.separatorChar, '/') : mme.getKey();					
-					return prefix == null ? path : prefix + path;
-				}
-			}
-		}		
-		return null;
-	}	
-
-	/**
-	 * 
-	 * @param ref
-	 * @param moduleMap
-	 * @return
-	 * @throws IOException
-	 */
-	private String nonModulePath(Map.Entry<String,File> nonModuleEntry) throws IOException {
-		String path = absolute ? nonModuleEntry.getValue().getCanonicalFile().getAbsolutePath().replace(File.separatorChar, '/') : nonModuleEntry.getKey();					
-		return prefix == null ? path : prefix + path;
-	}	
 
 }

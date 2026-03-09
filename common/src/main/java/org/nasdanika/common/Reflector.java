@@ -298,7 +298,10 @@ public class Reflector {
 	 */
 	public Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, List<FactoryRecord> factoryPath) {
 		Predicate<Object> targetPredicate = getTargetPredicate(target);
-		return Util.getFieldsAndMethods(target.getClass()).flatMap(ae -> getAnnotatedElementRecords(target, ae, factoryPath)).map(aer -> aer.and(targetPredicate));
+		return Util
+				.getFieldsAndMethods(target.getClass())
+				.flatMap(ae -> getAnnotatedElementRecords(target, ae, factoryPath))
+				.map(aer -> aer.and(targetPredicate));
 	}
 	
 	/**

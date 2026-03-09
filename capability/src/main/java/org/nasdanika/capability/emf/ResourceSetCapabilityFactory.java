@@ -44,7 +44,12 @@ public class ResourceSetCapabilityFactory extends ServiceCapabilityFactory<Resou
 		
 		ResourceSet resourceSet = createResourceSet(requirement);
 		for (CapabilityProvider<Object> cp: contributorProviders) {
-			cp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(contributor -> ((ResourceSetContributor) contributor).contribute(resourceSet, progressMonitor));
+			cp
+				.getPublisher()
+				.filter(Objects::nonNull)
+				.collectList()
+				.block()
+				.forEach(contributor -> ((ResourceSetContributor) contributor).contribute(resourceSet, progressMonitor));
 		}
 
 		if (requirement != null) {
