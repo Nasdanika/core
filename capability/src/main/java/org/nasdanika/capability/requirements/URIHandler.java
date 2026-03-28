@@ -2,6 +2,7 @@ package org.nasdanika.capability.requirements;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.eclipse.emf.common.util.URI;
@@ -23,8 +24,12 @@ public interface URIHandler extends Composable<URIHandler> {
 	}
 	
 	default InputStream openStream(URI uri) throws IOException {
-		URL url = new URL(uri.toString());
-		return url.openStream();
+		try {
+			URL url = new java.net.URI(uri.toString()).toURL();
+			return url.openStream();
+		} catch (URISyntaxException e) {
+			throw new IOException(e);
+		}
 	}	
 	
 	@Override
@@ -49,5 +54,5 @@ public interface URIHandler extends Composable<URIHandler> {
 		};
 		
 	}
-
+	
 }

@@ -2,6 +2,7 @@ import org.nasdanika.capability.CapabilityFactory;
 import org.nasdanika.cli.DocumentToModelCommandFactory;
 //import org.nasdanika.cli.CallableElementInvocableCommandFactory;
 import org.nasdanika.cli.DrawioCommandFactory;
+import org.nasdanika.cli.EcoreCommandFactory;
 import org.nasdanika.cli.ElementInvocableCommandFactory;
 import org.nasdanika.cli.HelpCommandFactory;
 import org.nasdanika.cli.InvokeCommandFactory;
@@ -31,7 +32,8 @@ module org.nasdanika.cli {
 		DocumentToModelCommandFactory,
 		InvokeCommandFactory,
 //		CallableElementInvocableCommandFactory, Invocable factory below is more flexible.
-		ElementInvocableCommandFactory;
+		ElementInvocableCommandFactory,
+		EcoreCommandFactory;
 	
 	// Waiting for Picocli 4.8.0 with Nasdanika contributions
 	// Bundling picocli with this module in the meantime
