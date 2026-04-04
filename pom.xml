@@ -209,6 +209,7 @@
 		<module>telemetry</module>
 		<module>telemetry.model</module>
 		<module>echarts</module>
+		<module>emf-json</module>
 	</modules>	
 
 	<distributionManagement>

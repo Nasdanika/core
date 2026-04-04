@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface DocumentationFactory extends Composable<DocumentationFactory> {
 	
-	record Requirement(boolean inline) {}
+	record Requirement(boolean inline /*, boolean createStubs */) {}
 	
 	/**
 	 * @param Content type. E.g. text/markdown, text/html, text/plain

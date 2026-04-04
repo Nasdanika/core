@@ -8,15 +8,27 @@
         <version>2026.2.0</version>
         <relativePath>..</relativePath>
     </parent>
-    <artifactId>capability</artifactId>
+    <artifactId>emf-json</artifactId>
     <packaging>jar</packaging>
-    <name>Capability</name>
-    <description>Capability provider/loader framework</description>
+    <name>EMF JSON</name>
+    <description>Resource factories for JSON and YAML</description>
     <dependencies>
         <dependency>
             <groupId>org.nasdanika.core</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>capability</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emfcloud</groupId>
+            <artifactId>emfjson-jackson</artifactId>
+            <version>2.3.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>2.12.6</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
