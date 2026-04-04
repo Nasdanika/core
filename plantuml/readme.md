@@ -1,0 +1,1 @@
+Command for loading ecore model(s) from PlantUML class diagrams.
