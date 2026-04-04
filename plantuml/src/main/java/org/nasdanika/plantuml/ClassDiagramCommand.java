@@ -503,6 +503,9 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 		if (className == null || className.isEmpty()) {
 			return "ref";
 		}
+		if (className.length() == 1) {
+			return className.toLowerCase();
+		}
 		return Character.toLowerCase(className.charAt(0)) + className.substring(1);
 	}
 	
