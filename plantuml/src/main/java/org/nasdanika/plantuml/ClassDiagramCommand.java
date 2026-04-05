@@ -33,6 +33,7 @@ import net.sourceforge.plantuml.decoration.LinkDecor;
 import net.sourceforge.plantuml.decoration.LinkType;
 import net.sourceforge.plantuml.klimt.creole.Display;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.ParentCommand;
 
 @Command(
@@ -49,14 +50,35 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 
 	@ParentCommand
 	BlockUmlSupplier blockUmlSupplier;
+		
+	@Option(
+		names = {"--name"},
+		description = { 
+				"Package name to use for the generated EPackage",
+				"Defaults to the diagram title or 'unnamed'" 
+				})
+	private String[] name;	
+	
+	@Option(
+		names = {"--prefix"},
+		description = "Namespace prefix to use for the generated EPackage"
+			)
+	private String[] prefix;	
+	
+	@Option(
+		names = {"--uri"},
+		description = "Namespace URI to use for the generated EPackage"
+			)
+	private String[] uri;	
 
 	@Override
 	public Collection<EModelElement> getEObjects(ProgressMonitor progressMonitor) {
+		int[] idx = { 0 };
 		return blockUmlSupplier.get().stream()
 				.map(BlockUml::getDiagram)
 				.filter(ClassDiagram.class::isInstance)
 				.map(ClassDiagram.class::cast)
-				.map(this::loadClassDiagram)
+				.map(diagram -> loadClassDiagram(diagram, idx[0]++))
 				.toList(); 
 	}
 	
@@ -91,7 +113,7 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 	 * @param classDiagram the PlantUML class diagram to convert
 	 * @return the populated EPackage
 	 */
-	protected EModelElement loadClassDiagram(ClassDiagram classDiagram) {
+	protected EModelElement loadClassDiagram(ClassDiagram classDiagram, int idx) {
 		EPackage ePackage = EcoreFactory.eINSTANCE.createEPackage();
 		
 		// Use the diagram title or a default name
@@ -101,16 +123,27 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 			if (!titleStr.isEmpty()) {
 				ePackage.setName(titleStr);
 			} else {
-				// TODO - name
-				ePackage.setName(UNNAMED);
-				
+				if (name != null && idx < name.length && name[idx] != null && !name[idx].isEmpty()) {
+					ePackage.setName(name[idx]);
+				} else {
+					ePackage.setName(UNNAMED);
+				}				
 			}
 		} else {
-			// TODO - name
-			ePackage.setName(UNNAMED);
+			if (name != null && idx < name.length && name[idx] != null && !name[idx].isEmpty()) {
+				ePackage.setName(name[idx]);
+			} else {
+				ePackage.setName(UNNAMED);
+			}
 		}
 		
-		// TODO - namespace, prefix
+		if (prefix != null && idx < prefix.length && prefix[idx] != null && !prefix[idx].isEmpty()) {
+			ePackage.setNsPrefix(prefix[idx]);
+		}
+		
+		if (uri != null && idx < uri.length && uri[idx] != null && !uri[idx].isEmpty()) {
+			ePackage.setNsURI(uri[idx]);
+		}
 		
 		// Map from PlantUML Entity to EClassifier for cross-referencing
 		Map<Entity, EClassifier> entityToClassifier = new LinkedHashMap<>();
