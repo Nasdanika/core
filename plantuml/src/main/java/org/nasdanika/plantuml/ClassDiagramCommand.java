@@ -43,6 +43,10 @@ import picocli.CommandLine.ParentCommand;
 @ParentCommands(BlockUmlSupplier.class)
 public class ClassDiagramCommand extends CommandGroup implements EModelElementSupplier<EModelElement> {
 	
+	private static final String VOID = "void";
+
+	private static final String UNNAMED = "unnamed";
+
 	@ParentCommand
 	BlockUmlSupplier blockUmlSupplier;
 
@@ -58,6 +62,8 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 	
 	// Pattern for parsing member declarations like "name : Type" or "name : Type[*]"
 	private static final Pattern FIELD_PATTERN = Pattern.compile("^\\s*([+\\-#~])?\\s*(.+?)\\s*:\\s*(.+?)\\s*$");
+	
+	private static final Pattern TYPE_NAME_PATTERN = Pattern.compile("(\\S+)\\s+(\\S+)");	
 	
 	// Pattern for parsing method declarations like "name(params) : ReturnType"
 	private static final Pattern METHOD_PATTERN = Pattern.compile("^\\s*([+\\-#~])?\\s*(.+?)\\s*\\((.*)\\)\\s*(?::\\s*(.+?))?\\s*$");
@@ -90,16 +96,21 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 		
 		// Use the diagram title or a default name
 		Display title = classDiagram.getTitleDisplay();
-		if (title != null && !Display.NULL.equals(title) && !title.isWhite()) {
+		if (title != null && !Display.isNull(title) && !title.isWhite()) {
 			String titleStr = title.toString().trim();
 			if (!titleStr.isEmpty()) {
 				ePackage.setName(titleStr);
 			} else {
-				ePackage.setName("unnamed");
+				// TODO - name
+				ePackage.setName(UNNAMED);
+				
 			}
 		} else {
-			ePackage.setName("unnamed");
+			// TODO - name
+			ePackage.setName(UNNAMED);
 		}
+		
+		// TODO - namespace, prefix
 		
 		// Map from PlantUML Entity to EClassifier for cross-referencing
 		Map<Entity, EClassifier> entityToClassifier = new LinkedHashMap<>();
@@ -191,7 +202,7 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 		
 		// Fall back to display
 		Display display = entity.getDisplay();
-		if (display != null && !Display.NULL.equals(display)) {
+		if (display != null && !Display.isNull(display) && !display.isWhite()) {
 			return display.toString().trim();
 		}
 		
@@ -209,7 +220,7 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 		
 		// Process fields
 		Display fields = bodier.getFieldsToDisplay();
-		if (fields != null && !Display.NULL.equals(fields)) {
+		if (fields != null && !Display.isNull(fields) && !fields.isWhite()) {
 			for (CharSequence field : fields) {
 				String fieldStr = field.toString().trim();
 				if (!fieldStr.isEmpty() && !fieldStr.startsWith("--") && !fieldStr.startsWith("==") && !fieldStr.startsWith("..")) {
@@ -220,7 +231,7 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 		
 		// Process methods
 		Display methods = bodier.getMethodsToDisplay();
-		if (methods != null && !Display.NULL.equals(methods)) {
+		if (methods != null && !Display.isNull(methods) && !methods.isWhite()) {
 			for (CharSequence method : methods) {
 				String methodStr = method.toString().trim();
 				if (!methodStr.isEmpty() && !methodStr.startsWith("--") && !methodStr.startsWith("==") && !methodStr.startsWith("..")) {
@@ -273,11 +284,46 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 				eClass.getEStructuralFeatures().add(eAttribute);
 			}
 		} else {
-			// Fallback: treat the whole string as an attribute name with EString type
-			EAttribute eAttribute = EcoreFactory.eINSTANCE.createEAttribute();
-			eAttribute.setName(stripVisibility(fieldStr));
-			eAttribute.setEType(EcorePackage.Literals.ESTRING);
-			eClass.getEStructuralFeatures().add(eAttribute);
+			String name = stripVisibility(fieldStr);
+			
+			// Handling <type> <name> case
+			Matcher typeNameMatcher = TYPE_NAME_PATTERN.matcher(name);
+			if (typeNameMatcher.matches()) {
+				String typeStr = typeNameMatcher.group(1).trim();												
+				int lowerBound = 0;
+				int upperBound = 1;
+				if (typeStr.endsWith("[]")) {
+					typeStr = typeStr.substring(0, typeStr.length() - 2).trim();
+					upperBound = -1;
+				}
+				
+				name = typeNameMatcher.group(2).trim();
+				EClassifier referencedClassifier = findClassifierByName(typeStr, entityToClassifier);
+				
+				if (referencedClassifier instanceof EClass referencedClass) {
+					// Create an EReference
+					EReference eReference = EcoreFactory.eINSTANCE.createEReference();
+					eReference.setName(name);
+					eReference.setEType(referencedClass);
+					eReference.setLowerBound(lowerBound);
+					eReference.setUpperBound(upperBound);
+					eClass.getEStructuralFeatures().add(eReference);
+				} else {
+					// Create an EAttribute
+					EAttribute eAttribute = EcoreFactory.eINSTANCE.createEAttribute();
+					eAttribute.setName(name);
+					eAttribute.setEType(resolveDataType(typeStr));
+					eAttribute.setLowerBound(lowerBound);
+					eAttribute.setUpperBound(upperBound);
+					eClass.getEStructuralFeatures().add(eAttribute);
+				}				
+			} else {			
+				// Fallback: treat the whole string as an attribute name with EString type
+				EAttribute eAttribute = EcoreFactory.eINSTANCE.createEAttribute();
+				eAttribute.setName(name);
+				eAttribute.setEType(EcorePackage.Literals.ESTRING);
+				eClass.getEStructuralFeatures().add(eAttribute);
+			}
 		}
 	}
 	
@@ -296,7 +342,7 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 			eOperation.setName(name);
 			
 			// Set return type
-			if (returnTypeStr != null && !returnTypeStr.trim().isEmpty() && !"void".equalsIgnoreCase(returnTypeStr.trim())) {
+			if (returnTypeStr != null && !returnTypeStr.trim().isEmpty() && !VOID.equalsIgnoreCase(returnTypeStr.trim())) {
 				String retType = returnTypeStr.trim();
 				EClassifier retClassifier = findClassifierByName(retType, entityToClassifier);
 				if (retClassifier != null) {
@@ -456,7 +502,7 @@ public class ClassDiagramCommand extends CommandGroup implements EModelElementSu
 		
 		// Derive name from label, or from target class name (lowercased first char)
 		Display label = link.getLabel();
-		if (label != null && !Display.NULL.equals(label) && !label.isWhite()) {
+		if (label != null && !Display.isNull(label) && !label.isWhite()) {
 			String labelStr = label.toString().trim();
 			if (!labelStr.isEmpty()) {
 				eReference.setName(labelStr);
