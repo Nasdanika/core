@@ -1,5 +1,7 @@
 package org.nasdanika.ncore.util;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +33,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -259,6 +262,15 @@ public final class NcoreUtil {
 	}
 	
 	public static record ContainmentPath(EObject container, String path) {}
+	
+	public static String path(EObject eObj) {
+		ContainmentPath containmentPath = containmentPath(eObj);
+		if (containmentPath == null) {
+			return null;
+		}
+		String parentPath = path(containmentPath.container());
+		return Util.isBlank(parentPath) ? containmentPath.path() : parentPath + "/" + containmentPath.path();		
+	}
 
 	/**
 	 * Containment path relative to the object container. If the container is a map entry its key is added to path and the entry container is skipped. This happens recursively. 
@@ -312,7 +324,29 @@ public final class NcoreUtil {
 		}
 		EReference eContainmentFeature = eObj.eContainmentFeature();
 		if (eContainmentFeature.isMany()) {
-			EList<EAttribute> eKeys = eContainmentFeature.getEKeys();
+			if (eContainmentFeature == EcorePackage.Literals.ECLASS__EOPERATIONS) {
+				EOperation operation = (EOperation) eObj;
+				EClass eClass = operation.getEContainingClass();
+				long count = eClass.getEOperations()
+					.stream()
+					.filter(op -> Objects.equals(op.getName(), operation.getName()))
+					.count();		
+				
+				if (count == 1) {
+					return URLEncoder.encode(operation.getName(), StandardCharsets.UTF_8);
+				}
+				
+				return URLEncoder.encode(operation.getName(), StandardCharsets.UTF_8) + "/" + operation.getOperationID();
+			}			
+			
+			List<EAttribute> eKeys = eContainmentFeature.getEKeys();
+			if (eContainmentFeature == EcorePackage.Literals.EPACKAGE__ECLASSIFIERS 
+					|| eContainmentFeature == EcorePackage.Literals.ECLASS__ESTRUCTURAL_FEATURES
+					|| eContainmentFeature == EcorePackage.Literals.EENUM__ELITERALS
+					|| eContainmentFeature == EcorePackage.Literals.EOPERATION__EPARAMETERS) {
+				eKeys = List.of(EcorePackage.Literals.ENAMED_ELEMENT__NAME);
+			} 
+						
 			String position = String.valueOf(((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj));
 			if (eKeys.isEmpty()) {
 				return position;
@@ -326,7 +360,7 @@ public final class NcoreUtil {
 				if (pathBuilder.length() > 0) {
 					pathBuilder.append("/");
 				}
-				pathBuilder.append(value);
+				pathBuilder.append(URLEncoder.encode(String.valueOf(value), StandardCharsets.UTF_8));
 			}
 			return pathBuilder.toString();
 		}
@@ -372,8 +406,14 @@ public final class NcoreUtil {
 					if (eObj instanceof ENamedElement) {
 						if (eObj instanceof EOperation) {
 							// Need a signature, not yet supported
-						} if (eObj instanceof EPackage) {
-							ownIdentifiers.add(URI.createURI(((EPackage) eObj).getNsURI()));
+						} if (eObj instanceof EPackage ePkg) {
+							String nsURI = ePkg.getNsURI();
+							if (!Util.isBlank(nsURI)) {
+								URI uri = URI.createURI(nsURI);
+								if (uri.isHierarchical() && !uri.isRelative()) {
+									ownIdentifiers.add(uri);
+								}
+							}
 						} else {
 							EReference containmentFeature = eObj.eContainmentFeature();
 							String name = ((ENamedElement) eObj).getName();
@@ -576,7 +616,7 @@ public final class NcoreUtil {
 				}
 			}
 		}
-		return Util.camelToKebab(feature.getName());
+		return URLEncoder.encode(feature.getName(), StandardCharsets.UTF_8);
 	}
 
 	/**
