@@ -211,6 +211,8 @@
 		<module>echarts</module>
 		<module>emf-json</module>
 		<module>plantuml</module>
+		<module>xcore-cli</module>
+		<module>xsd</module>
 	</modules>	
 
 	<distributionManagement>
