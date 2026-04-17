@@ -15,19 +15,15 @@ public interface Node extends Layer<Node>, LayerElement<Node>, Connectable {
 	 * Creates a connection point for this node. 
 	 * @return
 	 */
-	ConnectionPoint createConnectionPoint();
+	ConnectionPoint createConnectionPoint(double x, double y, double dx, double dy, boolean perimeter);
 		
 	default ConnectionPoint createConnectionPoint(double x, double y, double dx, double dy) {
-		ConnectionPoint cp = createConnectionPoint(x,y);
-		cp.setDx(dx);
-		cp.setDy(dy);
+		ConnectionPoint cp = createConnectionPoint(x,y, dx, dy, false);
 		return cp;
 	}
 	
 	default ConnectionPoint createConnectionPoint(double x, double y) {
-		ConnectionPoint cp = createConnectionPoint();
-		cp.setX(x);
-		cp.setY(y);
+		ConnectionPoint cp = createConnectionPoint(x, y, 0, 0, false);
 		return cp;
 	}		
 

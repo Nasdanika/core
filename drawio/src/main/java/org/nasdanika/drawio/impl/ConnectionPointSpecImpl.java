@@ -19,6 +19,14 @@ class ConnectionPointSpecImpl implements ConnectionPointSpec {
 		
 	}
 	
+	public ConnectionPointSpecImpl(double x, double y, double dx, double dy, boolean perimeter) {
+		this.x = x;
+		this.y = y;
+		this.dx = dx;
+		this.dy = dy;
+		this.perimeter = perimeter;
+	}
+	
 	public ConnectionPointSpecImpl(ConnectionPointSpec spec) {
 		setSpec(spec);
 	}

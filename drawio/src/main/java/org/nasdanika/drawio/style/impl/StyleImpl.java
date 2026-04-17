@@ -35,9 +35,9 @@ public abstract class StyleImpl extends DelimitedStringMap implements Style {
 	@Override
 	public Style rounded(boolean rounded) {
 		if (rounded) {
-			put(ROUNDED, "1");
-		} else {
 			remove(ROUNDED);
+		} else {
+			put(ROUNDED, "0");
 		}
 		return this;
 	}

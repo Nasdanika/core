@@ -209,8 +209,8 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 	
 	private class ConnectionPointImpl extends ConnectionPointSpecImpl implements ConnectionPoint {
 		
-		protected ConnectionPointImpl() {
-			super();
+		protected ConnectionPointImpl(double x, double y, double dx, double dy, boolean perimeter) {
+			super(x, y, dx, dy, perimeter);
 		}
 
 		protected ConnectionPointImpl(ConnectionPointSpec spec) {
@@ -239,9 +239,9 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 				.forEach(updater);
 			
 			getOutgoingConnections() 
-			.stream()
-			.map(c -> ((ConnectionImpl) c).getExitPoint())
-			.forEach(updater);			
+				.stream()
+				.map(c -> ((ConnectionImpl) c).getExitPoint())
+				.forEach(updater);			
 		}
 		
 		@Override
@@ -336,8 +336,8 @@ class NodeImpl extends LayerImpl<Node> implements Node {
 	}
 
 	@Override
-	public ConnectionPoint createConnectionPoint() {
-		return new ConnectionPointImpl();
+	public ConnectionPoint createConnectionPoint(double x, double y, double dx, double dy, boolean perimeter) {
+		return new ConnectionPointImpl(x, y, dx, dy, perimeter);
 	}
 	
 	@Override

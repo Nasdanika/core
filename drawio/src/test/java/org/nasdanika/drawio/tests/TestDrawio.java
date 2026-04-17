@@ -170,7 +170,7 @@ public class TestDrawio {
 		
 		ConnectionPoint sourceConnectionPoint = source.createConnectionPoint(0.5, 1);
 				
-		ConnectionPoint targetConnectionPoint = target.createConnectionPoint();
+		ConnectionPoint targetConnectionPoint = target.createConnectionPoint(0, 0.66);
 		
 		Connection connection = newLayer.createConnection(
 				sourceConnectionPoint, 

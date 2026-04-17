@@ -27,7 +27,15 @@ public interface ConnectionStyle extends LineStyle {
 
     Arrow endArrowEnum();
 
-    ConnectionStyle endArrowEnum(Arrow arrow);
+    ConnectionStyle endArrow(Arrow arrow);
+    
+    Jump jumpEnum();
+
+    ConnectionStyle jump(Jump jump);
+    
+    ConnectionStyle jump(String jump);
+
+    String jump();
     
     /**
      * Style of the edge, e.g. orthogonalEdgeStyle.

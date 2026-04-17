@@ -2,6 +2,7 @@ package org.nasdanika.drawio.style.impl;
 
 import org.nasdanika.drawio.style.Arrow;
 import org.nasdanika.drawio.style.ConnectionStyle;
+import org.nasdanika.drawio.style.Jump;
 
 public abstract class ConnectionStyleImpl extends LineStyleImpl implements ConnectionStyle {
 
@@ -10,6 +11,7 @@ public abstract class ConnectionStyleImpl extends LineStyleImpl implements Conne
     private static final String EDGE_STYLE = "edgeStyle";
     private static final String START_FILL = "startFill";
     private static final String END_FILL = "endFill";
+    private static final String JUMP_STYLE = "jumpStyle";        
     
 	@Override
     public boolean startFill() {
@@ -80,8 +82,30 @@ public abstract class ConnectionStyleImpl extends LineStyleImpl implements Conne
     }
 
     @Override
-    public ConnectionStyle endArrowEnum(Arrow arrow) {
+    public ConnectionStyle endArrow(Arrow arrow) {
         endArrow(arrow == null ? null : arrow.value());
+        return this;
+    }
+    
+    @Override
+    public ConnectionStyle jump(String jumpStyle) {
+        put(JUMP_STYLE, jumpStyle);
+        return this;
+    }
+
+    @Override
+    public String jump() {
+        return get(JUMP_STYLE);
+    }
+
+    @Override
+    public Jump jumpEnum() {
+        return Jump.fromString(jump());
+    }
+
+    @Override
+    public ConnectionStyle jump(Jump jump) {
+        jump(jump == null ? null : jump.value());
         return this;
     }
     
