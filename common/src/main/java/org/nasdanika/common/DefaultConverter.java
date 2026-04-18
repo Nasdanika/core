@@ -297,6 +297,11 @@ public class DefaultConverter extends ReflectiveConverter {
 	
 	@ConverterMethod
 	public InputStream toInputStream(URI uri) throws IOException {
+		if (Util.MODULE_SCHEME.equals(uri.scheme())) {
+			Module targetModule = getClass().getModule().getLayer().findModule(uri.authority()).orElseThrow(() -> new IOException("Module not found: " + uri.authority()));
+			return targetModule.getResourceAsStream(uri.path());
+		}
+		
         ClassLoader cl = Thread.currentThread().getContextClassLoader();		
 		try {
 			return toInputStream(uri, cl);

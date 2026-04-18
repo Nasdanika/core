@@ -3,6 +3,8 @@ import org.nasdanika.capability.emf.BinaryResourceFactoryCapabilityFactory;
 import org.nasdanika.capability.emf.ClassPathURIConverterContributorCapabilityFactory;
 import org.nasdanika.capability.emf.ClassPathURIHandlerFactory;
 import org.nasdanika.capability.emf.GzipBinaryResourceFactoryCapabilityFactory;
+import org.nasdanika.capability.emf.ModuleURIConverterContributorCapabilityFactory;
+import org.nasdanika.capability.emf.ModuleURIHandlerFactory;
 import org.nasdanika.capability.emf.ResourceSetCapabilityFactory;
 import org.nasdanika.capability.emf.XMIResourceFactoryCapabilityFactory;
 import org.nasdanika.capability.factories.ConfigurationCapabilityFactory;
@@ -26,8 +28,10 @@ module org.nasdanika.capability {
 		XMIResourceFactoryCapabilityFactory,
 		BinaryResourceFactoryCapabilityFactory,
 		GzipBinaryResourceFactoryCapabilityFactory,
-		ClassPathURIHandlerFactory,
+		ClassPathURIHandlerFactory,		
 		ClassPathURIConverterContributorCapabilityFactory,
+		ModuleURIHandlerFactory,		
+		ModuleURIConverterContributorCapabilityFactory,
 		MarkdownHelperCapabilityFactory,
 		URIInvocableCapabilityFactory,
 		ConfigurationCapabilityFactory;

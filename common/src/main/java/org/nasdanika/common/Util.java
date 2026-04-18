@@ -69,7 +69,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.jsoup.Jsoup;
-import org.nasdanika.common.Invocable.ProxyTargetResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -98,6 +97,10 @@ public class Util {
 	public static final String CLASSPATH_SCHEME = "classpath";
 
 	public static final String CLASSPATH_URL_PREFIX = CLASSPATH_SCHEME + "://";
+
+	public static final String MODULE_SCHEME = "module";
+
+	public static final String MODULE_URL_PREFIX = MODULE_SCHEME + "://";
 
 	private Util() {
 		// Singleton
