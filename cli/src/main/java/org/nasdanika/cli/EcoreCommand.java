@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.Description;
 import org.nasdanika.common.EModelElementSupplier;
 import org.nasdanika.common.EObjectSupplier;
 import org.nasdanika.common.ProgressMonitor;
@@ -17,6 +18,7 @@ import picocli.CommandLine.ParentCommand;
 		mixinStandardHelpOptions = true,
 		name = "ecore")
 @ParentCommands(EObjectSupplier.class)
+@Description(icon = "https://cdn.jsdelivr.net/gh/Nasdanika-Models/ecore@master/graph/web-resources/icons/EcoreModelFile.gif")
 public class EcoreCommand extends CommandGroup implements EModelElementSupplier<EModelElement> {
 	
 	@ParentCommand
