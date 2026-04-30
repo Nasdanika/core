@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
@@ -17,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import picocli.CommandLine;
-import picocli.CommandLine.Model.CommandSpec;
 
 /**
  * Base class for sub-command factories.
@@ -34,9 +34,37 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	
 	private record CommandLineAndPath(CommandLine commandLine, List<CommandLine> path) {};
 	
-	public static final int DEFAULT_MAX_COMMAND_PATH = 50;
+	public static final int DEFAULT_MAX_COMMAND_PATH = 15;
+	
+	public static final int DEFAULT_MAX_COMMANDS = 2000;
+	
+	protected int getMaxCommands() {
+		String maxCommands = System.getProperty("org.nasdanika.cli.maxCommands");
+		if (!Util.isBlank(maxCommands)) {
+			try {
+				int mcp = Integer.parseInt(maxCommands);
+				if (mcp >= 0) {
+					return mcp;
+				}
+			} catch (NumberFormatException e) {
+				LOGGER.warn("Invalid value for system property org.nasdanika.cli.maxCommands: {}, using default {}", maxCommands, DEFAULT_MAX_COMMANDS);
+			}
+		}
+		return DEFAULT_MAX_COMMANDS;
+	}	
 	
 	protected int getMaxPath() {
+		String maxCommandPath = System.getProperty("org.nasdanika.cli.maxCommandPath");
+		if (!Util.isBlank(maxCommandPath)) {
+			try {
+				int mcp = Integer.parseInt(maxCommandPath);
+				if (mcp >= 0) {
+					return mcp;
+				}
+			} catch (NumberFormatException e) {
+				LOGGER.warn("Invalid value for system property org.nasdanika.cli.maxCommandPath: {}, using default {}", maxCommandPath, DEFAULT_MAX_COMMAND_PATH);
+			}
+		}
 		return DEFAULT_MAX_COMMAND_PATH;
 	}
 	
@@ -46,44 +74,54 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 			SubCommandRequirement serviceRequirement,
 			Loader loader,
 			ProgressMonitor progressMonitor) {
-		
-		List<CommandLine> parentPath = serviceRequirement.parentPath();
-		if (parentPath == null || parentPath.size() <= getMaxPath()) {
-			CompletionStage<T> commandCS = createCommand(parentPath, loader, progressMonitor);
-			if (commandCS != null) {
-				CompletionStage<CommandLineAndPath> commandLineAndPathCS = commandCS.thenApply(command -> createCommandLine(command, serviceRequirement, progressMonitor));
-				CompletionStage<Iterable<CapabilityProvider<CommandLine>>> subCommandsCS = commandLineAndPathCS.thenCompose(
-						commandLineAndPath -> createSubCommands(
-								commandLineAndPath == null ? null : commandLineAndPath.path(),
-								loader,
-								progressMonitor));
-				
-				CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> mixInsCS = commandLineAndPathCS.thenCompose(
-						commandLineAndPath -> createMixIns(
-								commandLineAndPath == null ? null : commandLineAndPath.path(),
-								loader,
-								progressMonitor));
-				
-				CompletionStage<CommandLine> commandLineWithSubCommandsCS = commandLineAndPathCS.thenCombine(subCommandsCS, this::combineSubCommands);
-				CompletionStage<CommandLine> commandLineWithSubCommandsAndMixInsCS = commandLineWithSubCommandsCS.thenCombine(mixInsCS, this::combineMixIns);
-				CompletionStage<CommandLine> loggingCS = commandLineWithSubCommandsAndMixInsCS.thenApply(cl -> {
-					if (cl != null) {
-						if (parentPath.isEmpty()) {
-							LOGGER.info("Created command line {}", cl.getCommandName());						
-						} else {
-							StringBuilder commandPath = new StringBuilder();
-							for (CommandLine pathElement: parentPath) {
-								if (commandPath.length() > 0) {
-									commandPath.append(" ");
+
+		if (serviceRequirement.commandCounter().get() > getMaxCommands()) {
+			LOGGER.warn("Max commands exceeded for parent path {}", serviceRequirement.parentPath().stream().map(CommandLine::getCommandName).reduce((a,b) -> a + " " + b).orElse("<empty>"));
+		} else {		
+			List<CommandLine> parentPath = serviceRequirement.parentPath();
+			if (parentPath != null && parentPath.size() > getMaxPath()) {
+				LOGGER.warn("Max command path exceeded for parent path {}", serviceRequirement.parentPath().stream().map(CommandLine::getCommandName).reduce((a,b) -> a + " " + b).orElse("<empty>"));
+			} else {
+				CompletionStage<T> commandCS = createCommand(parentPath, loader, progressMonitor);
+				if (commandCS != null) {
+					CompletionStage<CommandLineAndPath> commandLineAndPathCS = commandCS.thenApply(command -> createCommandLine(command, serviceRequirement, progressMonitor));
+					CompletionStage<Iterable<CapabilityProvider<CommandLine>>> subCommandsCS = commandLineAndPathCS.thenCompose(
+							commandLineAndPath -> createSubCommands(
+									commandLineAndPath == null ? null : commandLineAndPath.path(),
+									serviceRequirement.commandCounter(),
+									loader,
+									progressMonitor));
+					
+					CompletionStage<Iterable<CapabilityProvider<MixInRecord>>> mixInsCS = commandLineAndPathCS.thenCompose(
+							commandLineAndPath -> createMixIns(
+									commandLineAndPath == null ? null : commandLineAndPath.path(),
+									loader,
+									progressMonitor));
+					
+					CompletionStage<CommandLine> commandLineWithSubCommandsCS = commandLineAndPathCS.thenCombine(subCommandsCS, this::combineSubCommands);
+					CompletionStage<CommandLine> commandLineWithSubCommandsAndMixInsCS = commandLineWithSubCommandsCS.thenCombine(mixInsCS, this::combineMixIns);
+					CompletionStage<CommandLine> loggingCS = commandLineWithSubCommandsAndMixInsCS.thenApply(cl -> {
+						if (cl != null) {
+							int totalCommands = serviceRequirement.commandCounter().incrementAndGet(); // Incrementing command counter for the parent path to prevent creating too many commands 							
+							if (parentPath.isEmpty()) {
+								LOGGER.info("Created command line {}, total commands {}", cl.getCommandName(), totalCommands);						
+							} else {
+								StringBuilder commandPath = new StringBuilder();
+								for (CommandLine pathElement: parentPath) {
+									if (commandPath.length() > 0) {
+										commandPath.append(" ");
+									}
+									commandPath.append(pathElement.getCommandName());
 								}
-								commandPath.append(pathElement.getCommandName());
+								LOGGER.info("Created command line {}, parent path {}, total commands {}", cl.getCommandName(), commandPath.toString(), totalCommands);		
 							}
-							LOGGER.info("Created command line {}, parent path {}", cl.getCommandName(), commandPath.toString());						
 						}
-					}
-					return cl;
-				});
-				return wrapCompletionStage(loggingCS);
+						return cl;
+					});
+					
+					
+					return wrapCompletionStage(loggingCS);
+				}
 			}
 		}
 		
@@ -110,6 +148,7 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 	
 	protected CompletionStage<Iterable<CapabilityProvider<CommandLine>>> createSubCommands(
 				List<CommandLine> path,
+				AtomicInteger commandCounter,
 				Loader loader,
 				ProgressMonitor progressMonitor) {		
 
@@ -117,7 +156,7 @@ public abstract class SubCommandCapabilityFactory<T> extends ServiceCapabilityFa
 			return CompletableFuture.completedStage(null);
 		}
 		
-		Requirement<SubCommandRequirement, CommandLine> subCommandRequirement = ServiceCapabilityFactory.createRequirement(CommandLine.class, null, new SubCommandRequirement(path));
+		Requirement<SubCommandRequirement, CommandLine> subCommandRequirement = ServiceCapabilityFactory.createRequirement(CommandLine.class, null, new SubCommandRequirement(path, commandCounter));
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		CompletionStage<Iterable<CapabilityProvider<CommandLine>>> subCommandsCS = (CompletionStage) loader.load(subCommandRequirement, progressMonitor);
 		return subCommandsCS;

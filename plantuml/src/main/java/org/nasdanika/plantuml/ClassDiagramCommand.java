@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.nasdanika.cli.CommandGroup;
 import org.nasdanika.cli.ParentCommands;
+import org.nasdanika.common.Description;
 import org.nasdanika.common.EModelElementSupplier;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -42,6 +43,7 @@ import picocli.CommandLine.ParentCommand;
 		mixinStandardHelpOptions = true,
 		name = "class")
 @ParentCommands(BlockUmlSupplier.class)
+@Description(icon = "https://cdn.jsdelivr.net/gh/Nasdanika-Models/ecore@master/graph/web-resources/icons/EClass.gif")
 public class ClassDiagramCommand extends CommandGroup implements EModelElementSupplier<EModelElement> {
 	
 	private static final String VOID = "void";

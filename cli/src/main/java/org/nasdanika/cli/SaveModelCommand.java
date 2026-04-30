@@ -22,7 +22,7 @@ import picocli.CommandLine.ParentCommand;
 		mixinStandardHelpOptions = true,
 		name = "save")
 @ParentCommands(EObjectSupplier.class)
-@Description(icon = "https://img.icons8.com/dusk/20/save--v1.png")
+@Description(icon = "https://docs.nasdanika.org/images/diskette.svg")
 public class SaveModelCommand extends CommandBase {
 
 	protected SaveModelCommand(CapabilityLoader capabilityLoader) {

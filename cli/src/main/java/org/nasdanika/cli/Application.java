@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
@@ -32,7 +33,7 @@ public class Application {
 
 		// Sub-commands, sorting alphabetically
 		List<CommandLine> rootCommands = new ArrayList<>();		
-		Requirement<SubCommandRequirement, CommandLine> subCommandRequirement = ServiceCapabilityFactory.createRequirement(CommandLine.class, null,  new SubCommandRequirement(Collections.emptyList()));
+		Requirement<SubCommandRequirement, CommandLine> subCommandRequirement = ServiceCapabilityFactory.createRequirement(CommandLine.class, null,  new SubCommandRequirement(Collections.emptyList(), new AtomicInteger()));
 		for (CapabilityProvider<Object> cp: capabilityLoader.load(subCommandRequirement, progressMonitor)) {
 			cp.getPublisher().filter(Objects::nonNull).collectList().block().forEach(cmd -> rootCommands.add((CommandLine) cmd));
 		}
