@@ -13,6 +13,20 @@
 	<name>Nasdanika Core Model</name>
 	<url>https://docs.nasdanika.org/modules/core/modules/ncore/index.html</url>
 	<build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>model</directory>
+                <targetPath>org/nasdanika/ncore</targetPath> 
+                <includes>
+                    <include>**/*.ecore</include>
+                    <include>**/*.genmodel</include>
+                </includes>
+            </resource>
+        </resources>
+	
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

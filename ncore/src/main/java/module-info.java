@@ -9,6 +9,8 @@ module org.nasdanika.ncore {
 	requires org.eclipse.emf.ecore.xmi;
 	requires transitive org.nasdanika.capability;
 	
+	opens org.nasdanika.ncore; // For accessing models
+	
 	provides CapabilityFactory with
 		NcoreEPackageResourceSetCapabilityFactory;
 }
