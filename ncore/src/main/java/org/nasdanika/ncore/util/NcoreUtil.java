@@ -632,12 +632,14 @@ public final class NcoreUtil {
 		}
 		String oName = getNasdanikaAnnotationDetail(eReference, "opposite");
 		EClass refType = eReference.getEReferenceType();
-		for (EReference ref: refType.getEAllReferences()) {
-			if (ref.getName().equals(oName)) {
-				return ref;
-			}
-			if (ref.getEReferenceType() == eReference.getEContainingClass() && eReference.getName().equals(getNasdanikaAnnotationDetail(ref, "opposite"))) {
-				return ref;
+		if (refType != null) { // Can be null for EObject type in Xcore
+			for (EReference ref: refType.getEAllReferences()) {
+				if (ref.getName().equals(oName)) {
+					return ref;
+				}
+				if (ref.getEReferenceType() == eReference.getEContainingClass() && eReference.getName().equals(getNasdanikaAnnotationDetail(ref, "opposite"))) {
+					return ref;
+				}
 			}
 		}
 		return null;
