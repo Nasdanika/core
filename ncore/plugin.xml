@@ -24,7 +24,7 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated ncore -->
       <package
-            uri="https://ncore.models.nasdanika.org"
+            uri="ecore://nasdanika.org/core/ncore"
             class="org.nasdanika.ncore.NcorePackage"
             genModel="model/ncore.genmodel"/>
    </extension>

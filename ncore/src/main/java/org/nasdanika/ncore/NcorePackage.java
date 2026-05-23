@@ -42,7 +42,7 @@ public interface NcorePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "https://ncore.models.nasdanika.org";
+	String eNS_URI = "ecore://nasdanika.org/core/ncore";
 
 	/**
 	 * The package namespace name.
