@@ -57,7 +57,7 @@ public abstract class AbstractModuleResolverCommand extends CommandBase {
 	@Option(names = {"-s", "--absolute"}, description = "Use absolute paths")
 	protected boolean absolute;		
 		
-	@Option(names = {"-P", "--prefix"},	description = "Module path prefix")
+	@Option(names = {"-P", "--prefix"},	description = "Module and class path prefix")
 	protected String prefix;		
 
 	/**
