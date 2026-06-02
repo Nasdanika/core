@@ -107,7 +107,7 @@ public interface ResourceContentsFilter extends Composable<ResourceContentsFilte
      * @param contents the previous-stage contents, never {@code null}
      * @param options resource-load options, including any filter-specific
      *                configuration; may be {@code null}
-     * @param qualifier part of the file name being processed. For example in a file adams.family.xlsx
+     * @param qualifiers parts of the file name being processed. For example in a file adams.family.xlsx
      * there are 3 qualifiers - "adams", "family" and "xlsx". For loading qualifiers are processed right-to-left -
      * "xlsx" first, "family" second and "adams" third. For saving the order is opposite.
      * @param qualifierPosition zero-based starting from the right. 
@@ -121,7 +121,7 @@ public interface ResourceContentsFilter extends Composable<ResourceContentsFilte
 	default List<EObject> load(
 			Resource resource, 
 			List<EObject> contents, 
-			String qualifier,
+			String[] qualifiers,
 			int qualifierPosition,
 			Map<?, ?> options) throws IOException {
 		
@@ -151,7 +151,7 @@ public interface ResourceContentsFilter extends Composable<ResourceContentsFilte
      * 
      * @param resource the resource being saved
      * @param contents the next-stage contents, never {@code null}
-     * @param qualifier part of the file name being processed. For example in a file adams.family.xlsx
+     * @param qualifiers parts of the file name being processed. For example in a file adams.family.xlsx
      * there are 3 qualifiers - "adams", "family" and "xlsx". For loading qualifiers are processed right-to-left -
      * "xlsx" first, "family" second and "adams" third. For saving the order is opposite.
      * @param qualifierPosition zero-based starting from the right. 
@@ -168,7 +168,7 @@ public interface ResourceContentsFilter extends Composable<ResourceContentsFilte
 	default List<EObject> save(
 			Resource resource, 
 			List<EObject> contents, 
-			String qualifier,
+			String[] qualifiers,
 			int qualifierPosition,			
 			Map<?, ?> options) throws IOException {
 		
@@ -190,24 +190,24 @@ public interface ResourceContentsFilter extends Composable<ResourceContentsFilte
 			public List<EObject> load(
 					Resource resource, 
 					List<EObject> contents, 
-					String qualifier, 
+					String[] qualifiers, 
 					int qualifierPosition,
 					Map<?, ?> options) throws IOException {
 				
-				List<EObject> thisResult = ResourceContentsFilter.this.load(resource, contents, qualifier, qualifierPosition, options);
-				return other.load(resource, thisResult, qualifier, qualifierPosition, options);
+				List<EObject> thisResult = ResourceContentsFilter.this.load(resource, contents, qualifiers, qualifierPosition, options);
+				return other.load(resource, thisResult, qualifiers, qualifierPosition, options);
 			}
 			
 			@Override
 			public List<EObject> save(
 					Resource resource, 
 					List<EObject> contents, 
-					String qualifier,
+					String[] qualifiers,
 					int qualifierPosition, 
 					Map<?, ?> options) throws IOException {
 				
-				List<EObject> otherResult = other.save(resource, contents, qualifier, qualifierPosition, options);
-				return ResourceContentsFilter.this.save(resource, otherResult, qualifier, qualifierPosition, options);
+				List<EObject> otherResult = other.save(resource, contents, qualifiers, qualifierPosition, options);
+				return ResourceContentsFilter.this.save(resource, otherResult, qualifiers, qualifierPosition, options);
 			}
 			
 			@Override

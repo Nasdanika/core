@@ -57,7 +57,7 @@ public class ContentsFilteringResource extends ResourceImpl {
 		if (!Util.isBlank(lastSegment) && filter != null) {			
 			String[] qualifiers = reverse(lastSegment.split("\\."));
 			for (int i = 0; i < qualifiers.length; ++i) {
-				contents = filter.load(this, contents, qualifiers[i], i, options);
+				contents = filter.load(this, contents, qualifiers, i, options);
 			}
 		}		
 		
@@ -82,7 +82,7 @@ public class ContentsFilteringResource extends ResourceImpl {
 		if (!Util.isBlank(lastSegment) && filter != null) {
 			String[] qualifiers = reverse(lastSegment.split("\\."));
 			for (int i = qualifiers.length - 1; i >= 0 ; --i) {
-				content = filter.save(this, content, qualifiers[i], i, options);
+				content = filter.save(this, content, qualifiers, i, options);
 			}
 		}		
 		
