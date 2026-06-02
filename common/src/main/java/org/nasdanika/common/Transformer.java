@@ -65,7 +65,7 @@ public class Transformer<S,T> extends Reflector {
 		
 		/**
 		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
-		 * which is evaluated in the context of an element. 
+		 * which is evaluated in the context of the element. 
 		 * @return
 		 */
 		String value() default "";
@@ -101,7 +101,7 @@ public class Transformer<S,T> extends Reflector {
 		
 		/**
 		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
-		 * which is evaluated in the context of the source element with target element as target variable (might be null). 
+		 * which is evaluated in the context of the source element with the target element as target variable (might be null). 
 		 * @return
 		 */
 		String value() default "";
