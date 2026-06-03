@@ -286,7 +286,11 @@ public class Transformer<S,T> extends Reflector {
 								if (registryFrozen.get()) {
 									throw new IllegalStateException("Registry is frozen, use registry to get elements");
 								}
-								stageConsumer.accept((CompletionStage<?>) registry.computeIfAbsent(e, this).thenAccept(t -> c.accept(t, progressMonitor))); // TODO - split progress monitor
+								stageConsumer.accept((CompletionStage<?>) registry.computeIfAbsent(e, this).thenAccept(t -> {
+										if (c!=null) {
+											c.accept(t, progressMonitor);
+										}
+									})); // TODO - split progress monitor
 							},
 							registryCallback,
 							progressMonitor);

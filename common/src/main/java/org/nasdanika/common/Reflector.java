@@ -641,7 +641,7 @@ public class Reflector {
 			}
 		}
 				
-		return a.hashCode() - b.hashCode();
+		return a.getName().compareTo(b.getName());
 	}
 
 }
