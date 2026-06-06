@@ -52,7 +52,7 @@ public class Transformer<S,T> extends Reflector {
 	 * <UL>
 	 * <LI>source object</LI>
 	 * <LI>boolean parallel</LI>
-	 * <LI>BiConsumer&ltS, BiConsumer&lt;T,ProgressMonitor&gt;&gt; elementProvider - pass a source element you need a target element for and a consumer of the target element</LI>
+	 * <LI>BiConsumer&lt;S, BiConsumer&lt;T,ProgressMonitor&gt;&gt; elementProvider - pass a source element you need a target element for and a consumer of the target element</LI>
 	 * <LI>Consumer&lt;BiConsumer&lt;Map&lt;S, T&gt;,ProgressMonitor&gt;&gt; registry - pass a consumer of a registry of all elements</LI>
 	 * <LI>ProgressMonitor</LI>
 	 * </UL>
