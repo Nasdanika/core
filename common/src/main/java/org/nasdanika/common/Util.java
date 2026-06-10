@@ -1657,6 +1657,11 @@ public class Util {
 			throw new NasdanikaException("Error scaling SVG: " + e, e);
 		}
 	}
+
+//  Wrapping PNG into SVG to be able to scale it in HTML without quality loss.	
+//	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 100 100">
+//		  <image width="100" height="100" xlink:href="data:image/png;base64,..."/>
+//	</svg>	
 		
 	static Pattern EXPANDER_PATTERN = Pattern.compile("\\$\\{(.+?)\\}");	
 	
