@@ -5,12 +5,12 @@
     <parent>
         <artifactId>parent</artifactId>
         <groupId>org.nasdanika.core</groupId>
-        <version>2026.6.0</version>
+        <version>2026.2.0</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>xsd</artifactId>
     <packaging>jar</packaging>
-    <name>XSD CLI</name>
+    <name>Xcore CLI</name>
     <description>CLI commands and a resource factory registration for XML Schema</description>
     <dependencies>
         <dependency>
