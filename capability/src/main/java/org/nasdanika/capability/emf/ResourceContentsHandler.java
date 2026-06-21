@@ -151,12 +151,17 @@ public interface ResourceContentsHandler<T> {
 	
 	/**
 	 * Saves resource contents to the specified output stream.
+	 * Implementations of this method may throw UnsupportedOperationException if saving is not supported.
+	 * This implementation throws UnsupportedOperationException. 
+	 * It is provided as a default method for convenience for read-only handlers that only support loading resource contents - they can be implemented as functional interfaces.
 	 * @param contents
 	 * @param outputStream
 	 * @param options
 	 * @throws IOException
 	 */
-	void save(T contents, OutputStream outputStream, Map<?, ?> options) throws IOException;	
+	default void save(T contents, OutputStream outputStream, Map<?, ?> options) throws IOException {
+		throw new UnsupportedOperationException("Save operation is not supported");
+	}
 	
 	default <V> ResourceContentsHandler<V> adapt(Function<T,V> loadAdapter, Function<V,T> saveAdapter) {
 		

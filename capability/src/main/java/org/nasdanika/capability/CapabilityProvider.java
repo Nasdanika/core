@@ -43,5 +43,16 @@ public interface CapabilityProvider<T> {
 				
 		};
 	}
+	
+	default <V>  CapabilityProvider<V> map(java.util.function.Function<? super T, ? extends V> mapper) {
+		return new CapabilityProvider<V>() {
+
+			@Override
+			public Flux<V> getPublisher() {
+				return CapabilityProvider.this.getPublisher().map(mapper);
+			}
+			
+		};
+	}
 
 }
