@@ -4,6 +4,9 @@
  */
 
 import org.nasdanika.capability.CapabilityFactory;
+import org.nasdanika.drawio.emf.DrawioArrayResourceContentsHandlerCapabilityFactory;
+import org.nasdanika.drawio.emf.DrawioResourceContentsHandlerCapabilityFactory;
+import org.nasdanika.drawio.emf.DrawioResourceFactoryCapabilityFactory;
 import org.nasdanika.drawio.processor.DiagramCapabilityFactory;
 
 module org.nasdanika.drawio {
@@ -17,6 +20,8 @@ module org.nasdanika.drawio {
 	requires org.apache.commons.lang3;
 	requires org.eclipse.emf.common;
 	requires org.apache.commons.codec;
+	requires org.nasdanika.capability;
+	requires org.eclipse.emf.ecore;
 	
 	exports org.nasdanika.drawio;
 	exports org.nasdanika.drawio.style;
@@ -26,6 +31,10 @@ module org.nasdanika.drawio {
 	exports org.nasdanika.drawio.gen.section;
 //	exports org.nasdanika.drawio.message;
 	
-	provides CapabilityFactory with DiagramCapabilityFactory;
+	provides CapabilityFactory with 
+		DiagramCapabilityFactory,
+		DrawioResourceFactoryCapabilityFactory,
+		DrawioResourceContentsHandlerCapabilityFactory,
+		DrawioArrayResourceContentsHandlerCapabilityFactory;
 		
 }

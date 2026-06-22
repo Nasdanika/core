@@ -25,6 +25,7 @@ import javax.xml.transform.TransformerException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIHandler;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -211,6 +212,24 @@ public interface Document extends Element<Document> {
 				@Override
 				public InputStream openStream(URI uri) throws IOException, URISyntaxException {
 					return uriHandler == null ? Context.super.openStream(uri) : uriHandler.createInputStream(uri, null);
+				}
+				
+			};
+		}
+		
+		static Context fromURIConverter(URIConverter uriConverter) {
+			return new Context() {
+				
+				private Realm realm = new ExclusiveRealm();
+		
+				@Override
+				public Realm getRealm() {
+					return realm;
+				}
+				
+				@Override
+				public InputStream openStream(URI uri) throws IOException, URISyntaxException {
+					return uriConverter == null ? Context.super.openStream(uri) : uriConverter.createInputStream(uri, null);
 				}
 				
 			};

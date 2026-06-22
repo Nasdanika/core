@@ -33,8 +33,15 @@ import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.nasdanika.capability.CapabilityLoader;
+import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
+import org.nasdanika.capability.emf.ResourceSetRequirement;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
@@ -1339,6 +1346,23 @@ public class TestDrawio {
 		// Long path
 		assertEquals("bobs-house", alice.getProperty("outgoing-connection/target/../id"));		
 		
-	}	
+	}
+	
+	@Test
+	public void testDrawioResource() throws Exception {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class);		
+		ResourceSet resourceSet = capabilityLoader.loadOne(requirement, progressMonitor);
+        
+		File diagramFile = new File("src/test/resources/org/nasdanika/drawio/tests/alice-bob.drawio").getCanonicalFile();
+		Resource diagramResource = resourceSet.getResource(URI.createFileURI(diagramFile.getAbsolutePath()), true);		
+		org.nasdanika.drawio.model.Document document = (org.nasdanika.drawio.model.Document) diagramResource.getContents().get(0);
+		
+		File xmlFile = new File("target/alice-bob.xml").getCanonicalFile();
+		Resource xmlResource = resourceSet.createResource(URI.createFileURI(xmlFile.getAbsolutePath()));
+		xmlResource.getContents().add(EcoreUtil.copy(document));
+		xmlResource.save(null);		
+	}
 	
 }

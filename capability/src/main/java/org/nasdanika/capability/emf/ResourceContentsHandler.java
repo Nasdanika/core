@@ -1,5 +1,7 @@
 package org.nasdanika.capability.emf;
 
+import static org.nasdanika.capability.emf.ResourceContentsHandler.Order.of;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -8,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.capability.CapabilityLoader;
 
@@ -166,6 +169,29 @@ public interface ResourceContentsHandler<T> {
 	default <V> ResourceContentsHandler<V> adapt(Function<T,V> loadAdapter, Function<V,T> saveAdapter) {
 		
 		return new ResourceContentsHandler<V>() {
+			
+			@Override
+			public Order getOrder() {
+				return ResourceContentsHandler.this.getOrder();
+			}
+			
+			@Override
+			public V load(InputStream inputStream, Map<?, ?> options) throws IOException {
+				return loadAdapter.apply(ResourceContentsHandler.this.load(inputStream, options));
+			}
+			
+			@Override
+			public void save(V contents, OutputStream outputStream, Map<?, ?> options) throws IOException {
+				ResourceContentsHandler.this.save(saveAdapter.apply(contents), outputStream, options);
+			}
+			
+		};
+		
+	}	
+	
+	default <V extends EObject> ResourceEObjectContentsHandler<V> adaptToResourceEObjectContentsHandler(Function<T,V> loadAdapter, Function<V,T> saveAdapter) {
+		
+		return new ResourceEObjectContentsHandler<V>() {
 			
 			@Override
 			public Order getOrder() {
