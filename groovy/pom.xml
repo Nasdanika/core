@@ -4,23 +4,23 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2025.10.0</version>
+	    <version>2026.6.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>groovy</artifactId>
 	<packaging>jar</packaging>
 	<name>Groovy</name>
-	<description>Groovy shell CLI command</description>
+	<description>Groovy resouce contents handlers</description>
 	
 	<dependencies>		
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>cli</artifactId>
+			<artifactId>capability</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.groovy</groupId>
-		    <artifactId>groovy-groovysh</artifactId>
+		    <artifactId>groovy-jsr223</artifactId>
 		    <version>5.0.6</version>
 		</dependency>
 	</dependencies>
