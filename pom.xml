@@ -225,7 +225,7 @@
 		<module>capability</module>
 		<module>cli</module>
 		<module>http</module>
-		<!--<module>groovy</module>-->
+		<module>groovy</module>
 		<module>telemetry</module>
 		<module>telemetry.model</module>
 		<module>echarts</module>
