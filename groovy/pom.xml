@@ -1,18 +1,32 @@
-﻿<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	  <parent>
-	    <artifactId>parent</artifactId>
-	    <groupId>org.nasdanika.core</groupId>
-	    <version>2026.6.0</version>
-	    <relativePath>..</relativePath>
-	  </parent>
-	<artifactId>groovy</artifactId>
-	<packaging>jar</packaging>
-	<name>Groovy</name>
-	<description>Groovy resouce contents handlers</description>
-	
-	<dependencies>		
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.nasdanika.core</groupId>
+        <version>2026.6.0</version>
+        <artifactId>parent</artifactId>
+        <relativePath>..</relativePath>
+    </parent>
+    <artifactId>groovy</artifactId>
+    <packaging>jar</packaging>
+    <name>Groovy Support</name>
+    <description>Groovy resource contents handler and Ecore-backed DSL</description>
+
+    <properties>
+        <!-- Groovy 5.0.x requires JDK 11+; this build targets JDK 21 (see parent). -->
+        <groovy.version>5.0.6</groovy.version>
+        <gmavenplus.version>4.3.1</gmavenplus.version>
+        <!--
+            The only Java source here is module-info.java; the DSL classes are Groovy, which javadoc
+            cannot parse. The parent's attach-javadocs execution therefore fails with "No public or
+            protected classes found to document", so skip javadoc for this module. (If a -javadoc.jar
+            is needed for Maven Central, generate it from Groovydoc via gmavenplus instead.)
+        -->
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+    </properties>
+
+    <dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>capability</artifactId>
@@ -23,5 +37,86 @@
 		    <artifactId>groovy-jsr223</artifactId>
 		    <version>5.0.6</version>
 		</dependency>
-	</dependencies>
+
+        <!-- Groovy itself - the DSL builders compile against it -->
+        <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${groovy.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--
+                Joint Java/Groovy compilation for a real JPMS module.
+
+                The DSL classes are written in Groovy (src/main/groovy) but the module descriptor
+                (src/main/java/module-info.java) is Java. javac cannot compile a module-info that
+                exports a package it considers "empty", and the exported package contains only
+                Groovy-compiled classes. So the build is ordered:
+
+                  1. gmavenplus compiles src/main/groovy -> target/classes (declared first below).
+                  2. maven-compiler-plugin compiles ONLY module-info.java, with a
+                     "patch-module <module>=target/classes" javac arg so javac treats the
+                     already-compiled Groovy classes as part of the module being defined. This
+                     satisfies the exports/contains checks.
+
+                The Groovy compile is bound to process-sources (test compile to
+                process-test-sources) so it runs strictly before the maven-compiler-plugin
+                lifecycle bindings (compile / test-compile). Relying on same-phase declaration
+                order is NOT reliable here: Maven runs the lifecycle-default default-compile
+                ahead of the gmavenplus compile execution.
+            -->
+            <!-- Step 1: Groovy compilation: src/main/groovy -> target/classes/*.class -->
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>${gmavenplus.version}</version>
+                <configuration>
+                    <targetBytecode>21</targetBytecode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>groovy-add-sources</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>addSources</goal>
+                            <goal>addTestSources</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>groovy-compile</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>groovy-compile-tests</id>
+                        <phase>process-test-sources</phase>
+                        <goals>
+                            <goal>compileTests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Step 2: javac compiles module-info.java against the patched-in Groovy classes -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <configuration>
+                            <compilerArgs>
+                                <arg>--patch-module</arg>
+                                <arg>org.nasdanika.models.productmanagement.dsl.groovy=${project.build.outputDirectory}</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
