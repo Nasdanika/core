@@ -1,5 +1,6 @@
 import org.nasdanika.capability.CapabilityFactory;
-import org.nasdanika.groovy.GroovyCompiledScriptResourceContentsHandlerCapabilityFactory;
+import org.nasdanika.groovy.CompiledScriptResourceContentsHandlerCapabilityFactory;
+import org.nasdanika.groovy.DslResourceContentsHandlerCapabilityFactory;
 import org.nasdanika.groovy.GroovyResourceFactoryCapabilityFactory;
 
 module org.nasdanika.models.productmanagement.dsl.groovy {
@@ -12,9 +13,11 @@ module org.nasdanika.models.productmanagement.dsl.groovy {
 	requires transitive org.apache.groovy;
 	requires transitive org.nasdanika.capability;
 	requires transitive java.scripting;
+	requires org.apache.commons.lang3;
 	
 	provides CapabilityFactory with 
-		GroovyCompiledScriptResourceContentsHandlerCapabilityFactory,
+		CompiledScriptResourceContentsHandlerCapabilityFactory,
+		DslResourceContentsHandlerCapabilityFactory,
 		GroovyResourceFactoryCapabilityFactory;
 
 }

@@ -23,15 +23,25 @@ import org.eclipse.emf.ecore.util.EcoreUtil
  */
 class DslContext {
 
-    final EPackage ePackage
+	interface Resolver {
+		
+        EClass classByName(EObject base, String name)
+		EClass classByInstanceClass(EObject base, Class clazz)
+		List<EClass> candidates(EObject base, EClass featureType, EClass targetType)
+				
+		/**
+		 * Returns a map of decapitalised EClass names to concrete EClasses in the metamodel.
+		 * @return
+		 */
+		Map<String, EClass> names();
+			
+	}
+	
+    final Resolver resolver
     final Resource resource
     final ResourceSet resourceSet
     final URI baseURI
-
-    /** Decapitalised concrete-class name -> EClass, e.g. {@code 'capability' -> Capability}. */
-    private final Map<String, EClass> byName = [:]
-    /** id -> element, for tier-2 (by-id) reference resolution. */
-    private final Map<String, EObject> byId = [:]
+	
     /** Reference resolvers run after the script has been evaluated (so every id is indexed). */
     private final List<Closure> deferred = []
     /** Top-level elements created by root entry points; the terminal stage adds them to the resource. */
@@ -40,16 +50,11 @@ class DslContext {
     private final Map<String, EClass> wrapperCache = [:]
     private static final EClass NONE = org.eclipse.emf.ecore.EcoreFactory.eINSTANCE.createEClass()
 
-    DslContext(EPackage ePackage, Resource resource) {
-        this.ePackage = ePackage
+    DslContext(Resolver resolver, Resource resource) {
+        this.resolver = resolver
         this.resource = resource
         this.resourceSet = resource?.resourceSet
         this.baseURI = resource?.URI
-        ePackage.EClassifiers.each { EClassifier c ->
-            if (c instanceof EClass && !c.abstract && !c.interface) {
-                byName[decapitalize(c.name)] = c
-            }
-        }
     }
 
     // --- factory / registry ---------------------------------------------------------------------
@@ -59,63 +64,23 @@ class DslContext {
     }
 
     /** Concrete EClass registered under a decapitalised name, or {@code null}. */
-    EClass classByName(String name) {
-        byName[name]
+    EClass classByName(EObject base, String name) {
+        resolver.classByName(base, name)
     }
 
     /** Coerce a type token (EClass, Class, or name String) to an EClass, or {@code null}. */
-    EClass toEClass(Object token) {
+    EClass toEClass(EObject base, Object token) {
         if (token instanceof EClass) {
             return (EClass) token
         }
         if (token instanceof Class) {
-            return (EClass) ePackage.EClassifiers.find { it instanceof EClass && it.instanceClass == token }
+		    return resolver.classByInstanceClass(base, (Class) token)
         }
         if (token instanceof CharSequence) {
             String s = token.toString()
-            return byName[s] ?: byName[decapitalize(s)] ?: (EClass) ePackage.getEClassifier(s)
+			return resolver.classByName(base, s);
         }
         null
-    }
-
-    // --- id index + reference resolution --------------------------------------------------------
-
-    /** Index an element by its {@code id} attribute, if present. */
-    void index(EObject element) {
-        EStructuralFeature f = element.eClass().getEStructuralFeature('id')
-        if (f != null) {
-            Object v = element.eGet(f)
-            if (v) {
-                byId[v.toString()] = element
-            }
-        }
-    }
-
-    EObject byId(String id) {
-        byId[id]
-    }
-
-    /**
-     * Unified tier-2 (local id) + tier-3 (cross-file URI) lookup. Tries the local id index first,
-     * then resolves {@code key} as a (possibly relative) URI through the resource set.
-     */
-    EObject resolve(String key) {
-        EObject local = byId[key]
-        if (local != null) {
-            return local
-        }
-        if (resourceSet == null) {
-            return null
-        }
-        try {
-            URI uri = URI.createURI(key)
-            if (baseURI != null) {
-                uri = uri.resolve(baseURI)
-            }
-            return resourceSet.getEObject(uri, true)
-        } catch (Exception ignore) {
-            return null
-        }
     }
 
     /**
@@ -221,17 +186,14 @@ class DslContext {
      * qualify (e.g. CapabilityReference and its subtype CapabilityDependency), the most general one is
      * chosen. Returns {@code null} when no wrapper exists (a genuine inline containment).</p>
      */
-    EClass referenceWrapperFor(EClass featureType, EClass targetType) {
+    EClass referenceWrapperFor(EObject base, EClass featureType, EClass targetType) {
         String key = featureType.name + '->' + targetType.name
         EClass cached = wrapperCache[key]
         if (cached != null) {
             return cached.is(NONE) ? null : cached
         }
-
-        List<EClass> candidates = ePackage.EClassifiers.findAll { EClassifier c ->
-            c instanceof EClass && !c.abstract && !c.interface &&
-                featureType.isSuperTypeOf((EClass) c) && targetFeature((EClass) c, targetType) != null
-        } as List<EClass>
+		
+		List<EClass> candidates = resolver.candidates(base, featureType, targetType)
 
         // Drop any candidate that is a subtype of another candidate -> keep the most general wrapper(s).
         List<EClass> roots = candidates.findAll { EClass c ->
@@ -264,8 +226,7 @@ class DslContext {
     void installInto(Map<String, Object> bindings) {
         bindings.ref = this.&ref
         bindings.dsl = this
-        bindings.factory = ePackage.EFactoryInstance
-        byName.each { String name, EClass type ->
+        resolver.names().each { String name, EClass type ->
             bindings[name] = { Closure cl -> root(type, cl) }
         }
     }
@@ -273,27 +234,8 @@ class DslContext {
     EObject root(EClass type, Closure cl) {
         EObject element = create(type)
         run(cl, new ReflectiveBuilder(this, element))
-        index(element)
         roots << element
         element
-    }
-
-    /**
-     * JavaBeans-style decapitalization, inlined to avoid a {@code java.desktop} ({@code java.beans})
-     * module dependency in headless/CLI builds. Mirrors {@code java.beans.Introspector.decapitalize},
-     * including the rule that a name whose first two characters are upper case is left unchanged
-     * (so acronym-style class names like {@code URI}/{@code URL} are not mangled).
-     */
-    static String decapitalize(String name) {
-        if (!name) {
-            return name
-        }
-        if (name.length() > 1 && Character.isUpperCase(name.charAt(1)) && Character.isUpperCase(name.charAt(0))) {
-            return name
-        }
-        char[] chars = name.toCharArray()
-        chars[0] = Character.toLowerCase(chars[0])
-        new String(chars)
     }
 
     /** Runs a configuration closure against a builder delegate with DELEGATE_FIRST resolution. */

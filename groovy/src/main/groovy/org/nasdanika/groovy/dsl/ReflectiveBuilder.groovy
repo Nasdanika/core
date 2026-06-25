@@ -57,7 +57,7 @@ class ReflectiveBuilder {
             return invokeFeature(f, a)
         }
 
-        EClass childType = ctx.classByName(name)
+        EClass childType = ctx.classByName(element, name)
         if (childType != null) {
             return createChildAutoRouted(childType, a)
         }
@@ -246,7 +246,7 @@ class ReflectiveBuilder {
             addOrSet(r, target)
             return
         }
-        EClass wrapperType = ctx.referenceWrapperFor((EClass) r.EType, target.eClass())
+        EClass wrapperType = ctx.referenceWrapperFor(element, (EClass) r.EType, target.eClass())
         if (wrapperType != null) {
             EObject wrapper = ctx.create(wrapperType)
             EReference targetFeature = ctx.targetFeature(wrapperType, target.eClass())

@@ -12,7 +12,7 @@ import org.nasdanika.common.ProgressMonitor;
 /**
  * Provides an {@link OpenAIClient} instance.  
  */
-public class GroovyCompiledScriptResourceContentsHandlerCapabilityFactory extends ServiceCapabilityFactory<org.nasdanika.capability.emf.ResourceContentsHandler.Requirement, ResourceContentsHandler<CompiledScript>> {
+public class CompiledScriptResourceContentsHandlerCapabilityFactory extends ServiceCapabilityFactory<org.nasdanika.capability.emf.ResourceContentsHandler.Requirement, ResourceContentsHandler<CompiledScript>> {
 
 	@Override
 	public boolean isFor(Class<?> type, Object serviceRequirement) {
@@ -34,7 +34,7 @@ public class GroovyCompiledScriptResourceContentsHandlerCapabilityFactory extend
 			final Loader loader,
 			ProgressMonitor progressMonitor) {
 		
-		return wrap(new GroovyCompiledScriptResourceContentsHandler(serviceRequirement.getResource().getURI()));
+		return wrap(new CompiledScriptResourceContentsHandler(serviceRequirement.getResource().getURI()));
 	}
 
 }

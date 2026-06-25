@@ -15,11 +15,11 @@ import org.eclipse.emf.common.util.URI;
 import org.nasdanika.capability.emf.ResourceContentsHandler;
 
 
-public class GroovyCompiledScriptResourceContentsHandler implements ResourceContentsHandler<CompiledScript> {
+public class CompiledScriptResourceContentsHandler implements ResourceContentsHandler<CompiledScript> {
 	
 	private URI uri;
 
-	public GroovyCompiledScriptResourceContentsHandler(URI uri) {
+	public CompiledScriptResourceContentsHandler(URI uri) {
 		this.uri = uri;
 	}
 
