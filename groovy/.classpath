@@ -8,7 +8,7 @@
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="patch-module" value="org.nasdanika.models.productmanagement.dsl.groovy=C:\Users\pavel\git\core\groovy\target\classes"/>
+			<attribute name="patch-module" value="org.nasdanika.models.productmanagement.dsl.groovy=C:\Users\Pavel\git\core\groovy\target\classes"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="GROOVY_SUPPORT"/>

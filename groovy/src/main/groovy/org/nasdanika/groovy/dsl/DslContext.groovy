@@ -34,6 +34,20 @@ class DslContext {
 		 * @return
 		 */
 		Map<String, EClass> names();
+		
+		/**
+		 * Registers a global object by id, so that it can be referenced from other resources.
+		 * @param id
+		 * @param element
+		 */
+		void global(String id, EObject element);
+		
+		/**
+		 * Finds an object by id (URI).
+		 * @param id
+		 * @return
+		 */
+		EObject get(String id);
 			
 	}
 	
@@ -203,17 +217,6 @@ class DslContext {
         EClass result = roots.size() == 1 ? roots[0] : null
         wrapperCache[key] = (result == null ? NONE : result)
         result
-    }
-
-    /**
-     * The wrapper's {@code target} feature: its single-valued, non-containment EReference whose type
-     * accepts {@code targetType}. Named by convention {@code target} across the metamodel, but detected
-     * structurally so the convention isn't load-bearing.
-     */
-    EReference targetFeature(EClass wrapper, EClass targetType) {
-        wrapper.EAllReferences.find { EReference r ->
-            !r.containment && !r.many && ((EClass) r.EType).isSuperTypeOf(targetType)
-        }
     }
 
     // --- entry points ---------------------------------------------------------------------------

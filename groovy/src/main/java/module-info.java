@@ -14,6 +14,7 @@ module org.nasdanika.models.productmanagement.dsl.groovy {
 	requires transitive org.nasdanika.capability;
 	requires transitive java.scripting;
 	requires org.apache.commons.lang3;
+	requires org.eclipse.emf.ecore;
 	
 	provides CapabilityFactory with 
 		CompiledScriptResourceContentsHandlerCapabilityFactory,

@@ -12,9 +12,13 @@ import javax.script.ScriptException;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.capability.emf.ResourceContentsHandler;
 import org.nasdanika.groovy.dsl.DslContext;
+import org.nasdanika.groovy.dsl.DslContext.Resolver;
 
 /**
  * Transform handler for the {@code .pm} qualifier over a {@code .groovy} source. It resolves the
@@ -28,50 +32,43 @@ public class DslResourceContentsHandler implements ResourceContentsHandler<EObje
 	private ResourceContentsHandler<CompiledScript> sourceHandler;
 
 	private Resource resource;
+	
+	private Resolver resolver;
 
-	public DslResourceContentsHandler(Resource resource, ResourceContentsHandler<CompiledScript> sourceHandler) {
+	public DslResourceContentsHandler(
+			Resource resource, 
+			ResourceContentsHandler<CompiledScript> sourceHandler,
+			Resolver resolver) {
 		this.resource = resource;
 		this.sourceHandler = sourceHandler;
+		this.resolver = resolver;
+	}
+
+	public DslResourceContentsHandler(
+			Resource resource, 
+			ResourceContentsHandler<CompiledScript> sourceHandler,
+			EPackage... ePackages) {
+		this.resource = resource;
+		this.sourceHandler = sourceHandler;
+		
+		// For testing
+		if (ePackages == null || ePackages.length == 0) {
+			ePackages = new EPackage[] { EcorePackage.eINSTANCE };
+		}
+		this.resolver = new EPackageResolver(ePackages) {
+			
+			@Override
+			protected ResourceSet getResourceSet() {
+				return resource.getResourceSet();
+			}
+			
+		};
 	}
 
 	@Override
 	public EObject[] load(InputStream inputStream, Map<?, ?> options) throws IOException {
 		try {
 			CompiledScript compiledScript = sourceHandler.load(inputStream, options);
-	
-			DslContext.Resolver resolver = new DslContext.Resolver() {
-				
-				@Override
-		        public EClass classByName(EObject base, String name) {
-		        	throw new UnsupportedOperationException("Not implemented yet");
-		        }
-				
-				@Override
-		        public EClass classByInstanceClass(EObject base, Class clazz) {
-		        	throw new UnsupportedOperationException("Not implemented yet");
-				}
-				
-		        @Override
-		        public List<EClass> candidates(EObject base, EClass featureType, EClass targetType) {
-		        	throw new UnsupportedOperationException("Not implemented yet");
-		        }
-						
-				@Override
-				public Map<String, EClass> names() {
-		        	throw new UnsupportedOperationException("Not implemented yet");
-					
-//		        	return resource.getResourceSet().getPackageRegistry().entrySet().stream()
-//		        			.filter(e -> e.getValue() instanceof org.eclipse.emf.ecore.EPackage)
-//		        			.collect(java.util.stream.Collectors.toMap(
-//		        					Map.Entry::getKey, 
-//		        					e -> ((org.eclipse.emf.ecore.EPackage) e.getValue()).getEClassifiers().stream()
-//		        							.filter(c -> c instanceof EClass)
-//		        							.map(c -> (EClass) c)
-//		        							.findFirst()
-//		        							.orElse(null)));
-		        };
-		        
-			};
 			
 			DslContext dsl = new DslContext(resolver, resource);
 			Bindings bindings = compiledScript.getEngine().createBindings();
@@ -85,7 +82,7 @@ public class DslResourceContentsHandler implements ResourceContentsHandler<EObje
 			throw new IOException(e);
 		}
 	}
-
+	
 	/**
 	 * Normalizes the script result into resource contents. A returned {@code EObject}, array or
 	 * iterable of {@code EObject}s is flattened; if the script returned nothing usable, the elements
@@ -120,29 +117,3 @@ public class DslResourceContentsHandler implements ResourceContentsHandler<EObje
 	}
 
 }
-
-///**
-// * JavaBeans-style decapitalization, inlined to avoid a {@code java.desktop} ({@code java.beans})
-// * module dependency in headless/CLI builds. Mirrors {@code java.beans.Introspector.decapitalize},
-// * including the rule that a name whose first two characters are upper case is left unchanged
-// * (so acronym-style class names like {@code URI}/{@code URL} are not mangled).
-// */
-//static String decapitalize(String name) {
-//    if (!name) {
-//        return name
-//    }
-//    if (name.length() > 1 && Character.isUpperCase(name.charAt(1)) && Character.isUpperCase(name.charAt(0))) {
-//        return name
-//    }
-//    char[] chars = name.toCharArray()
-//    chars[0] = Character.toLowerCase(chars[0])
-//    new String(chars)
-//}
-
-
-//List<EClass> candidates = ePackage.EClassifiers.findAll { EClassifier c ->
-//c instanceof EClass && !c.abstract && !c.interface &&
-//    featureType.isSuperTypeOf((EClass) c) && targetFeature((EClass) c, targetType) != null
-//} as List<EClass>
-//
-
