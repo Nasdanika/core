@@ -2,8 +2,10 @@ ePackage {
 
 	name "test"
 
-	// EClass has no 'global' feature, so the 'global' keyword registers this element
-	// under the given URI via DslContext.global(String, EObject).
+	// 'global' is a real builder method, so 'global "<uri>"' always registers this element
+	// as a global object via DslContext.global(Object, EObject) - it wins over feature/type
+	// dispatch. If an EClass declared a 'global' feature, that feature would stay settable via
+	// the assignment form 'global = <value>' (which routes through propertyMissing, not the method).
 	eClass {
 
 		name "Person"
@@ -11,8 +13,7 @@ ePackage {
 		global "urn:test/Person"
 	}
 
-	// 'registerGlobal' is the always-available alias; it registers even on EClasses
-	// that declare a 'global' feature (here it registers the ePackage itself).
-	registerGlobal "urn:test"
+	// Registers the ePackage itself as a global object.
+	global "urn:test"
 
 }

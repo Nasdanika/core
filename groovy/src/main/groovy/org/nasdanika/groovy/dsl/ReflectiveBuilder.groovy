@@ -33,21 +33,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil
  */
 class ReflectiveBuilder {
 
-    /**
-     * Reserved keyword that registers the current element as a global object via
-     * {@link DslContext#global(String, EObject)}. It is only honoured when the current EClass has no
-     * structural feature of the same name - a real {@code global} feature always takes precedence, so
-     * {@code global '<uri>'} / {@code global = '<uri>'} set that feature as usual and never conflict.
-     */
-    static final String GLOBAL = 'global'
-
-    /**
-     * Unambiguous, always-available alias for {@link #GLOBAL} registration. Unlike {@code global}, this
-     * keyword takes precedence over structural features, so it is the escape hatch for EClasses that do
-     * declare a {@code global} feature - {@code registerGlobal '<uri>'} still registers the element.
-     */
-    static final String REGISTER_GLOBAL = 'registerGlobal'
-
     protected final DslContext ctx
     protected final EObject element
     protected final EClass eClass
@@ -62,22 +47,40 @@ class ReflectiveBuilder {
         element
     }
 
+    // --- global registration --------------------------------------------------------------------
+
+    /**
+     * Registers the current element as a global object under the given URI via
+     * {@link DslContext#global(Object, EObject)}. Defined as a real method so it always wins over
+     * feature/type dispatch: {@code global 'uri'} registers even on an EClass that declares a
+     * {@code global} feature. That feature stays settable through the assignment form
+     * {@code global = value} (which routes through {@link #propertyMissing}, not this method) and
+     * readable through the read form - a real method never intercepts property access.
+     */
+    EObject global(String uri) {
+        ctx.global(uri, element)
+        element
+    }
+	
+	/**
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	
+	EObject proxy(String uri) {
+		((InternalEObject) element).eSetProxyURI(URI.createURI(uri))
+		element
+	}
+
     // --- dispatch -------------------------------------------------------------------------------
 
     def methodMissing(String name, Object args) {
         Object[] a = args as Object[]
 
-        if (name == REGISTER_GLOBAL) {
-            return registerGlobal(a)               // reserved escape hatch - wins over features
-        }
-
         EStructuralFeature f = eClass.getEStructuralFeature(name)
         if (f != null) {
             return invokeFeature(f, a)
-        }
-
-        if (name == GLOBAL) {
-            return registerGlobal(a)
         }
 
         EClass childType = ctx.classByName(element, name)
@@ -90,14 +93,8 @@ class ReflectiveBuilder {
 
     /** Assignment form: {@code name = 'x'} as an alternative to {@code name 'x'}. */
     def propertyMissing(String name, Object value) {
-        if (name == REGISTER_GLOBAL) {
-            return registerGlobal([value] as Object[])   // reserved escape hatch - wins over features
-        }
         EStructuralFeature f = eClass.getEStructuralFeature(name)
         if (f == null) {
-            if (name == GLOBAL) {
-                return registerGlobal([value] as Object[])
-            }
             throw new MissingPropertyException(name, ReflectiveBuilder)
         }
         invokeFeature(f, [value] as Object[])
@@ -110,19 +107,6 @@ class ReflectiveBuilder {
             throw new MissingPropertyException(name, ReflectiveBuilder)
         }
         element.eGet(f)
-    }
-
-    // --- global registration --------------------------------------------------------------------
-
-    /**
-     * Register the current element as a global object under the given URI. Backs both the {@code global}
-     * keyword (fallback, honoured only when no {@code global} feature exists) and the {@code registerGlobal}
-     * keyword (always available). Accepts the method form ({@code global '<uri>'}) and the assignment form
-     * ({@code global = '<uri>'}).
-     */
-    private Object registerGlobal(Object[] a) {
-        a.each { ctx.global(it, element) }
-        element
     }
 
     // --- feature dispatch -----------------------------------------------------------------------
