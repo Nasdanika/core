@@ -33,6 +33,21 @@ import org.eclipse.emf.ecore.util.EcoreUtil
  */
 class ReflectiveBuilder {
 
+    /**
+     * Reserved keyword that registers the current element as a global object via
+     * {@link DslContext#global(String, EObject)}. It is only honoured when the current EClass has no
+     * structural feature of the same name - a real {@code global} feature always takes precedence, so
+     * {@code global '<uri>'} / {@code global = '<uri>'} set that feature as usual and never conflict.
+     */
+    static final String GLOBAL = 'global'
+
+    /**
+     * Unambiguous, always-available alias for {@link #GLOBAL} registration. Unlike {@code global}, this
+     * keyword takes precedence over structural features, so it is the escape hatch for EClasses that do
+     * declare a {@code global} feature - {@code registerGlobal '<uri>'} still registers the element.
+     */
+    static final String REGISTER_GLOBAL = 'registerGlobal'
+
     protected final DslContext ctx
     protected final EObject element
     protected final EClass eClass
@@ -52,9 +67,17 @@ class ReflectiveBuilder {
     def methodMissing(String name, Object args) {
         Object[] a = args as Object[]
 
+        if (name == REGISTER_GLOBAL) {
+            return registerGlobal(a)               // reserved escape hatch - wins over features
+        }
+
         EStructuralFeature f = eClass.getEStructuralFeature(name)
         if (f != null) {
             return invokeFeature(f, a)
+        }
+
+        if (name == GLOBAL) {
+            return registerGlobal(a)
         }
 
         EClass childType = ctx.classByName(element, name)
@@ -67,8 +90,14 @@ class ReflectiveBuilder {
 
     /** Assignment form: {@code name = 'x'} as an alternative to {@code name 'x'}. */
     def propertyMissing(String name, Object value) {
+        if (name == REGISTER_GLOBAL) {
+            return registerGlobal([value] as Object[])   // reserved escape hatch - wins over features
+        }
         EStructuralFeature f = eClass.getEStructuralFeature(name)
         if (f == null) {
+            if (name == GLOBAL) {
+                return registerGlobal([value] as Object[])
+            }
             throw new MissingPropertyException(name, ReflectiveBuilder)
         }
         invokeFeature(f, [value] as Object[])
@@ -83,6 +112,19 @@ class ReflectiveBuilder {
         element.eGet(f)
     }
 
+    // --- global registration --------------------------------------------------------------------
+
+    /**
+     * Register the current element as a global object under the given URI. Backs both the {@code global}
+     * keyword (fallback, honoured only when no {@code global} feature exists) and the {@code registerGlobal}
+     * keyword (always available). Accepts the method form ({@code global '<uri>'}) and the assignment form
+     * ({@code global = '<uri>'}).
+     */
+    private Object registerGlobal(Object[] a) {
+        a.each { ctx.global(it, element) }
+        element
+    }
+
     // --- feature dispatch -----------------------------------------------------------------------
 
     private Object invokeFeature(EStructuralFeature f, Object[] a) {
@@ -90,7 +132,7 @@ class ReflectiveBuilder {
             throw new IllegalStateException("Feature '${eClass.name}.${f.name}' is derived/read-only and cannot be set")
         }
         if (f instanceof EAttribute) {
-            setAttribute((EAttribute) f, a.length ? a[0] : null)
+			a.each { setAttribute((EAttribute) f, it) }
             return null
         }
         EReference r = (EReference) f
@@ -113,9 +155,6 @@ class ReflectiveBuilder {
             (element.eGet(f) as EList).add(coerced)
         } else {
             element.eSet(f, coerced)
-        }
-        if (f.name == 'id') {
-            ctx.index(element)
         }
     }
 
@@ -160,7 +199,6 @@ class ReflectiveBuilder {
             DslContext.run(cl, new ReflectiveBuilder(ctx, child))
         }
         addOrSet(r, child)
-        ctx.index(child)
         child
     }
 
@@ -188,12 +226,11 @@ class ReflectiveBuilder {
 
     /** Type-dispatch: route a {@code goal { }}-style call to the unique containment feature accepting it. */
     private EObject createChildAutoRouted(EClass type, Object[] a) {
-		println("createChildAutoRouted: type=${type.name}, eClass=${eClass.name}, args")
         List<EReference> candidates = eClass.EAllContainments.findAll { EReference r ->
             r.changeable && !r.derived && ((EClass) r.EType).isSuperTypeOf(type)
         }
         if (candidates.isEmpty()) {
-            throw new MissingMethodException(DslContext.decapitalize(type.name), ReflectiveBuilder, a)
+            throw new MissingMethodException(type.name, ReflectiveBuilder, a)
         }
         if (candidates.size() > 1) {
             throw new IllegalStateException(
@@ -207,7 +244,6 @@ class ReflectiveBuilder {
             DslContext.run(cl, new ReflectiveBuilder(ctx, child))
         }
         addOrSet(r, child)
-        ctx.index(child)
         child
     }
 
@@ -215,7 +251,7 @@ class ReflectiveBuilder {
 
     private void resolveReference(EReference r, Object arg) {
         if (arg instanceof EObject) {
-            attachReference(r, (EObject) arg)                 // tier 1 (by var) / tier 3 (ref())
+            attachReference(r, (EObject) arg)                 // tier 1 (by var)
             return
         }
         if (arg instanceof CharSequence) {

@@ -6,9 +6,9 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
+import org.nasdanika.common.NasdanikaResourceSet;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
@@ -69,7 +69,7 @@ public class ResourceSetCapabilityFactory extends ServiceCapabilityFactory<Resou
 				return ret;
 			}
 		}
-		return new ResourceSetImpl();
+		return new NasdanikaResourceSet();
 	}
 
 }

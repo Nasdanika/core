@@ -40,7 +40,7 @@ class DslContext {
 		 * @param id
 		 * @param element
 		 */
-		void global(String id, EObject element);
+		void global(Object id, EObject element);
 		
 		/**
 		 * Finds an object by id (URI).
@@ -75,6 +75,14 @@ class DslContext {
 
     EObject create(EClass type) {
         (EObject) type.EPackage.EFactoryInstance.create(type)
+    }
+
+    /**
+     * Register an element as a global object under the given id (URI), so it can be referenced from
+     * other resources. Backs the {@code global '<uri>'} keyword in {@link ReflectiveBuilder}.
+     */
+    void global(Object id, EObject element) {
+        resolver.global(id, element)
     }
 
     /** Concrete EClass registered under a decapitalised name, or {@code null}. */
@@ -119,6 +127,7 @@ class DslContext {
      * form (proxy URIs / serialization).</p>
      */
     EObject resolveRelative(EObject base, String expr) {
+		println("resolveRelative: base=${base}, expr=${expr}")
         if (expr.contains('#')) {
             if (resourceSet == null) {
                 return null

@@ -17,9 +17,14 @@ public abstract class AbstractResolver implements Resolver {
 	protected abstract ResourceSet getResourceSet();
 
 	@Override
-	public void global(String id, EObject element) {
+	public void global(Object id, EObject element) {
 		if (getResourceSet() instanceof NasdanikaResourceSet nsdResourceSet) {
-			nsdResourceSet.registerGlobal(URI.createURI(id), element);
+			if (id instanceof String idStr) {
+				id = URI.createURI(idStr);
+			} else if (!(id instanceof URI)) {
+				throw new IllegalArgumentException("id must be a String or URI");
+			}
+			nsdResourceSet.registerGlobal((URI) id, element);
 		} else {
 			throw new IllegalStateException("ResourceSet is not an instance of NasdanikaResourceSet");
 		}

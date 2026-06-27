@@ -1,9 +1,12 @@
 package org.nasdanika.groovy;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -32,6 +35,9 @@ public class DslTests {
 		
 		File markdownFile = new File("src/test/resources/ecore.groovy").getCanonicalFile();
 		Resource markdownResource = resourceSet.getResource(URI.createFileURI(markdownFile.getAbsolutePath()), true);
+		
+		EObject person = resourceSet.getEObject(URI.createURI("urn:test/Person"), true);
+		assertNotNull(person, "Person not found");
 		
 		File ecoreFile = new File("target/ecore-groovy.xml").getCanonicalFile();
 		Resource ecoreResource = resourceSet.createResource(URI.createFileURI(ecoreFile.getAbsolutePath()));

@@ -8,7 +8,6 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 
 /**
  * Resolves against a list of {@link EPackage}s. It is used by {@link DslResourceContentsHandler} to resolve.

@@ -20,7 +20,7 @@ public class NasdanikaResourceSet extends ResourceSetImpl {
 
 	@Override
 	public EObject getEObject(URI uri, boolean loadOnDemand) {
-		return globals.getOrDefault(uri, super.getEObject(uri, loadOnDemand));
+		return globals.compute(uri, (k,v) -> v == null ? super.getEObject(k, loadOnDemand) : v);
 	}
 	
 }
