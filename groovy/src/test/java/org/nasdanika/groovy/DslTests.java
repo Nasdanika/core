@@ -33,15 +33,16 @@ public class DslTests {
 		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class);
 		ResourceSet resourceSet = capabilityLoader.loadOne(requirement, progressMonitor);
 		
-		File markdownFile = new File("src/test/resources/ecore.groovy").getCanonicalFile();
-		Resource markdownResource = resourceSet.getResource(URI.createFileURI(markdownFile.getAbsolutePath()), true);
+		File groovyFile = new File("src/test/resources/ecore.groovy").getCanonicalFile();
+		Resource groovyResource = resourceSet.getResource(URI.createFileURI(groovyFile.getAbsolutePath()), true);
 		
 		EObject person = resourceSet.getEObject(URI.createURI("urn:test/Person"), true);
 		assertNotNull(person, "Person not found");
+		System.out.println("Person URI fragment: " + groovyResource.getURIFragment(person));
 		
 		File ecoreFile = new File("target/ecore-groovy.xml").getCanonicalFile();
 		Resource ecoreResource = resourceSet.createResource(URI.createFileURI(ecoreFile.getAbsolutePath()));
-		ecoreResource.getContents().addAll(EcoreUtil.copyAll(markdownResource.getContents()));
+		ecoreResource.getContents().addAll(EcoreUtil.copyAll(groovyResource.getContents()));
 		ecoreResource.save(null);
 	}
 

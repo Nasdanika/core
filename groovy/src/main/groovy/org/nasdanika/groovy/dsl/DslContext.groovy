@@ -127,7 +127,8 @@ class DslContext {
      * form (proxy URIs / serialization).</p>
      */
     EObject resolveRelative(EObject base, String expr) {
-		println("resolveRelative: base=${base}, expr=${expr}")
+        
+		println(base.eContainer())
         if (expr.contains('#')) {
             if (resourceSet == null) {
                 return null

@@ -15,5 +15,20 @@ ePackage {
 
 	// Registers the ePackage itself as a global object.
 	global "urn:test"
+	
+	eClass {
+
+        name "Address"
+
+        global "urn:test/Address"
+		
+		eReference {
+			
+            name "residents"
+            eType "//Person"
+            upperBound -1
+			
+		}
+    }
 
 }
