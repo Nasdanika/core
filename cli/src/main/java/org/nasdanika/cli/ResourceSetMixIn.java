@@ -3,10 +3,14 @@ package org.nasdanika.cli;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
@@ -51,14 +55,17 @@ public class ResourceSetMixIn {
 		
 	public ResourceSet createResourceSet(Consumer<ResourceSet> configurator, ProgressMonitor progressMonitor) {
 		CapabilityLoader capabilityLoader = getCapabilityLoader();
+		BiFunction<ResourceSet, Loader, CompletionStage<ResourceSet>> theConfigurator = (resourceSet, loader) -> {
+			configureResourceSet(resourceSet);
+			if (configurator != null) {
+				configurator.accept(resourceSet);
+			}
+			return CompletableFuture.completedStage(resourceSet);
+		};
+		
 		ResourceSetRequirement serviceRequirement = new ResourceSetRequirement(
 				createRequirementResourceSet(), 
-				rs -> {
-					configureResourceSet(rs);
-					if (configurator != null) {
-						configurator.accept(rs);
-					}
-				}, 
+				theConfigurator, 
 				this::testContributor);		
 		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class, this::testFactory, serviceRequirement);		
 		for (CapabilityProvider<?> cp: capabilityLoader.load(requirement, progressMonitor)) {

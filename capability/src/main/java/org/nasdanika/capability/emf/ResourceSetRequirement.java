@@ -1,10 +1,12 @@
 package org.nasdanika.capability.emf;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletionStage;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.nasdanika.capability.CapabilityFactory.Loader;
 
 /**
  * Requirement for a {@link ResourceSet}.
@@ -14,7 +16,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
  */
 public record ResourceSetRequirement(
 		ResourceSet resourceSet,
-		Consumer<ResourceSet> configurator,
+		BiFunction<ResourceSet,Loader,CompletionStage<ResourceSet>> configurator,
 		Predicate<ResourceSetContributor> contributorPredicate) {
 	
 }

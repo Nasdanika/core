@@ -1,4 +1,4 @@
-ePackage {
+eObject('http://www.eclipse.org/emf/2002/Ecore#EPackage') {
 
 	name "test"
 
@@ -6,7 +6,9 @@ ePackage {
 	// as a global object via DslContext.global(Object, EObject) - it wins over feature/type
 	// dispatch. If an EClass declared a 'global' feature, that feature would stay settable via
 	// the assignment form 'global = <value>' (which routes through propertyMissing, not the method).
-	eClass {
+	// 'eObject' with a URI-qualified name resolves the EClass even when its simple name would
+	// collide across packages in a resource set; the simple 'eClass { }' form still works too.
+	eObject('http://www.eclipse.org/emf/2002/Ecore#EClass') {
 
 		name "Person"
 

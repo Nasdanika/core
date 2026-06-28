@@ -73,6 +73,22 @@ class ReflectiveBuilder {
 		element
 	}
 
+	/**
+	 * Nested counterpart of the top-level {@code eObject('<name>') { }} entry point. Resolves an EClass
+	 * by simple, qualified or URI name (see {@link DslContext.Resolver#classByName}) and auto-routes a
+	 * new child into the unique containment feature that accepts it - same routing as the bare
+	 * {@code eClass { }} type-dispatch form, but with a name that can disambiguate across packages.
+	 * Defined as a real method so it wins over the top-level binding when invoked inside a builder
+	 * closure (which would otherwise create a detached root).
+	 */
+	EObject eObject(String name, Closure cl) {
+		EClass type = ctx.classByName(element, name)
+		if (type == null) {
+			throw new IllegalArgumentException("Cannot resolve type '${name}' for ${eClass.name}")
+		}
+		createChildAutoRouted(type, [cl] as Object[])
+	}
+
     // --- dispatch -------------------------------------------------------------------------------
 
     def methodMissing(String name, Object args) {

@@ -1,8 +1,13 @@
 package org.nasdanika.capability.test;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.function.BiFunction;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.junit.jupiter.api.Test;
+import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ContextServiceFactory;
@@ -37,13 +42,16 @@ public class CapabilityTests {
 		CapabilityLoader capabilityLoader = new CapabilityLoader();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		
+		BiFunction<ResourceSet, Loader, CompletionStage<ResourceSet>> configurator = (resourceSet, loader) -> {
+			System.out.println("*** Resource set: " + resourceSet);
+			return CompletableFuture.completedStage(resourceSet);
+		};
+		
 		ResourceSetRequirement serviceRequirement = new ResourceSetRequirement(
 				null, 
-				resourceSet -> {
-					System.out.println(resourceSet);					
-				}, 
+				configurator, 
 				contributor -> {
-					System.out.println(contributor);
+					System.out.println("*** Contributor: " + contributor);
 					return true;
 				}
 		);

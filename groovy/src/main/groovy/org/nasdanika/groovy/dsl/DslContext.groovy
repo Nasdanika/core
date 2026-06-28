@@ -270,12 +270,23 @@ class DslContext {
 
     /**
      * Install top-level names where {@code groovy.lang.Script.invokeMethod} will find them: every
-     * concrete EClass becomes a root entry point ({@code product { }}, {@code persona { }}, ...), plus
-     * {@code ref}, {@code factory}, {@code dsl}. Mirrors ProductManagementGroovyDsl.installInto.
+     * concrete EClass with an <em>unambiguous</em> simple name becomes a root entry point
+     * ({@code product { }}, {@code persona { }}, ...), plus {@code ref}, {@code dsl} and the
+     * {@code eObject('<name>') { }} entry point. {@code eObject} accepts a simple, qualified
+     * ({@code 'c4.Component'}) or URI ({@code '<nsURI>#Component'}) name, so a class can be addressed
+     * even when its simple name collides across packages in a resource set - see
+     * {@link Resolver#classByName(EObject, String)}.
      */
     void installInto(Map<String, Object> bindings) {
         bindings.ref = this.&ref
         bindings.dsl = this
+        bindings.eObject = { String name, Closure cl ->
+            EClass type = resolver.classByName(null, name)
+            if (type == null) {
+                throw new IllegalArgumentException("Cannot resolve type '${name}'")
+            }
+            root(type, cl)
+        }
         resolver.names().each { String name, EClass type ->
             bindings[name] = { Closure cl -> root(type, cl) }
         }

@@ -8,6 +8,7 @@ import org.nasdanika.capability.emf.ModuleURIHandlerFactory;
 import org.nasdanika.capability.emf.ResourceSetCapabilityFactory;
 import org.nasdanika.capability.emf.XMIResourceFactoryCapabilityFactory;
 import org.nasdanika.capability.factories.ConfigurationCapabilityFactory;
+import org.nasdanika.capability.factories.EcoreEPackageResourceSetCapabilityFactory;
 import org.nasdanika.capability.factories.MarkdownHelperCapabilityFactory;
 import org.nasdanika.capability.factories.URIInvocableCapabilityFactory;
 
@@ -34,6 +35,7 @@ module org.nasdanika.capability {
 		ModuleURIConverterContributorCapabilityFactory,
 		MarkdownHelperCapabilityFactory,
 		URIInvocableCapabilityFactory,
+		EcoreEPackageResourceSetCapabilityFactory,
 		ConfigurationCapabilityFactory;
 		
 }

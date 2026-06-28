@@ -50,11 +50,6 @@ public class DslResourceContentsHandler implements ResourceContentsHandler<EObje
 			EPackage... ePackages) {
 		this.resource = resource;
 		this.sourceHandler = sourceHandler;
-		
-		// For testing
-		if (ePackages == null || ePackages.length == 0) {
-			ePackages = new EPackage[] { EcorePackage.eINSTANCE };
-		}
 		this.resolver = new EPackageResolver(ePackages) {
 			
 			@Override
