@@ -206,7 +206,7 @@ class ReflectiveBuilder {
     private EClass resolveConcreteType(EReference r, Object[] a) {
         Object token = a.find { !(it instanceof Closure) }
         if (token != null) {
-            EClass type = ctx.toEClass(token)
+            EClass type = ctx.toEClass(element, token)
             if (type == null) {
                 throw new IllegalArgumentException("Unknown type '${token}' for ${eClass.name}.${r.name}")
             }

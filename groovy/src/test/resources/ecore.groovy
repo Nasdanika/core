@@ -45,5 +45,10 @@ eObject('http://www.eclipse.org/emf/2002/Ecore#EPackage') {
 
 		}
     }
+	
+	eClassifiers('EClass') {
+        name "Company"
+        global "urn:test/Company"
+    }
 
 }
