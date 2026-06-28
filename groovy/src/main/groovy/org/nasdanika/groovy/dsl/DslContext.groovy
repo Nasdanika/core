@@ -106,7 +106,42 @@ class DslContext {
     }
 
     /**
-     * Resolve a reference expression relative to {@code base}.
+     * Resolve a reference selector relative to {@code base}. A selector is one of:
+     *
+     * <ul>
+     *   <li>an {@link EObject} - returned as-is (already resolved);</li>
+     *   <li>a {@link Closure} - cloned, given {@code base} as its delegate (DELEGATE_FIRST) and as
+     *       its single argument, then invoked; whatever it returns is resolved recursively, so a
+     *       closure may yield either an {@link EObject} or a path/URI {@link String}. This lets
+     *       authors navigate the model directly, e.g.
+     *       {@code { eContainer().eContainer().getEClassifier('Person') }};</li>
+     *   <li>a {@link CharSequence} - a relative path / cross-resource URI, resolved as described in
+     *       {@link #resolveRelativePath(EObject, String)}.</li>
+     * </ul>
+     */
+    EObject resolveRelative(EObject base, Object selector) {
+        if (selector == null) {
+            return null
+        }
+        if (selector instanceof EObject) {
+            return (EObject) selector
+        }
+        if (selector instanceof Closure) {
+            Closure copy = (Closure) ((Closure) selector).clone()
+            copy.delegate = base
+            copy.resolveStrategy = Closure.DELEGATE_FIRST
+            Object result = copy.call(base)
+            return resolveRelative(base, result)            // result may be EObject or path String
+        }
+        if (selector instanceof CharSequence) {
+            return resolveRelativePath(base, selector.toString())
+        }
+        throw new IllegalArgumentException(
+            "Cannot use ${selector.getClass().name} as a reference selector")
+    }
+
+    /**
+     * Resolve a string reference expression relative to {@code base}.
      *
      * <ul>
      *   <li>contains {@code '#'} - a (possibly relative) cross-resource URI, resolved through the
@@ -126,9 +161,7 @@ class DslContext {
      * declared on the reference; eKeys are only needed when EMF must <em>emit</em> this fragment
      * form (proxy URIs / serialization).</p>
      */
-    EObject resolveRelative(EObject base, String expr) {
-        
-		println(base.eContainer())
+    EObject resolveRelativePath(EObject base, String expr) {
         if (expr.contains('#')) {
             if (resourceSet == null) {
                 return null
@@ -174,11 +207,15 @@ class DslContext {
         cur
     }
 
-    /** Explicit reference helper: {@code ref('../personas[id=\'pavel\']')}, {@code ref('a.pm#//@x')}. */
-    EObject ref(String fragment) {
-        EObject resolved = resolveRelative(null, fragment)
+    /**
+     * Explicit reference helper. The {@code selector} may be a path/URI String
+     * ({@code ref('../personas[id=\'pavel\']')}, {@code ref('a.pm#//@x')}), an {@link EObject}, or a
+     * {@link Closure} that computes one - see {@link #resolveRelative(EObject, Object)}.
+     */
+    EObject ref(Object selector) {
+        EObject resolved = resolveRelative(null, selector)
         if (resolved == null) {
-            throw new IllegalStateException("Cannot resolve reference '" + fragment + "'")
+            throw new IllegalStateException("Cannot resolve reference '" + selector + "'")
         }
         resolved
     }

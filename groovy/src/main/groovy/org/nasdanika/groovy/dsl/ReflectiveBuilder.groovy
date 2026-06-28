@@ -238,16 +238,16 @@ class ReflectiveBuilder {
             attachReference(r, (EObject) arg)                 // tier 1 (by var)
             return
         }
-        if (arg instanceof CharSequence) {
-            String key = arg.toString()
-            ctx.defer {                                        // relative path / cross-resource URI
-                EObject target = ctx.resolveRelative(element, key)
+        if (arg instanceof CharSequence || arg instanceof Closure) {
+            Object selector = arg                              // path/URI String, or closure computing one
+            ctx.defer {                                        // deferred: navigate the fully-built model
+                EObject target = ctx.resolveRelative(element, selector)
                 if (target == null) {
-                    throw new IllegalStateException("Unresolved reference '${key}' for ${eClass.name}.${r.name}")
+                    throw new IllegalStateException("Unresolved reference '${selector}' for ${eClass.name}.${r.name}")
                 }
                 if (!r.EType.isInstance(target)) {
                     throw new IllegalStateException(
-                        "'${key}' resolves to ${target.eClass().name}, not a ${r.EType.name} for ${r.name}")
+                        "'${selector}' resolves to ${target.eClass().name}, not a ${r.EType.name} for ${r.name}")
                 }
                 attachReference(r, target)
             }

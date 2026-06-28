@@ -21,13 +21,26 @@ ePackage {
         name "Address"
 
         global "urn:test/Address"
-		
+
+		// String selector: an EMF path anchored at the resource root ('/'). Each step is a URI-fragment
+		// segment, so a classifier is matched by an attribute predicate, eClassifiers[name='Person'].
 		eReference {
-			
+
             name "residents"
-            eType "//Person"
+            eType "/eClassifiers[name='Person']"
             upperBound -1
-			
+
+		}
+
+		// Closure selector for a non-containment reference: instead of a relative path, navigate the
+		// model directly. The closure is evaluated deferred (after the whole script is built) with the
+		// reference element as its delegate, so eContainer() walks up to the EPackage. It may return an
+		// EObject (as here) or a path String. See DslContext.resolveRelative(EObject, Object).
+		eReference {
+
+			name "primaryResident"
+			eType { eContainer().eContainer().getEClassifier("Person") }
+
 		}
     }
 
