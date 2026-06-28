@@ -56,8 +56,12 @@ class DslContext {
     final ResourceSet resourceSet
     final URI baseURI
 	
-    /** Reference resolvers run after the script has been evaluated (so every id is indexed). */
-    private final List<Closure> deferred = []
+    /**
+     * Reference resolvers run after the script has been evaluated (so every id is indexed). Each is
+     * paired with the script line it was registered from ({@code [line, closure]}); the script frame
+     * is no longer on the stack when these run, so the line is captured here for diagnostics.
+     */
+    private final List<Object[]> deferred = []
     /** Top-level elements created by root entry points; the terminal stage adds them to the resource. */
     private final List<EObject> roots = []
     /** Cache for {@link #referenceWrapperFor}: 'featureType->targetType' -> wrapper EClass (or NONE). */
@@ -221,12 +225,80 @@ class DslContext {
     }
 
     void defer(Closure resolver) {
-        deferred << resolver
+        deferred << ([scriptLine(new Throwable()), resolver] as Object[])
+    }
+
+    // --- diagnostics ----------------------------------------------------------------------------
+
+    /**
+     * Groovy infrastructure that authors a {@code .groovy} stack frame but isn't the user's script:
+     * the Groovy runtime/engine and this DSL's own builder classes (all compiled from Groovy). A
+     * {@code .groovy} frame outside these prefixes belongs to the script being loaded.
+     */
+    private static final List<String> LIB_PREFIXES = [
+        'org.nasdanika.', 'groovy.', 'org.codehaus.groovy.', 'org.apache.groovy.'
+    ]
+
+    /**
+     * Tag a build/evaluation failure with the source location it came from. The original throw site
+     * lives in the deepest cause, so the cause chain is scanned deepest-first for the first script
+     * frame (line recovered from the Groovy stack trace; column is not exposed by the runtime, so it
+     * stays {@code -1}); the root cause supplies the message. Already-located exceptions are returned
+     * unchanged so wrapping is idempotent.
+     */
+    DslException located(Throwable t) {
+        if (t instanceof DslException) {
+            return (DslException) t
+        }
+        List<Throwable> chain = []
+        for (Throwable cur = t; cur != null && !chain.contains(cur); cur = cur.cause) {
+            chain << cur
+        }
+        int line = -1
+        for (Throwable cur : chain.reverse()) {     // deepest cause first - that's the throw site
+            int l = scriptLine(cur)
+            if (l > 0) {
+                line = l
+                break
+            }
+        }
+        Throwable root = chain.last()
+        String message = root.message ?: root.toString()
+        new DslException(message, t, baseURI, line, -1)
+    }
+
+    /** First user-script ({@code .groovy}, non-library) line in a throwable's stack trace, or {@code -1}. */
+    private static int scriptLine(Throwable t) {
+        for (StackTraceElement e : t.stackTrace) {
+            String fn = e.fileName
+            if (fn == null || !fn.endsWith('.groovy')) {
+                continue
+            }
+            String cn = e.className
+            if (cn != null && LIB_PREFIXES.any { cn.startsWith(it) }) {
+                continue
+            }
+            if (e.lineNumber > 0) {
+                return e.lineNumber
+            }
+        }
+        -1
     }
 
     /** Called by the terminal normalise stage, after the script has been evaluated. */
     void resolveDeferred() {
-        deferred*.call()
+        for (Object[] entry : deferred) {
+            int line = (int) entry[0]
+            Closure cl = (Closure) entry[1]
+            try {
+                cl.call()
+            } catch (DslException e) {
+                throw e
+            } catch (RuntimeException e) {
+                // No script frame on the stack now; use the line captured when this was deferred.
+                throw new DslException(e.message ?: e.toString(), e, baseURI, line, -1)
+            }
+        }
     }
 
     List<EObject> getRoots() {
@@ -305,6 +377,17 @@ class DslContext {
         copy.delegate = delegate
         copy.resolveStrategy = Closure.DELEGATE_FIRST
         copy.call()
+    }
+
+    /**
+     * The wrapper's {@code target} feature: its single-valued, non-containment EReference whose type
+     * accepts {@code targetType}. Named by convention {@code target} across the metamodel, but detected
+     * structurally so the convention isn't load-bearing.
+     */
+    EReference targetFeature(EClass wrapper, EClass targetType) {
+        wrapper.EAllReferences.find { EReference r ->
+            !r.containment && !r.many && ((EClass) r.EType).isSuperTypeOf(targetType)
+        }
     }
 
 }

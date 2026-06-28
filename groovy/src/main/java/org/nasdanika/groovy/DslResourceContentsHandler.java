@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.capability.emf.ResourceContentsHandler;
 import org.nasdanika.groovy.dsl.DslContext;
 import org.nasdanika.groovy.dsl.DslContext.Resolver;
+import org.nasdanika.groovy.dsl.DslException;
 
 /**
  * Transform handler for the {@code .pm} qualifier over a {@code .groovy} source. It resolves the
@@ -62,20 +63,23 @@ public class DslResourceContentsHandler implements ResourceContentsHandler<EObje
 
 	@Override
 	public EObject[] load(InputStream inputStream, Map<?, ?> options) throws IOException {
+		CompiledScript compiledScript = sourceHandler.load(inputStream, options);
+
+		DslContext dsl = new DslContext(resolver, resource);
+		Bindings bindings = compiledScript.getEngine().createBindings();
+		dsl.installInto(bindings);
+
+		Object result;
 		try {
-			CompiledScript compiledScript = sourceHandler.load(inputStream, options);
-			
-			DslContext dsl = new DslContext(resolver, resource);
-			Bindings bindings = compiledScript.getEngine().createBindings();
-			dsl.installInto(bindings);
-	
-			Object result = compiledScript.eval(bindings);
+			result = compiledScript.eval(bindings);
 			dsl.resolveDeferred();
-	
-			return normalize(result, dsl);
-		} catch (ScriptException e) {
-			throw new IOException(e);
+		} catch (ScriptException | RuntimeException e) {
+			// Tag the failure with its source location (URI/line) before reporting it.
+			DslException located = dsl.located(e);
+			throw new IOException(located.getMessage(), located);
 		}
+
+		return normalize(result, dsl);
 	}
 	
 	/**

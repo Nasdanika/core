@@ -69,7 +69,7 @@ class ReflectiveBuilder {
 	 */
 	
 	EObject proxy(String uri) {
-		((org.eclipse.emf.ecore.InternalEObject) element).eSetProxyURI(URI.createURI(uri))
+		((org.eclipse.emf.ecore.InternalEObject) element).eSetProxyURI(org.eclipse.emf.common.util.URI.createURI(uri))
 		element
 	}
 

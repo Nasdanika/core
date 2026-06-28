@@ -8,7 +8,7 @@ eObject('http://www.eclipse.org/emf/2002/Ecore#EPackage') {
 	// the assignment form 'global = <value>' (which routes through propertyMissing, not the method).
 	// 'eObject' with a URI-qualified name resolves the EClass even when its simple name would
 	// collide across packages in a resource set; the simple 'eClass { }' form still works too.
-	eObject('http://www.eclipse.org/emf/2002/Ecore#EClass') {
+	def person = eObject('http://www.eclipse.org/emf/2002/Ecore#EClass') {
 
 		name "Person"
 
@@ -44,6 +44,14 @@ eObject('http://www.eclipse.org/emf/2002/Ecore#EPackage') {
 			eType { eContainer().eContainer().getEClassifier("Person") }
 
 		}
+
+		eReference {
+
+			name "secondaryResident"
+			eType person  // the variable defined above, which is an EObject
+
+		}
+
     }
 	
 	eClassifiers('EClass') {
