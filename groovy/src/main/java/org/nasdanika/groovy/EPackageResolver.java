@@ -41,6 +41,7 @@ public abstract class EPackageResolver extends AbstractResolver {
 	private final Map<Class<?>, EClass> byInstanceClass = new java.util.HashMap<>();
 	/** Every concrete EClass, used for qualified- and URI-form lookups. */
 	private final List<EClass> allClasses = new ArrayList<>();
+	private final List<EClassifier> allClassifiers = new ArrayList<>();
 
 	public EPackageResolver(EPackage... ePackages) {
 		for (EPackage ePkg : ePackages) {
@@ -50,6 +51,7 @@ public abstract class EPackageResolver extends AbstractResolver {
 
 	private void index(EPackage ePkg) {
 		for (EClassifier eClassifier : ePkg.getEClassifiers()) {
+			allClassifiers.add(eClassifier);
 			if (eClassifier instanceof EClass eClass && !eClass.isAbstract() && !eClass.isInterface()) {
 				allClasses.add(eClass);
 				bySimpleName
@@ -63,6 +65,43 @@ public abstract class EPackageResolver extends AbstractResolver {
 		for (EPackage subPkg : ePkg.getESubpackages()) {
 			index(subPkg);
 		}
+	}
+
+	@Override
+	public EClassifier classifierByName(EObject base, String name) {
+		if (name == null) {
+			return null;
+		}
+		name = name.trim();
+
+		// URI form: '<nsURI>#<ClassName>'
+		int hash = name.lastIndexOf('#');
+		if (hash >= 0) {
+			EPackage ePkg = getEPackage(name.substring(0, hash));
+			return ePkg == null ? null : ePkg.getEClassifier(name.substring(hash + 1));
+		}
+
+		// Qualified form: '<pkgPath>.<ClassName>' (one or more package segments)
+		int dot = name.lastIndexOf('.');
+		if (dot >= 0) {
+			String pkgPath = name.substring(0, dot);
+			String className = name.substring(dot + 1);
+			List<EClassifier> matches = allClassifiers
+				.stream()
+				.filter(c -> nameMatches(c, className) && packageMatches(c.getEPackage(), pkgPath))
+				.toList();
+			return single(matches, name);
+		}
+
+		// Simple form: prefer the package of base, then fall back to the global index.
+		if (base != null) {
+			EClass scoped = concreteClass(base.eClass().getEPackage(), name);
+			if (scoped != null) {
+				return scoped;
+			}
+		}
+		String theName = name;
+		return single(allClassifiers.stream().filter(c -> nameMatches(c, theName)).toList(), name);
 	}
 
 	@Override
@@ -137,23 +176,22 @@ public abstract class EPackageResolver extends AbstractResolver {
 	// --- helpers --------------------------------------------------------------------------------
 
 	/** Reduce a match list to a single EClass, raising a qualified-alternatives error on ambiguity. */
-	private EClass single(List<EClass> matches, String name) {
+	private <T extends EClassifier> T single(List<T> matches, String name) {
 		if (matches.isEmpty()) {
 			return null;
 		}
 		if (matches.size() == 1) {
 			return matches.get(0);
 		}
-		String alternatives = matches.stream()
+		String alternatives = matches
+			.stream()
 			.map(c -> qualifiedName(c) + " (" + c.getEPackage().getNsURI() + "#" + c.getName() + ")")
 			.collect(Collectors.joining(", "));
-		throw new IllegalArgumentException(
-			"Ambiguous name '" + name + "'; qualify it as one of: " + alternatives);
+		throw new IllegalArgumentException("Ambiguous name '" + name + "'; qualify it as one of: " + alternatives);
 	}
 
-	private boolean nameMatches(EClass eClass, String className) {
-		return eClass.getName().equals(className)
-			|| StringUtils.uncapitalize(eClass.getName()).equals(className);
+	private boolean nameMatches(EClassifier eClassifier, String className) {
+		return eClassifier.getName().equals(className) || StringUtils.uncapitalize(eClassifier.getName()).equals(className);
 	}
 
 	/** A package matches {@code pkgPath} when the path equals, or is a trailing sub-path of, its full path. */
@@ -162,8 +200,8 @@ public abstract class EPackageResolver extends AbstractResolver {
 		return full.equals(pkgPath) || full.endsWith("." + pkgPath);
 	}
 
-	private String qualifiedName(EClass eClass) {
-		return qualifiedPath(eClass.getEPackage()) + "." + eClass.getName();
+	private String qualifiedName(EClassifier eClassifier) {
+		return qualifiedPath(eClassifier.getEPackage()) + "." + eClassifier.getName();
 	}
 
 	/** Dotted EPackage name path from the root package down, e.g. {@code architecture.c4}. */

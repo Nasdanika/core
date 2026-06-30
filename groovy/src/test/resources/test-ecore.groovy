@@ -13,6 +13,13 @@ eObject('http://www.eclipse.org/emf/2002/Ecore#EPackage') {
 		name "Person"
 
 		global "urn:test/Person"
+
+		eAttribute {
+			
+			name "name"
+
+		}
+		
 	}
 
 	// Registers the ePackage itself as a global object.

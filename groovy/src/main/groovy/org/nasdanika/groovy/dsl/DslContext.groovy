@@ -26,6 +26,7 @@ class DslContext {
 	interface Resolver {
 		
         EClass classByName(EObject base, String name)
+        EClassifier classifierByName(EObject base, String name)
 		EClass classByInstanceClass(EObject base, Class clazz)
 		List<EClass> candidates(EObject base, EClass featureType, EClass targetType)
 				
@@ -166,6 +167,13 @@ class DslContext {
      * form (proxy URIs / serialization).</p>
      */
     EObject resolveRelativePath(EObject base, String expr) {
+		if (!expr.contains('/')) {
+			EClassifier eClassifier = resolver.classifierByName(base, expr)
+			if (eClassifier != null) {
+                return eClassifier
+            }
+		}
+			
         if (expr.contains('#')) {
             if (resourceSet == null) {
                 return null
@@ -187,7 +195,7 @@ class DslContext {
         if (cur == null) {
             throw new IllegalStateException("Cannot resolve relative reference '${expr}' without a context object")
         }
-
+		
         for (String seg : expr.tokenize('/')) {
             seg = seg.trim()
             if (!seg) {
@@ -198,6 +206,11 @@ class DslContext {
                 if (cur == null) {
                     throw new IllegalStateException("'..' steps past the resource root in '${expr}'")
                 }
+                continue
+            }
+			
+			// ./<name> form to disambiguater from resolver classifiers.
+            if (seg == '.') {
                 continue
             }
             if (!seg.startsWith('@')) {

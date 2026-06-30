@@ -214,3 +214,39 @@
 2026-06-28 13:27:21.405 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/my-app.json 
 2026-06-28 13:27:21.408 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration for module org.nasdanika.capability.tests 
 2026-06-28 13:27:21.409 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests.yml 
+2026-06-29 14:29:00.990 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration for module org.nasdanika.capability.tests 
+2026-06-29 14:29:00.999 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests.yml 
+2026-06-29 14:29:01.050 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading 'my-app' configuration of type class org.nasdanika.capability.tests.ConfigRecord for module org.nasdanika.capability.tests 
+2026-06-29 14:29:01.051 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/my-app.yml 
+2026-06-29 14:29:01.051 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Configuration resource not found: file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/my-app.yml 
+2026-06-29 14:29:01.052 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/my-app.yaml 
+2026-06-29 14:29:01.052 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Configuration resource not found: file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/my-app.yaml 
+2026-06-29 14:29:01.052 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/my-app.json 
+2026-06-29 14:29:01.066 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading 'no-config' configuration of type class org.nasdanika.capability.tests.ConfigRecord for module org.nasdanika.capability.tests 
+2026-06-29 14:29:01.067 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.yml 
+2026-06-29 14:29:01.067 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Configuration resource not found: file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.yml 
+2026-06-29 14:29:01.067 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.yaml 
+2026-06-29 14:29:01.068 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Configuration resource not found: file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.yaml 
+2026-06-29 14:29:01.068 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.json 
+2026-06-29 14:29:01.068 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Configuration resource not found: file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.json 
+2026-06-29 14:29:01.071 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration of type class org.nasdanika.capability.tests.ConfigRecord for module org.nasdanika.capability.tests 
+2026-06-29 14:29:01.072 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests.yml 
+2026-06-29 14:29:01.075 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading global 'global' configuration of type class org.nasdanika.capability.tests.ConfigRecord 
+2026-06-29 14:29:01.075 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/global.yml 
+2026-06-29 14:29:01.076 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Configuration resource not found: file:/C:/Users/pavel/git/core/capability-tests/config/global.yml 
+2026-06-29 14:29:01.076 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/global.yaml 
+2026-06-29 14:29:01.079 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading 'no-config' configuration for module org.nasdanika.capability.tests 
+2026-06-29 14:29:01.080 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.yml 
+2026-06-29 14:29:01.080 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Configuration resource not found: file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.yml 
+2026-06-29 14:29:01.080 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.yaml 
+2026-06-29 14:29:01.080 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Configuration resource not found: file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.yaml 
+2026-06-29 14:29:01.080 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.json 
+2026-06-29 14:29:01.080 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Configuration resource not found: file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/no-config.json 
+2026-06-29 14:29:01.083 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading 'my-app' configuration for module org.nasdanika.capability.tests 
+2026-06-29 14:29:01.084 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/my-app.yml 
+2026-06-29 14:29:01.084 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Configuration resource not found: file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/my-app.yml 
+2026-06-29 14:29:01.084 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/my-app.yaml 
+2026-06-29 14:29:01.084 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Configuration resource not found: file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/my-app.yaml 
+2026-06-29 14:29:01.085 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests/my-app.json 
+2026-06-29 14:29:01.088 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration for module org.nasdanika.capability.tests 
+2026-06-29 14:29:01.088 [main] INFO  o.n.c.f.ConfigurationCapabilityFactory - Loading configuration from file:/C:/Users/pavel/git/core/capability-tests/config/org/nasdanika/capability/tests.yml 

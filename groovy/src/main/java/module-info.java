@@ -1,6 +1,7 @@
 import org.nasdanika.capability.CapabilityFactory;
 import org.nasdanika.groovy.CompiledScriptResourceContentsHandlerCapabilityFactory;
 import org.nasdanika.groovy.DslResourceContentsHandlerCapabilityFactory;
+import org.nasdanika.groovy.EcoreResourceContentsHandlerCapabilityFactory;
 import org.nasdanika.groovy.GroovyResourceFactoryCapabilityFactory;
 
 module org.nasdanika.models.productmanagement.dsl.groovy {
@@ -19,6 +20,7 @@ module org.nasdanika.models.productmanagement.dsl.groovy {
 	provides CapabilityFactory with 
 		CompiledScriptResourceContentsHandlerCapabilityFactory,
 		DslResourceContentsHandlerCapabilityFactory,
+		EcoreResourceContentsHandlerCapabilityFactory,
 		GroovyResourceFactoryCapabilityFactory;
 
 }
