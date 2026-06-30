@@ -88,7 +88,7 @@ ePackage {
             name 'members'
             eType "/eClassifiers[name='Person']"
             lowerBound 2
-            upperBound -1
+            upperBound = -1
 
             eAnnotation {
 
@@ -161,7 +161,7 @@ ePackage {
             eType "/eClassifiers[name='Person']"
             lowerBound 0
             upperBound 2
-            eOpposite "/eClassifiers[name='Person']/eStructuralFeatures[name='children']"
+            eOpposite "../eStructuralFeatures[name='children']"
 
             eAnnotation {
 
@@ -183,8 +183,8 @@ ePackage {
             name 'children'
             eType "/eClassifiers[name='Person']"
             lowerBound 0
-            upperBound -1
-            eOpposite "/eClassifiers[name='Person']/eStructuralFeatures[name='parents']"
+            upperBound = -1
+            eOpposite "../eStructuralFeatures[name='parents']"
 
             eAnnotation {
 

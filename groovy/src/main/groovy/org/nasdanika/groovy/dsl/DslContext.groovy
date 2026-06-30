@@ -187,8 +187,7 @@ class DslContext {
 
         EObject cur
         if (expr.startsWith('/')) {
-            cur = base != null ? EcoreUtil.getRootContainer(base)
-                : (resource != null && !resource.contents.empty ? resource.contents[0] : null)
+            cur = base != null ? EcoreUtil.getRootContainer(base) : (resource != null && !resource.contents.empty ? resource.contents[0] : null)
         } else {
             cur = base
         }

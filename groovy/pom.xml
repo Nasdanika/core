@@ -17,13 +17,6 @@
         <!-- Groovy 5.0.x requires JDK 11+; this build targets JDK 21 (see parent). -->
         <groovy.version>5.0.6</groovy.version>
         <gmavenplus.version>4.3.1</gmavenplus.version>
-        <!--
-            The only Java source here is module-info.java; the DSL classes are Groovy, which javadoc
-            cannot parse. The parent's attach-javadocs execution therefore fails with "No public or
-            protected classes found to document", so skip javadoc for this module. (If a -javadoc.jar
-            is needed for Maven Central, generate it from Groovydoc via gmavenplus instead.)
-        -->
-        <maven.javadoc.skip>true</maven.javadoc.skip>
     </properties>
 
     <dependencies>
