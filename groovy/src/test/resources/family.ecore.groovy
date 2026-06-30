@@ -161,6 +161,7 @@ ePackage {
             eType "/eClassifiers[name='Person']"
             lowerBound 0
             upperBound 2
+            eOpposite "/eClassifiers[name='Person']/eStructuralFeatures[name='children']"
 
             eAnnotation {
 
