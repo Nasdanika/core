@@ -110,6 +110,21 @@ public class DslTests {
 		ecoreResource.save(null);
 	}
 
+    @Test
+    public void testFamilyPrmEcoreDslResource() throws IOException {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class);
+		ResourceSet resourceSet = capabilityLoader.loadOne(requirement, progressMonitor);
+		
+		Resource groovyResource = resourceSet.getResource(URI.createURI("classpath://cp/family.ecore.groovy"), true);
+		
+		File ecoreFile = new File("target/family-classpath.ecore.groovy.xml").getCanonicalFile();
+		Resource ecoreResource = resourceSet.createResource(URI.createFileURI(ecoreFile.getAbsolutePath()));
+		ecoreResource.getContents().addAll(EcoreUtil.copyAll(groovyResource.getContents()));
+		ecoreResource.save(null);
+	}
+
 	/**
 	 * Validates the self-writing script: an {@code onSave} callback receives the original script source
 	 * and writes it back with an appended fragment. Saves to a caller-supplied {@link ByteArrayOutputStream}
