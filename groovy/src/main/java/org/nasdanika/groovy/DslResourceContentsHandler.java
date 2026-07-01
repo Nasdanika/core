@@ -1,8 +1,12 @@
 package org.nasdanika.groovy;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +37,23 @@ public class DslResourceContentsHandler implements ResourceContentsHandler<EObje
 	private ResourceContentsHandler<CompiledScript> sourceHandler;
 
 	private Resource resource;
-	
+
 	private Resolver resolver;
+
+	/**
+	 * The {@link DslContext} from the most recent {@link #load(InputStream, Map)}. Retained so that
+	 * {@link #save(EObject[], OutputStream, Map)} can delegate to an {@code onSave} callback the script
+	 * registered during load. This is safe because a single handler instance serves both load and save
+	 * for the lifetime of a resource (see {@code ContentsHandlingResource}).
+	 */
+	private DslContext dslContext;
+
+	/**
+	 * The original script source text captured during {@link #load(InputStream, Map)}. Handed to the
+	 * {@code onSave} callback so a self-writing script can write it back verbatim or emit a modified
+	 * version.
+	 */
+	private String source;
 
 	public DslResourceContentsHandler(
 			Resource resource, 
@@ -57,29 +76,42 @@ public class DslResourceContentsHandler implements ResourceContentsHandler<EObje
 			protected ResourceSet getResourceSet() {
 				return resource.getResourceSet();
 			}
-			
+
+			@Override
+			public Map<String, Object> bindings() {
+				return DslResourceContentsHandler.this.bindings();
+			}
+
 		};
 	}
 
+    protected Map<String, Object> bindings() {
+        return Collections.emptyMap();
+    }
+
 	@Override
 	public EObject[] load(InputStream inputStream, Map<?, ?> options) throws IOException {
-		CompiledScript compiledScript = sourceHandler.load(inputStream, options);
+		// Buffer the source so it can be handed to an onSave callback later (the source handler consumes
+		// the stream to compile and does not retain the text).
+		byte[] sourceBytes = inputStream.readAllBytes();
+		this.source = new String(sourceBytes, StandardCharsets.UTF_8);
+		CompiledScript compiledScript = sourceHandler.load(new ByteArrayInputStream(sourceBytes), options);
 
-		DslContext dsl = new DslContext(resolver, resource);
+		dslContext = new DslContext(resolver, resource);
 		Bindings bindings = compiledScript.getEngine().createBindings();
-		dsl.installInto(bindings);
+		dslContext.installInto(bindings);
 
 		Object result;
 		try {
 			result = compiledScript.eval(bindings);
-			dsl.resolveDeferred();
+			dslContext.resolveDeferred();
 		} catch (ScriptException | RuntimeException e) {
 			// Tag the failure with its source location (URI/line) before reporting it.
-			DslException located = dsl.located(e);
+			DslException located = dslContext.located(e);
 			throw new IOException(located.getMessage(), located);
 		}
 
-		return normalize(result, dsl);
+		return normalize(result, dslContext);
 	}
 	
 	/**
@@ -107,6 +139,27 @@ public class DslResourceContentsHandler implements ResourceContentsHandler<EObje
 			for (Object element : iterable) {
 				collect(element, contents);
 			}
+		}
+	}
+
+	/**
+	 * Delegates to the {@code onSave} callback registered by the script during {@link #load(InputStream, Map)},
+	 * handing it the original script source so a self-writing script can write it back verbatim or emit a
+	 * modified version. If the script registered no callback - the read-only case - throws
+	 * {@link UnsupportedOperationException}, matching the default {@link ResourceContentsHandler#save}
+	 * behaviour. The {@code contents} argument is ignored: the DSL script, not the in-memory model, is the
+	 * source of truth for what gets written.
+	 */
+	@Override
+	public void save(EObject[] contents, OutputStream outputStream, Map<?, ?> options) throws IOException {
+		if (dslContext == null || !dslContext.isSaveSupported()) {
+			throw new UnsupportedOperationException("Save operation is not supported");
+		}
+		try {
+			dslContext.save(source, outputStream, options);
+		} catch (RuntimeException e) {
+			DslException located = dslContext.located(e);
+			throw new IOException(located.getMessage(), located);
 		}
 	}
 

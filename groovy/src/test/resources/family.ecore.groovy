@@ -53,7 +53,7 @@ ePackage {
 
     }
 
-    eClass {
+    eObject('http://www.eclipse.org/emf/2002/Ecore#EClass') {
 
         name 'Family'
         eSuperTypes namedElement

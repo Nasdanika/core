@@ -37,7 +37,7 @@ eObject('http://www.eclipse.org/emf/2002/Ecore#EPackage') {
 
             name "residents"
             eType "/eClassifiers[name='Person']"
-            upperBound -1
+            upperBound = -1
 
 		}
 

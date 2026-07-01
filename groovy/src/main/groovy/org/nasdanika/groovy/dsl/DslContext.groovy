@@ -35,6 +35,10 @@ class DslContext {
 		 * @return
 		 */
 		Map<String, EClass> names();
+
+        default Map<String, Object> bindings() {
+            return [:]
+        }
 		
 		/**
 		 * Registers a global object by id, so that it can be referenced from other resources.
@@ -68,6 +72,13 @@ class DslContext {
     /** Cache for {@link #referenceWrapperFor}: 'featureType->targetType' -> wrapper EClass (or NONE). */
     private final Map<String, EClass> wrapperCache = [:]
     private static final EClass NONE = org.eclipse.emf.ecore.EcoreFactory.eINSTANCE.createEClass()
+
+    /**
+     * Save callback registered by the script through {@code onSave { outputStream, options -> ... }}.
+     * When present it takes over persistence (see {@link #save(OutputStream, Map)}); when absent the
+     * handler falls back to the read-only default (throwing {@code UnsupportedOperationException}).
+     */
+    private Closure saveHandler
 
     DslContext(Resolver resolver, Resource resource) {
         this.resolver = resolver
@@ -317,6 +328,51 @@ class DslContext {
         roots
     }
 
+    // --- save support ---------------------------------------------------------------------------
+
+    /**
+     * Registers a save callback backing the {@code onSave { source, outputStream, options -> ... }}
+     * keyword - a self-writing script. The callback is invoked on save (see
+     * {@link #save(String, OutputStream, Map)}) with three arguments:
+     *
+     * <ul>
+     *   <li>{@code source} - the original {@code .groovy} script text this resource was loaded from,
+     *       so the callback can write it back verbatim, or emit a modified version (e.g. append DSL
+     *       fragments for newly discovered/modified objects);</li>
+     *   <li>{@code outputStream} - the target the script content is written to;</li>
+     *   <li>{@code options} - the save options {@link Map}.</li>
+     * </ul>
+     *
+     * <p>The real effect of a save may live entirely in side effects (calling Jira APIs, updating a
+     * database); in that case the callback does its work and writes {@code source} back unchanged so
+     * the {@code .groovy} file is preserved. Registering a callback replaces any previously registered
+     * one - the last {@code onSave} wins.</p>
+     *
+     * <p>Note: the output stream is opened against the resource URI (the {@code .groovy} source itself)
+     * before this callback runs, so a callback that writes nothing leaves the source file truncated -
+     * write {@code source} back to preserve it.</p>
+     */
+    void onSave(Closure callback) {
+        this.saveHandler = callback
+    }
+
+    /** Whether a script registered an {@link #onSave(Closure) onSave} callback. */
+    boolean isSaveSupported() {
+        saveHandler != null
+    }
+
+    /**
+     * Invokes the registered {@link #onSave(Closure) onSave} callback with the original script
+     * {@code source}, the target {@code outputStream} and the save {@code options}, or throws
+     * {@link UnsupportedOperationException} when the script registered none.
+     */
+    void save(String source, OutputStream outputStream, Map<?, ?> options) {
+        if (saveHandler == null) {
+            throw new UnsupportedOperationException("Save operation is not supported: no onSave callback registered")
+        }
+        saveHandler.call(source, outputStream, options)
+    }
+
     // --- reference-wrapper detection (the centralised cross-ref policy) --------------------------
 
     /**
@@ -364,6 +420,7 @@ class DslContext {
     void installInto(Map<String, Object> bindings) {
         bindings.ref = this.&ref
         bindings.dsl = this
+        bindings.onSave = this.&onSave
         bindings.eObject = { String name, Closure cl ->
             EClass type = resolver.classByName(null, name)
             if (type == null) {
@@ -374,6 +431,8 @@ class DslContext {
         resolver.names().each { String name, EClass type ->
             bindings[name] = { Closure cl -> root(type, cl) }
         }
+
+        bindings.putAll(resolver.bindings())
     }
 
     EObject root(EClass type, Closure cl) {

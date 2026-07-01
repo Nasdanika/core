@@ -30,7 +30,7 @@ ePackage {
 
             name "residents"
             eType "/eClassifiers[name='Person']"
-            upperBound -1
+            upperBound = -1
 
 		}
 		

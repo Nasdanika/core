@@ -1,9 +1,14 @@
 package org.nasdanika.groovy;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -103,6 +108,31 @@ public class DslTests {
 		Resource ecoreResource = resourceSet.createResource(URI.createFileURI(ecoreFile.getAbsolutePath()));
 		ecoreResource.getContents().addAll(EcoreUtil.copyAll(groovyResource.getContents()));
 		ecoreResource.save(null);
+	}
+
+	/**
+	 * Validates the self-writing script: an {@code onSave} callback receives the original script source
+	 * and writes it back with an appended fragment. Saves to a caller-supplied {@link ByteArrayOutputStream}
+	 * (rather than {@code save(null)}, which would open a stream against the .groovy source URI and
+	 * truncate it) and asserts the written content is the source plus the appended fragment.
+	 */
+	@Test
+	public void testSaveCallback() throws IOException {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class);
+		ResourceSet resourceSet = capabilityLoader.loadOne(requirement, progressMonitor);
+
+		File groovyFile = new File("src/test/resources/save.ecore.groovy").getCanonicalFile();
+		String originalSource = Files.readString(groovyFile.toPath(), StandardCharsets.UTF_8);
+
+		Resource groovyResource = resourceSet.getResource(URI.createFileURI(groovyFile.getAbsolutePath()), true);
+		assertFalse(groovyResource.getContents().isEmpty(), "Expected script contents to load");
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		groovyResource.save(out, null);
+
+		assertEquals(originalSource + "\n// appended on save\n", new String(out.toByteArray(), StandardCharsets.UTF_8));
 	}
 
 }

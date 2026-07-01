@@ -4,7 +4,7 @@ import org.nasdanika.groovy.DslResourceContentsHandlerCapabilityFactory;
 import org.nasdanika.groovy.EcoreResourceContentsHandlerCapabilityFactory;
 import org.nasdanika.groovy.GroovyResourceFactoryCapabilityFactory;
 
-module org.nasdanika.models.productmanagement.dsl.groovy {
+module org.nasdanika.groovy {
 
 	exports org.nasdanika.groovy;
 	exports org.nasdanika.groovy.dsl;
