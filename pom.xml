@@ -224,6 +224,7 @@
 		<module>maven</module> 
 		<module>capability</module>
 		<module>cli</module>
+		<module>bootstrap</module>
 		<module>http</module>
 		<module>groovy</module>
 		<module>telemetry</module>
@@ -233,6 +234,7 @@
 		<module>plantuml</module>
 		<module>xcore-cli</module>
 		<module>xsd</module>
+		<module>product-management</module>
 	</modules>	
 
 	<distributionManagement>
