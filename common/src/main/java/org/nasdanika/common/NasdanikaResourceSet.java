@@ -23,4 +23,8 @@ public class NasdanikaResourceSet extends ResourceSetImpl {
 		return globals.compute(uri, (k,v) -> v == null ? super.getEObject(k, loadOnDemand) : v);
 	}
 	
+	public Map<URI, EObject> getGlobals() {
+		return globals;
+	}
+	
 }
