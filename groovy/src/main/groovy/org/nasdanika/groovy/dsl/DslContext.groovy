@@ -53,7 +53,30 @@ class DslContext {
 		 * @return
 		 */
 		EObject get(String id);
-			
+
+		/**
+		 * Records the source location an object or feature value was authored at. Called during loading
+		 * through {@link DslContext#mark(EObject, EStructuralFeature)}: with {@code feature == null} when
+		 * an {@link EObject} is created, and with the feature when a feature value is set on it.
+		 *
+		 * <p>{@code line} is the 1-based line of the offending statement in the {@code .groovy} script,
+		 * recovered from the Groovy runtime stack (or {@code -1} when unknown). {@code col} is always
+		 * {@code -1}: the Groovy runtime does not expose columns in stack traces (see
+		 * {@link DslContext#located(Throwable)}); the parameter is kept for a future AST-based
+		 * implementation that could supply it.</p>
+		 *
+		 * <p>The default is a no-op; override to associate line/column information with loaded objects
+		 * (e.g. for hyperlinking diagnostics or navigation back to source).</p>
+		 *
+		 * @param eObject the object being created, or the object carrying the feature being set
+		 * @param feature the feature being set, or {@code null} when {@code eObject} itself was created
+		 * @param line 1-based script line, or {@code -1} when unknown
+		 * @param col always {@code -1} (columns are not exposed by the Groovy runtime)
+		 */
+		default void mark(EObject eObject, EStructuralFeature feature, int line, int col) {
+			// no-op by default
+		}
+
 	}
 	
     final Resolver resolver
@@ -290,6 +313,18 @@ class DslContext {
         new DslException(message, t, baseURI, line, -1)
     }
 
+    /**
+     * Records the source location of a just-created object ({@code feature == null}) or a just-set
+     * feature value, by recovering the authoring script line from the current stack - the same
+     * mechanism {@link #located(Throwable)} uses for diagnostics - and forwarding it to
+     * {@link Resolver#mark}. Column is not exposed by the Groovy runtime, so it is reported as
+     * {@code -1}. Invoked from {@link ReflectiveBuilder} at the object-creation and feature-setting
+     * points, while the user's script frame is still on the stack.
+     */
+    void mark(EObject eObject, EStructuralFeature feature) {
+        resolver.mark(eObject, feature, scriptLine(new Throwable()), -1)
+    }
+
     /** First user-script ({@code .groovy}, non-library) line in a throwable's stack trace, or {@code -1}. */
     private static int scriptLine(Throwable t) {
         for (StackTraceElement e : t.stackTrace) {
@@ -437,6 +472,7 @@ class DslContext {
 
     EObject root(EClass type, Closure cl) {
         EObject element = create(type)
+        mark(element, null)
         run(cl, new ReflectiveBuilder(this, element))
         roots << element
         element

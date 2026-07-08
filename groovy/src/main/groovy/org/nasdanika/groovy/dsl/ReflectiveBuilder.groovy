@@ -131,6 +131,7 @@ class ReflectiveBuilder {
         if (!f.changeable || f.derived) {
             throw new IllegalStateException("Feature '${eClass.name}.${f.name}' is derived/read-only and cannot be set")
         }
+        ctx.mark(element, f)                        // record where this feature was authored
         if (f instanceof EAttribute) {
 			a.each { setAttribute((EAttribute) f, it) }
             return null
@@ -195,6 +196,7 @@ class ReflectiveBuilder {
         Closure cl = (Closure) a.find { it instanceof Closure }
         EClass type = resolveConcreteType(r, a)
         EObject child = ctx.create(type)
+        ctx.mark(child, null)
         if (cl != null) {
             DslContext.run(cl, new ReflectiveBuilder(ctx, child))
         }
@@ -240,6 +242,7 @@ class ReflectiveBuilder {
         EReference r = candidates[0]
         Closure cl = (Closure) a.find { it instanceof Closure }
         EObject child = ctx.create(type)
+        ctx.mark(child, null)
         if (cl != null) {
             DslContext.run(cl, new ReflectiveBuilder(ctx, child))
         }
