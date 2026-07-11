@@ -119,4 +119,17 @@ public interface Input<I> {
 		};
 	}
 	
+	static <I extends Input<?>> java.util.function.Function<I, Stream<I>> flatMapMatch(java.util.function.Function<I, Stream<I>> mapper, String... patterns) {
+		AntPathMatcher matcher = new AntPathMatcher();
+		return input -> {
+			String path = input.getURI().toString();
+			for (String pattern : patterns) {
+				if (matcher.match(pattern, path)) {
+					return mapper.apply(input);
+				}
+			}
+			return Stream.of(input);
+		};
+	}
+	
 }
