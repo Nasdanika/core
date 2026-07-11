@@ -13,8 +13,12 @@ public interface StreamOutput extends Output<OutputStream> {
 		return new StreamOutput() {
 			
 			@Override
-			public OutputStream openOutput(URI uri) throws IOException {
-				return uriConverter.createOutputStream(uri);
+			public OutputStream openOutput(URI uri) {
+				try {
+					return uriConverter.createOutputStream(uri);
+				} catch (IOException e) {
+					throw new NasdanikaException(e);
+				}
 			}
 			
 		};

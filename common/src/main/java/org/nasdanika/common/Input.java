@@ -1,6 +1,5 @@
 package org.nasdanika.common;
 
-import java.io.IOException;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -13,7 +12,7 @@ public interface Input<I> {
 	
 	URI getURI();
 	
-	I openInput() throws IOException;
+	I openInput();
 
 	default Input<I> mapURI(UnaryOperator<URI> mapper) {
 		return new Input<I>() {
@@ -24,7 +23,7 @@ public interface Input<I> {
 			}
 			
 			@Override
-			public I openInput() throws IOException {
+			public I openInput() {
 				return Input.this.openInput();
 			}
 			
@@ -40,7 +39,7 @@ public interface Input<I> {
 			}
 			
 			@Override
-			public P openInput() throws IOException {
+			public P openInput() {
 				I input = Input.this.openInput();
 				if (input == null) {
 					return null;
@@ -106,5 +105,18 @@ public interface Input<I> {
 			return Stream.empty();
 		};
 	}
-
+	
+	static <I extends Input<?>> UnaryOperator<I> mapMatch(UnaryOperator<I> mapper, String... patterns) {
+		AntPathMatcher matcher = new AntPathMatcher();
+		return input -> {
+			String path = input.getURI().toString();
+			for (String pattern : patterns) {
+				if (matcher.match(pattern, path)) {
+					return mapper.apply(input);
+				}
+			}
+			return input;
+		};
+	}
+	
 }

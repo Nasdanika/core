@@ -1,6 +1,5 @@
 package org.nasdanika.common;
 
-import java.io.IOException;
 import java.util.function.UnaryOperator;
 
 import org.eclipse.emf.common.util.URI;
@@ -11,20 +10,20 @@ public interface Output<O> {
 		return new Output<O>() {
 		
 			@Override
-			public O openOutput(URI uri) throws IOException {
+			public O openOutput(URI uri) {
 				return null;
 			}
 			
 		};
 	}
 	
-	O openOutput(URI uri) throws IOException;
+	O openOutput(URI uri);
 
 	default Output<O> mapURI(UnaryOperator<URI> mapper) {
 		return new Output<O>() {
 			
 			@Override
-			public O openOutput(URI uri) throws IOException {
+			public O openOutput(URI uri) {
 				return Output.this.openOutput(mapper.apply(uri));
 			}
 			
@@ -39,7 +38,7 @@ public interface Output<O> {
 		return new Output<P>() {
 			
 			@Override
-			public P openOutput(URI uri) throws IOException {
+			public P openOutput(URI uri) {
 				O output = Output.this.openOutput(uri);
 				if (output == null) {
 					return null;

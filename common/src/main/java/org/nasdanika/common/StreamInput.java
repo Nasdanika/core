@@ -9,11 +9,10 @@ import java.io.OutputStream;
 import java.lang.module.ModuleReader;
 import java.lang.module.ModuleReference;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -53,8 +52,12 @@ public interface StreamInput extends Input<InputStream> {
 					}
 	
 					@Override
-					public InputStream openInput() throws IOException {
-						return reader.open(name).orElse(null);
+					public InputStream openInput() {
+						try {
+							return reader.open(name).orElse(null);
+						} catch (IOException e) {
+							throw new NasdanikaException(e);
+						}
 					}
 					
 				});
@@ -75,38 +78,29 @@ public interface StreamInput extends Input<InputStream> {
 	 * Recursively walks each file/directory and returns a StreamInput per regular file.
 	 * URIs are absolute file URIs.
 	 */
-	static Stream<StreamInput> of(File... files) {
-		return Arrays.stream(files).flatMap(file -> {
-			if (file.isDirectory()) {
-				try {
-					return Files.walk(file.toPath())
-						.filter(p -> !Files.isDirectory(p))
-						.map(p -> new StreamInput() {
-							@Override
-							public URI getURI() {
-								return URI.createFileURI(p.toFile().getAbsolutePath());
-							}
-							@Override
-							public InputStream openInput() throws IOException {
-								return Files.newInputStream(p);
-							}
-						});
-				} catch (IOException e) {
-					throw new NasdanikaException(e);
-				}
-			} else {
-				return Stream.of(new StreamInput() {
+	static Stream<StreamInput> of(String path, File... files) {
+		List<StreamInput> result = new ArrayList<>();
+		BiConsumer<File, String> listener = (file, relativePath) -> {
+			if (!file.isDirectory()) {
+				result.add(new StreamInput() {
 					@Override
 					public URI getURI() {
-						return URI.createFileURI(file.getAbsolutePath());
+						return URI.createURI(relativePath);
 					}
 					@Override
-					public InputStream openInput() throws IOException {
-						return new FileInputStream(file);
+					public InputStream openInput() {
+						try {
+							return new FileInputStream(file);
+						} catch (IOException e) {
+							throw new NasdanikaException(e);
+						}
 					}
 				});
 			}
-		});
+		};
+						
+		Util.walk(path, listener, files);		
+		return result.stream();
 	}
 
 	/**
@@ -119,8 +113,12 @@ public interface StreamInput extends Input<InputStream> {
 				return URI.createURI(url.toString());
 			}
 			@Override
-			public InputStream openInput() throws IOException {
-				return url.openStream();
+			public InputStream openInput() {
+				try {
+					return url.openStream();
+				} catch (IOException e) {
+					throw new NasdanikaException(e);
+				}
 			}
 		};
 	}
@@ -132,7 +130,7 @@ public interface StreamInput extends Input<InputStream> {
 				return input.getURI();
 			}
 			@Override
-			public InputStream openInput() throws IOException {
+			public InputStream openInput() {
 				return input.openInput();
 			}
 		};
@@ -183,8 +181,12 @@ public interface StreamInput extends Input<InputStream> {
 					return URI.createURI(entry.getName());
 				}
 				@Override
-				public InputStream openInput() throws IOException {
-					return zipFile.getInputStream(entry);
+				public InputStream openInput() {
+					try {
+						return zipFile.getInputStream(entry);
+					} catch (IOException e) {
+						throw new NasdanikaException(e);
+					}
 				}
 			});
 	}
@@ -205,6 +207,32 @@ public interface StreamInput extends Input<InputStream> {
 		} catch (IOException e) {
 			throw new NasdanikaException(e);
 		}
+	}
+	
+	default StreamInput cache() {
+		return new StreamInput() {
+			byte[] cachedBytes;
+			
+			@Override
+			public URI getURI() {
+				return StreamInput.this.getURI();
+			}
+			
+			@Override
+			public InputStream openInput() {
+				try {
+					if (cachedBytes == null) {
+						try (InputStream is = StreamInput.this.openInput()) {
+							cachedBytes = is.readAllBytes();
+						}
+					}
+					return new ByteArrayInputStream(cachedBytes);
+				} catch (IOException e) {
+					throw new NasdanikaException(e);					
+				}
+			}
+			
+		};
 	}
 
 }
