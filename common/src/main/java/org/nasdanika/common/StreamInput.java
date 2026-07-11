@@ -124,6 +124,20 @@ public interface StreamInput extends Input<InputStream> {
 			}
 		};
 	}
+	
+	static StreamInput of(Input<InputStream> input) {
+		return new StreamInput() {
+			@Override
+			public URI getURI() {
+				return input.getURI();
+			}
+			@Override
+			public InputStream openInput() throws IOException {
+				return input.openInput();
+			}
+		};
+	}
+
 
 	/**
 	 * Reads all entries from a ZipInputStream into memory and returns them as a stream.
