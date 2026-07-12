@@ -122,11 +122,12 @@ public interface StringInput extends Input<String> {
 	}
 	
 	default StringInput mapLines(java.util.function.UnaryOperator<Line> mapper) {
+		StringInput self = this; // capture outer instance to avoid recursive this.lines() → this.openInput() loop
 		return new StringInput() {
 			
 			@Override
 			public String openInput() {
-				return lines()
+				return self.lines()  // calls the OUTER instance's lines() → outer openInput(), not this one
 					.map(mapper)
 					.map(Line::getLine)
 					.reduce((a, b) -> a + System.lineSeparator() + b)
@@ -135,10 +136,14 @@ public interface StringInput extends Input<String> {
 
 			@Override
 			public URI getURI() {
-				return StringInput.this.getURI();
+				return self.getURI();
 			}
 			
 		};
+	}
+	
+	default void transferTo(Output<java.util.function.Consumer<String>> output) {
+		output.openOutput(getURI()).accept(openInput());
 	}
 	
 }

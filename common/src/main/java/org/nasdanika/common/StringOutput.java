@@ -7,7 +7,7 @@ import org.eclipse.emf.common.util.URI;
 
 public interface StringOutput extends Output<java.util.function.Consumer<String>> {
 
-	static StringOutput of(Output<OutputStream> output) {
+	static StringOutput ofStreamOutput(Output<OutputStream> output) {
 		return new StringOutput() {
 			
 			@Override
@@ -28,5 +28,22 @@ public interface StringOutput extends Output<java.util.function.Consumer<String>
 			
 		};
 	}
+	
+	static StringOutput of(Output<java.util.function.Consumer<String>> output) {
+		return new StringOutput() {
+			
+			@Override
+			public java.util.function.Consumer<String> openOutput(URI uri) {
+				return output.openOutput(uri);
+			}
+			
+		};
+	}
+	
+	/**
+	 * Default output that uses EMF URIConverter to create output streams
+	 */
+	static StringOutput INSTANCE = ofStreamOutput(StreamOutput.INSTANCE);
+	
 
 }

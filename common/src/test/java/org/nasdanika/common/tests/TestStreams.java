@@ -13,6 +13,7 @@ import org.nasdanika.common.Output;
 import org.nasdanika.common.StreamInput;
 import org.nasdanika.common.StreamOutput;
 import org.nasdanika.common.StringInput;
+import org.nasdanika.common.StringOutput;
 import org.nasdanika.common.Util;
 
 public class TestStreams {
@@ -58,8 +59,7 @@ public class TestStreams {
 			}
 		}
 	}
-	
-	
+		
 	@Test
 	void testStringStreams() throws IOException {
 		String includePattern = "org/nasdanika/common/**";
@@ -109,5 +109,41 @@ public class TestStreams {
 		
 	}
 	
+	@Test
+	void testLineMapping() throws IOException {
+		File outputDir = new File("target/tests-filtered");
+		outputDir.mkdirs();
+		// Trailing slash is required so EMF URI resolution treats it as a directory
+		URI outputBase = URI.createFileURI(outputDir.getAbsolutePath()).appendSegment("");						
+		StringOutput output = StringOutput.of(StringOutput.INSTANCE.base(outputBase));
+		try (Stream<StreamInput> inputs = StreamInput.of(null, new File("pom.xml"))) {
+			inputs
+			.map(StringInput::ofStreamInput)
+			.map(this::filterPomXml)
+			.forEach(input -> {
+				input.transferTo(output);
+			});
+		}
+
+		// Verify that some files were written to target/descrs
+		String[] written = outputDir.list();
+		System.out.println("Written to " + outputDir.getAbsolutePath() + ":");
+		if (written != null) {
+			for (String name : written) {
+				System.out.println("  " + name);
+			}
+		}		
+	}
+	
+	//	.github/workflows/site.yml
+	private StringInput filterPomXml(StringInput input) {
+		return input.mapLines(line -> {
+			return switch (line.getLineNumber()) {
+				case 7 -> line.mapLine(l -> l.replace("<version>2026.6.0</version>", "<version>%s</version>".formatted("test-line-edit")));
+				default -> line;
+			};
+		});
+		
+	}
 
 }
