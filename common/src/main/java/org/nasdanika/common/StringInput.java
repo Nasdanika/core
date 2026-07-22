@@ -1,6 +1,7 @@
 package org.nasdanika.common;
 
 import java.io.InputStream;
+import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -144,6 +145,11 @@ public interface StringInput extends Input<String> {
 	
 	default void transferTo(Output<java.util.function.Consumer<String>> output) {
 		output.openOutput(getURI()).accept(openInput());
+	}
+	
+	@Override
+	default StringInput mapURI(UnaryOperator<URI> mapper) {
+		return StringInput.of(Input.super.mapURI(mapper));
 	}
 	
 }
