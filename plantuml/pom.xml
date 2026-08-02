@@ -29,13 +29,4 @@
             <version>1.2024.5</version>
         </dependency>       
     </dependencies>
-
-    <!-- For Xtext wrapper -->
-    <repositories>
-        <repository>
-            <id>nasdanika-releases</id>
-            <url>https://maven.nasdanika.org/releases</url>
-        </repository>
-    </repositories>
-
 </project>
