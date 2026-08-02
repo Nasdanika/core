@@ -243,12 +243,6 @@
 			<url>scp://docs.nasdanika.org/core/maven-site</url>
 		</site>
 	</distributionManagement>	
-    <repositories>
-        <repository>
-            <id>nasdanika-snapshots</id>
-            <url>https://maven.nasdanika.org/snapshots</url>
-        </repository>
-    </repositories> 
 
 	 <profiles>
 		<profile>
