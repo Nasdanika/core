@@ -77,6 +77,47 @@ class DslContext {
 			// no-op by default
 		}
 
+        /**
+         * Creates a new object to add to a given EReference and initialises it with the given value -
+         * the <em>short</em> authoring form {@code evaluator 'a.b.c'}, where the reference type is
+         * abstract or has several implementations and this resolver knows which concrete type to
+         * default to and which feature to initialise from the value (e.g. a {@code SpelEvaluator} with
+         * its {@code expression} attribute set to the string).
+         *
+         * <p>{@code value} is {@code null} when only the default type is requested - the
+         * {@code evaluator { ... }} form, where the closure, not a value, supplies the configuration.
+         * It may also be passed alongside a closure ({@code evaluator('a.b.c') { documentation '...' }}),
+         * which is then run against the created object, so the short form extends to the full authoring
+         * surface.</p>
+         *
+         * <p>The returned object is attached to {@code eReference} as-is: it is never wrapped in a
+         * {@code *Reference} type (see {@link DslContext#referenceWrapperFor}), because it was created
+         * <em>for</em> this reference rather than resolved from elsewhere.</p>
+         *
+         * <p>The default implementation handles only the {@code value == null} case, and only for a
+         * reference typed by a concrete {@link EClass}: it instantiates that type, which is what the
+         * plain {@code evaluator { ... }} form means when the metamodel leaves no choice to make. For a
+         * value, or for an abstract/interface reference type, it returns {@code null} - "this reference
+         * has no value/default-type syntax": a {@link CharSequence} or {@link Closure} then keeps its
+         * usual meaning of a cross-reference selector, any other value is rejected, and a closure on an
+         * abstract type reports that a concrete type must be named. Note the converse - creation is
+         * tried first, so a reference for which this method returns non-null for a string can no longer
+         * take a path/URI selector.</p>
+         *
+         * @param eReference the reference the created object will be added to
+         * @param value the authored value, or {@code null} when only a default type is requested
+         * @return the created object, or {@code null} to decline
+         */
+        default EObject create(EReference eReference, Object value) {
+            if (value == null && eReference.EType instanceof EClass) {
+                EClass eType = (EClass) eReference.EType
+                if (!eType.abstract && !eType.interface) {
+                    return (EObject) eType.EPackage.EFactoryInstance.create(eType)
+                }
+            }
+            return null;
+        }
+
 	}
 	
     final Resolver resolver
@@ -114,6 +155,29 @@ class DslContext {
 
     EObject create(EClass type) {
         (EObject) type.EPackage.EFactoryInstance.create(type)
+    }
+
+    /**
+     * Asks the resolver to create an element for {@code eReference} from an arbitrary {@code value}
+     * (or, with {@code value == null}, an element of the reference's default type) - see
+     * {@link Resolver#create(EReference, Object)}. The result is type-checked against the reference and
+     * marked with its source location, exactly as if it had been created from an explicit type token.
+     *
+     * @return the created element, or {@code null} when the resolver declines - callers turn that into
+     *         the error appropriate for the form they were invoked from.
+     */
+    EObject create(EReference eReference, Object value) {
+        EObject created = resolver.create(eReference, value)
+        if (created == null) {
+            return null
+        }
+        if (!eReference.EType.isInstance(created)) {
+            throw new IllegalStateException(
+                "Resolver created a ${created.eClass().name} for ${eReference.EContainingClass.name}.${eReference.name}, " +
+                "which is not a ${eReference.EType.name}")
+        }
+        mark(created, null)
+        created
     }
 
     /**

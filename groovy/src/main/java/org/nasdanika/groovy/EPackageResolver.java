@@ -149,7 +149,21 @@ public abstract class EPackageResolver extends AbstractResolver {
 		return allClasses
 			.stream()
 			.filter(c -> featureType.isSuperTypeOf(c) && targetFeature(c, targetType) != null)
+			.sorted(this::compareBySpecificity)
 			.toList();
+	}
+
+	protected int compareBySpecificity(EClass a, EClass b) {
+		if (a == b) {
+			return 0;
+		}
+		if (a.isSuperTypeOf(b)) {
+			return 1;
+		}
+		if (b.isSuperTypeOf(a)) {
+			return -1;
+		}
+		return 0;
 	}
 
 	protected EReference targetFeature(EClass wrapper, EClass targetType) {

@@ -30,6 +30,12 @@ import org.eclipse.emf.ecore.util.EcoreUtil
  * <p>All cross-references - direct {@code refers} and {@code *Reference} wrappers alike - funnel through
  * the one {@link #resolveReference} / {@link #attachReference} pair, so there is no per-feature
  * reference code to drift. See groovy-kotlin-dsl-design.md &sect;5.6.</p>
+ *
+ * <p>Before a non-{@link EObject} argument is read as a cross-reference selector it is offered to
+ * {@link DslContext.Resolver#create(EReference, Object)}, which lets a metamodel give a reference a
+ * short value form - {@code evaluator 'a.b.c'} creating a default-typed {@code SpelEvaluator} - that
+ * scales up to the full form ({@code evaluator('SpelEvaluator') { }},
+ * {@code evaluator('a.b.c') { documentation '...' }}) without a second keyword.</p>
  */
 class ReflectiveBuilder {
 
@@ -194,9 +200,26 @@ class ReflectiveBuilder {
 
     private EObject containChild(EReference r, Object[] a) {
         Closure cl = (Closure) a.find { it instanceof Closure }
-        EClass type = resolveConcreteType(r, a)
-        EObject child = ctx.create(type)
-        ctx.mark(child, null)
+        Object token = a.find { !(it instanceof Closure) }
+        EObject child = null
+        if (token != null && ctx.toEClass(element, token) == null) {
+            // Not a type token - hand the value to the resolver: evaluator('a.b.c') { documentation '...' }
+            child = ctx.create(r, token)
+            if (child == null) {
+                throw new IllegalArgumentException(
+                    "Unknown type '${token}' for ${eClass.name}.${r.name}, " +
+                    "and the resolver created no element from it")
+            }
+        } else if (token == null) {
+            // evaluator { ... } - the resolver supplies the reference's default type: the feature type
+            // itself unless it overrides create(), and null when that type is abstract.
+            child = ctx.create(r, null)
+        }
+        if (child == null) {
+            EClass type = resolveConcreteType(r, a)     // reports the abstract-feature-type error
+            child = ctx.create(type)
+            ctx.mark(child, null)
+        }
         if (cl != null) {
             DslContext.run(cl, new ReflectiveBuilder(ctx, child))
         }
@@ -257,6 +280,16 @@ class ReflectiveBuilder {
             attachReference(r, (EObject) arg)                 // tier 1 (by var)
             return
         }
+        if (arg != null && !(arg instanceof Closure)) {
+            // tier 0 (short form): let the resolver turn the value into a default-typed element,
+            // e.g. evaluator 'a.b.c' -> SpelEvaluator(expression: 'a.b.c'). Created for this
+            // reference, so it is attached as-is rather than through a *Reference wrapper.
+            EObject created = ctx.create(r, arg)
+            if (created != null) {
+                addOrSet(r, created)
+                return
+            }
+        }
         if (arg instanceof CharSequence || arg instanceof Closure) {
             Object selector = arg                              // path/URI String, or closure computing one
             ctx.defer {                                        // deferred: navigate the fully-built model
@@ -272,7 +305,9 @@ class ReflectiveBuilder {
             }
             return
         }
-        throw new IllegalArgumentException("Cannot use ${arg?.getClass()?.name} as a reference for ${r.name}")
+        throw new IllegalArgumentException(
+            "Cannot use ${arg?.getClass()?.name} as a reference for ${r.name}: " +
+            "it is neither an element nor a selector, and the resolver created no element from it")
     }
 
     /**

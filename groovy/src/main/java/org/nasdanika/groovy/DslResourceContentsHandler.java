@@ -17,6 +17,8 @@ import javax.script.ScriptException;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -33,6 +35,39 @@ import org.nasdanika.groovy.dsl.DslException;
  * {@code MarkdownToProductManagementResourceContentsHandler}.
  */
 public class DslResourceContentsHandler implements ResourceContentsHandler<EObject[]> {
+
+	/**
+	 * Service interface to delegate marking.
+	 */
+	public interface Marker {
+
+		void mark(EObject eObject, EStructuralFeature feature, int line, int col);
+
+	}
+
+	/**
+	 * Service interface to delegate creation of an element for a reference from an authored value.	 
+	 */
+	public interface Factory extends Comparable<Factory> {
+
+		boolean canCreate(EReference eReference, Object value);
+		
+		/**
+		 * Higher priority wins when multiple factories can create for the same reference/value pair. The default is 0.
+		 * @return
+		 */
+		default int getPriority() {
+			return 0;
+		}
+
+		@Override
+		default int compareTo(Factory o) {
+			return Integer.compare(o.getPriority(), getPriority());
+		}
+
+		EObject create(EReference eReference, Object value);
+		
+	}
 
 	private ResourceContentsHandler<CompiledScript> sourceHandler;
 
@@ -82,7 +117,34 @@ public class DslResourceContentsHandler implements ResourceContentsHandler<EObje
 				return DslResourceContentsHandler.this.bindings();
 			}
 
+			@Override
+			public void mark(EObject eObject, EStructuralFeature feature, int line, int col) {
+				DslResourceContentsHandler.this.mark(eObject, feature, line, col);
+			}
+
+			@Override
+			public EObject create(EReference eReference, Object value) {
+				EObject created = DslResourceContentsHandler.this.create(eReference, value);
+				// Declining falls back to the default: the reference type itself when it is concrete.
+				return created == null ? super.create(eReference, value) : created;
+			}
+
 		};
+	}
+
+	protected void mark(EObject eObject, EStructuralFeature feature, int line, int col) {
+		// Implement the actual marking logic here
+	}
+
+	/**
+	 * Creates an element for a reference from an authored value - the short DSL form, e.g.
+	 * {@code evaluator 'a.b.c'} yielding a default-typed evaluator with its expression set. Returning
+	 * {@code null} - the default - declines, leaving the reference with its regular semantics:
+	 * selectors for values, and the reference type itself for the {@code evaluator { ... }} form when
+	 * that type is concrete. See {@link Resolver#create(EReference, Object)} for the contract.
+	 */
+	protected EObject create(EReference eReference, Object value) {
+		return null;
 	}
 
     protected Map<String, Object> bindings() {
