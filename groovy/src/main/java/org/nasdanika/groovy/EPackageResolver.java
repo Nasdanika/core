@@ -136,7 +136,12 @@ public abstract class EPackageResolver extends AbstractResolver {
 				return scoped;
 			}
 		}
-		return single(bySimpleName.getOrDefault(name, List.of()), name);
+		// The index is keyed by decapitalised name; match the capitalised form too, as classifierByName does.
+		List<EClass> matches = bySimpleName.getOrDefault(name, List.of());
+		if (matches.isEmpty()) {
+			matches = bySimpleName.getOrDefault(StringUtils.uncapitalize(name), List.of());
+		}
+		return single(matches, name);
 	}
 
 	@Override

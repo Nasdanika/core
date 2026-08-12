@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EEnumLiteral
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.EStructuralFeature
+import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.util.EcoreUtil
 
 /**
@@ -77,6 +78,26 @@ class ReflectiveBuilder {
 	EObject proxy(String uri) {
 		((org.eclipse.emf.ecore.InternalEObject) element).eSetProxyURI(org.eclipse.emf.common.util.URI.createURI(uri))
 		element
+	}
+
+	/**
+	 * Loads another resource through {@link DslContext#loadResource(String)} - the nested counterpart of
+	 * the top-level {@code loadResource '<uri>'} keyword, so a script can iterate a Draw.io diagram (or
+	 * any other resource the resource set can read) while building an element:
+	 *
+	 * <pre>
+	 * architecture {
+	 *     loadResource('diagram.drawio').contents.each { page -&gt; ... }
+	 * }
+	 * </pre>
+	 *
+	 * <p>Defined as a real method so it always wins over feature/type dispatch. A metamodel feature
+	 * literally named {@code loadResource} stays settable through the assignment form
+	 * {@code loadResource = value} (which routes through {@link #propertyMissing}, not this method) and
+	 * readable through the read form - a real method never intercepts property access.</p>
+	 */
+	Resource loadResource(String uri) {
+		ctx.loadResource(uri)
 	}
 
 	/**

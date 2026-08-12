@@ -334,6 +334,44 @@ class DslContext {
         resolved
     }
 
+    /**
+     * Loads another resource and returns it, backing the {@code loadResource '<uri>'} keyword. This is
+     * what lets a script <em>derive</em> a model from data that lives elsewhere - iterate a Draw.io
+     * diagram and emit an architecture model, read a spreadsheet and emit a product backlog - instead
+     * of authoring every element by hand.
+     *
+     * <p>{@code uri} is resolved against this script's own URI when relative, so a sibling file is just
+     * {@code loadResource 'diagram.drawio'}. Loading goes through the script resource's
+     * {@link ResourceSet}, which means every registered URI handler, resource factory and content
+     * handler applies - including other DSL scripts - and a resource already loaded in that set is
+     * returned as-is rather than re-read.</p>
+     *
+     * <p>Because the loaded elements share the resource set, they can be referenced directly: hand an
+     * {@link EObject} from the returned resource to any feature, or reach into it with a {@code '#'}
+     * selector / {@link #ref(Object)}.</p>
+     *
+     * @param uri absolute, or relative to the script's URI
+     * @return the loaded resource - never {@code null}; failures are reported as exceptions tagged with
+     *         the script line
+     */
+    Resource loadResource(String uri) {
+        if (uri == null) {
+            throw new IllegalArgumentException("loadResource requires a URI")
+        }
+        if (resourceSet == null) {
+            throw new IllegalStateException("Cannot load '${uri}': this script's resource has no resource set")
+        }
+        URI resolved = URI.createURI(uri)
+        if (resolved.isRelative() && baseURI != null && !baseURI.isRelative() && baseURI.isHierarchical()) {
+            resolved = resolved.resolve(baseURI)
+        }
+        Resource loaded = resourceSet.getResource(resolved, true)
+        if (loaded == null) {
+            throw new IllegalStateException("Cannot load resource '${uri}' (resolved to '${resolved}')")
+        }
+        loaded
+    }
+
     void defer(Closure resolver) {
         deferred << ([scriptLine(new Throwable()), resolver] as Object[])
     }
@@ -510,25 +548,33 @@ class DslContext {
     /**
      * Install top-level names where {@code groovy.lang.Script.invokeMethod} will find them: every
      * concrete EClass with an <em>unambiguous</em> simple name becomes a root entry point
-     * ({@code product { }}, {@code persona { }}, ...), plus {@code ref}, {@code dsl} and the
-     * {@code eObject('<name>') { }} entry point. {@code eObject} accepts a simple, qualified
-     * ({@code 'c4.Component'}) or URI ({@code '<nsURI>#Component'}) name, so a class can be addressed
-     * even when its simple name collides across packages in a resource set - see
-     * {@link Resolver#classByName(EObject, String)}.
+     * ({@code product { }}, {@code persona { }}, ...), plus the built-in keywords {@code ref},
+     * {@code dsl}, {@code onSave}, {@code loadResource} and {@code eObject('<name>') { }}.
+     * {@code eObject} accepts a simple, qualified ({@code 'c4.Component'}) or URI
+     * ({@code '<nsURI>#Component'}) name, so a class can be addressed even when its simple name
+     * collides across packages in a resource set - see {@link Resolver#classByName(EObject, String)}.
+     *
+     * <p>The built-ins are installed <em>after</em> the metamodel names, so a metamodel class whose
+     * decapitalised name collides with a keyword does not shadow it - mirroring the builder, where the
+     * keywords are real methods and therefore win over feature/type dispatch. Such a class is still
+     * instantiable through {@code eObject('<name>') { }}. Bindings contributed by the resolver come
+     * last and override everything, keeping them the final word for a metamodel-specific DSL.</p>
      */
     void installInto(Map<String, Object> bindings) {
+        resolver.names().each { String name, EClass type ->
+            bindings[name] = { Closure cl -> root(type, cl) }
+        }
+
         bindings.ref = this.&ref
         bindings.dsl = this
         bindings.onSave = this.&onSave
+        bindings.loadResource = this.&loadResource
         bindings.eObject = { String name, Closure cl ->
             EClass type = resolver.classByName(null, name)
             if (type == null) {
                 throw new IllegalArgumentException("Cannot resolve type '${name}'")
             }
             root(type, cl)
-        }
-        resolver.names().each { String name, EClass type ->
-            bindings[name] = { Closure cl -> root(type, cl) }
         }
 
         bindings.putAll(resolver.bindings())
