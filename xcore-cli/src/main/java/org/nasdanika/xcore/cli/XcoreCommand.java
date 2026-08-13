@@ -2,6 +2,7 @@ package org.nasdanika.xcore.cli;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EModelElement;
@@ -54,14 +55,38 @@ public class XcoreCommand extends CommandGroup implements EModelElementSupplier<
 		description = "URI parameter is a file path")
 	private boolean isFile;
 	
+	@Option(
+			names = { "--reference-model", "-r" }, 
+			description = "URIs of reference models relative to the input model")
+	private List<String> referenceModels;	
+	
+	@Option(
+			names = { "--reference-file", "-R" }, 
+			description = "Reference model file paths relative to the input model")
+	private List<String> referenceFiles;
+	
 	@Override
 	public Collection<EModelElement> getEObjects(ProgressMonitor progressMonitor) {
 		URI theUri = isFile ? URI.createFileURI(new File(uri).getAbsolutePath()) : URI.createURI(uri).resolve(URI.createFileURI(new File(".").getAbsolutePath()).appendSegment(""));
 		
         Injector injector = new XcoreStandaloneSetup().createInjectorAndDoEMFRegistration();
         XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
+        
+        if (referenceModels != null) {
+			for (String refModel : referenceModels) {
+				URI refUri = theUri.resolve(URI.createURI(refModel));
+				resourceSet.getResource(refUri, true);
+			}
+		}
+        if (referenceFiles != null) {
+			for (String refFile : referenceFiles) {
+				URI refUri = theUri.resolve(URI.createFileURI(refFile));
+				resourceSet.getResource(refUri, true);
+			}
+		}
+        
         Resource resource = resourceSet.getResource(theUri, true);
-        EcoreUtil.resolveAll(resource);
+        EcoreUtil.resolveAll(resourceSet);
         
 		return resource.getContents()
 				.stream()
@@ -72,3 +97,4 @@ public class XcoreCommand extends CommandGroup implements EModelElementSupplier<
 	}
 	
 }
+
