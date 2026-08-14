@@ -3,9 +3,6 @@
 A tiny, **dependency-free** bootstrap jar that makes a Nasdanika CLI
 distribution runnable from **any working directory** out of the box.
 
-It is the implementation of "Option A" in
-[`launcher-design.md`](../launcher-design.md).
-
 ## The problem it solves
 
 A Nasdanika CLI distribution runs on a mixed **module-path + class-path** layout
