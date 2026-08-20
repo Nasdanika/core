@@ -372,6 +372,59 @@ class DslContext {
         loaded
     }
 
+    /**
+     * Resolves a prototype and returns a <em>detached deep copy</em> of it, backing the
+     * {@code copy '<uri>'} keyword. This is the layering story: the bulk of a model is authored where
+     * it is cheapest - a Draw.io diagram, a Markdown file, another DSL script - and the script copies
+     * an element from there and layers the parts that only code can express on top, exactly the way a
+     * fresh element is populated.
+     *
+     * <p>The copy is a <b>snapshot</b>, not a live link: later edits to the prototype do not propagate,
+     * and edits to the copy never touch the prototype. Cross-references that point <em>out</em> of the
+     * copied subtree are preserved as-is, so a copied element still refers to the original's targets;
+     * references <em>within</em> the subtree are rewired to the copies (this is {@link EcoreUtil#copy}).</p>
+     *
+     * @param base the element relative selectors resolve against, or {@code null} at the top level
+     * @param selector anything {@link #resolveRelative(EObject, Object)} accepts - typically a
+     *        {@code '<resource uri>#<fragment>'} string, but an {@link EObject} or a navigation
+     *        {@link Closure} works too
+     */
+    EObject copy(EObject base, Object selector) {
+        if (selector == null) {
+            throw new IllegalArgumentException("copy requires a prototype selector")
+        }
+        EObject prototype = resolveRelative(base, selector)
+        if (prototype == null) {
+            throw new IllegalStateException("Cannot resolve prototype '${selector}'")
+        }
+        EObject copy = EcoreUtil.copy(prototype)
+        mark(copy, null)
+        copy
+    }
+
+    /**
+     * A detached copy resolved without a context element - {@code dsl.copy('<uri>')}. Use it where the
+     * copy must be placed by hand rather than auto-routed, e.g. into a named feature:
+     * {@code members dsl.copy('base.xmi#//@people.0')}. Relative paths need a context element, so pass
+     * an absolute URI, an {@link EObject}, or use the {@code copy} keyword instead.
+     */
+    EObject copy(Object selector) {
+        copy((EObject) null, selector)
+    }
+
+    /**
+     * Top-level {@code copy('<uri>') { ... }}: a copied element becomes a root of this resource, the
+     * way {@code eObject('<type>') { ... }} does for a newly created one.
+     */
+    EObject rootCopy(Object selector, Closure cl) {
+        EObject copy = copy((EObject) null, selector)
+        if (cl != null) {
+            run(cl, new ReflectiveBuilder(this, copy))
+        }
+        roots << copy
+        copy
+    }
+
     void defer(Closure resolver) {
         deferred << ([scriptLine(new Throwable()), resolver] as Object[])
     }
@@ -549,7 +602,8 @@ class DslContext {
      * Install top-level names where {@code groovy.lang.Script.invokeMethod} will find them: every
      * concrete EClass with an <em>unambiguous</em> simple name becomes a root entry point
      * ({@code product { }}, {@code persona { }}, ...), plus the built-in keywords {@code ref},
-     * {@code dsl}, {@code onSave}, {@code loadResource} and {@code eObject('<name>') { }}.
+     * {@code dsl}, {@code onSave}, {@code loadResource}, {@code copy('<uri>') { }} and
+     * {@code eObject('<name>') { }}.
      * {@code eObject} accepts a simple, qualified ({@code 'c4.Component'}) or URI
      * ({@code '<nsURI>#Component'}) name, so a class can be addressed even when its simple name
      * collides across packages in a resource set - see {@link Resolver#classByName(EObject, String)}.
@@ -569,6 +623,7 @@ class DslContext {
         bindings.dsl = this
         bindings.onSave = this.&onSave
         bindings.loadResource = this.&loadResource
+        bindings.copy = { Object selector, Closure cl = null -> rootCopy(selector, cl) }
         bindings.eObject = { String name, Closure cl ->
             EClass type = resolver.classByName(null, name)
             if (type == null) {

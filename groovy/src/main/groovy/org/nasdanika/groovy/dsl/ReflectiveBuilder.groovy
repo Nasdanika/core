@@ -101,6 +101,47 @@ class ReflectiveBuilder {
 	}
 
 	/**
+	 * Copies an existing element and adds the copy to this one - the nested counterpart of the top-level
+	 * {@code copy('<uri>') { }} keyword. The prototype is resolved through
+	 * {@link DslContext#copy(EObject, Object)} (so a relative path resolves against <em>this</em>
+	 * element), deep-copied, configured by the closure exactly like a newly created child, then routed
+	 * into the one containment feature that accepts it - the same routing the bare {@code eClass { }}
+	 * type-dispatch form uses:
+	 *
+	 * <pre>
+	 * architecture {
+	 *     copy('base.drawio#//@nodes.0') {
+	 *         description 'the bit only code can express'
+	 *     }
+	 * }
+	 * </pre>
+	 *
+	 * <p>When more than one containment feature accepts the copy, name the feature and hand it a
+	 * detached copy instead: {@code members dsl.copy('<uri>')}.</p>
+	 *
+	 * <p>Defined as a real method so it always wins over feature/type dispatch. A metamodel feature
+	 * literally named {@code copy} stays settable through the assignment form {@code copy = value}.</p>
+	 */
+	EObject copy(Object selector, Closure cl = null) {
+		EObject copy = ctx.copy(element, selector)
+		List<EReference> candidates = containmentsFor(copy.eClass())
+		if (candidates.isEmpty()) {
+			throw new IllegalStateException(
+				"No containment feature of ${eClass.name} accepts a copy of ${copy.eClass().name}")
+		}
+		if (candidates.size() > 1) {
+			throw new IllegalStateException(
+				"Ambiguous: a copy of ${copy.eClass().name} fits containment features ${candidates*.name} " +
+				"on ${eClass.name}; name the feature instead, e.g. ${candidates[0].name} dsl.copy('<uri>')")
+		}
+		if (cl != null) {
+			DslContext.run(cl, new ReflectiveBuilder(ctx, copy))
+		}
+		addOrSet(candidates[0], copy)
+		copy
+	}
+
+	/**
 	 * Nested counterpart of the top-level {@code eObject('<name>') { }} entry point. Resolves an EClass
 	 * by simple, qualified or URI name (see {@link DslContext.Resolver#classByName}) and auto-routes a
 	 * new child into the unique containment feature that accepts it - same routing as the bare
@@ -270,11 +311,16 @@ class ReflectiveBuilder {
         featureType
     }
 
-    /** Type-dispatch: route a {@code goal { }}-style call to the unique containment feature accepting it. */
-    private EObject createChildAutoRouted(EClass type, Object[] a) {
-        List<EReference> candidates = eClass.EAllContainments.findAll { EReference r ->
+    /** Every settable containment feature of the current element that accepts {@code type}. */
+    private List<EReference> containmentsFor(EClass type) {
+        eClass.EAllContainments.findAll { EReference r ->
             r.changeable && !r.derived && ((EClass) r.EType).isSuperTypeOf(type)
         }
+    }
+
+    /** Type-dispatch: route a {@code goal { }}-style call to the unique containment feature accepting it. */
+    private EObject createChildAutoRouted(EClass type, Object[] a) {
+        List<EReference> candidates = containmentsFor(type)
         if (candidates.isEmpty()) {
             throw new MissingMethodException(type.name, ReflectiveBuilder, a)
         }
