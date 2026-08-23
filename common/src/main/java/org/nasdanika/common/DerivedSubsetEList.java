@@ -60,7 +60,7 @@ public class DerivedSubsetEList<E> extends AbstractSequentialInternalEList<E>
 	protected final Function<E, Object> sourceMapper;
 
 	/**
-	 * Type-filtered subset: an element of the source list is part of the view iff it is
+	 * Type-filtered subset: an element of the source list is part of the view if it is
 	 * an instance of {@code dataClass}.
 	 */
 	public DerivedSubsetEList(Class<E> dataClass, InternalEObject owner, int featureID, int sourceFeatureID) {

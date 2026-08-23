@@ -23,7 +23,6 @@
 	</scm>
 
 	<properties>
-		<jacoco.version>0.8.14</jacoco.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.javadoc.failOnError>false</maven.javadoc.failOnError>
 		<linksource>true</linksource>
@@ -61,7 +60,7 @@
 			<plugin>
 			        <groupId>org.jacoco</groupId>
 			        <artifactId>jacoco-maven-plugin</artifactId>
-			        <version>${jacoco.version}</version>
+			        <version>0.8.14</version>
 			        <executions>
 			          <execution>
 			            <goals>
@@ -167,24 +166,33 @@
 		</plugins>
 	</build>
 
+	<dependencyManagement>
+	    <dependencies>
+	        <dependency>
+	            <groupId>org.nasdanika</groupId>
+	            <artifactId>bom</artifactId>
+	            <version>${project.version}</version>
+	            <type>pom</type>
+	            <scope>import</scope>
+	        </dependency>
+	    </dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 		    <groupId>org.junit.jupiter</groupId>
 		    <artifactId>junit-jupiter-api</artifactId>
-		    <version>6.1.0</version>
 		    <scope>test</scope>
 		</dependency>		
 		<dependency>
 		    <groupId>org.junit.jupiter</groupId>
 		    <artifactId>junit-jupiter-engine</artifactId>
-		    <version>6.1.0</version>
 		    <scope>test</scope>
 		</dependency>		
 		
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.27.7</version>
 			<scope>test</scope>
 		</dependency>				
 	</dependencies>
@@ -228,7 +236,7 @@
 		<module>http</module>
 		<module>groovy</module>
 		<module>telemetry</module>
-		<module>telemetry.model</module>
+		<!--<module>telemetry.model</module>-->
 		<module>echarts</module>
 		<module>emf-json</module>
 		<module>plantuml</module>
