@@ -41,9 +41,20 @@
 
 		<dependency>
 		    <groupId>com.vladsch.flexmark</groupId>
-		    <artifactId>flexmark-all</artifactId>
+		    <artifactId>flexmark</artifactId>
 		</dependency>
-
+		<dependency>
+		    <groupId>com.vladsch.flexmark</groupId>
+		    <artifactId>flexmark-util-data</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>com.vladsch.flexmark</groupId>
+		    <artifactId>flexmark-html2md-converter</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>com.vladsch.flexmark</groupId>
+		    <artifactId>flexmark-profile-pegdown</artifactId>
+		</dependency>
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
