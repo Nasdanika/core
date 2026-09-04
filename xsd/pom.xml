@@ -5,7 +5,7 @@
     <parent>
         <artifactId>parent</artifactId>
         <groupId>org.nasdanika.core</groupId>
-        <version>2026.6.0</version>
+        <version>2026.9.0</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>xsd</artifactId>
@@ -21,7 +21,6 @@
         <dependency>
             <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.xsd</artifactId>
-            <version>2.22.0</version>
         </dependency>        
     </dependencies>        
 </project>

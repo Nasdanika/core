@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2026.6.0</version>
+	    <version>2026.9.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>common</artifactId>
@@ -16,91 +16,74 @@
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
-            <version>3.8.6</version>
         </dependency>
-	
 		<dependency>
 		    <groupId>org.eclipse.emf</groupId>
 		    <artifactId>org.eclipse.emf.ecore</artifactId>
-		    <version>2.42.0</version>
 		</dependency> 		
 		<dependency>
 			<groupId>org.eclipse.emf</groupId>
 			<artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-			<version>2.40.0</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.json</groupId>
 		    <artifactId>json</artifactId>
-		    <version>20260522</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.yaml</groupId>
 		    <artifactId>snakeyaml</artifactId>
-		    <version>2.6</version>
 		</dependency>		
 
 		<dependency>
 		    <groupId>org.jsoup</groupId>
 		    <artifactId>jsoup</artifactId>
-		    <version>1.22.2</version>
 		</dependency>
 
 		<dependency>
 		    <groupId>com.vladsch.flexmark</groupId>
 		    <artifactId>flexmark-all</artifactId>
-		    <version>0.64.8</version>
 		</dependency>
 
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
-		    <version>3.20.0</version>
 		</dependency>
 
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-text</artifactId>
-		    <version>1.15.0</version>
 		</dependency>		
 		
 		<dependency>
 		    <groupId>net.sourceforge.plantuml</groupId>
 		    <artifactId>plantuml-epl</artifactId>
-		    <version>1.2024.5</version>
 		</dependency>		
 		
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-core</artifactId>
-		    <version>7.0.8</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-expression</artifactId>
-		    <version>7.0.8</version>
 		</dependency>
 		
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.18</version>
         </dependency>       
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
-            <version>2.0.18</version>
         </dependency>    
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.34</version>
         </dependency>
    		
 		<dependency>
 		  <groupId>commons-codec</groupId>
 		  <artifactId>commons-codec</artifactId>
-		  <version>1.22.0</version>
 		</dependency>		
 	</dependencies>
 </project>

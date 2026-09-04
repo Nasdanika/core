@@ -5,7 +5,7 @@
     <parent>
         <artifactId>parent</artifactId>
         <groupId>org.nasdanika.core</groupId>
-        <version>2026.6.0</version>
+        <version>2026.9.0</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>plantuml</artifactId>
@@ -26,7 +26,6 @@
         <dependency>
             <groupId>net.sourceforge.plantuml</groupId>
             <artifactId>plantuml-epl</artifactId>
-            <version>1.2024.5</version>
         </dependency>       
     </dependencies>
 </project>
