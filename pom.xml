@@ -15,37 +15,10 @@
 	<description>Parent pom.</description>
 
 	<url>https://docs.nasdanika.org/core/index.html</url>
-		
-	<licenses>
-		<license>
-			<name>Eclipse Public License 2.0</name>
-			<url>https://nasdanika.org/builds/master/eclipse-public-license-2.0.html</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
 
 	<scm>
 		<url>https://github.com/Nasdanika/core</url>
 	</scm>
-
-	<dependencies>
-		<dependency>
-		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter-api</artifactId>
-		    <scope>test</scope>
-		</dependency>		
-		<dependency>
-		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter-engine</artifactId>
-		    <scope>test</scope>
-		</dependency>		
-		
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<scope>test</scope>
-		</dependency>				
-	</dependencies>
 	
 	<modules>
 		<module>drawio</module>
