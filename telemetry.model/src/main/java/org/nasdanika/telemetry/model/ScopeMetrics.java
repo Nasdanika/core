@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Scope Metrics</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * A collection of Metrics produced by an Scope.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -70,7 +66,7 @@ public interface ScopeMetrics extends EObject {
 	 * @return the value of the '<em>Schema Url</em>' attribute.
 	 * @see #setSchemaUrl(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getScopeMetrics_SchemaUrl()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getSchemaUrl();

@@ -9,10 +9,6 @@ import org.eclipse.emf.common.util.EList;
  * A representation of the model object '<em><b>Histogram</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * Histogram represents the type of a metric that is calculated by aggregating as a Histogram of all reported measurements over a time interval.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -47,7 +43,7 @@ public interface Histogram extends Metric {
 	 * @see org.nasdanika.telemetry.model.AggregationTemporality
 	 * @see #setAggregationTemporality(AggregationTemporality)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getHistogram_AggregationTemporality()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	AggregationTemporality getAggregationTemporality();

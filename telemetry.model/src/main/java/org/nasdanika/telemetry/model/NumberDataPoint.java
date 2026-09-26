@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Number Data Point</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * NumberDataPoint is a single data point in a timeseries that describes the time-varying scalar value of a metric.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -52,7 +48,7 @@ public interface NumberDataPoint extends EObject {
 	 * @return the value of the '<em>Start Time Unix Nano</em>' attribute.
 	 * @see #setStartTimeUnixNano(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getNumberDataPoint_StartTimeUnixNano()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getStartTimeUnixNano();
@@ -74,7 +70,7 @@ public interface NumberDataPoint extends EObject {
 	 * @return the value of the '<em>Time Unix Nano</em>' attribute.
 	 * @see #setTimeUnixNano(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getNumberDataPoint_TimeUnixNano()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getTimeUnixNano();
@@ -93,13 +89,10 @@ public interface NumberDataPoint extends EObject {
 	 * Returns the value of the '<em><b>As Double</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * value as a double. Either asDouble or asInt must be set.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>As Double</em>' attribute.
 	 * @see #setAsDouble(Double)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getNumberDataPoint_AsDouble()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Double getAsDouble();
@@ -118,13 +111,10 @@ public interface NumberDataPoint extends EObject {
 	 * Returns the value of the '<em><b>As Int</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * value as an integer. Either asDouble or asInt must be set.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>As Int</em>' attribute.
 	 * @see #setAsInt(Long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getNumberDataPoint_AsInt()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Long getAsInt();
@@ -155,13 +145,10 @@ public interface NumberDataPoint extends EObject {
 	 * Returns the value of the '<em><b>Flags</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Flags is an optional bit field containing hints for the backends.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Flags</em>' attribute.
 	 * @see #setFlags(int)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getNumberDataPoint_Flags()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	int getFlags();

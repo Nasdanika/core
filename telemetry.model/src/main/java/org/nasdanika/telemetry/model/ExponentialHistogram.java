@@ -9,10 +9,6 @@ import org.eclipse.emf.common.util.EList;
  * A representation of the model object '<em><b>Exponential Histogram</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * ExponentialHistogram represents the type of a metric that is calculated by aggregating as a ExponentialHistogram of all reported double measurements over a time interval.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -47,7 +43,7 @@ public interface ExponentialHistogram extends Metric {
 	 * @see org.nasdanika.telemetry.model.AggregationTemporality
 	 * @see #setAggregationTemporality(AggregationTemporality)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogram_AggregationTemporality()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	AggregationTemporality getAggregationTemporality();

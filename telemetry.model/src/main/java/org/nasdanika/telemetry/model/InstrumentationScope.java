@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Instrumentation Scope</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * InstrumentationScope is a message representing the instrumentation scope information such as the fully qualified name and version.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -35,13 +31,10 @@ public interface InstrumentationScope extends EObject {
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * An empty instrumentation scope name means the name is unknown.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getInstrumentationScope_Name()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getName();
@@ -63,7 +56,7 @@ public interface InstrumentationScope extends EObject {
 	 * @return the value of the '<em>Version</em>' attribute.
 	 * @see #setVersion(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getInstrumentationScope_Version()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getVersion();
@@ -83,9 +76,6 @@ public interface InstrumentationScope extends EObject {
 	 * The list contents are of type {@link org.nasdanika.telemetry.model.KeyValue}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Additional attributes that describe the scope. Use of this parameter is optional.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Attributes</em>' containment reference list.
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getInstrumentationScope_Attributes()
 	 * @model containment="true"
@@ -100,7 +90,7 @@ public interface InstrumentationScope extends EObject {
 	 * @return the value of the '<em>Dropped Attributes Count</em>' attribute.
 	 * @see #setDroppedAttributesCount(int)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getInstrumentationScope_DroppedAttributesCount()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	int getDroppedAttributesCount();
@@ -119,13 +109,10 @@ public interface InstrumentationScope extends EObject {
 	 * Returns the value of the '<em><b>Schema Url</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * schema_url contains the URL that describes the semantics of the attributes.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Schema Url</em>' attribute.
 	 * @see #setSchemaUrl(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getInstrumentationScope_SchemaUrl()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getSchemaUrl();

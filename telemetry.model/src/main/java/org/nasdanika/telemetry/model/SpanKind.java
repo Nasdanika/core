@@ -13,9 +13,6 @@ import org.eclipse.emf.common.util.Enumerator;
  * A representation of the literals of the enumeration '<em><b>Span Kind</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
- * <!-- begin-model-doc -->
- * SpanKind is the type of span. Can be used to specify additional relationships between spans in addition to a parent/child relationship.
- * <!-- end-model-doc -->
  * @see org.nasdanika.telemetry.model.ModelPackage#getSpanKind()
  * @model
  * @generated
@@ -25,9 +22,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND UNSPECIFIED</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Unspecified. Do NOT use as default. Implementations MAY assume SpanKind to be INTERNAL when receiving UNSPECIFIED.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_UNSPECIFIED_VALUE
 	 * @generated
 	 * @ordered
@@ -38,9 +32,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND INTERNAL</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Indicates that the span represents an internal operation within an application, as opposed to an operations happening at the boundaries of a process.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_INTERNAL_VALUE
 	 * @generated
 	 * @ordered
@@ -51,9 +42,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND SERVER</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Indicates that the span covers server-side handling of an RPC or other remote network request.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_SERVER_VALUE
 	 * @generated
 	 * @ordered
@@ -64,9 +52,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND CLIENT</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Indicates that the span describes a request to some remote service.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_CLIENT_VALUE
 	 * @generated
 	 * @ordered
@@ -77,9 +62,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND PRODUCER</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Indicates that the span describes a producer sending a message to a broker. Unlike CLIENT and SERVER, there is often no direct critical-path latency relationship between producer and consumer spans.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_PRODUCER_VALUE
 	 * @generated
 	 * @ordered
@@ -90,9 +72,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND CONSUMER</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Indicates that the span describes consumer receiving a message from a broker. Like the PRODUCER kind, there is often no direct critical-path latency relationship between producer and consumer spans.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_CONSUMER_VALUE
 	 * @generated
 	 * @ordered
@@ -103,9 +82,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND UNSPECIFIED</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Unspecified. Do NOT use as default. Implementations MAY assume SpanKind to be INTERNAL when receiving UNSPECIFIED.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_UNSPECIFIED
 	 * @model
 	 * @generated
@@ -117,9 +93,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND INTERNAL</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Indicates that the span represents an internal operation within an application, as opposed to an operations happening at the boundaries of a process.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_INTERNAL
 	 * @model
 	 * @generated
@@ -131,9 +104,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND SERVER</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Indicates that the span covers server-side handling of an RPC or other remote network request.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_SERVER
 	 * @model
 	 * @generated
@@ -145,9 +115,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND CLIENT</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Indicates that the span describes a request to some remote service.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_CLIENT
 	 * @model
 	 * @generated
@@ -159,9 +126,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND PRODUCER</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Indicates that the span describes a producer sending a message to a broker. Unlike CLIENT and SERVER, there is often no direct critical-path latency relationship between producer and consumer spans.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_PRODUCER
 	 * @model
 	 * @generated
@@ -173,9 +137,6 @@ public enum SpanKind implements Enumerator {
 	 * The '<em><b>SPAN KIND CONSUMER</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Indicates that the span describes consumer receiving a message from a broker. Like the PRODUCER kind, there is often no direct critical-path latency relationship between producer and consumer spans.
-	 * <!-- end-model-doc -->
 	 * @see #SPAN_KIND_CONSUMER
 	 * @model
 	 * @generated

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin
+      name="%pluginName"
+      id="org.nasdanika.telemetry.model.tests"
+      version="1.0.0"
+      provider-name="%providerName">
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.nasdanika.telemetry.model" export="true"/>
+      <import plugin="org.eclipse.emf.ecore" export="true"/>
+      <import plugin="org.eclipse.emf.ecore.xmi" export="true"/>
+      <import plugin="org.junit" export="true"/>
+   </requires>
+
+   <runtime>
+      <library name=".">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+</plugin>

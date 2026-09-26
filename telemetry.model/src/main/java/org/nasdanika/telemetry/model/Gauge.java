@@ -9,10 +9,6 @@ import org.eclipse.emf.common.util.EList;
  * A representation of the model object '<em><b>Gauge</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * Gauge represents the type of a scalar metric that always exports the current value for every data point. It should be used for an unknown aggregation.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>

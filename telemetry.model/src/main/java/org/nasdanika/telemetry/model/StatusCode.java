@@ -13,9 +13,6 @@ import org.eclipse.emf.common.util.Enumerator;
  * A representation of the literals of the enumeration '<em><b>Status Code</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
- * <!-- begin-model-doc -->
- * For the semantics of status codes see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#set-status
- * <!-- end-model-doc -->
  * @see org.nasdanika.telemetry.model.ModelPackage#getStatusCode()
  * @model
  * @generated
@@ -25,9 +22,6 @@ public enum StatusCode implements Enumerator {
 	 * The '<em><b>STATUS CODE UNSET</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The default status.
-	 * <!-- end-model-doc -->
 	 * @see #STATUS_CODE_UNSET_VALUE
 	 * @generated
 	 * @ordered
@@ -38,9 +32,6 @@ public enum StatusCode implements Enumerator {
 	 * The '<em><b>STATUS CODE OK</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The Span has been validated by an Application developer or Operator to have completed successfully.
-	 * <!-- end-model-doc -->
 	 * @see #STATUS_CODE_OK_VALUE
 	 * @generated
 	 * @ordered
@@ -51,9 +42,6 @@ public enum StatusCode implements Enumerator {
 	 * The '<em><b>STATUS CODE ERROR</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The Span contains an error.
-	 * <!-- end-model-doc -->
 	 * @see #STATUS_CODE_ERROR_VALUE
 	 * @generated
 	 * @ordered
@@ -64,9 +52,6 @@ public enum StatusCode implements Enumerator {
 	 * The '<em><b>STATUS CODE UNSET</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The default status.
-	 * <!-- end-model-doc -->
 	 * @see #STATUS_CODE_UNSET
 	 * @model
 	 * @generated
@@ -78,9 +63,6 @@ public enum StatusCode implements Enumerator {
 	 * The '<em><b>STATUS CODE OK</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The Span has been validated by an Application developer or Operator to have completed successfully.
-	 * <!-- end-model-doc -->
 	 * @see #STATUS_CODE_OK
 	 * @model
 	 * @generated
@@ -92,9 +74,6 @@ public enum StatusCode implements Enumerator {
 	 * The '<em><b>STATUS CODE ERROR</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The Span contains an error.
-	 * <!-- end-model-doc -->
 	 * @see #STATUS_CODE_ERROR
 	 * @model
 	 * @generated

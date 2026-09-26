@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin
+      name="%pluginName"
+      id="org.nasdanika.telemetry.model.edit"
+      version="1.0.0"
+      provider-name="%providerName"
+      class="org.nasdanika.telemetry.model.provider.TelemetryEditPlugin$Implementation">
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.nasdanika.telemetry.model" export="true"/>
+      <import plugin="org.eclipse.emf.edit" export="true"/>
+      <import plugin="org.eclipse.emf.ecore" export="true"/>
+   </requires>
+
+   <runtime>
+      <library name=".">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+   <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
+      <!-- @generated Model -->
+      <factory
+            uri="ecore://nasdanika.org/core/telemetry/model"
+            class="org.nasdanika.telemetry.model.provider.ModelItemProviderAdapterFactory"
+            supportedTypes=
+              "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
+               org.eclipse.emf.edit.provider.IStructuredItemContentProvider
+               org.eclipse.emf.edit.provider.ITreeItemContentProvider
+               org.eclipse.emf.edit.provider.IItemLabelProvider
+               org.eclipse.emf.edit.provider.IItemPropertySource"/>
+   </extension>
+
+</plugin>

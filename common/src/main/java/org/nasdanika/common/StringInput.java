@@ -1,6 +1,7 @@
 package org.nasdanika.common;
 
 import java.io.InputStream;
+import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -143,8 +144,19 @@ public interface StringInput extends Input<String> {
 		};
 	}
 	
-	default void transferTo(Output<java.util.function.Consumer<String>> output) {
-		output.openOutput(getURI()).accept(openInput());
+	default void transferTo(Output<? extends java.util.function.Consumer<String>> output) {
+		Consumer<String> consumer = output.openOutput(getURI());
+		try {
+			consumer.accept(openInput());
+		} finally {
+			if (consumer instanceof AutoCloseable) {
+				try {
+					((AutoCloseable) consumer).close();
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}
 	}
 	
 	@Override

@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Summary Data Point</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * SummaryDataPoint is a single data point in a timeseries that describes the time-varying values of a Summary metric.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -52,7 +48,7 @@ public interface SummaryDataPoint extends EObject {
 	 * @return the value of the '<em>Start Time Unix Nano</em>' attribute.
 	 * @see #setStartTimeUnixNano(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getSummaryDataPoint_StartTimeUnixNano()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getStartTimeUnixNano();
@@ -74,7 +70,7 @@ public interface SummaryDataPoint extends EObject {
 	 * @return the value of the '<em>Time Unix Nano</em>' attribute.
 	 * @see #setTimeUnixNano(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getSummaryDataPoint_TimeUnixNano()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getTimeUnixNano();
@@ -96,7 +92,7 @@ public interface SummaryDataPoint extends EObject {
 	 * @return the value of the '<em>Count</em>' attribute.
 	 * @see #setCount(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getSummaryDataPoint_Count()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getCount();
@@ -118,7 +114,7 @@ public interface SummaryDataPoint extends EObject {
 	 * @return the value of the '<em>Sum</em>' attribute.
 	 * @see #setSum(double)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getSummaryDataPoint_Sum()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	double getSum();
@@ -152,7 +148,7 @@ public interface SummaryDataPoint extends EObject {
 	 * @return the value of the '<em>Flags</em>' attribute.
 	 * @see #setFlags(int)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getSummaryDataPoint_Flags()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	int getFlags();

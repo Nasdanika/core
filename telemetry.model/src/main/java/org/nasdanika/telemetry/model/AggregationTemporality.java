@@ -13,9 +13,6 @@ import org.eclipse.emf.common.util.Enumerator;
  * A representation of the literals of the enumeration '<em><b>Aggregation Temporality</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
- * <!-- begin-model-doc -->
- * AggregationTemporality defines how a metric aggregator reports aggregated values. It describes how those values relate to the time interval over which they are aggregated.
- * <!-- end-model-doc -->
  * @see org.nasdanika.telemetry.model.ModelPackage#getAggregationTemporality()
  * @model
  * @generated
@@ -25,9 +22,6 @@ public enum AggregationTemporality implements Enumerator {
 	 * The '<em><b>AGGREGATION TEMPORALITY UNSPECIFIED</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * UNSPECIFIED is the default AggregationTemporality, it MUST not be used.
-	 * <!-- end-model-doc -->
 	 * @see #AGGREGATION_TEMPORALITY_UNSPECIFIED_VALUE
 	 * @generated
 	 * @ordered
@@ -38,9 +32,6 @@ public enum AggregationTemporality implements Enumerator {
 	 * The '<em><b>AGGREGATION TEMPORALITY DELTA</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * DELTA is an AggregationTemporality for a metric aggregator which reports changes since last report time.
-	 * <!-- end-model-doc -->
 	 * @see #AGGREGATION_TEMPORALITY_DELTA_VALUE
 	 * @generated
 	 * @ordered
@@ -51,9 +42,6 @@ public enum AggregationTemporality implements Enumerator {
 	 * The '<em><b>AGGREGATION TEMPORALITY CUMULATIVE</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * CUMULATIVE is an AggregationTemporality for a metric aggregator which reports changes since a fixed start time.
-	 * <!-- end-model-doc -->
 	 * @see #AGGREGATION_TEMPORALITY_CUMULATIVE_VALUE
 	 * @generated
 	 * @ordered
@@ -64,9 +52,6 @@ public enum AggregationTemporality implements Enumerator {
 	 * The '<em><b>AGGREGATION TEMPORALITY UNSPECIFIED</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * UNSPECIFIED is the default AggregationTemporality, it MUST not be used.
-	 * <!-- end-model-doc -->
 	 * @see #AGGREGATION_TEMPORALITY_UNSPECIFIED
 	 * @model
 	 * @generated
@@ -78,9 +63,6 @@ public enum AggregationTemporality implements Enumerator {
 	 * The '<em><b>AGGREGATION TEMPORALITY DELTA</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * DELTA is an AggregationTemporality for a metric aggregator which reports changes since last report time.
-	 * <!-- end-model-doc -->
 	 * @see #AGGREGATION_TEMPORALITY_DELTA
 	 * @model
 	 * @generated
@@ -92,9 +74,6 @@ public enum AggregationTemporality implements Enumerator {
 	 * The '<em><b>AGGREGATION TEMPORALITY CUMULATIVE</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * CUMULATIVE is an AggregationTemporality for a metric aggregator which reports changes since a fixed start time.
-	 * <!-- end-model-doc -->
 	 * @see #AGGREGATION_TEMPORALITY_CUMULATIVE
 	 * @model
 	 * @generated

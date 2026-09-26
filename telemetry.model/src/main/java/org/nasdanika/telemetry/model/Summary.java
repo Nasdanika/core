@@ -9,10 +9,6 @@ import org.eclipse.emf.common.util.EList;
  * A representation of the model object '<em><b>Summary</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * Summary metric data are used to convey quantile summaries.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>

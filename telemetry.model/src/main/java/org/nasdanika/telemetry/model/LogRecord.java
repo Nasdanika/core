@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Log Record</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * A log record according to OpenTelemetry Log Data Model: https://opentelemetry.io/docs/specs/otel/logs/data-model/
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -40,13 +36,10 @@ public interface LogRecord extends EObject {
 	 * Returns the value of the '<em><b>Time Unix Nano</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * time_unix_nano is the time when the event occurred. Value is UNIX Epoch time in nanoseconds since 00:00:00 UTC on 1 January 1970.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Time Unix Nano</em>' attribute.
 	 * @see #setTimeUnixNano(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getLogRecord_TimeUnixNano()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getTimeUnixNano();
@@ -65,13 +58,10 @@ public interface LogRecord extends EObject {
 	 * Returns the value of the '<em><b>Observed Time Unix Nano</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Time when the event was observed by the collection system.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Observed Time Unix Nano</em>' attribute.
 	 * @see #setObservedTimeUnixNano(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getLogRecord_ObservedTimeUnixNano()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getObservedTimeUnixNano();
@@ -91,14 +81,11 @@ public interface LogRecord extends EObject {
 	 * The literals are from the enumeration {@link org.nasdanika.telemetry.model.SeverityNumber}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Numerical value of the severity, normalized to values described in the log data model.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Severity Number</em>' attribute.
 	 * @see org.nasdanika.telemetry.model.SeverityNumber
 	 * @see #setSeverityNumber(SeverityNumber)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getLogRecord_SeverityNumber()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	SeverityNumber getSeverityNumber();
@@ -118,13 +105,10 @@ public interface LogRecord extends EObject {
 	 * Returns the value of the '<em><b>Severity Text</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The severity text (also known as log level). The original string representation as it is known at the source.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Severity Text</em>' attribute.
 	 * @see #setSeverityText(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getLogRecord_SeverityText()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getSeverityText();
@@ -143,9 +127,6 @@ public interface LogRecord extends EObject {
 	 * Returns the value of the '<em><b>Body</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * A value containing the body of the log record.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Body</em>' containment reference.
 	 * @see #setBody(AnyValue)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getLogRecord_Body()
@@ -169,9 +150,6 @@ public interface LogRecord extends EObject {
 	 * The list contents are of type {@link org.nasdanika.telemetry.model.KeyValue}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Additional attributes that describe the specific event occurrence.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Attributes</em>' containment reference list.
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getLogRecord_Attributes()
 	 * @model containment="true"
@@ -186,7 +164,7 @@ public interface LogRecord extends EObject {
 	 * @return the value of the '<em>Dropped Attributes Count</em>' attribute.
 	 * @see #setDroppedAttributesCount(int)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getLogRecord_DroppedAttributesCount()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	int getDroppedAttributesCount();
@@ -205,13 +183,10 @@ public interface LogRecord extends EObject {
 	 * Returns the value of the '<em><b>Flags</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Flags, a bit field.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Flags</em>' attribute.
 	 * @see #setFlags(int)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getLogRecord_Flags()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	int getFlags();
@@ -230,13 +205,10 @@ public interface LogRecord extends EObject {
 	 * Returns the value of the '<em><b>Trace Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * A unique identifier for a trace. All logs from the same trace share the same trace_id.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Trace Id</em>' attribute.
 	 * @see #setTraceId(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getLogRecord_TraceId()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getTraceId();
@@ -255,13 +227,10 @@ public interface LogRecord extends EObject {
 	 * Returns the value of the '<em><b>Span Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * A unique identifier for a span within a trace. If present, this log record is associated with a specific span.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Span Id</em>' attribute.
 	 * @see #setSpanId(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getLogRecord_SpanId()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getSpanId();

@@ -10,8 +10,6 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.change.ChangeDescription;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -514,8 +512,8 @@ public class SpanImpl extends MinimalEObjectImpl.Container implements Span {
 	 * @generated
 	 */
 	@Override
-	public ChangeDescription getChangeDescription() {
-		return (ChangeDescription)eDynamicGet(ModelPackage.SPAN__CHANGE_DESCRIPTION, ModelPackage.Literals.SPAN__CHANGE_DESCRIPTION, true, true);
+	public Object getChangeDescription() {
+		return (Object)eDynamicGet(ModelPackage.SPAN__CHANGE_DESCRIPTION, ModelPackage.Literals.SPAN__CHANGE_DESCRIPTION, true, true);
 	}
 
 	/**
@@ -523,8 +521,8 @@ public class SpanImpl extends MinimalEObjectImpl.Container implements Span {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetChangeDescription(ChangeDescription newChangeDescription, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newChangeDescription, ModelPackage.SPAN__CHANGE_DESCRIPTION, msgs);
+	public NotificationChain basicSetChangeDescription(Object newChangeDescription, NotificationChain msgs) {
+		msgs = eDynamicInverseAdd(newChangeDescription, ModelPackage.SPAN__CHANGE_DESCRIPTION, msgs);
 		return msgs;
 	}
 
@@ -534,7 +532,7 @@ public class SpanImpl extends MinimalEObjectImpl.Container implements Span {
 	 * @generated
 	 */
 	@Override
-	public void setChangeDescription(ChangeDescription newChangeDescription) {
+	public void setChangeDescription(Object newChangeDescription) {
 		eDynamicSet(ModelPackage.SPAN__CHANGE_DESCRIPTION, ModelPackage.Literals.SPAN__CHANGE_DESCRIPTION, newChangeDescription);
 	}
 
@@ -680,7 +678,7 @@ public class SpanImpl extends MinimalEObjectImpl.Container implements Span {
 				setFlags((Integer)newValue);
 				return;
 			case ModelPackage.SPAN__CHANGE_DESCRIPTION:
-				setChangeDescription((ChangeDescription)newValue);
+				setChangeDescription(newValue);
 				return;
 			case ModelPackage.SPAN__LOG_RECORDS:
 				getLogRecords().clear();
@@ -747,7 +745,7 @@ public class SpanImpl extends MinimalEObjectImpl.Container implements Span {
 				setFlags(FLAGS_EDEFAULT);
 				return;
 			case ModelPackage.SPAN__CHANGE_DESCRIPTION:
-				setChangeDescription((ChangeDescription)null);
+				setChangeDescription((Object)null);
 				return;
 			case ModelPackage.SPAN__LOG_RECORDS:
 				getLogRecords().clear();

@@ -9,10 +9,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Key Value</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * KeyValue is a key-value pair that is used to store Span attributes, Link attributes, etc.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -33,7 +29,7 @@ public interface KeyValue extends EObject {
 	 * @return the value of the '<em>Key</em>' attribute.
 	 * @see #setKey(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getKeyValue_Key()
-	 * @model required="true"
+	 * @model unique="false" required="true"
 	 * @generated
 	 */
 	String getKey();
@@ -52,9 +48,6 @@ public interface KeyValue extends EObject {
 	 * Returns the value of the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The value associated with the key.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Value</em>' containment reference.
 	 * @see #setValue(AnyValue)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getKeyValue_Value()

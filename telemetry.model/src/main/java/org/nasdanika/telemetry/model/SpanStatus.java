@@ -9,10 +9,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Span Status</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * The Status type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -30,13 +26,10 @@ public interface SpanStatus extends EObject {
 	 * Returns the value of the '<em><b>Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * A developer-facing human readable error message.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Message</em>' attribute.
 	 * @see #setMessage(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getSpanStatus_Message()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getMessage();
@@ -56,14 +49,11 @@ public interface SpanStatus extends EObject {
 	 * The literals are from the enumeration {@link org.nasdanika.telemetry.model.StatusCode}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The status code.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Code</em>' attribute.
 	 * @see org.nasdanika.telemetry.model.StatusCode
 	 * @see #setCode(StatusCode)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getSpanStatus_Code()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	StatusCode getCode();

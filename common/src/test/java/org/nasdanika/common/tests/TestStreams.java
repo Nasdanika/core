@@ -14,6 +14,7 @@ import org.nasdanika.common.StreamInput;
 import org.nasdanika.common.StreamOutput;
 import org.nasdanika.common.StringInput;
 import org.nasdanika.common.StringOutput;
+import org.nasdanika.common.StringOutput.CloseableStringConsumer;
 import org.nasdanika.common.Util;
 
 public class TestStreams {
@@ -115,7 +116,7 @@ public class TestStreams {
 		outputDir.mkdirs();
 		// Trailing slash is required so EMF URI resolution treats it as a directory
 		URI outputBase = URI.createFileURI(outputDir.getAbsolutePath()).appendSegment("");						
-		StringOutput output = StringOutput.of(StringOutput.INSTANCE.base(outputBase));
+		StringOutput<CloseableStringConsumer> output = StringOutput.of(StringOutput.INSTANCE.base(outputBase));
 		try (Stream<StreamInput> inputs = StreamInput.of(null, new File("pom.xml"))) {
 			inputs
 			.map(StringInput::ofStreamInput)

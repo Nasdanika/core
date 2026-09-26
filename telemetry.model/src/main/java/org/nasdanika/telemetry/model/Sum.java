@@ -9,10 +9,6 @@ import org.eclipse.emf.common.util.EList;
  * A representation of the model object '<em><b>Sum</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * Sum represents the type of a scalar metric that is calculated as a sum of all reported measurements over a time interval.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -48,7 +44,7 @@ public interface Sum extends Metric {
 	 * @see org.nasdanika.telemetry.model.AggregationTemporality
 	 * @see #setAggregationTemporality(AggregationTemporality)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getSum_AggregationTemporality()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	AggregationTemporality getAggregationTemporality();
@@ -68,13 +64,10 @@ public interface Sum extends Metric {
 	 * Returns the value of the '<em><b>Is Monotonic</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * If true, the sum is monotonically increasing.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Is Monotonic</em>' attribute.
 	 * @see #setIsMonotonic(boolean)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getSum_IsMonotonic()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	boolean isIsMonotonic();

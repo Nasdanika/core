@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Exponential Histogram Data Point</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * ExponentialHistogramDataPoint is a single data point in a timeseries that describes the time-varying values of a ExponentialHistogram of double values.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -59,7 +55,7 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * @return the value of the '<em>Start Time Unix Nano</em>' attribute.
 	 * @see #setStartTimeUnixNano(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_StartTimeUnixNano()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getStartTimeUnixNano();
@@ -81,7 +77,7 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * @return the value of the '<em>Time Unix Nano</em>' attribute.
 	 * @see #setTimeUnixNano(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_TimeUnixNano()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getTimeUnixNano();
@@ -103,7 +99,7 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * @return the value of the '<em>Count</em>' attribute.
 	 * @see #setCount(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_Count()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getCount();
@@ -125,7 +121,7 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * @return the value of the '<em>Sum</em>' attribute.
 	 * @see #setSum(Double)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_Sum()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Double getSum();
@@ -144,13 +140,10 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * Returns the value of the '<em><b>Scale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * scale describes the resolution of the histogram. Boundaries are located at powers of the base, where base = (2^(2^-scale))
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Scale</em>' attribute.
 	 * @see #setScale(int)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_Scale()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	int getScale();
@@ -169,13 +162,10 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * Returns the value of the '<em><b>Zero Count</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * zero_count is the count of values in the zero bucket.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Zero Count</em>' attribute.
 	 * @see #setZeroCount(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_ZeroCount()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getZeroCount();
@@ -194,9 +184,6 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * Returns the value of the '<em><b>Positive</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * positive carries the positive range of exponential bucket counts.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Positive</em>' containment reference.
 	 * @see #setPositive(ExponentialHistogramDataPointBuckets)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_Positive()
@@ -219,9 +206,6 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * Returns the value of the '<em><b>Negative</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * negative carries the negative range of exponential bucket counts.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Negative</em>' containment reference.
 	 * @see #setNegative(ExponentialHistogramDataPointBuckets)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_Negative()
@@ -247,7 +231,7 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * @return the value of the '<em>Flags</em>' attribute.
 	 * @see #setFlags(int)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_Flags()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	int getFlags();
@@ -281,7 +265,7 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * @return the value of the '<em>Min</em>' attribute.
 	 * @see #setMin(Double)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_Min()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Double getMin();
@@ -303,7 +287,7 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * @return the value of the '<em>Max</em>' attribute.
 	 * @see #setMax(Double)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_Max()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Double getMax();
@@ -325,7 +309,7 @@ public interface ExponentialHistogramDataPoint extends EObject {
 	 * @return the value of the '<em>Zero Threshold</em>' attribute.
 	 * @see #setZeroThreshold(double)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPoint_ZeroThreshold()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	double getZeroThreshold();

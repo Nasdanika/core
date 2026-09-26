@@ -11,12 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Metric</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * Defines a Metric which has one or more timeseries. The following is a brief summary of the Metric data model.
- * 
- * Metric is a named entity with a description and unit.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -36,13 +30,10 @@ public interface Metric extends EObject {
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * name of the metric, including its DNS name prefix. It must be unique.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getMetric_Name()
-	 * @model required="true"
+	 * @model unique="false" required="true"
 	 * @generated
 	 */
 	String getName();
@@ -61,13 +52,10 @@ public interface Metric extends EObject {
 	 * Returns the value of the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * description of the metric, which can be used in documentation.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Description</em>' attribute.
 	 * @see #setDescription(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getMetric_Description()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getDescription();
@@ -86,13 +74,10 @@ public interface Metric extends EObject {
 	 * Returns the value of the '<em><b>Unit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * unit in which the metric value is reported. Follows the format described by http://unitsofmeasure.org/ucum.html.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Unit</em>' attribute.
 	 * @see #setUnit(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getMetric_Unit()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getUnit();
@@ -112,9 +97,6 @@ public interface Metric extends EObject {
 	 * The list contents are of type {@link org.nasdanika.telemetry.model.KeyValue}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Additional metadata attributes that describe the metric.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Metadata</em>' containment reference list.
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getMetric_Metadata()
 	 * @model containment="true"

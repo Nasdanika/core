@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Exemplar</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * A representation of an exemplar, which is a sample input measurement. Exemplars also hold information about the environment when the measurement was recorded, for example the span and trace ID of the active span when the exemplar was recorded.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -38,9 +34,6 @@ public interface Exemplar extends EObject {
 	 * The list contents are of type {@link org.nasdanika.telemetry.model.KeyValue}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * The set of key/value pairs that were filtered out by the aggregator, but recorded alongside the original measurement.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Filtered Attributes</em>' containment reference list.
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExemplar_FilteredAttributes()
 	 * @model containment="true"
@@ -55,7 +48,7 @@ public interface Exemplar extends EObject {
 	 * @return the value of the '<em>Time Unix Nano</em>' attribute.
 	 * @see #setTimeUnixNano(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExemplar_TimeUnixNano()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getTimeUnixNano();
@@ -77,7 +70,7 @@ public interface Exemplar extends EObject {
 	 * @return the value of the '<em>As Double</em>' attribute.
 	 * @see #setAsDouble(Double)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExemplar_AsDouble()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Double getAsDouble();
@@ -99,7 +92,7 @@ public interface Exemplar extends EObject {
 	 * @return the value of the '<em>As Int</em>' attribute.
 	 * @see #setAsInt(Long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExemplar_AsInt()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Long getAsInt();
@@ -118,13 +111,10 @@ public interface Exemplar extends EObject {
 	 * Returns the value of the '<em><b>Span Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * (Optional) Span ID of the exemplar trace. span_id may be missing if the measurement is not recorded inside a trace or if the trace is not sampled.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Span Id</em>' attribute.
 	 * @see #setSpanId(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExemplar_SpanId()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getSpanId();
@@ -143,13 +133,10 @@ public interface Exemplar extends EObject {
 	 * Returns the value of the '<em><b>Trace Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * (Optional) Trace ID of the exemplar trace.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Trace Id</em>' attribute.
 	 * @see #setTraceId(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExemplar_TraceId()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getTraceId();

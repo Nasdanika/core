@@ -20,10 +20,6 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * <!-- begin-model-doc -->
- * An Ecore model of OpenTelemetry concepts - traces, spans, metrics, logs, and supporting types.
- * Based on the OpenTelemetry specification: https://opentelemetry.io/docs/specs/otel/
- * <!-- end-model-doc -->
  * @see org.nasdanika.telemetry.model.ModelFactory
  * @model kind="package"
  * @generated

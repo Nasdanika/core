@@ -13,9 +13,6 @@ import org.eclipse.emf.common.util.Enumerator;
  * A representation of the literals of the enumeration '<em><b>Severity Number</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
- * <!-- begin-model-doc -->
- * Possible values for LogRecord.SeverityNumber.
- * <!-- end-model-doc -->
  * @see org.nasdanika.telemetry.model.ModelPackage#getSeverityNumber()
  * @model
  * @generated
@@ -25,9 +22,6 @@ public enum SeverityNumber implements Enumerator {
 	 * The '<em><b>SEVERITY NUMBER UNSPECIFIED</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * UNSPECIFIED is the default SeverityNumber, it MUST not be used.
-	 * <!-- end-model-doc -->
 	 * @see #SEVERITY_NUMBER_UNSPECIFIED_VALUE
 	 * @generated
 	 * @ordered
@@ -278,9 +272,6 @@ public enum SeverityNumber implements Enumerator {
 	 * The '<em><b>SEVERITY NUMBER UNSPECIFIED</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * UNSPECIFIED is the default SeverityNumber, it MUST not be used.
-	 * <!-- end-model-doc -->
 	 * @see #SEVERITY_NUMBER_UNSPECIFIED
 	 * @model
 	 * @generated

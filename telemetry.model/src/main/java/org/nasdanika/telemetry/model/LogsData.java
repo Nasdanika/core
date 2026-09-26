@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Logs Data</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * LogsData represents the logs export payload which can be serialized to different formats, e.g., OTLP/gRPC, JSON, and proto.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -32,9 +28,6 @@ public interface LogsData extends EObject {
 	 * The list contents are of type {@link org.nasdanika.telemetry.model.ResourceLogs}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * An array of ResourceLogs.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Resource Logs</em>' containment reference list.
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getLogsData_ResourceLogs()
 	 * @model containment="true"

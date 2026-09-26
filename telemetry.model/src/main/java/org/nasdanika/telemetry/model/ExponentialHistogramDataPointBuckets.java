@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Exponential Histogram Data Point Buckets</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * Buckets are a set of bucket counts, encoded in a contiguous array of counts.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -32,13 +28,10 @@ public interface ExponentialHistogramDataPointBuckets extends EObject {
 	 * Returns the value of the '<em><b>Offset</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Offset is the bucket index of the first entry in the bucket_counts array.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Offset</em>' attribute.
 	 * @see #setOffset(int)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getExponentialHistogramDataPointBuckets_Offset()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	int getOffset();

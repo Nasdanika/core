@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Histogram Data Point</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * HistogramDataPoint is a single data point in a timeseries that describes the time-varying values of a Histogram.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -56,7 +52,7 @@ public interface HistogramDataPoint extends EObject {
 	 * @return the value of the '<em>Start Time Unix Nano</em>' attribute.
 	 * @see #setStartTimeUnixNano(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getHistogramDataPoint_StartTimeUnixNano()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getStartTimeUnixNano();
@@ -78,7 +74,7 @@ public interface HistogramDataPoint extends EObject {
 	 * @return the value of the '<em>Time Unix Nano</em>' attribute.
 	 * @see #setTimeUnixNano(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getHistogramDataPoint_TimeUnixNano()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getTimeUnixNano();
@@ -97,13 +93,10 @@ public interface HistogramDataPoint extends EObject {
 	 * Returns the value of the '<em><b>Count</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * count is the number of values in the population.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Count</em>' attribute.
 	 * @see #setCount(long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getHistogramDataPoint_Count()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	long getCount();
@@ -122,13 +115,10 @@ public interface HistogramDataPoint extends EObject {
 	 * Returns the value of the '<em><b>Sum</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * sum of the values in the population. If count is zero then this field must be zero.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Sum</em>' attribute.
 	 * @see #setSum(Double)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getHistogramDataPoint_Sum()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Double getSum();
@@ -148,9 +138,6 @@ public interface HistogramDataPoint extends EObject {
 	 * The list contents are of type {@link java.lang.Long}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * bucket_counts is an optional field contains the count values of histogram for each bucket.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Bucket Counts</em>' attribute list.
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getHistogramDataPoint_BucketCounts()
 	 * @model
@@ -163,9 +150,6 @@ public interface HistogramDataPoint extends EObject {
 	 * The list contents are of type {@link java.lang.Double}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * explicit_bounds specifies buckets with explicitly defined bounds for values.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Explicit Bounds</em>' attribute list.
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getHistogramDataPoint_ExplicitBounds()
 	 * @model
@@ -192,7 +176,7 @@ public interface HistogramDataPoint extends EObject {
 	 * @return the value of the '<em>Flags</em>' attribute.
 	 * @see #setFlags(int)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getHistogramDataPoint_Flags()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	int getFlags();
@@ -211,13 +195,10 @@ public interface HistogramDataPoint extends EObject {
 	 * Returns the value of the '<em><b>Min</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * min is the minimum value over (start_time, end_time].
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Min</em>' attribute.
 	 * @see #setMin(Double)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getHistogramDataPoint_Min()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Double getMin();
@@ -236,13 +217,10 @@ public interface HistogramDataPoint extends EObject {
 	 * Returns the value of the '<em><b>Max</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * max is the maximum value over (start_time, end_time].
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Max</em>' attribute.
 	 * @see #setMax(Double)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getHistogramDataPoint_Max()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Double getMax();

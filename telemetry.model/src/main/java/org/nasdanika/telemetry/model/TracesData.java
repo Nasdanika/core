@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Traces Data</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * TracesData represents the traces export payload which can be serialized to different formats, e.g., OTLP/gRPC, JSON, and proto.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -32,9 +28,6 @@ public interface TracesData extends EObject {
 	 * The list contents are of type {@link org.nasdanika.telemetry.model.ResourceSpans}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * An array of ResourceSpans. For data coming from a single resource this array will typically contain one element. Intermediary nodes that receive data from multiple origins typically batch the data before forwarding further.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Resource Spans</em>' containment reference list.
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getTracesData_ResourceSpans()
 	 * @model containment="true"

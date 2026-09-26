@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Any Value</b></em>'.
  * <!-- end-user-doc -->
  *
- * <!-- begin-model-doc -->
- * AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
- * <!-- end-model-doc -->
- *
  * <p>
  * The following features are supported:
  * </p>
@@ -40,7 +36,7 @@ public interface AnyValue extends EObject {
 	 * @return the value of the '<em>String Value</em>' attribute.
 	 * @see #setStringValue(String)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getAnyValue_StringValue()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	String getStringValue();
@@ -62,7 +58,7 @@ public interface AnyValue extends EObject {
 	 * @return the value of the '<em>Bool Value</em>' attribute.
 	 * @see #setBoolValue(Boolean)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getAnyValue_BoolValue()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Boolean getBoolValue();
@@ -84,7 +80,7 @@ public interface AnyValue extends EObject {
 	 * @return the value of the '<em>Int Value</em>' attribute.
 	 * @see #setIntValue(Long)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getAnyValue_IntValue()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Long getIntValue();
@@ -106,7 +102,7 @@ public interface AnyValue extends EObject {
 	 * @return the value of the '<em>Double Value</em>' attribute.
 	 * @see #setDoubleValue(Double)
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getAnyValue_DoubleValue()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	Double getDoubleValue();
@@ -126,9 +122,6 @@ public interface AnyValue extends EObject {
 	 * The list contents are of type {@link org.nasdanika.telemetry.model.AnyValue}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Represents an array of any value.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Array Value</em>' containment reference list.
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getAnyValue_ArrayValue()
 	 * @model containment="true"
@@ -141,9 +134,6 @@ public interface AnyValue extends EObject {
 	 * The list contents are of type {@link org.nasdanika.telemetry.model.KeyValue}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Represents a list of key-value pairs.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Kvlist Value</em>' containment reference list.
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getAnyValue_KvlistValue()
 	 * @model containment="true"
@@ -155,13 +145,10 @@ public interface AnyValue extends EObject {
 	 * Returns the value of the '<em><b>Bytes Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Represents raw bytes value.
-	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Bytes Value</em>' attribute.
 	 * @see #setBytesValue(byte[])
 	 * @see org.nasdanika.telemetry.model.ModelPackage#getAnyValue_BytesValue()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	byte[] getBytesValue();
